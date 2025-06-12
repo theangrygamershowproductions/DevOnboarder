@@ -1,0 +1,21 @@
+# PATCHED v0.1.8 infrastructure/docker-compose.yaml — Orchestration
+
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/backend.Dockerfile
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+  frontend:
+    build:
+      context: ..
+      dockerfile: infrastructure/docker/frontend.Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+  redis:
+    image: redis:7-alpine
+    command: --save "" --appendonly no
+    ports:
+      - "6379:6379"

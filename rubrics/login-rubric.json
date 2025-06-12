@@ -1,0 +1,9 @@
+{
+  "challenge": "login",
+  "total_points": 5,
+  "tests": [
+    {"name": "renders form", "points": 2, "description": "Username and password inputs are visible"},
+    {"name": "validates empty fields", "points": 2, "description": "Submission fails when any field is blank"},
+    {"name": "shows success", "points": 1, "description": "Displays 'Logged in' message after valid submit"}
+  ]
+}

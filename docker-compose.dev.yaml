@@ -1,0 +1,76 @@
+# PATCHED v0.2.8 docker-compose.dev.yaml — Full development stack
+
+version: "3.9"
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+  auth-server:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env.example
+    volumes:
+      - ./auth:/app
+    expose:
+      - "8000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=Host(`auth.localhost`)"
+      - "traefik.http.routers.auth.entrypoints=web"
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    env_file:
+      - ./frontend/.env.frontend.dev
+    volumes:
+      - ./frontend:/app/frontend
+    expose:
+      - "5173"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`app.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+    depends_on:
+      - auth-server
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: --save "" --appendonly no
+    ports:
+      - "6379:6379"
+    
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN:-}
+    depends_on:
+      - traefik
+    restart: unless-stopped
+
+  debug-tools:
+    image: ghcr.io/nicolaka/netshoot:latest
+    command: sleep infinity
+    tty: true
+    depends_on:
+      - traefik
+    restart: on-failure

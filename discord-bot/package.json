@@ -1,0 +1,16 @@
+{
+  "name": "devonboarder-discord-bot",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.1",
+    "dotenv": "^10.0.0"
+  }
+}

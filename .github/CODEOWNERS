@@ -1,0 +1,10 @@
+# Core docs
+/docs/**          @potato @docs-maintainers
+# Backend
+backend/**        @backend-leads
+# Frontend
+frontend/**       @frontend-leads
+# CI / scaffold
+.github/**        @automation-team
+# Fallback
+*                 @potato

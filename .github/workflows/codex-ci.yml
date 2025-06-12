@@ -1,0 +1,85 @@
+# PATCHED v0.1.1 .github/workflows/codex-ci.yml — use Python 3.13
+
+name: codex-ci
+
+on:
+  push:
+    branches: ["feature/**", "bugfix/**"]
+  pull_request:
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          bash scripts/setup-dev.sh
+          source venv/bin/activate
+      - name: Lint commit message
+        if: github.event_name == 'pull_request'
+        run: npx commitlint --from HEAD~1
+      - name: Validate assets
+        run: python .codex/scripts/validate_assets.py docs
+      - name: Validate docs
+        run: python .codex/scripts/validate_docs.py
+      - name: Check plugins
+        run: python .codex/scripts/check_plugins.py
+      - name: Install lint dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r .codex/requirements-lint.txt \
+            pre-commit
+      - name: Run pre-commit checks
+        run: pre-commit run --all-files
+      - name: Run tests
+        run: |
+          source venv/bin/activate
+          ./hooks/pre-commit
+      - name: Optional Snyk scan
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+        uses: snyk/actions@v3
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  backup:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create tarball
+        run: tar czf repo-backup.tgz .
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-backup
+          path: repo-backup.tgz
+      - name: Upload backup to Azure
+        if: >-
+          ${{ secrets.AZURE_STORAGE_CONNECTION_STRING != '' &&
+              secrets.AZURE_STORAGE_CONTAINER != '' }}
+        uses: azure/CLI@v1
+        env:
+          AZURE_STORAGE_CONNECTION_STRING:
+            >-
+              ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+        with:
+          inlineScript: |
+            az storage blob upload \
+              --connection-string "$AZURE_STORAGE_CONNECTION_STRING" \
+              --container-name "$AZURE_STORAGE_CONTAINER" \
+              --file repo-backup.tgz \
+              --name repo-backup.tgz

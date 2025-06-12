@@ -1,0 +1,17 @@
+# PATCHED v0.5.10 docker-compose.codex.yml — Add blank line after header
+
+version: "3.9"
+services:
+  codex:
+    build:
+      context: .
+      dockerfile: Dockerfile.codex
+    volumes:
+      - .:/workspace
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    security_opt:
+      - no-new-privileges:true
+    command: >
+      --approval-mode auto-edit
+      --quiet

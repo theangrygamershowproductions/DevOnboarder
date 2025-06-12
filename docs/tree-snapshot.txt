@@ -1,0 +1,119 @@
+.
+|-- Git
+|   |-- Git.md
+|   |-- MERGE_CHECKLIST.md
+|   `-- README.md
+|-- Imaging
+|   `-- PrettyTree.md
+|-- TODO
+|   `-- mission_module.md
+|-- archive
+|   |-- TAG-Roadmap.v1.1.5.md
+|   `-- TAG-Roadmapv1.1.0.md
+|-- archiving
+|   `-- README.md
+|-- auth
+|   |-- TODO
+|   |   |-- NEXT_STEPS.md
+|   |   `-- nginx-proxy-config-test.md
+|   |-- archive
+|   |   `-- README.v1.1.0.md
+|   |-- handoffbriefs
+|   |   |-- DeveloperHandOffHandbook.md
+|   |   |-- TAG_Auth_Handoff_Consolidated.pdf
+|   |   |-- handoff-phase7-cont.md
+|   |   |-- handoff-phase7.md
+|   |   `-- handoff.md
+|   |-- security
+|   |   |-- static-analysis-configs
+|   |   |   |-- eslint.base.js
+|   |   |   `-- snyk.config.json
+|   |   |-- tools
+|   |   |   |-- README.md
+|   |   |   `-- scripts
+|   |   |       `-- run-all-scans.sh
+|   |   |-- JWT_Introduction_Plan.md
+|   |   |-- SECURITY_POLICY.md
+|   |   |-- Security-Baseline-Checklist.md
+|   |   |-- penetration-test-plan.md
+|   |   `-- threat-model.md
+|   |-- CHANGELOG.md
+|   |-- Community Guild Access Control.md
+|   |-- README.v.1.1.5.md
+|   |-- User_Role_Matrix.md
+|   |-- env.roles.md
+|   `-- frontend-session-access-guide.md
+|-- canvas
+|   `-- canvas_editing_rules.md
+|-- cloudflared
+|-- commander
+|   |-- CHANGELOG.md
+|   `-- README.md
+|-- docker
+|   |-- Compose.md
+|   `-- README.md
+|-- education
+|   |-- graph_interpretation.md
+|   `-- math_process_playbook.md
+|-- frontend
+|   |-- Notes
+|   |   `-- Phase 8 Adjustment.md
+|   |-- complete
+|   |   `-- Phase_7_Frontend_Complete.md
+|   |-- RBAC-Migration.md
+|   |-- React-Type_Notes.md
+|   |-- frontend-auth-alignment-checklist.md
+|   |-- frontend-auth-flow.md
+|   |-- frontend-session-role-guide.md
+|   `-- permission-management.md
+|-- infrastructure
+|   `-- docker-compose.template.yaml
+|-- internal
+|   |-- TAGS-CHANGELOG-Template.md
+|   |-- TAGS-DOC-Index.md
+|   |-- TAGS-Operational-Alignment-Plan.md
+|   |-- TAGS-PR-Template.md
+|   |-- TAGS-Secrets-Security-Policy.md
+|   |-- TAGS-Shared-Test-Utilities.md
+|   `-- TAGS-VSCode-Integrations.md
+|-- markdown
+|   `-- Markdownlint.md
+|-- node
+|   `-- README.md
+|-- python
+|   |-- DOCSTRING.md
+|   |-- DataStructure.md
+|   |-- Exceptions.md
+|   |-- Math.md
+|   |-- Modules.md
+|   |-- README.md
+|   `-- Structure.md
+|-- security
+|   |-- static-analysis-configs
+|   |   |-- eslint.base.js
+|   |   `-- snyk.config.json
+|   |-- tools
+|   |   |-- README.md
+|   |   `-- scripts
+|   |       `-- run-all-scans.sh
+|   |-- JWT_Introduction_Plan.md
+|   |-- SECURITY_POLICY.md
+|   |-- Security-Baseline-Checklist.md
+|   |-- penetration-test-plan.md
+|   `-- threat-model.md
+|-- terminal
+|   `-- oh-my-posh-setup-guide.md
+|-- tools
+|-- versioning
+|   `-- Patching.md
+|-- vscode
+|-- LICENSE
+|-- Project_Scope_and_Timeline.md
+|-- README.md
+|-- Stack.md
+|-- Structure.md
+|-- TAG-Roadmap.v1.2.md
+|-- image.png
+`-- tree-snapshot.txt
+
+33 directories, 83 files

@@ -1,0 +1,41 @@
+# PATCHED v0.1.27 docker-compose.yml — Add discord bot service
+
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+  redis:
+    image: redis:7-alpine
+    command: --save "" --appendonly no
+    ports:
+      - "6379:6379"
+  discord-bot:
+    build:
+      context: ./discord-bot
+      dockerfile: Dockerfile
+    environment:
+      - DISCORD_BOT_TOKEN
+  codeql-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.codeql
+    volumes:
+      - ./:/workspace
+      - codeql-db:/db
+      - codeql-results:/results
+    environment:
+      - GITHUB_TOKEN
+
+volumes:
+  codeql-db:
+  codeql-results:

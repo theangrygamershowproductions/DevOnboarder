@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+        language_version: system
+  - repo: local
+    hooks:
+      - id: ensure-env
+        name: Ensure environment
+        entry: bash -c 'test -d venv || ./scripts/setup-dev.sh'
+        language: system
+      - id: black
+        name: Black formatting
+        entry: bash -c '. venv/bin/activate && black --check .'
+        language: system
+      - id: frontend-lint
+        name: Frontend lint
+        entry: bash -c 'pnpm --dir frontend lint'
+        language: system
+      - id: frontend-test
+        name: Frontend tests
+        entry: bash -c 'pnpm --dir frontend test:unit'
+        language: system
+      - id: pytest
+        name: Run pytest
+        entry: bash -c '. venv/bin/activate && pytest --cov --cov-fail-under=85'
+        language: system
+      - id: auth-server-test
+        name: Auth server tests
+        entry: bash -c 'pnpm --dir auth-server run test'
+        language: system

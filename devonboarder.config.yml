@@ -1,0 +1,3 @@
+# PATCHED v0.2.1 devonboarder.config.yml — register codex_scaffold plugin
+plugins:
+  - ./plugins/codex_scaffold

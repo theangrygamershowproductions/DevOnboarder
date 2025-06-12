@@ -1,0 +1,134 @@
+# docker-compose.prod.yaml — v1.1.0
+# PATCHED v0.2.9 docs/infrastructure/docker-compose.template.yaml — Use .env.development
+
+# version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik-dev
+    restart: always
+    command:
+      - "--api.dashboard=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+      - "--certificatesresolvers.devresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.devresolver.acme.email=dev@thenagrygamershow.\
+com"
+      - "--certificatesresolvers.devresolver.acme.storage=/letsencrypt/acme.\
+json"
+      - CF_API_EMAIL=<DEVELOPER_EMAIL@DEV>
+      - CF_API_KEY=<YOURKEY># or CF_API_TOKEN if using scoped token
+
+    labels:
+      - "traefik.enable=true"
+      - |
+        traefik.http.routers.traefik.rule=Host(`traefik.thenagrygamershow.com`)
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=devresolver"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=internal-ip-whitelist@file"
+
+    ports:
+      - "192.168.0.205:80:80"
+      - "192.168.0.205:443:443"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic/dynamic.yml
+      - ./letsencrypt:/letsencrypt
+
+    networks:
+      - dev_network
+
+  auth-server:
+    container_name: auth-server-dev
+    restart: always
+    depends_on:
+      - traefik
+    build:
+      context: ./auth
+      dockerfile: dev.Dockerfile
+    working_dir: /app
+    environment:
+      - DATABASE_URL
+      - REDIS_URL
+      - JWT_ALGORITHM
+      - JWT_EXPIRATION
+      - OWNER_ROLE_ID
+      - ADMINISTRATOR_ROLE_ID
+      - VERIFIED_USER_ROLE_ID
+      - VERIFIED_MEMBER_ROLE_ID
+      - ALLOWED_ORIGINS
+    secrets:
+      - discord_client_id
+      - discord_client_secret
+      - jwt_secret
+    volumes:
+      - ./auth:/app
+      - ./auth/src:/app/src
+      - ./auth/package.json:/app/package.json
+      - ./auth/tsconfig.json:/app/tsconfig.json
+    networks:
+      - dev_network
+    command: npm run dev
+    expose:
+      - 4000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-dev.rule=Host(`auth.thenagrygamershow.com`)"
+      - "traefik.http.routers.auth-dev.entrypoints=websecure"
+      - "traefik.http.routers.auth-dev.tls.certresolver=devresolver"
+      - "traefik.http.services.auth-dev.loadbalancer.server.port=4000"
+      - "traefik.http.routers.auth-dev.middlewares=cors-header@file"
+
+  frontend:
+    container_name: tag-frontend-dev
+    restart: always
+    depends_on:
+      - auth-server
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    working_dir: /app
+    env_file:
+      - ./frontend/.env.development
+    environment:
+      - VITE_HOST
+      - VITE_PORT
+      - VITE_ALLOWED_HOSTS
+
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/.env.development:/app/.env.development
+
+    networks:
+      - dev_network
+    command: npm run dev
+    expose:
+      - 8080
+    labels:
+      - "traefik.enable=true"
+      - |
+        traefik.http.routers.frontend-dev.rule=Host(`test.thenagrygamershow.com`)
+      - "traefik.http.routers.frontend-dev.entrypoints=websecure"
+      - "traefik.http.routers.frontend-dev.tls.certresolver=devresolver"
+      - "traefik.http.services.frontend-dev.loadbalancer.server.port=8080"
+
+networks:
+  dev_network:
+    driver: bridge
+
+secrets:
+  discord_client_id:
+    file: ./secrets/discord_client_id.txt
+  discord_client_secret:
+    file: ./secrets/discord_client_secret.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt

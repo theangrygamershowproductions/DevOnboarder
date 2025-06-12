@@ -1,0 +1,270 @@
+# .gitignore for DevOnboarder
+
+# ─── OS-specific files ─────────────────────────────────────────
+
+.DS\_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+.Trash-\*
+
+# ─── IDE / editor directories ───────────────────────────────────
+
+.vscode/
+.idea/
+\*.sublime-project
+\*.sublime-workspace
+
+# ─── Python byte-compiled / optimized / DLL files ────────────────
+
+**pycache**/
+\*.py\[cod]
+\*\$py.class
+.mypy\_cache/
+
+# ─── C extensions ───────────────────────────────────────────────
+
+\*.so
+
+# ─── Distribution / packaging ──────────────────────────────────
+
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+\*.egg-info/
+.installed.cfg
+\*.egg
+MANIFEST
+
+# ─── PyInstaller artifacts ─────────────────────────────────────
+
+\*.manifest
+\*.spec
+
+# ─── Installer logs ─────────────────────────────────────────────
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ─── Unit test / coverage reports ───────────────────────────────
+
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.\*
+.cache
+nosetests.xml
+coverage.xml
+\*.cover
+\*.py,cover
+.hypothesis/
+.pytest\_cache/
+cover/
+
+# ─── Translations ──────────────────────────────────────────────
+
+\*.mo
+\*.pot
+
+# ─── Web framework / database ──────────────────────────────────
+
+# Django
+
+\*.log
+local\_settings.py
+db.sqlite3
+db.sqlite3-journal
+verification.db
+
+# Flask
+
+instance/
+.webassets-cache
+
+# Scrapy
+
+.scrapy
+
+# ─── Documentation / builds ────────────────────────────────────
+
+# Sphinx
+
+docs/\_build/
+
+# mkdocs
+
+/site
+
+# ─── Project and build tools ────────────────────────────────────
+
+# PyBuilder
+
+.pybuilder/
+target/
+
+# Jupyter
+
+.ipynb\_checkpoints
+
+# IPython
+
+profile\_default/
+ipython\_config.py
+
+# pyenv
+
+.python-version
+
+# pipenv
+
+\#Pipfile.lock
+
+# UV
+
+\#uv.lock
+
+# poetry
+
+\#poetry.lock
+
+# pdm
+
+.pdm.toml
+.pdm-python
+.pdm-build/
+
+# PEP 582
+
+**pypackages**/
+
+# Celery
+
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+
+\*.sage.py
+
+# ─── Environment files ─────────────────────────────────────────
+
+.env
+.env.development
+.env.production
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Service env files
+
+auth/.env
+backend/.env
+frontend/.env
+infrastructure/.env
+
+# Traefik certificate store
+
+acme.json
+
+# ─── Spyder / Rope ─────────────────────────────────────────────
+
+.spyderproject
+.spyproject
+.ropeproject
+
+# ─── Build caches and artifacts ─────────────────────────────────
+
+# Ruff
+
+.ruff\_cache/
+
+# Cursor AI
+
+.cursorignore
+.cursorindexingignore
+
+# CodeQL
+
+codeql-db/
+codeql-results/
+
+# ─── Node.js / JavaScript ──────────────────────────────────────
+
+node\_modules/
+
+# npm
+
+package-lock.json
+npm-debug.log
+
+# Yarn
+
+yarn-error.log
+
+# pnpm
+
+pnpm-lock.yaml
+!frontend/pnpm-lock.yaml
+
+# Bun
+
+bun.lockb
+
+# ─── JS coverage & caches ──────────────────────────────────────
+
+coverage/
+.nyc\_output/
+jest.cache
+.eslintcache
+
+# ─── JS build output ──────────────────────────────────────────
+
+dist/
+build/
+.out/
+.vite/
+
+# ─── Terraform ─────────────────────────────────────────────────
+
+.terraform/
+
+# ─── Miscellaneous ─────────────────────────────────────────────
+
+lcov-report/
+lcov.info
+.npm/
+.pnp.\*
+
+# ─── Discord bot ──────────────────────────────────────────────
+
+discord-bot/node\_modules/
+discord-bot/.env
+discord-bot/dist/
+
+# ─── Placeholder files ─────────────────────────────────────────
+
+Potato
+Potato.md
+
+# ─── Local / ephemeral ──────────────────────────────────────────
+
+.codex/
+.vscode-integrations/
+logs/
+.env.dev

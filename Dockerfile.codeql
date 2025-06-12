@@ -1,0 +1,16 @@
+# PATCHED v0.1.43 Dockerfile.codeql — CodeQL CLI image
+
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y curl unzip git python3 python3-pip nodejs npm ca-certificates && \
+    npm install -g pnpm@10.11.1 && \
+    curl -L https://github.com/github/codeql-cli-binaries/releases/download/v2.21.4/codeql-linux64.zip -o /tmp/codeql.zip && \
+    unzip /tmp/codeql.zip -d /opt && \
+    rm /tmp/codeql.zip && \
+    chmod +x /opt/codeql/codeql && \
+    mkdir /workspace /db /results
+
+ENV PATH="/opt/codeql:${PATH}"
+
+ENTRYPOINT ["codeql"]

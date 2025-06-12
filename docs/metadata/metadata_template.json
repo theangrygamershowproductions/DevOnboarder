@@ -1,0 +1,11 @@
+{
+  "project": "TAGS",
+  "module": "<Module Name>",
+  "phase": "<Phase Number or Name>",
+  "tags": ["<tag1>", "<tag2>", "..."],
+  "version": "v0.0.0",
+  "author": "<Author Name>",
+  "email": "<Author Email>",
+  "updated": "<Last Updated Date and Time>",
+  "description": "<description of the module>"
+}

@@ -1,0 +1,55 @@
+# PATCHED v0.1.0 codex/src/templates/shared-policies/CLA — IP ownership checklist
+---
+
+project: "TAGS"
+module: "DevOnboarder Codex"
+phase: "MVP"
+tags: ["checklist", "ip", "ownership"]
+updated: "11 June 2025 02:58 (EST)"
+version: "v0.1.0"
+-----------------
+
+# IP Ownership Checklist
+
+> **Purpose:** Ensure every code contribution to TAGS projects is legally
+> owned by TAGS and free of licensing conflicts *before* merge.
+
+---
+
+## 1  Contributor Status
+
+* [ ] Contributor has a signed **Employment/Contractor Agreement** with Work‑Made‑For‑Hire or IP‑Assignment clause.
+* [ ] Contributor has accepted the **TAGS CLA** (see CLA.md).
+* [ ] AI‑assisted work acknowledged ("All AI output is work made for hire") in contract or CLA.
+
+## 2  Dependency Audit
+
+* [ ] Run `sbom:generate` (CycloneDX/SPDX) → produces `sbom.json`.
+* [ ] Scan `sbom.json` for copyleft or patent‑encumbered licences (GPLv3, AGPL, LGPL, SSPL, BUSL, etc.).
+* [ ] If any forbidden licence detected → escalate to Legal before PR review.
+* [ ] Record approved licences in `/docs/licenses.md`.
+
+## 3  AI‑Generated Code Review
+
+* [ ] Save prompt + completion pair in `.ai-log/` (retained 30 days in CI artefacts).
+* [ ] Reviewer confirms code is **original** (no verbatim third‑party snippets under non‑permissive licences).
+* [ ] Code passes static analysis + style linters.
+
+## 4  Pull‑Request Gate (mandatory)
+
+* [ ] **license-guard** CI job passes.
+* [ ] **cla‑bot** status is green.
+* [ ] At least **one human reviewer** approved the PR.
+* [ ] Changelog / version header updated where required.
+
+## 5  Escalation Matrix
+
+| Issue found      | Contact                       | Action                         |
+| ---------------- | ----------------------------- | ------------------------------ |
+| Copyleft licence | `legal@thenagrygamershow.com` | Block merge, seek alternative. |
+| Patent concern   | General Counsel               | Perform patent clearance.      |
+| Large AI snippet | Eng Lead + Legal              | Perform originality check.     |
+
+---
+
+*Store this checklist in the PR description template so contributors can self‑certify each box before requesting review.*

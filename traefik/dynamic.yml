@@ -1,0 +1,11 @@
+# PATCHED v0.1.0 traefik/dynamic.yml — HTTPS redirect and HSTS header
+http:
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    secure-headers:
+      headers:
+        customResponseHeaders:
+          Strict-Transport-Security: "max-age=63072000; includeSubDomains; preload"
