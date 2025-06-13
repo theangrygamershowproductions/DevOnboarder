@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# PATCHED v0.5.12 scripts/setup-env.sh — Docker-aware environment bootstrap
+
+# - Sources versions.sh and exports CODEX_ENV_* variables.
+# - Uses the Codex universal container when Docker is available.
+# - Falls back to local setup steps when Docker is absent.
 
 # ─── DEBUG SECTION (remove or comment once stable) ────────────────
 export PS4='[\D{%H:%M:%S}] $? ➜  '
@@ -6,14 +11,6 @@ exec > >(tee /tmp/codex_setup.log) 2>&1
 trap 'echo "💥 exit $?: line $LINENO → $BASH_COMMAND"' EXIT
 set -xeuo pipefail
 # ─────────────────────────────────────────────────────────────────
-
-# PATCHED v0.5.12 scripts/setup-env.sh — Docker-aware environment bootstrap
-
-# - Sources versions.sh and exports CODEX_ENV_* variables.
-# - Uses the Codex universal container when Docker is available.
-# - Falls back to local setup steps when Docker is absent.
-
-set -euo pipefail
 
 SCRIPT_DIR="$(dirname "$0")"
 source "${SCRIPT_DIR}/versions.sh"
