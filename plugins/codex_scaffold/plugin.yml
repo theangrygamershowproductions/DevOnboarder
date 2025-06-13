@@ -1,7 +1,0 @@
-# PATCHED v0.2.1 plugins/codex_scaffold/plugin.yml — plugin manifest
-id: codex_scaffold
-name: Codex Scaffold
-version: 0.2.1
-description: Drop-in plugin for Codex scaffolding
-entry: index.ts
-env: env.manifest.yml
