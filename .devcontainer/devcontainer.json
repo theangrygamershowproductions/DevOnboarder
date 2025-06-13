@@ -1,6 +1,4 @@
 {
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "build": { "dockerfile": "Dockerfile" },
   "postCreateCommand": "./scripts/setup-dev.sh"
 }
