@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo ">> CODEx BOOTSTRAP v0.2.32 STARTING <<"
 # ─── DEBUG SECTION (remove or comment once stable) ────────────────
 export PS4='[\D{%H:%M:%S}] $? ➜  '
 exec > >(tee /tmp/codex_setup.log) 2>&1
