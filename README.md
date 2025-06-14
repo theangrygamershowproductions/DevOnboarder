@@ -69,10 +69,9 @@ docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
 ```
 
 ## Quickstart
-1. Copy `.env.example` to `.env.dev` and adjust values as needed.
-2. Run `bash scripts/setup-env.sh` to install dependencies.
-3. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
-4. Execute the tests using `pytest -q`.
+1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
+2. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
+3. Execute the tests using `pytest -q`.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.
