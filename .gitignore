@@ -1,17 +1,35 @@
-# General OS artifacts
+# OS files
 .DS_Store
 Thumbs.db
+.Trash-*
 
-# Editor directories and files
+# IDE folders
 .vscode/
 .idea/
-*~
-*.swp
-*.swo
+*.sublime-*
 
-# Dependency artifacts
-node_modules/
-venv/
+# Python artifacts
+__pycache__/
+*.py[cod]
 .venv/
-vendor/
-target/
+venv/
+.env*
+
+# JS artifacts
+node_modules/
+dist/
+coverage/
+.nyc_output/
+pnpm-lock.yaml
+
+# Local/Codex caches
+.codex/
+.vscode-integrations/
+logs/
+.env.dev
+
+# Misc
+.terraform/
+lcov-report/
+codeql-*
+
