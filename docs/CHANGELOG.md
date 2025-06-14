@@ -6,3 +6,5 @@ All notable changes to this project will be recorded in this file.
 - Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter.
 - Added `.env.example` and documented setup steps in the README.
 - Documented branch naming, commit messages, and rebase policy in the Git guidelines.
+- Expanded `docs/pull_request_template.md` with sections for summary, linked issues,
+  screenshots, testing steps, and a checklist referencing documentation and changelog updates.
