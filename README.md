@@ -14,7 +14,8 @@ container setup used by Codex.
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
-- `.devcontainer/` – Dev container configuration (tracked with `.gitkeep`).
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code
+  development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
 - `docker-compose.yml` – Base compose file for production deployments.
 - `docker-compose.dev.yaml` – Compose file for local development.
   Includes a Redis service exposed on port `6379`.
