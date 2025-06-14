@@ -1,5 +1,0 @@
-# PATCHED v0.1.0 .flake8 — enforce line rules
-[flake8]
-max-line-length = 79
-extend-select   = ISC002
-ignore          = ISC001

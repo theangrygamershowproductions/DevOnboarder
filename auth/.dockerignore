@@ -1,5 +1,0 @@
-# PATCHED v0.1.0 auth/.dockerignore — Add patch header
-
-# Ignore environment files
-.env*
-**/.env*

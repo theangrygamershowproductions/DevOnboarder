@@ -1,7 +1,0 @@
-# PATCHED v0.1.1 requirements-dev.txt — unify dev requirements
-
--r backend/requirements.txt
--r auth/requirements.txt
-pytest-cov==4.1.0
-fakeredis==2.21.1
-
