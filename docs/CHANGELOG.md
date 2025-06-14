@@ -8,3 +8,5 @@ All notable changes to this project will be recorded in this file.
 - Documented branch naming, commit messages, and rebase policy in the Git guidelines.
 - Expanded `docs/pull_request_template.md` with sections for summary, linked issues,
   screenshots, testing steps, and a checklist referencing documentation and changelog updates.
+- Documented the requirement to pass lint and tests, update documentation and the changelog,
+  and added a reviewer sign-off section to the pull request template.
