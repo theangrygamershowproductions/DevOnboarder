@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Added a README section pointing to workflow docs under `docs/`.
 - Added `DATABASE_URL` placeholder to `.env.example`.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
+- Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
