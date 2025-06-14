@@ -3,3 +3,7 @@ services:
   app:
     build: .
     command: ["echo", "dev environment"]
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
