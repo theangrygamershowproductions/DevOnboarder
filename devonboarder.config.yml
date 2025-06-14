@@ -1,0 +1,2 @@
+workspace: .
+setup_script: ./scripts/setup-env.sh
