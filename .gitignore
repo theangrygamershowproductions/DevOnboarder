@@ -1,2 +1,17 @@
-Potato
-Potato.md
+# General OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# Dependency artifacts
+node_modules/
+venv/
+.venv/
+vendor/
+target/
