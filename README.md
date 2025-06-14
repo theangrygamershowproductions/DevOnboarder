@@ -23,6 +23,17 @@ container setup used by Codex.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample environment variables for local development.
 
+## Documentation and Onboarding
+
+Workflow documentation lives under the [docs/](docs/) directory. New contributors should:
+
+1. Read [docs/README.md](docs/README.md) for development tips and setup details.
+2. Follow [docs/git-guidelines.md](docs/git-guidelines.md) for branch and commit policies.
+3. Use [docs/pull_request_template.md](docs/pull_request_template.md) when opening a pull request.
+4. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
+
+These files expand on the steps listed in the Quickstart section.
+
 ## Local Development
 
 Build the development container defined in `.devcontainer/devcontainer.json`:
