@@ -1,6 +1,7 @@
 # DevOnboarder
 
-This repository showcases a **trunk‑based** workflow and a minimal container setup used by Codex.
+This repository showcases a **trunk-based** workflow and a minimal
+container setup used by Codex.
 
 ## Trunk-Based Workflow
 
@@ -13,23 +14,24 @@ This repository showcases a **trunk‑based** workflow and a minimal container s
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
-- `.devcontainer/` – Holds dev container configuration (tracked with `.gitkeep`).
+- `.devcontainer/` – Dev container configuration (tracked with `.gitkeep`).
 - `docker-compose.yml` – Base compose file for production deployments.
-- `docker-compose.dev.yaml` – Compose file used for local development and includes
-  a Redis service exposed on port `6379`.
+- `docker-compose.dev.yaml` – Compose file for local development.
+  Includes a Redis service exposed on port `6379`.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
-- `docker-compose.override.yaml` – Overrides applied on top of the base compose file.
-- `config/devonboarder.config.yml` – Configuration file consumed by the `devonboarder` tool.
+- `docker-compose.override.yaml` – Overrides for the base compose file.
+- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 
 ## Local Development
 
-Build and start the development container defined in `.devcontainer/devcontainer.json`:
+Build the development container defined in `.devcontainer/devcontainer.json`:
 
 ```bash
 devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
-Alternatively, you can run the Docker Compose setup directly. This will start the
+Alternatively, you can run the Docker Compose setup directly.
+This will start the
 application along with a Redis container on port `6379`:
 
 ```bash
@@ -53,3 +55,13 @@ Use the main compose file (with overrides) to deploy the application:
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
 ```
+
+## Quickstart
+1. cp .env.example .env.dev
+2. bash scripts/setup-env.sh
+3. docker-compose -f docker-compose.dev.yaml up -d
+4. pytest -q
+
+## License
+This project is licensed under the MIT License. See LICENSE.md.
+
