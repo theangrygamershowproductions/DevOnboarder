@@ -22,10 +22,10 @@ This repository showcases a **trunk‑based** workflow and a minimal container s
 
 ## Local Development
 
-Build and start the development container defined in `devcontainer.dev.json`:
+Build and start the development container defined in `.devcontainer/devcontainer.json`:
 
 ```bash
-devcontainer dev --workspace-folder . --config devcontainer.dev.json
+devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
 Alternatively, you can run the Docker Compose setup directly:
