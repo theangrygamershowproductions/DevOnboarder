@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      # Redis is started via docker-compose
+      # Postgres service for tests; Redis is started via docker compose
       postgres:
         image: postgres:14
         env:
