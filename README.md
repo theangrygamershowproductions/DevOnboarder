@@ -21,6 +21,7 @@ container setup used by Codex.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
 - `docker-compose.override.yaml` – Overrides for the base compose file.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+- `.env.example` – Sample environment variables for local development.
 
 ## Local Development
 
@@ -57,10 +58,10 @@ docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
 ```
 
 ## Quickstart
-1. cp .env.example .env.dev
-2. bash scripts/setup-env.sh
-3. docker-compose -f docker-compose.dev.yaml up -d
-4. pytest -q
+1. Copy `.env.example` to `.env.dev` and adjust values as needed.
+2. Run `bash scripts/setup-env.sh` to install dependencies.
+3. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
+4. Execute the tests using `pytest -q`.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.
