@@ -15,7 +15,8 @@ This repository showcases a **trunk‑based** workflow and a minimal container s
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
 - `.devcontainer/` – Holds dev container configuration (tracked with `.gitkeep`).
 - `docker-compose.yml` – Base compose file for production deployments.
-- `docker-compose.dev.yaml` – Compose file used for local development.
+- `docker-compose.dev.yaml` – Compose file used for local development and includes
+  a Redis service exposed on port `6379`.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
 - `docker-compose.override.yaml` – Overrides applied on top of the base compose file.
 - `config/devonboarder.config.yml` – Configuration file consumed by the `devonboarder` tool.
@@ -28,11 +29,14 @@ Build and start the development container defined in `.devcontainer/devcontainer
 devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
-Alternatively, you can run the Docker Compose setup directly:
+Alternatively, you can run the Docker Compose setup directly. This will start the
+application along with a Redis container on port `6379`:
 
 ```bash
 docker compose -f docker-compose.dev.yaml up
 ```
+
+The CI pipeline also relies on this compose file to start Redis during tests.
 
 ## Codex Runs
 
