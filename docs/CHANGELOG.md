@@ -1,12 +1,13 @@
-# Changelog Placeholder
+# Changelog
 
 All notable changes to this project will be recorded in this file.
 
-- Added `src/app.py` with `greet` function and updated smoke tests.
-- Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter.
-- Added `.env.example` and documented setup steps in the README.
-- Documented branch naming, commit messages, and rebase policy in the Git guidelines.
-- Expanded `docs/pull_request_template.md` with sections for summary, linked issues,
-  screenshots, testing steps, and a checklist referencing documentation and changelog updates.
-- Documented the requirement to pass lint and tests, update documentation and the changelog,
-  and added a reviewer sign-off section to the pull request template.
+## [Unreleased]
+
+## [0.1.0] - 2025-06-14
+- Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
+- Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter. [#22](https://github.com/theangrygamershowproductions/DevOnboarder/pull/22)
+- Added `.env.example` and documented setup steps in the README. [#23](https://github.com/theangrygamershowproductions/DevOnboarder/pull/23)
+- Documented branch naming, commit messages, and rebase policy in the Git guidelines. [#24](https://github.com/theangrygamershowproductions/DevOnboarder/pull/24)
+- Expanded `docs/pull_request_template.md` with sections for summary, linked issues, screenshots, testing steps, and a checklist referencing documentation and changelog updates. [#25](https://github.com/theangrygamershowproductions/DevOnboarder/pull/25)
+- Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-off section to the pull request template. [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
