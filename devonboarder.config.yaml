@@ -1,4 +1,0 @@
-# PATCHED v0.2.1 devonboarder.config.yml — register codex_scaffold plugin
-# devonboarder.config.yml
-workspace: .
-setup_script: ./scripts/setup-env.sh
