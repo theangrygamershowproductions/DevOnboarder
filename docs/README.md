@@ -1,30 +1,23 @@
-# Documentation Placeholder
+# Developer Onboarding
 
-This file will contain onboarding instructions and an overview of project documentation.
+Welcome to **DevOnboarder**. This page explains how to get your environment running and where to find documentation about our workflow.
 
-## Development Tips
+## Local Development
 
-Install development dependencies:
+1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
+2. Start services with `docker compose -f docker-compose.dev.yaml up -d`.
+3. Verify changes with `ruff check .` and `pytest -q` before committing.
 
-```bash
-pip install -r requirements-dev.txt
-```
+## Key Documentation
 
-Run the linter before committing changes:
+- [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
+- [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
+- [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 
-```bash
-ruff check .
-```
+## Issues and Pull Requests
 
-## Proposing Issues
-
-1. Search existing issues to avoid duplicates.
-2. Provide a clear description and reproduction steps when filing a new issue.
-
-## Proposing Pull Requests
-
-1. Start from an up‑to‑date `main` branch and follow the [git guidelines](git-guidelines.md).
-2. Use the [pull request template](pull_request_template.md) to describe your change.
-3. Maintainers verify each PR with the [merge checklist](merge-checklist.md).
-4. We do not yet have a formal code of conduct; please treat others with respect.
+1. Search existing issues to avoid duplicates and provide clear reproduction steps.
+2. Start branches from the latest `main` and follow the git guidelines.
+3. Use the pull request template and ensure the checklist passes.
 
