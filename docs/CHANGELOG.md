@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Expanded infrastructure blueprints with usage notes.
 - Clarified dev container usage in the README.
+- Replaced `docs/README.md` placeholder with onboarding instructions and local development steps.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
