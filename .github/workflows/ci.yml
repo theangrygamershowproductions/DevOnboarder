@@ -43,3 +43,5 @@ jobs:
         run: docker compose -f docker-compose.dev.yaml up -d
       - name: Run tests
         run: pytest -q
+      - name: Stop compose
+        run: docker compose -f docker-compose.dev.yaml down
