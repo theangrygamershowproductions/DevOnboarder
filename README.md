@@ -11,14 +11,14 @@ This repository showcases a **trunk‑based** workflow and a minimal container s
 
 ## Directory Overview
 
-- `config/` – Optional configuration files. Empty by default.
+- `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
 - `.devcontainer/` – Holds dev container configuration (tracked with `.gitkeep`).
 - `docker-compose.yml` – Base compose file for production deployments.
 - `docker-compose.dev.yaml` – Compose file used for local development.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
 - `docker-compose.override.yaml` – Overrides applied on top of the base compose file.
-- `devonboarder.config.yml` – Configuration file consumed by the `devonboarder` tool.
+- `config/devonboarder.config.yml` – Configuration file consumed by the `devonboarder` tool.
 
 ## Local Development
 
