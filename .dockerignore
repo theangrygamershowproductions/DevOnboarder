@@ -1,0 +1,37 @@
+# Ignore version control directory
+.git
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node artifacts
+node_modules/
+dist/
+coverage/
+.nyc_output/
+pnpm-lock.yaml
+
+# Environment files
+.env*
+!.env.example
+
+# Local caches and logs
+.codex/
+.vscode/
+.vscode-integrations/
+.idea/
+logs/
+
+# Tests and coverage reports
+tests/
+
+# Misc
+.DS_Store
+Thumbs.db
+.Trash-*
+.terraform/
+lcov-report/
+codeql-*
