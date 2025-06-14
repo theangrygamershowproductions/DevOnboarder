@@ -24,3 +24,7 @@ pytest -q
 - [ ] Updated `docs/CHANGELOG.md`
 - [ ] Updated relevant documentation in `docs/`
 - [ ] Lint and tests pass
+
+# Reviewer Sign-Off
+
+- [ ] I, the reviewer, confirm the checklist above is complete.

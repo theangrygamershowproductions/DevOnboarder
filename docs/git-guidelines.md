@@ -42,3 +42,17 @@ git pull --rebase origin main
 
 Pull requests are merged using **Squash and merge** to keep history linear.
 Delete the feature branch after the merge completes.
+
+## Pre-PR Checklist
+
+Before opening a pull request, make sure to:
+
+- Rebase your branch on the latest `main`.
+- Run the linter and tests to confirm they pass:
+
+```bash
+ruff check .
+pytest -q
+```
+- Update `docs/CHANGELOG.md` with a short summary of your change.
+- Update any other relevant documentation under `docs/`.
