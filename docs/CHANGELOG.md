@@ -9,6 +9,8 @@ All notable changes to this project will be recorded in this file.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Expanded infrastructure blueprints with usage notes.
+- Clarified dev container usage in the README.
+- Replaced `docs/README.md` placeholder with onboarding instructions and local development steps.
 - Added tests for the greeting function and Docker Compose configuration.
 
 ## [0.1.0] - 2025-06-14
