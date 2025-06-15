@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Expanded infrastructure blueprints with usage notes.
 - Clarified dev container usage in the README.
 - Replaced `docs/README.md` placeholder with onboarding instructions and local development steps.
+- Added tests for the greeting function and Docker Compose configuration.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
