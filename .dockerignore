@@ -24,6 +24,8 @@ pnpm-lock.yaml
 .vscode-integrations/
 .idea/
 logs/
+.pytest_cache/
+.ruff_cache/
 
 # Tests and coverage reports
 tests/
