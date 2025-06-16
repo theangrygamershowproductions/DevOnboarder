@@ -28,6 +28,8 @@ pnpm-lock.yaml
 .vscode-integrations/
 logs/
 .env.dev
+.pytest_cache/
+.ruff_cache/
 
 # Misc
 .terraform/
