@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Clarified dev container usage in the README.
 - Replaced `docs/README.md` placeholder with onboarding instructions and local development steps.
 - Added tests for the greeting function and Docker Compose configuration.
+- Added configuration helper files and documented their usage.
 - Added test for the bootstrap script and removed the unused Postgres
   service from CI.
 
