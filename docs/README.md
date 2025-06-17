@@ -6,8 +6,9 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 
 1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
 2. Start services with `docker compose -f docker-compose.dev.yaml up -d`.
-3. Verify changes with `ruff check .` and `pytest -q` before committing.
-4. Install git hooks with `pre-commit install` so these checks run automatically.
+3. Visit `http://localhost:8000` to see the greeting server.
+4. Verify changes with `ruff check .` and `pytest -q` before committing.
+5. Install git hooks with `pre-commit install` so these checks run automatically.
 
 ## Key Documentation
 
