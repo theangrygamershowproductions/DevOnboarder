@@ -16,6 +16,7 @@ All notable changes to this project will be recorded in this file.
 - Added configuration helper files and documented their usage.
 - Added test for the bootstrap script and removed the unused Postgres
   service from CI.
+- Added test for `setup-env.sh` that verifies virtual environment creation when Docker is unavailable.
 - Replaced the placeholder Docker image with a Python-based image and updated
   `docker-compose.yml` and tests accordingly.
 - Added a minimal HTTP server and configured the app service to run it.
