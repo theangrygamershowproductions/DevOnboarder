@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
   service from CI.
 - Replaced the placeholder Docker image with a Python-based image and updated
   `docker-compose.yml` and tests accordingly.
+- Added a minimal HTTP server and configured the app service to run it.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
