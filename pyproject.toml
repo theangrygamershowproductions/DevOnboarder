@@ -5,3 +5,14 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F"]
 
+[project]
+name = "devonboarder"
+version = "0.1.0"
+description = "Sample trunk-based workflow project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+devonboarder = "cli:main"
+
