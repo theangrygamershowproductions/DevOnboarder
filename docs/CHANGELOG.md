@@ -22,6 +22,7 @@ All notable changes to this project will be recorded in this file.
 - Added a minimal HTTP server and configured the app service to run it.
 - CI workflow now installs the package before running tests.
 - Defined project metadata in `pyproject.toml` and added a console script entry point.
+- Restructured source into a `devonboarder` package and updated tests to import modules by package path.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)

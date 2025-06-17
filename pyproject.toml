@@ -14,5 +14,12 @@ requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]
-devonboarder = "cli:main"
+devonboarder = "devonboarder.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 

@@ -1,4 +1,4 @@
-from app import greet
+from devonboarder.app import greet
 
 
 def test_greet_empty_string():
