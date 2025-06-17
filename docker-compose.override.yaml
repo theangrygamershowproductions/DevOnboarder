@@ -1,4 +1,4 @@
 version: "3.8"
 services:
   app:
-    command: ["python", "src/server.py"]
+    command: ["python", "-m", "devonboarder.server"]
