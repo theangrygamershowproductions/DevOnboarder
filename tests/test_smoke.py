@@ -1,6 +1,6 @@
 """Smoke tests for the DevOnboarder project."""
 
-from app import greet
+from devonboarder.app import greet
 
 
 def test_greet():

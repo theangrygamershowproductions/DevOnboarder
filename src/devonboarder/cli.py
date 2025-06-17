@@ -1,5 +1,6 @@
 import argparse
-from app import greet
+
+from .app import greet
 
 
 def main() -> None:

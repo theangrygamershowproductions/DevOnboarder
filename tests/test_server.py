@@ -3,7 +3,7 @@ from __future__ import annotations
 import threading
 import urllib.request
 
-from server import create_server
+from devonboarder.server import create_server
 
 
 def test_http_server_greets_name():
