@@ -18,8 +18,9 @@ def test_dev_compose_has_redis_service():
     assert "6379:6379" in ports
 
 
-def test_base_compose_app_command():
-    """Base compose file has the expected app command."""
+def test_base_compose_builds_image():
+    """Base compose file builds the application image."""
     compose = load_compose("docker-compose.yml")
-    command = compose["services"]["app"].get("command")
-    assert command == ["echo", "hello world"]
+    service = compose["services"]["app"]
+    assert "build" in service
+    assert "command" not in service
