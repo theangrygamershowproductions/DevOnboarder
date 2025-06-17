@@ -2,7 +2,7 @@ version: "3.8"
 services:
   app:
     build: .
-    command: ["python", "src/server.py"]
+    command: ["python", "-m", "devonboarder.server"]
   redis:
     image: redis:latest
     ports:
