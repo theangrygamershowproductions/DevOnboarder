@@ -18,6 +18,8 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Setup environment
         run: ./scripts/setup-env.sh
+      - name: Install package
+        run: pip install -e .
       - name: Run linter
         run: ruff check .
       - name: Start docker compose
