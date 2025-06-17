@@ -44,8 +44,8 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
 Alternatively, you can run the Docker Compose setup directly.
-This will start the
-application along with a Redis container on port `6379`:
+This will start the application (executed via `python -m devonboarder.server`)
+along with a Redis container on port `6379`:
 
 ```bash
 docker compose -f docker-compose.dev.yaml up
@@ -73,6 +73,7 @@ docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
 1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
 2. Install the project with `pip install -e .`.
 3. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
+   The app container launches via `python -m devonboarder.server`.
 4. Execute the tests using `pytest -q`.
 
 ## License
