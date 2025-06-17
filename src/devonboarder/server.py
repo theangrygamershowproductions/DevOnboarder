@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from app import greet
+from .app import greet
 
 
 class GreetingHandler(BaseHTTPRequestHandler):
