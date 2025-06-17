@@ -16,6 +16,8 @@ All notable changes to this project will be recorded in this file.
 - Added configuration helper files and documented their usage.
 - Added test for the bootstrap script and removed the unused Postgres
   service from CI.
+- Replaced the placeholder Docker image with a Python-based image and updated
+  `docker-compose.yml` and tests accordingly.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
