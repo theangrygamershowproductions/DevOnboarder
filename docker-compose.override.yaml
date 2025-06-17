@@ -1,4 +1,4 @@
 version: "3.8"
 services:
   app:
-    command: ["echo", "override"]
+    command: ["python", "src/server.py"]

@@ -2,7 +2,7 @@ version: "3.8"
 services:
   app:
     build: .
-    command: ["echo", "dev environment"]
+    command: ["python", "src/server.py"]
   redis:
     image: redis:latest
     ports:
