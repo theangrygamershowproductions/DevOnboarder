@@ -10,6 +10,8 @@ All notable changes to this project will be recorded in this file.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Ignored `.pytest_cache/` and `.ruff_cache/` in `.gitignore` and `.dockerignore`.
 - Expanded infrastructure blueprints with usage notes.
+- Expanded `infra/README.md` and blueprint docs with compose examples and
+  environment variable instructions.
 - Clarified dev container usage in the README.
 - Replaced `docs/README.md` placeholder with onboarding instructions and local development steps.
 - Added tests for the greeting function and Docker Compose configuration.
