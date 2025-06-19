@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 import httpx
 
 
@@ -56,48 +54,5 @@ def get_user_profile(token: str) -> dict[str, str | None]:
     }
 
 
-def resolve_user_flags(user_roles: dict[str, list[str]]) -> dict[str, object]:
-    """Resolve admin and verification flags based on role IDs."""
-    env = os.environ
-    admin_guild = env.get("ADMIN_SERVER_GUILD_ID")
-    owner_role = env.get("OWNER_ROLE_ID")
-    admin_role = env.get("ADMINISTRATOR_ROLE_ID")
-    mod_role = env.get("MODERATOR_ROLE_ID")
-    verified_user_role = env.get("VERIFIED_USER_ROLE_ID")
-    verified_member_role = env.get("VERIFIED_MEMBER_ROLE_ID")
-    government_role = env.get("GOVERNMENT_ROLE_ID")
-    military_role = env.get("MILITARY_ROLE_ID")
-    education_role = env.get("EDUCATION_ROLE_ID")
 
-    all_roles = {r for roles in user_roles.values() for r in roles}
-
-    admin_roles = {owner_role, admin_role, mod_role} - {None}
-    is_admin = False
-    if admin_guild and admin_guild in user_roles:
-        is_admin = bool(set(user_roles[admin_guild]) & admin_roles)
-
-    verification_roles = {
-        verified_user_role,
-        verified_member_role,
-        government_role,
-        military_role,
-        education_role,
-    } - {None}
-    is_verified = bool(all_roles & verification_roles)
-
-    verification_type = None
-    if government_role in all_roles:
-        verification_type = "government"
-    elif military_role in all_roles:
-        verification_type = "military"
-    elif education_role in all_roles:
-        verification_type = "education"
-    elif verified_member_role in all_roles or verified_user_role in all_roles:
-        verification_type = "member"
-
-    return {
-        "isAdmin": is_admin,
-        "isVerified": is_verified,
-        "verificationType": verification_type,
-    }
 

@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
-from utils import discord as discord_utils
+from utils import roles as roles_utils
 
 
 def setup_function(function):
@@ -173,7 +173,7 @@ def test_user_endpoint_returns_flags(monkeypatch):
     monkeypatch.setattr(
         auth_service,
         "resolve_user_flags",
-        discord_utils.resolve_user_flags,
+        roles_utils.resolve_user_flags,
     )
 
     monkeypatch.setattr(
