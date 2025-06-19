@@ -8,6 +8,7 @@ All notable changes to this project will be recorded in this file.
 - Added a README section pointing to workflow docs under `docs/`.
 - Added `DATABASE_URL` placeholder to `.env.example`.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
+- Linked `docs/founders/charter.md` from the founders README.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Ignored `.pytest_cache/` and `.ruff_cache/` in `.gitignore` and `.dockerignore`.
 - Expanded infrastructure blueprints with usage notes.
