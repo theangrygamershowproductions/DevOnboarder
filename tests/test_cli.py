@@ -9,3 +9,11 @@ def test_cli_prints_greeting(capsys, monkeypatch):
     main()
     captured = capsys.readouterr()
     assert captured.out.strip() == "Hello, Codex!"
+
+
+def test_cli_prints_default_greeting(capsys, monkeypatch):
+    """devonboarder.cli.main prints default greeting when no name given."""
+    monkeypatch.setattr(sys, "argv", ["devonboarder"])
+    main()
+    captured = capsys.readouterr()
+    assert captured.out.strip() == "Hello, World!"
