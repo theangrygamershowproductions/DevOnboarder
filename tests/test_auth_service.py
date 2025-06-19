@@ -85,3 +85,42 @@ def test_user_levels_and_promote():
     with auth_service.SessionLocal() as db:
         bob = db.query(auth_service.User).filter_by(username="bob").first()
         assert bob.is_admin
+
+def test_register_duplicate_username():
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "bob", "password": "pwd"})
+    resp = client.post("/api/register", json={"username": "bob", "password": "pwd"})
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Username exists"
+
+
+def test_login_invalid_credentials():
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "alice", "password": "secret"})
+    resp = client.post("/api/login", json={"username": "alice", "password": "wrong"})
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Invalid credentials"
+
+
+def test_xp_accumulation_and_level_calculation():
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "eve", "password": "pw"})
+    with auth_service.SessionLocal() as db:
+        eve = db.query(auth_service.User).filter_by(username="eve").first()
+        db.add_all([
+            auth_service.XPEvent(user_id=eve.id, xp=120),
+            auth_service.XPEvent(user_id=eve.id, xp=80),
+            auth_service.XPEvent(user_id=eve.id, xp=60),
+        ])
+        db.commit()
+
+    token = _get_token(client, "eve", "pw")
+    resp = client.get("/api/user/level", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 200
+    assert resp.json() == {"level": 3}
