@@ -11,10 +11,15 @@ This template outlines how to onboard early testers who receive special access.
 1. Accept your invitation and join the private communication channel.
 2. Follow [docs/README.md](../README.md) to set up the project locally.
 3. Use the app and note any problems or confusing areas.
-4. Submit feedback through the issue tracker or provided survey link.
+4. Submit feedback through the issue tracker for bugs. For general impressions
+   or anonymous comments, fill out
+   [feedback-form.md](feedback-form.md).
 5. Expect occasional downtime or breaking changes while we iterate.
 6. Update [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md) with your feedback status.
 7. Track progress in [feedback-template.md](feedback-template.md) as issues are addressed.
+
+Use the form for quick thoughts or private comments. Open an issue when you
+encounter a reproducible bug or have a feature suggestion so we can track it.
 
 ## Alpha Feature Flag
 Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes meant only for testers. See `.env.example` for the default value.
