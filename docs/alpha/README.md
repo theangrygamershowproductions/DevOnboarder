@@ -16,3 +16,5 @@ This template outlines how to onboard early testers who receive special access.
 
 ## Thank You
 Invite-only testers help shape the stability of the project. Your feedback directly influences upcoming releases.
+
+For a sample invitation, see [emails/invite_alpha_email.md](../../emails/invite_alpha_email.md).
