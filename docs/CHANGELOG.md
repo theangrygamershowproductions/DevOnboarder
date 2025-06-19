@@ -80,6 +80,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now installs bot dependencies and runs `npm test`.
 - Documented onboarding phases, XP milestones and contributor logs in `docs/README.md`.
 - Added `docs/endpoint-reference.md` with API routes and Discord command examples.
+- Added Discord utilities for fetching user roles and resolving admin flags.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
