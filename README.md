@@ -69,6 +69,14 @@ curl http://localhost:8001/api/user/onboarding-status
 curl http://localhost:8001/api/user/level
 ```
 
+For authentication and user management, run:
+
+```bash
+devonboarder-auth
+```
+
+The auth service listens on `http://localhost:8002`.
+
 The CI pipeline also relies on this compose file to start Redis during tests.
 
 ## Codex Runs

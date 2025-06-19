@@ -3,6 +3,8 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added authentication service with SQLAlchemy models and JWT-protected routes.
+- Documented running `devonboarder-auth` in the onboarding guide.
 - Added test ensuring the CLI prints the default greeting when no name is provided.
 - Documented how to propose issues and pull requests in `docs/README.md`.
 - Added an alpha phase roadmap under `docs/roadmap/` and linked it from the docs README.
