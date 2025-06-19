@@ -33,6 +33,9 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 3. Use [docs/pull_request_template.md](docs/pull_request_template.md) when opening a pull request.
 4. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
 5. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
+6. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
+7. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
+8. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
 
 These files expand on the steps listed in the Quickstart section.
 
