@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
 - Added test ensuring the CLI prints the default greeting when no name is provided.
 - Authentication middleware now resolves Discord roles after JWT validation and
   `/api/user` includes `isAdmin`, `isVerified`, `verificationType`, and `roles`.
+- `/api/user` now returns the Discord ID, username, avatar, and guild roles.
 - Documented how to propose issues and pull requests in `docs/README.md`.
 - Added an alpha phase roadmap under `docs/roadmap/` and linked it from the docs README.
 - Added a README section pointing to workflow docs under `docs/`.

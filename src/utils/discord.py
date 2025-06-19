@@ -43,6 +43,19 @@ def get_user_roles(user_id: str, token: str) -> dict[str, list[str]]:
     return roles
 
 
+def get_user_profile(token: str) -> dict[str, str | None]:
+    """Return the Discord user profile for the given OAuth token."""
+    headers = {"Authorization": f"Bearer {token}"}
+    resp = httpx.get(f"{BASE_URL}/users/@me", headers=headers)
+    resp.raise_for_status()
+    data = resp.json()
+    return {
+        "id": data["id"],
+        "username": data["username"],
+        "avatar": data.get("avatar"),
+    }
+
+
 def resolve_user_flags(user_roles: dict[str, list[str]]) -> dict[str, object]:
     """Resolve admin and verification flags based on role IDs."""
     env = os.environ
