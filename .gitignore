@@ -36,5 +36,3 @@ logs/
 .terraform/
 lcov-report/
 codeql-*
-
-Potato.md
