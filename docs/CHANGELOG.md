@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Added `docker-compose.ci.yaml` for the CI pipeline.
 - Added Postgres `db` service in the compose files and initial Alembic
   migrations for `users`, `contributions`, and `xp_events` tables.
+- Added placeholder `frontend/README.md` to reserve the upcoming UI directory.
 - Added authentication service with SQLAlchemy models and JWT-protected routes.
 - Documented running `devonboarder-auth` in the onboarding guide.
 - Added test ensuring the CLI prints the default greeting when no name is provided.

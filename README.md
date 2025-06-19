@@ -51,7 +51,8 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 
 Alternatively, you can run the Docker Compose setup directly.
 This starts the auth, bot, XP API, frontend, and database services using
-environment variables from `.env.dev`:
+environment variables from `.env.dev`.
+The `frontend/` directory currently contains only a placeholder README:
 
 ```bash
 docker compose -f docker-compose.dev.yaml --env-file .env.dev up
