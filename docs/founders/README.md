@@ -18,4 +18,7 @@ Members of the Founder's Circle help guide the long-term vision of the project.
 3. Join scheduled feedback sessions or submit pull requests with improvements.
 4. Add yourself to [../../FOUNDERS.md](../../FOUNDERS.md) so we can track contributions.
 
+## Founder Feature Flag
+Set `IS_FOUNDER=true` in your `.env.dev` file to unlock founder-only routes. The `.env.example` file lists this variable for reference.
+
 Need a reference email? See [emails/founders_invite.md](../../emails/founders_invite.md) for a template you can adapt.
