@@ -31,7 +31,7 @@ All notable changes to this project will be recorded in this file.
 - Restructured source into a `devonboarder` package and updated tests to import modules by package path.
 - Dockerfile installs the package and uses the CLI entrypoint.
 - Added test that runs the CLI and verifies the greeting output.
-- Compose files start the server via `python -m devonboarder.server`.
+- Compose files start the server via `devonboarder-server`.
 - Added onboarding templates for invite-only alpha testers and the founder's circle.
 - Moved onboarding docs into `docs/alpha/` and `docs/founders/` with new feedback and charter files.
 - Added invitation email templates under the `emails/` directory.
@@ -50,6 +50,7 @@ All notable changes to this project will be recorded in this file.
   that new rows should be appended below it.
 - Added tests verifying that `/alpha` and `/founder` routes allow mixed-case
   feature flags.
+- Added `devonboarder-server` console script and updated compose files and docs.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
