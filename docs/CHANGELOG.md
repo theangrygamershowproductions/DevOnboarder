@@ -11,6 +11,8 @@ All notable changes to this project will be recorded in this file.
 - Added `DATABASE_URL` placeholder to `.env.example`.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
 - Added `httpx` as a project dependency and documented it in the README.
+- Added `uvicorn` as a project dependency and documented its usage in the
+  API server instructions.
 - Linked `docs/founders/charter.md` from the founders README.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Ignored `.pytest_cache/` and `.ruff_cache/` in `.gitignore` and `.dockerignore`.
