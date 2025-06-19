@@ -23,8 +23,8 @@ jobs:
       - name: Run linter
         run: ruff check .
       - name: Start docker compose
-        run: docker compose -f docker-compose.dev.yaml up -d
+        run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
       - name: Run tests
         run: pytest -q
       - name: Stop compose
-        run: docker compose -f docker-compose.dev.yaml down
+        run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down

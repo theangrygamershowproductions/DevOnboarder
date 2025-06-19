@@ -16,11 +16,12 @@ container setup used by Codex.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
 - `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code
   development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
-- `docker-compose.yml` – Base compose file for production deployments.
-- `docker-compose.dev.yaml` – Compose file for local development.
-  Includes a Redis service exposed on port `6379`.
-- `docker-compose.codex.yml` – Compose file used when running in Codex.
-- `docker-compose.override.yaml` – Overrides for the base compose file.
+  - `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
+  - `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
+  - `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
+  - `docker-compose.yml` – Base compose file for generic deployments.
+  - `docker-compose.codex.yml` – Compose file used when running in Codex.
+  - `docker-compose.override.yaml` – Overrides for the base compose file.
 - `bot/` – Discord bot written in TypeScript.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample environment variables for local development.
@@ -49,12 +50,11 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
 Alternatively, you can run the Docker Compose setup directly.
-This will start the application (executed via `devonboarder-server`)
-along with a Redis container on port `6379` and a Postgres database on
-port `5432`:
+This starts the auth, bot, XP API, frontend, and database services using
+environment variables from `.env.dev`:
 
 ```bash
-docker compose -f docker-compose.dev.yaml up
+docker compose -f docker-compose.dev.yaml --env-file .env.dev up
 ```
 
 To experiment with the user-facing API outside Docker, run:
@@ -79,7 +79,7 @@ devonboarder-auth
 
 The auth service listens on `http://localhost:8002`.
 
-The CI pipeline also relies on this compose file to start Redis during tests.
+The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
 
 ## Codex Runs
 
@@ -91,17 +91,17 @@ docker compose -f docker-compose.codex.yml up
 
 ## Production Deployment
 
-Use the main compose file (with overrides) to deploy the application:
+Deploy the production stack with the dedicated compose file and `.env.prod`:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
+docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
 1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
 2. Install the project with `pip install -e .`.
-3. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
-   The app container launches via `devonboarder-server`.
+3. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+   The services launch using the commands defined in the compose file.
 4. Run `alembic upgrade head` to create the initial tables.
 5. Execute the tests using `pytest -q`.
 
