@@ -23,7 +23,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
    `curl http://localhost:8001/api/user/onboarding-status`
    and `curl http://localhost:8001/api/user/level`.
 10. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
-11. Verify changes with `ruff check .` and `pytest -q` before committing.
+11. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
 12. Install git hooks with `pre-commit install` so these checks run automatically.
 
 The compose files define common service settings using YAML anchors. Each
