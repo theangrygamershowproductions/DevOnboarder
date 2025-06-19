@@ -22,9 +22,12 @@ container setup used by Codex.
   - `docker-compose.yml` – Base compose file for generic deployments.
   - `docker-compose.codex.yml` – Compose file used when running in Codex.
   - `docker-compose.override.yaml` – Overrides for the base compose file.
-- `bot/` – Discord bot written in TypeScript.
-- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
-- `.env.example` – Sample environment variables for local development.
+  - `bot/` – Discord bot written in TypeScript.
+  - `frontend/` – Placeholder directory for the upcoming web UI.
+  - `auth/` – Environment files for the authentication service.
+  - `xp/` – Environment files for the XP API.
+  - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+  - `.env.example` – Sample variables shared across services.
 
 ## Documentation and Onboarding
 
@@ -52,6 +55,7 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 Alternatively, you can run the Docker Compose setup directly.
 This starts the auth, bot, XP API, frontend, and database services using
 environment variables from `.env.dev`.
+Copy each `*.env.example` to `.env` inside its service directory before starting.
 The `frontend/` directory currently contains only a placeholder README:
 
 ```bash
@@ -100,11 +104,16 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 ## Quickstart
 1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
-2. Install the project with `pip install -e .`.
-3. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+2. Copy each service example file to `.env`:
+   `cp auth/.env.example auth/.env`
+   `cp bot/.env.example bot/.env`
+   `cp xp/.env.example xp/.env`
+   `cp frontend/.env.example frontend/.env`
+3. Install the project with `pip install -e .`.
+4. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    The services launch using the commands defined in the compose file.
-4. Run `alembic upgrade head` to create the initial tables.
-5. Execute the tests using `pytest -q`.
+5. Run `alembic upgrade head` to create the initial tables.
+6. Execute the tests using `pytest -q`.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.

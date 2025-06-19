@@ -4,6 +4,9 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added `.env.example` files for individual services and documented how to copy
+  them during setup.
+
 - Added `docker-compose.dev.yaml` and `docker-compose.prod.yaml` with auth,
   bot, XP API, frontend, and Postgres services loading variables from
   `.env.dev` and `.env.prod`.
