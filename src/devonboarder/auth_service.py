@@ -3,7 +3,8 @@ from __future__ import annotations
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from utils.discord import get_user_roles, resolve_user_flags, get_user_profile
+from utils.discord import get_user_roles, get_user_profile
+from utils.roles import resolve_user_flags
 from sqlalchemy import (
     Column,
     Integer,
@@ -105,7 +106,8 @@ def get_current_user(
 
     # Fetch Discord roles and resolve verification/admin flags
     roles = get_user_roles(str(user_id), token)
-    flags = resolve_user_flags(roles)
+    all_role_ids = {r for rs in roles.values() for r in rs}
+    flags = resolve_user_flags(all_role_ids)
 
     profile = get_user_profile(token)
 
