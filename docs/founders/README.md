@@ -14,5 +14,5 @@ Members of the Founder's Circle help guide the long-term vision of the project.
 
 ## Getting Started
 1. Introduce yourself in the private Founder's Circle channel.
-2. Review [docs/README.md](README.md) to set up your environment.
+2. Review [docs/README.md](../README.md) to set up your environment.
 3. Join scheduled feedback sessions or submit pull requests with improvements.
