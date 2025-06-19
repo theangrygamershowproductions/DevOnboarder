@@ -25,6 +25,10 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 11. Verify changes with `ruff check .` and `pytest -q` before committing.
 12. Install git hooks with `pre-commit install` so these checks run automatically.
 
+The compose files define common service settings using YAML anchors. Each
+environment file overrides differences like `env_file` or exposed ports below the
+`<<` merge key.
+
 ## Key Documentation
 
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
