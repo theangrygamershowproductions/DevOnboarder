@@ -12,9 +12,12 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 5. Visit `http://localhost:8000` to see the greeting server.
 6. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
-7. Stop services with `docker compose -f docker-compose.dev.yaml down`.
-8. Verify changes with `ruff check .` and `pytest -q` before committing.
-9. Install git hooks with `pre-commit install` so these checks run automatically.
+7. Test the XP API with:
+   `curl http://localhost:8001/api/user/onboarding-status`
+   and `curl http://localhost:8001/api/user/level`.
+8. Stop services with `docker compose -f docker-compose.dev.yaml down`.
+9. Verify changes with `ruff check .` and `pytest -q` before committing.
+10. Install git hooks with `pre-commit install` so these checks run automatically.
 
 ## Key Documentation
 
