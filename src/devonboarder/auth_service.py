@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from utils.discord import get_user_roles, resolve_user_flags
+from utils.discord import get_user_roles, resolve_user_flags, get_user_profile
 from sqlalchemy import (
     Column,
     Integer,
@@ -107,11 +107,16 @@ def get_current_user(
     roles = get_user_roles(str(user_id), token)
     flags = resolve_user_flags(roles)
 
+    profile = get_user_profile(token)
+
     # Attach resolved information to the user object for downstream handlers
     user.roles = roles
     user.isAdmin = flags["isAdmin"]
     user.isVerified = flags["isVerified"]
     user.verificationType = flags["verificationType"]
+    user.discord_id = profile["id"]
+    user.discord_username = profile["username"]
+    user.avatar = profile["avatar"]
 
     return user
 
@@ -145,12 +150,13 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
 @app.get("/api/user")
 def user_info(current_user: User = Depends(get_current_user)) -> dict[str, object]:
     return {
-        "username": current_user.username,
-        "is_admin": current_user.is_admin,
-        "roles": current_user.roles,
+        "id": current_user.discord_id,
+        "username": current_user.discord_username,
+        "avatar": current_user.avatar,
         "isAdmin": current_user.isAdmin,
         "isVerified": current_user.isVerified,
         "verificationType": current_user.verificationType,
+        "roles": current_user.roles,
     }
 
 

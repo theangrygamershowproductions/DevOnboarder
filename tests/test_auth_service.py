@@ -8,6 +8,9 @@ def setup_function(function):
     auth_service.resolve_user_flags = (
         lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
     )
+    auth_service.get_user_profile = (
+        lambda token: {"id": "0", "username": "", "avatar": None}
+    )
 
 
 def _get_token(client: TestClient, username: str, password: str) -> str:
@@ -32,6 +35,12 @@ def test_register_login_and_user_info(monkeypatch):
         lambda roles: {"isAdmin": True, "isVerified": False, "verificationType": None},
     )
 
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda token: {"id": "99", "username": "discord", "avatar": "img"},
+    )
+
     resp = client.post(
         "/api/register",
         json={"username": "alice", "password": "secret"},
@@ -45,12 +54,15 @@ def test_register_login_and_user_info(monkeypatch):
     )
     assert resp.status_code == 200
     data = resp.json()
-    assert data["username"] == "alice"
-    assert data["is_admin"] is False
-    assert data["roles"] == {"guild": ["role1"]}
-    assert data["isAdmin"] is True
-    assert data["isVerified"] is False
-    assert data["verificationType"] is None
+    assert data == {
+        "id": "99",
+        "username": "discord",
+        "avatar": "img",
+        "isAdmin": True,
+        "isVerified": False,
+        "verificationType": None,
+        "roles": {"guild": ["role1"]},
+    }
 
     # login works
     token2 = _get_token(client, "alice", "secret")
