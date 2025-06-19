@@ -18,6 +18,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
+- [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 - [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
 - [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.

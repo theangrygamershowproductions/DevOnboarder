@@ -27,6 +27,8 @@ Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes mean
 ## Thank You
 Invite-only testers help shape the stability of the project. Your feedback directly influences upcoming releases.
 
+Maintainers should follow [alpha-wave-rollout-guide.md](alpha-wave-rollout-guide.md) when scheduling each invite wave.
+
 For a sample invitation, see [emails/invite_alpha_email.md](../../emails/invite_alpha_email.md).
 Refer to [emails/style-guide.md](../../emails/style-guide.md) for our email tone guidelines.
 
