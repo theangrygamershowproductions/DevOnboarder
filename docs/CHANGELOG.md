@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Linked `docs/founders/charter.md` from the founders README.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Ignored `.pytest_cache/` and `.ruff_cache/` in `.gitignore` and `.dockerignore`.
+- Added FastAPI user API with `/api/user/onboarding-status` and `/api/user/level` routes.
 - Expanded infrastructure blueprints with usage notes.
 - Expanded `infra/README.md` and blueprint docs with compose examples and
   environment variable instructions.
