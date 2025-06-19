@@ -17,8 +17,8 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
-- [Invite-only alpha onboarding](invite-only-alpha.md) &ndash; guide for early testers.
-- [Founder's circle onboarding](founders-circle.md) &ndash; roles and perks for core supporters.
+- [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
+- [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 
 ## Configuration Helpers
 
