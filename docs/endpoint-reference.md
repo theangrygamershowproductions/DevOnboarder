@@ -15,7 +15,7 @@ Requests to these endpoints require a valid JWT unless otherwise noted.
 
 - `POST /api/register` – create a new account and return a token.
 - `POST /api/login` – obtain a token for an existing account.
-- `GET /api/user` – fetch account details including admin and verification flags.
+- `GET /api/user` – fetch the Discord ID, username, avatar, roles, and admin/verification flags.
 - `GET /api/user/onboarding-status` – onboarding status for the authenticated user.
 - `GET /api/user/level` – level derived from accumulated XP.
 - `GET /api/user/contributions` – list contribution descriptions.

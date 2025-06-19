@@ -1,5 +1,5 @@
 import httpx
-from utils.discord import get_user_roles, resolve_user_flags
+from utils.discord import get_user_roles, resolve_user_flags, get_user_profile
 
 
 class StubResponse:
@@ -51,4 +51,14 @@ def test_resolve_user_flags(monkeypatch):
         "isVerified": True,
         "verificationType": "government",
     }
+
+
+def test_get_user_profile(monkeypatch):
+    def fake_get(url: str, headers: dict[str, str]):
+        assert url.endswith("/users/@me")
+        return StubResponse(200, {"id": "42", "username": "foo", "avatar": "img"})
+
+    monkeypatch.setattr(httpx, "get", fake_get)
+    profile = get_user_profile("token")
+    assert profile == {"id": "42", "username": "foo", "avatar": "img"}
 
