@@ -11,8 +11,26 @@ def load_compose(file_name: str) -> dict:
 
 def test_dev_compose_has_expected_services():
     """docker-compose.dev.yaml defines all core services."""
+
+
+def test_dev_compose_has_expected_services():
+    """docker-compose.dev.yaml defines all core services."""
     compose = load_compose("docker-compose.dev.yaml")
     services = compose.get("services", {})
+    expected = {"auth", "bot", "xp", "frontend", "db"}
+    assert expected.issubset(services)
+
+
+def test_compose_uses_env_files():
+    """Both compose files load environment variables from env files."""
+    for fname, env in [
+        ("docker-compose.dev.yaml", ".env.dev"),
+        ("docker-compose.prod.yaml", ".env.prod"),
+    ]:
+        compose = load_compose(fname)
+        service = compose["services"]["auth"]
+        env_file = service.get("env_file")
+        assert env_file == [env] or env_file == env
     expected = {"auth", "bot", "xp", "frontend", "db"}
     assert expected.issubset(services)
 
@@ -40,6 +58,8 @@ def test_base_compose_builds_image():
 
 
 def test_compose_includes_postgres():
+    """Both compose files include a Postgres service."""
+    for fname in ["docker-compose.dev.yaml", "docker-compose.prod.yaml"]:
     """All compose files include a Postgres service."""
     for fname in [
         "docker-compose.dev.yaml",
@@ -51,6 +71,16 @@ def test_compose_includes_postgres():
         assert "db" in services
         image = services["db"].get("image", "")
         assert image.startswith("postgres")
+
+
+def test_db_volume_persisted():
+    """Postgres service uses a named volume for data."""
+    for fname in ["docker-compose.dev.yaml", "docker-compose.prod.yaml"]:
+        compose = load_compose(fname)
+        db_service = compose["services"]["db"]
+        volumes = db_service.get("volumes", [])
+        assert any(v.startswith("db_data:") for v in volumes)
+        assert "db_data" in compose.get("volumes", {})
 
 
 def test_db_volume_persisted():
