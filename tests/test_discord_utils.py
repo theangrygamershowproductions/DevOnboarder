@@ -1,6 +1,7 @@
 import httpx
 import pytest
-from utils.discord import get_user_roles, resolve_user_flags, get_user_profile
+from utils.discord import get_user_roles, get_user_profile
+from utils.roles import resolve_user_flags
 
 
 class StubResponse:
@@ -45,8 +46,7 @@ def test_resolve_user_flags(monkeypatch):
     monkeypatch.setenv("MILITARY_ROLE_ID", "mil")
     monkeypatch.setenv("EDUCATION_ROLE_ID", "edu")
 
-    roles = {"10": ["owner"], "20": ["gov"]}
-    flags = resolve_user_flags(roles)
+    flags = resolve_user_flags({"owner", "gov"})
     assert flags == {
         "isAdmin": True,
         "isVerified": True,
@@ -119,6 +119,6 @@ def test_resolve_user_flags_combinations(monkeypatch, roles, expected):
     monkeypatch.setenv("MILITARY_ROLE_ID", "mil")
     monkeypatch.setenv("EDUCATION_ROLE_ID", "edu")
 
-    flags = resolve_user_flags(roles)
+    flags = resolve_user_flags({r for rs in roles.values() for r in rs})
     assert flags == expected
 
