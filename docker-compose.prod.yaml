@@ -1,41 +1,48 @@
 version: "3.8"
+
+x-app-base: &app-base
+  build: .
+
+x-node-base: &node-base
+  image: node:18
+  command: ["npm", "start"]
+
+x-db-base: &db-base
+  image: postgres:15
+  environment:
+    POSTGRES_USER: devuser
+    POSTGRES_PASSWORD: devpass
+    POSTGRES_DB: devdb
+  volumes:
+    - db_data:/var/lib/postgresql/data
+
+x-env-prod: &env-prod
+  env_file:
+    - .env.prod
+
 services:
   auth:
-    build: .
+    <<: [*app-base, *env-prod]
     command: ["devonboarder-auth"]
-    env_file:
-      - .env.prod
+
   bot:
-    image: node:18
+    <<: [*node-base, *env-prod]
     working_dir: /bot
     volumes:
       - ./bot:/bot
-    command: ["npm", "start"]
-    env_file:
-      - .env.prod
+
   xp:
-    build: .
+    <<: [*app-base, *env-prod]
     command: ["devonboarder-api"]
-    env_file:
-      - .env.prod
+
   frontend:
-    image: node:18
+    <<: [*node-base, *env-prod]
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
-    command: ["npm", "start"]
-    env_file:
-      - .env.prod
+
   db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpass
-      POSTGRES_DB: devdb
-    env_file:
-      - .env.prod
-    volumes:
-      - db_data:/var/lib/postgresql/data
+    <<: [*db-base, *env-prod]
 
 volumes:
   db_data:

@@ -1,14 +1,21 @@
 version: "3.8"
+
+x-db-base: &db-base
+  image: postgres:15
+  environment:
+    POSTGRES_USER: devuser
+    POSTGRES_PASSWORD: devpass
+    POSTGRES_DB: devdb
+  volumes:
+    - db_data:/var/lib/postgresql/data
+
+x-env-dev: &env-dev
+  env_file:
+    - .env.dev
+
 services:
   db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpass
-      POSTGRES_DB: devdb
-    env_file:
-      - .env.dev
-    volumes:
-      - db_data:/var/lib/postgresql/data
+    <<: [*db-base, *env-dev]
+
 volumes:
   db_data:
