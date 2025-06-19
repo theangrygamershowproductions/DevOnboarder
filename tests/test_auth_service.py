@@ -4,6 +4,10 @@ from devonboarder import auth_service
 
 def setup_function(function):
     auth_service.init_db()
+    auth_service.get_user_roles = lambda user_id, token: {}
+    auth_service.resolve_user_flags = (
+        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
+    )
 
 
 def _get_token(client: TestClient, username: str, password: str) -> str:
@@ -12,9 +16,21 @@ def _get_token(client: TestClient, username: str, password: str) -> str:
     return resp.json()["token"]
 
 
-def test_register_login_and_user_info():
+def test_register_login_and_user_info(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
+
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_roles",
+        lambda user_id, token: {"guild": ["role1"]},
+    )
+
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {"isAdmin": True, "isVerified": False, "verificationType": None},
+    )
 
     resp = client.post(
         "/api/register",
@@ -28,8 +44,13 @@ def test_register_login_and_user_info():
         headers={"Authorization": f"Bearer {token}"},
     )
     assert resp.status_code == 200
-    assert resp.json()["username"] == "alice"
-    assert resp.json()["is_admin"] is False
+    data = resp.json()
+    assert data["username"] == "alice"
+    assert data["is_admin"] is False
+    assert data["roles"] == {"guild": ["role1"]}
+    assert data["isAdmin"] is True
+    assert data["isVerified"] is False
+    assert data["verificationType"] is None
 
     # login works
     token2 = _get_token(client, "alice", "secret")
