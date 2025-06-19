@@ -4,7 +4,8 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 
 ## Local Development
 
-1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
+1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies
+   (including `httpx`).
 2. Install the project in editable mode with `pip install -e .`.
 3. Start services with `docker compose -f docker-compose.dev.yaml up -d`.
 4. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
