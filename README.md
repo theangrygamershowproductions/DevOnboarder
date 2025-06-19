@@ -17,6 +17,7 @@ container setup used by Codex.
 - `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code
   development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
   - `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
+  - `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
   - `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
   - `docker-compose.yml` – Base compose file for generic deployments.
   - `docker-compose.codex.yml` – Compose file used when running in Codex.
@@ -78,7 +79,7 @@ devonboarder-auth
 
 The auth service listens on `http://localhost:8002`.
 
-The CI pipeline also relies on this compose file to start Redis during tests.
+The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
 
 ## Codex Runs
 
