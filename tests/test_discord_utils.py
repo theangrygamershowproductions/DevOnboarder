@@ -37,7 +37,7 @@ def test_get_user_roles(monkeypatch):
 def test_resolve_user_flags(monkeypatch):
     monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
     monkeypatch.setenv("OWNER_ROLE_ID", "owner")
-    monkeypatch.setenv("ADMNISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("ADMINISTRATOR_ROLE_ID", "admin")
     monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
     monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
     monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
@@ -111,7 +111,7 @@ def test_resolve_user_flags_combinations(monkeypatch, roles, expected):
     """Return correct flags for assorted role sets."""
     monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
     monkeypatch.setenv("OWNER_ROLE_ID", "owner")
-    monkeypatch.setenv("ADMNISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("ADMINISTRATOR_ROLE_ID", "admin")
     monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
     monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
     monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
