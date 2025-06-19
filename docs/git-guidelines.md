@@ -31,6 +31,12 @@ Add login form UI
 Includes basic username and password fields.
 ```
 
+Summarize the purpose of the change in the first line. For example:
+
+```text
+Add dedicated CI compose file and environment-specific compose configs
+```
+
 ## Rebase and Merge Policy
 
 Always rebase your branch onto the latest `main` before opening a pull request
