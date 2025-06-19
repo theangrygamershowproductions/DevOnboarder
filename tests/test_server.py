@@ -83,3 +83,27 @@ def test_founder_route_allowed_with_flag(monkeypatch):
     finally:
         server.shutdown()
         thread.join()
+
+
+def test_alpha_route_allowed_with_mixed_case_flag(monkeypatch):
+    monkeypatch.setenv("IS_ALPHA_USER", "True")
+    server, host, port, thread = _start_server()
+    try:
+        with urllib.request.urlopen(f"http://{host}:{port}/alpha") as resp:
+            body = resp.read().decode()
+        assert body == "Welcome to the alpha program!"
+    finally:
+        server.shutdown()
+        thread.join()
+
+
+def test_founder_route_allowed_with_mixed_case_flag(monkeypatch):
+    monkeypatch.setenv("IS_FOUNDER", "True")
+    server, host, port, thread = _start_server()
+    try:
+        with urllib.request.urlopen(f"http://{host}:{port}/founder") as resp:
+            body = resp.read().decode()
+        assert body == "Founder access granted."
+    finally:
+        server.shutdown()
+        thread.join()
