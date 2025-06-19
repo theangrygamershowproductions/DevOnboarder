@@ -13,6 +13,7 @@ This template outlines how to onboard early testers who receive special access.
 3. Use the app and note any problems or confusing areas.
 4. Submit feedback through the issue tracker or provided survey link.
 5. Expect occasional downtime or breaking changes while we iterate.
+6. Update [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md) with your feedback status.
 
 ## Thank You
 Invite-only testers help shape the stability of the project. Your feedback directly influences upcoming releases.
