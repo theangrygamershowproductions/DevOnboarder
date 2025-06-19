@@ -1,4 +1,5 @@
 import httpx
+import pytest
 from utils.discord import get_user_roles, resolve_user_flags, get_user_profile
 
 
@@ -61,4 +62,63 @@ def test_get_user_profile(monkeypatch):
     monkeypatch.setattr(httpx, "get", fake_get)
     profile = get_user_profile("token")
     assert profile == {"id": "42", "username": "foo", "avatar": "img"}
+
+
+def test_get_user_roles_multiple_guilds(monkeypatch):
+    """Collect roles across more than two guilds."""
+    def fake_get(url: str, headers: dict[str, str]):
+        if url.endswith("/users/@me/guilds"):
+            return StubResponse(200, [{"id": "1"}, {"id": "2"}, {"id": "3"}])
+        if url.endswith("/users/@me/guilds/1/member"):
+            return StubResponse(200, {"roles": ["r1"]})
+        if url.endswith("/users/@me/guilds/2/member"):
+            return StubResponse(200, {"roles": ["r2"]})
+        if url.endswith("/users/@me/guilds/3/member"):
+            return StubResponse(200, {"roles": ["r3"]})
+        return StubResponse(404, {})
+
+    monkeypatch.setattr(httpx, "get", fake_get)
+    roles = get_user_roles("321", "token")
+    assert roles == {"1": ["r1"], "2": ["r2"], "3": ["r3"]}
+
+
+@pytest.mark.parametrize(
+    "roles,expected",
+    [
+        (
+            {"10": ["owner"]},
+            {"isAdmin": True, "isVerified": False, "verificationType": None},
+        ),
+        (
+            {"10": ["mod"], "99": ["edu"]},
+            {
+                "isAdmin": True,
+                "isVerified": True,
+                "verificationType": "education",
+            },
+        ),
+        (
+            {"10": [], "50": ["gov"]},
+            {
+                "isAdmin": False,
+                "isVerified": True,
+                "verificationType": "government",
+            },
+        ),
+    ],
+)
+def test_resolve_user_flags_combinations(monkeypatch, roles, expected):
+    """Return correct flags for assorted role sets."""
+    monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
+    monkeypatch.setenv("OWNER_ROLE_ID", "owner")
+    monkeypatch.setenv("ADMNISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
+    monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
+    monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
+    monkeypatch.setenv("GOVERNMENT_ROLE_ID", "gov")
+    monkeypatch.setenv("MILITARY_ROLE_ID", "mil")
+    monkeypatch.setenv("EDUCATION_ROLE_ID", "edu")
+
+    flags = resolve_user_flags(roles)
+    assert flags == expected
 
