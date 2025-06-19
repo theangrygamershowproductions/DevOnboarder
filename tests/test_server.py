@@ -57,6 +57,22 @@ def test_alpha_route_allowed_with_flag(monkeypatch):
         thread.join()
 
 
+def test_founder_route_denied_without_flag():
+    server, host, port, thread = _start_server()
+    try:
+        try:
+            urllib.request.urlopen(f"http://{host}:{port}/founder")
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode()
+            assert exc.code == 403
+            assert "Founders only." in body
+        else:
+            raise AssertionError("expected HTTPError")
+    finally:
+        server.shutdown()
+        thread.join()
+
+
 def test_founder_route_allowed_with_flag(monkeypatch):
     monkeypatch.setenv("IS_FOUNDER", "true")
     server, host, port, thread = _start_server()
