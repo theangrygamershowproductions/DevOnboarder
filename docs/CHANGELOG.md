@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Added `docker-compose.dev.yaml` and `docker-compose.prod.yaml` with auth,
   bot, XP API, frontend, and Postgres services loading variables from
   `.env.dev` and `.env.prod`.
+- Documented commit message style with an example summarizing change purpose.
 - Added `docker-compose.ci.yaml` for the CI pipeline.
 - Added Postgres `db` service in the compose files and initial Alembic
   migrations for `users`, `contributions`, and `xp_events` tables.
