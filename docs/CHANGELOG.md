@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 - Documented how to propose issues and pull requests in `docs/README.md`.
+- Added an alpha phase roadmap under `docs/roadmap/` and linked it from the docs README.
 - Added a README section pointing to workflow docs under `docs/`.
 - Added `DATABASE_URL` placeholder to `.env.example`.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
