@@ -11,7 +11,10 @@ version = "0.1.0"
 description = "Sample trunk-based workflow project"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["fastapi"]
+dependencies = [
+    "httpx",
+    "fastapi",
+]
 
 [project.scripts]
 devonboarder = "devonboarder.cli:main"
