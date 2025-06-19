@@ -21,6 +21,7 @@ container setup used by Codex.
   Includes a Redis service exposed on port `6379`.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
 - `docker-compose.override.yaml` – Overrides for the base compose file.
+- `bot/` – Discord bot written in TypeScript.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample environment variables for local development.
 
