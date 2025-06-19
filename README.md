@@ -62,6 +62,12 @@ devonboarder-api
 ```
 
 The API server listens on `http://localhost:8001`.
+Test the endpoints with:
+
+```bash
+curl http://localhost:8001/api/user/onboarding-status
+curl http://localhost:8001/api/user/level
+```
 
 The CI pipeline also relies on this compose file to start Redis during tests.
 
