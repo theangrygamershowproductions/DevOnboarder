@@ -28,6 +28,7 @@ All notable changes to this project will be recorded in this file.
 - Defined project metadata in `pyproject.toml` and added a console script entry point.
 - Restructured source into a `devonboarder` package and updated tests to import modules by package path.
 - Dockerfile installs the package and uses the CLI entrypoint.
+- Added test that runs the CLI and verifies the greeting output.
 - Compose files start the server via `python -m devonboarder.server`.
 - Added onboarding templates for invite-only alpha testers and the founder's circle.
 - Moved onboarding docs into `docs/alpha/` and `docs/founders/` with new feedback and charter files.
