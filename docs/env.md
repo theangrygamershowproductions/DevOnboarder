@@ -42,3 +42,10 @@ moderator role inside the admin guild. Verification types (`government`,
 `military`, `education` or `member`) are resolved in the same way. These
 flags appear in the `/api/user` response and control access to certain
 commands and pages.
+
+- `VERIFIED_GOVERNMENT_ROLE_ID` &ndash; role granted after confirming a
+  government employee's credentials.
+- `VERIFIED_MILITARY_ROLE_ID` &ndash; role granted once a user proves active
+  duty or veteran status.
+- `VERIFIED_EDUCATION_ROLE_ID` &ndash; role assigned when a school or
+  university affiliation is verified.

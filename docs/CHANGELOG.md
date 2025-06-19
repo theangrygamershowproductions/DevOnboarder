@@ -4,6 +4,9 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 - Added tests for Discord role resolution and `/api/user` flags.
+- Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
+  `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
+  `docs/env.md`.
 - Moved role flag logic to `utils.roles` and added `resolve_verification_type`.
 - Introduced Discord role resolution in the auth service and expanded `/api/user`
   to return Discord profile fields and resolved role flags.
