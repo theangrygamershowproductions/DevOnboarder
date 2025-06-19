@@ -1,13 +1,12 @@
 Hello <Name>,
 
-We're thrilled to have you as a Founder's Circle member. Your support shapes our roadmap.
+Welcome to the Founder's Circle! Your insight will help steer our roadmap.
 
-As thanks, you receive:
 - Priority access to new features
 - Recognition in our documentation
 - A direct line to the maintainers
 
-We look forward to building with you!
+We look forward to building with you, so feel free to share ideas anytime.
 
 Cheers,
 The DevOnboarder Team

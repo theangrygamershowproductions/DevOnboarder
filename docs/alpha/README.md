@@ -23,4 +23,5 @@ Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes mean
 Invite-only testers help shape the stability of the project. Your feedback directly influences upcoming releases.
 
 For a sample invitation, see [emails/invite_alpha_email.md](../../emails/invite_alpha_email.md).
+Refer to [emails/style-guide.md](../../emails/style-guide.md) for our email tone guidelines.
 
