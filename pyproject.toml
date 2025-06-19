@@ -18,6 +18,8 @@ dependencies = [
     "SQLAlchemy<2.0",
     "passlib[bcrypt]",
     "python-jose",
+    "alembic",
+    "psycopg2-binary",
 ]
 
 [project.scripts]
