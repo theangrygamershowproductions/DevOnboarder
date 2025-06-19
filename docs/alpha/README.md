@@ -15,6 +15,9 @@ This template outlines how to onboard early testers who receive special access.
 5. Expect occasional downtime or breaking changes while we iterate.
 6. Update [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md) with your feedback status.
 
+## Alpha Feature Flag
+Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes meant only for testers. See `.env.example` for the default value.
+
 ## Thank You
 Invite-only testers help shape the stability of the project. Your feedback directly influences upcoming releases.
 
