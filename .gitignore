@@ -14,7 +14,10 @@ __pycache__/
 .venv/
 venv/
 .env*
-!.env.example
+!*.env.example
+!*/.env.example
+!*.env.*.example
+!*/.env.*.example
 
 # JS artifacts
 node_modules/
