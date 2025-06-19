@@ -24,3 +24,13 @@ def test_base_compose_builds_image():
     service = compose["services"]["app"]
     assert "build" in service
     assert "command" not in service
+
+
+def test_compose_includes_postgres():
+    """Both compose files include a Postgres service."""
+    for fname in ["docker-compose.yml", "docker-compose.dev.yaml"]:
+        compose = load_compose(fname)
+        services = compose.get("services", {})
+        assert "db" in services
+        image = services["db"].get("image", "")
+        assert image.startswith("postgres")
