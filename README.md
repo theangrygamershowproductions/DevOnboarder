@@ -55,6 +55,14 @@ along with a Redis container on port `6379`:
 docker compose -f docker-compose.dev.yaml up
 ```
 
+To experiment with the user-facing API outside Docker, run:
+
+```bash
+devonboarder-api
+```
+
+The API server listens on `http://localhost:8001`.
+
 The CI pipeline also relies on this compose file to start Redis during tests.
 
 ## Codex Runs
