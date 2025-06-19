@@ -27,6 +27,7 @@ All notable changes to this project will be recorded in this file.
 - Restructured source into a `devonboarder` package and updated tests to import modules by package path.
 - Dockerfile installs the package and uses the CLI entrypoint.
 - Compose files start the server via `python -m devonboarder.server`.
+- Added onboarding templates for invite-only alpha testers and the founder's circle.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
