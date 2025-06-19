@@ -26,10 +26,12 @@ services:
     command: ["devonboarder-auth"]
 
   bot:
-    <<: [*node-base, *env-dev]
-    working_dir: /bot
+    build: ./bot
+    env_file:
+      - ./bot/.env
     volumes:
-      - ./bot:/bot
+      - ./bot:/usr/src/app
+    command: ["npm", "start"]
 
   xp:
     <<: [*app-base, *env-dev]
