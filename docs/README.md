@@ -20,6 +20,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 - [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
+- [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
 
