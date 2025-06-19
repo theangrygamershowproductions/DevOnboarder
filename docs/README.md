@@ -6,20 +6,24 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 
 1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies
    (including `httpx` and `uvicorn`).
+   Update `DATABASE_URL` in `.env.dev` if you are not using the default
+   Postgres credentials.
 2. Install the project in editable mode with `pip install -e .`.
 3. Start services with `docker compose -f docker-compose.dev.yaml up -d`.
-4. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
-5. Visit `http://localhost:8000` to see the greeting server.
-6. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
+   This launches Postgres on port `5432` and Redis on `6379`.
+4. Run `alembic upgrade head` to apply the initial database migration.
+5. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
+6. Visit `http://localhost:8000` to see the greeting server.
+7. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
-7. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
+8. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
    It stores data in a local SQLite database.
-8. Test the XP API with:
+9. Test the XP API with:
    `curl http://localhost:8001/api/user/onboarding-status`
    and `curl http://localhost:8001/api/user/level`.
-9. Stop services with `docker compose -f docker-compose.dev.yaml down`.
-10. Verify changes with `ruff check .` and `pytest -q` before committing.
-11. Install git hooks with `pre-commit install` so these checks run automatically.
+10. Stop services with `docker compose -f docker-compose.dev.yaml down`.
+11. Verify changes with `ruff check .` and `pytest -q` before committing.
+12. Install git hooks with `pre-commit install` so these checks run automatically.
 
 ## Key Documentation
 

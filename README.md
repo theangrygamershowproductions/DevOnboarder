@@ -49,7 +49,8 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 
 Alternatively, you can run the Docker Compose setup directly.
 This will start the application (executed via `devonboarder-server`)
-along with a Redis container on port `6379`:
+along with a Redis container on port `6379` and a Postgres database on
+port `5432`:
 
 ```bash
 docker compose -f docker-compose.dev.yaml up
@@ -100,7 +101,8 @@ docker compose -f docker-compose.yml -f docker-compose.override.yaml up -d
 2. Install the project with `pip install -e .`.
 3. Start the services with `docker compose -f docker-compose.dev.yaml up -d`.
    The app container launches via `devonboarder-server`.
-4. Execute the tests using `pytest -q`.
+4. Run `alembic upgrade head` to create the initial tables.
+5. Execute the tests using `pytest -q`.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.
