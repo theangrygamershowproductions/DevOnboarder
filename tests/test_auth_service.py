@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
+from utils import discord as discord_utils
 
 
 def setup_function(function):
@@ -157,3 +158,45 @@ def test_xp_accumulation_and_level_calculation():
     resp = client.get("/api/user/level", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 200
     assert resp.json() == {"level": 3}
+
+
+def test_user_endpoint_returns_flags(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_roles",
+        lambda user_id, token: {"10": ["mod"], "30": ["edu"]},
+    )
+
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        discord_utils.resolve_user_flags,
+    )
+
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda token: {"id": "5", "username": "d", "avatar": None},
+    )
+
+    monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
+    monkeypatch.setenv("OWNER_ROLE_ID", "owner")
+    monkeypatch.setenv("ADMNISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
+    monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
+    monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
+    monkeypatch.setenv("GOVERNMENT_ROLE_ID", "gov")
+    monkeypatch.setenv("MILITARY_ROLE_ID", "mil")
+    monkeypatch.setenv("EDUCATION_ROLE_ID", "edu")
+
+    client.post("/api/register", json={"username": "carl", "password": "pwd"})
+    token = _get_token(client, "carl", "pwd")
+
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    data = resp.json()
+    assert data["isAdmin"] is True
+    assert data["isVerified"] is True
+    assert data["verificationType"] == "education"
