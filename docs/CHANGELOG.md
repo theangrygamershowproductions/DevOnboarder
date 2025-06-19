@@ -19,6 +19,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the alpha wave rollout process in `docs/alpha/alpha-wave-rollout-guide.md` and linked it from the docs.
 - Added `DATABASE_URL` placeholder to `.env.example`.
 - Expanded `scripts/bootstrap.sh` to create `.env.dev` and run the environment setup script.
+- CI workflow copies `.env.example` to `.env.dev` before launching Docker Compose.
 - Added `httpx` as a project dependency and documented it in the README.
 - Added `uvicorn` as a project dependency and documented its usage in the
   API server instructions.
