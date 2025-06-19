@@ -1,11 +1,11 @@
 Hello <Name>,
 
-Thank you for agreeing to test our early alpha release. To join:
+Thanks for joining our alpha! We're excited to hear what you think.
 
-1. Accept the invite link to access the private channel.
+1. Accept the invite to our private channel.
 2. Follow the setup instructions in the repository.
 
-Please share feedback or issues so we can improve quickly.
+Your feedback will directly shape our launch, so please send any questions or ideas our way.
 
-Thanks again,
+Cheers,
 The DevOnboarder Team
