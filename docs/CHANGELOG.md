@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 - Added tests for Discord role resolution and `/api/user` flags.
+- Introduced Discord role resolution in the auth service and expanded `/api/user`
+  to return Discord profile fields and resolved role flags.
 
 - Added `.env.example` files for individual services and documented how to copy
   them during setup.
