@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added tests for Discord role resolution and `/api/user` flags.
 
 - Added `.env.example` files for individual services and documented how to copy
   them during setup.
