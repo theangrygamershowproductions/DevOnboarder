@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Added `httpx` as a project dependency and documented it in the README.
 - Added `uvicorn` as a project dependency and documented its usage in the
   API server instructions.
+- Documented running `devonboarder-api` on `http://localhost:8001` under Local Development in the README.
 - Linked `docs/founders/charter.md` from the founders README.
 - Added `.dockerignore` to reduce the Docker build context by excluding caches and tests.
 - Ignored `.pytest_cache/` and `.ruff_cache/` in `.gitignore` and `.dockerignore`.
