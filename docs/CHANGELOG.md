@@ -32,6 +32,7 @@ All notable changes to this project will be recorded in this file.
 - Added invitation email templates under the `emails/` directory.
 - Added `FOUNDERS.md` and `ALPHA_TESTERS.md` to track community members.
 - Added `IS_ALPHA_USER` and `IS_FOUNDER` flags to `.env.example` with server routes and documentation.
+- Added `docs/alpha/feedback-template.md` and linked it from the alpha README.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
