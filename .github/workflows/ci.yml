@@ -14,6 +14,10 @@ jobs:
               uses: actions/setup-python@v4
               with:
                   python-version: "3.11"
+            - name: Set up Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "18"
             - name: Install dev dependencies
               run: pip install -r requirements-dev.txt
             - name: Setup environment
@@ -28,5 +32,11 @@ jobs:
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
             - name: Run tests
               run: pytest -q
+            - name: Install bot dependencies
+              run: npm ci
+              working-directory: bot
+            - name: Run bot tests
+              run: npm test
+              working-directory: bot
             - name: Stop docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
