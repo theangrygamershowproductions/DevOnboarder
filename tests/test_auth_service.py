@@ -184,7 +184,7 @@ def test_user_endpoint_returns_flags(monkeypatch):
 
     monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
     monkeypatch.setenv("OWNER_ROLE_ID", "owner")
-    monkeypatch.setenv("ADMNISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("ADMINISTRATOR_ROLE_ID", "admin")
     monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
     monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
     monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
