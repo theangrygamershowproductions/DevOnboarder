@@ -42,8 +42,27 @@ environment file overrides differences like `env_file` or exposed ports below th
 - [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
 - [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
+- [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+
+## Onboarding Phases
+
+Our rollout begins with invite-only [alpha testing](alpha/README.md) followed by
+the **Founder's Circle** outlined in [founders/README.md](founders/README.md).
+These groups provide early feedback before the project opens to the public.
+
+## XP Milestones
+
+Each contribution grants experience points (XP). Every 100 XP increases your
+level, which you can check through the `/profile` command or the
+`/api/user/level` endpoint.
+
+## Contributor Logging
+
+Add yourself to [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md) or
+[../FOUNDERS.md](../FOUNDERS.md) when you participate. These logs help us track
+who has contributed and when.
 
 ## Configuration Helpers
 
