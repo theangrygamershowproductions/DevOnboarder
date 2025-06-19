@@ -19,6 +19,8 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
+- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
 
 ## Configuration Helpers
 
