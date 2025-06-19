@@ -36,3 +36,4 @@ logs/
 .terraform/
 lcov-report/
 codeql-*
+auth.db

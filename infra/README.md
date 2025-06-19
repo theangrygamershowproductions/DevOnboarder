@@ -16,11 +16,9 @@ the repository. Deployments rely on environment variables provided via a
    ```bash
    # Local development
    docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d
-   # This starts the application along with Postgres (service `db`) and Redis.
 
    # Production deployment
-   docker compose -f docker-compose.yml -f docker-compose.override.yaml \
-     --env-file .env.prod up -d
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    ```
 
 4. When finished, shut down the stack with `docker compose down`.
