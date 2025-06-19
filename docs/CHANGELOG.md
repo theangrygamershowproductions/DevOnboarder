@@ -3,6 +3,8 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
+  documented `GOVERNMENT_ROLE_ID`, `MILITARY_ROLE_ID`, and `EDUCATION_ROLE_ID`.
 - Added tests for Discord role resolution and `/api/user` flags.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
   `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
