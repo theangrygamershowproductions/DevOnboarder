@@ -4,7 +4,7 @@ services:
     build: .
     command: ["devonboarder-auth"]
     env_file:
-      - .env.dev
+      - .env.prod
   bot:
     image: node:18
     working_dir: /bot
@@ -12,12 +12,12 @@ services:
       - ./bot:/bot
     command: ["npm", "start"]
     env_file:
-      - .env.dev
+      - .env.prod
   xp:
     build: .
     command: ["devonboarder-api"]
     env_file:
-      - .env.dev
+      - .env.prod
   frontend:
     image: node:18
     working_dir: /frontend
@@ -25,7 +25,7 @@ services:
       - ./frontend:/frontend
     command: ["npm", "start"]
     env_file:
-      - .env.dev
+      - .env.prod
   db:
     image: postgres:15
     environment:
@@ -33,9 +33,7 @@ services:
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: devdb
     env_file:
-      - .env.dev
-    ports:
-      - "5432:5432"
+      - .env.prod
     volumes:
       - db_data:/var/lib/postgresql/data
 

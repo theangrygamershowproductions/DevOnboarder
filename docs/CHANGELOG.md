@@ -3,6 +3,9 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added `docker-compose.dev.yaml` and `docker-compose.prod.yaml` with auth,
+  bot, XP API, frontend, and Postgres services loading variables from
+  `.env.dev` and `.env.prod`.
 - Added Postgres `db` service in the compose files and initial Alembic
   migrations for `users`, `contributions`, and `xp_events` tables.
 - Added authentication service with SQLAlchemy models and JWT-protected routes.
