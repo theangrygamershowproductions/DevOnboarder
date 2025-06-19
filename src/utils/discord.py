@@ -61,7 +61,7 @@ def resolve_user_flags(user_roles: dict[str, list[str]]) -> dict[str, object]:
     env = os.environ
     admin_guild = env.get("ADMIN_SERVER_GUILD_ID")
     owner_role = env.get("OWNER_ROLE_ID")
-    admin_role = env.get("ADMNISTRATOR_ROLE_ID")
+    admin_role = env.get("ADMINISTRATOR_ROLE_ID")
     mod_role = env.get("MODERATOR_ROLE_ID")
     verified_user_role = env.get("VERIFIED_USER_ROLE_ID")
     verified_member_role = env.get("VERIFIED_MEMBER_ROLE_ID")

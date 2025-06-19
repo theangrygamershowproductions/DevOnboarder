@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Added Postgres `db` service in the compose files and initial Alembic
   migrations for `users`, `contributions`, and `xp_events` tables.
 - Added placeholder `frontend/README.md` to reserve the upcoming UI directory.
+- Corrected `ADMINISTRATOR_ROLE_ID` variable name in docs, code and tests.
 - Added authentication service with SQLAlchemy models and JWT-protected routes.
 - Documented running `devonboarder-auth` in the onboarding guide.
 - Added test ensuring the CLI prints the default greeting when no name is provided.
