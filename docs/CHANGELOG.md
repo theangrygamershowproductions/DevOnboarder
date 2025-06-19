@@ -48,6 +48,8 @@ All notable changes to this project will be recorded in this file.
 - Added Discord message templates and linked them from the docs README.
 - Added example feedback row with notes column in `ALPHA_TESTERS.md` and noted
   that new rows should be appended below it.
+- Added tests verifying that `/alpha` and `/founder` routes allow mixed-case
+  feature flags.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
