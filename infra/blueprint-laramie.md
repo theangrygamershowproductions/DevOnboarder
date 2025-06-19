@@ -20,8 +20,7 @@ This blueprint sets up a local development stack.
    docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d
    ```
 
-   Redis will be available on port `6379` and the application listens on
-   port `8000`.
+   The stack exposes Postgres on port `5432` and serves the frontend on port `3000`.
 
 Application data is stored in local volumes under the `./data` directory.
 Stop everything with `docker compose down` when finished.

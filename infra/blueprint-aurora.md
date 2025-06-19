@@ -3,11 +3,10 @@ title: Aurora Blueprint
 ---
 
 This blueprint describes the production deployment that relies on
-**AWS Aurora** for the backing database. Use the `docker-compose.yml`
-file together with `docker-compose.override.yaml` when deploying this
-environment. Ensure the application containers can reach the Aurora
-cluster through the configured security groups and that backups are
-enabled for disaster recovery.
+**AWS Aurora** for the backing database. Use `docker-compose.prod.yaml`
+when deploying this environment. Ensure the application containers can
+reach the Aurora cluster through the configured security groups and that
+backups are enabled for disaster recovery.
 
 1. Create a `.env.prod` file and set `DATABASE_URL` to the writer
    endpoint for your Aurora cluster:
@@ -20,8 +19,7 @@ enabled for disaster recovery.
 2. Deploy with:
 
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.override.yaml \
-     --env-file .env.prod up -d
+   docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    ```
 
 The service expects the `DATABASE_URL` environment variable to point to
