@@ -15,6 +15,7 @@ dependencies = []
 
 [project.scripts]
 devonboarder = "devonboarder.cli:main"
+devonboarder-server = "devonboarder.server:main"
 
 [build-system]
 requires = ["setuptools>=61"]
