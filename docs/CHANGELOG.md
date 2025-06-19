@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Moved role flag logic to `utils.roles` and added `resolve_verification_type`.
 - Introduced Discord role resolution in the auth service and expanded `/api/user`
   to return Discord profile fields and resolved role flags.
+- Added `src/routes/user.py` router for `/api/user` and included it in the auth service.
 
 - Added `.env.example` files for individual services and documented how to copy
   them during setup.
