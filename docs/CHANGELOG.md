@@ -43,6 +43,7 @@ All notable changes to this project will be recorded in this file.
   `docs/alpha/README.md` and linked the form.
 - Added README links to `docs/alpha/README.md`, `docs/founders/README.md`, and the email style guide for easier navigation.
 - Removed `Potato.md` from `.gitignore`.
+- Added Discord message templates and linked them from the docs README.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
