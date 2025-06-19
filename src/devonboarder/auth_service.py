@@ -149,17 +149,6 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     return {"token": create_token(user)}
 
 
-@app.get("/api/user")
-def user_info(current_user: User = Depends(get_current_user)) -> dict[str, object]:
-    return {
-        "id": current_user.discord_id,
-        "username": current_user.discord_username,
-        "avatar": current_user.avatar,
-        "isAdmin": current_user.isAdmin,
-        "isVerified": current_user.isVerified,
-        "verificationType": current_user.verificationType,
-        "roles": current_user.roles,
-    }
 
 
 @app.get("/api/user/onboarding-status")
@@ -202,6 +191,8 @@ def promote(
 
 def create_app() -> FastAPI:
     init_db()
+    from routes.user import router as user_router
+    app.include_router(user_router)
     return app
 
 
