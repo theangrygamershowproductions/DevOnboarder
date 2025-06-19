@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Introduced Discord role resolution in the auth service and expanded `/api/user`
   to return Discord profile fields and resolved role flags.
 - Added `src/routes/user.py` router for `/api/user` and included it in the auth service.
+- Added Discord bot scaffolding with dynamic command loading and a `/ping` command.
 
 - Added `.env.example` files for individual services and documented how to copy
   them during setup.
