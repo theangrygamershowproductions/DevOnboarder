@@ -22,3 +22,4 @@ Members of the Founder's Circle help guide the long-term vision of the project.
 Set `IS_FOUNDER=true` in your `.env.dev` file to unlock founder-only routes. The `.env.example` file lists this variable for reference.
 
 Need a reference email? See [emails/founders_invite.md](../../emails/founders_invite.md) for a template you can adapt.
+Refer to [emails/style-guide.md](../../emails/style-guide.md) for tone guidelines when you reach out.
