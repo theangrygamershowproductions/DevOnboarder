@@ -36,6 +36,7 @@ environment file overrides differences like `env_file` or exposed ports below th
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 - [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
