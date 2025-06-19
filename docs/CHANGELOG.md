@@ -36,6 +36,7 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/alpha/feedback-template.md` and linked it from the alpha README.
 - Added feedback dashboard PRD under `docs/prd/` and linked it from the docs README.
 - Refined email templates and added a style guide under `emails/`.
+- Added test ensuring the `/founder` route returns `403` unless `IS_FOUNDER` is set.
 
 ## [0.1.0] - 2025-06-14
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
