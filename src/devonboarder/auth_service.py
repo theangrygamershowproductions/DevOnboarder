@@ -106,8 +106,13 @@ def get_current_user(
 
     # Fetch Discord roles and resolve verification/admin flags
     roles = get_user_roles(str(user_id), token)
-    all_role_ids = {r for rs in roles.values() for r in rs}
-    flags = resolve_user_flags(all_role_ids)
+    admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
+    if admin_guild:
+        relevant_roles = roles.get(admin_guild, [])
+    else:
+        relevant_roles = [r for rs in roles.values() for r in rs]
+
+    flags = resolve_user_flags(relevant_roles)
 
     profile = get_user_profile(token)
 
