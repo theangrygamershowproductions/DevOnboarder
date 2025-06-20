@@ -4,10 +4,11 @@ This document lists HTTP routes exposed by DevOnboarder services and how Discord
 
 ## XP API
 
-These endpoints provide onboarding and XP details without authentication.
+These endpoints provide onboarding and XP details without authentication. Pass a
+`username` query parameter to look up records for that user.
 
-- `GET /api/user/onboarding-status` – return the current onboarding phase.
-- `GET /api/user/level` – return the calculated user level.
+- `GET /api/user/onboarding-status?username=<name>` – current onboarding phase.
+- `GET /api/user/level?username=<name>` – calculated user level.
 
 ## Auth Service
 
