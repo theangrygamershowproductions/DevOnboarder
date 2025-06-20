@@ -13,6 +13,8 @@ All notable changes to this project will be recorded in this file.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
   `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
   `docs/env.md`.
+- XP API now reads `Contribution` and `XPEvent` data to return onboarding
+  status and level for the requested user.
 - Moved role flag logic to `utils.roles` and added `resolve_verification_type`.
 - Introduced Discord role resolution in the auth service and expanded `/api/user`
   to return Discord profile fields and resolved role flags.
