@@ -23,7 +23,7 @@ ALGORITHM = "HS256"
 
 Base = declarative_base()
 engine = create_engine(
-    os.getenv("AUTH_DATABASE_URL", "sqlite:///./auth.db"),
+    os.getenv("DATABASE_URL", "sqlite:///./auth.db"),
     connect_args={"check_same_thread": False},
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
