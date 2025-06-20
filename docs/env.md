@@ -55,9 +55,11 @@ VERIFIED_EDUCATION_ROLE_ID=
 
 Users are considered admins when they hold the owner, administrator or
 moderator role inside the admin guild. Verification types (`government`,
-`military`, `education` or `member`) are resolved in the same way. These
-flags appear in the `/api/user` response and control access to certain
-commands and pages.
+`military`, `education` or `member`) are resolved in the same way. The auth
+service filters roles to the guild specified by `ADMIN_SERVER_GUILD_ID` before
+resolving these flags, so roles from other guilds do not influence admin or
+verification status. These flags appear in the `/api/user` response and control
+access to certain commands and pages.
 
 - `VERIFIED_GOVERNMENT_ROLE_ID` &ndash; role granted after confirming a
   government employee's credentials.
