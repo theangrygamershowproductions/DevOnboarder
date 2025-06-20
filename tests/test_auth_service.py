@@ -4,6 +4,7 @@ from utils import roles as roles_utils
 
 
 def setup_function(function):
+    auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
     auth_service.get_user_roles = lambda user_id, token: {}
     auth_service.resolve_user_flags = (
