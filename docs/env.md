@@ -2,7 +2,10 @@
 
 This document lists important variables used by DevOnboarder. Copy
 `.env.example` to `.env.dev` and fill in values before running the
-services. The CI pipeline also copies this file during tests.
+services. The CI pipeline also copies this file during tests. The auth and
+Discord bot services each provide their own examples &ndash; copy
+`auth/.env.example` to `auth/.env` and `bot/.env.example` to `bot/.env`
+when working with those packages directly.
 
 ## Core settings
 
@@ -15,6 +18,19 @@ services. The CI pipeline also copies this file during tests.
 
 - `IS_ALPHA_USER` &ndash; enable routes restricted to early testers.
 - `IS_FOUNDER` &ndash; enable routes and perks for Founder's Circle members.
+
+## Secrets
+
+The following tokens and keys are required but **must not** be committed to
+the repository. Provide them through your build or deployment secret store:
+
+- `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` &ndash; OAuth credentials for
+  authenticating with Discord.
+- `AUTH_SECRET_KEY` &ndash; signing key used by the auth service (sometimes
+  referred to as `JWT_SECRET`).
+- `DISCORD_TOKEN` &ndash; bot token used when running the Discord bot.
+- `DISCORD_BOT_TOKEN` &ndash; alternative variable name for the bot token.
+- `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 
 ## Discord role-based permissions
 
