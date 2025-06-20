@@ -198,5 +198,46 @@ def test_user_endpoint_returns_flags(monkeypatch):
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
     data = resp.json()
     assert data["isAdmin"] is True
-    assert data["isVerified"] is True
-    assert data["verificationType"] == "education"
+    assert data["isVerified"] is False
+    assert data["verificationType"] is None
+
+
+def test_other_guild_roles_do_not_grant_admin(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_roles",
+        lambda user_id, token: {"20": ["mod"]},
+    )
+
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        roles_utils.resolve_user_flags,
+    )
+
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda token: {"id": "7", "username": "x", "avatar": None},
+    )
+
+    monkeypatch.setenv("ADMIN_SERVER_GUILD_ID", "10")
+    monkeypatch.setenv("OWNER_ROLE_ID", "owner")
+    monkeypatch.setenv("ADMINISTRATOR_ROLE_ID", "admin")
+    monkeypatch.setenv("MODERATOR_ROLE_ID", "mod")
+    monkeypatch.setenv("VERIFIED_USER_ROLE_ID", "verified")
+    monkeypatch.setenv("VERIFIED_MEMBER_ROLE_ID", "vmember")
+    monkeypatch.setenv("GOVERNMENT_ROLE_ID", "gov")
+    monkeypatch.setenv("MILITARY_ROLE_ID", "mil")
+    monkeypatch.setenv("EDUCATION_ROLE_ID", "edu")
+
+    client.post("/api/register", json={"username": "alex", "password": "pw"})
+    token = _get_token(client, "alex", "pw")
+
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    data = resp.json()
+    assert data["isAdmin"] is False
+    assert data["isVerified"] is False
