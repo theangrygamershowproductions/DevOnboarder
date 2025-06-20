@@ -64,7 +64,7 @@ class XPEvent(Base):
 
 
 def init_db() -> None:
-    Base.metadata.drop_all(bind=engine)
+    """Create database tables if they do not exist."""
     Base.metadata.create_all(bind=engine)
 
 
@@ -195,7 +195,8 @@ def promote(
 
 
 def create_app() -> FastAPI:
-    init_db()
+    if os.getenv("INIT_DB_ON_STARTUP"):
+        init_db()
     from routes.user import router as user_router
     app.include_router(user_router)
     return app
