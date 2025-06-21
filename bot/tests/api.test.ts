@@ -10,6 +10,8 @@ const mockedFetch = fetch as jest.MockedFunction<typeof fetch>;
 
 function mockResponse(data: unknown) {
   return Promise.resolve({
+    ok: true,
+    status: 200,
     json: () => Promise.resolve(data),
   } as any);
 }
@@ -17,6 +19,7 @@ function mockResponse(data: unknown) {
 afterEach(() => {
   mockedFetch.mockReset();
   delete process.env.BOT_JWT;
+  jest.restoreAllMocks();
 });
 
 test('getUserLevel sends auth header', async () => {
@@ -57,4 +60,14 @@ test('token is read from BOT_JWT env var', async () => {
     expect.any(String),
     expect.objectContaining({ headers: { Authorization: 'Bearer envtoken' } })
   );
+});
+
+test('errors are thrown for non-ok responses', async () => {
+  const jsonMock = jest.fn();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+  mockedFetch.mockResolvedValue(
+    Promise.resolve({ ok: false, status: 500, json: jsonMock } as any)
+  );
+  await expect(getUserLevel('tok')).rejects.toThrow('500');
+  expect(jsonMock).not.toHaveBeenCalled();
 });
