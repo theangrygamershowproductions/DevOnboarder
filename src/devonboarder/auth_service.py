@@ -175,6 +175,7 @@ app.add_middleware(_SecurityHeadersMiddleware)
 
 @app.post("/api/register")
 def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
+    """Create a new user and return an authentication token."""
     username = data["username"]
     password = data["password"]
     discord_token = data.get("discord_token")
@@ -193,6 +194,7 @@ def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
 
 @app.post("/api/login")
 def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
+    """Authenticate a user and return a JWT."""
     username = data["username"]
     password = data["password"]
     discord_token = data.get("discord_token")
@@ -263,12 +265,14 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
 
 @app.get("/api/user/onboarding-status")
 def onboarding_status(current_user: User = Depends(get_current_user)) -> dict[str, str]:
+    """Return the user's onboarding progress."""
     status_str = "complete" if current_user.contributions else "pending"
     return {"status": status_str}
 
 
 @app.get("/api/user/level")
 def user_level(current_user: User = Depends(get_current_user)) -> dict[str, int]:
+    """Calculate the user's level from accumulated XP."""
     xp_total = sum(evt.xp for evt in current_user.events)
     level = xp_total // 100 + 1
     return {"level": level}
@@ -278,6 +282,7 @@ def user_level(current_user: User = Depends(get_current_user)) -> dict[str, int]
 def user_contributions(
     current_user: User = Depends(get_current_user),
 ) -> dict[str, list[str]]:
+    """List the user's recorded contributions."""
     return {
         "contributions": [c.description for c in current_user.contributions]
     }
@@ -312,6 +317,7 @@ def promote(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
+    """Grant admin privileges to another user."""
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Admin required")
     target = db.query(User).filter_by(username=data["username"]).first()
