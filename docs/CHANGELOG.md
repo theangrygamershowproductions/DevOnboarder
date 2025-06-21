@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
+- Documented database agent and synced environment variables with `.env.example`.
 
 - Completed alpha onboarding guide and linked a simple marketing
   site preview.
