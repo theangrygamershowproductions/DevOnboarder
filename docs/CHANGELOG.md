@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
   failure responses.
 - Auth service now filters Discord roles to the admin guild when resolving
   user flags. Updated docs to clarify guild-based role filtering.
+- Auth tokens now include `iat` and `exp` claims. Set `TOKEN_EXPIRE_SECONDS` to configure expiry.
 - Bot API helpers now accept a `username` argument and bot commands send the
   caller's name in each request.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,

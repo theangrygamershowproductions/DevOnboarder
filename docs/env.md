@@ -13,6 +13,7 @@ when working with those packages directly.
 - `REDIS_URL` &ndash; connection string for the Redis cache.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `LOG_LEVEL` &ndash; Python logging level (`INFO`, `DEBUG`, etc.).
+- `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
 
 ## Feature flags
 
