@@ -6,7 +6,7 @@
   "version": "v1.0.0",
   "author": "Chad Reesey",
   "email": "reesey275@thenagrygamershow.com",
-  "updated": "21 June 2025 05:13 (EST)",
+  "updated": "21 June 2025 08:25 (EST)",
   "description": "Dashboard summarizing Codex task progress and module status for contributors."
 }
 
@@ -16,9 +16,9 @@ This dashboard provides a live snapshot of module status, responsibilities, and 
 
 | Module         | Path                      | Description                                                        | Status          |
 |----------------|---------------------------|--------------------------------------------------------------------|-----------------|
-| **auth_service** | `services/auth_service`    | Implement Discord OAuth2 login and session issuance.               | 🔧 In Progress  |
-| **xp_api**       | `services/xp_api`          | Fix XP endpoint logic and add contribution POST route.             | 🔧 In Progress  |
-| **discord_bot**  | `bot`                      | Modularize commands and integrate token-based API calls.           | 🔧 In Progress  |
+| **auth_service** | `services/auth_service`    | Implement Discord OAuth2 login and session issuance.               | ✅ Complete      |
+| **xp_api**       | `services/xp_api`          | Fix XP endpoint logic and add contribution POST route.             | ✅ Complete      |
+| **discord_bot**  | `bot`                      | Modularize commands and integrate token-based API calls.           | ✅ Complete      |
 | **frontend**     | `frontend`                 | Scaffold OAuth callback, onboarding UI, and XP dashboard.         | ⏳ Not Started   |
 | **infra_docs**   | `infra`                    | Environment templates, Docker Compose, CI/CD scripts.             | ✅ Complete      |
 | **codex_docs**   | `codex`                    | Codex plan, tasks, and automation metadata files.                  | ✅ Complete      |
