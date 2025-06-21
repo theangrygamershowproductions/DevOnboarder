@@ -12,7 +12,7 @@ description = "Sample trunk-based workflow project"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "httpx<0.28",
+    "httpx<0.29",
     "fastapi",
     "uvicorn",
     "SQLAlchemy<3.0",
