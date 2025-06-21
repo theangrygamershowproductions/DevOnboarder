@@ -30,6 +30,8 @@ the repository. Provide them through your build or deployment secret store:
   referred to as `JWT_SECRET`).
 - `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
+- `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
+  `http://localhost:8002/login/discord/callback`.
 
 ## Discord role-based permissions
 
@@ -66,3 +68,11 @@ access to certain commands and pages.
   duty or veteran status.
 - `VERIFIED_EDUCATION_ROLE_ID` &ndash; role assigned when a school or
   university affiliation is verified.
+
+### Discord OAuth login
+
+Users sign in by visiting `/login/discord`, which redirects to Discord's consent
+screen. After granting permissions, Discord redirects back to
+`DISCORD_REDIRECT_URI`. The auth service exchanges the provided code for an
+access token, creates or looks up the user, then returns a JWT from
+`/login/discord/callback`.
