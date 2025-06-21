@@ -41,6 +41,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 6. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
 7. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
 8. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
+9. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
 
 These files expand on the steps listed in the Quickstart section.
 
