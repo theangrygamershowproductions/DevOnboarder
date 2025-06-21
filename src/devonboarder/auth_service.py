@@ -24,6 +24,8 @@ import os
 SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "secret")
 ALGORITHM = "HS256"
 
+CONTRIBUTION_XP = 50
+
 Base = declarative_base()
 _db_url = os.getenv("DATABASE_URL", "sqlite:///./auth.db")
 _engine_kwargs = (
@@ -248,6 +250,29 @@ def user_contributions(
     return {
         "contributions": [c.description for c in current_user.contributions]
     }
+
+
+@app.post("/api/user/contributions")
+def add_contribution(
+    data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict[str, str]:
+    """Record a new contribution and award XP."""
+    username = data.get("username", current_user.username)
+    description = data["description"]
+
+    user = db.query(User).filter_by(username=username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    db.add(Contribution(user_id=user.id, description=description))
+    db.add(XPEvent(user_id=user.id, xp=CONTRIBUTION_XP))
+    db.commit()
+    return {"recorded": description}
 
 
 @app.post("/api/user/promote")
