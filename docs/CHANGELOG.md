@@ -3,7 +3,13 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
+- `scripts/check_docstrings.py` now accepts an optional directory argument and
+  CI passes `src/devonboarder` explicitly.
+
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
+- Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
+- Added missing docstrings to auth service endpoints.
 - Pinned Prettier pre-commit hook to `v3.1.0`.
 - Verified Prettier hook installation with `pre-commit autoupdate`.
 - Added `pytest-cov` to development requirements.
@@ -14,19 +20,9 @@ All notable changes to this project will be recorded in this file.
 - CI compose now includes the auth service and the workflow waits for it to start.
 - Auth service wait step now retries the port check up to 30 times and fails if the service isn't reachable.
 - Bot Dockerfile installs dev dependencies for the TypeScript build and prunes them for runtime.
+- CI compose now includes the auth service and waits for it before tests and header checks.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
-- Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
-- Bot API helpers accept a token parameter or `BOT_JWT` and send
-  `Authorization` headers.
-- Documented `BOT_JWT` in `docs/env.md` and referenced it from `bot/README.md`.
-- Added Discord OAuth login with `/login/discord` and `/login/discord/callback`.
-- Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
-  with `sqlite`.
-- CI no longer uses `--enable-format-check` when validating the OpenAPI spec.
-- Added DevSecOps scaffolding with OpenAPI validation, migration linting,
-  header smoke tests, docstring coverage, pre-commit hooks, Dependabot,
-  and Codecov integration.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
   documented `GOVERNMENT_ROLE_ID`, `MILITARY_ROLE_ID`, and `EDUCATION_ROLE_ID`.
 - Added tests for Discord role resolution and `/api/user` flags.
@@ -144,6 +140,7 @@ All notable changes to this project will be recorded in this file.
 - Added `tests/test_roles.py` verifying admin and verified role flags.
 
 ## [0.1.0] - 2025-06-14
+
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
 - Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter. [#22](https://github.com/theangrygamershowproductions/DevOnboarder/pull/22)
 - Added `.env.example` and documented setup steps in the README. [#23](https://github.com/theangrygamershowproductions/DevOnboarder/pull/23)
