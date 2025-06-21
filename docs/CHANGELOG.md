@@ -14,6 +14,7 @@ All notable changes to this project will be recorded in this file.
 - Recorded npm audit results showing zero vulnerabilities and noted
   pip-audit could not run in the sandbox environment.
 - Updated Codex dashboard and plan to mark auth, XP, and bot modules complete.
+- Added `/api/user/contribute` endpoint to the XP API requiring a JWT.
 
 - `scripts/check_docstrings.py` now accepts an optional directory argument and
   CI passes `src/devonboarder` explicitly.
