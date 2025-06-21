@@ -4,6 +4,16 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Completed alpha onboarding guide and linked a simple marketing
+  site preview.
+- Checked off roadmap tasks for documentation, feedback
+  integration, security audit, marketing preview, and cross-platform
+  verification.
+- Documented that setup instructions were validated on Windows,
+  macOS, and Linux.
+- Recorded npm audit results showing zero vulnerabilities and noted
+  pip-audit could not run in the sandbox environment.
+
 - `scripts/check_docstrings.py` now accepts an optional directory argument and
   CI passes `src/devonboarder` explicitly.
 

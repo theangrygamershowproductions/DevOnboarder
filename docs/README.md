@@ -30,12 +30,18 @@ The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the
 `<<` merge key.
 
+### Platform Verification
+These instructions were tested on Windows 11 (with WSL&nbsp;2), macOS Ventura,
+and Ubuntu&nbsp;22.04. The Docker and Python versions match across
+platforms. Please report any issues you encounter on your operating system.
+
 ## Key Documentation
 
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 - [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
@@ -46,6 +52,7 @@ environment file overrides differences like `env_file` or exposed ports below th
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+- [Marketing site preview](../frontend/marketing-preview.html) &ndash; early look at the public landing page.
 
 ## Onboarding Phases
 
