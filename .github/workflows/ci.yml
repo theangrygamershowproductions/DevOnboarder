@@ -24,19 +24,39 @@ jobs:
               run: ./scripts/setup-env.sh
             - name: Install package
               run: pip install -e .
+            - name: Validate OpenAPI contract
+              run: |
+                pip install openapi-spec-validator
+                openapi-spec-validator --enable-format-check src/devonboarder/openapi.json
+            - name: Alembic migration lint
+              run: ./scripts/alembic_migration_check.sh
+            - name: Doc coverage check
+              run: python scripts/check_docstrings.py
             - name: Run linter
               run: ruff check .
             - name: Prepare environment file
               run: cp .env.example .env.dev
             - name: Start docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
-            - name: Run tests
-              run: pytest -q
+            - name: Run tests with coverage
+              run: pytest --cov=src --cov-fail-under=85
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v3
             - name: Install bot dependencies
               run: npm ci
               working-directory: bot
             - name: Run bot tests
               run: npm test
               working-directory: bot
+            - name: Check CORS & security headers
+              run: |
+                pip install requests
+                python scripts/check_headers.py
             - name: Stop docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
+            - name: Label Codex PR
+              if: github.actor == 'codex[bot]'
+              uses: actions-ecosystem/action-add-labels@v1
+              with:
+                labels: |
+                  🚧 Codex
