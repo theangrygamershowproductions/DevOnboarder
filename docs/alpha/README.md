@@ -32,3 +32,13 @@ Maintainers should follow [alpha-wave-rollout-guide.md](alpha-wave-rollout-guide
 For a sample invitation, see [emails/invite_alpha_email.md](../../emails/invite_alpha_email.md).
 Refer to [emails/style-guide.md](../../emails/style-guide.md) for our email tone guidelines.
 
+## Marketing Site Preview
+Get a first look at the upcoming website in
+[frontend/marketing-preview.html](../../frontend/marketing-preview.html).
+Share this link with prospective testers who want a quick overview.
+
+## Setup Validation
+The steps in [docs/README.md](../README.md) were verified on Windows 11
+(using WSL&nbsp;2), macOS Ventura, and Ubuntu&nbsp;22.04. If you run into
+platform-specific issues, open an issue so we can update the guide.
+
