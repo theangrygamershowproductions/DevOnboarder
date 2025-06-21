@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
   `http://localhost:8002/api/user`).
 - CI compose now includes the auth service and the workflow waits for it to start.
 - Auth service wait step now retries the port check up to 30 times and fails if the service isn't reachable.
+- Bot Dockerfile installs dev dependencies for the TypeScript build and prunes them for runtime.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
