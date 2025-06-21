@@ -15,7 +15,7 @@ dependencies = [
     "httpx<0.28",
     "fastapi",
     "uvicorn",
-    "SQLAlchemy<2.0",
+    "SQLAlchemy<3.0",
     "passlib[bcrypt]",
     "python-jose",
     "alembic",
