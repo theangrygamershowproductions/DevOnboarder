@@ -4,6 +4,9 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- `scripts/check_docstrings.py` now accepts an optional directory argument and
+  CI passes `src/devonboarder` explicitly.
+
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
 - Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
 - Added missing docstrings to auth service endpoints.
@@ -14,7 +17,7 @@ All notable changes to this project will be recorded in this file.
   header smoke test.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
-- CI compose now includes the auth service and the workflow waits for it to start.
+- CI compose now includes the auth service and waits for it before tests and header checks.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
