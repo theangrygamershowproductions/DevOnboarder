@@ -9,6 +9,8 @@ All notable changes to this project will be recorded in this file.
 - Added `pytest-cov` to development requirements.
 - Added CORS and security middleware to the auth and XP services and updated the
   header smoke test.
+- Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
+  `http://localhost:8002/api/user`).
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
