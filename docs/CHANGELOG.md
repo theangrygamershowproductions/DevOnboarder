@@ -12,7 +12,7 @@ All notable changes to this project will be recorded in this file.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
 - CI compose now includes the auth service and the workflow waits for it to start.
-- Auth service wait step now fails if the port check doesn't succeed.
+- Auth service wait step now retries the port check up to 30 times and fails if the service isn't reachable.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
