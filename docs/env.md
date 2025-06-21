@@ -79,3 +79,8 @@ screen. After granting permissions, Discord redirects back to
 `DISCORD_REDIRECT_URI`. The auth service exchanges the provided code for an
 access token, creates or looks up the user, then returns a JWT from
 `/login/discord/callback`.
+
+## Frontend
+
+- `VITE_API_URL` &ndash; base URL for the XP API.
+- `VITE_AUTH_URL` &ndash; base URL for the auth service.
