@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
   failure responses.
 - Auth service now filters Discord roles to the admin guild when resolving
   user flags. Updated docs to clarify guild-based role filtering.
+- Bot API helpers now accept a `username` argument and bot commands send the
+  caller's name in each request.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
   `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
   `docs/env.md`.

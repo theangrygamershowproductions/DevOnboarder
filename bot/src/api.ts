@@ -22,17 +22,35 @@ async function request<T>(path: string, token?: string): Promise<T> {
   return (await resp.json()) as T;
 }
 
-export async function getUserLevel(token?: string): Promise<number> {
-  const data = await request<{ level: number }>('/api/user/level', token);
+export async function getUserLevel(
+  username: string,
+  token?: string
+): Promise<number> {
+  const data = await request<{ level: number }>(
+    `/api/user/level?username=${encodeURIComponent(username)}`,
+    token
+  );
   return data.level;
 }
 
-export async function getUserContributions(token?: string): Promise<string[]> {
-  const data = await request<{ contributions: string[] }>('/api/user/contributions', token);
+export async function getUserContributions(
+  username: string,
+  token?: string
+): Promise<string[]> {
+  const data = await request<{ contributions: string[] }>(
+    `/api/user/contributions?username=${encodeURIComponent(username)}`,
+    token
+  );
   return data.contributions;
 }
 
-export async function getOnboardingStatus(token?: string): Promise<string> {
-  const data = await request<{ status: string }>('/api/user/onboarding-status', token);
+export async function getOnboardingStatus(
+  username: string,
+  token?: string
+): Promise<string> {
+  const data = await request<{ status: string }>(
+    `/api/user/onboarding-status?username=${encodeURIComponent(username)}`,
+    token
+  );
   return data.status;
 }
