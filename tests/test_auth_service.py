@@ -1,6 +1,8 @@
+import importlib
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
+import sqlalchemy
 
 
 def setup_function(function):
@@ -32,6 +34,42 @@ def _get_token(
     )
     assert resp.status_code == 200
     return resp.json()["token"]
+
+
+def test_engine_initializes_for_sqlite(monkeypatch):
+    """Engine passes check_same_thread when DATABASE_URL is SQLite."""
+    orig_create = sqlalchemy.create_engine
+    recorded: dict[str, dict] = {}
+
+    def fake_create_engine(url, **kwargs):
+        recorded["kwargs"] = kwargs
+        return orig_create("sqlite:///:memory:", **kwargs)
+
+    monkeypatch.setattr(sqlalchemy, "create_engine", fake_create_engine)
+    monkeypatch.setenv("DATABASE_URL", "sqlite:///:memory:")
+    importlib.reload(auth_service)
+    assert recorded["kwargs"].get("connect_args") == {"check_same_thread": False}
+    monkeypatch.setattr(sqlalchemy, "create_engine", orig_create)
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    importlib.reload(auth_service)
+
+
+def test_engine_initializes_without_sqlite_args(monkeypatch):
+    """Engine omits connect_args for non-SQLite URLs."""
+    orig_create = sqlalchemy.create_engine
+    recorded: dict[str, dict] = {}
+
+    def fake_create_engine(url, **kwargs):
+        recorded["kwargs"] = kwargs
+        return orig_create("sqlite:///:memory:", **kwargs)
+
+    monkeypatch.setattr(sqlalchemy, "create_engine", fake_create_engine)
+    monkeypatch.setenv("DATABASE_URL", "postgresql://db")
+    importlib.reload(auth_service)
+    assert "connect_args" not in recorded["kwargs"]
+    monkeypatch.setattr(sqlalchemy, "create_engine", orig_create)
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    importlib.reload(auth_service)
 
 
 def test_register_login_and_user_info(monkeypatch):
