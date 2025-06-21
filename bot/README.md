@@ -10,7 +10,9 @@ using the token provided in `.env`.
    ```bash
    cp .env.example .env
    ```
-   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, and `DISCORD_GUILD_IDS`.
+   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
+   and `BOT_JWT`. The bot sends this token in an `Authorization` header
+   when calling the API.
 2. Install dependencies and build the bot:
    ```bash
    npm install
