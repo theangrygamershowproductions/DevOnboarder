@@ -156,6 +156,11 @@ All notable changes to this project will be recorded in this file.
 - Added verified role ID placeholders to `.env.example` and documented them in `docs/env.md`.
 - Added a "Secrets" section in `docs/env.md` covering Discord OAuth and bot tokens, with matching placeholders in `.env.example` and `.env.bot.example`.
 - Added `tests/test_roles.py` verifying admin and verified role flags.
+- Documented outdated packages and vulnerability scan results. `pip list` showed
+  updates for mypy, pyright, pytest, ruff and typing extensions; `npm outdated`
+  flagged missing React packages in the frontend and outdated `node-fetch` in
+  the bot. `pip-audit` reported no issues while `npm audit` found moderate
+  vulnerabilities in `esbuild` for the frontend with none in the bot.
 
 ## [0.1.0] - 2025-06-14
 
