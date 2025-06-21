@@ -28,8 +28,7 @@ the repository. Provide them through your build or deployment secret store:
   authenticating with Discord.
 - `AUTH_SECRET_KEY` &ndash; signing key used by the auth service (sometimes
   referred to as `JWT_SECRET`).
-- `DISCORD_TOKEN` &ndash; bot token used when running the Discord bot.
-- `DISCORD_BOT_TOKEN` &ndash; alternative variable name for the bot token.
+- `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 
 ## Discord role-based permissions
