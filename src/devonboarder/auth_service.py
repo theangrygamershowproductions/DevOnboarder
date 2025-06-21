@@ -37,6 +37,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
+    discord_token = Column(String, nullable=True)
     is_admin = Column(Boolean, default=False)
 
     contributions = relationship("Contribution", back_populates="user")
@@ -87,9 +88,9 @@ def get_current_user(
     creds: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ) -> User:
-    token = creds.credentials
+    jwt_token = creds.credentials
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(jwt_token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = int(payload["sub"])
     except (JWTError, KeyError, ValueError):
         raise HTTPException(
@@ -104,8 +105,10 @@ def get_current_user(
             detail="User not found",
         )
 
-    # Fetch Discord roles and resolve verification/admin flags
-    roles = get_user_roles(str(user_id), token)
+    # Fetch Discord roles and resolve verification/admin flags using stored
+    # OAuth token.
+    discord_token = user.discord_token
+    roles = get_user_roles(str(user_id), discord_token)
     admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
     if admin_guild:
         relevant_roles = roles.get(admin_guild, [])
@@ -114,7 +117,7 @@ def get_current_user(
 
     flags = resolve_user_flags(relevant_roles)
 
-    profile = get_user_profile(token)
+    profile = get_user_profile(discord_token)
 
     # Attach resolved information to the user object for downstream handlers
     user.roles = roles
@@ -135,9 +138,14 @@ app = FastAPI()
 def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     username = data["username"]
     password = data["password"]
+    discord_token = data.get("discord_token")
     if db.query(User).filter_by(username=username).first():
         raise HTTPException(status_code=400, detail="Username exists")
-    user = User(username=username, password_hash=pwd_context.hash(password))
+    user = User(
+        username=username,
+        password_hash=pwd_context.hash(password),
+        discord_token=discord_token,
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -148,9 +156,13 @@ def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
 def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     username = data["username"]
     password = data["password"]
+    discord_token = data.get("discord_token")
     user = db.query(User).filter_by(username=username).first()
     if not user or not pwd_context.verify(password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid credentials")
+    if discord_token is not None:
+        user.discord_token = discord_token
+        db.commit()
     return {"token": create_token(user)}
 
 
