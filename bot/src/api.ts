@@ -12,9 +12,15 @@ function buildHeaders(token?: string) {
 }
 
 async function request<T>(path: string, token?: string): Promise<T> {
-  const resp = await fetch(`${baseUrl}${path}`, {
-    headers: buildHeaders(token),
-  });
+  let resp;
+  try {
+    resp = await fetch(`${baseUrl}${path}`, {
+      headers: buildHeaders(token),
+    });
+  } catch (err) {
+    console.error(`Network error while requesting ${path}:`, err);
+    throw new Error(`Network error while requesting ${path}`);
+  }
   if (!resp.ok) {
     console.error(`API request to ${path} failed: ${resp.status}`);
     throw new Error(`Request failed with status ${resp.status}`);
