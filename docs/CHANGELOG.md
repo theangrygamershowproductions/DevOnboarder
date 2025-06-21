@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - Moved role flag logic to `utils.roles` and added `resolve_verification_type`.
 - Introduced Discord role resolution in the auth service and expanded `/api/user`
   to return Discord profile fields and resolved role flags.
+- Auth service now stores Discord OAuth tokens and uses them for Discord API
+  calls during authentication.
 - Added `src/routes/user.py` router for `/api/user` and included it in the auth service.
 - Added Discord bot scaffolding with dynamic command loading and a `/ping` command.
 
