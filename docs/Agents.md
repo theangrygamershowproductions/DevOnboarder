@@ -11,17 +11,18 @@ This document defines all agents (services, bots, integrations, and guards) in t
 4. [Discord Integration Agent](#discord-integration-agent)
 5. [Verification Agent](#verification-agent)
 6. [Session/JWT Agent](#sessionjwt-agent)
-7. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-8. [Planned Agents / Stubs](#planned-agents--stubs)
-9. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
-10. [Agent Task Checklist](#agent-task-checklist)
-11. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
-12. [Environment Variable Reference](#environment-variable-reference)
-13. [How to Extend/Contribute](#how-to-extendcontribute)
-14. [Deprecation & Retirement](#deprecation--retirement)
-15. [Glossary](#glossary)
-16. [Related Docs](#related-docs)
-17. [Revision History](#revision-history)
+7. [Database Service (Postgres)](#database-service-postgres)
+8. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+9. [Planned Agents / Stubs](#planned-agents--stubs)
+10. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+11. [Agent Task Checklist](#agent-task-checklist)
+12. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+13. [Environment Variable Reference](#environment-variable-reference)
+14. [How to Extend/Contribute](#how-to-extendcontribute)
+15. [Deprecation & Retirement](#deprecation--retirement)
+16. [Glossary](#glossary)
+17. [Related Docs](#related-docs)
+18. [Revision History](#revision-history)
 
 ---
 
@@ -82,6 +83,16 @@ This document defines all agents (services, bots, integrations, and guards) in t
 
 ---
 
+## Database Service (Postgres)
+
+**Purpose:** Provides persistent storage for the auth and XP services.
+
+**Key Files:** schema models in `src/devonboarder/auth_service.py` and migrations in `migrations/`.
+
+**Environment:** Connection string defined by `DATABASE_URL`.
+
+---
+
 ## DevOps/Infrastructure Agents
 
 Examples include Traefik or Nginx for routing, Docker Compose for orchestration, and monitoring agents.
@@ -126,6 +137,7 @@ healthcheck:
 | Discord Integration | Partial     | No             | No               |
 | XP API              | Yes         | Yes            | Yes              |
 | Webhook/Bot Agent   | Optional    | No             | Optional         |
+| Database (Postgres) | Yes         | Yes            | Yes              |
 
 ---
 
@@ -133,14 +145,35 @@ healthcheck:
 
 | Variable                     | Description                                |
 | ---------------------------- | ------------------------------------------ |
-| DISCORD_CLIENT_ID            | Discord application client ID              |
-| DISCORD_CLIENT_SECRET        | Discord application client secret          |
+| APP_ENV                      | Application mode (`development`, etc.)     |
+| REDIS_URL                    | Redis connection string                    |
+| DATABASE_URL                 | Postgres connection string                 |
+| LOG_LEVEL                    | Python log level                           |
+| TOKEN_EXPIRE_SECONDS         | JWT expiration in seconds                  |
+| IS_ALPHA_USER                | Enable alpha-only routes                   |
+| IS_FOUNDER                   | Enable founder-only routes                 |
+| ADMIN_SERVER_GUILD_ID        | Discord guild ID used for admin checks     |
 | OWNER_ROLE_ID                | Discord role for system owner              |
 | ADMINISTRATOR_ROLE_ID        | Discord role for administrators            |
-| JWT_SECRET                   | Secret key for JWT signing                 |
-| JWT_EXPIRATION               | JWT expiration in seconds                  |
-| JWT_ALGORITHM                | JWT signing algorithm                      |
-| VITE_*                       | Frontend role IDs and other client config  |
+| MODERATOR_ROLE_ID            | Discord role for moderators                |
+| VERIFIED_USER_ROLE_ID        | Role granted to verified community members |
+| VERIFIED_MEMBER_ROLE_ID      | Alias role for verified members            |
+| GOVERNMENT_ROLE_ID           | Role for government employees              |
+| MILITARY_ROLE_ID             | Role for military members                  |
+| EDUCATION_ROLE_ID            | Role for school or university affiliation  |
+| VERIFIED_GOVERNMENT_ROLE_ID  | Role assigned after government verification|
+| VERIFIED_MILITARY_ROLE_ID    | Role assigned after military verification  |
+| VERIFIED_EDUCATION_ROLE_ID   | Role assigned after education verification |
+| DISCORD_CLIENT_ID            | Discord application client ID              |
+| DISCORD_CLIENT_SECRET        | Discord application client secret          |
+| AUTH_SECRET_KEY              | Secret key for JWT signing                 |
+| DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
+| DISCORD_GUILD_IDS            | Guilds where the bot operates              |
+| BOT_JWT                      | JWT used by the bot for API calls          |
+| API_BASE_URL                 | XP API URL for the bot                     |
+| VITE_API_URL                 | XP API URL for the frontend                |
+| VITE_AUTH_URL                | Auth service URL for the frontend          |
+| INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
 
 ---
 
@@ -179,6 +212,7 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 
 | Date        | Version | Author    | Summary                                |
 | ----------- | ------- | --------- | -------------------------------------- |
+| 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars |
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
 
