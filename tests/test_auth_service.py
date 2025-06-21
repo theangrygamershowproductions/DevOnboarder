@@ -234,6 +234,29 @@ def test_xp_accumulation_and_level_calculation():
     assert resp.json() == {"level": 3}
 
 
+def test_contribution_endpoint_awards_xp():
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "sam", "password": "pw"})
+    token = _get_token(client, "sam", "pw")
+
+    headers = {"Authorization": f"Bearer {token}"}
+    client.post(
+        "/api/user/contributions",
+        json={"description": "docs"},
+        headers=headers,
+    )
+    client.post(
+        "/api/user/contributions",
+        json={"description": "tests"},
+        headers=headers,
+    )
+
+    resp = client.get("/api/user/level", headers=headers)
+    assert resp.json() == {"level": 2}
+
+
 def test_user_endpoint_returns_flags(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
