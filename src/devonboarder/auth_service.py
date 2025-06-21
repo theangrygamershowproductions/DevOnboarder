@@ -1,10 +1,15 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import RedirectResponse
 
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
+from urllib.parse import urlencode
+import httpx
 from sqlalchemy import (
     Column,
     Integer,
@@ -17,9 +22,13 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 import os
+import time
 
 SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "secret")
 ALGORITHM = "HS256"
+TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
+
+CONTRIBUTION_XP = 50
 
 Base = declarative_base()
 _db_url = os.getenv("DATABASE_URL", "sqlite:///./auth.db")
@@ -81,7 +90,10 @@ def get_db() -> Session:
 
 
 def create_token(user: User) -> str:
-    return jwt.encode({"sub": str(user.id)}, SECRET_KEY, algorithm=ALGORITHM)
+    """Return a signed JWT for the given user."""
+    iat = int(time.time())
+    payload = {"sub": str(user.id), "iat": iat, "exp": iat + TOKEN_EXPIRE_SECONDS}
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
 security = HTTPBearer()
@@ -93,7 +105,12 @@ def get_current_user(
 ) -> User:
     jwt_token = creds.credentials
     try:
-        payload = jwt.decode(jwt_token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            jwt_token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM],
+            options={"verify_exp": True},
+        )
         user_id = int(payload["sub"])
     except (JWTError, KeyError, ValueError):
         raise HTTPException(
@@ -111,7 +128,7 @@ def get_current_user(
     # Fetch Discord roles and resolve verification/admin flags using stored
     # OAuth token.
     discord_token = user.discord_token
-    roles = get_user_roles(str(user_id), discord_token)
+    roles = get_user_roles(discord_token)
     admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
     if admin_guild:
         relevant_roles = roles.get(admin_guild, [])
@@ -135,6 +152,25 @@ def get_current_user(
 
 
 app = FastAPI()
+
+
+class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add basic security headers to all responses."""
+
+    async def dispatch(self, request, call_next):  # type: ignore[override]
+        resp = await call_next(request)
+        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+        resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+        return resp
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.add_middleware(_SecurityHeadersMiddleware)
 
 
 @app.post("/api/register")
@@ -169,6 +205,60 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     return {"token": create_token(user)}
 
 
+@app.get("/login/discord")
+def discord_login() -> RedirectResponse:
+    """Redirect the user to Discord's OAuth consent screen."""
+    params = {
+        "client_id": os.getenv("DISCORD_CLIENT_ID"),
+        "response_type": "code",
+        "redirect_uri": os.getenv(
+            "DISCORD_REDIRECT_URI",
+            "http://localhost:8002/login/discord/callback",
+        ),
+        "scope": "identify guilds guilds.members.read",
+    }
+    url = "https://discord.com/oauth2/authorize?" + urlencode(params)
+    return RedirectResponse(url)
+
+
+@app.get("/login/discord/callback")
+def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
+    """Exchange the OAuth code for a token and return a JWT."""
+    token_resp = httpx.post(
+        "https://discord.com/api/oauth2/token",
+        data={
+            "client_id": os.getenv("DISCORD_CLIENT_ID"),
+            "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": os.getenv(
+                "DISCORD_REDIRECT_URI",
+                "http://localhost:8002/login/discord/callback",
+            ),
+        },
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    token_resp.raise_for_status()
+    access_token = token_resp.json()["access_token"]
+
+    profile = get_user_profile(access_token)
+    username = profile["id"]
+    user = db.query(User).filter_by(username=username).first()
+    if not user:
+        user = User(
+            username=username,
+            password_hash=pwd_context.hash(""),
+            discord_token=access_token,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    else:
+        user.discord_token = access_token
+        db.commit()
+    return {"token": create_token(user)}
+
+
 
 
 @app.get("/api/user/onboarding-status")
@@ -191,6 +281,29 @@ def user_contributions(
     return {
         "contributions": [c.description for c in current_user.contributions]
     }
+
+
+@app.post("/api/user/contributions")
+def add_contribution(
+    data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict[str, str]:
+    """Record a new contribution and award XP."""
+    username = data.get("username", current_user.username)
+    description = data["description"]
+
+    user = db.query(User).filter_by(username=username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    db.add(Contribution(user_id=user.id, description=description))
+    db.add(XPEvent(user_id=user.id, xp=CONTRIBUTION_XP))
+    db.commit()
+    return {"recorded": description}
 
 
 @app.post("/api/user/promote")
