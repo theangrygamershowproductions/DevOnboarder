@@ -68,7 +68,7 @@ def test_db_volume_persisted():
 
 
 def test_ci_compose_minimal():
-    """CI compose file only defines the db service."""
+    """CI compose file defines only the auth and db services."""
     compose = load_compose("docker-compose.ci.yaml")
     services = compose.get("services", {})
-    assert set(services) == {"db"}
+    assert set(services) == {"auth", "db"}
