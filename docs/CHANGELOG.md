@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
+- Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
+  with `sqlite`.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
   documented `GOVERNMENT_ROLE_ID`, `MILITARY_ROLE_ID`, and `EDUCATION_ROLE_ID`.
 - Added tests for Discord role resolution and `/api/user` flags.
