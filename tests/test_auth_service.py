@@ -2,6 +2,7 @@ import importlib
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
+import time
 import sqlalchemy
 import httpx
 
@@ -426,3 +427,25 @@ def test_oauth_callback_updates_existing_user(monkeypatch):
     with auth_service.SessionLocal() as db:
         user = db.query(auth_service.User).filter_by(username="5").first()
         assert user.discord_token == "second"
+
+
+def test_expired_token_rejected(monkeypatch):
+    monkeypatch.setenv("TOKEN_EXPIRE_SECONDS", "1")
+    importlib.reload(auth_service)
+    auth_service.Base.metadata.drop_all(bind=auth_service.engine)
+    auth_service.init_db()
+    auth_service.get_user_roles = lambda user_id, token: {}
+    auth_service.resolve_user_flags = (
+        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
+    )
+    auth_service.get_user_profile = (
+        lambda token: {"id": "0", "username": "", "avatar": None}
+    )
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "tim", "password": "pw"})
+    token = _get_token(client, "tim", "pw")
+    time.sleep(1.1)
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 401

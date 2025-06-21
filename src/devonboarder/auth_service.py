@@ -20,9 +20,11 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 import os
+import time
 
 SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "secret")
 ALGORITHM = "HS256"
+TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 
 CONTRIBUTION_XP = 50
 
@@ -86,7 +88,9 @@ def get_db() -> Session:
 
 
 def create_token(user: User) -> str:
-    return jwt.encode({"sub": str(user.id)}, SECRET_KEY, algorithm=ALGORITHM)
+    now = int(time.time())
+    payload = {"sub": str(user.id), "iat": now, "exp": now + TOKEN_EXPIRE_SECONDS}
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
 security = HTTPBearer()
@@ -98,7 +102,12 @@ def get_current_user(
 ) -> User:
     jwt_token = creds.credentials
     try:
-        payload = jwt.decode(jwt_token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            jwt_token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM],
+            options={"verify_exp": True},
+        )
         user_id = int(payload["sub"])
     except (JWTError, KeyError, ValueError):
         raise HTTPException(
