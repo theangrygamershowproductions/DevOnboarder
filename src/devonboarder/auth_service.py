@@ -88,7 +88,7 @@ def get_db() -> Session:
 
 
 def create_token(user: User) -> str:
-    now = int(time.time())
+    now = time.time()
     payload = {"sub": str(user.id), "iat": now, "exp": now + TOKEN_EXPIRE_SECONDS}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -125,7 +125,7 @@ def get_current_user(
     # Fetch Discord roles and resolve verification/admin flags using stored
     # OAuth token.
     discord_token = user.discord_token
-    roles = get_user_roles(str(user_id), discord_token)
+    roles = get_user_roles(discord_token)
     admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
     if admin_guild:
         relevant_roles = roles.get(admin_guild, [])
