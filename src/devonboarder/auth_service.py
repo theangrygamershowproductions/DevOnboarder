@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import RedirectResponse
 
@@ -150,6 +152,25 @@ def get_current_user(
 
 
 app = FastAPI()
+
+
+class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add basic security headers to all responses."""
+
+    async def dispatch(self, request, call_next):  # type: ignore[override]
+        resp = await call_next(request)
+        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+        resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+        return resp
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.add_middleware(_SecurityHeadersMiddleware)
 
 
 @app.post("/api/register")

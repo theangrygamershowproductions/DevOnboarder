@@ -7,6 +7,8 @@ All notable changes to this project will be recorded in this file.
 - Pinned Prettier pre-commit hook to `v3.1.0`.
 - Verified Prettier hook installation with `pre-commit autoupdate`.
 - Added `pytest-cov` to development requirements.
+- Added CORS and security middleware to the auth and XP services and updated the
+  header smoke test.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
