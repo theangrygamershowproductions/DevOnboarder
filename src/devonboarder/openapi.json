@@ -1,5 +1,74 @@
 {
   "openapi": "3.0.0",
   "info": {"title": "DevOnboarder API", "version": "1.0.0"},
-  "paths": {}
+  "paths": {
+    "/api/user/onboarding-status": {
+      "get": {
+        "summary": "User onboarding status",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "username",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Onboarding status",
+            "content": {"application/json": {"schema": {"type": "object"}}}
+          }
+        }
+      }
+    },
+    "/api/user/level": {
+      "get": {
+        "summary": "User level",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "username",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Level",
+            "content": {"application/json": {"schema": {"type": "object"}}}
+          }
+        }
+      }
+    },
+    "/api/user/contribute": {
+      "post": {
+        "summary": "Record a contribution and award XP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {"description": {"type": "string"}},
+                "required": ["description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contribution recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {"recorded": {"type": "string"}}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
