@@ -1,9 +1,13 @@
-"""
-Checks that all FastAPI endpoints have docstrings.
-Usage: python scripts/check_docstrings.py
+"""Checks that all FastAPI endpoints have docstrings.
+
+Usage: ``python scripts/check_docstrings.py [PATH]``
+
+Provide an optional ``PATH`` to scan a different directory. The default path is
+``src/devonboarder``.
 """
 import ast
 import os
+import sys
 
 
 def has_docstring(node: ast.AST) -> bool:
@@ -11,7 +15,7 @@ def has_docstring(node: ast.AST) -> bool:
 
 
 def main() -> None:
-    api_path = "src/devonboarder"  # Adjust if needed
+    api_path = sys.argv[1] if len(sys.argv) > 1 else "src/devonboarder"
     errors: list[str] = []
     for dirpath, _, filenames in os.walk(api_path):
         for filename in filenames:
