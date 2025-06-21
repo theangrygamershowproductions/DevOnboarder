@@ -39,6 +39,7 @@ platforms. Please report any issues you encounter on your operating system.
 
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
@@ -84,4 +85,5 @@ who has contributed and when.
 1. Search existing issues to avoid duplicates and provide clear reproduction steps.
 2. Start branches from the latest `main` and follow the git guidelines.
 3. Use the pull request template and ensure the checklist passes.
+4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 
