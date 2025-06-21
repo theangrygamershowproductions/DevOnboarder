@@ -11,7 +11,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 2. Install the project in editable mode with `pip install -e .`.
 3. Start services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
-   The `frontend/` folder currently contains only a placeholder README.
+   The `frontend/` folder now hosts a React app built with Vite.
 4. Run `alembic upgrade head` to apply the initial database migration.
 5. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
 6. Visit `http://localhost:8000` to see the greeting server.
