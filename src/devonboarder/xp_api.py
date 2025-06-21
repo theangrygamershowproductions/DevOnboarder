@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
 
 from devonboarder import auth_service
@@ -36,6 +38,22 @@ def user_level(
 def create_app() -> FastAPI:
     """Create a FastAPI application with the XP router."""
     app = FastAPI()
+
+    class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):  # type: ignore[override]
+            resp = await call_next(request)
+            resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+            resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+            return resp
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(_SecurityHeadersMiddleware)
+
     app.include_router(router)
     return app
 

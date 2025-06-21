@@ -1,54 +1,39 @@
-import { handleCommand } from '../src/index';
-import * as api from '../src/api';
-import { Interaction } from 'discord.js';
+import path from 'path';
+import { execute } from '../src/events/interactionCreate';
+import { loadCommands } from '../src/utils/loadFiles';
 
-jest.mock('discord.js', () => {
-  return {
-    Client: jest.fn().mockImplementation(() => ({
-      once: jest.fn(),
-      on: jest.fn(),
-      login: jest.fn(),
-      user: { tag: 'test' },
-    })),
-    GatewayIntentBits: { Guilds: 0 },
-    Interaction: class {},
-  };
-});
-
-jest.mock('../src/api');
+jest.mock('../src/api', () => ({
+  getOnboardingStatus: jest.fn().mockResolvedValue('complete'),
+  getUserLevel: jest.fn().mockResolvedValue(42),
+  submitContribution: jest.fn().mockResolvedValue(undefined),
+}));
 
 function makeInteraction(commandName: string) {
   return {
     isChatInputCommand: () => true,
     commandName,
     reply: jest.fn(),
-  } as unknown as Interaction & { reply: jest.Mock };
+    options: { getString: jest.fn().mockReturnValue('fix bug') },
+    user: { id: '1', username: 'alice' },
+  } as any;
 }
 
-const mockedStatus = api.getOnboardingStatus as jest.Mock;
-const mockedLevel = api.getUserLevel as jest.Mock;
-const mockedContrib = api.getUserContributions as jest.Mock;
+test('interaction handler executes commands loaded from disk', async () => {
+  const commands = await loadCommands(path.join(__dirname, '..', 'src', 'commands'));
 
-test('verify command replies with onboarding status', async () => {
-  mockedStatus.mockResolvedValue('pending');
-  const interaction = makeInteraction('verify');
-  await handleCommand(interaction);
-  expect(mockedStatus).toHaveBeenCalled();
-  expect(interaction.reply).toHaveBeenCalledWith('Onboarding status: pending');
-});
+  const ping = makeInteraction('ping');
+  await execute(ping, commands);
+  expect(ping.reply).toHaveBeenCalledWith('🏓 Pong!');
 
-test('profile command replies with user level', async () => {
-  mockedLevel.mockResolvedValue(5);
-  const interaction = makeInteraction('profile');
-  await handleCommand(interaction);
-  expect(mockedLevel).toHaveBeenCalled();
-  expect(interaction.reply).toHaveBeenCalledWith('Your level is 5');
-});
+  const verify = makeInteraction('verify');
+  await execute(verify, commands);
+  expect(verify.reply).toHaveBeenCalledWith('Onboarding status: complete');
 
-test('contribute command replies with contributions list', async () => {
-  mockedContrib.mockResolvedValue(['fix1', 'doc']);
-  const interaction = makeInteraction('contribute');
-  await handleCommand(interaction);
-  expect(mockedContrib).toHaveBeenCalled();
-  expect(interaction.reply).toHaveBeenCalledWith('Contributions: fix1, doc');
+  const profile = makeInteraction('profile');
+  await execute(profile, commands);
+  expect(profile.reply).toHaveBeenCalledWith('Current level: 42');
+
+  const contribute = makeInteraction('contribute');
+  await execute(contribute, commands);
+  expect(contribute.reply).toHaveBeenCalledWith('Recorded contribution: fix bug');
 });

@@ -3,15 +3,32 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
+- Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
+- Pinned Prettier pre-commit hook to `v3.1.0`.
+- Verified Prettier hook installation with `pre-commit autoupdate`.
+- Added `pytest-cov` to development requirements.
+- Added CORS and security middleware to the auth and XP services and updated the
+  header smoke test.
+- Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
+  `http://localhost:8002/api/user`).
+- CI compose now includes the auth service and the workflow waits for it to start.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
-- Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
-  with `sqlite`.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
   documented `GOVERNMENT_ROLE_ID`, `MILITARY_ROLE_ID`, and `EDUCATION_ROLE_ID`.
 - Added tests for Discord role resolution and `/api/user` flags.
+- Bot API helpers now validate `resp.ok` before parsing JSON and throw errors on
+  failure responses.
+- API request helper now logs network errors and throws a descriptive
+  "Network error" exception when `fetch` fails.
 - Auth service now filters Discord roles to the admin guild when resolving
   user flags. Updated docs to clarify guild-based role filtering.
+- Auth tokens now include `iat` and `exp` claims. Set `TOKEN_EXPIRE_SECONDS` to configure expiry.
+- Auth tokens now use integer timestamps for `iat` and `exp` to avoid race
+  conditions when checking expiry.
+- Bot API helpers now accept a `username` argument and bot commands send the
+  caller's name in each request.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
   `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
   `docs/env.md`.
@@ -24,6 +41,8 @@ All notable changes to this project will be recorded in this file.
   calls during authentication.
 - Added `src/routes/user.py` router for `/api/user` and included it in the auth service.
 - Added Discord bot scaffolding with dynamic command loading and a `/ping` command.
+- Added `POST /api/user/contributions` endpoint and updated the `/contribute` bot command to record contributions.
+- Added `/verify`, `/profile`, and `/contribute` command modules to the bot and tests loading them via `loadCommands`.
 
 - Added `.env.example` files for individual services and documented how to copy
   them during setup.
@@ -113,6 +132,7 @@ All notable changes to this project will be recorded in this file.
 - Added `tests/test_roles.py` verifying admin and verified role flags.
 
 ## [0.1.0] - 2025-06-14
+
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
 - Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter. [#22](https://github.com/theangrygamershowproductions/DevOnboarder/pull/22)
 - Added `.env.example` and documented setup steps in the README. [#23](https://github.com/theangrygamershowproductions/DevOnboarder/pull/23)
