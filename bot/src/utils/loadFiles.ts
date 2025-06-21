@@ -11,7 +11,7 @@ export type Commands = Collection<string, CommandModule>;
 
 export async function loadCommands(dir: string): Promise<Commands> {
   const commands: Commands = new Collection();
-  const files = readdirSync(dir).filter((f) => f.endsWith('.js'));
+  const files = readdirSync(dir).filter((f) => f.endsWith('.js') || f.endsWith('.ts'));
   for (const file of files) {
     const mod = await import(path.join(dir, file));
     commands.set(mod.data.name, mod as CommandModule);

@@ -44,6 +44,13 @@ Place new command modules in `src/commands`. Each module exports
 `data` (a `SlashCommandBuilder`) and an `execute` function. They are
 loaded automatically when the bot starts.
 
+The repository provides the following built-in commands:
+
+- `/ping` – simple health check returning `Pong!`.
+- `/verify` – show your onboarding status from the XP API.
+- `/profile` – display your current XP level.
+- `/contribute` – record a contribution description.
+
 ## Future Work
 
 - Sync verified roles back to the auth database.
