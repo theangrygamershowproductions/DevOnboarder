@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
+- Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
+- Added missing docstrings to auth service endpoints.
 - Pinned Prettier pre-commit hook to `v3.1.0`.
 - Verified Prettier hook installation with `pre-commit autoupdate`.
 - Added `pytest-cov` to development requirements.
