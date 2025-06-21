@@ -38,6 +38,8 @@ All notable changes to this project will be recorded in this file.
 - Bot Dockerfile installs dev dependencies for the TypeScript build and prunes them for runtime.
 - CI compose now includes the auth service and waits for it before tests and header checks.
 - Enabled OpenAPI format validation in the CI workflow.
+- Updated CI to run `openapi-spec-validator` without the
+  `--enable-format-check` flag.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
