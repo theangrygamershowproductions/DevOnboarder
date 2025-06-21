@@ -2,3 +2,5 @@ ruff
 pytest
 pyyaml
 pre-commit
+openapi-spec-validator
+requests
