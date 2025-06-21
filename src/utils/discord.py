@@ -8,14 +8,11 @@ import httpx
 BASE_URL = "https://discord.com/api/v10"
 
 
-def get_user_roles(user_id: str, token: str) -> dict[str, list[str]]:
-    """Return guild role IDs for the given user.
+def get_user_roles(token: str) -> dict[str, list[str]]:
+    """Return guild role IDs for the authenticated user.
 
     Parameters
     ----------
-    user_id:
-        The Discord user ID. Currently unused but kept for future
-        compatibility.
     token:
         OAuth or bot token used for the API call.
 

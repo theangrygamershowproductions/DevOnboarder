@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
