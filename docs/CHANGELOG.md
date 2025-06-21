@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 - `init_db()` no longer drops existing tables. Tests now clean up the database
   themselves.
+- Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
 - Bot API helpers accept a token parameter or `BOT_JWT` and send
   `Authorization` headers.
 - Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
