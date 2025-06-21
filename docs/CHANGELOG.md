@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Added Discord OAuth login with `/login/discord` and `/login/discord/callback`.
 - Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
   with `sqlite`.
+- CI no longer uses `--enable-format-check` when validating the OpenAPI spec.
 - Added DevSecOps scaffolding with OpenAPI validation, migration linting,
   header smoke tests, docstring coverage, pre-commit hooks, Dependabot,
   and Codecov integration.
