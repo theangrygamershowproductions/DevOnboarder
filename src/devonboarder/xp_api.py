@@ -35,6 +35,24 @@ def user_level(
     return {"level": level}
 
 
+@router.post("/api/user/contribute")
+def contribute(
+    data: dict,
+    current_user: auth_service.User = Depends(auth_service.get_current_user),
+    db: Session = Depends(auth_service.get_db),
+) -> dict[str, str]:
+    """Record a contribution and award XP."""
+    description = data["description"]
+    db.add(
+        auth_service.Contribution(user_id=current_user.id, description=description)
+    )
+    db.add(
+        auth_service.XPEvent(user_id=current_user.id, xp=auth_service.CONTRIBUTION_XP)
+    )
+    db.commit()
+    return {"recorded": description}
+
+
 def create_app() -> FastAPI:
     """Create a FastAPI application with the XP router."""
     app = FastAPI()
