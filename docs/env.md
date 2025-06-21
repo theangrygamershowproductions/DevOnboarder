@@ -13,6 +13,7 @@ when working with those packages directly.
 - `REDIS_URL` &ndash; connection string for the Redis cache.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `LOG_LEVEL` &ndash; Python logging level (`INFO`, `DEBUG`, etc.).
+- `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
 
 ## Feature flags
 
@@ -28,9 +29,12 @@ the repository. Provide them through your build or deployment secret store:
   authenticating with Discord.
 - `AUTH_SECRET_KEY` &ndash; signing key used by the auth service (sometimes
   referred to as `JWT_SECRET`).
-- `DISCORD_TOKEN` &ndash; bot token used when running the Discord bot.
-- `DISCORD_BOT_TOKEN` &ndash; alternative variable name for the bot token.
+- `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
+- `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
+  `http://localhost:8002/login/discord/callback`.
+- `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
+  API helpers send this JWT when no other token is provided.
 
 ## Discord role-based permissions
 
@@ -67,3 +71,11 @@ access to certain commands and pages.
   duty or veteran status.
 - `VERIFIED_EDUCATION_ROLE_ID` &ndash; role assigned when a school or
   university affiliation is verified.
+
+### Discord OAuth login
+
+Users sign in by visiting `/login/discord`, which redirects to Discord's consent
+screen. After granting permissions, Discord redirects back to
+`DISCORD_REDIRECT_URI`. The auth service exchanges the provided code for an
+access token, creates or looks up the user, then returns a JWT from
+`/login/discord/callback`.

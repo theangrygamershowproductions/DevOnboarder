@@ -1,5 +1,8 @@
 version: "3.8"
 
+x-app-base: &app-base
+  build: .
+
 x-db-base: &db-base
   image: postgres:15
   environment:
@@ -14,6 +17,9 @@ x-env-dev: &env-dev
     - .env.dev
 
 services:
+  auth:
+    <<: [*app-base, *env-dev]
+    command: ["devonboarder-auth"]
   db:
     <<: [*db-base, *env-dev]
 

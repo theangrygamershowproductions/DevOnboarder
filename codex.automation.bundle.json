@@ -1,0 +1,55 @@
+{
+    "plan": "codex.plan.md",
+    "tasks": "codex.tasks.json",
+    "modules": [
+        {
+            "name": "auth_service",
+            "description": "Add Discord OAuth login to enable real user authentication.",
+            "actions": [
+                "Implement /login/discord and /callback routes in FastAPI",
+                "Use DISCORD_CLIENT_ID and DISCORD_CLIENT_SECRET from environment",
+                "Fetch user identity and store session in JWT",
+                "Update docs/env.md and codex.tasks.json"
+            ]
+        },
+        {
+            "name": "xp_api",
+            "description": "Fix broken XP endpoints and add contribution tracking.",
+            "actions": [
+                "Allow token-based auth (current user context) instead of username query",
+                "Implement POST /api/user/contributions",
+                "Write logic for XP event generation and role progression",
+                "Unit test XP assignment and level calculation"
+            ]
+        },
+        {
+            "name": "discord_bot",
+            "description": "Refactor bot commands into modular format and improve API integration.",
+            "actions": [
+                "Move /verify, /profile, /contribute into separate command modules",
+                "Refactor src/api.ts to properly pass token to XP endpoints",
+                "Add error handling and feedback to Discord users",
+                "Update README with new command loader pattern"
+            ]
+        },
+        {
+            "name": "env_config",
+            "description": "Normalize .env usage and finalize codex-ready variable structure.",
+            "actions": [
+                "Sync all .env files with .env.example",
+                "Confirm presence of VITE_ variables for frontend and standard vars for backend",
+                "Document usage and placement in docs/env.md"
+            ]
+        },
+        {
+            "name": "frontend",
+            "description": "Scaffold onboarding UI and XP dashboard.",
+            "actions": [
+                "Build login callback and onboarding progress page",
+                "Display XP, level, next milestone via API integration",
+                "Add loader and error states to calls"
+            ]
+        }
+    ],
+    "workflow": "main"
+}

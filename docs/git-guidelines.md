@@ -60,5 +60,8 @@ Before opening a pull request, make sure to:
 ruff check .
 pytest -q
 ```
+- Keep Prettier pinned to `v3.1.0`. Run
+  `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
+  to confirm the hook installs correctly.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.

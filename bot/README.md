@@ -10,7 +10,10 @@ using the token provided in `.env`.
    ```bash
    cp .env.example .env
    ```
-   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, and `DISCORD_GUILD_IDS`.
+   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
+   and `BOT_JWT`. The bot sends this token in an `Authorization` header
+   when calling the API. See [docs/env.md](../docs/env.md) for details
+   about this variable.
 2. Install dependencies and build the bot:
    ```bash
    npm install
@@ -41,6 +44,13 @@ bot:
 Place new command modules in `src/commands`. Each module exports
 `data` (a `SlashCommandBuilder`) and an `execute` function. They are
 loaded automatically when the bot starts.
+
+The repository provides the following built-in commands:
+
+- `/ping` – simple health check returning `Pong!`.
+- `/verify` – show your onboarding status from the XP API.
+- `/profile` – display your current XP level.
+- `/contribute` – record a contribution description.
 
 ## Future Work
 
