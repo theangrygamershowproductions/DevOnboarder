@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
 import sqlalchemy
+import httpx
 
 
 def setup_function(function):
@@ -314,3 +315,91 @@ def test_other_guild_roles_do_not_grant_admin(monkeypatch):
     data = resp.json()
     assert data["isAdmin"] is False
     assert data["isVerified"] is False
+
+
+class StubResponse:
+    def __init__(self, status_code: int, json_data: object):
+        self.status_code = status_code
+        self._json = json_data
+
+    def json(self):
+        return self._json
+
+    def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise httpx.HTTPStatusError("error", request=None, response=None)
+
+
+def test_discord_oauth_callback_issues_jwt(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    def fake_post(url: str, data: dict, headers: dict):
+        assert url.endswith("/token")
+        assert data["code"] == "abc"
+        return StubResponse(200, {"access_token": "tok"})
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda uid, tok: {})
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {
+            "isAdmin": False,
+            "isVerified": False,
+            "verificationType": None,
+        },
+    )
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {
+            "id": "99",
+            "username": "d",
+            "avatar": None,
+        },
+    )
+
+    resp = client.get("/login/discord/callback?code=abc")
+    assert resp.status_code == 200
+    token = resp.json()["token"]
+    assert token
+
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 200
+
+
+def test_oauth_callback_updates_existing_user(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    def fake_post(url: str, data: dict, headers: dict):
+        return StubResponse(200, {"access_token": data["code"]})
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda uid, tok: {})
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {
+            "isAdmin": False,
+            "isVerified": False,
+            "verificationType": None,
+        },
+    )
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {
+            "id": "5",
+            "username": "p",
+            "avatar": None,
+        },
+    )
+
+    client.get("/login/discord/callback?code=first")
+    resp = client.get("/login/discord/callback?code=second")
+    assert resp.status_code == 200
+    with auth_service.SessionLocal() as db:
+        user = db.query(auth_service.User).filter_by(username="5").first()
+        assert user.discord_token == "second"

@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import RedirectResponse
 
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
+from urllib.parse import urlencode
+import httpx
 from sqlalchemy import (
     Column,
     Integer,
@@ -165,6 +168,60 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
         raise HTTPException(status_code=400, detail="Invalid credentials")
     if discord_token is not None:
         user.discord_token = discord_token
+        db.commit()
+    return {"token": create_token(user)}
+
+
+@app.get("/login/discord")
+def discord_login() -> RedirectResponse:
+    """Redirect the user to Discord's OAuth consent screen."""
+    params = {
+        "client_id": os.getenv("DISCORD_CLIENT_ID"),
+        "response_type": "code",
+        "redirect_uri": os.getenv(
+            "DISCORD_REDIRECT_URI",
+            "http://localhost:8002/login/discord/callback",
+        ),
+        "scope": "identify guilds guilds.members.read",
+    }
+    url = "https://discord.com/oauth2/authorize?" + urlencode(params)
+    return RedirectResponse(url)
+
+
+@app.get("/login/discord/callback")
+def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
+    """Exchange the OAuth code for a token and return a JWT."""
+    token_resp = httpx.post(
+        "https://discord.com/api/oauth2/token",
+        data={
+            "client_id": os.getenv("DISCORD_CLIENT_ID"),
+            "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": os.getenv(
+                "DISCORD_REDIRECT_URI",
+                "http://localhost:8002/login/discord/callback",
+            ),
+        },
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    token_resp.raise_for_status()
+    access_token = token_resp.json()["access_token"]
+
+    profile = get_user_profile(access_token)
+    username = profile["id"]
+    user = db.query(User).filter_by(username=username).first()
+    if not user:
+        user = User(
+            username=username,
+            password_hash=pwd_context.hash(""),
+            discord_token=access_token,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    else:
+        user.discord_token = access_token
         db.commit()
     return {"token": create_token(user)}
 
