@@ -3,6 +3,8 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- `scripts/check_docstrings.py` now accepts an optional directory argument and
+  CI passes `src/devonboarder` explicitly.
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
 - Pinned Prettier pre-commit hook to `v3.1.0`.
 - Verified Prettier hook installation with `pre-commit autoupdate`.

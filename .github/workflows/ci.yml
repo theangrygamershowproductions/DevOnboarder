@@ -31,7 +31,7 @@ jobs:
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
-              run: python scripts/check_docstrings.py
+              run: python scripts/check_docstrings.py src/devonboarder
             - name: Run linter
               run: ruff check .
             - name: Prepare environment file
