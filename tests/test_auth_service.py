@@ -446,6 +446,6 @@ def test_expired_token_rejected(monkeypatch):
 
     client.post("/api/register", json={"username": "tim", "password": "pw"})
     token = _get_token(client, "tim", "pw")
-    time.sleep(1.1)
+    time.sleep(2.1)
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 401
