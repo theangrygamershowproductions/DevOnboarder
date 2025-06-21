@@ -3,11 +3,11 @@
 This checklist outlines high-level milestones before and after launch.
 
 ## Pre-Launch
-- [ ] Finalize onboarding documentation for testers
-- [ ] Integrate feedback from the first invite wave
-- [ ] Run a security and dependency audit
-- [ ] Publish a preview of the marketing site
-- [ ] Verify environment setup steps across platforms
+- [x] Finalize onboarding documentation for testers
+- [x] Integrate feedback from the first invite wave
+- [x] Run a security and dependency audit ([results](../security-audit-2025-06-21.md))
+- [x] Publish a preview of the marketing site
+- [x] Verify environment setup steps across platforms
 
 ## Post-Launch
 - [ ] Monitor server health and analytics
