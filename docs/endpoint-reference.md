@@ -21,6 +21,7 @@ Requests to these endpoints require a valid JWT unless otherwise noted.
 - `GET /api/user` – fetch the Discord ID, username, avatar, roles, and admin/verification flags.
 - `GET /api/user/onboarding-status` – onboarding status for the authenticated user.
 - `GET /api/user/level` – level derived from accumulated XP.
+- `POST /api/user/contributions` – record a new contribution and award XP.
 - `GET /api/user/contributions` – list contribution descriptions.
 - `POST /api/user/promote` – admins only; mark another user as an admin.
 
@@ -32,6 +33,6 @@ The bot in `bot/` calls these routes when users run slash commands:
 | ------- | -------- |
 | `/verify` | `GET /api/user/onboarding-status` |
 | `/profile` | `GET /api/user/level` |
-| `/contribute` | `GET /api/user/contributions` |
+| `/contribute` | `POST /api/user/contributions` |
 
 For example, typing `/verify` in Discord triggers a request to `/api/user/onboarding-status` and echoes the resulting status back to the channel.
