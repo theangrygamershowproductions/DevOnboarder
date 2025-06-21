@@ -10,7 +10,7 @@ import httpx
 def setup_function(function):
     auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
-    auth_service.get_user_roles = lambda user_id, token: {}
+    auth_service.get_user_roles = lambda token: {}
     auth_service.resolve_user_flags = (
         lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
     )
@@ -78,7 +78,7 @@ def test_register_login_and_user_info(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    def fake_get_roles(user_id: str, token: str):
+    def fake_get_roles(token: str):
         assert token == "oauth-reg"
         return {"guild": ["role1"]}
 
@@ -138,7 +138,7 @@ def test_oauth_token_updated_on_login(monkeypatch):
         return {"id": "1", "username": "d", "avatar": None}
 
     monkeypatch.setattr(auth_service, "get_user_profile", fake_profile)
-    monkeypatch.setattr(auth_service, "get_user_roles", lambda user_id, token: {})
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda token: {})
 
     token = _get_token(client, "dan", "pw", discord_token="new")
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
@@ -265,7 +265,7 @@ def test_user_endpoint_returns_flags(monkeypatch):
     monkeypatch.setattr(
         auth_service,
         "get_user_roles",
-        lambda user_id, token: {"10": ["mod"], "30": ["edu"]},
+        lambda token: {"10": ["mod"], "30": ["edu"]},
     )
 
     monkeypatch.setattr(
@@ -307,7 +307,7 @@ def test_other_guild_roles_do_not_grant_admin(monkeypatch):
     monkeypatch.setattr(
         auth_service,
         "get_user_roles",
-        lambda user_id, token: {"20": ["mod"]},
+        lambda token: {"20": ["mod"]},
     )
 
     monkeypatch.setattr(
@@ -364,7 +364,7 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
         return StubResponse(200, {"access_token": "tok"})
 
     monkeypatch.setattr(httpx, "post", fake_post)
-    monkeypatch.setattr(auth_service, "get_user_roles", lambda uid, tok: {})
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda tok: {})
     monkeypatch.setattr(
         auth_service,
         "resolve_user_flags",
@@ -401,7 +401,7 @@ def test_oauth_callback_updates_existing_user(monkeypatch):
         return StubResponse(200, {"access_token": data["code"]})
 
     monkeypatch.setattr(httpx, "post", fake_post)
-    monkeypatch.setattr(auth_service, "get_user_roles", lambda uid, tok: {})
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda tok: {})
     monkeypatch.setattr(
         auth_service,
         "resolve_user_flags",
@@ -434,7 +434,7 @@ def test_expired_token_rejected(monkeypatch):
     importlib.reload(auth_service)
     auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
-    auth_service.get_user_roles = lambda user_id, token: {}
+    auth_service.get_user_roles = lambda token: {}
     auth_service.resolve_user_flags = (
         lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
     )

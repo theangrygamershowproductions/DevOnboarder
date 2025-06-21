@@ -31,7 +31,7 @@ def test_get_user_roles(monkeypatch):
         return StubResponse(404, {})
 
     monkeypatch.setattr(httpx, "get", fake_get)
-    roles = get_user_roles("123", "token")
+    roles = get_user_roles("token")
     assert roles == {"1": ["a"], "2": ["b", "c"]}
 
 
@@ -78,7 +78,7 @@ def test_get_user_roles_multiple_guilds(monkeypatch):
         return StubResponse(404, {})
 
     monkeypatch.setattr(httpx, "get", fake_get)
-    roles = get_user_roles("321", "token")
+    roles = get_user_roles("token")
     assert roles == {"1": ["r1"], "2": ["r2"], "3": ["r3"]}
 
 
