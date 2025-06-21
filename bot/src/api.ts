@@ -15,6 +15,10 @@ async function request<T>(path: string, token?: string): Promise<T> {
   const resp = await fetch(`${baseUrl}${path}`, {
     headers: buildHeaders(token),
   });
+  if (!resp.ok) {
+    console.error(`API request to ${path} failed: ${resp.status}`);
+    throw new Error(`Request failed with status ${resp.status}`);
+  }
   return (await resp.json()) as T;
 }
 
