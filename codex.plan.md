@@ -3,7 +3,7 @@ project: "DevOnboarder"
 phase: "MVP"
 status: "active"
 version: "v0.3.0"
-updated: "21 June 2025 23:32 (EST)"
+updated: "21 June 2025 08:25 (EST)"
 ---
 
 # DevOnboarder – Codex Execution Plan
@@ -16,10 +16,10 @@ This document defines the roadmap and execution logic for Codex tasks during the
 
 | Feature            | Description                                               | Status     |
 |--------------------|-----------------------------------------------------------|------------|
-| Discord OAuth2     | Let users authenticate and receive session tokens         | 🔧 Pending |
+| Discord OAuth2     | Let users authenticate and receive session tokens | ✅ Done |
 | XP API             | Serve XP, level, and onboarding progress                  | ✅ Done     |
-| XP Submission      | Allow users to earn XP via bot or web actions             | 🔧 Pending |
-| Discord Bot        | Handle `/verify`, `/profile`, and `/contribute` commands | ✅ Stubbed |
+| XP Submission      | Allow users to earn XP via bot or web actions | ✅ Done |
+| Discord Bot        | Handle `/verify`, `/profile`, and `/contribute` commands | ✅ Done |
 | Contributor Roles  | Flag admin/verified users via Discord roles              | ✅ Done     |
 | Frontend Scaffold  | Display onboarding/XP state via session token            | 🔧 Pending |
 
