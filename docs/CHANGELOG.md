@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 
 - `scripts/check_docstrings.py` now accepts an optional directory argument and
   CI passes `src/devonboarder` explicitly.
+- Added `docs/sample-pr.md` with an example pull request.
 
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
 - Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
