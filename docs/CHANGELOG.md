@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
   requirements.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
+- Updated CI and container configs to Node 20 and Python 3.12.
 - CI compose now includes the auth service and the workflow waits for it to start.
 - Auth service wait step now retries the port check up to 30 times and fails if the service isn't reachable.
 - Bot Dockerfile installs dev dependencies for the TypeScript build and prunes them for runtime.
