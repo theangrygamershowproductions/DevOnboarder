@@ -8,6 +8,7 @@ All notable changes to this project will be recorded in this file.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
 - Bot API helpers accept a token parameter or `BOT_JWT` and send
   `Authorization` headers.
+- Added Discord OAuth login with `/login/discord` and `/login/discord/callback`.
 - Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
   with `sqlite`.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
