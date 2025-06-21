@@ -38,6 +38,16 @@ jobs:
               run: cp .env.example .env.dev
             - name: Start docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
+            - name: Wait for auth service
+              run: |
+                for i in {1..30}; do
+                  if nc -z localhost 8002; then
+                    echo "Service is up!";
+                    break
+                  fi
+                  echo "Waiting for service...";
+                  sleep 2
+                done
             - name: Run tests with coverage
               run: pytest --cov=src --cov-fail-under=85
             - name: Upload coverage to Codecov
