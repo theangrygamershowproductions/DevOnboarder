@@ -15,6 +15,9 @@ All notable changes to this project will be recorded in this file.
 - Added `pytest-cov` to development requirements.
 - Added CORS and security middleware to the auth and XP services and updated the
   header smoke test.
+- Synced docs pull request template with `.github` to include OpenAPI and
+  migration checks, docstring enforcement, header validation, and coverage
+  requirements.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
 - CI compose now includes the auth service and the workflow waits for it to start.
