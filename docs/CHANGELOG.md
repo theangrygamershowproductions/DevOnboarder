@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - Added tests for Discord role resolution and `/api/user` flags.
 - Bot API helpers now validate `resp.ok` before parsing JSON and throw errors on
   failure responses.
+- API request helper now logs network errors and throws a descriptive
+  "Network error" exception when `fetch` fails.
 - Auth service now filters Discord roles to the admin guild when resolving
   user flags. Updated docs to clarify guild-based role filtering.
 - Auth tokens now include `iat` and `exp` claims. Set `TOKEN_EXPIRE_SECONDS` to configure expiry.
