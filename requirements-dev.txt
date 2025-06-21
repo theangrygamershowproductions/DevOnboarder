@@ -4,3 +4,4 @@ pyyaml
 pre-commit
 openapi-spec-validator
 requests
+pytest-cov
