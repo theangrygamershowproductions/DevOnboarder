@@ -15,8 +15,21 @@ def setup_function(function):
     )
 
 
-def _get_token(client: TestClient, username: str, password: str) -> str:
-    resp = client.post("/api/login", json={"username": username, "password": password})
+def _get_token(
+    client: TestClient,
+    username: str,
+    password: str,
+    *,
+    discord_token: str = "dtoken",
+) -> str:
+    resp = client.post(
+        "/api/login",
+        json={
+            "username": username,
+            "password": password,
+            "discord_token": discord_token,
+        },
+    )
     assert resp.status_code == 200
     return resp.json()["token"]
 
@@ -25,11 +38,11 @@ def test_register_login_and_user_info(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    monkeypatch.setattr(
-        auth_service,
-        "get_user_roles",
-        lambda user_id, token: {"guild": ["role1"]},
-    )
+    def fake_get_roles(user_id: str, token: str):
+        assert token == "oauth-reg"
+        return {"guild": ["role1"]}
+
+    monkeypatch.setattr(auth_service, "get_user_roles", fake_get_roles)
 
     monkeypatch.setattr(
         auth_service,
@@ -37,15 +50,15 @@ def test_register_login_and_user_info(monkeypatch):
         lambda roles: {"isAdmin": True, "isVerified": False, "verificationType": None},
     )
 
-    monkeypatch.setattr(
-        auth_service,
-        "get_user_profile",
-        lambda token: {"id": "99", "username": "discord", "avatar": "img"},
-    )
+    def fake_profile(token: str):
+        assert token == "oauth-reg"
+        return {"id": "99", "username": "discord", "avatar": "img"}
+
+    monkeypatch.setattr(auth_service, "get_user_profile", fake_profile)
 
     resp = client.post(
         "/api/register",
-        json={"username": "alice", "password": "secret"},
+        json={"username": "alice", "password": "secret", "discord_token": "oauth-reg"},
     )
     assert resp.status_code == 200
     token = resp.json()["token"]
@@ -69,6 +82,27 @@ def test_register_login_and_user_info(monkeypatch):
     # login works
     token2 = _get_token(client, "alice", "secret")
     assert token2
+
+
+def test_oauth_token_updated_on_login(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post(
+        "/api/register",
+        json={"username": "dan", "password": "pw", "discord_token": "old"},
+    )
+
+    def fake_profile(token: str):
+        assert token == "new"
+        return {"id": "1", "username": "d", "avatar": None}
+
+    monkeypatch.setattr(auth_service, "get_user_profile", fake_profile)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda user_id, token: {})
+
+    token = _get_token(client, "dan", "pw", discord_token="new")
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 200
 
 
 def test_user_levels_and_promote():
