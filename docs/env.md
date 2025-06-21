@@ -33,6 +33,8 @@ the repository. Provide them through your build or deployment secret store:
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 - `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
   `http://localhost:8002/login/discord/callback`.
+- `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
+  API helpers send this JWT when no other token is provided.
 
 ## Discord role-based permissions
 

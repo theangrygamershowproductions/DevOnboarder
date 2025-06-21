@@ -9,6 +9,7 @@ All notable changes to this project will be recorded in this file.
 - Consolidated bot entrypoint to `main.ts` and standardized `DISCORD_BOT_TOKEN`.
 - Bot API helpers accept a token parameter or `BOT_JWT` and send
   `Authorization` headers.
+- Documented `BOT_JWT` in `docs/env.md` and referenced it from `bot/README.md`.
 - Added Discord OAuth login with `/login/discord` and `/login/discord/callback`.
 - Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
   with `sqlite`.
@@ -20,6 +21,8 @@ All notable changes to this project will be recorded in this file.
 - Auth service now filters Discord roles to the admin guild when resolving
   user flags. Updated docs to clarify guild-based role filtering.
 - Auth tokens now include `iat` and `exp` claims. Set `TOKEN_EXPIRE_SECONDS` to configure expiry.
+- Auth tokens now use integer timestamps for `iat` and `exp` to avoid race
+  conditions when checking expiry.
 - Bot API helpers now accept a `username` argument and bot commands send the
   caller's name in each request.
 - Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,

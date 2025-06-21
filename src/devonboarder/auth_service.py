@@ -88,8 +88,9 @@ def get_db() -> Session:
 
 
 def create_token(user: User) -> str:
-    now = time.time()
-    payload = {"sub": str(user.id), "iat": now, "exp": now + TOKEN_EXPIRE_SECONDS}
+    """Return a signed JWT for the given user."""
+    iat = int(time.time())
+    payload = {"sub": str(user.id), "iat": iat, "exp": iat + TOKEN_EXPIRE_SECONDS}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
