@@ -13,6 +13,9 @@ All notable changes to this project will be recorded in this file.
 - Added Discord OAuth login with `/login/discord` and `/login/discord/callback`.
 - Auth service now passes `check_same_thread` only when `DATABASE_URL` starts
   with `sqlite`.
+- Added DevSecOps scaffolding with OpenAPI validation, migration linting,
+  header smoke tests, docstring coverage, pre-commit hooks, Dependabot,
+  and Codecov integration.
 - Introduced `utils/roles.py` and expanded `/api/user` to return role flags;
   documented `GOVERNMENT_ROLE_ID`, `MILITARY_ROLE_ID`, and `EDUCATION_ROLE_ID`.
 - Added tests for Discord role resolution and `/api/user` flags.
