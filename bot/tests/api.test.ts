@@ -71,3 +71,16 @@ test('errors are thrown for non-ok responses', async () => {
   await expect(getUserLevel('erin', 'tok')).rejects.toThrow('500');
   expect(jsonMock).not.toHaveBeenCalled();
 });
+
+test('network errors are logged and rethrown', async () => {
+  const error = new Error('conn reset');
+  const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  mockedFetch.mockRejectedValue(error);
+  await expect(getUserLevel('frank', 'tok')).rejects.toThrow(
+    'Network error while requesting /api/user/level?username=frank'
+  );
+  expect(consoleSpy).toHaveBeenCalledWith(
+    'Network error while requesting /api/user/level?username=frank:',
+    error
+  );
+});
