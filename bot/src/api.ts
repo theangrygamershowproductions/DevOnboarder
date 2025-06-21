@@ -54,3 +54,23 @@ export async function getOnboardingStatus(
   );
   return data.status;
 }
+
+export async function submitContribution(
+  username: string,
+  description: string,
+  token?: string
+): Promise<void> {
+  const path = '/api/user/contributions';
+  const resp = await fetch(`${baseUrl}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...buildHeaders(token),
+    },
+    body: JSON.stringify({ username, description }),
+  });
+  if (!resp.ok) {
+    console.error(`API request to ${path} failed: ${resp.status}`);
+    throw new Error(`Request failed with status ${resp.status}`);
+  }
+}
