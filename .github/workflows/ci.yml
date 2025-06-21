@@ -58,10 +58,18 @@ jobs:
             - name: Run bot tests
               run: npm test
               working-directory: bot
+            - name: Wait for auth service
+              run: |
+                for i in {1..30}; do
+                  nc -z localhost 8002 && exit 0
+                  echo "Waiting for service..."
+                  sleep 2
+                done
+                echo "Auth service failed to start"
+                exit 1
             - name: Check CORS & security headers
               run: |
                 pip install requests
-                for i in {1..10}; do nc -z localhost 8002 && break || sleep 1; done
                 python scripts/check_headers.py
               env:
                 CHECK_HEADERS_URL: http://localhost:8002/api/user
