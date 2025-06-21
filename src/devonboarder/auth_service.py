@@ -22,10 +22,13 @@ SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "secret")
 ALGORITHM = "HS256"
 
 Base = declarative_base()
-engine = create_engine(
-    os.getenv("DATABASE_URL", "sqlite:///./auth.db"),
-    connect_args={"check_same_thread": False},
+_db_url = os.getenv("DATABASE_URL", "sqlite:///./auth.db")
+_engine_kwargs = (
+    {"connect_args": {"check_same_thread": False}}
+    if _db_url.startswith("sqlite")
+    else {}
 )
+engine = create_engine(_db_url, **_engine_kwargs)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
