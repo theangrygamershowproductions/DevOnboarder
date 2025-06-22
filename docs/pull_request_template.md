@@ -21,12 +21,14 @@ pytest -q
 
 # Checklist
 
-- [ ] All code passes automated lint, type, test, and security checks
+- [ ] All code passes lint, type, and security checks
+- [ ] All new ENV variables are documented in `docs/Agents.md`
+- [ ] `.env.example` matches the table in `docs/Agents.md`
 - [ ] OpenAPI/contract and migration checks pass
-- [ ] All FastAPI endpoints have docstrings and are documented
+- [ ] All API endpoints have docstrings and documentation
 - [ ] CORS and security headers validated
 - [ ] No secrets or sensitive data are present in commits
-- [ ] Did Codex introduce any direct commit to main?
+- [ ] Codex did **not** introduce any direct commits to `main`
 - [ ] Are all Codex changes covered by tests and docs?
 - [ ] Coverage does not decrease (see Codecov status)
 
