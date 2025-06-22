@@ -65,3 +65,4 @@ pytest -q
   to confirm the hook installs correctly.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
+- Follow the pull request template in `docs/pull_request_template.md`.

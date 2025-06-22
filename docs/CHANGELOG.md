@@ -33,6 +33,7 @@ All notable changes to this project will be recorded in this file.
 - Synced docs pull request template with `.github` to include OpenAPI and
   migration checks, docstring enforcement, header validation, and coverage
   requirements.
+- Expanded the pull request template with environment variable and coverage checks and noted the template in the Git guidelines.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
 - Updated CI and container configs to Node 20 and Python 3.12.
