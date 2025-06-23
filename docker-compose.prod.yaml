@@ -24,6 +24,11 @@ services:
   auth:
     <<: [*app-base, *env-prod]
     command: ["devonboarder-auth"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
 
   bot:
     <<: [*node-base, *env-prod]
@@ -34,6 +39,11 @@ services:
   xp:
     <<: [*app-base, *env-prod]
     command: ["devonboarder-api"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
 
   frontend:
     <<: [*node-base, *env-prod]
