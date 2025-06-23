@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - Updated Codex dashboard and plan to mark auth, XP, and bot modules complete.
 - Added `/api/user/contribute` endpoint to the XP API requiring a JWT.
 - Updated README to describe the Vite-based React frontend.
+- Added a standard Vite `index.html` with a `<div id="root"></div>` mount point
+  in the `frontend/` directory.
 - Documented new frontend environment variables in `docs/env.md` and `docs/Agents.md`.
 - Replaced marketing preview links with `frontend/index.html`.
 
