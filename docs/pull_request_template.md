@@ -20,6 +20,18 @@ pytest -q
 bash scripts/check_docs.sh
 ```
 
+## Documentation & QA Checklist
+
+Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
+
+- [ ] All Python and JS dependencies installed (`pip install -r requirements-dev.txt`, `npm ci` if needed)
+- [ ] Vale is installed locally (`vale --version`)
+- [ ] All Markdown docs pass checks (`bash scripts/check_docs.sh`)
+- [ ] All new or updated docs are clear, concise, and free of grammar issues
+- [ ] pytest and other test suites pass
+- [ ] Pre-commit hooks installed (`pre-commit install`)
+- [ ] If doc checks failed, issues are resolved before requesting review
+
 # Checklist
 
 - [ ] All code passes lint, type, and security checks
