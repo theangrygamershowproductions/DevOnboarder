@@ -82,5 +82,6 @@ access token, creates or looks up the user, then returns a JWT from
 
 ## Frontend
 
-- `VITE_API_URL` &ndash; base URL for the XP API.
-- `VITE_AUTH_URL` &ndash; base URL for the auth service.
+- `VITE_AUTH_API_BASE_URL` &ndash; base URL for the auth API.
+- `VITE_DISCORD_CLIENT_ID` &ndash; OAuth client ID for Discord.
+- `VITE_SESSION_REFRESH_INTERVAL` &ndash; interval (seconds) between session refreshes.
