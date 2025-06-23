@@ -6,6 +6,8 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Documented database agent and synced environment variables with `.env.example`.
 
+- Replaced marketing preview links with the frontend README and React demo.
+
 - Completed alpha onboarding guide and linked a simple marketing
   site preview.
 - Checked off roadmap tasks for documentation, feedback
