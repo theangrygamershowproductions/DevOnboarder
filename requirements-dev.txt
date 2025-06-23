@@ -5,3 +5,5 @@ pre-commit
 openapi-spec-validator
 requests
 pytest-cov
+vale
+language-tool-python
