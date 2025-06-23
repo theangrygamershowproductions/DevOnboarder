@@ -72,6 +72,11 @@ def create_app() -> FastAPI:
     )
     app.add_middleware(_SecurityHeadersMiddleware)
 
+    @app.get("/health")
+    def health() -> dict[str, str]:
+        """Return service health status."""
+        return {"status": "ok"}
+
     app.include_router(router)
     return app
 
