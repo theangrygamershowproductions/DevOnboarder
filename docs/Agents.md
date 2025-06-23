@@ -69,7 +69,7 @@ This document defines all agents (services, bots, integrations, and guards) in t
 
 ## Frontend Session Agent
 
-**Purpose:** Stores and refreshes JWTs, restores sessions, and applies RBAC checks client side.
+**Purpose:** Stores and refreshes JWTs, restores sessions, and applies RBAC checks client-side.
 
 **Key Files:** `src/hooks/useSession.ts`, `src/lib/auth/discord.ts`
 
