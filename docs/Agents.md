@@ -171,8 +171,9 @@ healthcheck:
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |
 | BOT_JWT                      | JWT used by the bot for API calls          |
 | API_BASE_URL                 | XP API URL for the bot                     |
-| VITE_API_URL                 | XP API URL for the frontend                |
-| VITE_AUTH_URL                | Auth service URL for the frontend          |
+| VITE_AUTH_API_BASE_URL       | Auth service URL for the frontend          |
+| VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
+| VITE_SESSION_REFRESH_INTERVAL| How often the frontend refreshes sessions  |
 | INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
 
 ---
@@ -216,5 +217,5 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
 
-*Last updated: 21 June 2025*
+*Last updated: 22 June 2025*
 
