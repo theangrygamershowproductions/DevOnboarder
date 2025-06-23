@@ -1,6 +1,6 @@
-# Frontend
+# DevOnboarder Frontend
 
-This directory contains a small React app built with Vite.
+This directory houses the DevOnboarder React application built with Vite.
 
-Run `npm install` followed by `npm run dev` to start the development server.
+Install dependencies with `npm install` and start the dev server with `npm run dev`.
 Environment variables are defined in `.env.example`.
