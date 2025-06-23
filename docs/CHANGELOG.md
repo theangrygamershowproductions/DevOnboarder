@@ -8,38 +8,30 @@ All notable changes to this project will be recorded in this file.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
 - Generated `frontend/package-lock.json` to pin npm dependencies.
 - Added Vale and LanguageTool documentation linting in CI.
-- Improved LanguageTool script with line/column output and graceful
-  connection error handling.
+- Improved LanguageTool script with line/column output and graceful connection error handling.
+- LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Documented database agent and synced environment variables with `.env.example`.
+- `setup-env.sh` now falls back to `npm install` when `pnpm` is unavailable.
 - Added documentation & QA checklist to `docs/pull_request_template.md` and `.github/pull_request_template.md`.
 - Added `doc-quality-onboarding.md` with a quickstart for running documentation checks.
-
 - Replaced marketing preview links with the frontend README and React demo.
 - Updated `frontend/README.md` with DevOnboarder branding and removed outdated badge references.
 - Updated `docker-compose.dev.yaml` to run `npm run dev` for the frontend service.
-
-- Completed alpha onboarding guide and linked a simple marketing
-  site preview.
-- Checked off roadmap tasks for documentation, feedback
-  integration, security audit, marketing preview, and cross-platform
-  verification.
-- Documented that setup instructions were validated on Windows,
-  macOS, and Linux.
-- Recorded npm audit results showing zero vulnerabilities and noted
-  pip-audit could not run in the sandbox environment.
+- Completed alpha onboarding guide and linked a simple marketing site preview.
+- Checked off roadmap tasks for documentation, feedback integration, security audit, marketing preview, and cross-platform verification.
+- Documented that setup instructions were validated on Windows, macOS, and Linux.
+- Recorded npm audit results showing zero vulnerabilities and noted pip-audit could not run in the sandbox environment.
 - Removed outdated reference to `bot/npm-audit.json` in the security audit doc.
 - Updated Codex dashboard and plan to mark auth, XP, and bot modules complete.
 - Added `/api/user/contribute` endpoint to the XP API requiring a JWT.
 - Updated README to describe the Vite-based React frontend.
-- Added a standard Vite `index.html` with a `<div id="root"></div>` mount point
-  in the `frontend/` directory.
+- Added a standard Vite `index.html` with a `<div id="root"></div>` mount point in the `frontend/` directory.
 - Documented new frontend environment variables in `docs/env.md` and `docs/Agents.md`.
 - Replaced marketing preview links with `frontend/index.html`.
 
-- `scripts/check_docstrings.py` now accepts an optional directory argument and
-  CI passes `src/devonboarder` explicitly.
+- `scripts/check_docstrings.py` now accepts an optional directory argument and CI passes `src/devonboarder` explicitly.
 - Added `docs/sample-pr.md` with an example pull request.
 - Documented Vale installation steps and improved `scripts/check_docs.sh` to
   verify the command is available before running.

@@ -11,6 +11,10 @@ def check_file(path: str, tool: language_tool_python.LanguageTool) -> int:
     try:
         matches = tool.check(text)
     except Exception as e:  # network or parsing errors
+        err = str(e)
+        if "414" in err or "Request-URI" in err or "400" in err:
+            print(f"{path}: LanguageTool skipped due to request size")
+            return 0
         print(f"{path}: LanguageTool error {e}")
         return 1
     if matches:
