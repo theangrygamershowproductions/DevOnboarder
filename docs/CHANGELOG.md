@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
+- Cleaned up README and AGENTS docs to reduce documentation lint warnings.
 - Auth service now errors at startup when `AUTH_SECRET_KEY` is unset or "secret" outside development mode.
 - Documented database agent and synced environment variables with `.env.example`.
 - `setup-env.sh` now falls back to `npm install` when `pnpm` is unavailable.
