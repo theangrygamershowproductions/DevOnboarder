@@ -1,0 +1,6 @@
+extends: substitution
+message: "Use 'DevOnboarder' for the project name."
+level: warning
+ignorecase: true
+swap:
+  devonboarder: DevOnboarder
