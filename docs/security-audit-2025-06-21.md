@@ -8,4 +8,3 @@ No issues were identified in the partial results.
 
 ## Node (`npm audit`)
 `npm audit` reported zero vulnerabilities across all dependencies.
-See `bot/npm-audit.json` for the full output.
