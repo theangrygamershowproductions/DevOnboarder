@@ -14,6 +14,7 @@ when working with those packages directly.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `LOG_LEVEL` &ndash; Python logging level (`INFO`, `DEBUG`, etc.).
 - `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
+- `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
 
 ## Feature flags
 
