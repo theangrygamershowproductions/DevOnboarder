@@ -14,20 +14,19 @@ container setup used by Codex.
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
-- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code
-  development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
-  - `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
-  - `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
-  - `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
-  - `docker-compose.yml` – Base compose file for generic deployments.
-  - `docker-compose.codex.yml` – Compose file used when running in Codex.
-  - `docker-compose.override.yaml` – Overrides for the base compose file.
-  - `bot/` – Discord bot written in TypeScript.
-  - `frontend/` – Placeholder directory for the upcoming web UI.
-  - `auth/` – Environment files for the authentication service.
-  - `xp/` – Environment files for the XP API.
-  - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
-  - `.env.example` – Sample variables shared across services.
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
+- `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
+- `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
+- `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
+- `docker-compose.yml` – Base compose file for generic deployments.
+- `docker-compose.codex.yml` – Compose file used when running in Codex.
+- `docker-compose.override.yaml` – Overrides for the base compose file.
+- `bot/` – Discord bot written in TypeScript.
+- `frontend/` – Placeholder directory for the upcoming web UI.
+- `auth/` – Environment files for the authentication service.
+- `xp/` – Environment files for the XP API.
+- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+- `.env.example` – Sample variables shared across services.
 
 ## Documentation and Onboarding
 
