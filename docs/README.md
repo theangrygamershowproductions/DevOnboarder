@@ -9,6 +9,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
    Update `DATABASE_URL` in `.env.dev` if you are not using the default
    Postgres credentials.
 2. Install the project in editable mode with `pip install -e .`.
+   Install the dev requirements with `pip install -r requirements-dev.txt`.
 3. Start services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
@@ -25,6 +26,17 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 10. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
 11. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
 12. Install git hooks with `pre-commit install` so these checks run automatically.
+13. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
+    This script uses **Vale** for style and **LanguageTool** for grammar.
+    LanguageTool requires network access to `api.languagetool.org` unless you
+    provide a custom server URL in the `LANGUAGETOOL_URL` environment variable.
+    If your environment blocks outbound requests, run your own instance with:
+
+    ```bash
+    docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
+    ```
+    
+    Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
 The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the

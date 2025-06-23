@@ -57,9 +57,13 @@ Before opening a pull request, make sure to:
 - Run the linter and tests to confirm they pass:
 
 ```bash
-ruff check .
-pytest -q
+-  ruff check .
+-  pytest -q
 ```
+- Run documentation checks with `./scripts/check_docs.sh`.
+  These use **Vale** and **LanguageTool** and require network access to
+  `api.languagetool.org` or a locally hosted server specified via
+  `LANGUAGETOOL_URL`.
 - Keep Prettier pinned to `v3.1.0`. Run
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
