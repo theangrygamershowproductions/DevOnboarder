@@ -22,7 +22,12 @@ else
     fi
     if [ -d frontend ]; then
         cd frontend
-        pnpm install
+        if command -v pnpm >/dev/null 2>&1; then
+            pnpm install
+        else
+            echo "pnpm not found, using npm"
+            npm install
+        fi
         cd ..
     fi
     export PYTHONPATH="$(pwd)"
