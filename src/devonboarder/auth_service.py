@@ -173,6 +173,12 @@ app.add_middleware(
 app.add_middleware(_SecurityHeadersMiddleware)
 
 
+@app.get("/health")
+def health() -> dict[str, str]:
+    """Return service health status."""
+    return {"status": "ok"}
+
+
 @app.post("/api/register")
 def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     """Create a new user and return an authentication token."""
