@@ -3,6 +3,8 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Generated `frontend/package-lock.json` to pin npm dependencies.
+- Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Documented database agent and synced environment variables with `.env.example`.
 
