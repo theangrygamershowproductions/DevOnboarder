@@ -238,7 +238,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | VERIFIED_EDUCATION_ROLE_ID   | Role assigned after education verification |
 | DISCORD_CLIENT_ID            | Discord application client ID              |
 | DISCORD_CLIENT_SECRET        | Discord application client secret          |
-| AUTH_SECRET_KEY              | Secret key for JWT signing                 |
+| AUTH_SECRET_KEY              | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
 | DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |
 | BOT_JWT                      | JWT used by the bot for API calls          |
