@@ -34,7 +34,7 @@ Refer to [emails/style-guide.md](../../emails/style-guide.md) for our email tone
 
 ## Marketing Site Preview
 Get a first look at the upcoming website in
-[frontend/marketing-preview.html](../../frontend/marketing-preview.html).
+[frontend/index.html](../../frontend/index.html).
 Share this link with prospective testers who want a quick overview.
 
 ## Setup Validation
