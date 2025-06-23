@@ -184,6 +184,8 @@ All notable changes to this project will be recorded in this file.
   flagged missing React packages in the frontend and outdated `node-fetch` in
   the bot. `pip-audit` reported no issues while `npm audit` found moderate
   vulnerabilities in `esbuild` for the frontend with none in the bot.
+- Expanded `docs/Agents.md` with a service map, healthcheck code samples and a
+  remediation checklist.
 
 ## [0.1.0] - 2025-06-14
 
