@@ -17,6 +17,7 @@
 ```bash
 ruff check .
 pytest -q
+bash scripts/check_docs.sh
 ```
 
 # Checklist
@@ -29,6 +30,7 @@ pytest -q
 - [ ] CORS and security headers validated
 - [ ] No secrets or sensitive data are present in commits
 - [ ] Codex did **not** introduce any direct commits to `main`
+- [ ] Documentation passes `bash scripts/check_docs.sh`
 - [ ] Are all Codex changes covered by tests and docs?
 - [ ] Coverage does not decrease (see Codecov status)
 

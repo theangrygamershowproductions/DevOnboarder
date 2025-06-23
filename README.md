@@ -42,6 +42,9 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 7. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
 8. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
 9. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+10. Run `./scripts/check_docs.sh` to lint documentation with Vale and
+    LanguageTool. Set `LANGUAGETOOL_URL` if you use a local LanguageTool
+    server.
 
 These files expand on the steps listed in the Quickstart section.
 
@@ -112,6 +115,7 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    `cp xp/.env.example xp/.env`
    `cp frontend/.env.example frontend/.env`
 3. Install the project with `pip install -e .`.
+   Install development tools with `pip install -r requirements-dev.txt`.
 4. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    The services launch using the commands defined in the compose file.
 5. Run `alembic upgrade head` to create the initial tables.
