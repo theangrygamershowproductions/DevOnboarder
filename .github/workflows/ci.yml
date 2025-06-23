@@ -36,6 +36,10 @@ jobs:
               run: python scripts/check_docstrings.py src/devonboarder
             - name: Run linter
               run: ruff check .
+            - name: Install Vale
+              run: |
+                curl -fsSL https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_amd64.tar.gz | tar xz
+                sudo mv vale /usr/local/bin/
             - name: Documentation style check
               run: ./scripts/check_docs.sh
             - name: Prepare environment file
