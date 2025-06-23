@@ -24,6 +24,7 @@ pip install -r requirements-dev.txt
 * On macOS: `brew install vale`
 * On Windows: `choco install vale`
 * Or see [Vale Installation Docs](https://vale.sh/docs/installation/) for other platforms
+* **CI automatically installs Vale**, but you still need it locally to run the checks before committing.
 
 ---
 
