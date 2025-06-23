@@ -53,7 +53,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
-- [Marketing site preview](../frontend/marketing-preview.html) &ndash; early look at the public landing page.
+- [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
 
 ## Onboarding Phases
 
