@@ -94,6 +94,15 @@ who has contributed and when.
 - `.python-version` &ndash; indicates the Python version for pyenv.
 - `.nvmrc` &ndash; defines the Node.js version for nvm.
 
+## Documentation Quality Checks
+
+All Markdown files must pass Vale and LanguageTool checks.
+
+- Run `bash scripts/check_docs.sh` before pushing any changes.
+- Install Vale with `brew install vale` or see the [Vale installation docs](https://vale.sh/docs/installation/).
+- Install Python dev dependencies with `pip install -r requirements-dev.txt`.
+- Set `LANGUAGETOOL_URL` if you use a self-hosted LanguageTool server. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+
 ## Issues and Pull Requests
 
 1. Search existing issues to avoid duplicates and provide clear reproduction steps.

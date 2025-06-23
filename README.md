@@ -45,6 +45,9 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 10. Run `./scripts/check_docs.sh` to lint documentation with Vale and
     LanguageTool. Set `LANGUAGETOOL_URL` if you use a local LanguageTool
     server.
+11. Install Vale with `brew install vale` (or see the [Vale installation docs](https://vale.sh/docs/installation/))
+    and install Python dependencies from `requirements-dev.txt` so the
+    documentation checks work locally.
 
 These files expand on the steps listed in the Quickstart section.
 
