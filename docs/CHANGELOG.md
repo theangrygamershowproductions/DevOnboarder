@@ -12,6 +12,8 @@ All notable changes to this project will be recorded in this file.
 - Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Documented database agent and synced environment variables with `.env.example`.
+- Added documentation & QA checklist to `docs/pull_request_template.md` and `.github/pull_request_template.md`.
+- Added `doc-quality-onboarding.md` with a quickstart for running documentation checks.
 
 - Replaced marketing preview links with the frontend README and React demo.
 - Updated `frontend/README.md` with DevOnboarder branding and removed outdated badge references.
