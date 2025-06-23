@@ -7,27 +7,28 @@ This document defines all agents (services, bots, integrations, and guards) in t
 ## Table of Contents
 1. [Agent Service Map](#agent-service-map)
 2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
-3. [Frontend Session Agent](#frontend-session-agent)
-4. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
-5. [Discord Integration Agent](#discord-integration-agent)
-6. [Verification Agent](#verification-agent)
-7. [Session/JWT Agent](#sessionjwt-agent)
-8. [Database Service (Postgres)](#database-service-postgres)
-9. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-10. [Planned Agents / Stubs](#planned-agents--stubs)
-11. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
-12. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
-13. [CI Wait Example](#ci-wait-example)
-14. [Agent Task Checklist](#agent-task-checklist)
-15. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
-16. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
-17. [Environment Variable Reference](#environment-variable-reference)
-18. [Codex Observability](#codex-observability)
-19. [How to Extend/Contribute](#how-to-extendcontribute)
-20. [Deprecation & Retirement](#deprecation--retirement)
-21. [Glossary](#glossary)
-22. [Related Docs](#related-docs)
-23. [Revision History](#revision-history)
+3. [XP API](#xp-api)
+4. [Frontend Session Agent](#frontend-session-agent)
+5. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
+6. [Discord Integration Agent](#discord-integration-agent)
+7. [Verification Agent](#verification-agent)
+8. [Session/JWT Agent](#sessionjwt-agent)
+9. [Database Service (Postgres)](#database-service-postgres)
+10. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+11. [Planned Agents / Stubs](#planned-agents--stubs)
+12. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+13. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
+14. [CI Wait Example](#ci-wait-example)
+15. [Agent Task Checklist](#agent-task-checklist)
+16. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
+17. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+18. [Environment Variable Reference](#environment-variable-reference)
+19. [Codex Observability](#codex-observability)
+20. [How to Extend/Contribute](#how-to-extendcontribute)
+21. [Deprecation & Retirement](#deprecation--retirement)
+22. [Glossary](#glossary)
+23. [Related Docs](#related-docs)
+24. [Revision History](#revision-history)
 
 ---
 
@@ -47,7 +48,7 @@ This document defines all agents (services, bots, integrations, and guards) in t
 
 **Purpose:** Provides Discord OAuth, role checks, JWT issuance, and user session endpoints.
 
-**Key Endpoints:** `POST /api/discord/exchange`, `GET /api/auth/user`, `GET /api/verification/status`
+**Key Endpoints:** `POST /api/discord/exchange`, `GET /api/auth/user`, `GET /api/verification/status`, `GET /health`
 
 **Environment:** Discord client credentials, role IDs, JWT secret and config.
 
@@ -55,6 +56,14 @@ This document defines all agents (services, bots, integrations, and guards) in t
 1. Receive code from frontend.
 2. Exchange it for a Discord token and fetch roles.
 3. Issue a JWT and session payload to the frontend.
+
+## XP API
+
+**Purpose:** Provides onboarding and XP routes backed by the auth service database.
+
+**Key Endpoints:** `GET /api/user/onboarding-status`, `GET /api/user/level`, `POST /api/user/contribute`, `GET /health`
+
+**Environment:** Shares database connection via `DATABASE_URL`.
 
 ---
 
@@ -284,9 +293,10 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 | Date        | Version | Author    | Summary                                |
 | ----------- | ------- | --------- | -------------------------------------- |
 | 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
+| 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints |
 | 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars |
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
 
-*Last updated: 22 June 2025*
+*Last updated: 23 June 2025*
 
