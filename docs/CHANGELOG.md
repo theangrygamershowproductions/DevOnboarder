@@ -187,6 +187,7 @@ All notable changes to this project will be recorded in this file.
   remediation checklist.
 - Added `INIT_DB_ON_STARTUP` placeholder to `.env.example` and documented its purpose.
 - Removed duplicate auth wait step from CI workflow.
+- Added Vitest setup and a basic React test.
 
 ## [0.1.0] - 2025-06-14
 
