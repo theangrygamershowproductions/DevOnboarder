@@ -9,6 +9,7 @@ All notable changes to this project will be recorded in this file.
 - Documented database agent and synced environment variables with `.env.example`.
 
 - Replaced marketing preview links with the frontend README and React demo.
+- Updated `docker-compose.dev.yaml` to run `npm run dev` for the frontend service.
 
 - Completed alpha onboarding guide and linked a simple marketing
   site preview.
