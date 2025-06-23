@@ -31,6 +31,7 @@ environment file overrides differences like `env_file` or exposed ports below th
 `<<` merge key.
 
 ### Platform Verification
+
 These instructions were tested on Windows 11 (with WSL&nbsp;2), macOS Ventura,
 and Ubuntu&nbsp;22.04. The Docker and Python versions match across
 platforms. Please report any issues you encounter on your operating system.
@@ -53,6 +54,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+- [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
 
 ## Onboarding Phases
@@ -86,4 +88,3 @@ who has contributed and when.
 2. Start branches from the latest `main` and follow the git guidelines.
 3. Use the pull request template and ensure the checklist passes.
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
-
