@@ -24,7 +24,12 @@ from jose import jwt, JWTError
 import os
 import time
 
-SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "secret")
+SECRET_KEY = os.getenv("AUTH_SECRET_KEY")
+APP_ENV = os.getenv("APP_ENV")
+if (not SECRET_KEY or SECRET_KEY == "secret") and APP_ENV != "development":
+    raise RuntimeError(
+        "AUTH_SECRET_KEY must be set to a non-default value in production"
+    )
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 
