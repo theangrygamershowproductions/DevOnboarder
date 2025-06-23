@@ -3,11 +3,15 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
+- Generated `frontend/package-lock.json` to pin npm dependencies.
+- Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Documented database agent and synced environment variables with `.env.example`.
 
 - Replaced marketing preview links with the frontend README and React demo.
 - Updated `frontend/README.md` with DevOnboarder branding and removed outdated badge references.
+- Updated `docker-compose.dev.yaml` to run `npm run dev` for the frontend service.
 
 - Completed alpha onboarding guide and linked a simple marketing
   site preview.
@@ -18,6 +22,7 @@ All notable changes to this project will be recorded in this file.
   macOS, and Linux.
 - Recorded npm audit results showing zero vulnerabilities and noted
   pip-audit could not run in the sandbox environment.
+- Removed outdated reference to `bot/npm-audit.json` in the security audit doc.
 - Updated Codex dashboard and plan to mark auth, XP, and bot modules complete.
 - Added `/api/user/contribute` endpoint to the XP API requiring a JWT.
 - Updated README to describe the Vite-based React frontend.
