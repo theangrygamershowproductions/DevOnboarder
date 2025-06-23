@@ -55,6 +55,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
@@ -97,6 +98,7 @@ who has contributed and when.
 ## Documentation Quality Checks
 
 All Markdown files must pass Vale and LanguageTool checks.
+See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
 - Install Vale with `brew install vale` or see the [Vale installation docs](https://vale.sh/docs/installation/).
