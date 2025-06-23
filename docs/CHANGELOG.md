@@ -17,6 +17,7 @@ All notable changes to this project will be recorded in this file.
   macOS, and Linux.
 - Recorded npm audit results showing zero vulnerabilities and noted
   pip-audit could not run in the sandbox environment.
+- Removed outdated reference to `bot/npm-audit.json` in the security audit doc.
 - Updated Codex dashboard and plan to mark auth, XP, and bot modules complete.
 - Added `/api/user/contribute` endpoint to the XP API requiring a JWT.
 - Updated README to describe the Vite-based React frontend.
