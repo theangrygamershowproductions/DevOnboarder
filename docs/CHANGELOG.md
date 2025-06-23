@@ -191,6 +191,7 @@ All notable changes to this project will be recorded in this file.
   vulnerabilities in `esbuild` for the frontend with none in the bot.
 - Expanded `docs/Agents.md` with a service map, healthcheck code samples and a
   remediation checklist.
+- Added `INIT_DB_ON_STARTUP` placeholder to `.env.example` and documented its purpose.
 
 ## [0.1.0] - 2025-06-14
 
