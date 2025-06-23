@@ -47,11 +47,11 @@ jobs:
             - name: Wait for auth service
               run: |
                 for i in {1..30}; do
-                  if nc -z localhost 8002; then
-                    echo "Service is up!";
+                  if curl -sf http://localhost:8002/health; then
+                    echo "Service is up!"
                     break
                   fi
-                  echo "Waiting for service...";
+                  echo "Waiting for service..."
                   sleep 2
                 done
             - name: Run tests with coverage
@@ -67,7 +67,7 @@ jobs:
             - name: Wait for auth service
               run: |
                 for i in {1..30}; do
-                  nc -z localhost 8002 && exit 0
+                  curl -sf http://localhost:8002/health && exit 0
                   echo "Waiting for service..."
                   sleep 2
                 done
