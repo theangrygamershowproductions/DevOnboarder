@@ -5,24 +5,41 @@ This document defines all agents (services, bots, integrations, and guards) in t
 <!-- This file is derived from the master merged draft provided during onboarding. -->
 
 ## Table of Contents
-1. [Auth Server (Backend Agent)](#auth-server-backend-agent)
-2. [Frontend Session Agent](#frontend-session-agent)
-3. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
-4. [Discord Integration Agent](#discord-integration-agent)
-5. [Verification Agent](#verification-agent)
-6. [Session/JWT Agent](#sessionjwt-agent)
-7. [Database Service (Postgres)](#database-service-postgres)
-8. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-9. [Planned Agents / Stubs](#planned-agents--stubs)
-10. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
-11. [Agent Task Checklist](#agent-task-checklist)
-12. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
-13. [Environment Variable Reference](#environment-variable-reference)
-14. [How to Extend/Contribute](#how-to-extendcontribute)
-15. [Deprecation & Retirement](#deprecation--retirement)
-16. [Glossary](#glossary)
-17. [Related Docs](#related-docs)
-18. [Revision History](#revision-history)
+1. [Agent Service Map](#agent-service-map)
+2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
+3. [Frontend Session Agent](#frontend-session-agent)
+4. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
+5. [Discord Integration Agent](#discord-integration-agent)
+6. [Verification Agent](#verification-agent)
+7. [Session/JWT Agent](#sessionjwt-agent)
+8. [Database Service (Postgres)](#database-service-postgres)
+9. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+10. [Planned Agents / Stubs](#planned-agents--stubs)
+11. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+12. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
+13. [CI Wait Example](#ci-wait-example)
+14. [Agent Task Checklist](#agent-task-checklist)
+15. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
+16. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+17. [Environment Variable Reference](#environment-variable-reference)
+18. [Codex Observability](#codex-observability)
+19. [How to Extend/Contribute](#how-to-extendcontribute)
+20. [Deprecation & Retirement](#deprecation--retirement)
+21. [Glossary](#glossary)
+22. [Related Docs](#related-docs)
+23. [Revision History](#revision-history)
+
+---
+
+## Agent Service Map
+
+| Agent Name          | Endpoint(s)                      | Port | Healthcheck | Depends On | Status   |
+| ------------------- | -------------------------------- | ---- | ----------- | ---------- | -------- |
+| Auth Server         | `/api/*`, `/health`              | 8002 | `/health`   | db         | updating |
+| Discord Integration | `/oauth`, `/roles`               | 8081 | `TBD`       | Auth, db   | planned  |
+| Frontend Agent      | `/`, `/session`                  | 3000 | N/A         | Auth       | stable   |
+| XP API              | `/xp`, `/health`                 | 8001 | `/health`   | db         | verify   |
+| Database (Postgres) | N/A                              | 5432 | docker      | N/A        | stable   |
 
 ---
 
@@ -118,6 +135,41 @@ healthcheck:
   retries: 10
 ```
 
+## Healthcheck Implementation Guide
+
+Add a simple `/health` route in each service so CI and Compose can poll for readiness.
+
+**Express:**
+
+```js
+app.get('/health', (req, res) => res.status(200).send('OK'));
+```
+
+**FastAPI:**
+
+```python
+@app.get("/health")
+def healthcheck():
+    return {"status": "ok"}
+```
+
+## CI Wait Example
+
+Use a small loop in your workflow to wait for the auth service before running tests:
+
+```yaml
+- name: Wait for Auth service
+  run: |
+    for i in {1..20}; do
+      if curl -sf http://localhost:8002/health; then
+        echo "Auth is up"
+        exit 0
+      fi
+      sleep 3
+    done
+    exit 1
+```
+
 ---
 
 ## Agent Task Checklist
@@ -125,6 +177,17 @@ healthcheck:
 - [ ] Document each agent's purpose, key files, environment, and workflow.
 - [ ] Update this file and the changelog when an agent changes.
 - [ ] Ensure healthchecks pass for required services.
+
+---
+
+## Next Steps / Remediation Timeline
+
+- [ ] Implement `/health` in Auth
+- [ ] Add Docker healthcheck to compose
+- [ ] CI workflow update to poll `/health`
+- [ ] Env var audit/cleanup in `.env.dev`
+- [ ] Doc/Agents.md/Changelog update
+- [ ] Retire obsolete scripts
 
 ---
 
@@ -178,6 +241,13 @@ healthcheck:
 
 ---
 
+## Codex Observability
+
+CI health and failure events are monitored by Codex. Future outages will trigger
+an automated notification and suggested fix via Codex's reporting channel.
+
+---
+
 ## How to Extend/Contribute
 
 1. Add a new section following the same structure: purpose, key files, environment, typical workflow.
@@ -213,6 +283,7 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 
 | Date        | Version | Author    | Summary                                |
 | ----------- | ------- | --------- | -------------------------------------- |
+| 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
 | 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars |
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
