@@ -64,15 +64,6 @@ jobs:
             - name: Run bot tests
               run: npm test
               working-directory: bot
-            - name: Wait for auth service
-              run: |
-                for i in {1..30}; do
-                  curl -sf http://localhost:8002/health && exit 0
-                  echo "Waiting for service..."
-                  sleep 2
-                done
-                echo "Auth service failed to start"
-                exit 1
             - name: Check CORS & security headers
               run: |
                 pip install requests
