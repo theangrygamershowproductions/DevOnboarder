@@ -57,7 +57,8 @@ Alternatively, you can run the Docker Compose setup directly.
 This starts the auth, bot, XP API, frontend, and database services using
 environment variables from `.env.dev`.
 Copy each `*.env.example` to `.env` inside its service directory before starting.
-The `frontend/` directory currently contains only a placeholder README:
+The `frontend/` directory hosts a Vite-based React app. Run `npm install` and
+`npm run dev` in that folder to start the development server:
 
 ```bash
 docker compose -f docker-compose.dev.yaml --env-file .env.dev up
