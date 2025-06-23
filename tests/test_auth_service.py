@@ -1,4 +1,7 @@
 import importlib
+import os
+os.environ.setdefault("APP_ENV", "development")
+os.environ.setdefault("AUTH_SECRET_KEY", "devsecret")
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
