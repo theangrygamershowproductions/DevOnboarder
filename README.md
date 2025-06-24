@@ -109,6 +109,7 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
+First install Docker, Docker Compose, Node.js 20, and Python 3.12. See [docs/ubuntu-setup.md](docs/ubuntu-setup.md) for the Ubuntu commands.
 1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
 2. Copy each service example file to `.env`:
    `cp auth/.env.example auth/.env`
