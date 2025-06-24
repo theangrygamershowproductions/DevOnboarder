@@ -244,7 +244,8 @@ Use a small loop in your workflow to wait for the auth service before running te
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |
 | BOT_JWT                      | JWT used by the bot for API calls          |
 | API_BASE_URL                 | XP API URL for the bot                     |
-| VITE_AUTH_API_BASE_URL       | Auth service URL for the frontend          |
+| VITE_AUTH_URL                | Auth service URL for the frontend          |
+| VITE_API_URL                 | XP API URL for the frontend                |
 | VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
 | VITE_SESSION_REFRESH_INTERVAL| How often the frontend refreshes sessions  |
 | INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
