@@ -21,7 +21,7 @@ def check_file(path: str, tool: language_tool_python.LanguageTool) -> int:
         print(f"{path}: {len(matches)} issues found")
         for m in matches:
             line, col = m.get_line_and_column(text)
-            print(f"- Line {line}, column {col}: {m.message}")
+            print(f"::error file={path},line={line}::{m.message}")
         return len(matches)
     return 0
 
