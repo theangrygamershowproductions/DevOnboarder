@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 FILES=$(git ls-files '*.md')
 
 if ! command -v vale >/dev/null 2>&1; then
-  echo "Vale not installed. Install it with 'brew install vale' or see docs/README.md."
+  echo "::error file=scripts/check_docs.sh,line=$LINENO::Vale not installed"
   exit 1
 fi
 
-vale $FILES
-python scripts/languagetool_check.py $FILES
+if ! vale $FILES; then
+  echo "::error file=scripts/check_docs.sh,line=$LINENO::Vale issues found"
+  exit 1
+fi
+
+if ! python scripts/languagetool_check.py $FILES; then
+  echo "::error file=scripts/check_docs.sh,line=$LINENO::LanguageTool issues found"
+  exit 1
+fi
