@@ -22,7 +22,7 @@ container setup used by Codex.
 - `docker-compose.codex.yml` – Compose file used when running in Codex.
 - `docker-compose.override.yaml` – Overrides for the base compose file.
 - `bot/` – Discord bot written in TypeScript.
-- `frontend/` – Placeholder directory for the upcoming web UI.
+- `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
 - `xp/` – Environment files for the XP API.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
@@ -62,8 +62,7 @@ Alternatively, you can run the Docker Compose setup directly.
 This starts the auth, bot, XP API, frontend, and database services using
 environment variables from `.env.dev`.
 Copy each `*.env.example` to `.env` inside its service directory before starting.
-The `frontend/` directory hosts a Vite-based React app. Run `npm install` (which creates `package-lock.json`) and commit the lockfile to version control and
-`npm run dev` in that folder to start the development server:
+The `frontend/` directory hosts a Vite-based React app. Run `npm install` (or `pnpm install`) in that folder to install dependencies, commit the generated lockfile, and then start the development server with `npm run dev`:
 
 ```bash
 docker compose -f docker-compose.dev.yaml --env-file .env.dev up
