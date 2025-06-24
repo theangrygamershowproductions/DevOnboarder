@@ -14,6 +14,8 @@ All notable changes to this project will be recorded in this file.
 - Linter step now uses `ruff check --output-format=github .`.
 - Improved LanguageTool script with line/column output and graceful connection error handling.
 - CI workflow now records pytest results and uploads them as an artifact.
+- Documented where to download the `pytest-results.xml` artifact in GitHub
+  Actions.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - LanguageTool script now emits GitHub error annotations and exits with a non-zero code when issues are found.
 - Documented committing the lockfile in the README and frontend README.
