@@ -198,6 +198,7 @@ All notable changes to this project will be recorded in this file.
 - Removed duplicate auth wait step from CI workflow.
 - Added Vitest setup and a basic React test.
 - Added Discord server configuration guide noting that the Widget must be enabled.
+- Replaced `VITE_AUTH_API_BASE_URL` with `VITE_AUTH_URL` and documented `VITE_API_URL`.
 
 ## [0.1.0] - 2025-06-14
 
