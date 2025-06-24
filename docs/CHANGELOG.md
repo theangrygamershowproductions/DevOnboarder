@@ -15,6 +15,7 @@ All notable changes to this project will be recorded in this file.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - LanguageTool script now emits GitHub error annotations and exits with a non-zero code when issues are found.
 - Documented committing the lockfile in the README and frontend README.
+- Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Cleaned up README and AGENTS docs to reduce documentation lint warnings.
 - Auth service now errors at startup when `JWT_SECRET_KEY` is unset or "secret" outside development mode.
