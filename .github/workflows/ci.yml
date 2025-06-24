@@ -35,7 +35,7 @@ jobs:
             - name: Doc coverage check
               run: python scripts/check_docstrings.py src/devonboarder
             - name: Run linter
-              run: ruff check --format=github .
+              run: ruff check --output-format=github .
             - name: Install Vale
               run: |
                 curl -fsSL https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_amd64.tar.gz | tar xz
