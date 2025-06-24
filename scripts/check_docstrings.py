@@ -42,17 +42,23 @@ def main() -> None:
     for dirpath, _, filenames in os.walk(api_path):
         for filename in filenames:
             if filename.endswith(".py"):
-                with open(os.path.join(dirpath, filename), "r") as f:
+                path = os.path.join(dirpath, filename)
+                with open(path, "r") as f:
                     tree = ast.parse(f.read())
                 for node in ast.walk(tree):
                     if isinstance(node, ast.FunctionDef):
-                        if any(_is_route_decorator(d) for d in node.decorator_list):
+                        if any(
+                            _is_route_decorator(d) for d in node.decorator_list
+                        ):
                             if not has_docstring(node):
-                                errors.append(
-                                    f"{filename}:{node.lineno} missing docstring"
+                                rel_path = os.path.relpath(path)
+                                msg = (
+                                    f"::error file={rel_path},line={node.lineno}"
+                                    "::missing docstring"
                                 )
+                                print(msg)
+                                errors.append(rel_path)
     if errors:
-        print("Missing docstrings:\n" + "\n".join(errors))
         exit(1)
     print("All endpoint docstrings present.")
 
