@@ -36,6 +36,7 @@ the repository. Provide them through your build or deployment secret store:
   `http://localhost:8002/login/discord/callback`.
 - `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
   API helpers send this JWT when no other token is provided.
+- `API_KEY` &ndash; example API token for local development.
 
 ## Discord role-based permissions
 
