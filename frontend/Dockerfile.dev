@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+# Copy manifests & install dependencies (including dev)
+COPY frontend/package*.json ./
+RUN npm ci
+
+# Copy frontend code
+COPY frontend/ .
+
+# Expose Vite default port
+EXPOSE 3000
+
+# Run dev server
+CMD ["npm", "run", "dev"]

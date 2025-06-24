@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added Dockerfiles for the bot and frontend and updated `docker-compose.dev.yaml` to build them.
 - CI workflow now builds service containers before starting Compose.
 - CI workflow installs Vale automatically before documentation checks.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
