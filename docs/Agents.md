@@ -243,6 +243,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |
 | BOT_JWT                      | JWT used by the bot for API calls          |
+| API_KEY                      | Example API token for local development    |
 | API_BASE_URL                 | XP API URL for the bot                     |
 | VITE_AUTH_URL                | Auth service URL for the frontend          |
 | VITE_API_URL                 | XP API URL for the frontend                |
