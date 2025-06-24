@@ -1,10 +1,12 @@
 import importlib
 import os
 os.environ.setdefault("APP_ENV", "development")
-os.environ.setdefault("AUTH_SECRET_KEY", "devsecret")
+os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
+from jose import jwt
+import pytest
 import time
 import sqlalchemy
 import httpx
@@ -452,3 +454,19 @@ def test_expired_token_rejected(monkeypatch):
     time.sleep(2.1)
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 401
+
+
+def test_expired_token_decode_fails(monkeypatch):
+    monkeypatch.setenv("TOKEN_EXPIRE_SECONDS", "1")
+    monkeypatch.setenv("JWT_SECRET_KEY", "devsecret")
+    importlib.reload(auth_service)
+    user = auth_service.User(id=123, username="u", password_hash="x")
+    token = auth_service.create_token(user)
+    time.sleep(2.1)
+    with pytest.raises(jwt.ExpiredSignatureError):
+        jwt.decode(
+            token,
+            auth_service.SECRET_KEY,
+            algorithms=[auth_service.ALGORITHM],
+            options={"verify_exp": True},
+        )

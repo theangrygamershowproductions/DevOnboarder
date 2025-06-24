@@ -28,8 +28,8 @@ the repository. Provide them through your build or deployment secret store:
 
 - `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` &ndash; OAuth credentials for
   authenticating with Discord.
-- `AUTH_SECRET_KEY` &ndash; signing key used by the auth service (sometimes
-  referred to as `JWT_SECRET`).
+- `JWT_SECRET_KEY` &ndash; signing key used by the auth service.
+- `JWT_ALGORITHM` &ndash; signing algorithm for JWTs (default `HS256`).
 - `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 - `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to

@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import os
 os.environ.setdefault("APP_ENV", "development")
-os.environ.setdefault("AUTH_SECRET_KEY", "devsecret")
+os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 from devonboarder.auth_service import create_app as create_auth_app
 from devonboarder.xp_api import create_app as create_xp_app
 

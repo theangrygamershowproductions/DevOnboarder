@@ -18,6 +18,7 @@ dependencies = [
     "SQLAlchemy<3.0",
     "passlib[bcrypt]",
     "python-jose",
+    "python-dotenv",
     "alembic",
     "psycopg2-binary",
 ]
