@@ -35,13 +35,19 @@ jobs:
             - name: Doc coverage check
               run: python scripts/check_docstrings.py src/devonboarder
             - name: Run linter
-              run: ruff check .
+              run: ruff check --format=github .
             - name: Install Vale
               run: |
                 curl -fsSL https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_amd64.tar.gz | tar xz
                 sudo mv vale /usr/local/bin/
             - name: Documentation style check
               run: ./scripts/check_docs.sh
+            - name: Upload Vale results
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: vale-results
+                  path: vale-results.json
             - name: Prepare environment file
               run: cp .env.example .env.dev
             - name: Build containers
