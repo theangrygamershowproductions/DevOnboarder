@@ -114,7 +114,7 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    `cp auth/.env.example auth/.env`
    `cp bot/.env.example bot/.env`
    `cp xp/.env.example xp/.env`
-   `cp frontend/.env.example frontend/.env`
+   `cp frontend/src/.env.example frontend/.env`
 3. Install the project with `pip install -e .`.
    Install development tools with `pip install -r requirements-dev.txt`.
 4. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
