@@ -205,6 +205,8 @@ All notable changes to this project will be recorded in this file.
 - Added Vitest setup and a basic React test.
 - Added Discord server configuration guide noting that the Widget must be enabled.
 - Replaced `VITE_AUTH_API_BASE_URL` with `VITE_AUTH_URL` and documented `VITE_API_URL`.
+- Added placeholders for `VITE_AUTH_URL`, `VITE_API_URL`, and `VITE_SESSION_REFRESH_INTERVAL` in `.env.example`.
+- Added `VITE_SESSION_REFRESH_INTERVAL` to `frontend/src/.env.example` with a default value and synced `docs/env.md`.
 
 ## [0.1.0] - 2025-06-14
 
