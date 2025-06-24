@@ -23,14 +23,17 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 import os
 import time
+from dotenv import load_dotenv
 
-SECRET_KEY = os.getenv("AUTH_SECRET_KEY")
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")
 if (not SECRET_KEY or SECRET_KEY == "secret") and APP_ENV != "development":
     raise RuntimeError(
-        "AUTH_SECRET_KEY must be set to a non-default value in production"
+        "JWT_SECRET_KEY must be set to a non-default value in production"
     )
-ALGORITHM = "HS256"
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 
 CONTRIBUTION_XP = 50
