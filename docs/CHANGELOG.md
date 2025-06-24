@@ -40,6 +40,9 @@ All notable changes to this project will be recorded in this file.
 - Documented Vale installation steps and improved `scripts/check_docs.sh` to
   verify the command is available before running.
 
+- Updated `scripts/check_docs.sh` to output GitHub error annotations when
+  Vale or LanguageTool find issues.
+
 - Dropped unused `user_id` argument from `utils.discord.get_user_roles`.
 - Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
 - Added missing docstrings to auth service endpoints.
