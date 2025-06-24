@@ -64,6 +64,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
 - [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
+- [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
