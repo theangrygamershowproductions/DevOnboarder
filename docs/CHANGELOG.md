@@ -22,6 +22,7 @@ All notable changes to this project will be recorded in this file.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
 - Added `scripts/generate-secrets.sh` and a Makefile for generating throwaway secrets before starting Compose.
+- Documented `make deps` and `make up` targets in the onboarding guide for a simpler workflow.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Cleaned up README and AGENTS docs to reduce documentation lint warnings.
 - Auth service now errors at startup when `JWT_SECRET_KEY` is unset or "secret" outside development mode.
