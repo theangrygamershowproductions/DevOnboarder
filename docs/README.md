@@ -8,15 +8,17 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
    (including `httpx` and `uvicorn`).
    Update `DATABASE_URL` in `.env.dev` if you are not using the default
    Postgres credentials.
-2. Install the project in editable mode with `pip install -e .`.
+2. Generate throwaway secrets with `./scripts/generate-secrets.sh`.
+   This script overwrites `.env.dev` with fresh random values.
+3. Install the project in editable mode with `pip install -e .`.
    Install the dev requirements with `pip install -r requirements-dev.txt`.
-3. Start services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+4. Start services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
-4. Run `alembic upgrade head` to apply the initial database migration.
-5. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
-6. Visit `http://localhost:8000` to see the greeting server.
-7. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
+5. Run `alembic upgrade head` to apply the initial database migration.
+6. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
+7. Visit `http://localhost:8000` to see the greeting server.
+8. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
 8. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
    It stores data in a local SQLite database.
