@@ -59,7 +59,18 @@ jobs:
                   sleep 2
                 done
             - name: Run tests with coverage
-              run: pytest --cov=src --cov-fail-under=85
+              run: pytest --cov=src --cov-fail-under=85 --junitxml=pytest-results.xml
+            - name: Upload pytest results
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: pytest-results
+                  path: pytest-results.xml
+            - name: Annotate pytest failures
+              if: failure()
+              run: |
+                  line=$(grep -n -m 1 '<failure' pytest-results.xml | cut -d: -f1)
+                  echo "::error file=pytest-results.xml,line=${line}::Test failures detected"
             - name: Install frontend dependencies
               run: npm ci
               working-directory: frontend
