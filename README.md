@@ -118,10 +118,12 @@ First install Docker, Docker Compose, Node.js 20, and Python 3.12. See [docs/ubu
    `cp frontend/src/.env.example frontend/.env`
 3. Install the project with `pip install -e .`.
    Install development tools with `pip install -r requirements-dev.txt`.
-4. Start the services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+4. Build the containers with `make deps`.
+5. Start the services with `make up` or run
+   `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    The services launch using the commands defined in the compose file.
-5. Run `alembic upgrade head` to create the initial tables.
-6. Execute the tests using `pytest -q`.
+6. Run `alembic upgrade head` to create the initial tables.
+7. Execute the tests using `pytest -q`.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.

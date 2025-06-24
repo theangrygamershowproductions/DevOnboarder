@@ -11,25 +11,27 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    Postgres credentials.
 2. Generate throwaway secrets with `./scripts/generate-secrets.sh`.
    This script overwrites `.env.dev` with fresh random values.
-3. Install the project in editable mode with `pip install -e .`.
+3. Build the service containers with `make deps`.
+4. Install the project in editable mode with `pip install -e .`.
    Install the dev requirements with `pip install -r requirements-dev.txt`.
-4. Start services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+5. Start services with `make up` or run
+   `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
-5. Run `alembic upgrade head` to apply the initial database migration.
-6. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
-7. Visit `http://localhost:8000` to see the greeting server.
-8. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
+6. Run `alembic upgrade head` to apply the initial database migration.
+7. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
+8. Visit `http://localhost:8000` to see the greeting server.
+9. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
-8. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
+10. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
    It stores data in a local SQLite database.
-9. Test the XP API with:
+11. Test the XP API with:
    `curl http://localhost:8001/api/user/onboarding-status`
    and `curl http://localhost:8001/api/user/level`.
-10. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
-11. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
-12. Install git hooks with `pre-commit install` so these checks run automatically.
-13. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
+12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
+13. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
+14. Install git hooks with `pre-commit install` so these checks run automatically.
+15. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
     LanguageTool requires network access to `api.languagetool.org` unless you
     provide a custom server URL in the `LANGUAGETOOL_URL` environment variable.
