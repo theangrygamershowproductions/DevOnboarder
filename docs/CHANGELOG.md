@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
 - Generated `frontend/package-lock.json` to pin npm dependencies.
 - Added Vale and LanguageTool documentation linting in CI.
+- CI now saves Vale results as `vale-results.json` and uploads them as an artifact.
 - Improved LanguageTool script with line/column output and graceful connection error handling.
 - CI workflow now records pytest results and uploads them as an artifact.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.

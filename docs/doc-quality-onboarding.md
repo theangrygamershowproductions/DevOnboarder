@@ -50,6 +50,8 @@ Before every push or PR, run:
 bash scripts/check_docs.sh
 ```
 
+This generates `vale-results.json` for machine-readable output, which CI stores as an artifact.
+
 This will fail if Vale is missing, run both Vale and LanguageTool, and print issues by file, line, and column.
 
 ---
