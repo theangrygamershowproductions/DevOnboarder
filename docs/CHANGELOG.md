@@ -207,6 +207,7 @@ All notable changes to this project will be recorded in this file.
 - Replaced `VITE_AUTH_API_BASE_URL` with `VITE_AUTH_URL` and documented `VITE_API_URL`.
 - Added placeholders for `VITE_AUTH_URL`, `VITE_API_URL`, and `VITE_SESSION_REFRESH_INTERVAL` in `.env.example`.
 - Added `VITE_SESSION_REFRESH_INTERVAL` to `frontend/src/.env.example` with a default value and synced `docs/env.md`.
+- Added `VITE_DISCORD_CLIENT_ID` placeholders to `.env.example` and `frontend/src/.env.example` and documented the variable.
 - Corrected README quickstart path to `frontend/src/.env.example`.
 
 ## [0.1.0] - 2025-06-14
