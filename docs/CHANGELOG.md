@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Added Vale and LanguageTool documentation linting in CI.
 - Improved LanguageTool script with line/column output and graceful connection error handling.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
+- LanguageTool script now emits GitHub error annotations and exits with a non-zero code when issues are found.
 - Documented committing the lockfile in the README and frontend README.
 - Added `docs/Agents.md` with a consolidated overview of service agents and healthchecks.
 - Cleaned up README and AGENTS docs to reduce documentation lint warnings.
