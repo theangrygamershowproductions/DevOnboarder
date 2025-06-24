@@ -44,7 +44,7 @@ jobs:
               run: ./scripts/check_docs.sh
             - name: Upload Vale results
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: vale-results
                   path: vale-results.json
@@ -68,7 +68,7 @@ jobs:
               run: pytest --cov=src --cov-fail-under=85 --junitxml=pytest-results.xml
             - name: Upload pytest results
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: pytest-results
                   path: pytest-results.xml
