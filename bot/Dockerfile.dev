@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+# set working directory
+WORKDIR /usr/src/app
+
+# copy package manifests and install deps
+COPY bot/package*.json ./
+RUN npm ci
+
+# copy source, compile TS
+COPY bot/ .
+RUN npm run build
+
+# default command
+CMD ["node", "dist/main.js"]
