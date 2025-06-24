@@ -191,7 +191,7 @@ All notable changes to this project will be recorded in this file.
 - Added Discord utilities for fetching user roles and resolving admin flags.
 - Documented role and guild ID placeholders in `.env.example` and created `docs/env.md` with details on the role-based permission system.
 - Added verified role ID placeholders to `.env.example` and documented them in `docs/env.md`.
-- Added a "Secrets" section in `docs/env.md` covering Discord OAuth and bot tokens, with matching placeholders in `.env.example` and `.env.bot.example`.
+- Added a "Secrets" section in `docs/env.md` covering Discord OAuth and bot tokens, with matching placeholders in `.env.example` and `bot/.env.example`.
 - Added `tests/test_roles.py` verifying admin and verified role flags.
 - Documented outdated packages and vulnerability scan results. `pip list` showed
   updates for mypy, pyright, pytest, ruff and typing extensions; `npm outdated`
