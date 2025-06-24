@@ -58,6 +58,8 @@ review Vale output and debug failing tests.
 
 This will fail if Vale is missing, run both Vale and LanguageTool, and print issues by file, line, and column.
 
+CI also uploads `pytest-results.xml` when the test suite runs in GitHub Actions. Visit a workflow run, open the **Artifacts** drop-down, and download the file to review which tests failed and why.
+
 ---
 
 ### Step 5: Pre‑commit Integration (Recommended)
