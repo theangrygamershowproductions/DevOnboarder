@@ -2,6 +2,7 @@
 
 Welcome to **DevOnboarder**. This page explains how to get your environment running and where to find documentation about our workflow.
 
+If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker Compose, Node.js 20, and Python 3.12.
 ## Local Development
 
 1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies
