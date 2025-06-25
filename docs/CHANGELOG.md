@@ -33,7 +33,16 @@ All notable changes to this project will be recorded in this file.
 - `scripts/check_docs.sh` now skips the Vale check with a warning when the binary cannot be downloaded or executed.
 - Documented how to install Vale manually when network access is restricted.
 - Added offline instructions for manual Vale installation and running LanguageTool locally.
+- Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move only the binary.
+- Added a cleanup trap to remove the temporary Vale directory automatically.
+- CI now prints auth container logs if the service fails to start before header checks.
+- Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool checks.
+- Documented that grammar and style issues only produce CI warnings.
+- `scripts/check_docs.sh` now reports Vale and LanguageTool issues as warnings instead of failing CI.
+- `docker-compose.ci.yaml` exposes the auth service on port 8002 and drops the deprecated `version` key so CI health checks succeed.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
+- CI workflow now waits for the auth service before running the header check to avoid connection errors.
+- The initial auth wait step now fails and prints logs if the service never starts, avoiding test timeouts.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
 - Added `scripts/generate-secrets.sh` and a Makefile for generating throwaway secrets before starting Compose.
