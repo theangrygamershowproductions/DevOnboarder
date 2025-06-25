@@ -22,3 +22,10 @@ Some development environments restrict outbound network traffic. These tips help
   npm config set registry <mirror-url>
   pip config set global.index-url <mirror-url>
   ```
+
+## pre-commit nodeenv SSL errors
+- The Prettier hook downloads Node.js using pre-commit's built-in nodeenv. Some
+  networks block this download or fail SSL verification.
+- Install Node.js 22 manually (see [ubuntu-setup.md](ubuntu-setup.md)) and set
+  `PRE_COMMIT_NO_INSTALL=1` so pre-commit uses your system Node instead.
+- Re-run `pre-commit install` after exporting the variable.
