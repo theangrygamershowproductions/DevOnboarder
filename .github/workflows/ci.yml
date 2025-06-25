@@ -28,6 +28,8 @@ jobs:
               run: ./scripts/setup-env.sh
             - name: Install package
               run: pip install -e .
+            - name: Enforce Potato ignore policy
+              run: bash scripts/check_potato_ignore.sh
             - name: Validate OpenAPI contract
               run: |
                 pip install openapi-spec-validator
