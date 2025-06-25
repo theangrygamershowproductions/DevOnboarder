@@ -125,7 +125,15 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 3. Copy each `*.env.example` to `.env` inside its service directory.
 4. Build the containers with `make deps` and start them with `make up`.
 5. Apply database migrations using `bash scripts/run_migrations.sh`.
-6. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from `bot/`.
+6. Install the project and dev requirements, then run the tests:
+
+   ```bash
+   pip install -e .  # or `pip install -r requirements.txt` if present
+   pip install -r requirements-dev.txt
+   ruff check .
+   pytest -q
+   npm test --prefix bot
+   ```
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
