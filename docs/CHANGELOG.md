@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Added `docs/offline-setup.md` explaining how to install dependencies without internet access and linked it from the onboarding docs.
+- Added a module-level docstring to `src/devonboarder/cli.py` describing CLI usage.
 - Added a "Project Statement" section to the README highlighting the project's purpose.
 - Added `scripts/run_migrations.sh` for running `alembic upgrade head` and
   updated onboarding docs to reference it.
