@@ -253,6 +253,7 @@ All notable changes to this project will be recorded in this file.
   `<!-- vale off -->` / `<!-- vale on -->` and a reference to `.pre-commit-config.yaml`.
 - Documented how to add words to `.codespell-ignore`.
 - Added nodeenv SSL troubleshooting steps to `docs/network-troubleshooting.md`.
+- Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale instructions.
 
 ## [0.1.0] - 2025-06-14
 
