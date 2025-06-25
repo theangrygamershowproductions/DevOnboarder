@@ -226,6 +226,7 @@ All notable changes to this project will be recorded in this file.
   tag in CI for reproducibility.
 - Updated Node to 22 and Python to 3.13 across Dockerfiles, compose files, CI, and documentation.
 - Required Python 3.13 in `pyproject.toml` and ruff configuration.
+- Fixed the Vale download path in CI to resolve a 404 error.
 
 ## [0.1.0] - 2025-06-14
 
