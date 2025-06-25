@@ -25,3 +25,14 @@ sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install -y python3.13 python3.13-venv python3.13-dev
 ```
+
+## Install Project Dependencies
+
+After Python is installed, set up the project in editable mode so tests and
+scripts can run:
+
+```bash
+pip install -e .  # or `pip install -r requirements.txt` if you created one
+pip install -r requirements-dev.txt
+```
+
