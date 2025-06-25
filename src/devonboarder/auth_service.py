@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -159,35 +159,16 @@ def get_current_user(
     return user
 
 
-app = FastAPI()
+router = APIRouter()
 
 
-class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
-    """Add basic security headers to all responses."""
-
-    async def dispatch(self, request, call_next):  # type: ignore[override]
-        resp = await call_next(request)
-        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
-        resp.headers.setdefault("Access-Control-Allow-Origin", "*")
-        return resp
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-app.add_middleware(_SecurityHeadersMiddleware)
-
-
-@app.get("/health")
+@router.get("/health")
 def health() -> dict[str, str]:
     """Return service health status."""
     return {"status": "ok"}
 
 
-@app.post("/api/register")
+@router.post("/api/register")
 def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     """Create a new user and return an authentication token."""
     username = data["username"]
@@ -206,7 +187,7 @@ def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     return {"token": create_token(user)}
 
 
-@app.post("/api/login")
+@router.post("/api/login")
 def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     """Authenticate a user and return a JWT."""
     username = data["username"]
@@ -221,7 +202,7 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     return {"token": create_token(user)}
 
 
-@app.get("/login/discord")
+@router.get("/login/discord")
 def discord_login() -> RedirectResponse:
     """Redirect the user to Discord's OAuth consent screen."""
     params = {
@@ -237,7 +218,7 @@ def discord_login() -> RedirectResponse:
     return RedirectResponse(url)
 
 
-@app.get("/login/discord/callback")
+@router.get("/login/discord/callback")
 def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
     token_resp = httpx.post(
@@ -277,14 +258,14 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
 
 
 
-@app.get("/api/user/onboarding-status")
+@router.get("/api/user/onboarding-status")
 def onboarding_status(current_user: User = Depends(get_current_user)) -> dict[str, str]:
     """Return the user's onboarding progress."""
     status_str = "complete" if current_user.contributions else "pending"
     return {"status": status_str}
 
 
-@app.get("/api/user/level")
+@router.get("/api/user/level")
 def user_level(current_user: User = Depends(get_current_user)) -> dict[str, int]:
     """Calculate the user's level from accumulated XP."""
     xp_total = sum(evt.xp for evt in current_user.events)
@@ -292,7 +273,7 @@ def user_level(current_user: User = Depends(get_current_user)) -> dict[str, int]
     return {"level": level}
 
 
-@app.get("/api/user/contributions")
+@router.get("/api/user/contributions")
 def user_contributions(
     current_user: User = Depends(get_current_user),
 ) -> dict[str, list[str]]:
@@ -302,7 +283,7 @@ def user_contributions(
     }
 
 
-@app.post("/api/user/contributions")
+@router.post("/api/user/contributions")
 def add_contribution(
     data: dict,
     current_user: User = Depends(get_current_user),
@@ -325,7 +306,7 @@ def add_contribution(
     return {"recorded": description}
 
 
-@app.post("/api/user/promote")
+@router.post("/api/user/promote")
 def promote(
     data: dict,
     current_user: User = Depends(get_current_user),
@@ -343,9 +324,33 @@ def promote(
 
 
 def create_app() -> FastAPI:
+    """Instantiate and configure the FastAPI application."""
+
     if os.getenv("INIT_DB_ON_STARTUP"):
         init_db()
+
+    app = FastAPI()
+
+    class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
+        """Add basic security headers to all responses."""
+
+        async def dispatch(self, request, call_next):  # type: ignore[override]
+            resp = await call_next(request)
+            resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+            resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+            return resp
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(_SecurityHeadersMiddleware)
+
     from routes.user import router as user_router
+
+    app.include_router(router)
     app.include_router(user_router)
     return app
 
