@@ -20,6 +20,10 @@ else
     if [ -f requirements-dev.txt ]; then
         pip install -r requirements-dev.txt
     fi
+    # Install the project so runtime dependencies are available
+    if [ -f pyproject.toml ]; then
+        pip install -e .
+    fi
     if [ -d frontend ]; then
         cd frontend
         if command -v pnpm >/dev/null 2>&1; then

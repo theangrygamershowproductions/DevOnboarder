@@ -9,6 +9,8 @@ This guide demonstrates a minimal documentation update using the project workflo
 2. Make a small change, such as adding this file.
 3. Run the pre-PR checks:
    ```bash
+   pip install -e .
+   pip install -r requirements-dev.txt
    ruff check .
    pytest -q
    ```

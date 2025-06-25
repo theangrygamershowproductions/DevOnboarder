@@ -7,6 +7,11 @@ if ! command -v pytest >/dev/null 2>&1; then
     pip install -r requirements-dev.txt
 fi
 
+# Ensure runtime dependencies are installed
+if [ -f pyproject.toml ]; then
+    pip install -e .
+fi
+
 ruff check .
 pytest -q
 if [ -d bot ] && [ -f bot/package.json ]; then
