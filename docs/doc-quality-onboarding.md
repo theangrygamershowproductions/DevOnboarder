@@ -138,8 +138,9 @@ and commit the change with your documentation update.
 
 ### CI Policy
 
-All doc lint issues must be fixed or suppressed before a pull request is merged,
-except for documented LanguageTool skips due to large files.
+- **Spelling errors block merging.** Codespell runs in pre-commit and CI. Fix typos or add valid project terms to `.codespell-ignore`.
+- **Formatting and grammar warnings do not block CI.** Vale and LanguageTool emit GitHub warnings instead of failing. Address them when touching the affected files.
+- Large files skipped by LanguageTool are documented above; run it manually on sections if you need a full grammar review.
 
 ---
 
