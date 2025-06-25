@@ -1,3 +1,12 @@
+"""Command-line interface for DevOnboarder.
+
+Usage::
+
+    devonboarder [name]
+
+Prints a friendly greeting to ``name`` or ``World`` by default.
+"""
+
 import argparse
 
 from .app import greet
