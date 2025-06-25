@@ -6,8 +6,8 @@ RESULTS_FILE="vale-results.json"
 
 # Try to locate or download Vale
 VALE_CMD="${VALE_BINARY:-vale}"
-# Allow overriding the version; default to 3.4.2
-VALE_VERSION="${VALE_VERSION:-3.4.2}"
+# Allow overriding the version; default to 3.12.0.0
+VALE_VERSION="${VALE_VERSION:-3.12.0.0}"
 
 if ! command -v "$VALE_CMD" >/dev/null 2>&1; then
   echo "Vale not found; attempting download of version $VALE_VERSION..."
