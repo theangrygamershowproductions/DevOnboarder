@@ -9,6 +9,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now builds service containers before starting Compose.
 - CI workflow installs Vale automatically before documentation checks.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
+- Confirmed all Docker healthchecks and CI wait steps use `/health` instead of the deprecated `/healthz` path.
 - Generated `frontend/package-lock.json` to pin npm dependencies.
 - Added Vale and LanguageTool documentation linting in CI.
 - CI now saves Vale results as `vale-results.json` and uploads them as an artifact.
