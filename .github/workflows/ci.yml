@@ -8,7 +8,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         env:
-            VALE_VERSION: 3.12.0.0
+            VALE_VERSION: 3.12.0
 
         steps:
             - uses: actions/checkout@v3
@@ -32,8 +32,8 @@ jobs:
               run: bash scripts/check_potato_ignore.sh
             - name: Validate OpenAPI contract
               run: |
-                pip install openapi-spec-validator
-                openapi-spec-validator src/devonboarder/openapi.json
+                  pip install openapi-spec-validator
+                  openapi-spec-validator src/devonboarder/openapi.json
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
@@ -42,8 +42,8 @@ jobs:
               run: ruff check --output-format=github .
             - name: Install Vale
               run: |
-                curl -fsSL https://github.com/errata-ai/vale/releases/download/v3.12.0.0/vale_3.12.0.0_Linux_64-bit.tar.gz | tar xz # pinned version
-                sudo mv vale /usr/local/bin/
+                  curl -fsSL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_64-bit.tar.gz | tar xz # pinned version
+                  sudo mv vale /usr/local/bin/
             - name: Documentation style check
               run: ./scripts/check_docs.sh
             - name: Upload Vale results
@@ -60,17 +60,17 @@ jobs:
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
             - name: Wait for auth service
               run: |
-                for i in {1..30}; do
-                  if curl -fs http://localhost:8002/health; then
-                    echo "Auth service is up!"
-                    exit 0
-                  fi
-                  echo "Waiting for auth service..."
-                  sleep 2
-                done
-                echo "Auth service failed to start"
-                docker compose -f docker-compose.ci.yaml logs auth --tail=50
-                exit 1
+                  for i in {1..30}; do
+                    if curl -fs http://localhost:8002/health; then
+                      echo "Auth service is up!"
+                      exit 0
+                    fi
+                    echo "Waiting for auth service..."
+                    sleep 2
+                  done
+                  echo "Auth service failed to start"
+                  docker compose -f docker-compose.ci.yaml logs auth --tail=50
+                  exit 1
             - name: Run tests with coverage
               run: pytest --cov=src --cov-fail-under=85 --junitxml=pytest-results.xml
             - name: Upload pytest results
@@ -100,28 +100,28 @@ jobs:
               working-directory: bot
             - name: Wait for auth service before header check
               run: |
-                for i in {1..30}; do
-                  if curl -fs http://localhost:8002/health; then
-                    echo "Auth service is up!"
-                    exit 0
-                  fi
-                  echo "Waiting for auth service..."
-                  sleep 2
-                done
-                echo "Auth service failed to start"
-                docker compose -f docker-compose.ci.yaml logs auth --tail=50
-                exit 1
+                  for i in {1..30}; do
+                    if curl -fs http://localhost:8002/health; then
+                      echo "Auth service is up!"
+                      exit 0
+                    fi
+                    echo "Waiting for auth service..."
+                    sleep 2
+                  done
+                  echo "Auth service failed to start"
+                  docker compose -f docker-compose.ci.yaml logs auth --tail=50
+                  exit 1
             - name: Check CORS & security headers
               run: |
-                pip install requests
-                python scripts/check_headers.py
+                  pip install requests
+                  python scripts/check_headers.py
               env:
-                CHECK_HEADERS_URL: http://localhost:8002/api/user
+                  CHECK_HEADERS_URL: http://localhost:8002/api/user
             - name: Stop docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
             - name: Label Codex PR
               if: github.actor == 'codex[bot]'
               uses: actions-ecosystem/action-add-labels@v1
               with:
-                labels: |
-                  🚧 Codex
+                  labels: |
+                      🚧 Codex

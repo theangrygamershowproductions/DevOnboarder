@@ -3,6 +3,7 @@
 Welcome to **DevOnboarder**. This page explains how to get your environment running and where to find documentation about our workflow.
 
 If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker Compose, Node.js 22, and Python 3.13.
+
 ## Local Development
 
 1. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies
@@ -36,6 +37,7 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
     pip install -e .  # or `pip install -r requirements.txt` if you have one
     pip install -r requirements-dev.txt
     ```
+
 14. Install git hooks with `pre-commit install` so these checks run automatically.
 15. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
@@ -117,9 +119,9 @@ All Markdown files must pass Vale and LanguageTool checks.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
-- Install Vale (version 3.12.0.0) with `brew install vale` or download it from the
+- Install Vale (version 3.12.0) with `brew install vale` or download it from the
   [Vale releases page](https://github.com/errata-ai/vale/releases).
-- If your network blocks direct downloads, fetch version 3.12.0.0 from
+- If your network blocks direct downloads, fetch version 3.12.0 from
   `https://github.com/errata-ai/vale/releases` on another machine and copy the
   `vale` binary to a directory in your `PATH`.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
