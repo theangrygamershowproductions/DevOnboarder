@@ -13,6 +13,8 @@ All notable changes to this project will be recorded in this file.
 - Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.
 - Expanded the Codex QA instructions with troubleshooting tips and a Potato-themed Easter egg in `docs/ONBOARDING.md`.
 - Documented a sample QA response, randomized Easter egg reply, and the Vale/LanguageTool fallback policy.
+- Refactored `auth_service.create_app()` to instantiate a new `FastAPI` app and
+  moved endpoints to an `APIRouter`.
 - Clarified where Codex posts QA results, added a "What happens next?" section, and noted that "⚠️ Docs: Lint skipped" doesn't block merges.
 - Refined the onboarding snippet to show a sample Codex QA response and referenced network troubleshooting and the Codex FAQ.
 
