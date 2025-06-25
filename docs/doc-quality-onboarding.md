@@ -108,6 +108,14 @@ one is easy to review and merge without conflicts.
 
 ---
 
+### Adding New Codespell Ignore Terms
+
+If Codespell flags a project-specific word (for example, a brand or tool name),
+append it to `.codespell-ignore` in the repository root. Add one term per line
+and commit the change with your documentation update.
+
+---
+
 ### Troubleshooting
 
 * **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
