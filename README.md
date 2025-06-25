@@ -55,7 +55,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
 12. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
-    See [AGENTS.md](AGENTS.md) for the full policy. Do not remove these entries without approval.
+    See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
+    to confirm the entries exist. Do not remove them without approval.
 
 These files expand on the steps listed in the Quickstart section.
 
@@ -138,4 +139,3 @@ First install Docker, Docker Compose, Node.js 22, and Python 3.13. See [docs/ubu
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.
-
