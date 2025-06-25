@@ -59,6 +59,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
+- [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
