@@ -6,7 +6,7 @@ interface UserInfo {
   avatar: string | null;
 }
 
-export default function SessionStatus() {
+export default function Login() {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [level, setLevel] = useState<number | null>(null);
@@ -17,8 +17,9 @@ export default function SessionStatus() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     const stored = localStorage.getItem('jwt');
+    const path = window.location.pathname;
 
-    if (!stored && code) {
+    if (!stored && path === '/login/discord/callback' && code) {
       fetch(`${authUrl}/login/discord/callback?code=${code}`)
         .then((r) => r.json())
         .then((data) => {
