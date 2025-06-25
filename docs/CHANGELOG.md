@@ -276,6 +276,7 @@ All notable changes to this project will be recorded in this file.
 - Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale instructions.
 - Added a package docstring to `src/routes/__init__.py` summarizing the routes module.
 - `scripts/run_tests.sh` now always installs development requirements before running tests to ensure packages like PyYAML are available.
+- Added `DISCORD_REDIRECT_URI` placeholder to `.env.example` and documented it under Secrets.
 
 ## [0.1.0] - 2025-06-14
 
