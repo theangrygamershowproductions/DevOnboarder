@@ -2,7 +2,7 @@ x-app-base: &app-base
   build: .
 
 x-node-base: &node-base
-  image: node:20
+  image: node:22
   command: ["npm", "start"]
 
 x-db-base: &db-base
