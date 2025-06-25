@@ -239,6 +239,9 @@ All notable changes to this project will be recorded in this file.
   `devonboarder`.
 - Documented Codex CI Monitoring Policy and linked it from the onboarding guide.
 - Added ignore patterns and token filters to `.vale.ini` to skip code blocks and frontmatter.
+- Documented the new Vale ignore patterns and Codespell hook in
+  `docs/doc-quality-onboarding.md`, including how to disable Vale with
+  `<!-- vale off -->` / `<!-- vale on -->` and a reference to `.pre-commit-config.yaml`.
 
 ## [0.1.0] - 2025-06-14
 
