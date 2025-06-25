@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - Added a "Project Statement" section to the README highlighting the project's purpose.
 - Added `scripts/run_migrations.sh` for running `alembic upgrade head` and
   updated onboarding docs to reference it.
+- Documented installing the project with `pip install -e .` before running tests and updated setup scripts.
 - Added `docs/about-potato.md` describing the Potato origin story and Easter egg.
 - Linked `docs/about-potato.md` from the documentation README.
 - Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.

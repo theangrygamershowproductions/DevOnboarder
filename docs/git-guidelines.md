@@ -51,14 +51,21 @@ Delete the feature branch after the merge completes.
 
 ## Pre-PR Checklist
 
-Before opening a pull request, make sure to:
+-Before opening a pull request, make sure to:
 
 - Rebase your branch on the latest `main`.
+- Install the project and dev requirements:
+
+```bash
+pip install -e .
+pip install -r requirements-dev.txt
+```
+
 - Run the linter and tests to confirm they pass:
 
 ```bash
--  ruff check .
--  pytest -q
+ruff check .
+pytest -q
 ```
 - Run documentation checks with `./scripts/check_docs.sh`.
   These use **Vale** and **LanguageTool** and require network access to
