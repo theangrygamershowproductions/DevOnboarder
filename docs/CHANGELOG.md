@@ -228,6 +228,8 @@ All notable changes to this project will be recorded in this file.
 - Updated Node to 22 and Python to 3.13 across Dockerfiles, compose files, CI, and documentation.
 - Required Python 3.13 in `pyproject.toml` and ruff configuration.
 - Fixed the Vale download path in CI to resolve a 404 error.
+- Ensured tests set `APP_ENV` and `JWT_SECRET_KEY` before importing modules from
+  `devonboarder`.
 
 ## [0.1.0] - 2025-06-14
 
