@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now records pytest results and uploads them as an artifact.
 - CI workflow now uses `actions/upload-artifact@v4`.
 - Documented where to download the `pytest-results.xml` artifact in the doc-quality onboarding guide.
+- Added a `make test` target that installs dev requirements before running tests.
+- Documented installing `requirements-dev.txt` prior to running `pytest`.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - LanguageTool script now emits GitHub error annotations and exits with a non-zero code when issues are found.
 - `scripts/check_docs.sh` now skips the Vale check with a warning when the binary cannot be downloaded or executed.
