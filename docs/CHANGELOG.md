@@ -233,6 +233,7 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/tasks/doc_lint_debt.md` as a template issue for documentation lint backlog.
 - Ensured tests set `APP_ENV` and `JWT_SECRET_KEY` before importing modules from
   `devonboarder`.
+- Documented Codex CI Monitoring Policy and linked it from the onboarding guide.
 
 ## [0.1.0] - 2025-06-14
 
