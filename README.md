@@ -122,7 +122,7 @@ First install Docker, Docker Compose, Node.js 20, and Python 3.12. See [docs/ubu
 5. Start the services with `make up` or run
    `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    The services launch using the commands defined in the compose file.
-6. Run `alembic upgrade head` to create the initial tables.
+6. Run `bash scripts/run_migrations.sh` to create the initial tables.
 7. Execute the tests using `pytest -q`.
    If `pytest` is not available, first run `pip install -r requirements-dev.txt`.
    You can also run `make test` to install missing dependencies automatically.
