@@ -34,6 +34,7 @@ All notable changes to this project will be recorded in this file.
 - Codespell ignore list covers `DevOnboarder`, `nodeenv`, and `pyenv`.
 - Enforced "Potato" and `Potato.md` entries in ignore files with a pre-commit check.
 - CI now enforces the Potato policy with `scripts/check_potato_ignore.sh`.
+- CI workflow now runs `./scripts/generate-secrets.sh` instead of copying `.env.example` to `.env.dev`.
 - Expanded nodeenv troubleshooting with certificate verification failure tips and
   linked the section from the onboarding docs.
 - Documented the `NODEJS_MIRROR` environment variable and linked the troubleshooting guide from the PR template.
