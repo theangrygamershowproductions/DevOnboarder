@@ -2,12 +2,47 @@
 
 This page collects helpful tips for new contributors. Follow [docs/README.md](README.md) for a complete development setup.
 
-## Requesting a Full QA Sweep
+## Requesting a Codex QA Assessment
 
-Codex can run a comprehensive quality assessment of the repository. To trigger this check, comment on a pull request or issue with:
+* **To trigger a full QA sweep:** Simply comment
 
-```text
-@codex run full-qa
+  ```
+  @codex run full-qa
+  ```
+
+  on any Pull Request or GitHub Issue.
+* **What this does:** Codex will analyze CI logs, code quality, test coverage, lint results, and documentation checks. It will reply with a **detailed checklist** of all issues it finds—each with actionable tasks you can assign, discuss, or address.
+* **Note:** You must resolve all critical issues before merging, per project policy.
+
+### Sample Codex QA Response
+
+### What happens next?
+
+After you comment `@codex run full-qa`, Codex replies directly to your comment with a checklist similar to:
+
+```
+- ❌ Lint: 3 Python files have PEP8 errors (see ruff logs)
+- ❌ Test: 1 backend test failed (see pytest-results.xml)
+- ⚠️ Docs: 12 Vale/LanguageTool warnings (docs/README.md)
+- ⚠️ Security: 1 dependency flagged by pip-audit
+- ✅ All workflows run with correct tool versions
 ```
 
-Codex will parse CI results, run additional analysis, and create tasks for any failures it finds. Merges are blocked until critical issues from the sweep are resolved.
+Each line links to the CI logs or artifacts so you can jump straight to the problem.
+
+**Troubleshooting:**
+If Codex does not respond, make sure:
+
+* Codex bot is installed and has permission to comment and create issues.
+* Workflow files (such as `.github/workflows/codex.ci.yml`) include `full-qa` as a supported command.
+
+If Vale or LanguageTool cannot run due to network errors, Codex marks the documentation step as a "⚠️ Docs: Lint skipped" warning. You can still merge if all other required checks pass, but please run docs checks locally later to catch formatting errors.
+
+### Optional Easter Egg (for fun!)
+
+You could add:
+
+> Want to know the secret identity of Potato?
+> Try commenting `@codex who-is-potato` in any issue for a surprise!
+
+Codex will reply with a short, Potato-themed message on the same thread. The bot rotates through a few quirky facts, so feel free to try again later for a different response!
