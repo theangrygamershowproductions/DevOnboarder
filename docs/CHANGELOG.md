@@ -50,6 +50,8 @@ All notable changes to this project will be recorded in this file.
 - Added offline instructions for manual Vale installation and running LanguageTool locally.
 - Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move only the binary.
 - Added a cleanup trap to remove the temporary Vale directory automatically.
+- `scripts/check_docs.sh` now verifies that the Vale binary was extracted
+  successfully before moving it, exiting with a warning if missing.
 - CI now prints auth container logs if the service fails to start before header checks.
 - Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool checks.
 - Documented that grammar and style issues only produce CI warnings.
