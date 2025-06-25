@@ -14,9 +14,12 @@ Welcome to the project! To keep our docs clear and professional, we run two tool
 ### Step 1: Install All Dev Requirements
 
 ```bash
-pip install -e .
+pip install -e .  # or `pip install -r requirements.txt` if present
 pip install -r requirements-dev.txt
 ```
+
+Run these commands **before executing tests or documentation checks** so Python
+imports resolve correctly.
 
 ---
 
@@ -120,7 +123,7 @@ and commit the change with your documentation update.
 ### Troubleshooting
 
 * **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
-* **Python errors:** ensure `pip install -e .` and `pip install -r requirements-dev.txt` succeeded.
+* **Python errors:** ensure `pip install -e .` (or `pip install -r requirements.txt`) and `pip install -r requirements-dev.txt` succeeded.
 * **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to its address.
 * **pytest fails:** double-check that all dev dependencies and the project itself are installed.
 

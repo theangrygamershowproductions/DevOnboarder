@@ -15,6 +15,8 @@
 <!-- Detail how a reviewer can verify the change. Include any setup commands. -->
 
 ```bash
+pip install -e .  # or `pip install -r requirements.txt` if present
+pip install -r requirements-dev.txt
 ruff check .
 pytest -q
 bash scripts/check_docs.sh
@@ -22,9 +24,9 @@ bash scripts/check_docs.sh
 
 ## Documentation & QA Checklist
 
-Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
+-Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
 
-- [ ] All Python and JS dependencies installed (`pip install -e .` and `pip install -r requirements-dev.txt`, `npm ci` if needed)
+- [ ] All Python and JS dependencies installed (`pip install -e .` or `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
 - [ ] Vale is installed locally (`vale --version`)
 - [ ] All Markdown docs pass checks (`bash scripts/check_docs.sh`)
 - [ ] All new or updated docs are clear, concise, and free of grammar issues
