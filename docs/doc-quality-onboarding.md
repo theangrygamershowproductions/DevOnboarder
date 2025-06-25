@@ -72,6 +72,21 @@ pre-commit install
 
 ---
 
+### Batch‑Fixing Documentation
+
+When many files share typos or inconsistent formatting, fix them in bulk:
+
+```bash
+codespell -w docs/
+npx prettier -w "docs/**/*.md"
+bash scripts/check_docs.sh
+```
+
+Check the results carefully and create **small, focused pull requests** so each
+one is easy to review and merge without conflicts.
+
+---
+
 ### Troubleshooting
 
 * **Vale not found:** install it as shown above.
