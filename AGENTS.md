@@ -24,6 +24,13 @@ This repository follows the DevOnboarder protocol. Key points:
 - Keep pull requests focused and small.
 - Update documentation and the changelog with each change.
 
+## Potato Ignore Policy
+
+"Potato" and `Potato.md` must remain in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
+Contributors may not remove or modify these entries without project lead approval and an
+explanation recorded in `docs/CHANGELOG.md`.
+Both pre-commit and CI run `scripts/check_potato_ignore.sh` to verify the entries exist.
+
 ## Codex CI Monitoring Policy
 
 The `codex.ci.yml` workflow watches every CI job and step. When a failure
