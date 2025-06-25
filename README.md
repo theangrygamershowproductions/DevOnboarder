@@ -3,6 +3,13 @@
 This repository showcases a **trunk-based** workflow and a minimal
 container setup used by Codex.
 
+### 🔧 **Project Statement**
+
+> *"This project wasn’t built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."*
+
+*Designed to automate onboarding, reduce friction, and support developers building from the ground up.*
+
+
 ## Trunk-Based Workflow
 
 - All stable code lives in the `main` branch.
