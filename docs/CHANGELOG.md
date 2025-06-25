@@ -33,6 +33,7 @@ All notable changes to this project will be recorded in this file.
 - `scripts/check_docs.sh` now skips the Vale check with a warning when the binary cannot be downloaded or executed.
 - Documented how to install Vale manually when network access is restricted.
 - Added offline instructions for manual Vale installation and running LanguageTool locally.
+- Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move only the binary.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
