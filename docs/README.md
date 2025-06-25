@@ -30,10 +30,10 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    and `curl http://localhost:8001/api/user/level`.
 12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
 13. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
-    Before running the tests, install the project and dev requirements:
+    Install the project and dev requirements **before running the tests**:
 
     ```bash
-    pip install -e .
+    pip install -e .  # or `pip install -r requirements.txt` if you have one
     pip install -r requirements-dev.txt
     ```
 14. Install git hooks with `pre-commit install` so these checks run automatically.
