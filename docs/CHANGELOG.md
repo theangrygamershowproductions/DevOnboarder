@@ -231,6 +231,8 @@ All notable changes to this project will be recorded in this file.
 - Documented batch doc fixes with `codespell` and Prettier in the doc-quality onboarding guide.
 - Added a reminder in `docs/merge-checklist.md` to keep `scripts/check_docs.sh` passing.
 - Added `docs/tasks/doc_lint_debt.md` as a template issue for documentation lint backlog.
+- Ensured tests set `APP_ENV` and `JWT_SECRET_KEY` before importing modules from
+  `devonboarder`.
 
 ## [0.1.0] - 2025-06-14
 
