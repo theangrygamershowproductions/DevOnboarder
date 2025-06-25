@@ -124,6 +124,8 @@ First install Docker, Docker Compose, Node.js 20, and Python 3.12. See [docs/ubu
    The services launch using the commands defined in the compose file.
 6. Run `alembic upgrade head` to create the initial tables.
 7. Execute the tests using `pytest -q`.
+   If `pytest` is not available, first run `pip install -r requirements-dev.txt`.
+   You can also run `make test` to install missing dependencies automatically.
 
 ## License
 This project is licensed under the MIT License. See LICENSE.md.
