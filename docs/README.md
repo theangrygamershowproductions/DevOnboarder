@@ -31,6 +31,8 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    and `curl http://localhost:8001/api/user/level`.
 12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
 13. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
+    After installing dependencies, run `npm test` in the `frontend/` directory as well
+    (see [../frontend/README.md](../frontend/README.md) for details).
     Install the project and dev requirements **before running the tests**:
 
     ```bash
