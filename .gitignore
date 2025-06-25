@@ -42,6 +42,7 @@ codeql-*
 auth.db
 vale
 
+Potato
 Potato.md
 *.potato
 *.potato.*

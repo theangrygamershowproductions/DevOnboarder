@@ -37,3 +37,6 @@ Thumbs.db
 .terraform/
 lcov-report/
 codeql-*
+
+Potato
+Potato.md
