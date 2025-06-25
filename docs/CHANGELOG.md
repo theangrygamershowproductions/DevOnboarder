@@ -19,6 +19,8 @@ All notable changes to this project will be recorded in this file.
 - Documented where to download the `pytest-results.xml` artifact in the doc-quality onboarding guide.
 - LanguageTool checks now skip files that exceed the request size limit instead of failing.
 - LanguageTool script now emits GitHub error annotations and exits with a non-zero code when issues are found.
+- `scripts/check_docs.sh` now skips the Vale check with a warning when the binary cannot be downloaded or executed.
+- Documented how to install Vale manually when network access is restricted.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
 - Added `scripts/generate-secrets.sh` and a Makefile for generating throwaway secrets before starting Compose.
