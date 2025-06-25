@@ -54,6 +54,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 11. Install Vale with `brew install vale` (or see the [Vale installation docs](https://vale.sh/docs/installation/))
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
+12. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
+    See [AGENTS.md](AGENTS.md) for the full policy. Do not remove these entries without approval.
 
 These files expand on the steps listed in the Quickstart section.
 

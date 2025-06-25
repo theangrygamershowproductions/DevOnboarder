@@ -29,3 +29,7 @@ repos:
         entry: bash scripts/check_docs.sh
         language: system
         files: \.md$
+      - id: potato-ignore-check
+        name: Potato ignore policy
+        entry: bash scripts/check_potato_ignore.sh
+        language: system

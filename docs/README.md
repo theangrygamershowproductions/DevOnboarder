@@ -41,7 +41,7 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
     ```bash
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
     ```
-    
+
     Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
 The compose files define common service settings using YAML anchors. Each
@@ -62,7 +62,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
-- [Network troubleshooting](network-troubleshooting.md) &ndash; tips for working around network restrictions.
+- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+  &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
