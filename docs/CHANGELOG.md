@@ -11,6 +11,9 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/about-potato.md` describing the Potato origin story and Easter egg.
 - Linked `docs/about-potato.md` from the documentation README.
 - Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.
+- Expanded the Codex QA instructions with troubleshooting tips and a Potato-themed Easter egg in `docs/ONBOARDING.md`.
+- Documented a sample QA response, randomized Easter egg reply, and the Vale/LanguageTool fallback policy.
+- Clarified where Codex posts QA results, added a "What happens next?" section, and noted that "⚠️ Docs: Lint skipped" doesn't block merges.
 
 - Added Dockerfiles for the bot and frontend and updated `docker-compose.dev.yaml` to build them.
 - Documented Ubuntu commands for installing Docker, Docker Compose, Node.js 20, and Python 3.12. Linked the setup guide from the README quickstart.
