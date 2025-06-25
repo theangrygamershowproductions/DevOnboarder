@@ -62,6 +62,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
+- [Network troubleshooting](network-troubleshooting.md) &ndash; tips for working around network restrictions.
 - [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
