@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added a "Project Statement" section to the README highlighting the project's purpose.
 - Added `scripts/run_migrations.sh` for running `alembic upgrade head` and
   updated onboarding docs to reference it.
 
