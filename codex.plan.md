@@ -69,7 +69,7 @@ This document defines the roadmap and execution logic for Codex tasks during the
   - `bot/src/commands/verify.ts`
   - `bot/src/commands/profile.ts`
   - `bot/src/commands/contribute.ts`
-  - `frontend/src/components/SessionStatus.tsx`
+  - `frontend/src/components/Login.tsx`
 
 ---
 
