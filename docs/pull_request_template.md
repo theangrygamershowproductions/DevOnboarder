@@ -31,6 +31,7 @@ Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
 - [ ] pytest and other test suites pass
 - [ ] Pre-commit hooks installed (`pre-commit install`)
 - [ ] If doc checks failed, issues are resolved before requesting review
+- [ ] If pre-commit cannot download Node.js, review [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
 
 # Checklist
 
