@@ -15,6 +15,10 @@ if ! command -v "$VALE_CMD" >/dev/null 2>&1; then
   TMP_DIR=$(mktemp -d)
   trap 'rm -rf "$TMP_DIR"' EXIT
   if curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR" --strip-components=1; then
+    if [ ! -f "$TMP_DIR/vale" ]; then
+      echo "::warning file=scripts/check_docs.sh,line=$LINENO::Unable to download Vale. Install version $VALE_VERSION manually and set VALE_BINARY to its path. Skipping documentation style check"
+      exit 0
+    fi
     mv "$TMP_DIR/vale" ./vale
     chmod +x ./vale
     VALE_CMD="./vale"
