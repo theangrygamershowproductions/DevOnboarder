@@ -222,6 +222,9 @@ All notable changes to this project will be recorded in this file.
 - Added `VITE_DISCORD_CLIENT_ID` placeholders to `.env.example` and `frontend/src/.env.example` and documented the variable.
 - Corrected README quickstart path to `frontend/src/.env.example`.
 
+- Updated development tooling to stable versions and pinned the Vale download
+  tag in CI for reproducibility.
+
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
