@@ -82,6 +82,10 @@ screen. After granting permissions, Discord redirects back to
 access token, creates or looks up the user, then returns a JWT from
 `/login/discord/callback`.
 
+The React `Login` component in `frontend/` handles this callback route. It
+stores the returned token in the browser and displays the user's onboarding
+status and level.
+
 ## Frontend
 
 - `VITE_AUTH_URL` &ndash; base URL for the auth API.

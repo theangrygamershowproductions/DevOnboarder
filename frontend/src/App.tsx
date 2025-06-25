@@ -1,10 +1,10 @@
-import SessionStatus from './components/SessionStatus';
+import Login from './components/Login';
 
 export default function App() {
   return (
     <div>
       <h1>DevOnboarder</h1>
-      <SessionStatus />
+      <Login />
     </div>
   );
 }
