@@ -269,6 +269,7 @@ All notable changes to this project will be recorded in this file.
 - Documented how to add words to `.codespell-ignore`.
 - Added nodeenv SSL troubleshooting steps to `docs/network-troubleshooting.md`.
 - Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale instructions.
+- Added a package docstring to `src/routes/__init__.py` summarizing the routes module.
 
 ## [0.1.0] - 2025-06-14
 
