@@ -13,7 +13,7 @@ if ! command -v "$VALE_CMD" >/dev/null 2>&1; then
   echo "Vale not found; attempting download of version $VALE_VERSION..."
   VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
   TMP_DIR=$(mktemp -d)
-  if curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR" --strip-components=1 >/dev/null 2>&1; then
+  if curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR" --strip-components=1; then
     mv "$TMP_DIR/vale" ./vale
     chmod +x ./vale
     rm -r "$TMP_DIR"

@@ -123,6 +123,24 @@ and commit the change with your documentation update.
 * **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to its address.
 * **pytest fails:** double-check that all dev dependencies are installed.
 
+### Known Limitations
+
+- **LanguageTool Skips Large Files:**
+  When a Markdown file exceeds LanguageTool's request size limit, grammar checks
+  are skipped. Spelling and style are still enforced via Codespell and Vale.
+  Run LanguageTool manually on smaller sections or split the file if you need a
+  full grammar review.
+
+- **Suppressing False Positives:**
+  Add valid project terms to `.codespell-ignore` and use Vale suppression
+  comments (`<!-- vale off -->` ... `<!-- vale on -->`) for persistent warnings
+  in code blocks or technical docs.
+
+### CI Policy
+
+All doc lint issues must be fixed or suppressed before a pull request is merged,
+except for documented LanguageTool skips due to large files.
+
 ---
 
 ### More Info
