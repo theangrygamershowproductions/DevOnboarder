@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure development requirements are installed
-if ! command -v pytest >/dev/null 2>&1; then
-    echo "Installing dev requirements..."
-    pip install -r requirements-dev.txt
-fi
+# Always ensure development requirements are installed
+echo "Installing dev requirements..."
+pip install -r requirements-dev.txt
 
 # Ensure runtime dependencies are installed
 if [ -f pyproject.toml ]; then
