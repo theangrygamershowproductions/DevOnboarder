@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Documented Ubuntu commands for installing Docker, Docker Compose, Node.js 20, and Python 3.12. Linked the setup guide from the README quickstart.
 - CI workflow now builds service containers before starting Compose.
 - CI workflow installs Vale automatically before documentation checks.
+- Pinned Vale version to 3.4.2 in CI, documentation, and scripts.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
 - Confirmed all Docker healthchecks and CI wait steps use `/health` instead of the deprecated `/healthz` path.
 - Generated `frontend/package-lock.json` to pin npm dependencies.
