@@ -82,6 +82,15 @@ The hooks run Black, Ruff, Prettier, Codespell, and our docs-quality script.
 Codespell relies on `.codespell-ignore` for project-specific terms you want to
 skip. The default list skips `DevOnboarder`, `nodeenv`, and `pyenv`.
 
+### Vale Ignore Patterns & Codespell Hook
+
+The project now defines ignore patterns in `.vale.ini` to skip fenced code
+blocks, indented code, YAML frontmatter, and `auto-gen` sections. If a snippet
+still triggers warnings, wrap it between `<!-- vale off -->` and `<!-- vale on -->`.
+
+`.pre-commit-config.yaml` runs Vale and Codespell automatically once you execute
+`pre-commit install`, so every commit is checked for style issues and typos.
+
 ---
 
 ### Batch‑Fixing Documentation
