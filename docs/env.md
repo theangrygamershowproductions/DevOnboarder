@@ -92,3 +92,12 @@ status and level.
 - `VITE_API_URL` &ndash; base URL for the XP API.
 - `VITE_DISCORD_CLIENT_ID` &ndash; OAuth client ID for Discord.
 - `VITE_SESSION_REFRESH_INTERVAL` &ndash; interval (seconds) between session refreshes.
+
+## Docker development images
+
+`docker-compose.dev.yaml` builds the bot and frontend containers using
+`bot/Dockerfile.dev` and `frontend/Dockerfile.dev`. These Dockerfiles install
+dependencies with `npm ci` and run the development servers. When running the
+frontend outside Docker, follow [../frontend/README.md](../frontend/README.md)
+and install packages with `pnpm install` (or `npm ci` for a clean install) before
+starting `npm run dev`.
