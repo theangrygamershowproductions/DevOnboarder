@@ -14,6 +14,7 @@ This repository follows the DevOnboarder protocol. Key points:
 - Pull request template: `docs/pull_request_template.md`.
 - Maintainer merge checklist: `docs/merge-checklist.md`.
 - Project changelog: `docs/CHANGELOG.md`.
+- Offline setup instructions: `docs/offline-setup.md`.
 
 3. **Development Environment**
 - Use the provided container setup and compose files for local development.
