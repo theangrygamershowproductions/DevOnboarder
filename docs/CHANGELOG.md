@@ -34,6 +34,7 @@ All notable changes to this project will be recorded in this file.
   linked the section from the onboarding docs.
 - Documented the `NODEJS_MIRROR` environment variable and linked the troubleshooting guide from the PR template.
 - Pinned Vale version to 3.4.2 in CI, documentation, and scripts.
+- Updated Vale version to 3.12.0.0 across documentation and scripts.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
 - Confirmed all Docker healthchecks and CI wait steps use `/health` instead of the deprecated `/healthz` path.
 - Generated `frontend/package-lock.json` to pin npm dependencies.

@@ -117,9 +117,9 @@ All Markdown files must pass Vale and LanguageTool checks.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
-- Install Vale (version 3.4.2) with `brew install vale` or download it from the
+- Install Vale (version 3.12.0.0) with `brew install vale` or download it from the
   [Vale releases page](https://github.com/errata-ai/vale/releases).
-- If your network blocks direct downloads, fetch version 3.4.2 from
+- If your network blocks direct downloads, fetch version 3.12.0.0 from
   `https://github.com/errata-ai/vale/releases` on another machine and copy the
   `vale` binary to a directory in your `PATH`.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
