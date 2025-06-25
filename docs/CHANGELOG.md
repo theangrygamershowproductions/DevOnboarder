@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.
 - Added `"license": "MIT"` to `bot/package.json` and `frontend/package.json`.
 - Expanded the Codex QA instructions with troubleshooting tips and a Potato-themed Easter egg in `docs/ONBOARDING.md`.
+- Removed the `version:` field from all Docker compose files since Compose v2 no longer requires it.
 - Updated the frontend dependencies to `vite@7`, `vitest@3`, and the latest React and testing packages.
 - Documented a sample QA response, randomized Easter egg reply, and the Vale/LanguageTool fallback policy.
 - Refactored `auth_service.create_app()` to instantiate a new `FastAPI` app and
