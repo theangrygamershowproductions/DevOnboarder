@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
   updated onboarding docs to reference it.
 - Added `docs/about-potato.md` describing the Potato origin story and Easter egg.
 - Linked `docs/about-potato.md` from the documentation README.
+- Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.
 
 - Added Dockerfiles for the bot and frontend and updated `docker-compose.dev.yaml` to build them.
 - Documented Ubuntu commands for installing Docker, Docker Compose, Node.js 20, and Python 3.12. Linked the setup guide from the README quickstart.
@@ -271,3 +272,4 @@ All notable changes to this project will be recorded in this file.
 - Expanded `docs/pull_request_template.md` with sections for summary, linked issues, screenshots, testing steps, and a checklist referencing documentation and changelog updates. [#25](https://github.com/theangrygamershowproductions/DevOnboarder/pull/25)
 - Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-off section to the pull request template. [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
 - Added `codex.ci.yml` to automate CI monitoring and fix failing builds.
+
