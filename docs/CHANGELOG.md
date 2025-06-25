@@ -39,6 +39,7 @@ All notable changes to this project will be recorded in this file.
 - Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool checks.
 - Documented that grammar and style issues only produce CI warnings.
 - `scripts/check_docs.sh` now reports Vale and LanguageTool issues as warnings instead of failing CI.
+- `docker-compose.ci.yaml` exposes the auth service on port 8002 and drops the deprecated `version` key so CI health checks succeed.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
 - CI workflow now waits for the auth service before running the header check to avoid connection errors.
 - Documented committing the lockfile in the README and frontend README.
