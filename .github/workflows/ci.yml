@@ -52,8 +52,8 @@ jobs:
               with:
                   name: vale-results
                   path: vale-results.json
-            - name: Prepare environment file
-              run: cp .env.example .env.dev
+            - name: Generate secrets
+              run: ./scripts/generate-secrets.sh
             - name: Build containers
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build
             - name: Start docker compose
