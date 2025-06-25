@@ -1,10 +1,11 @@
-from fastapi.testclient import TestClient
 import os
-from devonboarder.auth_service import create_app as create_auth_app
-from devonboarder.xp_api import create_app as create_xp_app
-
+# Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
+
+from fastapi.testclient import TestClient
+from devonboarder.auth_service import create_app as create_auth_app
+from devonboarder.xp_api import create_app as create_xp_app
 
 
 def test_auth_health():
