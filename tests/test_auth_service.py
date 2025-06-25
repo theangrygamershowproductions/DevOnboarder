@@ -1,5 +1,9 @@
 import importlib
 import os
+# Environment variables must be set before importing modules from devonboarder.
+os.environ.setdefault("APP_ENV", "development")
+os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
+
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from utils import roles as roles_utils
@@ -8,9 +12,6 @@ import pytest
 import time
 import sqlalchemy
 import httpx
-
-os.environ.setdefault("APP_ENV", "development")
-os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 
 
 def setup_function(function):
