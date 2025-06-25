@@ -30,6 +30,7 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    and `curl http://localhost:8001/api/user/level`.
 12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
 13. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
+    If the `pytest` command is missing, run `pip install -r requirements-dev.txt` first or execute `make test`.
 14. Install git hooks with `pre-commit install` so these checks run automatically.
 15. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
