@@ -29,3 +29,12 @@ Some development environments restrict outbound network traffic. These tips help
 - Install Node.js 22 manually (see [ubuntu-setup.md](ubuntu-setup.md)) and set
   `PRE_COMMIT_NO_INSTALL=1` so pre-commit uses your system Node instead.
 - Re-run `pre-commit install` after exporting the variable.
+- If you see an error like `failed to install nodeenv: SSL: CERTIFICATE_VERIFY_FAILED`,
+  your network may be blocking the download from `nodejs.org`.
+- Run pre-commit on a machine with network access if possible.
+- Request CI or firewall exceptions for `nodejs.org` or use a local mirror if available.
+- If your organization hosts a Node.js mirror, set the `NODEJS_MIRROR` environment variable before running pre-commit:
+  ```bash
+  export NODEJS_MIRROR="https://mirror.example.com/nodejs"
+  pre-commit run
+  ```
