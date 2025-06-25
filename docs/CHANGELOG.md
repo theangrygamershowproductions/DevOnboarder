@@ -35,6 +35,8 @@ All notable changes to this project will be recorded in this file.
 - Added offline instructions for manual Vale installation and running LanguageTool locally.
 - Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move only the binary.
 - Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool checks.
+- Documented that grammar and style issues only produce CI warnings.
+- `scripts/check_docs.sh` now reports Vale and LanguageTool issues as warnings instead of failing CI.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
