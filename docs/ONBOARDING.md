@@ -6,7 +6,7 @@ This page collects helpful tips for new contributors. Follow [docs/README.md](RE
 
 * **To trigger a full QA sweep:** Simply comment
 
-  ```
+  ```sh
   @codex run full-qa
   ```
 
@@ -16,11 +16,13 @@ This page collects helpful tips for new contributors. Follow [docs/README.md](RE
 
 ### Sample Codex QA Response
 
+After you comment `@codex run full-qa`, Codex replies directly to your comment with a checklist like:
+
 ### What happens next?
 
 After you comment `@codex run full-qa`, Codex replies directly to your comment with a checklist similar to:
 
-```
+```markdown
 - ❌ Lint: 3 Python files have PEP8 errors (see ruff logs)
 - ❌ Test: 1 backend test failed (see pytest-results.xml)
 - ⚠️ Docs: 12 Vale/LanguageTool warnings (docs/README.md)
@@ -29,6 +31,10 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 ```
 
 Each line links to the CI logs or artifacts so you can jump straight to the problem.
+
+Codex posts this checklist as a reply to your `@codex run full-qa` comment. If you see `⚠️ Docs: Lint skipped`, the documentation step failed (usually due to network issues). You may merge if all other checks pass, but run `bash scripts/check_docs.sh` locally when possible.
+
+For more help, see [Network troubleshooting](network-troubleshooting.md) and the Codex FAQ.
 
 **Troubleshooting:**
 If Codex does not respond, make sure:
