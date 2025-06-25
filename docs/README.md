@@ -123,3 +123,4 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 2. Start branches from the latest `main` and follow the git guidelines.
 3. Use the pull request template and ensure the checklist passes.
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
+5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
