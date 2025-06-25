@@ -104,7 +104,7 @@ jobs:
                   sleep 2
                 done
                 echo "Auth service failed to start"
-                docker compose logs
+                docker compose -f docker-compose.ci.yaml logs auth --tail=50
                 exit 1
             - name: Check CORS & security headers
               run: |
