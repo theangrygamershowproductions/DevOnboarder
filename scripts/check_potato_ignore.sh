@@ -17,4 +17,3 @@ if [ "$missing" -ne 0 ]; then
   echo "See AGENTS.md for the policy or document an approved exception in docs/CHANGELOG.md." >&2
   exit 1
 fi
-
