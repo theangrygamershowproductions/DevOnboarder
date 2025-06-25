@@ -41,3 +41,7 @@ lcov-report/
 codeql-*
 auth.db
 vale
+
+Potato.md
+*.potato
+*.potato.*
