@@ -24,17 +24,25 @@ pip install -r requirements-dev.txt
 * On macOS: `brew install vale`
 * On Windows: `choco install vale`
 * Or see [Vale Installation Docs](https://vale.sh/docs/installation/) for other platforms
+* If the script cannot download Vale automatically, manually download `vale_3.4.2_Linux_64-bit.tar.gz` from the [releases page](https://github.com/errata-ai/vale/releases), extract the `vale` binary, and set `VALE_BINARY` to its path.
 * **The project uses Vale 3.4.2. CI installs this version automatically**, but you still need it locally to run the checks before committing.
 
 ---
 
 ### Step 3: (Optional) Set Up Local LanguageTool Server
 
-By default the project uses the public LanguageTool API, but CI or firewalls may block it. For local use:
+By default the project uses the public LanguageTool API, but CI or firewalls may block it. For local use or when offline:
 
 ```bash
 docker run -d -p 8010:8010 --name languagetool \
   quay.io/languagetool/languagetool:latest
+export LANGUAGETOOL_URL="http://localhost:8010"
+```
+
+You can also download a LanguageTool release from <https://languagetool.org/download/> and run it with Java:
+
+```bash
+java -jar languagetool-server.jar --port 8010 &
 export LANGUAGETOOL_URL="http://localhost:8010"
 ```
 
@@ -89,9 +97,9 @@ one is easy to review and merge without conflicts.
 
 ### Troubleshooting
 
-* **Vale not found:** install it as shown above.
+* **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
 * **Python errors:** ensure `pip install -r requirements-dev.txt` succeeded.
-* **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL`.
+* **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to its address.
 * **pytest fails:** double-check that all dev dependencies are installed.
 
 ---
