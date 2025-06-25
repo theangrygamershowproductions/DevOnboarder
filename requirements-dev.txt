@@ -1,9 +1,9 @@
-ruff==0.1.7
-pytest
+ruff==0.12.0  # LTS as of 2025-06
+pytest==8.4.1  # LTS as of 2025-06
 pyyaml
-pre-commit
-openapi-spec-validator
-requests
-pytest-cov
-vale
-language-tool-python
+pre-commit==4.2.0  # LTS as of 2025-06
+openapi-spec-validator==0.7.2  # LTS as of 2025-06
+requests==2.32.4  # LTS as of 2025-06
+pytest-cov==6.2.1  # LTS as of 2025-06
+vale==3.12.0.0  # LTS as of 2025-06
+language-tool-python==2.9.4  # LTS as of 2025-06
