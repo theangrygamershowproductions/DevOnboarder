@@ -1,14 +1,14 @@
 # DevOnboarder
 
-This repository showcases a **trunk-based** workflow and a minimal
-container setup used by Codex.
+DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
-### 🔧 **Project Statement**
+See [docs/README.md](docs/README.md) for full setup instructions and workflow guidelines.
+
+## 🔧 **Project Statement**
 
 > *"This project wasn’t built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."*
 
 *Designed to automate onboarding, reduce friction, and support developers building from the ground up.*
-
 
 ## Trunk-Based Workflow
 
@@ -119,23 +119,16 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
-First install Docker, Docker Compose, Node.js 22, and Python 3.13. See [docs/ubuntu-setup.md](docs/ubuntu-setup.md) for the Ubuntu commands.
-1. Run `bash scripts/bootstrap.sh` to copy `.env.example` to `.env.dev` and install dependencies.
-2. Copy each service example file to `.env`:
-   `cp auth/.env.example auth/.env`
-   `cp bot/.env.example bot/.env`
-   `cp xp/.env.example xp/.env`
-   `cp frontend/src/.env.example frontend/.env`
-3. Install the project with `pip install -e .`.
-   Install development tools with `pip install -r requirements-dev.txt`.
-4. Build the containers with `make deps`.
-5. Start the services with `make up` or run
-   `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
-   The services launch using the commands defined in the compose file.
-6. Run `bash scripts/run_migrations.sh` to create the initial tables.
-7. Execute the tests using `pytest -q`.
-   If `pytest` is not available, first run `pip install -r requirements-dev.txt`.
-   You can also run `make test` to install missing dependencies automatically.
+
+1. Install Docker, Docker Compose, Node.js 22, and Python 3.13.
+2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
+3. Copy each `*.env.example` to `.env` inside its service directory.
+4. Build the containers with `make deps` and start them with `make up`.
+5. Apply database migrations using `bash scripts/run_migrations.sh`.
+6. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from `bot/`.
+
+Licensed under the MIT License. See `LICENSE.md` for details.
 
 ## License
+
 This project is licensed under the MIT License. See LICENSE.md.
