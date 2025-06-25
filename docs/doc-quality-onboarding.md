@@ -78,6 +78,10 @@ Install pre-commit hooks so documentation and code checks run automatically:
 pre-commit install
 ```
 
+The hooks run Black, Ruff, Prettier, Codespell, and our docs-quality script.
+Codespell relies on `.codespell-ignore` for project-specific terms you want to
+skip. The default list skips `DevOnboarder`, `nodeenv`, and `pyenv`.
+
 ---
 
 ### Batch‑Fixing Documentation
