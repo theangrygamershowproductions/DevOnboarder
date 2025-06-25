@@ -7,3 +7,6 @@ Reviewers must verify the following before merging a pull request:
 - [ ] Documentation in `docs/` is updated as needed.
 - [ ] Documentation passes `bash scripts/check_docs.sh`.
 - [ ] The pull request contains a completed reviewer sign-off section.
+
+After merging large documentation updates, run `bash scripts/check_docs.sh`
+locally to ensure the main branch remains lint-free.
