@@ -242,6 +242,8 @@ All notable changes to this project will be recorded in this file.
 - Documented the new Vale ignore patterns and Codespell hook in
   `docs/doc-quality-onboarding.md`, including how to disable Vale with
   `<!-- vale off -->` / `<!-- vale on -->` and a reference to `.pre-commit-config.yaml`.
+- Documented how to add words to `.codespell-ignore`.
+- Added nodeenv SSL troubleshooting steps to `docs/network-troubleshooting.md`.
 
 ## [0.1.0] - 2025-06-14
 
