@@ -11,7 +11,9 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    Update `DATABASE_URL` in `.env.dev` if you are not using the default
    Postgres credentials.
 2. Generate throwaway secrets with `./scripts/generate-secrets.sh`.
-   This script overwrites `.env.dev` with fresh random values.
+   This script overwrites `.env.dev` with fresh random values. The CI
+   workflow runs the same script before building containers so your
+   environment matches the pipeline.
 3. Build the service containers with `make deps`.
 4. Install the project in editable mode with `pip install -e .`.
    Install the dev requirements with `pip install -r requirements-dev.txt`.
