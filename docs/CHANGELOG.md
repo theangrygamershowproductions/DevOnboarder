@@ -15,6 +15,11 @@ All notable changes to this project will be recorded in this file.
 - CI workflow installs Vale automatically before documentation checks.
 - Added `codespell` pre-commit hook for Markdown and text files.
 - Codespell ignore list covers `DevOnboarder`, `nodeenv`, and `pyenv`.
+- Enforced "Potato" and `Potato.md` entries in ignore files with a pre-commit check.
+- CI now enforces the Potato policy with `scripts/check_potato_ignore.sh`.
+- Expanded nodeenv troubleshooting with certificate verification failure tips and
+  linked the section from the onboarding docs.
+- Documented the `NODEJS_MIRROR` environment variable and linked the troubleshooting guide from the PR template.
 - Pinned Vale version to 3.4.2 in CI, documentation, and scripts.
 - Added `/health` endpoints for auth and XP services with compose and CI healthchecks.
 - Confirmed all Docker healthchecks and CI wait steps use `/health` instead of the deprecated `/healthz` path.
