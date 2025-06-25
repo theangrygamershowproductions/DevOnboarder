@@ -38,6 +38,7 @@ All notable changes to this project will be recorded in this file.
 - Documented that grammar and style issues only produce CI warnings.
 - `scripts/check_docs.sh` now reports Vale and LanguageTool issues as warnings instead of failing CI.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
+- CI workflow now waits for the auth service before running the header check to avoid connection errors.
 - Documented committing the lockfile in the README and frontend README.
 - Documented starting the frontend with `npm install` (or `pnpm install`) and `npm run dev`.
 - Added `scripts/generate-secrets.sh` and a Makefile for generating throwaway secrets before starting Compose.
