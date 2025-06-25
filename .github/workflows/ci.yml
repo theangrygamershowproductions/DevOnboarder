@@ -7,6 +7,8 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
+        env:
+            VALE_VERSION: 3.4.2
 
         steps:
             - uses: actions/checkout@v3
@@ -38,7 +40,7 @@ jobs:
               run: ruff check --output-format=github .
             - name: Install Vale
               run: |
-                curl -fsSL https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_amd64.tar.gz | tar xz
+                curl -fsSL https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz | tar xz
                 sudo mv vale /usr/local/bin/
             - name: Documentation style check
               run: ./scripts/check_docs.sh
