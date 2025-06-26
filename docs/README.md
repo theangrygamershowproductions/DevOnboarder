@@ -77,6 +77,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
+- [Troubleshooting guide](troubleshooting.md)
+  &ndash; quick fixes for setup problems and failing CI jobs.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
