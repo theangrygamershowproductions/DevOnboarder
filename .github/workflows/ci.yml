@@ -90,6 +90,12 @@ jobs:
             - name: Run frontend tests
               run: npm test --if-present
               working-directory: frontend
+            - name: Install Playwright browsers
+              run: npx playwright install --with-deps
+              working-directory: frontend
+            - name: Run E2E tests
+              run: npm run test:e2e
+              working-directory: frontend
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
