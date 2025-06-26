@@ -13,5 +13,14 @@ fi
 ruff check .
 pytest -q
 if [ -d bot ] && [ -f bot/package.json ]; then
+    npm ci --prefix bot
     (cd bot && npm test)
+fi
+
+# Optionally run frontend tests when they exist
+if [ -d frontend ] && [ -f frontend/package.json ]; then
+    if grep -q "\"test\"" frontend/package.json; then
+        npm ci --prefix frontend
+        (cd frontend && npm test)
+    fi
 fi
