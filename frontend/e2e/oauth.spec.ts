@@ -32,6 +32,8 @@ test('login flow shows user info', async ({ page }) => {
     })
   );
 
+  // Ensure the Vite dev server is ready before hitting the callback route
+  await page.goto('/', { waitUntil: 'networkidle' });
   await page.goto('/login/discord/callback?code=abc');
 
   await expect(page.getByTestId('user-welcome')).toContainText('tester');
