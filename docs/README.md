@@ -91,6 +91,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
 - [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
+- [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
 
 ## Onboarding Phases
 
