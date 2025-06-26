@@ -60,7 +60,7 @@ export default function Login() {
   return (
     <div>
       {user && (
-        <p>
+        <p data-testid="user-welcome">
           Logged in as {user.username}
           {user.avatar && user.id && (
             <img
@@ -72,8 +72,8 @@ export default function Login() {
           )}
         </p>
       )}
-      <p>Level: {level ?? '...'}</p>
-      <p>Onboarding: {status ?? '...'}</p>
+      <p data-testid="user-level">Level: {level ?? '...'}</p>
+      <p data-testid="onboarding-status">Onboarding: {status ?? '...'}</p>
       {status === 'intro' && <button>Start Onboarding</button>}
     </div>
   );
