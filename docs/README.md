@@ -73,6 +73,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
