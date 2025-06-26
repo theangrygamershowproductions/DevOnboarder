@@ -296,6 +296,8 @@ All notable changes to this project will be recorded in this file.
 - Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale instructions.
 - Added a package docstring to `src/routes/__init__.py` summarizing the routes module.
 - `scripts/run_tests.sh` now always installs development requirements before running tests to ensure packages like PyYAML are available.
+- `scripts/run_tests.sh` installs bot dependencies with `npm ci --prefix bot` before running Jest and
+  installs frontend dependencies with `npm ci --prefix frontend` when frontend tests exist.
 - Added `DISCORD_REDIRECT_URI` placeholder to `.env.example` and documented it under Secrets.
 - Playwright tests now read `AUTH_URL` to locate the auth service. Documented the
   variable in `docs/e2e-tests.md` and set it in CI.
