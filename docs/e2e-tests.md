@@ -5,12 +5,12 @@ These tests exercise the OAuth login flow and assume the dev services are runnin
 
 ## Running Locally
 
-1. Install dependencies and browsers:
+1. Install dependencies and browsers from the `frontend/` directory:
 
    ```bash
    cd frontend
    npm ci
-   npx playwright install
+   npx playwright install --with-deps
    ```
 
 2. Start the services:
