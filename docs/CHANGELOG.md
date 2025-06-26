@@ -17,6 +17,8 @@ All notable changes to this project will be recorded in this file.
   updated onboarding docs to reference it.
 - Documented installing the project with `pip install -e .` before running tests and updated setup scripts.
 - Added Playwright E2E tests and documented how to run them.
+- Clarified Playwright install instructions in `docs/e2e-tests.md` to run
+  `npx playwright install --with-deps` inside the `frontend/` directory.
 - Added `docs/about-potato.md` describing the Potato origin story and Easter egg.
 - Linked `docs/about-potato.md` from the documentation README.
 - Documented how to request a full QA sweep with Codex using `@codex run full-qa` in `docs/ONBOARDING.md`.
