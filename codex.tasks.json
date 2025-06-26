@@ -32,6 +32,6 @@
     "title": "Stub Frontend OAuth Session Component",
     "module": "frontend",
     "description": "Add a simple React/Vite component that consumes the Discord OAuth token (if present), displays XP/level via `/api/user/level`, and shows onboarding state. Use environment variables defined in `.env.example` and align with backend API routes.",
-    "status": "pending"
+    "status": "complete"
   }
 ]
