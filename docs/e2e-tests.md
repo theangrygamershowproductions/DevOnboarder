@@ -33,3 +33,11 @@ The configuration at `frontend/playwright.config.ts` automatically launches the 
 User details rendered by `Login.tsx` expose `data-testid` attributes
 (`user-welcome`, `user-level`, and `onboarding-status`) so tests can
 select elements reliably.
+
+## Troubleshooting
+
+If the tests fail with a timeout on `toContainText`, the Vite dev server may not
+be fully compiled before Playwright navigates to the page. Ensure the dev server
+responds on <http://localhost:3000> by loading it in a browser or hitting the
+root URL with `curl` before running the tests. Re-running `npx playwright
+install` can also fix missing browser errors.
