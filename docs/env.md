@@ -101,3 +101,7 @@ dependencies with `npm ci` and run the development servers. When running the
 frontend outside Docker, follow [../frontend/README.md](../frontend/README.md)
 and install packages with `pnpm install` (or `npm ci` for a clean install) before
 starting `npm run dev`.
+
+The base `Dockerfile` installs Python packages with `pip install --root-user-action=ignore`
+to silence warnings when running as the root user. If you create your own image,
+you can activate a virtual environment instead of using this flag.
