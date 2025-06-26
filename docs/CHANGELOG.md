@@ -6,6 +6,8 @@ All notable changes to this project will be recorded in this file.
 
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
   the Playwright tests and documentation.
+- Updated the OAuth Playwright test to wait for the dev server and added
+  troubleshooting tips to `docs/e2e-tests.md`.
 - The base Dockerfile now runs `pip install --root-user-action=ignore` to
   suppress warnings when installing packages as root. Documented this
   behavior in `docs/env.md`.
