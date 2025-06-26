@@ -4,6 +4,9 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Set the Vite dev server to listen on port `3000` and ensured all documentation
+  and compose files reference the same port.
+
 - Documented running `npm test` from the `frontend/` directory after installing dependencies and linked
   `frontend/README.md` for details.
 - Clarified `frontend/README.md` to install dependencies with `pnpm` or `npm`, commit the lockfile, and run `npm run dev`.
