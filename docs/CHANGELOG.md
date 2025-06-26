@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Added `scripts/run_migrations.sh` for running `alembic upgrade head` and
   updated onboarding docs to reference it.
 - Documented installing the project with `pip install -e .` before running tests and updated setup scripts.
+- Added `completedTasks` to `codex.tasks.json` and documented the archiving process.
 - Added Playwright E2E tests and documented how to run them.
 - Clarified Playwright install instructions in `docs/e2e-tests.md` to run
   `npx playwright install --with-deps` inside the `frontend/` directory.
