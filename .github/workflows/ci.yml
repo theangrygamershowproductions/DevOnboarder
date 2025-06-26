@@ -96,6 +96,8 @@ jobs:
             - name: Run E2E tests
               run: npm run test:e2e
               working-directory: frontend
+              env:
+                  AUTH_URL: http://localhost:8002
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies

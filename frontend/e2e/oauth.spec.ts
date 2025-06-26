@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const AUTH = 'http://localhost:8002';
+const AUTH = process.env.AUTH_URL ?? 'http://localhost:8002';
 
 test('login flow shows user info', async ({ page }) => {
   await page.route(`${AUTH}/login/discord/callback*`, route =>
