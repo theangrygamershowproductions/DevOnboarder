@@ -1,37 +1,40 @@
-[
-  {
-    "id": "auth-001",
-    "title": "Implement Discord OAuth2 Flow",
-    "module": "auth_service",
-    "description": "Add Discord login support using DISCORD_CLIENT_ID and DISCORD_CLIENT_SECRET from the .env. Create `/api/auth/discord/login` and `/api/auth/discord/callback` endpoints to complete the flow. Store the Discord user data in the existing User model and issue a JWT on success.",
-    "status": "complete"
-  },
-  {
-    "id": "bot-001",
-    "title": "Fix XP API Fetch Calls in Bot",
-    "module": "discord_bot",
-    "description": "Update `src/api.ts` to include `username` or token when calling `/api/user/level`, `/api/user/onboarding-status`, and other endpoints. Currently, requests return 422 errors due to missing required parameters.",
-    "status": "complete"
-  },
-  {
-    "id": "xp-001",
-    "title": "Add Contribution POST Endpoint",
-    "module": "xp_api",
-    "description": "Create a new POST route at `/api/user/contribute` that accepts a contribution event, awards XP, and stores the record in the Contribution and XPEvent models. This will support XP gain via bot commands like `/contribute`.",
-    "status": "complete"
-  },
-  {
-    "id": "bot-002",
-    "title": "Modularize Discord Bot Commands",
-    "module": "discord_bot",
-    "description": "Refactor `/verify`, `/profile`, and `/contribute` commands out of `index.ts` and into separate files in a new `/commands` folder. Implement dynamic loading and registration of commands based on Discord.js v14 or your current bot handler.",
-    "status": "complete"
-  },
-  {
-    "id": "frontend-001",
-    "title": "Stub Frontend OAuth Session Component",
-    "module": "frontend",
-    "description": "Add a simple React/Vite component that consumes the Discord OAuth token (if present), displays XP/level via `/api/user/level`, and shows onboarding state. Use environment variables defined in `.env.example` and align with backend API routes.",
-    "status": "complete"
-  }
-]
+{
+  "tasks": [],
+  "completedTasks": [
+    {
+      "id": "auth-001",
+      "title": "Implement Discord OAuth2 Flow",
+      "module": "auth_service",
+      "description": "Add Discord login support using DISCORD_CLIENT_ID and DISCORD_CLIENT_SECRET from the .env. Create `/api/auth/discord/login` and `/api/auth/discord/callback` endpoints to complete the flow. Store the Discord user data in the existing User model and issue a JWT on success.",
+      "status": "complete"
+    },
+    {
+      "id": "bot-001",
+      "title": "Fix XP API Fetch Calls in Bot",
+      "module": "discord_bot",
+      "description": "Update `src/api.ts` to include `username` or token when calling `/api/user/level`, `/api/user/onboarding-status`, and other endpoints. Currently, requests return 422 errors due to missing required parameters.",
+      "status": "complete"
+    },
+    {
+      "id": "xp-001",
+      "title": "Add Contribution POST Endpoint",
+      "module": "xp_api",
+      "description": "Create a new POST route at `/api/user/contribute` that accepts a contribution event, awards XP, and stores the record in the Contribution and XPEvent models. This will support XP gain via bot commands like `/contribute`.",
+      "status": "complete"
+    },
+    {
+      "id": "bot-002",
+      "title": "Modularize Discord Bot Commands",
+      "module": "discord_bot",
+      "description": "Refactor `/verify`, `/profile`, and `/contribute` commands out of `index.ts` and into separate files in a new `/commands` folder. Implement dynamic loading and registration of commands based on Discord.js v14 or your current bot handler.",
+      "status": "complete"
+    },
+    {
+      "id": "frontend-001",
+      "title": "Stub Frontend OAuth Session Component",
+      "module": "frontend",
+      "description": "Add a simple React/Vite component that consumes the Discord OAuth token (if present), displays XP/level via `/api/user/level`, and shows onboarding state. Use environment variables defined in `.env.example` and align with backend API routes.",
+      "status": "complete"
+    }
+  ]
+}
