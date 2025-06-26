@@ -297,6 +297,8 @@ All notable changes to this project will be recorded in this file.
 - Added a package docstring to `src/routes/__init__.py` summarizing the routes module.
 - `scripts/run_tests.sh` now always installs development requirements before running tests to ensure packages like PyYAML are available.
 - Added `DISCORD_REDIRECT_URI` placeholder to `.env.example` and documented it under Secrets.
+- Playwright tests now read `AUTH_URL` to locate the auth service. Documented the
+  variable in `docs/e2e-tests.md` and set it in CI.
 
 ## [0.1.0] - 2025-06-14
 
