@@ -34,7 +34,7 @@ test('login flow shows user info', async ({ page }) => {
 
   await page.goto('/login/discord/callback?code=abc');
 
-  await expect(page.locator('text=Logged in as')).toContainText('tester');
-  await expect(page.locator('text=Level:')).toContainText('7');
-  await expect(page.locator('text=Onboarding:')).toContainText('intro');
+  await expect(page.getByTestId('user-welcome')).toContainText('tester');
+  await expect(page.getByTestId('user-level')).toContainText('7');
+  await expect(page.getByTestId('onboarding-status')).toContainText('intro');
 });

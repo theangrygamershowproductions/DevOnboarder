@@ -26,3 +26,7 @@ These tests exercise the OAuth login flow and assume the dev services are runnin
    ```
 
 The configuration at `frontend/playwright.config.ts` automatically launches the Vite dev server before running the tests.
+
+User details rendered by `Login.tsx` expose `data-testid` attributes
+(`user-welcome`, `user-level`, and `onboarding-status`) so tests can
+select elements reliably.

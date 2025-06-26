@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added `data-testid` attributes to user info in `Login.tsx` and updated
+  the Playwright tests and documentation.
 - Set the Vite dev server to listen on port `3000` and ensured all documentation
   and compose files reference the same port.
 
