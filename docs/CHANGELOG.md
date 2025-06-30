@@ -315,6 +315,8 @@ All notable changes to this project will be recorded in this file.
 - Playwright tests now read `AUTH_URL` to locate the auth service. Documented the
   variable in `docs/e2e-tests.md` and set it in CI.
 
+- Fixed spacing in the Git guidelines pre-PR checklist.
+
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
