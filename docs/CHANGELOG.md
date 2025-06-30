@@ -15,6 +15,8 @@ All notable changes to this project will be recorded in this file.
 - Set the Vite dev server to listen on port `3000` and ensured all documentation
   and compose files reference the same port.
 - Added coverage scripts for the bot and frontend packages. CI now runs `npm run coverage` and fails if coverage drops below 80%.
+- Added tests for the React entrypoint and `Login` component to improve frontend
+  coverage.
 
 - Documented running `npm test` from the `frontend/` directory after installing dependencies and linked
   `frontend/README.md` for details.
