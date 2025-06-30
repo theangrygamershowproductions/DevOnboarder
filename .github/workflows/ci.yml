@@ -100,10 +100,16 @@ jobs:
               run: npx playwright install --with-deps
               working-directory: frontend
             - name: Run E2E tests
-              run: npm run test:e2e
+              run: npm run test:e2e 2>&1 | tee playwright.log
               working-directory: frontend
               env:
                   AUTH_URL: http://localhost:8002
+            - name: Upload playwright log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-log
+                  path: frontend/playwright.log
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
