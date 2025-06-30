@@ -14,6 +14,7 @@ All notable changes to this project will be recorded in this file.
   behavior in `docs/env.md`.
 - Set the Vite dev server to listen on port `3000` and ensured all documentation
   and compose files reference the same port.
+- Added coverage scripts for the bot and frontend packages. CI now runs `npm run coverage` and fails if coverage drops below 80%.
 - Added tests for the React entrypoint and `Login` component to improve frontend
   coverage.
 
@@ -320,4 +321,3 @@ All notable changes to this project will be recorded in this file.
 - Expanded `docs/pull_request_template.md` with sections for summary, linked issues, screenshots, testing steps, and a checklist referencing documentation and changelog updates. [#25](https://github.com/theangrygamershowproductions/DevOnboarder/pull/25)
 - Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-off section to the pull request template. [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
 - Added `codex.ci.yml` to automate CI monitoring and fix failing builds.
-

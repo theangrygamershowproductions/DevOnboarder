@@ -87,8 +87,8 @@ jobs:
             - name: Install frontend dependencies
               run: npm ci
               working-directory: frontend
-            - name: Run frontend tests
-              run: npm test --if-present
+            - name: Run frontend tests with coverage
+              run: npm run coverage --if-present
               working-directory: frontend
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
@@ -103,8 +103,8 @@ jobs:
             - name: Install bot dependencies
               run: npm ci
               working-directory: bot
-            - name: Run bot tests
-              run: npm test
+            - name: Run bot tests with coverage
+              run: npm run coverage
               working-directory: bot
             - name: Wait for auth service before header check
               run: |
