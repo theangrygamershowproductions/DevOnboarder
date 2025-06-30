@@ -318,6 +318,7 @@ All notable changes to this project will be recorded in this file.
   variable in `docs/e2e-tests.md` and set it in CI.
 
 - Fixed spacing in the Git guidelines pre-PR checklist.
+- Updated `Codex_Contributor_Dashboard.md` to mark the frontend module in progress.
 
 ## [0.1.0] - 2025-06-14
 
