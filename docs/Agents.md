@@ -37,7 +37,7 @@ This document defines all agents (services, bots, integrations, and guards) in t
 | Agent Name          | Endpoint(s)                      | Port | Healthcheck | Depends On | Status   |
 | ------------------- | -------------------------------- | ---- | ----------- | ---------- | -------- |
 | Auth Server         | `/api/*`, `/health`              | 8002 | `/health`   | db         | updating |
-| Discord Integration | `/oauth`, `/roles`               | 8081 | `TBD`       | Auth, db   | planned  |
+| Discord Integration | `/oauth`, `/roles`               | 8081 | `TBD`       | Auth, db   | deferred |
 | Frontend Agent      | `/`, `/session`                  | 3000 | N/A         | Auth       | stable   |
 | XP API              | `/xp`, `/health`                 | 8001 | `/health`   | db         | verify   |
 | Database (Postgres) | N/A                              | 5432 | docker      | N/A        | stable   |
@@ -87,9 +87,11 @@ This document defines all agents (services, bots, integrations, and guards) in t
 
 ## Discord Integration Agent
 
-**Purpose:** Handles all Discord-specific OAuth flows and role lookups.
+**Status:** Deferred – planned endpoints `/oauth` and `/roles` are not yet implemented.
 
-**Key Files:** Backend utilities in `src/utils/discord.ts`, frontend helpers in `src/lib/auth/discord.ts`
+**Purpose:** Handles Discord OAuth flows and role lookups once the service is built.
+
+**Key Files:** To be determined when development resumes.
 
 ---
 
@@ -206,7 +208,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | ------------------- | ----------- | -------------- | ---------------- |
 | Auth Server         | Yes         | Yes            | Yes              |
 | Frontend            | Yes         | Yes            | Yes              |
-| Discord Integration | Partial     | No             | No               |
+| Discord Integration | N/A         | No             | No               |
 | XP API              | Yes         | Yes            | Yes              |
 | Webhook/Bot Agent   | Optional    | No             | Optional         |
 | Database (Postgres) | Yes         | Yes            | Yes              |
