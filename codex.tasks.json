@@ -6,6 +6,20 @@
       "module": "discord_integration",
       "description": "Create `/oauth` and `/roles` routes for Discord account linking and role lookup.",
       "status": "deferred"
+    },
+    {
+      "id": "feedback-001",
+      "title": "Implement Feedback Dashboard API",
+      "module": "feedback_service",
+      "description": "Add endpoints for submitting feedback, tracking status, and generating analytics as outlined in docs/prd/feedback-dashboard.md.",
+      "status": "planned"
+    },
+    {
+      "id": "feedback-002",
+      "title": "Create Feedback Dashboard UI",
+      "module": "frontend",
+      "description": "Build React components for the submission form, status board, and analytics snapshot per docs/prd/feedback-dashboard.md.",
+      "status": "planned"
     }
   ],
   "completedTasks": [
