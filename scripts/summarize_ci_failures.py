@@ -59,6 +59,13 @@ def main() -> None:
             lines.append(f"- {item}")
         lines.append("")
 
+    playwright_fails = parse_log(Path("frontend") / "playwright.log")
+    if playwright_fails:
+        lines.append("## Playwright Failures")
+        for item in playwright_fails[:5]:
+            lines.append(f"- {item}")
+        lines.append("")
+
     jest_fails = parse_log(Path("bot") / "jest.log")
     if jest_fails:
         lines.append("## Jest Failures")
