@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Updated Login component test to stub `import.meta.env.VITE_AUTH_URL` with `vi.stubEnv`.
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
   the Playwright tests and documentation.
 - Updated the OAuth Playwright test to wait for the dev server and added
