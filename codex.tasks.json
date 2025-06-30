@@ -1,5 +1,13 @@
 {
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "integration-001",
+      "title": "Implement Discord Integration agent",
+      "module": "discord_integration",
+      "description": "Create `/oauth` and `/roles` routes for Discord account linking and role lookup.",
+      "status": "deferred"
+    }
+  ],
   "completedTasks": [
     {
       "id": "auth-001",
