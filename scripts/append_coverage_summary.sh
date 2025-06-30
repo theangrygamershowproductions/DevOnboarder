@@ -20,8 +20,9 @@ OUTPUT_FILE=${1:-summary.md}
   if [ -n "$COVERED_BRANCHES" ] && [ -n "$TOTAL_BRANCHES" ]; then
     echo "- **Branches:** ${COVERED_BRANCHES}/${TOTAL_BRANCHES} (${BRANCH_PERCENT}%)"
   fi
-  printf "\n[Full coverage reports](%s/%s/actions/runs/%s)\n" \
-    "${GITHUB_SERVER_URL:-https://github.com}" \
-    "${GITHUB_REPOSITORY:-}" \
-    "${GITHUB_RUN_ID:-}"
 } >> "$OUTPUT_FILE"
+
+printf "\n[Full coverage reports](%s/%s/actions/runs/%s)\n" \
+  "${GITHUB_SERVER_URL:-https://github.com}" \
+  "${GITHUB_REPOSITORY:-}" \
+  "${GITHUB_RUN_ID:-}" >> "$OUTPUT_FILE"
