@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - Fixed newline formatting in the coverage summary by quoting the `printf` command with double quotes.
 - Added `scripts/append_coverage_summary.sh` to append the coverage link with proper newline handling.
 - CI workflow now uses this script so the coverage link appears on its own line.
+- CI workflow now exports GitHub variables when generating the coverage summary.
 
 - Updated Login component test to stub `import.meta.env.VITE_AUTH_URL` with `vi.stubEnv`.
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
