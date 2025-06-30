@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
+
 - Updated Login component test to stub `import.meta.env.VITE_AUTH_URL` with `vi.stubEnv`.
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
   the Playwright tests and documentation.
