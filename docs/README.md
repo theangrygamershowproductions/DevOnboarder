@@ -144,3 +144,4 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 3. Use the pull request template and ensure the checklist passes.
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
+6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated with a summary of the failing tests and links to the artifacts.
