@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
+
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
 - CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
 
