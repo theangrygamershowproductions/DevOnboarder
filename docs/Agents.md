@@ -183,17 +183,17 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 ## Agent Task Checklist
 
-- [ ] Document each agent's purpose, key files, environment, and workflow.
-- [ ] Update this file and the changelog when an agent changes.
-- [ ] Ensure healthchecks pass for required services.
+- [x] Document each agent's purpose, key files, environment, and workflow.
+- [x] Update this file and the changelog when an agent changes.
+- [x] Ensure healthchecks pass for required services.
 
 ---
 
 ## Next Steps / Remediation Timeline
 
-- [ ] Implement `/health` in Auth
-- [ ] Add Docker healthcheck to compose
-- [ ] CI workflow update to poll `/health`
+- [x] Implement `/health` in Auth
+- [x] Add Docker healthcheck to compose
+- [x] CI workflow update to poll `/health`
 - [ ] Env var audit/cleanup in `.env.dev`
 - [ ] Doc/Agents.md/Changelog update
 - [ ] Retire obsolete scripts
