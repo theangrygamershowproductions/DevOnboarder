@@ -125,6 +125,10 @@ jobs:
                   name: jest-log
                   path: bot/jest.log
             - name: Generate coverage summary
+              env:
+                  GITHUB_SERVER_URL: ${{ github.server_url }}
+                  GITHUB_REPOSITORY: ${{ github.repository }}
+                  GITHUB_RUN_ID: ${{ github.run_id }}
               run: |
                   python scripts/post_coverage_comment.py coverage-summary.md
                   bash scripts/append_coverage_summary.sh coverage-summary.md
