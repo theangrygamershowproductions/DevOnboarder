@@ -57,6 +57,9 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
 
     Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
+17. CI posts a coverage summary on pull requests. Run
+    `python scripts/post_coverage_comment.py` to generate the table locally.
+
 The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the
 `<<` merge key.

@@ -118,6 +118,31 @@ jobs:
               with:
                   name: jest-log
                   path: bot/jest.log
+            - name: Generate coverage summary
+              run: |
+                  python scripts/post_coverage_comment.py coverage-summary.md
+                  echo "\n[Full coverage reports](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> coverage-summary.md
+            - name: Upload coverage summary
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-summary
+                  path: coverage-summary.md
+            - name: Upload coverage data
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-data
+                  path: |
+                      bot/coverage
+                      frontend/coverage
+                      .coverage
+            - name: Post coverage comment
+              if: github.event_name == 'pull_request'
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body-file: coverage-summary.md
             - name: Wait for auth service before header check
               run: |
                   for i in {1..30}; do
