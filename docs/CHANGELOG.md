@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
 - CI workflow now uploads `playwright.log` and summarizes failing Playwright tests in the CI failure issue.
 - CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
+- Coverage summary now uses `printf` so the newline before the link renders correctly.
 
 - Updated Login component test to stub `import.meta.env.VITE_AUTH_URL` with `vi.stubEnv`.
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
