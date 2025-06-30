@@ -88,8 +88,14 @@ jobs:
               run: npm ci
               working-directory: frontend
             - name: Run frontend tests with coverage
-              run: npm run coverage --if-present
+              run: npm run coverage --if-present 2>&1 | tee vitest.log
               working-directory: frontend
+            - name: Upload vitest log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: vitest-log
+                  path: frontend/vitest.log
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
               working-directory: frontend
@@ -104,8 +110,14 @@ jobs:
               run: npm ci
               working-directory: bot
             - name: Run bot tests with coverage
-              run: npm run coverage
+              run: npm run coverage 2>&1 | tee jest.log
               working-directory: bot
+            - name: Upload jest log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: jest-log
+                  path: bot/jest.log
             - name: Wait for auth service before header check
               run: |
                   for i in {1..30}; do
@@ -133,3 +145,13 @@ jobs:
               with:
                   labels: |
                       🚧 Codex
+            - name: Summarize CI failures
+              if: failure()
+              run: python scripts/summarize_ci_failures.py
+            - name: Create or update CI failure issue
+              if: failure()
+              uses: peter-evans/create-issue-from-file@v5
+              with:
+                  title: CI Failures for ${{ github.sha }}
+                  content-filepath: summary.md
+                  labels: ci-failure
