@@ -51,7 +51,7 @@ Delete the feature branch after the merge completes.
 
 ## Pre-PR Checklist
 
--Before opening a pull request, make sure to:
+ - Before opening a pull request, make sure to:
 
 - Rebase your branch on the latest `main`.
 - Install the project and dev requirements:
