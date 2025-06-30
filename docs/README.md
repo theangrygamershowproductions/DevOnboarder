@@ -27,10 +27,10 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
 9. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
 10. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
-   It stores data in a local SQLite database.
+    It stores data in a local SQLite database.
 11. Test the XP API with:
-   `curl http://localhost:8001/api/user/onboarding-status`
-   and `curl http://localhost:8001/api/user/level`.
+    `curl http://localhost:8001/api/user/onboarding-status`
+    and `curl http://localhost:8001/api/user/level`.
 12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
 13. Verify changes with `ruff check .`, `pytest -q`, and `npm test` from the `bot/` directory before committing.
     After installing dependencies, run `npm test` in the `frontend/` directory as well
@@ -42,8 +42,10 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
     pip install -r requirements-dev.txt
     ```
 
-14. Install git hooks with `pre-commit install` so these checks run automatically.
-15. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
+14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
+    The CI workflow fails if coverage drops below **80%**.
+15. Install git hooks with `pre-commit install` so these checks run automatically.
+16. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
     LanguageTool requires network access to `api.languagetool.org` unless you
     provide a custom server URL in the `LANGUAGETOOL_URL` environment variable.
