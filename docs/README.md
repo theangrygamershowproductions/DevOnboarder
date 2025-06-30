@@ -59,6 +59,13 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
 
 17. CI posts a coverage summary on pull requests. Run
     `python scripts/post_coverage_comment.py` to generate the table locally.
+18. Append the coverage numbers to a Markdown file with
+    `bash scripts/append_coverage_summary.sh`. Set the following
+    environment variables before running the script:
+    `COVERED_LINES`, `TOTAL_LINES`, `COVERAGE_PERCENT`,
+    `COVERED_BRANCHES`, `TOTAL_BRANCHES`, and `BRANCH_PERCENT`.
+    Pass an optional output filename as the first argument
+    (defaults to `summary.md`).
 
 The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the
