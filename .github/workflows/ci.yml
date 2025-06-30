@@ -127,9 +127,7 @@ jobs:
             - name: Generate coverage summary
               run: |
                   python scripts/post_coverage_comment.py coverage-summary.md
-                  printf "\n[Full coverage reports](%s/%s/actions/runs/%s)\n" \
-                    "${{ github.server_url }}" "${{ github.repository }}" "${{ github.run_id }}" \
-                    >> coverage-summary.md
+                  bash scripts/append_coverage_summary.sh coverage-summary.md
             - name: Upload coverage summary
               if: always()
               uses: actions/upload-artifact@v4
