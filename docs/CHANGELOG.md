@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
+- CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
 
 - Updated Login component test to stub `import.meta.env.VITE_AUTH_URL` with `vi.stubEnv`.
 - Added `data-testid` attributes to user info in `Login.tsx` and updated
