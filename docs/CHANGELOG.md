@@ -14,6 +14,8 @@ All notable changes to this project will be recorded in this file.
   behavior in `docs/env.md`.
 - Set the Vite dev server to listen on port `3000` and ensured all documentation
   and compose files reference the same port.
+- Added tests for the React entrypoint and `Login` component to improve frontend
+  coverage.
 
 - Documented running `npm test` from the `frontend/` directory after installing dependencies and linked
   `frontend/README.md` for details.
