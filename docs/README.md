@@ -55,11 +55,13 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
     ```
 
-    Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
+Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
-17. CI posts a coverage summary on pull requests. Run
+17. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
+
+18. CI posts a coverage summary on pull requests. Run
     `python scripts/post_coverage_comment.py` to generate the table locally.
-18. Append the coverage numbers to a Markdown file with
+19. Append the coverage numbers to a Markdown file with
     `bash scripts/append_coverage_summary.sh`. Set the following
     environment variables before running the script:
     `COVERED_LINES`, `TOTAL_LINES`, `COVERAGE_PERCENT`,
