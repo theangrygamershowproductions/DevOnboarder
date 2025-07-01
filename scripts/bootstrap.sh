@@ -13,4 +13,7 @@ fi
 # Run the shared setup script to install all required tools and images
 "$(dirname "$0")/setup-env.sh"
 
+# Optionally check for optional tooling
+"$(dirname "$0")/check_dependencies.sh" || true
+
 echo "Bootstrap complete"
