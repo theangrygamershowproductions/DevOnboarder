@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
 - Fixed newline formatting in the coverage summary by quoting the `printf` command with double quotes.
 - Added `scripts/append_coverage_summary.sh` to append the coverage link with proper newline handling.
+- Added ESLint and Prettier configurations for the frontend and bot with new `npm run lint` and `npm run format` scripts.
 - CI workflow now uses this script so the coverage link appears on its own line.
 - CI workflow now exports GitHub variables when generating the coverage summary.
 - CI workflow now comments on the CI failure issue and closes it once a build succeeds.
