@@ -1,0 +1,15 @@
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: |
+          for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --reason completed
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
