@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
 
 - Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
+- Added `pip-audit` and `npm audit --production` security checks run via `scripts/security_audit.sh` and invoked in CI. Results are stored in `docs/security-audit-2025-07-01.md`.
 - Marked the Discord Integration agent as deferred and added a tracking task.
 
 - Moved XP API code into a dedicated `xp/api` package and updated tests and the
