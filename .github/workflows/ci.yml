@@ -109,6 +109,9 @@ jobs:
               working-directory: frontend
               env:
                   AUTH_URL: http://localhost:8002
+            - name: Run performance tests
+              run: npm run perf 2>&1 | tee lhci.log
+              working-directory: frontend
             - name: Run accessibility tests
               run: npm run test:a11y 2>&1 | tee a11y.log
               working-directory: frontend
@@ -124,6 +127,18 @@ jobs:
               with:
                   name: a11y-log
                   path: frontend/a11y.log
+            - name: Upload Lighthouse log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: lighthouse-log
+                  path: frontend/lhci.log
+            - name: Upload Lighthouse report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: lighthouse-report
+                  path: frontend/lhci-report
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
