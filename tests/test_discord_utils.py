@@ -20,7 +20,7 @@ class StubResponse:
 def test_get_user_roles(monkeypatch):
     calls = []
 
-    def fake_get(url: str, headers: dict[str, str]):
+    def fake_get(url: str, headers: dict[str, str], *, timeout=None):
         calls.append(url)
         if url.endswith("/users/@me/guilds"):
             return StubResponse(200, [{"id": "1"}, {"id": "2"}])
@@ -55,7 +55,7 @@ def test_resolve_user_flags(monkeypatch):
 
 
 def test_get_user_profile(monkeypatch):
-    def fake_get(url: str, headers: dict[str, str]):
+    def fake_get(url: str, headers: dict[str, str], *, timeout=None):
         assert url.endswith("/users/@me")
         return StubResponse(200, {"id": "42", "username": "foo", "avatar": "img"})
 
@@ -66,7 +66,7 @@ def test_get_user_profile(monkeypatch):
 
 def test_get_user_roles_multiple_guilds(monkeypatch):
     """Collect roles across more than two guilds."""
-    def fake_get(url: str, headers: dict[str, str]):
+    def fake_get(url: str, headers: dict[str, str], *, timeout=None):
         if url.endswith("/users/@me/guilds"):
             return StubResponse(200, [{"id": "1"}, {"id": "2"}, {"id": "3"}])
         if url.endswith("/users/@me/guilds/1/member"):
