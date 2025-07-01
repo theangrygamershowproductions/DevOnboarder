@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
+
 - Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
 - Marked the Discord Integration agent as deferred and added a tracking task.
 

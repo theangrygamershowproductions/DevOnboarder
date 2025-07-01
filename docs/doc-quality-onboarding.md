@@ -31,6 +31,8 @@ imports resolve correctly.
 * If the script cannot download Vale automatically, manually download `vale_3.12.0_Linux_64-bit.tar.gz` from the [releases page](https://github.com/errata-ai/vale/releases), extract the `vale` binary, and set `VALE_BINARY` to its path.
 * **The project uses Vale 3.12.0. CI installs this version automatically**, but you still need it locally to run the checks before committing.
 
+Run `bash scripts/check_dependencies.sh` to confirm Vale and the Node test tools are installed.
+
 ---
 
 ### Step 3: (Optional) Set Up Local LanguageTool Server
