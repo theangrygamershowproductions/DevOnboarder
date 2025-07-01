@@ -7,6 +7,9 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: Install GitHub CLI
+        run: |
+          curl -fsSL https://github.com/cli/cli/releases/latest/download/gh-install.sh | sudo bash
       - run: |
           for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
             gh issue close "$n" --reason completed
