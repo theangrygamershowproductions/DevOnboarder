@@ -1,11 +1,10 @@
 # Managing CI Failure Issues
 
-When the CI workflow fails, it opens or updates an issue titled `CI Failures for <sha>` with a summary of the failing tests. The workflow closes the issue automatically once the same commit passes CI.
+When the CI workflow fails, it opens or updates an issue titled `CI Failures for <sha>` with a summary of the failing tests. The workflow closes all open `ci-failure` issues once any CI run succeeds.
 
 ## Automatic Cleanup
 
-- `ci.yml` searches for an open failure issue matching the commit SHA whenever the pipeline succeeds.
-- If found, the workflow comments on the issue and closes it using the built-in `GITHUB_TOKEN`.
+- `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
 
 ## Clearing Old Issues
 
