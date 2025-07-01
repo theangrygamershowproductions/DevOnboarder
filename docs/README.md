@@ -43,7 +43,7 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
     ```
 
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
-    The CI workflow fails if coverage drops below **80%**.
+    The CI workflow fails if coverage drops below **95%**.
 15. Install git hooks with `pre-commit install` so these checks run automatically.
 16. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
