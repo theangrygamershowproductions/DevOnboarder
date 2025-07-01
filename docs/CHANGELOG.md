@@ -369,6 +369,7 @@ All notable changes to this project will be recorded in this file.
 - Upgraded React to v19 and dotenv to v17.
 - Aligned Prettier version 3.6.2 across configuration and docs.
 - Documented the 95% coverage policy in `docs/doc-quality-onboarding.md`.
+- Documented that CI failure issues use the built-in `GITHUB_TOKEN`; no personal token is required unless `permissions:` removes `issues: write`.
 
 ## [0.1.0] - 2025-06-14
 
