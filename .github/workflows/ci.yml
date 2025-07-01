@@ -240,13 +240,13 @@ jobs:
               with:
                   name: ci-failure-issue
                   path: ci_failure_issue.txt
-              - name: Close CI failure issue
-                if: success()
-                run: |
-                    ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
-                    if [ -n "$ISSUE" ]; then
-                        gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} for \`${{ github.sha }}\` succeeded. Closing this issue."
-                        gh issue close "$ISSUE"
-                    fi
-                env:
+            - name: Close CI failure issue
+              if: success()
+              run: |
+                    ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
+                    for ISSUE in $ISSUES; do
+                      gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
+                      gh issue close "$ISSUE"
+                    done
+              env:
                     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
