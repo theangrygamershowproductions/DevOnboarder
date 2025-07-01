@@ -19,7 +19,12 @@ using the token provided in `.env`.
    npm install
    npm run build
    ```
-3. Run the bot locally:
+3. Lint and format the code:
+   ```bash
+   npm run lint
+   npm run format
+   ```
+4. Run the bot locally:
    ```bash
    npm start
    ```
