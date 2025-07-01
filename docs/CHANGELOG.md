@@ -360,6 +360,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
 - Improved CI failure issue detection to search titles for the current commit SHA.
 - Added `DISCORD_API_TIMEOUT` environment variable and enforced HTTP timeouts when contacting Discord APIs.
+- Added `license = {text = "MIT"}` to `pyproject.toml`.
 
 ## [0.1.0] - 2025-06-14
 
