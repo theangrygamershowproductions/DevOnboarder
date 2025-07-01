@@ -15,6 +15,10 @@ All notable changes to this project will be recorded in this file.
 - Added `pip-audit` and `npm audit --production` security checks run via `scripts/security_audit.sh` and invoked in CI. Results are stored in `docs/security-audit-2025-07-01.md`.
 - Marked the Discord Integration agent as deferred and added a tracking task.
 
+- Added Lighthouse CI performance audits using `npm run perf`. CI uploads the
+  generated HTML reports as artifacts and `docs/e2e-tests.md` explains how to
+  download them.
+
 - Added `scripts/trivy_scan.sh` and a CI step that scans Docker images with
   Trivy, failing on high or critical vulnerabilities. Documented offline
   installation steps in `docs/offline-setup.md`.
