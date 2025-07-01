@@ -4,6 +4,7 @@ This directory houses the DevOnboarder React application built with Vite.
 
 Install dependencies with `pnpm install` (or `npm install` if `pnpm` is not available`). Commit the generated lockfile (`pnpm-lock.yaml` or `package-lock.json`).
 Start the development server with `npm run dev`.
+Run `npm run lint` to check code style and `npm run format` to apply Prettier formatting.
 Environment variables are defined in `.env.example`.
 
 ## Login Flow
