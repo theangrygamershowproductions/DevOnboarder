@@ -88,6 +88,12 @@ The hooks run Black, Ruff, Prettier, Codespell, and our docs-quality script.
 Codespell relies on `.codespell-ignore` for project-specific terms you want to
 skip. The default list skips `DevOnboarder`, `nodeenv`, and `pyenv`.
 
+## Coverage Requirement
+
+All code must maintain at least **95%** test coverage to pass CI. Coverage is
+enforced for Python, the frontend, and the bot packages. Run coverage commands
+locally before opening a pull request to avoid CI failures.
+
 ### Vale Ignore Patterns & Codespell Hook
 
 The project now defines ignore patterns in `.vale.ini` to skip fenced code

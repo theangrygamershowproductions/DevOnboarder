@@ -69,9 +69,9 @@ pytest -q
 ```
 - Run documentation checks with `./scripts/check_docs.sh`.
   These use **Vale** and **LanguageTool** and require network access to
-  `api.languagetool.org` or a locally hosted server specified via
+-  `api.languagetool.org` or a locally hosted server specified via
   `LANGUAGETOOL_URL`.
-- Keep Prettier pinned to `v3.1.0`. Run
+- Keep Prettier pinned to `v3.6.2`. Run
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
