@@ -24,7 +24,7 @@ bash scripts/check_docs.sh
 
 ## Documentation & QA Checklist
 
--Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
+- Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
 
 - [ ] All Python and JS dependencies installed (`pip install -e .` or `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
 - [ ] Vale is installed locally (`vale --version`)
