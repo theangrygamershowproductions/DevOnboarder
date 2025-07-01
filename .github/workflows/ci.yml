@@ -185,8 +185,43 @@ jobs:
               run: python scripts/summarize_ci_failures.py
             - name: Create or update CI failure issue
               if: failure()
+              id: ci_failure
               uses: peter-evans/create-issue-from-file@v5
               with:
                   title: CI Failures for ${{ github.sha }}
                   content-filepath: summary.md
                   labels: ci-failure
+            - name: Save CI failure issue number
+              if: failure()
+              run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
+            - name: Upload CI failure issue number
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ci-failure-issue
+                  path: ci_failure_issue.txt
+            - name: Download CI failure issue artifact
+              if: success()
+              uses: actions/download-artifact@v4
+              with:
+                  name: ci-failure-issue
+                  path: .
+                  if-no-files-found: ignore
+            - name: Set CI failure issue env var
+              if: success()
+              run: |
+                  if [ -f ci_failure_issue.txt ]; then
+                      echo "CI_FAILURE_ISSUE_NUMBER=$(cat ci_failure_issue.txt)" >> "$GITHUB_ENV"
+                  fi
+            - name: Comment on CI failure issue
+              if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
+              uses: actions-ecosystem/action-add-comment-to-issue@v1
+              with:
+                  issue-number: ${{ env.CI_FAILURE_ISSUE_NUMBER }}
+                  body: |
+                      CI run ${{ github.run_id }} for `${{ github.sha }}` succeeded. Closing this issue.
+            - name: Close CI failure issue
+              if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
+              uses: actions-ecosystem/action-close-issue@v1
+              with:
+                  issue-number: ${{ env.CI_FAILURE_ISSUE_NUMBER }}
