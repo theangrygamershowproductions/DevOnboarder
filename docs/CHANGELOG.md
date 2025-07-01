@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Clarified README instructions to stop the server with Ctrl+C.
 - Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 - Replaced `node-fetch` with the global `fetch` in the Discord bot and updated tests.
+- Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-config.yaml`.
 
 - Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
 
