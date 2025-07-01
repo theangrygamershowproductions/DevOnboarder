@@ -13,6 +13,9 @@ All notable changes to this project will be recorded in this file.
 - Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
 - Marked the Discord Integration agent as deferred and added a tracking task.
 
+- Moved XP API code into a dedicated `xp/api` package and updated tests and the
+  `devonboarder-api` entrypoint.
+
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
 - CI workflow now uploads `playwright.log` and summarizes failing Playwright tests in the CI failure issue.
 - CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
