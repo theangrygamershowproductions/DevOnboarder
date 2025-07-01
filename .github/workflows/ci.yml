@@ -186,6 +186,8 @@ jobs:
                   python scripts/check_headers.py
               env:
                   CHECK_HEADERS_URL: http://localhost:8002/api/user
+            - name: Run security audit
+              run: bash scripts/security_audit.sh
             - name: Stop docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
             - name: Label Codex PR
