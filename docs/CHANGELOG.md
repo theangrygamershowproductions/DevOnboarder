@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
 - Documented manual cleanup of `ci-failure` issues in `docs/ci-failure-issues.md`.
 - CI workflow now closes every open `ci-failure` issue once the pipeline succeeds.
+- CI workflows install the latest GitHub CLI using a cross-platform script.
 
 - Clarified README instructions to stop the server with Ctrl+C.
 - Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
