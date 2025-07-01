@@ -371,6 +371,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the 95% coverage policy in `docs/doc-quality-onboarding.md`.
 - Documented that CI failure issues use the built-in `GITHUB_TOKEN`; no personal token is required unless `permissions:` removes `issues: write`.
 - Added `cleanup-ci-failure.yml` workflow to close stale `ci-failure` issues nightly and documented the job in `docs/README.md`.
+- Granted `issues: write` permission in `ci.yml` so forks can open and close CI failure issues with the built-in token.
 
 ## [0.1.0] - 2025-06-14
 
