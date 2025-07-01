@@ -173,7 +173,7 @@ All notable changes to this project will be recorded in this file.
 - Docstring check now detects FastAPI route decorators instead of relying on function name prefixes.
 - Added missing docstrings to auth service endpoints.
 - Docstring check now emits GitHub error annotations for missing docstrings.
-- Pinned Prettier pre-commit hook to `v3.1.0`.
+- Pinned Prettier pre-commit hook to `v3.6.2`.
 - Verified Prettier hook installation with `pre-commit autoupdate`.
 - Added `pytest-cov` to development requirements.
 - Added CORS and security middleware to the auth and XP services and updated the
@@ -363,6 +363,10 @@ All notable changes to this project will be recorded in this file.
 - Improved CI failure issue detection to search titles for the current commit SHA.
 - Added `DISCORD_API_TIMEOUT` environment variable and enforced HTTP timeouts when contacting Discord APIs.
 - Added `license = {text = "MIT"}` to `pyproject.toml`.
+- Dependabot now monitors `/frontend` and `/bot` for npm updates.
+- Upgraded React to v19 and dotenv to v17.
+- Aligned Prettier version 3.6.2 across configuration and docs.
+- Documented the 95% coverage policy in `docs/doc-quality-onboarding.md`.
 
 ## [0.1.0] - 2025-06-14
 
