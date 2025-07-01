@@ -35,25 +35,21 @@ repos:
         language: system
       - id: frontend-eslint
         name: Frontend ESLint
-        entry: npm run lint
+        entry: bash -c 'cd frontend && npm run lint'
         language: system
         pass_filenames: false
-        working_directory: frontend
       - id: frontend-prettier
         name: Frontend Prettier
-        entry: npm run format
+        entry: bash -c 'cd frontend && npm run format'
         language: system
         pass_filenames: false
-        working_directory: frontend
       - id: bot-eslint
         name: Bot ESLint
-        entry: npm run lint
+        entry: bash -c 'cd bot && npm run lint'
         language: system
         pass_filenames: false
-        working_directory: bot
       - id: bot-prettier
         name: Bot Prettier
-        entry: npm run format
+        entry: bash -c 'cd bot && npm run format'
         language: system
         pass_filenames: false
-        working_directory: bot
