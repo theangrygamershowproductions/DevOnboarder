@@ -33,3 +33,27 @@ repos:
         name: Potato ignore policy
         entry: bash scripts/check_potato_ignore.sh
         language: system
+      - id: frontend-eslint
+        name: Frontend ESLint
+        entry: npm run lint
+        language: system
+        pass_filenames: false
+        working_directory: frontend
+      - id: frontend-prettier
+        name: Frontend Prettier
+        entry: npm run format
+        language: system
+        pass_filenames: false
+        working_directory: frontend
+      - id: bot-eslint
+        name: Bot ESLint
+        entry: npm run lint
+        language: system
+        pass_filenames: false
+        working_directory: bot
+      - id: bot-prettier
+        name: Bot Prettier
+        entry: npm run format
+        language: system
+        pass_filenames: false
+        working_directory: bot
