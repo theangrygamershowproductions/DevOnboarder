@@ -7,11 +7,15 @@ All notable changes to this project will be recorded in this file.
 - Clarified README instructions to stop the server with Ctrl+C.
 - Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 - Replaced `node-fetch` with the global `fetch` in the Discord bot and updated tests.
+- Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-config.yaml`.
 
 - Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
 
 - Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
 - Marked the Discord Integration agent as deferred and added a tracking task.
+
+- Moved XP API code into a dedicated `xp/api` package and updated tests and the
+  `devonboarder-api` entrypoint.
 
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
 - CI workflow now uploads `playwright.log` and summarizes failing Playwright tests in the CI failure issue.
