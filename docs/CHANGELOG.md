@@ -5,6 +5,9 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Clarified README instructions to stop the server with Ctrl+C.
+- Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
+  documented `CORS_ALLOW_ORIGINS` and `DISCORD_REDIRECT_URI` in `docs/Agents.md`
+  and `docs/env.md`.
 - Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 - Replaced `node-fetch` with the global `fetch` in the Discord bot and updated tests.
 - Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-config.yaml`.
