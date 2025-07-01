@@ -25,6 +25,14 @@ These tests exercise the OAuth login flow and assume the dev services are runnin
    npm run test:e2e
    ```
 
+4. Run accessibility checks:
+
+   ```bash
+   npm run test:a11y
+   ```
+
+   This uses `@axe-core/playwright` to report any accessibility violations.
+
    The tests read the auth service URL from the `AUTH_URL` environment variable,
    defaulting to `http://localhost:8002` when unset.
 
