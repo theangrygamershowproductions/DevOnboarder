@@ -35,6 +35,7 @@ if (not SECRET_KEY or SECRET_KEY == "secret") and APP_ENV != "development":
     )
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
+API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 
 CONTRIBUTION_XP = 50
 
@@ -133,19 +134,22 @@ def get_current_user(
             detail="User not found",
         )
 
-    # Fetch Discord roles and resolve verification/admin flags using stored
-    # OAuth token.
+    # Fetch Discord roles and profile using the stored OAuth token. Handle
+    # timeouts from the Discord API so the service can respond with a 504.
     discord_token = user.discord_token
-    roles = get_user_roles(discord_token)
-    admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
-    if admin_guild:
-        relevant_roles = roles.get(admin_guild, [])
-    else:
-        relevant_roles = [r for rs in roles.values() for r in rs]
+    try:
+        roles = get_user_roles(discord_token)
+        admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
+        if admin_guild:
+            relevant_roles = roles.get(admin_guild, [])
+        else:
+            relevant_roles = [r for rs in roles.values() for r in rs]
 
-    flags = resolve_user_flags(relevant_roles)
+        flags = resolve_user_flags(relevant_roles)
 
-    profile = get_user_profile(discord_token)
+        profile = get_user_profile(discord_token)
+    except httpx.TimeoutException as exc:
+        raise HTTPException(status_code=504, detail="Discord API timeout") from exc
 
     # Attach resolved information to the user object for downstream handlers
     user.roles = roles
@@ -221,9 +225,10 @@ def discord_login() -> RedirectResponse:
 @router.get("/login/discord/callback")
 def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
-    token_resp = httpx.post(
-        "https://discord.com/api/oauth2/token",
-        data={
+    try:
+        token_resp = httpx.post(
+            "https://discord.com/api/oauth2/token",
+            data={
             "client_id": os.getenv("DISCORD_CLIENT_ID"),
             "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
             "grant_type": "authorization_code",
@@ -232,9 +237,12 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
                 "DISCORD_REDIRECT_URI",
                 "http://localhost:8002/login/discord/callback",
             ),
-        },
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    )
+            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=API_TIMEOUT,
+        )
+    except httpx.TimeoutException as exc:
+        raise HTTPException(status_code=504, detail="Discord API timeout") from exc
     token_resp.raise_for_status()
     access_token = token_resp.json()["access_token"]
 

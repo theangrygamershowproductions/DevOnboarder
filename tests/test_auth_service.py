@@ -365,7 +365,7 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    def fake_post(url: str, data: dict, headers: dict):
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         assert url.endswith("/token")
         assert data["code"] == "abc"
         return StubResponse(200, {"access_token": "tok"})
@@ -404,7 +404,7 @@ def test_oauth_callback_updates_existing_user(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    def fake_post(url: str, data: dict, headers: dict):
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         return StubResponse(200, {"access_token": data["code"]})
 
     monkeypatch.setattr(httpx, "post", fake_post)
@@ -472,3 +472,39 @@ def test_expired_token_decode_fails(monkeypatch):
             algorithms=[auth_service.ALGORITHM],
             options={"verify_exp": True},
         )
+
+
+def test_discord_callback_timeout(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    def raise_timeout(*args, **kwargs):
+        raise httpx.TimeoutException("timeout")
+
+    monkeypatch.setattr(httpx, "post", raise_timeout)
+
+    resp = client.get("/login/discord/callback?code=abc")
+    assert resp.status_code == 504
+    assert resp.json()["detail"] == "Discord API timeout"
+
+
+def test_get_current_user_timeout(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "t", "password": "pw"})
+    token = _get_token(client, "t", "pw")
+
+    def raise_roles(*args, **kwargs):
+        raise httpx.TimeoutException("timeout")
+
+    monkeypatch.setattr(auth_service, "get_user_roles", raise_roles)
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {"id": "1", "username": "t", "avatar": None},
+    )
+
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 504
+    assert resp.json()["detail"] == "Discord API timeout"
