@@ -157,3 +157,4 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
 6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated with a summary of the failing tests and links to the artifacts.
+7. The workflow uses GitHub's built-in `GITHUB_TOKEN` to manage CI failure issues. No personal token is required unless you override permissions with a `permissions:` block (include `issues: write`).
