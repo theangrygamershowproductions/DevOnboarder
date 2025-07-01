@@ -44,17 +44,18 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 3. Use [docs/pull_request_template.md](docs/pull_request_template.md) when opening a pull request.
 4. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
 5. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
-6. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
-7. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
-8. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
-9. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
-10. Run `./scripts/check_docs.sh` to lint documentation with Vale and
+6. Update all relevant READMEs when new roles are added to the GitHub organization.
+7. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
+8. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
+9. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
+10. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+11. Run `./scripts/check_docs.sh` to lint documentation with Vale and
     LanguageTool. Set `LANGUAGETOOL_URL` if you use a local LanguageTool
     server.
-11. Install Vale with `brew install vale` (or see the [Vale installation docs](https://vale.sh/docs/installation/))
+12. Install Vale with `brew install vale` (or see the [Vale installation docs](https://vale.sh/docs/installation/))
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
-12. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
+13. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
 
