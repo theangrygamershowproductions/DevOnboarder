@@ -185,7 +185,7 @@ jobs:
               if: failure()
               id: ci_failure
               run: |
-                  ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }}" --json number --jq '.[0].number')
+                  ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
                   if [ -n "$ISSUE" ]; then
                       gh issue comment "$ISSUE" --body-file summary.md
                   else
