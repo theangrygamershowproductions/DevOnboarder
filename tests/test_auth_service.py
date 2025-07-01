@@ -6,6 +6,7 @@ os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
+from fastapi.middleware.cors import CORSMiddleware
 from utils import roles as roles_utils
 from jose import jwt
 import pytest
@@ -508,3 +509,10 @@ def test_get_current_user_timeout(monkeypatch):
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 504
     assert resp.json()["detail"] == "Discord API timeout"
+
+
+def test_cors_allow_origins(monkeypatch):
+    monkeypatch.setenv("CORS_ALLOW_ORIGINS", "https://a.com,https://b.com")
+    app = auth_service.create_app()
+    cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
+    assert cors.kwargs["allow_origins"] == ["https://a.com", "https://b.com"]
