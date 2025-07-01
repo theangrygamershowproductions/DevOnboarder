@@ -38,4 +38,23 @@ Some environments block direct access to package registries. Use another machine
    npm ci --offline --cache /path/to/devonboarder-offline/npm
    ```
 
+## Bot npm packages
+
+1. On the online machine, cache the bot dependencies:
+
+   ```bash
+   mkdir -p ~/devonboarder-offline/npm
+   cd bot
+   npm ci --cache ~/devonboarder-offline/npm
+   ```
+
+2. Copy the `devonboarder-offline` folder to your offline machine.
+
+3. Install the bot dependencies from the cache:
+
+   ```bash
+   cd bot
+   npm ci --offline --cache /path/to/devonboarder-offline/npm
+   ```
+
 After installing dependencies, run the usual setup commands such as `make deps` or `pre-commit install`.
