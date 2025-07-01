@@ -94,7 +94,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Troubleshooting guide](troubleshooting.md)
   &ndash; quick fixes for setup problems and failing CI jobs.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
-- [Security audit](security-audit-2025-06-21.md) &ndash; latest dependency check results.
+- [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 - [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
