@@ -58,3 +58,24 @@ Some environments block direct access to package registries. Use another machine
    ```
 
 After installing dependencies, run the usual setup commands such as `make deps` or `pre-commit install`.
+
+## Trivy
+
+1. On a machine with internet access, download the Trivy binary:
+
+   ```bash
+   mkdir -p ~/devonboarder-offline/trivy
+   curl -L -o ~/devonboarder-offline/trivy/trivy.tar.gz \
+     https://github.com/aquasecurity/trivy/releases/download/v0.47.0/trivy_0.47.0_Linux-64bit.tar.gz
+   tar -xzf ~/devonboarder-offline/trivy/trivy.tar.gz -C ~/devonboarder-offline/trivy
+   ```
+
+2. Copy the `devonboarder-offline` folder to your offline machine.
+
+3. Install the binary in your `PATH`:
+
+   ```bash
+   sudo install -m 755 /path/to/devonboarder-offline/trivy/trivy /usr/local/bin/trivy
+   ```
+
+Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yaml`.
