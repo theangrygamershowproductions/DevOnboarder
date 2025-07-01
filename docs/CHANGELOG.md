@@ -35,6 +35,7 @@ All notable changes to this project will be recorded in this file.
   `frontend/README.md` for details.
 - Clarified `frontend/README.md` to install dependencies with `pnpm` or `npm`, commit the lockfile, and run `npm run dev`.
 - Added `docs/offline-setup.md` explaining how to install dependencies without internet access and linked it from the onboarding docs.
+- Extended the offline setup guide with steps for caching and installing npm packages in `bot/`.
 - Added `docs/troubleshooting.md` summarizing setup and CI problems and linked it from the docs README.
 - Added a module-level docstring to `src/devonboarder/cli.py` describing CLI usage.
 - Added a "Project Statement" section to the README highlighting the project's purpose.
