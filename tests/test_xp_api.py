@@ -3,7 +3,7 @@ import os
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 
-from devonboarder.xp_api import create_app
+from xp.api import create_app
 from devonboarder import auth_service
 from fastapi.testclient import TestClient
 from fastapi.middleware.cors import CORSMiddleware

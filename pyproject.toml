@@ -26,7 +26,7 @@ dependencies = [
 [project.scripts]
 devonboarder = "devonboarder.cli:main"
 devonboarder-server = "devonboarder.server:main"
-devonboarder-api = "devonboarder.xp_api:main"
+devonboarder-api = "xp.api:main"
 devonboarder-auth = "devonboarder.auth_service:main"
 
 [build-system]
