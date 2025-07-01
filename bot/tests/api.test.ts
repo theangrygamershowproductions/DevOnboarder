@@ -3,10 +3,12 @@ import {
   getUserContributions,
   getOnboardingStatus,
 } from '../src/api';
-import fetch from 'node-fetch';
+const originalFetch = global.fetch;
+const mockedFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 
-jest.mock('node-fetch');
-const mockedFetch = fetch as jest.MockedFunction<typeof fetch>;
+beforeEach(() => {
+  global.fetch = mockedFetch;
+});
 
 function mockResponse(data: unknown) {
   return Promise.resolve({
@@ -18,6 +20,7 @@ function mockResponse(data: unknown) {
 
 afterEach(() => {
   mockedFetch.mockReset();
+  global.fetch = originalFetch;
   delete process.env.BOT_JWT;
   jest.restoreAllMocks();
 });
