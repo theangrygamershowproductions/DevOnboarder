@@ -3,7 +3,9 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
 - Clarified README instructions to stop the server with Ctrl+C.
+- Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 
 - Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
 
@@ -336,6 +338,7 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
 - Improved CI failure issue detection to search titles for the current commit SHA.
+- Added `DISCORD_API_TIMEOUT` environment variable and enforced HTTP timeouts when contacting Discord APIs.
 
 ## [0.1.0] - 2025-06-14
 
