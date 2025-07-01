@@ -334,6 +334,8 @@ All notable changes to this project will be recorded in this file.
 - Updated `Codex_Contributor_Dashboard.md` to mark the frontend module in progress.
 - Planned feedback dashboard with backend API and React UI as described in `docs/prd/feedback-dashboard.md`.
 
+- CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
+
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
