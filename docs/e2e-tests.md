@@ -33,6 +33,15 @@ These tests exercise the OAuth login flow and assume the dev services are runnin
 
    This uses `@axe-core/playwright` to report any accessibility violations.
 
+5. Measure performance with Lighthouse:
+
+   ```bash
+   npm run perf
+   ```
+
+   This audits the optimized build with `@lhci/cli`. CI uploads the resulting
+   HTML reports from `frontend/lhci-report/` as workflow artifacts.
+
    The tests read the auth service URL from the `AUTH_URL` environment variable,
    defaulting to `http://localhost:8002` when unset.
 
