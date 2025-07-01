@@ -37,6 +37,16 @@ ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 
+
+def _get_cors_origins() -> list[str]:
+    """Return allowed CORS origins from the environment."""
+    origins = os.getenv("CORS_ALLOW_ORIGINS")
+    if origins:
+        return [o.strip() for o in origins.split(",") if o.strip()]
+    if os.getenv("APP_ENV") == "development":
+        return ["*"]
+    return []
+
 CONTRIBUTION_XP = 50
 
 Base = declarative_base()
@@ -338,6 +348,7 @@ def create_app() -> FastAPI:
         init_db()
 
     app = FastAPI()
+    cors_origins = _get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
         """Add basic security headers to all responses."""
@@ -345,12 +356,14 @@ def create_app() -> FastAPI:
         async def dispatch(self, request, call_next):  # type: ignore[override]
             resp = await call_next(request)
             resp.headers.setdefault("X-Content-Type-Options", "nosniff")
-            resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+            resp.headers.setdefault(
+                "Access-Control-Allow-Origin", cors_origins[0] if cors_origins else "*"
+            )
             return resp
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=cors_origins,
         allow_methods=["*"],
         allow_headers=["*"],
     )
