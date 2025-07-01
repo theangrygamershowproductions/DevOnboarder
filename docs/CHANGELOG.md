@@ -362,6 +362,7 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
 - Improved CI failure issue detection to search titles for the current commit SHA.
+- CI workflow now closes any open CI failure issue for the current commit by searching titles rather than using artifacts.
 - Added `DISCORD_API_TIMEOUT` environment variable and enforced HTTP timeouts when contacting Discord APIs.
 - Added `license = {text = "MIT"}` to `pyproject.toml`.
 - Dependabot now monitors `/frontend` and `/bot` for npm updates.

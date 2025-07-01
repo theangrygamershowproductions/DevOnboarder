@@ -237,26 +237,13 @@ jobs:
               with:
                   name: ci-failure-issue
                   path: ci_failure_issue.txt
-            - name: Download CI failure issue artifact
-              if: success()
-              uses: actions/download-artifact@v4
-              with:
-                  name: ci-failure-issue
-                  path: .
-                  if-no-files-found: ignore
-            - name: Set CI failure issue env var
-              if: success()
-              run: |
-                  if [ -f ci_failure_issue.txt ]; then
-                      echo "CI_FAILURE_ISSUE_NUMBER=$(cat ci_failure_issue.txt)" >> "$GITHUB_ENV"
-                  fi
-            - name: Comment on CI failure issue
-              if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
-              run: gh issue comment ${{ env.CI_FAILURE_ISSUE_NUMBER }} --body "CI run ${{ github.run_id }} for `${{ github.sha }}` succeeded. Closing this issue."
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Close CI failure issue
-              if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
-              run: gh issue close ${{ env.CI_FAILURE_ISSUE_NUMBER }}
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              - name: Close CI failure issue
+                if: success()
+                run: |
+                    ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
+                    if [ -n "$ISSUE" ]; then
+                        gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} for \`${{ github.sha }}\` succeeded. Closing this issue."
+                        gh issue close "$ISSUE"
+                    fi
+                env:
+                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
