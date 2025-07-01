@@ -15,6 +15,7 @@ when working with those packages directly.
 - `LOG_LEVEL` &ndash; Python logging level (`INFO`, `DEBUG`, etc.).
 - `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
 - `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
+- `CORS_ALLOW_ORIGINS` &ndash; comma-separated list of allowed CORS origins. Defaults to `*` in development.
 
 ## Feature flags
 

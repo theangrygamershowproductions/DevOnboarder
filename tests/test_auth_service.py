@@ -6,6 +6,7 @@ os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
+from fastapi.middleware.cors import CORSMiddleware
 from utils import roles as roles_utils
 from jose import jwt
 import pytest
@@ -365,7 +366,7 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    def fake_post(url: str, data: dict, headers: dict):
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         assert url.endswith("/token")
         assert data["code"] == "abc"
         return StubResponse(200, {"access_token": "tok"})
@@ -404,7 +405,7 @@ def test_oauth_callback_updates_existing_user(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
-    def fake_post(url: str, data: dict, headers: dict):
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         return StubResponse(200, {"access_token": data["code"]})
 
     monkeypatch.setattr(httpx, "post", fake_post)
@@ -472,3 +473,46 @@ def test_expired_token_decode_fails(monkeypatch):
             algorithms=[auth_service.ALGORITHM],
             options={"verify_exp": True},
         )
+
+
+def test_discord_callback_timeout(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    def raise_timeout(*args, **kwargs):
+        raise httpx.TimeoutException("timeout")
+
+    monkeypatch.setattr(httpx, "post", raise_timeout)
+
+    resp = client.get("/login/discord/callback?code=abc")
+    assert resp.status_code == 504
+    assert resp.json()["detail"] == "Discord API timeout"
+
+
+def test_get_current_user_timeout(monkeypatch):
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    client.post("/api/register", json={"username": "t", "password": "pw"})
+    token = _get_token(client, "t", "pw")
+
+    def raise_roles(*args, **kwargs):
+        raise httpx.TimeoutException("timeout")
+
+    monkeypatch.setattr(auth_service, "get_user_roles", raise_roles)
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {"id": "1", "username": "t", "avatar": None},
+    )
+
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 504
+    assert resp.json()["detail"] == "Discord API timeout"
+
+
+def test_cors_allow_origins(monkeypatch):
+    monkeypatch.setenv("CORS_ALLOW_ORIGINS", "https://a.com,https://b.com")
+    app = auth_service.create_app()
+    cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
+    assert cors.kwargs["allow_origins"] == ["https://a.com", "https://b.com"]
