@@ -20,6 +20,5 @@ cp .env.example "$ENV_FILE"
 write_env "JWT_SECRET_KEY" "$(openssl rand -hex 32)"
 write_env "DISCORD_CLIENT_SECRET" "$(openssl rand -base64 24 | tr '/+' '_-')"
 write_env "DISCORD_BOT_TOKEN" "$(openssl rand -hex 32)"
-write_env "API_KEY" "$(openssl rand -hex 20)"
 
 echo "✅ Generated secrets in $ENV_FILE"
