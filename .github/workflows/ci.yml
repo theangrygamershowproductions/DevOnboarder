@@ -149,10 +149,9 @@ jobs:
                       .coverage
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
-              uses: peter-evans/create-or-update-comment@v4
-              with:
-                  issue-number: ${{ github.event.pull_request.number }}
-                  body-file: coverage-summary.md
+              run: gh pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Wait for auth service before header check
               run: |
                   for i in {1..30}; do
@@ -176,21 +175,25 @@ jobs:
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
             - name: Label Codex PR
               if: github.actor == 'codex[bot]'
-              uses: actions-ecosystem/action-add-labels@v1
-              with:
-                  labels: |
-                      🚧 Codex
+              run: gh pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
               if: failure()
               run: python scripts/summarize_ci_failures.py
             - name: Create or update CI failure issue
               if: failure()
               id: ci_failure
-              uses: peter-evans/create-issue-from-file@v5
-              with:
-                  title: CI Failures for ${{ github.sha }}
-                  content-filepath: summary.md
-                  labels: ci-failure
+              run: |
+                  ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }}" --json number --jq '.[0].number')
+                  if [ -n "$ISSUE" ]; then
+                      gh issue comment "$ISSUE" --body-file summary.md
+                  else
+                      ISSUE=$(gh issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number')
+                  fi
+                  echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number
               if: failure()
               run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
@@ -215,13 +218,11 @@ jobs:
                   fi
             - name: Comment on CI failure issue
               if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
-              uses: actions-ecosystem/action-add-comment-to-issue@v1
-              with:
-                  issue-number: ${{ env.CI_FAILURE_ISSUE_NUMBER }}
-                  body: |
-                      CI run ${{ github.run_id }} for `${{ github.sha }}` succeeded. Closing this issue.
+              run: gh issue comment ${{ env.CI_FAILURE_ISSUE_NUMBER }} --body "CI run ${{ github.run_id }} for `${{ github.sha }}` succeeded. Closing this issue."
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Close CI failure issue
               if: success() && env.CI_FAILURE_ISSUE_NUMBER != ''
-              uses: actions-ecosystem/action-close-issue@v1
-              with:
-                  issue-number: ${{ env.CI_FAILURE_ISSUE_NUMBER }}
+              run: gh issue close ${{ env.CI_FAILURE_ISSUE_NUMBER }}
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
