@@ -15,6 +15,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
+            - name: Install GitHub CLI
+              run: |
+                  curl -fsSL https://github.com/cli/cli/releases/latest/download/gh-install.sh | sudo bash
             - name: Set up Python
               uses: actions/setup-python@v4
               with:

@@ -10,6 +10,8 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 
 Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI:
 
+> **Note**: These examples require GitHub CLI v2 or later for the `--json` and `--jq` flags.
+
 ```bash
 export GH_TOKEN=your_personal_token
 for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
