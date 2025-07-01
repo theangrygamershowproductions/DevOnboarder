@@ -107,12 +107,21 @@ jobs:
               working-directory: frontend
               env:
                   AUTH_URL: http://localhost:8002
+            - name: Run accessibility tests
+              run: npm run test:a11y 2>&1 | tee a11y.log
+              working-directory: frontend
             - name: Upload playwright log
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: playwright-log
                   path: frontend/playwright.log
+            - name: Upload accessibility log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: a11y-log
+                  path: frontend/a11y.log
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
