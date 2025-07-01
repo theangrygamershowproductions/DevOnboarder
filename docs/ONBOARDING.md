@@ -13,6 +13,7 @@ This page collects helpful tips for new contributors. Follow [docs/README.md](RE
   on any Pull Request or GitHub Issue.
 * **What this does:** Codex will analyze CI logs, code quality, test coverage, lint results, and documentation checks. It will reply with a **detailed checklist** of all issues it finds—each with actionable tasks you can assign, discuss, or address.
 * **Note:** You must resolve all critical issues before merging, per project policy.
+* The CI workflow enforces a minimum of **95% code coverage** across the frontend, bot, and backend projects. Pull requests will fail if any suite drops below this threshold.
 
 ### Sample Codex QA Response
 
