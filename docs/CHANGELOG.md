@@ -335,6 +335,7 @@ All notable changes to this project will be recorded in this file.
 - Planned feedback dashboard with backend API and React UI as described in `docs/prd/feedback-dashboard.md`.
 
 - CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
+- Improved CI failure issue detection to search titles for the current commit SHA.
 
 ## [0.1.0] - 2025-06-14
 
