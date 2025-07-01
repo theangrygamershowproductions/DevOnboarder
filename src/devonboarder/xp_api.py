@@ -4,8 +4,19 @@ from fastapi import APIRouter, FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
+import os
 
 from devonboarder import auth_service
+
+
+def _get_cors_origins() -> list[str]:
+    """Return allowed CORS origins from the environment."""
+    origins = os.getenv("CORS_ALLOW_ORIGINS")
+    if origins:
+        return [o.strip() for o in origins.split(",") if o.strip()]
+    if os.getenv("APP_ENV") == "development":
+        return ["*"]
+    return []
 
 router = APIRouter()
 
@@ -56,17 +67,20 @@ def contribute(
 def create_app() -> FastAPI:
     """Create a FastAPI application with the XP router."""
     app = FastAPI()
+    cors_origins = _get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):  # type: ignore[override]
             resp = await call_next(request)
             resp.headers.setdefault("X-Content-Type-Options", "nosniff")
-            resp.headers.setdefault("Access-Control-Allow-Origin", "*")
+            resp.headers.setdefault(
+                "Access-Control-Allow-Origin", cors_origins[0] if cors_origins else "*"
+            )
             return resp
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=cors_origins,
         allow_methods=["*"],
         allow_headers=["*"],
     )
