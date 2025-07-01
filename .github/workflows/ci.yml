@@ -87,6 +87,9 @@ jobs:
             - name: Install frontend dependencies
               run: npm ci
               working-directory: frontend
+            - name: Run frontend lint
+              run: npm run lint
+              working-directory: frontend
             - name: Run frontend tests with coverage
               run: npm run coverage --if-present 2>&1 | tee vitest.log
               working-directory: frontend
@@ -114,6 +117,9 @@ jobs:
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
               run: npm ci
+              working-directory: bot
+            - name: Run bot lint
+              run: npm run lint
               working-directory: bot
             - name: Run bot tests with coverage
               run: npm run coverage 2>&1 | tee jest.log
