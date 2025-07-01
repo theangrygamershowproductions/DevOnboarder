@@ -6,6 +6,7 @@ os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
 from devonboarder.xp_api import create_app
 from devonboarder import auth_service
 from fastapi.testclient import TestClient
+from fastapi.middleware.cors import CORSMiddleware
 
 
 def setup_function(function):
@@ -80,3 +81,10 @@ def test_contribute_endpoint_awards_xp():
 
     resp = client.get("/api/user/level", params={"username": "bob"})
     assert resp.json() == {"level": 2}
+
+
+def test_cors_allow_origins(monkeypatch):
+    monkeypatch.setenv("CORS_ALLOW_ORIGINS", "https://a.com,https://b.com")
+    app = create_app()
+    cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
+    assert cors.kwargs["allow_origins"] == ["https://a.com", "https://b.com"]
