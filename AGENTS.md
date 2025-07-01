@@ -24,6 +24,46 @@ This repository follows the DevOnboarder protocol. Key points:
 - Keep pull requests focused and small.
 - Update documentation and the changelog with each change.
 
+## Commit Message Guidelines
+
+All contributors **must** follow these standards for commit messages:
+
+- Use the **imperative mood** (describe what this commit does, not what you did).
+- Be descriptive and concise; every commit should make sense when read in isolation.
+- Avoid non-descriptive messages like "update," "fix," "misc," or "Applying previous commit."
+- Reference related issues or PRs when appropriate.
+
+### Format
+
+```plaintext
+<type>(<scope>): <subject>
+```
+
+- **type**: One of FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE.
+- **scope**: The part of the codebase affected (optional, but recommended).
+- **subject**: Brief, imperative summary of the change.
+
+#### Types
+
+- **FEAT**: New features
+- **FIX**: Bug/security fixes
+- **DOCS**: Documentation
+- **STYLE**: Formatting/linting
+- **REFACTOR**: Structural changes
+- **TEST**: Tests
+- **CHORE**: Tooling, config, CI/CD
+
+#### Example
+
+```plaintext
+docs: Document built-in GITHUB_TOKEN usage for CI failure issues
+
+- Clarifies workflow token use in README
+- Updates changelog with policy details
+```
+
+See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under [docs/git/](./docs/git/) for additional Git best practices.
+
 ## Potato Ignore Policy
 
 "Potato" and `Potato.md` must remain in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
