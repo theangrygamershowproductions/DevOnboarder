@@ -326,6 +326,8 @@ All notable changes to this project will be recorded in this file.
 - Playwright tests now read `AUTH_URL` to locate the auth service. Documented the
   variable in `docs/e2e-tests.md` and set it in CI.
 
+- Fixed bullet formatting in `docs/pull_request_template.md`.
+
 - Fixed spacing in the Git guidelines pre-PR checklist.
 - Updated `Codex_Contributor_Dashboard.md` to mark the frontend module in progress.
 - Planned feedback dashboard with backend API and React UI as described in `docs/prd/feedback-dashboard.md`.
