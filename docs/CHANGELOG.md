@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
 
 - Clarified README instructions to stop the server with Ctrl+C.
 - Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
