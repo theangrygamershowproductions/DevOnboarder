@@ -22,7 +22,7 @@ If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-set
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
 6. Run `bash scripts/run_migrations.sh` to apply the initial database migration.
-7. Alternatively, run `devonboarder-server` to start the app without Docker. Stop it with Ctrl+C.
+7. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
 8. Visit `http://localhost:8000` to see the greeting server.
 9. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
