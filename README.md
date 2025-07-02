@@ -126,7 +126,7 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 ## Quickstart
 
-1. Install Docker, Docker Compose, Node.js 22, and Python 3.13.
+1. Install Docker, Docker Compose, Node.js 20, and Python 3.12.
 2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
 3. Copy each `*.env.example` to `.env` inside its service directory.
 4. Build the containers with `make deps` and start them with `make up`.
