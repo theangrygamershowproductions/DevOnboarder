@@ -13,8 +13,9 @@ jobs:
                   which gh
                   gh --version
             - run: |
-                  for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
-                    gh issue close "$n" --reason completed
+                  gh_bin=$(which gh)
+                  for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
+                    "$gh_bin" issue close "$n" --reason completed
                   done
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

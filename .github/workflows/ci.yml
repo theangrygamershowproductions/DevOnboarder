@@ -191,7 +191,9 @@ jobs:
                       .coverage
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
-              run: gh pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
+              run: |
+                  gh_bin=$(which gh)
+                  "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Wait for auth service before header check
@@ -219,7 +221,9 @@ jobs:
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
             - name: Label Codex PR
               if: github.actor == 'codex[bot]'
-              run: gh pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"
+              run: |
+                  gh_bin=$(which gh)
+                  "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
@@ -229,11 +233,12 @@ jobs:
               if: failure()
               id: ci_failure
               run: |
-                  ISSUE=$(gh issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
+                  gh_bin=$(which gh)
+                  ISSUE=$($gh_bin issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
                   if [ -n "$ISSUE" ]; then
-                      gh issue comment "$ISSUE" --body-file summary.md
+                      "$gh_bin" issue comment "$ISSUE" --body-file summary.md
                   else
-                      ISSUE=$(gh issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number')
+                      ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number')
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
               env:
@@ -250,10 +255,11 @@ jobs:
             - name: Close CI failure issue
               if: success()
               run: |
-                  ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
+                  gh_bin=$(which gh)
+                  ISSUES=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number')
                   for ISSUE in $ISSUES; do
-                    gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
-                    gh issue close "$ISSUE"
+                    "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
+                    "$gh_bin" issue close "$ISSUE"
                   done
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
