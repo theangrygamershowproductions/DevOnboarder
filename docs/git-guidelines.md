@@ -49,6 +49,10 @@ git pull --rebase origin main
 Pull requests are merged using **Squash and merge** to keep history linear.
 Delete the feature branch after the merge completes.
 
+## Commit History Policy
+
+Once commits are pushed to a shared branch, avoid rewriting history. Do not run `git commit --amend`, `git rebase -i`, or `git push --force`. If you need to clarify a message, create a follow-up commit or add details in the pull request description.
+
 ## Pre-PR Checklist
 
  - Before opening a pull request, make sure to:
