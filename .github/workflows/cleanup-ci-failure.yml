@@ -25,8 +25,12 @@ jobs:
                       sudo apt-get update
                       sudo apt-get install -y gh
                   fi
+            - name: Ensure latest gh is in PATH
+              run: echo "/usr/local/bin" >> "$GITHUB_PATH"
             - name: Show gh version
-              run: gh --version
+              run: |
+                  which gh
+                  gh --version
             - run: |
                   for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
                     gh issue close "$n" --reason completed
