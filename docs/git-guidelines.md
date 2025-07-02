@@ -69,7 +69,7 @@ pip install -r requirements-dev.txt
 
 ```bash
 ruff check .
-pytest -q
+pytest --cov=src --cov-fail-under=95
 ```
 - Run documentation checks with `./scripts/check_docs.sh`.
   These use **Vale** and **LanguageTool** and require network access to
