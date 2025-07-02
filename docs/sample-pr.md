@@ -12,7 +12,7 @@ This guide demonstrates a minimal documentation update using the project workflo
    pip install -e .
    pip install -r requirements-dev.txt
    ruff check .
-   pytest -q
+   pytest --cov=src --cov-fail-under=95
    ```
 4. Commit your work and open a pull request using `docs/pull_request_template.md`.
 
