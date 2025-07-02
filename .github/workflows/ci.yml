@@ -255,10 +255,10 @@ jobs:
             - name: Close CI failure issue
               if: success()
               run: |
-                    ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
-                    for ISSUE in $ISSUES; do
-                      gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
-                      gh issue close "$ISSUE"
-                    done
+                  ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
+                  for ISSUE in $ISSUES; do
+                    gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
+                    gh issue close "$ISSUE"
+                  done
               env:
-                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
