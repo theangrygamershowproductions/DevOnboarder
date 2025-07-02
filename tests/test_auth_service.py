@@ -516,3 +516,22 @@ def test_cors_allow_origins(monkeypatch):
     app = auth_service.create_app()
     cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
     assert cors.kwargs["allow_origins"] == ["https://a.com", "https://b.com"]
+
+
+def test_default_cors_in_development(monkeypatch):
+    monkeypatch.delenv("CORS_ALLOW_ORIGINS", raising=False)
+    monkeypatch.setenv("APP_ENV", "development")
+    importlib.reload(auth_service)
+    app = auth_service.create_app()
+    cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
+    assert cors.kwargs["allow_origins"] == ["*"]
+    monkeypatch.delenv("APP_ENV", raising=False)
+    importlib.reload(auth_service)
+
+
+def test_health_endpoint():
+    app = auth_service.create_app()
+    client = TestClient(app)
+    resp = client.get("/health")
+    assert resp.status_code == 200
+    assert resp.json() == {"status": "ok"}
