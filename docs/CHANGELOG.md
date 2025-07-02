@@ -9,6 +9,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now closes every open `ci-failure` issue once the pipeline succeeds.
 - Added a reusable `.github/actions/setup-gh-cli` action for installing the GitHub CLI.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
+- Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
 
