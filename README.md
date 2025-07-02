@@ -106,11 +106,15 @@ All workflows install the GitHub CLI via the reusable `.github/actions/setup-gh-
 
 ## Codex Runs
 
-Codex uses its own compose file. To invoke it manually:
+Codex uses its own compose file. Export your credentials and start the runner:
 
 ```bash
-docker compose -f docker-compose.codex.yml up
+GITHUB_TOKEN=<token> OPENAI_API_KEY=<key> \
+  docker compose -f docker-compose.codex.yml up
 ```
+
+The container reads `codex.ci.yml` and `codex.automation.bundle.json` from the
+project root.
 
 ## Production Deployment
 
