@@ -4,20 +4,10 @@ from fastapi import APIRouter, FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
-import os
+
+from utils.cors import _get_cors_origins
 
 from devonboarder import auth_service
-
-
-def _get_cors_origins() -> list[str]:
-    """Return allowed CORS origins from the environment."""
-    origins = os.getenv("CORS_ALLOW_ORIGINS")
-    if origins:
-        return [o.strip() for o in origins.split(",") if o.strip()]
-    if os.getenv("APP_ENV") == "development":
-        return ["*"]
-    return []
-
 router = APIRouter()
 
 
