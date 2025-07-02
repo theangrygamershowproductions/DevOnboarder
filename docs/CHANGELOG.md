@@ -8,9 +8,8 @@ All notable changes to this project will be recorded in this file.
 - Documented manual cleanup of `ci-failure` issues in `docs/ci-failure-issues.md`.
 - CI workflow now closes every open `ci-failure` issue once the pipeline succeeds.
 - Replaced `gh-install.sh` with a cross-platform GitHub CLI installation script.
-- CI workflows install the latest GitHub CLI using a cross-platform script.
-- CI workflows now install GitHub CLI from cli.github.com and log the version.
-- CI workflows ensure the latest GitHub CLI is used by adding /usr/local/bin to PATH.
+- CI workflows install the latest GitHub CLI from cli.github.com and log the version.
+- They update PATH via `$GITHUB_PATH` so `/usr/local/bin` takes precedence.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
 
 - Clarified README instructions to stop the server with Ctrl+C.
