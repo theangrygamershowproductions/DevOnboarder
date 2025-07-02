@@ -3,7 +3,7 @@ project: "DevOnboarder"
 phase: "MVP"
 status: "active"
 version: "v0.3.0"
-updated: "21 June 2025 08:25 (EST)"
+updated: "04 July 2025 10:00 (EST)"
 ---
 
 # DevOnboarder – Codex Execution Plan
@@ -56,6 +56,16 @@ This document defines the roadmap and execution logic for Codex tasks during the
   - Show level, XP, onboarding state
   - Display “Start Onboarding” if phase is `intro`
   - Show Discord username/avatar from JWT payload
+
+---
+
+## 📆 Upcoming Milestones
+
+| Date       | Task ID         | Target Version |
+| ---------- | --------------- | -------------- |
+| 2025-07-05 | integration-001 | v0.4.0 |
+| 2025-07-12 | feedback-001    | v0.5.0 |
+| 2025-07-19 | feedback-002    | v0.5.0 |
 
 ---
 
