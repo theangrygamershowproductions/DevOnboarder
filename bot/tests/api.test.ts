@@ -65,6 +65,15 @@ test('token is read from BOT_JWT env var', async () => {
   );
 });
 
+test('no auth header when no token provided', async () => {
+  mockedFetch.mockResolvedValue(mockResponse({ level: 1 }));
+  await getUserLevel('harry');
+  expect(mockedFetch).toHaveBeenCalledWith(
+    expect.stringContaining('/api/user/level?username=harry'),
+    expect.objectContaining({ headers: {} })
+  );
+});
+
 test('errors are thrown for non-ok responses', async () => {
   const jsonMock = jest.fn();
   jest.spyOn(console, 'error').mockImplementation(() => {});
