@@ -137,8 +137,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    pip install -e .  # or `pip install -r requirements.txt` if present
    pip install -r requirements-dev.txt
    ruff check .
-   pytest -q
-   npm test --prefix bot
+   pytest --cov=src --cov-fail-under=95
+   npm run coverage --prefix bot
    ```
 7. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
 
