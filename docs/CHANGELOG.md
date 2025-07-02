@@ -390,6 +390,7 @@ All notable changes to this project will be recorded in this file.
 - Verified `.env.dev` matches `.env.example` and added a warning in
   `scripts/bootstrap.sh` when variables are missing. Marked the env var audit
   task complete in `docs/Agents.md`.
+- Updated `.nvmrc` and CI workflow to use Node 20.
 
 ## [0.1.0] - 2025-06-14
 
