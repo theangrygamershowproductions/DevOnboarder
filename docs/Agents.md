@@ -196,7 +196,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 - [x] Implement `/health` in Auth
 - [x] Add Docker healthcheck to compose
 - [x] CI workflow update to poll `/health`
-- [ ] Env var audit/cleanup in `.env.dev`
+- [x] Env var audit/cleanup in `.env.dev`
 - [ ] Doc/Agents.md/Changelog update
 - [ ] Retire obsolete scripts
 
