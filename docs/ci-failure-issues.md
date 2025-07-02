@@ -11,6 +11,7 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI:
 
 > **Note**: These examples require GitHub CLI v2 or later for the `--json` and `--jq` flags.
+> Run `./scripts/install_gh_cli.sh` to install the CLI if it isn't already available.
 
 ```bash
 export GH_TOKEN=your_personal_token
