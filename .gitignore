@@ -23,6 +23,7 @@ venv/
 node_modules/
 dist/
 coverage/
+.coverage
 .nyc_output/
 pnpm-lock.yaml
 
