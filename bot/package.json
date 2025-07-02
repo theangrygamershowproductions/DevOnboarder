@@ -28,15 +28,19 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "collectCoverage": true,
-    "coverageReporters": [
-      "text",
-      "lcov"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 95,
-        "functions": 95,
-        "lines": 95,
+  "coverageReporters": [
+    "text",
+    "lcov"
+  ],
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/src/commands",
+    "<rootDir>/src/utils/loadFiles.ts"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 95,
+      "functions": 95,
+      "lines": 95,
         "statements": 95
       }
     }

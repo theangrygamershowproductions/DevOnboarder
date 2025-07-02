@@ -37,3 +37,15 @@ test('interaction handler executes commands loaded from disk', async () => {
   await execute(contribute, commands);
   expect(contribute.reply).toHaveBeenCalledWith('Recorded contribution: fix bug');
 });
+
+test('returns when interaction is not a chat command', async () => {
+  const interaction = { isChatInputCommand: () => false, reply: jest.fn() } as any;
+  await execute(interaction, new Map() as any);
+  expect(interaction.reply).not.toHaveBeenCalled();
+});
+
+test('returns when command is missing', async () => {
+  const interaction = makeInteraction('unknown');
+  await execute(interaction, new Map() as any);
+  expect(interaction.reply).not.toHaveBeenCalled();
+});
