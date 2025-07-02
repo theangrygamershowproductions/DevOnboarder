@@ -14,6 +14,8 @@ All notable changes to this project will be recorded in this file.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
 
+- Updated `docker-compose.codex.yml` with the Codex runner image and documented manual invocation under "Codex Runs".
+
 - Clarified README instructions to stop the server with Ctrl+C.
 - Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
   documented `CORS_ALLOW_ORIGINS` and `DISCORD_REDIRECT_URI` in `docs/Agents.md`
