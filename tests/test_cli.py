@@ -1,4 +1,5 @@
 import sys
+import runpy
 
 from devonboarder.cli import main
 
@@ -17,3 +18,10 @@ def test_cli_prints_default_greeting(capsys, monkeypatch):
     main()
     captured = capsys.readouterr()
     assert captured.out.strip() == "Hello, World!"
+
+
+def test_cli_invocation_via_module(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["devonboarder", "Bot"])
+    runpy.run_module("devonboarder.cli", run_name="__main__")
+    captured = capsys.readouterr()
+    assert captured.out.strip() == "Hello, Bot!"
