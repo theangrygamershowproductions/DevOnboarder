@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 88
-target-version = "py313"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F"]
@@ -11,7 +11,7 @@ version = "0.1.0"
 description = "Sample trunk-based workflow project"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "httpx<0.29",
     "fastapi",
