@@ -8,6 +8,7 @@ from fastapi.responses import RedirectResponse
 
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
+from utils.cors import _get_cors_origins
 from urllib.parse import urlencode
 import httpx
 from sqlalchemy import (
@@ -37,15 +38,6 @@ ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 
-
-def _get_cors_origins() -> list[str]:
-    """Return allowed CORS origins from the environment."""
-    origins = os.getenv("CORS_ALLOW_ORIGINS")
-    if origins:
-        return [o.strip() for o in origins.split(",") if o.strip()]
-    if os.getenv("APP_ENV") == "development":
-        return ["*"]
-    return []
 
 CONTRIBUTION_XP = 50
 

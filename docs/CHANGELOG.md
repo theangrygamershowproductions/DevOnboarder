@@ -17,6 +17,7 @@ All notable changes to this project will be recorded in this file.
 - Updated `scripts/run_tests.sh` to run `pytest --cov=src --cov-fail-under=95`
   and invoke `npm run coverage` for the bot and frontend packages.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
+- Extracted CORS helper to `utils.cors` and reused in auth and XP services.
 
 - Updated `docker-compose.codex.yml` with the Codex runner image and documented manual invocation under "Codex Runs".
 
