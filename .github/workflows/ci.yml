@@ -16,8 +16,17 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Install GitHub CLI
+              shell: bash
               run: |
-                  curl -fsSL https://github.com/cli/cli/releases/latest/download/gh-install.sh | sudo bash
+                  set -e
+                  if [ "$RUNNER_OS" = "Windows" ]; then
+                      choco install gh --no-progress --yes
+                  elif [ "$RUNNER_OS" = "macOS" ]; then
+                      brew install gh
+                  else
+                      sudo apt-get update
+                      sudo apt-get install -y --no-install-recommends gh
+                  fi
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -246,10 +255,10 @@ jobs:
             - name: Close CI failure issue
               if: success()
               run: |
-                    ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
-                    for ISSUE in $ISSUES; do
-                      gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
-                      gh issue close "$ISSUE"
-                    done
+                  ISSUES=$(gh issue list --label ci-failure --state open --json number --jq '.[].number')
+                  for ISSUE in $ISSUES; do
+                    gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
+                    gh issue close "$ISSUE"
+                  done
               env:
-                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
