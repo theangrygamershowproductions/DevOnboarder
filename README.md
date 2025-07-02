@@ -140,6 +140,9 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
+## Found DevOnboarder useful?
+If this project helped speed up onboarding, save time, or avoid headaches, please [⭐ star the repo](#) or [open an issue](#) with your feedback. Your input directly shapes future improvements.
+
 ## License
 
 This project is licensed under the MIT License. See LICENSE.md.
