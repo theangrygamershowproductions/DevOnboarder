@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Archived `languagetool_check.py` to `archive/` and removed its invocation from `scripts/check_docs.sh`.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
