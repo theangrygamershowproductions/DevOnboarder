@@ -97,6 +97,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; quick fixes for setup problems and failing CI jobs.
 - [CI failure issue management](ci-failure-issues.md)
   &ndash; how automatic cleanup works and how to close old issues.
+- [Automatic Codex issue closing](codex-issue-autoclose.md)
+  &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
