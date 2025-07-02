@@ -344,8 +344,8 @@ All notable changes to this project will be recorded in this file.
 
 - Updated development tooling to stable versions and pinned the Vale download
   tag in CI for reproducibility.
-- Updated Node to 22 and Python to 3.13 across Dockerfiles, compose files, CI, and documentation.
-- Required Python 3.13 in `pyproject.toml` and ruff configuration.
+- Updated Node to 20 and Python to 3.12 across Dockerfiles, compose files, CI, and documentation.
+- Required Python 3.12 in `pyproject.toml` and ruff configuration.
 - Fixed the Vale download path in CI to resolve a 404 error.
 - Documented batch doc fixes with `codespell` and Prettier in the doc-quality onboarding guide.
 - Added a reminder in `docs/merge-checklist.md` to keep `scripts/check_docs.sh` passing.
