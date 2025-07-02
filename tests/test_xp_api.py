@@ -88,3 +88,29 @@ def test_cors_allow_origins(monkeypatch):
     app = create_app()
     cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
     assert cors.kwargs["allow_origins"] == ["https://a.com", "https://b.com"]
+
+
+def test_default_cors_dev(monkeypatch):
+    monkeypatch.delenv("CORS_ALLOW_ORIGINS", raising=False)
+    monkeypatch.setenv("APP_ENV", "development")
+    app = create_app()
+    cors = next(m for m in app.user_middleware if m.cls is CORSMiddleware)
+    assert cors.kwargs["allow_origins"] == ["*"]
+
+
+def test_health_and_security_headers():
+    app = create_app()
+    client = TestClient(app)
+    resp = client.get("/health")
+    assert resp.json() == {"status": "ok"}
+    assert resp.headers["X-Content-Type-Options"] == "nosniff"
+    assert resp.headers["Access-Control-Allow-Origin"] == "*"
+
+
+def test_status_and_level_user_not_found():
+    app = create_app()
+    client = TestClient(app)
+    resp = client.get("/api/user/onboarding-status", params={"username": "x"})
+    assert resp.status_code == 404
+    resp = client.get("/api/user/level", params={"username": "x"})
+    assert resp.status_code == 404
