@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added `close-codex-issues.yml` workflow to automatically close Codex-created issues referenced by `Fixes #<issue>` after a pull request merges and documented it in `docs/README.md`.
 - Archived `languagetool_check.py` to `archive/` and removed its invocation from `scripts/check_docs.sh`.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
