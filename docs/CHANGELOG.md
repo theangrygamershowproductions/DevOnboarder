@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
 - Documented manual cleanup of `ci-failure` issues in `docs/ci-failure-issues.md`.
