@@ -8,8 +8,17 @@ jobs:
       issues: write
     steps:
       - name: Install GitHub CLI
+        shell: bash
         run: |
-          curl -fsSL https://github.com/cli/cli/releases/latest/download/gh-install.sh | sudo bash
+          set -e
+          if [ "$RUNNER_OS" = "Windows" ]; then
+              choco install gh --no-progress --yes
+          elif [ "$RUNNER_OS" = "macOS" ]; then
+              brew install gh
+          else
+              sudo apt-get update
+              sudo apt-get install -y --no-install-recommends gh
+          fi
       - run: |
           for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
             gh issue close "$n" --reason completed
