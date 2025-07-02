@@ -16,7 +16,7 @@
     - [Add a second remote](#add-a-second-remote)
     - [Make a remote fetch-only](#make-a-remote-fetch-only)
     - [Rename a remote](#rename-a-remote)
-  - [TODO](#todo)
+  - [Maintenance Notes](#maintenance-notes)
   - [Git Commit Message SOP](#git-commit-message-sop)
     - [Purpose](#purpose)
     - [Guidelines](#guidelines)
@@ -202,13 +202,16 @@ git remote -v
 
 ---
 
-## TODO
+## Maintenance Notes
 
-- [ ] Verify `.gitignore` is accurate
-- [ ] Follow commit message SOP
-- [ ] Setup submodules when ready
-- [ ] Use Git hooks for linting and formatting
-- [ ] Reference merging and remote workflows in onboarding docs
+The following tasks are now part of our standard workflow:
+
+- `.gitignore` entries are validated by `scripts/check_potato_ignore.sh` and reviewed each release.
+- Commit messages follow the guidelines in [docs/git-guidelines.md](../git-guidelines.md).
+- Pre-commit hooks enforce linting and formatting.
+- Merging and remote management workflows are documented in [docs/git/README.md](./README.md).
+
+Submodule support will be revisited once the frontend and backend repositories stabilize.
 
 ---
 

@@ -21,6 +21,7 @@ All notable changes to this project will be recorded in this file.
 - Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 - Replaced `node-fetch` with the global `fetch` in the Discord bot and updated tests.
 - Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-config.yaml`.
+- Replaced the outdated TODO section in `docs/git/Git.md` with a "Maintenance Notes" summary.
 - Upgraded React packages to 19.1.0 and `dotenv` to 17.0.1.
 - Removed the `API_KEY` generation step from `scripts/generate-secrets.sh`.
 
