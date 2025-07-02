@@ -14,6 +14,8 @@ All notable changes to this project will be recorded in this file.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
 - Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
+- Updated `scripts/run_tests.sh` to run `pytest --cov=src --cov-fail-under=95`
+  and invoke `npm run coverage` for the bot and frontend packages.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
 
 - Updated `docker-compose.codex.yml` with the Codex runner image and documented manual invocation under "Codex Runs".

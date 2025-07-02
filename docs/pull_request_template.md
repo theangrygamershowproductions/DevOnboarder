@@ -18,7 +18,7 @@
 pip install -e .  # or `pip install -r requirements.txt` if present
 pip install -r requirements-dev.txt
 ruff check .
-pytest -q
+pytest --cov=src --cov-fail-under=95
 bash scripts/check_docs.sh
 ```
 
