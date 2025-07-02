@@ -42,10 +42,4 @@ if [ $status -ne 0 ]; then
   cat "$RESULTS_FILE"
 fi
 
-lt_status=0
-python scripts/languagetool_check.py $FILES || lt_status=$?
-if [ $lt_status -eq 2 ]; then
-  echo "::warning file=scripts/check_docs.sh,line=$LINENO::LanguageTool unavailable. Run a local server and set LANGUAGETOOL_URL."
-elif [ $lt_status -ne 0 ]; then
-  echo "::warning file=scripts/check_docs.sh,line=$LINENO::LanguageTool grammar issues found"
-fi
+echo "::notice file=scripts/check_docs.sh,line=$LINENO::LanguageTool check skipped; script archived"
