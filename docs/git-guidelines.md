@@ -78,6 +78,8 @@ pytest -q
 - Keep Prettier pinned to `v3.6.2`. Run
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
+- CI lints commit messages using `scripts/check_commit_messages.sh`.
+  Past violations do not require rewriting history.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
 - Follow the pull request template in `docs/pull_request_template.md`.
