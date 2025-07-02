@@ -385,6 +385,9 @@ All notable changes to this project will be recorded in this file.
 - Added `cleanup-ci-failure.yml` workflow to close stale `ci-failure` issues nightly and documented the job in `docs/README.md`.
 - Granted `issues: write` permission in `ci.yml` so forks can open and close CI failure issues with the built-in token.
 - Noted that new GitHub organization roles require updates to all README files.
+- Verified `.env.dev` matches `.env.example` and added a warning in
+  `scripts/bootstrap.sh` when variables are missing. Marked the env var audit
+  task complete in `docs/Agents.md`.
 
 ## [0.1.0] - 2025-06-14
 
