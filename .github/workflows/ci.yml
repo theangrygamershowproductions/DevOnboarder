@@ -15,26 +15,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
-            - name: Install GitHub CLI
-              shell: bash
-              run: |
-                  set -e
-                  if [ "$RUNNER_OS" = "Windows" ]; then
-                      choco install gh --no-progress --yes
-                  elif [ "$RUNNER_OS" = "macOS" ]; then
-                      brew install gh
-                  else
-                      sudo mkdir -p -m 0755 /etc/apt/keyrings
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg |
-                        sudo dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg
-                      sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
-                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |
-                        sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
-                      sudo apt-get update
-                      sudo apt-get install -y gh
-                  fi
-            - name: Ensure latest gh is in PATH
-              run: echo "/usr/local/bin" >> $GITHUB_PATH
+            - name: Lint commit messages
+              run: bash scripts/check_commit_messages.sh
+            - uses: ./.github/actions/setup-gh-cli
             - name: Show gh version
               run: |
                   which gh
