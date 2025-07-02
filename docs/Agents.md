@@ -197,8 +197,8 @@ Use a small loop in your workflow to wait for the auth service before running te
 - [x] Add Docker healthcheck to compose
 - [x] CI workflow update to poll `/health`
 - [x] Env var audit/cleanup in `.env.dev`
-- [ ] Doc/Agents.md/Changelog update
-- [ ] Retire obsolete scripts
+- [x] Doc/Agents.md/Changelog update
+- [x] Retire obsolete scripts
 
 ---
 
@@ -300,9 +300,10 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 | ----------- | ------- | --------- | -------------------------------------- |
 | 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
 | 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints |
+| 2 Jul 2025  | v0.3.2  | Codex     | Archived languagetool script and updated tasks |
 | 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars |
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
 
-*Last updated: 23 June 2025*
+*Last updated: 2 July 2025*
 
