@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
 - Documented manual cleanup of `ci-failure` issues in `docs/ci-failure-issues.md`.
 - CI workflow now closes every open `ci-failure` issue once the pipeline succeeds.
+- Pytest failure annotations run only when the results file exists to avoid grep errors.
 - Added a reusable `.github/actions/setup-gh-cli` action for installing the GitHub CLI.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
 - Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
