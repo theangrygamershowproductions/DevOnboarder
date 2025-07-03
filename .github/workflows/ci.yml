@@ -86,19 +86,21 @@ jobs:
                   echo "Auth service failed to start"
                   docker compose -f docker-compose.ci.yaml logs auth --tail=50
                   exit 1
+            - name: Prepare test-results directory
+              run: mkdir -p test-results
             - name: Run tests with coverage
-              run: pytest --cov=src --cov-fail-under=95 --junitxml=pytest-results.xml
+              run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
             - name: Upload pytest results
-              if: always()
+              if: success() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
               with:
                   name: pytest-results
-                  path: pytest-results.xml
+                  path: test-results/pytest-results.xml
             - name: Annotate pytest failures
               if: failure()
               run: |
-                  line=$(grep -n -m 1 '<failure' pytest-results.xml | cut -d: -f1)
-                  echo "::error file=pytest-results.xml,line=${line}::Test failures detected"
+                  line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
+                  echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
             - name: Install frontend dependencies
               run: npm ci
               working-directory: frontend
