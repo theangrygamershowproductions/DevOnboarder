@@ -66,13 +66,13 @@ bash scripts/check_docs.sh
 
 This generates `vale-results.json` for machine-readable output, which CI stores as an artifact.
 
-CI also saves `pytest-results.xml` when running the test suite. You can download
+CI also saves `test-results/pytest-results.xml` when running the test suite. You can download
 both artifacts from the **Artifacts** section of each GitHub Actions run to
 review Vale output and debug failing tests.
 
 This will fail if Vale is missing, run both Vale and LanguageTool, and print issues by file, line, and column.
 
-CI also uploads `pytest-results.xml` when the test suite runs in GitHub Actions. Visit a workflow run, open the **Artifacts** drop-down, and download the file to review which tests failed and why.
+CI also uploads `test-results/pytest-results.xml` when the test suite runs in GitHub Actions. Visit a workflow run, open the **Artifacts** drop-down, and download the file to review which tests failed and why.
 
 ---
 
