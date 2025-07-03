@@ -415,3 +415,4 @@ All notable changes to this project will be recorded in this file.
 - Added `codex.ci.yml` to automate CI monitoring and fix failing builds.
 
 - Updated bot and frontend lock files and added tests so `scripts/run_tests.sh` passes
+- Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
