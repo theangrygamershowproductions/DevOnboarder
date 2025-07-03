@@ -97,7 +97,7 @@ jobs:
                   name: pytest-results
                   path: test-results/pytest-results.xml
             - name: Annotate pytest failures
-              if: failure()
+              if: failure() && hashFiles('test-results/pytest-results.xml') != ''
               run: |
                   line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
                   echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
