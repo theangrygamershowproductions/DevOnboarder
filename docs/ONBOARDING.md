@@ -25,7 +25,7 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 
 ```markdown
 - ❌ Lint: 3 Python files have PEP8 errors (see ruff logs)
-- ❌ Test: 1 backend test failed (see pytest-results.xml)
+ - ❌ Test: 1 backend test failed (see test-results/pytest-results.xml)
 - ⚠️ Docs: 12 Vale/LanguageTool warnings (docs/README.md)
 - ⚠️ Security: 1 dependency flagged by pip-audit
 - ✅ All workflows run with correct tool versions
