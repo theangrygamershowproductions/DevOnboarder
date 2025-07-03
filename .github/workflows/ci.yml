@@ -32,7 +32,7 @@ jobs:
             - name: Set up Node
               uses: actions/setup-node@v3
               with:
-                node-version: "20"
+                  node-version: "20"
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
             - name: Install dev dependencies
@@ -86,21 +86,21 @@ jobs:
                   echo "Auth service failed to start"
                   docker compose -f docker-compose.ci.yaml logs auth --tail=50
                   exit 1
+            - name: Prepare test-results directory
+              run: mkdir -p test-results
             - name: Run tests with coverage
-              run: |
-                  mkdir -p artifacts
-                  pytest --cov=src --cov-fail-under=95 --junitxml=artifacts/pytest-results.xml
+              run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
             - name: Upload pytest results
-              if: always()
+              if: success() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
               with:
                   name: pytest-results
-                  path: artifacts/pytest-results.xml
+                  path: test-results/pytest-results.xml
             - name: Annotate pytest failures
               if: failure()
               run: |
-                  line=$(grep -n -m 1 '<failure' artifacts/pytest-results.xml | cut -d: -f1)
-                  echo "::error file=artifacts/pytest-results.xml,line=${line}::Test failures detected"
+                  line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
+                  echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
             - name: Install frontend dependencies
               run: npm ci
               working-directory: frontend

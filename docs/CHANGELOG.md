@@ -137,6 +137,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow now records pytest results and uploads them as an artifact.
 - CI workflow now uses `actions/upload-artifact@v4`.
 - Documented where to download the `pytest-results.xml` artifact in the doc-quality onboarding guide.
+- Pytest results now save to `test-results/pytest-results.xml` and documentation references this path.
 - Added Playwright accessibility tests using `@axe-core/playwright` with a new `npm run test:a11y` script.
 - Added a `make test` target that installs dev requirements before running tests.
 - Documented installing `requirements-dev.txt` prior to running `pytest`.
