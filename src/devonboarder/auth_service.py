@@ -1,3 +1,5 @@
+"""Authentication service with Discord integration and JWT utilities."""
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status

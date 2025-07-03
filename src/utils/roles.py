@@ -1,3 +1,5 @@
+"""Helpers for resolving Discord role flags and verification status."""
+
 from __future__ import annotations
 
 import os
