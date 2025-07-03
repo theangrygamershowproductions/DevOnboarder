@@ -91,7 +91,7 @@ jobs:
             - name: Run tests with coverage
               run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
             - name: Upload pytest results
-              if: success() && hashFiles('test-results/pytest-results.xml') != ''
+              if: always() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
               with:
                   name: pytest-results
