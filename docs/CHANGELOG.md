@@ -13,7 +13,9 @@ All notable changes to this project will be recorded in this file.
 - Added a reusable `.github/actions/setup-gh-cli` action for installing the GitHub CLI.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
 - Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
+- Updated `setup-gh-cli` to remove the old `/usr/bin/gh` binary and export `/usr/local/bin` through `$GITHUB_PATH` so the new CLI is always found.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
+- CI workflow fetches the full git history so commit message linting can compare against `origin/main`.
 - Updated `scripts/run_tests.sh` to run `pytest --cov=src --cov-fail-under=95`
   and invoke `npm run coverage` for the bot and frontend packages.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
