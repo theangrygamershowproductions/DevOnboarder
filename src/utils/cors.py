@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 
 
-def _get_cors_origins() -> list[str]:
+def get_cors_origins() -> list[str]:
     """Return allowed CORS origins from the environment."""
     origins = os.getenv("CORS_ALLOW_ORIGINS")
     if origins:
