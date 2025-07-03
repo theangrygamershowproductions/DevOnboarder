@@ -10,7 +10,7 @@ from fastapi.responses import RedirectResponse
 
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
-from utils.cors import _get_cors_origins
+from utils.cors import get_cors_origins
 from urllib.parse import urlencode
 import httpx
 from sqlalchemy import (
@@ -342,7 +342,7 @@ def create_app() -> FastAPI:
         init_db()
 
     app = FastAPI()
-    cors_origins = _get_cors_origins()
+    cors_origins = get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
         """Add basic security headers to all responses."""
