@@ -45,7 +45,7 @@ def main() -> None:
 
     lines: List[str] = [f"# CI Failure Summary for `{sha}`", ""]
 
-    pyfails = parse_pytest(Path("pytest-results.xml"))
+    pyfails = parse_pytest(Path("test-results") / "pytest-results.xml")
     if pyfails:
         lines.append("## Pytest Failures")
         for name in pyfails[:5]:
