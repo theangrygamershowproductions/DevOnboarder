@@ -12,6 +12,7 @@ os="$(uname -s)"
 case "$os" in
     Linux*)
         if [ -f /etc/debian_version ]; then
+            sudo rm -f /usr/bin/gh || true
             sudo mkdir -p -m 0755 /etc/apt/keyrings
             curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
               | sudo dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg
@@ -39,3 +40,4 @@ esac
 
 which gh
 gh --version
+echo "/usr/local/bin" >> "$GITHUB_PATH"
