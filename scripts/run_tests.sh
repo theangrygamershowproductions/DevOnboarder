@@ -11,7 +11,8 @@ if [ -f pyproject.toml ]; then
 fi
 
 ruff check .
-pytest --cov=src --cov-fail-under=95
+mkdir -p test-results
+pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
 if [ -d bot ] && [ -f bot/package.json ]; then
     npm ci --prefix bot
     (cd bot && npm run coverage)
