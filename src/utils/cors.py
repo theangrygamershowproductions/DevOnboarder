@@ -1,3 +1,5 @@
+"""Utility for loading allowed CORS origins from environment variables."""
+
 from __future__ import annotations
 
 import os
