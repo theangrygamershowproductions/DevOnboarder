@@ -1,0 +1,11 @@
+#!/bin/sh
+# Prevent commits if the message does not match <TYPE>(<scope>): <subject>
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE)(\([^)]+\))?: .+'
+message=$(cat "$1")
+
+if ! printf '%s' "$message" | grep -Eq "$regex"; then
+  echo "Invalid commit message format."
+  echo "Use: <TYPE>(<scope>): <subject>"
+  echo "Example: FIX(ci): ensure latest GitHub CLI binary is used"
+  exit 1
+fi
