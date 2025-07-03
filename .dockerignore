@@ -30,6 +30,7 @@ logs/
 
 # Tests and coverage reports
 tests/
+test-results/
 
 # Misc
 .DS_Store
