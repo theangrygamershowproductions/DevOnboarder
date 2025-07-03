@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
 
-from utils.cors import _get_cors_origins
+from utils.cors import get_cors_origins
 
 from devonboarder import auth_service
 router = APIRouter()
@@ -59,7 +59,7 @@ def contribute(
 def create_app() -> FastAPI:
     """Create a FastAPI application with the XP router."""
     app = FastAPI()
-    cors_origins = _get_cors_origins()
+    cors_origins = get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):  # type: ignore[override]
