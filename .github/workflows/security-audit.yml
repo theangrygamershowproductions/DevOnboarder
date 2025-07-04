@@ -1,0 +1,52 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-gh-cli
+      - name: Show gh version
+        run: |
+          which gh
+          gh --version
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -e .
+          pip install pip-audit
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Install bot dependencies
+        run: npm ci
+        working-directory: bot
+      - name: Run security audit
+        id: audit
+        run: |
+          DATE=$(date -I)
+          bash scripts/security_audit.sh
+          echo "report=docs/security-audit-${DATE}.md" >> "$GITHUB_OUTPUT"
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-audit
+          path: ${{ steps.audit.outputs.report }}
+          retention-days: 7
