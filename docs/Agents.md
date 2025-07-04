@@ -248,6 +248,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | BOT_JWT                      | JWT used by the bot for API calls          |
 | API_BASE_URL                 | XP API URL for the bot                     |
 | AUTH_URL                     | Auth service URL for Playwright tests      |
+| CHECK_HEADERS_URL            | Endpoint used by header checks (default `http://localhost:8002/api/user`) |
 | VITE_AUTH_URL                | Auth service URL for the frontend          |
 | VITE_API_URL                 | XP API URL for the frontend                |
 | VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
