@@ -4,7 +4,7 @@
 set -euo pipefail
 
 echo "Checking Docker availability..."
-if docker info >/dev/null 2>&1; then
+if docker info >/dev/null 2>&1 && [ -z "${CI:-}" ]; then
     echo "Docker is available ✅"
     echo "Pulling Codex image..."
     docker pull ghcr.io/openai/codex-universal
@@ -13,7 +13,11 @@ if docker info >/dev/null 2>&1; then
         ghcr.io/openai/codex-universal /opt/codex/setup_universal.sh
     echo "Docker-based setup complete ✅"
 else
-    echo "Docker not usable, falling back to local setup"
+    if [ -n "${CI:-}" ]; then
+        echo "CI environment detected, skipping Codex Docker setup"
+    else
+        echo "Docker not usable, falling back to local setup"
+    fi
     python3 -m venv venv
     source venv/bin/activate
     python -m pip install --upgrade pip
