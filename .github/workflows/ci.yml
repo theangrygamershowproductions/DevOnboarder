@@ -93,6 +93,7 @@ jobs:
               with:
                   name: vale-results
                   path: vale-results.json
+                  retention-days: 7
             - name: Generate secrets
               run: ./scripts/generate-secrets.sh
             - name: Build containers
@@ -113,6 +114,7 @@ jobs:
               with:
                   name: pytest-results
                   path: test-results/pytest-results.xml
+                  retention-days: 7
             - name: Annotate pytest failures
               if: failure() && hashFiles('test-results/pytest-results.xml') != ''
               run: |
@@ -133,6 +135,7 @@ jobs:
               with:
                   name: vitest-log
                   path: frontend/vitest.log
+                  retention-days: 7
             - name: Cache Playwright browsers
               uses: actions/cache@v3
               with:
@@ -160,24 +163,28 @@ jobs:
               with:
                   name: playwright-log
                   path: frontend/playwright.log
+                  retention-days: 7
             - name: Upload accessibility log
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: a11y-log
                   path: frontend/a11y.log
+                  retention-days: 7
             - name: Upload Lighthouse log
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: lighthouse-log
                   path: frontend/lhci.log
+                  retention-days: 7
             - name: Upload Lighthouse report
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: lighthouse-report
                   path: frontend/lhci-report
+                  retention-days: 7
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
@@ -195,6 +202,7 @@ jobs:
               with:
                   name: jest-log
                   path: bot/jest.log
+                  retention-days: 7
             - name: Generate coverage summary
               env:
                   GITHUB_SERVER_URL: ${{ github.server_url }}
@@ -209,6 +217,7 @@ jobs:
               with:
                   name: coverage-summary
                   path: coverage-summary.md
+                  retention-days: 7
             - name: Upload coverage data
               if: always()
               uses: actions/upload-artifact@v4
@@ -218,6 +227,7 @@ jobs:
                       bot/coverage
                       frontend/coverage
                       .coverage
+                  retention-days: 7
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
               run: |
@@ -269,6 +279,7 @@ jobs:
               with:
                   name: ci-failure-issue
                   path: ci_failure_issue.txt
+                  retention-days: 7
             - name: Close CI failure issue
               if: success()
               run: |
