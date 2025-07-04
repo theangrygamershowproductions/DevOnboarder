@@ -29,7 +29,7 @@ jobs:
                   ref: ${{ github.head_ref }}
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
-            - uses: ./.github/actions/setup-gh-cli
+            - uses: actions/setup-gh@v4
             - name: Show gh version
               run: |
                   which gh
@@ -66,7 +66,11 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
             - name: Install dev dependencies
-              run: pip install -r requirements-dev.txt
+              run: |
+                  pip install -r requirements-dev.txt || {
+                      echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
+                      exit 1
+                  }
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package
@@ -104,6 +108,14 @@ jobs:
               run: bash scripts/trivy_scan.sh docker-compose.ci.yaml
             - name: Start docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
+            - name: Verify compose services
+              run: |
+                  docker compose -f docker-compose.ci.yaml --env-file .env.dev ps
+                  failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.dev ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
+                  if [ -n "$failed" ]; then
+                      docker compose logs
+                      exit 1
+                  fi
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health
             - name: Prepare test-results directory
@@ -123,7 +135,11 @@ jobs:
                   line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
                   echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
             - name: Install frontend dependencies
-              run: npm ci
+              run: |
+                  npm ci || {
+                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+                      exit 1
+                  }
               working-directory: frontend
             - name: Run frontend lint
               run: npm run lint
@@ -190,7 +206,11 @@ jobs:
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
             - name: Install bot dependencies
-              run: npm ci
+              run: |
+                  npm ci || {
+                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+                      exit 1
+                  }
               working-directory: bot
             - name: Run bot lint
               run: npm run lint
