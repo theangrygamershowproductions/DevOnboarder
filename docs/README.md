@@ -167,3 +167,4 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 8. A nightly job (`cleanup-ci-failure.yml`) closes any open `ci-failure` issues so the board stays tidy.
 
 9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
+10. CODEOWNERS automatically requests reviews from the maintainer team.
