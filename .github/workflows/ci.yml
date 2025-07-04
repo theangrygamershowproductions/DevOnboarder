@@ -81,6 +81,8 @@ jobs:
               run: python scripts/check_docstrings.py src/devonboarder
             - name: Run linter
               run: ruff check --output-format=github .
+            - name: Run mypy
+              run: mypy src/devonboarder
             - name: Install Vale
               run: |
                   curl -fsSL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_64-bit.tar.gz | tar xz # pinned version
