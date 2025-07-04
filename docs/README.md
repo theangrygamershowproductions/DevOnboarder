@@ -4,7 +4,7 @@ Welcome to **DevOnboarder**. This page explains how to get your environment runn
 
 If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker Compose, Node.js 20, and Python 3.12.
 
-After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to install a `commit-msg` hook. This ensures your commit messages pass the lint check in CI.
+After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to install a `commit-msg` hook. This ensures your commit messages pass the lint check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
 ## Local Development
 
