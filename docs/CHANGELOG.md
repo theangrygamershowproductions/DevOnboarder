@@ -23,6 +23,7 @@ All notable changes to this project will be recorded in this file.
 - Updated `setup-gh-cli` to remove the old `/usr/bin/gh` binary and export `/usr/local/bin` through `$GITHUB_PATH` so the new CLI is always found.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
 - CI workflow fetches the full git history so commit message linting can compare against `origin/main`.
+- Added `mypy` type checking and a configuration file. CI now runs `mypy`.
 - Updated `scripts/run_tests.sh` to run `pytest --cov=src --cov-fail-under=95`
   and invoke `npm run coverage` for the bot and frontend packages.
 - Documented policy against rewriting commit history or force-pushing after commits are pushed.
