@@ -407,6 +407,7 @@ All notable changes to this project will be recorded in this file.
 - CI now stops docker compose containers even when earlier steps fail.
 - Added `openapi-spec-validator` and `requests` to `requirements-dev.txt` and
   removed their manual installation from the CI workflow.
+- CI workflow caches pip downloads and Node dependencies for faster installs.
 
 ## [0.1.0] - 2025-06-14
 
