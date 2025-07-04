@@ -404,6 +404,7 @@ All notable changes to this project will be recorded in this file.
 - Ignored `.coverage` in `.gitignore` and `.dockerignore`.
 
 - Documented module descriptions for the auth service, XP API, roles, and CORS utilities.
+- CI now stops docker compose containers even when earlier steps fail.
 
 ## [0.1.0] - 2025-06-14
 
