@@ -97,18 +97,7 @@ jobs:
             - name: Start docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
             - name: Wait for auth service
-              run: |
-                  for i in {1..30}; do
-                    if curl -fs http://localhost:8002/health; then
-                      echo "Auth service is up!"
-                      exit 0
-                    fi
-                    echo "Waiting for auth service..."
-                    sleep 2
-                  done
-                  echo "Auth service failed to start"
-                  docker compose -f docker-compose.ci.yaml logs auth --tail=50
-                  exit 1
+              run: bash scripts/wait_for_service.sh http://localhost:8002/health
             - name: Prepare test-results directory
               run: mkdir -p test-results
             - name: Run tests with coverage
@@ -231,19 +220,8 @@ jobs:
                   "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Wait for auth service before header check
-              run: |
-                  for i in {1..30}; do
-                    if curl -fs http://localhost:8002/health; then
-                      echo "Auth service is up!"
-                      exit 0
-                    fi
-                    echo "Waiting for auth service..."
-                    sleep 2
-                  done
-                  echo "Auth service failed to start"
-                  docker compose -f docker-compose.ci.yaml logs auth --tail=50
-                  exit 1
+            - name: Wait for auth service
+              run: bash scripts/wait_for_service.sh http://localhost:8002/health
             - name: Check CORS & security headers
               run: python scripts/check_headers.py
               env:
