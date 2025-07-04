@@ -405,6 +405,8 @@ All notable changes to this project will be recorded in this file.
 
 - Documented module descriptions for the auth service, XP API, roles, and CORS utilities.
 - CI now stops docker compose containers even when earlier steps fail.
+- Added `openapi-spec-validator` and `requests` to `requirements-dev.txt` and
+  removed their manual installation from the CI workflow.
 
 ## [0.1.0] - 2025-06-14
 
