@@ -14,6 +14,10 @@ permissions:
 jobs:
     test:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.12"]
+                node-version: ["20"]
         timeout-minutes: 60
         env:
             VALE_VERSION: 3.12.0
@@ -33,32 +37,32 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
-                  python-version: "3.12"
+                  python-version: ${{ matrix.python-version }}
             - name: Set up Node
               uses: actions/setup-node@v3
               with:
-                  node-version: "20"
+                  node-version: ${{ matrix.node-version }}
             - name: Cache pip downloads
               uses: actions/cache@v3
               with:
                   path: ~/.cache/pip
-                  key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+                  key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements-dev.txt') }}
                   restore-keys: |
-                      ${{ runner.os }}-pip-
+                      ${{ runner.os }}-py${{ matrix.python-version }}-
             - name: Cache frontend node modules
               uses: actions/cache@v3
               with:
                   path: frontend/node_modules
-                  key: ${{ runner.os }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
+                  key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
                   restore-keys: |
-                      ${{ runner.os }}-frontend-
+                      ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
             - name: Cache bot node modules
               uses: actions/cache@v3
               with:
                   path: bot/node_modules
-                  key: ${{ runner.os }}-bot-${{ hashFiles('bot/package-lock.json') }}
+                  key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
                   restore-keys: |
-                      ${{ runner.os }}-bot-
+                      ${{ runner.os }}-node${{ matrix.node-version }}-bot-
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
             - name: Install dev dependencies
@@ -133,9 +137,9 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+                  key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
                   restore-keys: |
-                      ${{ runner.os }}-playwright-
+                      ${{ runner.os }}-node${{ matrix.node-version }}-playwright-
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
               working-directory: frontend
