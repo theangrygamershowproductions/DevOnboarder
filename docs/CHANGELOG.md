@@ -419,6 +419,8 @@ All notable changes to this project will be recorded in this file.
 
 - JS test scripts now run coverage and fail if coverage drops below 95%.
   CI uses `npm test` for the bot and frontend packages.
+- Documented the CI job's caching, concurrency, and coverage requirements in
+  `docs/ci-workflow.md`.
 
 ## [0.1.0] - 2025-06-14
 
