@@ -223,6 +223,7 @@ jobs:
             - name: Run security audit
               run: bash scripts/security_audit.sh
             - name: Stop docker compose
+              if: always()
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
             - name: Label Codex PR
               if: github.actor == 'codex[bot]'
