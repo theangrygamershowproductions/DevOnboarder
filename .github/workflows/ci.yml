@@ -18,6 +18,7 @@ jobs:
             matrix:
                 python-version: ["3.12"]
                 node-version: ["20"]
+        timeout-minutes: 60
         env:
             VALE_VERSION: 3.12.0
 
