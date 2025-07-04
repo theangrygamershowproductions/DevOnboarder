@@ -411,6 +411,7 @@ All notable changes to this project will be recorded in this file.
 - Added `openapi-spec-validator` and `requests` to `requirements-dev.txt` and
   removed their manual installation from the CI workflow.
 - CI workflow caches pip downloads and Node dependencies for faster installs.
+- Cache keys include Python and Node versions to avoid mismatches.
 
 ## [0.1.0] - 2025-06-14
 
