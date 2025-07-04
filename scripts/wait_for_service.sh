@@ -16,4 +16,5 @@ for ((i=1; i<=RETRIES; i++)); do
 done
 
 echo "Service failed to start: $URL" >&2
+docker compose logs auth >&2
 exit 1
