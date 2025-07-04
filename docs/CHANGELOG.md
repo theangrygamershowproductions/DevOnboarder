@@ -176,6 +176,7 @@ All notable changes to this project will be recorded in this file.
 - Replaced `AUTH_SECRET_KEY` with `JWT_SECRET_KEY` and added `JWT_ALGORITHM` with dotenv support.
 - Documented database agent and synced environment variables with `.env.example`.
 - `setup-env.sh` now falls back to `npm install` when `pnpm` is unavailable.
+- `setup-env.sh` skips the Codex Docker image when `CI` is set and uses the local virtualenv.
 - Added documentation & QA checklist to `docs/pull_request_template.md` and `.github/pull_request_template.md`.
 - Added `doc-quality-onboarding.md` with a quickstart for running documentation checks.
 - Replaced marketing preview links with the frontend README and React demo.
