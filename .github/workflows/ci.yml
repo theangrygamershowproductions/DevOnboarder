@@ -33,6 +33,27 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: "20"
+            - name: Cache pip downloads
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pip
+                  key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pip-
+            - name: Cache frontend node modules
+              uses: actions/cache@v3
+              with:
+                  path: frontend/node_modules
+                  key: ${{ runner.os }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-frontend-
+            - name: Cache bot node modules
+              uses: actions/cache@v3
+              with:
+                  path: bot/node_modules
+                  key: ${{ runner.os }}-bot-${{ hashFiles('bot/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-bot-
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
             - name: Install dev dependencies
