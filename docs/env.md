@@ -33,6 +33,7 @@ the repository. Provide them through your build or deployment secret store:
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 - `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
   `http://localhost:8002/login/discord/callback`.
+- `DISCORD_API_TIMEOUT` &ndash; HTTP timeout in seconds when contacting Discord APIs (default `10`).
 - `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
   API helpers send this JWT when no other token is provided.
 
@@ -90,6 +91,11 @@ status and level.
 - `VITE_API_URL` &ndash; base URL for the XP API.
 - `VITE_DISCORD_CLIENT_ID` &ndash; OAuth client ID for Discord.
 - `VITE_SESSION_REFRESH_INTERVAL` &ndash; interval (seconds) between session refreshes.
+
+## Testing utilities
+
+- `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
+- `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to verify headers (default `http://localhost:8002/api/user`).
 
 ## Docker development images
 
