@@ -424,6 +424,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the CI job's caching, concurrency, and coverage requirements in
   `docs/ci-workflow.md`.
 - Documented `AUTH_URL`, `DISCORD_API_TIMEOUT`, and `CHECK_HEADERS_URL` environment variables.
+- Documented running `scripts/install_commit_msg_hook.sh` after cloning so commit messages pass CI linting.
 
 ## [0.1.0] - 2025-06-14
 
