@@ -79,7 +79,7 @@ pytest --cov=src --cov-fail-under=95
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
 - CI lints commit messages using `scripts/check_commit_messages.sh`.
-  - Run `bash scripts/install_commit_msg_hook.sh` to install a local `commit-msg` hook so mistakes are caught before you push.
+  - Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a local `commit-msg` hook so mistakes are caught before you push.
   Past violations do not require rewriting history.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
