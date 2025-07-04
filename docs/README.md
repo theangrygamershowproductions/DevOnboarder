@@ -165,3 +165,5 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated with a summary of the failing tests and links to the artifacts.
 7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write` permission. When the pipeline succeeds, it closes every open `ci-failure` issue.
 8. A nightly job (`cleanup-ci-failure.yml`) closes any open `ci-failure` issues so the board stays tidy.
+
+9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
