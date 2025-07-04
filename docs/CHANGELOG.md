@@ -414,6 +414,9 @@ All notable changes to this project will be recorded in this file.
 - CI workflow caches pip downloads and Node dependencies for faster installs.
 - Cache keys include Python and Node versions to avoid mismatches.
 
+- JS test scripts now run coverage and fail if coverage drops below 95%.
+  CI uses `npm test` for the bot and frontend packages.
+
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
