@@ -4,6 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
+- Added CODEOWNERS to automatically request maintainer reviews on pull requests.
 - CI workflow cancels in-progress runs when new commits push.
 - Added a 60-minute timeout to the `test` job in `ci.yml`.
 - Added `close-codex-issues.yml` workflow to automatically close Codex-created issues referenced by `Fixes #<issue>` after a pull request merges and documented it in `docs/README.md`.
