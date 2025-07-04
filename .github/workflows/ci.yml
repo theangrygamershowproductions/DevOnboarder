@@ -125,7 +125,7 @@ jobs:
               run: npm run lint
               working-directory: frontend
             - name: Run frontend tests with coverage
-              run: npm run coverage --if-present 2>&1 | tee vitest.log
+              run: npm test 2>&1 | tee vitest.log
               working-directory: frontend
             - name: Upload vitest log
               if: always()
@@ -187,7 +187,7 @@ jobs:
               run: npm run lint
               working-directory: bot
             - name: Run bot tests with coverage
-              run: npm run coverage 2>&1 | tee jest.log
+              run: npm test 2>&1 | tee jest.log
               working-directory: bot
             - name: Upload jest log
               if: always()
