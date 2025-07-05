@@ -2,9 +2,10 @@
 # Poll a URL until it returns success or retry limit is reached
 set -euo pipefail
 
-URL=${1:?"usage: $0 URL [retries] [sleep]"}
+URL=${1:?"usage: $0 URL [retries] [sleep] [service]"}
 RETRIES=${2:-30}
 SLEEP=${3:-2}
+SERVICE=${4:-auth}
 
 for ((i=1; i<=RETRIES; i++)); do
   if curl -fs "$URL" >/dev/null; then
@@ -17,5 +18,5 @@ done
 
 echo "Service failed to start: $URL" >&2
 docker compose ps >&2
-docker compose logs auth >&2
+docker compose logs "$SERVICE" >&2
 exit 1

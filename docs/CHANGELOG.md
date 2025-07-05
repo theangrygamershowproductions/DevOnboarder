@@ -21,6 +21,7 @@ All notable changes to this project will be recorded in this file.
 - `install_gh_cli.sh` now checks `GITHUB_PATH` before appending to prevent local failures.
 - Added `scripts/wait_for_service.sh` and updated the CI workflow to reuse it when waiting for the auth service to start.
 - `scripts/wait_for_service.sh` now prints auth container logs when startup fails.
+- `wait_for_service.sh` accepts an optional service name and prints that container's logs when provided.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
 - Documented manual cleanup of `ci-failure` issues in `docs/ci-failure-issues.md`.
 - CI workflow now closes every open `ci-failure` issue once the pipeline succeeds.
