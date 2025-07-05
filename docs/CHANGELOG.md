@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `scripts/commit-msg` and `scripts/install_commit_msg_hook.sh` to help contributors set up a local `commit-msg` hook.
 - Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
+- `install_gh_cli.sh` now checks `GITHUB_PATH` before appending to prevent local failures.
 - Added `scripts/wait_for_service.sh` and updated the CI workflow to reuse it when waiting for the auth service to start.
 - `scripts/wait_for_service.sh` now prints auth container logs when startup fails.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
