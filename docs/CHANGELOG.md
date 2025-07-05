@@ -439,6 +439,8 @@ All notable changes to this project will be recorded in this file.
 - Documented `AUTH_URL`, `DISCORD_API_TIMEOUT`, and `CHECK_HEADERS_URL` environment variables.
 - Documented running `scripts/install_commit_msg_hook.sh` after cloning so commit messages pass CI linting.
 - Added `docs/origin.md` with the project's backstory and linked it from the README.
+- Expanded `docs/origin.md` with more detail on the 2017–2021 collapse,
+  recovery steps, and disclaimers.
 
 ## [0.1.0] - 2025-06-14
 
