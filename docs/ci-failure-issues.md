@@ -7,6 +7,16 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 - `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
 - The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
 
+## Root Cause Summaries
+
+Run `scripts/ci_log_audit.py` on a downloaded log to highlight common errors.
+
+```bash
+python scripts/ci_log_audit.py ci.log > audit.md
+```
+
+Attach the `audit.md` output to CI failure issues so maintainers can quickly spot the failing step.
+
 ## Clearing Old Issues
 
 Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI:
