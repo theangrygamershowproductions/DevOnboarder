@@ -60,6 +60,8 @@ All notable changes to this project will be recorded in this file.
 
 - Clarified README instructions to stop the server with Ctrl+C.
 - Updated README quickstart to run `npm run coverage --prefix frontend`.
+- Quickstart now instructs running `bash scripts/generate-secrets.sh` after
+  `bootstrap.sh` so local secrets match CI.
 - Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
   documented `CORS_ALLOW_ORIGINS` and `DISCORD_REDIRECT_URI` in `docs/Agents.md`
   and `docs/env.md`.

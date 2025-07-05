@@ -134,10 +134,11 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 1. Install Docker, Docker Compose, Node.js 20, and Python 3.12.
 2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
-3. Copy each `*.env.example` to `.env` inside its service directory.
-4. Build the containers with `make deps` and start them with `make up`.
-5. Apply database migrations using `bash scripts/run_migrations.sh`.
-6. Install the project and dev requirements, then run the tests:
+3. Run `bash scripts/generate-secrets.sh` so `.env.dev` matches the secrets CI uses.
+4. Copy each `*.env.example` to `.env` inside its service directory.
+5. Build the containers with `make deps` and start them with `make up`.
+6. Apply database migrations using `bash scripts/run_migrations.sh`.
+7. Install the project and dev requirements, then run the tests:
 
    ```bash
    pip install -e .  # or `pip install -r requirements.txt` if present
@@ -147,7 +148,7 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    npm run coverage --prefix bot
    npm run coverage --prefix frontend
    ```
-7. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
+8. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
