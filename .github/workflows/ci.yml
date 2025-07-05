@@ -277,10 +277,15 @@ jobs:
             - name: Summarize CI failures
               if: failure()
               run: python scripts/summarize_ci_failures.py
+            - name: Run CI log audit
+              if: failure()
+              run: python scripts/ci_log_audit.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
             - name: Create or update CI failure issue
               if: failure()
               id: ci_failure
               run: |
+                  printf '\n' >> summary.md
+                  cat audit.md >> summary.md
                   gh_bin=$(which gh)
                   ISSUE=$($gh_bin issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number' | tee -a gh_cli.log)
                   if [ -n "$ISSUE" ]; then
@@ -320,3 +325,4 @@ jobs:
                   path: |
                       ${{ runner.temp }}/_github_workflow/*/job.log
                       gh_cli.log
+                      audit.md
