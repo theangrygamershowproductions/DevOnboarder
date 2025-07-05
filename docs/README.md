@@ -113,7 +113,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
-- [Origin story](origin.md) &ndash; how the project emerged from rebuilding efforts.
+- [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
