@@ -283,11 +283,11 @@ jobs:
               id: ci_failure
               run: |
                   gh_bin=$(which gh)
-                  ISSUE=$($gh_bin issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number')
+                  ISSUE=$($gh_bin issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number' | tee -a gh_cli.log)
                   if [ -n "$ISSUE" ]; then
-                      "$gh_bin" issue comment "$ISSUE" --body-file summary.md
+                      "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                   else
-                      ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number')
+                      ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number' | tee -a gh_cli.log)
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
               env:
@@ -306,10 +306,18 @@ jobs:
               if: success()
               run: |
                   gh_bin=$(which gh)
-                  ISSUES=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number')
+                  ISSUES=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number' | tee -a gh_cli.log)
                   for ISSUE in $ISSUES; do
-                    "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing."
-                    "$gh_bin" issue close "$ISSUE"
+                    "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log
+                    "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log
                   done
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Upload CI logs
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ci-logs
+                  path: |
+                      ${{ runner.temp }}/_github_workflow/*/job.log
+                      gh_cli.log
