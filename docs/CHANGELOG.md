@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
+- Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - Replaced deprecated `actions/setup-gh-cli` with a direct
   installation approach.
 - Verified GitHub CLI availability across all workflows.
