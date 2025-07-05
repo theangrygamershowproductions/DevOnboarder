@@ -10,6 +10,10 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 *Designed to automate onboarding, reduce friction, and support developers building from the ground up.*
 
+## Why This Project Exists
+
+The short version: everything broke, then got rebuilt. The longer lesson is documented in [docs/origin.md](docs/origin.md). It shows how journaling, automation, and relentless documentation turned failure into DevOnboarder.
+
 ## Trunk-Based Workflow
 
 - All stable code lives in the `main` branch.
