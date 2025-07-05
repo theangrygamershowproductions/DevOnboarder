@@ -438,6 +438,7 @@ All notable changes to this project will be recorded in this file.
   `docs/ci-workflow.md`.
 - Documented `AUTH_URL`, `DISCORD_API_TIMEOUT`, and `CHECK_HEADERS_URL` environment variables.
 - Documented running `scripts/install_commit_msg_hook.sh` after cloning so commit messages pass CI linting.
+- Added `docs/origin.md` with the project's backstory and linked it from the README.
 
 ## [0.1.0] - 2025-06-14
 
