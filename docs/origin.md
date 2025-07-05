@@ -1,13 +1,16 @@
 # Origin Story
 
-Between 2017 and 2021, the system that held everything together fell apart. Health issues and cascading outages forced a hard reset. The setback was severe, but recovery came through steady work: fixing the body first, then rebuilding an identity around smaller, repeatable wins.
+Between 2017 and 2021 everything collapsed. Health problems and cascading
+infrastructure failures wiped away years of progress. Recovery started with
+the basics: doctors, rest, and a strict routine to regain strength.
 
-The process produced three lessons:
+With health on track, identity followed. The plan was simple—celebrate small
+wins, journal every obstacle, and script recurring fixes. Automation kept the
+process steady. Documentation turned each lesson into a reproducible step.
 
-1. **Journaling is fuel.** Recording each failure and improvement turned confusion into a map forward.
-2. **Automation prevents drift.** Replacing guesswork with scripts kept the recovery steps consistent.
-3. **Documentation keeps momentum.** Writing down each fix and procedure meant no step was lost when focus slipped.
+Those habits shaped DevOnboarder’s modular design. Every component mirrors the
+recovery path: short, repeatable tasks that work together. The goal is to give
+others a stable base so they can avoid the turmoil that sparked this project.
 
-Those practices evolved into DevOnboarder. The project exists so others can skip the chaos and build on a clear, repeatable base.
-
-*This origin is shared to explain the project’s purpose—not to seek pity.*
+*This story is shared only to explain DevOnboarder’s purpose—not to seek
+sympathy.*
