@@ -13,11 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cli/cli-action@v2
+      - name: Install GitHub CLI
+        run: ./scripts/install_gh_cli.sh
       - name: Show gh version
-        run: |
-          which gh
-          gh --version
+        run: which gh && gh --version
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

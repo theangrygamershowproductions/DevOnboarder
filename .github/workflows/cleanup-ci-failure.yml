@@ -7,11 +7,10 @@ jobs:
         permissions:
             issues: write
         steps:
-            - uses: cli/cli-action@v2
+            - name: Install GitHub CLI
+              run: ./scripts/install_gh_cli.sh
             - name: Show gh version
-              run: |
-                  which gh
-                  gh --version
+              run: which gh && gh --version
             - run: |
                   gh_bin=$(which gh)
                   for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
