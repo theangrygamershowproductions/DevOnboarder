@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
+- Split `docs/Agents.md` into `agents/` pages and updated references.
 - CI workflow now runs `ci_log_audit.py` on failures and appends the `audit.md` summary to CI failure issues.
 - Added tests for `ci_log_audit.py`.
 - Expanded `docs/ci-failure-issues.md` with an explanation of the automated audit step and how to interpret `audit.md`.
