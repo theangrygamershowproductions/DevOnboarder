@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-gh-cli@v4
+      - uses: actions/setup-gh@v4
       - name: Show gh version
         run: |
           which gh
