@@ -85,40 +85,41 @@ platforms. Please report any issues you encounter on your operating system.
 
 ## Key Documentation
 
-- [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
-- [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
-- [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
-- [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
-- [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
-- [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
-- [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
-- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
-  &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
-- [Troubleshooting guide](troubleshooting.md)
-  &ndash; quick fixes for setup problems and failing CI jobs.
-- [CI failure issue management](ci-failure-issues.md)
-  &ndash; how automatic cleanup works and how to close old issues.
+- [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
+- [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
+- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 - [Automatic Codex issue closing](codex-issue-autoclose.md)
   &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
+- [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [CI failure issue management](ci-failure-issues.md)
+  &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
-- [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
-- [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
-- [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
-- [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
-- [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
-- [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
-- [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
-- [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
+- [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
+- [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
-- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
+- [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
+- [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
 - [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
+- [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
-- [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
+- [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
+- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+  &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
+- [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
+- [Origin story](origin.md) &ndash; how the project emerged from rebuilding efforts.
+- [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
+- [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
+- [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
+- [Troubleshooting guide](troubleshooting.md)
+  &ndash; quick fixes for setup problems and failing CI jobs.
 
 ## Onboarding Phases
 
