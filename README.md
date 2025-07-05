@@ -12,7 +12,7 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 ## Why This Project Exists
 
-The short version: everything broke, then got rebuilt. The longer lesson is documented in [docs/origin.md](docs/origin.md). It shows how journaling, automation, and relentless documentation turned failure into DevOnboarder.
+The short version: everything broke, then got rebuilt. The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 ## Trunk-Based Workflow
 
