@@ -38,8 +38,8 @@ bash scripts/check_docs.sh
 # Checklist
 
 - [ ] All code passes lint, type, and security checks
-- [ ] All new ENV variables are documented in `docs/Agents.md`
-- [ ] `.env.example` matches the table in `docs/Agents.md`
+- [ ] All new ENV variables are documented in `agents/index.md`
+- [ ] `.env.example` matches the table in `agents/index.md`
 - [ ] OpenAPI/contract and migration checks pass
 - [ ] All API endpoints have docstrings and documentation
 - [ ] CORS and security headers validated
