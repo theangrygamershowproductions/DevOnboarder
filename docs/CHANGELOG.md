@@ -14,6 +14,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - CI workflow now runs `ci_log_audit.py` on failures and appends the `audit.md` summary to CI failure issues.
+- Added tests for `ci_log_audit.py`.
 - Replaced deprecated `actions/setup-gh-cli` with a direct
   installation approach.
 - Verified GitHub CLI availability across all workflows.
