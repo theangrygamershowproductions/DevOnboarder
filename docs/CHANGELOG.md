@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Replaced deprecated `actions/setup-gh-cli` with `cli/cli-action` in all workflows.
+- Verified GitHub CLI installation via `cli/cli-action` across all workflows.
 - Updated README to document the new GitHub CLI installation method.
 - Documented GitHub CLI installation and version output in `docs/ci-workflow.md`.
 - Added CODEOWNERS to automatically request maintainer reviews on pull requests.
