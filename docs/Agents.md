@@ -299,6 +299,7 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 
 | Date        | Version | Author    | Summary                                |
 | ----------- | ------- | --------- | -------------------------------------- |
+| 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_log_audit script |
 | 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
 | 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints |
 | 2 Jul 2025  | v0.3.2  | Codex     | Archived languagetool script and updated tasks |
@@ -306,5 +307,5 @@ When retiring an agent, mark the section as deprecated with the date and reason.
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
 
-*Last updated: 2 July 2025*
+*Last updated: 3 July 2025*
 
