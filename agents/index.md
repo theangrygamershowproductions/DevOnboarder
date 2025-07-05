@@ -49,3 +49,8 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
 | VITE_SESSION_REFRESH_INTERVAL| How often the frontend refreshes sessions  |
 | INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
+| TEAMS_APP_ID                 | Azure app ID for the Teams integration      |
+| TEAMS_APP_PASSWORD           | Secret used to authenticate the Teams app   |
+| TEAMS_TENANT_ID              | Azure tenant hosting the Teams app          |
+| TEAMS_CHANNEL_ID_ONBOARD     | Teams channel ID for onboarding updates     |
+
