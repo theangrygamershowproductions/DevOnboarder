@@ -7,7 +7,7 @@ jobs:
         permissions:
             issues: write
         steps:
-            - uses: actions/setup-gh@v4
+            - uses: cli/cli-action@v2
             - name: Show gh version
               run: |
                   which gh
