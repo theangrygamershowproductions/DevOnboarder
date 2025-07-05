@@ -5,15 +5,16 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
-- Use `cli/cli-action` for installing the GitHub CLI in CI.
+- Install the GitHub CLI in CI using the preinstalled binary or
+  `scripts/install_gh_cli.sh`.
 - Documented commit-msg hook setup in CONTRIBUTING.md and docs.
 - Offline install instructions now appear in CI logs when package installs fail.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
-- Replaced deprecated `actions/setup-gh-cli` with `cli/cli-action` in all workflows.
-- Verified GitHub CLI installation via `cli/cli-action` across all workflows.
-- Workflows install the GitHub CLI via `install_gh_cli.sh` instead of `cli/cli-action`.
+- Replaced deprecated `actions/setup-gh-cli` with a direct
+  installation approach.
+- Verified GitHub CLI availability across all workflows.
 - Updated README to document the new GitHub CLI installation method.
 - Documented GitHub CLI installation and version output in `docs/ci-workflow.md`.
 - Added CODEOWNERS to automatically request maintainer reviews on pull requests.
