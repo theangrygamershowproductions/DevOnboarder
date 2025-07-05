@@ -38,6 +38,8 @@ All notable changes to this project will be recorded in this file.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
 - Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
 - Updated `setup-gh-cli` to remove the old `/usr/bin/gh` binary and export `/usr/local/bin` through `$GITHUB_PATH` so the new CLI is always found.
+- Added `scripts/cache_precommit_hooks.sh` and offline instructions for caching
+  pre-commit hooks.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
 - `setup-gh-cli` now installs the GitHub CLI with the `actions/setup-gh` action to avoid apt repository outages.
 - CI workflow fetches the full git history so commit message linting can compare against `origin/main`.
