@@ -1,16 +1,62 @@
-# Origin Story
+---
+title: Project Origin & Recovery Story
+version: v1.0.0
+created: 2025-07-05
+---
 
-Between 2017 and 2021 everything collapsed. Health problems and cascading
-infrastructure failures wiped away years of progress. Recovery started with
-the basics: doctors, rest, and a strict routine to regain strength.
+# 🛠️ Why This Project Exists
 
-With health on track, identity followed. The plan was simple—celebrate small
-wins, journal every obstacle, and script recurring fixes. Automation kept the
-process steady. Documentation turned each lesson into a reproducible step.
+DevOnboarder isn’t just code. It’s a journey—a rebuilding of purpose, systems, and self.
 
-Those habits shaped DevOnboarder’s modular design. Every component mirrors the
-recovery path: short, repeatable tasks that work together. The goal is to give
-others a stable base so they can avoid the turmoil that sparked this project.
+---
 
-*This story is shared only to explain DevOnboarder’s purpose—not to seek
-sympathy.*
+## ⚠️ From System Collapse to System Rebuild
+
+Between 2017–2021, the builder of this project lost nearly everything:
+- A 24TB NAS full of code, documentation, and projects.
+- Health events: concussions and spinal surgery (C4/C5 vertebral replacement).
+- A period of physical and emotional pain masked through self-medication.
+- A return to manual labor under unsafe conditions—and a principled walk-off.
+- A business partnership break where ethics and effort no longer aligned.
+
+This was not collapse. It was a reclamation moment.
+
+---
+
+## 🔄 Rebuilding from the Ashes
+
+After relocating and recovering in 2021, the builder:
+- Returned to software, re-learning languages and workflows.
+- Discovered AI tools like Codex and ChatGPT as avenues for resilience.
+- Began rebuilding systems: journaling, CLI interfaces (`sf drop`, `sf ask`, `sf show`), DevContainer setups, Discord workflows, and GitHub CI/CD pipelines.
+- Turned personal necessity into replicable tools for anyone who needs a fresh start.
+
+---
+
+## 🧭 Not Sympathy — Humility & Growth
+
+This story isn’t shared for sympathy. Sympathy offers momentary comfort—it doesn’t build futures.
+
+What does build futures is **humility in failure**, the hard-earned clarity that follows—and the willingness to teach what was learned.
+
+DevOnboarder is a system born from that humility. It’s modular. Tested. Functional. It’s designed to help others rebuild — not to elicit pity.
+
+---
+
+## 📘 Implications for Anyone Onboarding Here
+
+- *You’re joining a tool with history.* Every command, test, and commit comes from a place of hard-earned resilience.
+- *You’re working on more than code.* You’re using insights shaped by loss, recovery, and systems rebuilding.
+- *You’re standing on a foundation forged by clarity under fire.* Humility isn’t weakness here—it’s the blueprint.
+
+---
+
+## 🚀 What Comes Next
+
+- don’t just use this tool—help build it forward.
+- Add prompts, stories, features or test reflections.
+- If this story resonates with you, your contributions can make it more accessible to others seeking to rise again.
+
+---
+
+*“Your origin isn’t your obstacle — it’s your ignition.”*
