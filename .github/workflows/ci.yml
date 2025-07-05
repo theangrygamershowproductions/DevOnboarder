@@ -29,7 +29,7 @@ jobs:
                   ref: ${{ github.head_ref }}
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
-            - uses: actions/setup-gh@v4
+            - uses: cli/cli-action@v2
             - name: Show gh version
               run: |
                   which gh
