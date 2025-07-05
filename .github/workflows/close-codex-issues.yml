@@ -12,11 +12,10 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: cli/cli-action@v2
+      - name: Install GitHub CLI
+        run: ./scripts/install_gh_cli.sh
       - name: Show gh version
-        run: |
-          which gh
-          gh --version
+        run: which gh && gh --version
       - name: Close referenced Codex issues
         run: |
           echo "${{ github.event.pull_request.body }}" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
