@@ -9,7 +9,9 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 
 ## Root Cause Summaries
 
-Run `scripts/ci_log_audit.py` on a downloaded log to highlight common errors.
+The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when a step fails and appends the resulting `audit.md` to the failure issue comment.
+
+Run the script manually on a downloaded log if you need to dig deeper:
 
 ```bash
 python scripts/ci_log_audit.py ci.log > audit.md
