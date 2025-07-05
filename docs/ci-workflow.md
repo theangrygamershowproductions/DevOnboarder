@@ -22,4 +22,4 @@ Both Python and JavaScript tests must maintain at least **95%** coverage. The wo
 
 ## GitHub CLI
 
-The workflows install the GitHub CLI using `cli/cli-action@v2`. Each job then prints the path and version with `which gh` and `gh --version` so the logs show exactly which binary is in use.
+The workflows install the GitHub CLI with `./scripts/install_gh_cli.sh`. Each job then prints the install path and version with `which gh && gh --version` so the logs show exactly which binary is in use.
