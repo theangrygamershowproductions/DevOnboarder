@@ -107,7 +107,7 @@ devonboarder-auth
 The auth service listens on `http://localhost:8002`.
 
 The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
-All workflows install the GitHub CLI with the official `cli/cli-action` action.
+All workflows install the GitHub CLI with `./scripts/install_gh_cli.sh`.
 
 ## Codex Runs
 
