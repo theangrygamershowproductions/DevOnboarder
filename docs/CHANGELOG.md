@@ -10,6 +10,8 @@ All notable changes to this project will be recorded in this file.
 - Offline install instructions now appear in CI logs when package installs fail.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
+- Replaced deprecated `actions/setup-gh-cli` with `actions/setup-gh` in all workflows.
+- Updated README to document the new GitHub CLI installation method.
 - Added CODEOWNERS to automatically request maintainer reviews on pull requests.
 - CI workflow cancels in-progress runs when new commits push.
 - Added a 60-minute timeout to the `test` job in `ci.yml`.
