@@ -446,6 +446,8 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/origin.md` with the project's backstory and linked it from the README.
 - Expanded `docs/origin.md` with more detail on the 2017–2021 collapse,
   recovery steps, and disclaimers.
+- Added `docs/builder-ethics-dossier.md` documenting project values and
+  ethical commitments.
 
 ## [0.1.0] - 2025-06-14
 
