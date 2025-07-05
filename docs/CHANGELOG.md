@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Replaced deprecated `actions/setup-gh-cli` with `cli/cli-action` in all workflows.
 - Verified GitHub CLI installation via `cli/cli-action` across all workflows.
+- Workflows install the GitHub CLI via `install_gh_cli.sh` instead of `cli/cli-action`.
 - Updated README to document the new GitHub CLI installation method.
 - Documented GitHub CLI installation and version output in `docs/ci-workflow.md`.
 - Added CODEOWNERS to automatically request maintainer reviews on pull requests.
