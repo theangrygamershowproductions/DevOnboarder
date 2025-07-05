@@ -40,4 +40,6 @@ esac
 
 which gh
 gh --version
-echo "/usr/local/bin" >> "$GITHUB_PATH"
+if [ -n "${GITHUB_PATH-}" ]; then
+    echo "/usr/local/bin" >> "$GITHUB_PATH"
+fi
