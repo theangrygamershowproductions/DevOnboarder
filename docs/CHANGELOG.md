@@ -452,6 +452,7 @@ All notable changes to this project will be recorded in this file.
   recovery steps, and disclaimers.
 - Added `docs/builder-ethics-dossier.md` documenting project values and
   ethical commitments.
+- Added `docs/builder_ethics_dossier.md` declaring the builder's ethics and reusable template.
 
 ## [0.1.0] - 2025-06-14
 
