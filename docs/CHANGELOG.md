@@ -58,6 +58,7 @@ All notable changes to this project will be recorded in this file.
 - Updated `docker-compose.codex.yml` with the Codex runner image and documented manual invocation under "Codex Runs".
 
 - Clarified README instructions to stop the server with Ctrl+C.
+- Updated README quickstart to run `npm run coverage --prefix frontend`.
 - Removed unused `REDIS_URL`, `LOG_LEVEL`, and `API_KEY` from `.env.example` and
   documented `CORS_ALLOW_ORIGINS` and `DISCORD_REDIRECT_URI` in `docs/Agents.md`
   and `docs/env.md`.
