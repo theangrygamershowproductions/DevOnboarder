@@ -43,3 +43,12 @@ gh --version
 if [ -n "${GITHUB_PATH-}" ]; then
     echo "/usr/local/bin" >> "$GITHUB_PATH"
 fi
+
+# Import pre-cached pre-commit hooks when available
+cache_src="$(pwd)/devonboarder-offline/precommit"
+dest_dir="${PRE_COMMIT_HOME:-$HOME/.cache/pre-commit}"
+if [ -d "$cache_src" ]; then
+    echo "Copying pre-commit hooks from $cache_src"
+    mkdir -p "$dest_dir"
+    cp -r "$cache_src"/* "$dest_dir"/
+fi
