@@ -79,3 +79,24 @@ After installing dependencies, run the usual setup commands such as `make deps` 
    ```
 
 Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yaml`.
+
+## Pre-commit hooks
+
+1. On the online machine, generate an offline bundle of hook environments:
+
+   ```bash
+   ./scripts/cache_precommit_hooks.sh
+   ```
+
+   This writes all hook dependencies to `~/devonboarder-offline/precommit`.
+
+2. Copy the `devonboarder-offline` folder to your offline machine.
+
+3. Point `pre-commit` at the cached hooks before installing:
+
+   ```bash
+   export PRE_COMMIT_HOME=/path/to/devonboarder-offline/precommit
+   pre-commit install
+   ```
+
+The hooks will run without needing network access.
