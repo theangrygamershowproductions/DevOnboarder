@@ -19,7 +19,7 @@ This repository follows the DevOnboarder protocol. Key points:
 3. **Development Environment**
 - Use the provided container setup and compose files for local development.
 - Ensure all tests pass before submitting a PR.
- - Workflows install the GitHub CLI with the official `actions/setup-gh` action.
+ - Workflows install the GitHub CLI with the official `cli/cli-action` action.
 
 4. **Contribution Guidelines**
 - Keep pull requests focused and small.
