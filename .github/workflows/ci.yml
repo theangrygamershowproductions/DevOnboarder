@@ -117,7 +117,7 @@ jobs:
                       exit 1
                   fi
             - name: Wait for auth service
-              run: bash scripts/wait_for_service.sh http://localhost:8002/health
+              run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
             - name: Prepare test-results directory
               run: mkdir -p test-results
             - name: Run tests with coverage
@@ -258,7 +258,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Wait for auth service
-              run: bash scripts/wait_for_service.sh http://localhost:8002/health
+              run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
             - name: Check CORS & security headers
               run: python scripts/check_headers.py
               env:
