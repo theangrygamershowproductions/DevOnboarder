@@ -15,6 +15,7 @@ All notable changes to this project will be recorded in this file.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - CI workflow now runs `ci_log_audit.py` on failures and appends the `audit.md` summary to CI failure issues.
 - Added tests for `ci_log_audit.py`.
+- Expanded `docs/ci-failure-issues.md` with an explanation of the automated audit step and how to interpret `audit.md`.
 - Replaced deprecated `actions/setup-gh-cli` with a direct
   installation approach.
 - Verified GitHub CLI availability across all workflows.
