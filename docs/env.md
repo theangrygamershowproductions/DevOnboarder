@@ -36,6 +36,7 @@ the repository. Provide them through your build or deployment secret store:
 - `DISCORD_API_TIMEOUT` &ndash; HTTP timeout in seconds when contacting Discord APIs (default `10`).
 - `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
   API helpers send this JWT when no other token is provided.
+- `API_BASE_URL` &ndash; base URL for the XP API used by the bot.
 
 ## Discord role-based permissions
 
