@@ -1,5 +1,9 @@
 # Agents — Service and Integration Roles (Codex-Driven Reference)
 
+> **Note**: The up-to-date agent documentation now lives at
+> [agents/index.md](../agents/index.md). The remainder of this file is kept for
+> legacy reference only.
+
 This document defines all agents (services, bots, integrations, and guards) in the TAGS ecosystem. Each entry describes the agent's purpose, configuration, and typical workflow so contributors and Codex automation can keep the platform healthy.
 
 <!-- This file is derived from the master merged draft provided during onboarding. -->
