@@ -43,6 +43,17 @@ else
         fi
         cd ..
     fi
+
+    if [ -d bot ]; then
+        cd bot
+        if command -v pnpm >/dev/null 2>&1; then
+            pnpm install
+        else
+            echo "pnpm not found, using npm"
+            npm install
+        fi
+        cd ..
+    fi
     export PYTHONPATH="$(pwd)"
     echo "Local environment ready ✅"
 fi
