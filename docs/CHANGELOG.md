@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
 - Install the GitHub CLI in CI using the preinstalled binary or
@@ -460,6 +461,7 @@ All notable changes to this project will be recorded in this file.
 - Added environment variable summary to `agents/index.md`.
 - Added MS Teams integration variables (`TEAMS_APP_ID`, `TEAMS_APP_PASSWORD`, `TEAMS_TENANT_ID`, `TEAMS_CHANNEL_ID_ONBOARD`) to `.env.example` and documentation.
 - Documented running `pre-commit install` in README Quickstart.
+- Added a legacy note in `docs/Agents.md` directing readers to `agents/index.md`.
 
 ## [0.1.0] - 2025-06-14
 
