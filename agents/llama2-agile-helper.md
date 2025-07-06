@@ -1,4 +1,5 @@
 # Llama2 Agile Helper Agent
+**Status:** Planned.
 
 **Purpose:** Offers agile planning suggestions and coaching using the Llama2 language model.
 
