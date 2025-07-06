@@ -31,9 +31,6 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | GOVERNMENT_ROLE_ID           | Role for government employees              |
 | MILITARY_ROLE_ID             | Role for military members                  |
 | EDUCATION_ROLE_ID            | Role for school or university affiliation  |
-| VERIFIED_GOVERNMENT_ROLE_ID  | Role assigned after government verification|
-| VERIFIED_MILITARY_ROLE_ID    | Role assigned after military verification  |
-| VERIFIED_EDUCATION_ROLE_ID   | Role assigned after education verification |
 | DISCORD_CLIENT_ID            | Discord application client ID              |
 | DISCORD_CLIENT_SECRET        | Discord application client secret          |
 | DISCORD_REDIRECT_URI         | OAuth callback URL for Discord             |
