@@ -118,6 +118,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
+- [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
 - [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
 - [Troubleshooting guide](troubleshooting.md)
   &ndash; quick fixes for setup problems and failing CI jobs.

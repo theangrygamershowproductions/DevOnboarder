@@ -64,6 +64,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 15. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
+16. Review the [builder ethics dossier](docs/builder_ethics_dossier.md) outlining contributor ethics and a simple template.
 
 These files expand on the steps listed in the Quickstart section.
 
