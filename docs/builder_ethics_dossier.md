@@ -45,4 +45,10 @@ Behavioral promises:
 
 "I recognize that every decision I log becomes part of my ethical legacy. I choose to build in a way that makes me proud—and that others can trust."
 
+## 📘 Journal Log: 2025-07-05
+
+Removed the outdated `docs/builder-ethics-dossier.md` in favor of this
+`docs/builder_ethics_dossier.md`. The Quickstart now instructs running
+`npm run coverage --prefix frontend` so React tests meet the coverage
+policy.
 
