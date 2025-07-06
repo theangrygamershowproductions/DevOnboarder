@@ -6,6 +6,8 @@ This directory documents the services and integrations that make up the DevOnboa
 
 - [Discord Integration](discord-integration.md)
 - [MS Teams Integration](ms-teams-integration.md)
+- [ID.me Verification](idme-verification.md)
+- [AI Mentor](ai-mentor.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 ## Required Environment Variables
