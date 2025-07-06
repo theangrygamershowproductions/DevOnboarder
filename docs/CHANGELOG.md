@@ -467,6 +467,7 @@ All notable changes to this project will be recorded in this file.
 - Added a legacy note in `docs/Agents.md` directing readers to `agents/index.md`.
 - Documented `API_BASE_URL` in `.env.example` and environment docs.
 - Added Llama2 Agile Helper agent doc and `LLAMA2_API_KEY` variable.
+- Documented planned status for Llama2 Agile Helper agent.
 
 ## [0.1.0] - 2025-06-14
 
