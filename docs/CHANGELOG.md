@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
+- Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - Removed `VERIFIED_GOVERNMENT_ROLE_ID`, `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` from `.env.example` and documentation.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
