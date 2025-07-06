@@ -206,6 +206,8 @@ All notable changes to this project will be recorded in this file.
 - Documented database agent and synced environment variables with `.env.example`.
 - `setup-env.sh` now falls back to `npm install` when `pnpm` is unavailable.
 - `setup-env.sh` skips the Codex Docker image when `CI` is set and uses the local virtualenv.
+- `setup-env.sh` installs bot packages when `bot/` exists and the README quickstart mentions
+  running `npm ci --prefix bot`.
 - Added documentation & QA checklist to `docs/pull_request_template.md` and `.github/pull_request_template.md`.
 - Added `doc-quality-onboarding.md` with a quickstart for running documentation checks.
 - Replaced marketing preview links with the frontend README and React demo.
