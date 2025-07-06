@@ -54,9 +54,6 @@ VERIFIED_MEMBER_ROLE_ID=
 GOVERNMENT_ROLE_ID=
 MILITARY_ROLE_ID=
 EDUCATION_ROLE_ID=
-VERIFIED_GOVERNMENT_ROLE_ID=
-VERIFIED_MILITARY_ROLE_ID=
-VERIFIED_EDUCATION_ROLE_ID=
 ```
 
 Users are considered admins when they hold the owner, administrator or
@@ -67,12 +64,6 @@ resolving these flags, so roles from other guilds do not influence admin or
 verification status. These flags appear in the `/api/user` response and control
 access to certain commands and pages.
 
-- `VERIFIED_GOVERNMENT_ROLE_ID` &ndash; role granted after confirming a
-  government employee's credentials.
-- `VERIFIED_MILITARY_ROLE_ID` &ndash; role granted once a user proves active
-  duty or veteran status.
-- `VERIFIED_EDUCATION_ROLE_ID` &ndash; role assigned when a school or
-  university affiliation is verified.
 
 ### Discord OAuth login
 
