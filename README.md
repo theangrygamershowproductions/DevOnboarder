@@ -134,6 +134,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 1. Install Docker, Docker Compose, Node.js 20, and Python 3.12.
 2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
+   The script installs the frontend and bot packages so `npm ci --prefix bot` is
+   only needed if you skip this step.
 3. Run `bash scripts/generate-secrets.sh` so `.env.dev` matches the secrets CI uses.
 4. Copy each `*.env.example` to `.env` inside its service directory.
 5. Build the containers with `make deps` and start them with `make up`.
