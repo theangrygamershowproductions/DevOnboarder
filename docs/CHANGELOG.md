@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
 - CI workflow now runs `ci_log_audit.py` on failures and appends the `audit.md` summary to CI failure issues.
 - Added tests for `ci_log_audit.py`.
+- Added a test for `scripts/check_headers.py` using FastAPI's TestClient.
 - Expanded `docs/ci-failure-issues.md` with an explanation of the automated audit step and how to interpret `audit.md`.
 - Replaced deprecated `actions/setup-gh-cli` with a direct
   installation approach.
