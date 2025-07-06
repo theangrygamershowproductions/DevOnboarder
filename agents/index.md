@@ -8,6 +8,7 @@ This directory documents the services and integrations that make up the DevOnboa
 - [MS Teams Integration](ms-teams-integration.md)
 - [ID.me Verification](idme-verification.md)
 - [AI Mentor](ai-mentor.md)
+- [Llama2 Agile Helper](llama2-agile-helper.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 ## Required Environment Variables
@@ -55,4 +56,5 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | TEAMS_APP_PASSWORD           | Secret used to authenticate the Teams app   |
 | TEAMS_TENANT_ID              | Azure tenant hosting the Teams app          |
 | TEAMS_CHANNEL_ID_ONBOARD     | Teams channel ID for onboarding updates     |
+| LLAMA2_API_KEY               | API key for accessing the Llama2 service    |
 
