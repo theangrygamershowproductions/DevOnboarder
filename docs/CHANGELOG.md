@@ -456,9 +456,7 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/origin.md` with the project's backstory and linked it from the README.
 - Expanded `docs/origin.md` with more detail on the 2017–2021 collapse,
   recovery steps, and disclaimers.
-- Added `docs/builder-ethics-dossier.md` documenting project values and
-  ethical commitments.
-- Added `docs/builder_ethics_dossier.md` declaring the builder's ethics and reusable template.
+- Added `docs/builder_ethics_dossier.md` documenting project values and a reusable template. Removed the outdated `docs/builder-ethics-dossier.md`.
 - Added environment variable summary to `agents/index.md`.
 - Added MS Teams integration variables (`TEAMS_APP_ID`, `TEAMS_APP_PASSWORD`, `TEAMS_TENANT_ID`, `TEAMS_CHANNEL_ID_ONBOARD`) to `.env.example` and documentation.
 - Documented running `pre-commit install` in README Quickstart.
