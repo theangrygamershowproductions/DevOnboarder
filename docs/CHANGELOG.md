@@ -463,6 +463,7 @@ All notable changes to this project will be recorded in this file.
 - Added MS Teams integration variables (`TEAMS_APP_ID`, `TEAMS_APP_PASSWORD`, `TEAMS_TENANT_ID`, `TEAMS_CHANNEL_ID_ONBOARD`) to `.env.example` and documentation.
 - Documented running `pre-commit install` in README Quickstart.
 - Added a legacy note in `docs/Agents.md` directing readers to `agents/index.md`.
+- Documented `API_BASE_URL` in `.env.example` and environment docs.
 
 ## [0.1.0] - 2025-06-14
 
