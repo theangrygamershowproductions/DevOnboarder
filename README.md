@@ -148,7 +148,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    npm run coverage --prefix bot
    npm run coverage --prefix frontend
    ```
-8. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
+8. Install git hooks with `pre-commit install` so lint checks run automatically.
+9. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
