@@ -23,6 +23,14 @@
       "description": "Build React components for the submission form, status board, and analytics snapshot per docs/prd/feedback-dashboard.md.",
       "status": "planned",
       "milestone": "v0.5.0"
+    },
+    {
+      "id": "agile-001",
+      "title": "Llama2 Agile Helper Integration",
+      "module": "llama2_agile_helper",
+      "description": "Provide sprint summaries and backlog grooming tips.",
+      "status": "planned",
+      "milestone": "v0.5.0"
     }
   ],
   "completedTasks": [
