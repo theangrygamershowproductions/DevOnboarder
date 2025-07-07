@@ -28,7 +28,7 @@ imports resolve correctly.
 * On macOS: `brew install vale`
 * On Windows: `choco install vale`
 * Or see [Vale Installation Docs](https://vale.sh/docs/installation/) for other platforms
-* If the script cannot download Vale automatically, manually download `vale_3.12.0_Linux_64-bit.tar.gz` from the [releases page](https://github.com/errata-ai/vale/releases), extract the `vale` binary, and set `VALE_BINARY` to its path.
+* If the script cannot download Vale automatically, manually download `vale_3.12.0_Linux_64-bit.tar.gz` from the [releases page](https://github.com/errata-ai/vale/releases), extract the `vale` binary, and set the `VALE_BINARY` environment variable to its full path when it's not in `PATH`.
 * **The project uses Vale 3.12.0. CI installs this version automatically**, but you still need it locally to run the checks before committing.
 
 Run `bash scripts/check_dependencies.sh` to confirm Vale and the Node test tools are installed.
