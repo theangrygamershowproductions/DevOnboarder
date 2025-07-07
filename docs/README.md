@@ -44,9 +44,9 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     pip install -r requirements-dev.txt
     ```
 
-    If you skip these commands, `pytest` fails with
-    `ModuleNotFoundError: No module named 'devonboarder'` from
-    `tests/test_app.py`.
+    `pytest.ini` sets `pythonpath=src` so tests can locate the
+    `devonboarder` package. Installing the project still ensures
+    dependencies like **FastAPI** are available.
 
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
