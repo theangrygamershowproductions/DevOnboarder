@@ -497,6 +497,7 @@ All notable changes to this project will be recorded in this file.
 - Documented Llama2 Agile Helper integration step in `codex.plan.md` and updated automation bundle.
 - Added `agile-001` task for Llama2 Agile Helper integration in `codex.tasks.json` and verified `codex.plan.md` reference.
 - CI workflow skips push runs when commit messages start with `[no-ci]`; documented the marker in `AGENTS.md`.
+- Added optional `pytest` pre-commit hook so tests can run locally before each commit.
 
 ## [0.1.0] - 2025-06-14
 
