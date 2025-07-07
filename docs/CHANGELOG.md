@@ -474,6 +474,7 @@ All notable changes to this project will be recorded in this file.
 - Added prompts, metrics log, and Codex tasks scaffolding for the Llama2 Agile Helper agent.
 - Documented configuring `VALE_BINARY` when the Vale binary is not in `PATH`.
 - Verified builder ethics dossier links, journal log, and coverage doc alignment (`codex/tasks/confirm_doc_alignment.md`)
+- Documented Llama2 Agile Helper integration step in `codex.plan.md` and updated automation bundle.
 
 ## [0.1.0] - 2025-06-14
 
