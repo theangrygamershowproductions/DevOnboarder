@@ -44,6 +44,10 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     pip install -r requirements-dev.txt
     ```
 
+    If you skip these commands, `pytest` fails with
+    `ModuleNotFoundError: No module named 'devonboarder'` from
+    `tests/test_app.py`.
+
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
 15. Install git hooks with `pre-commit install` so these checks run automatically.
