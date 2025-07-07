@@ -13,6 +13,8 @@ All notable changes to this project will be recorded in this file.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
+- Documented running `pip install -e .` before `pytest` in docs/README.md and
+  docs/ONBOARDING.md to avoid `ModuleNotFoundError: No module named 'devonboarder'`.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
 - Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
