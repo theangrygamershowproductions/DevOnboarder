@@ -112,8 +112,8 @@ you can activate a virtual environment instead of using this flag.
 
 ## Auditing environment variables
 
-Run `scripts/audit_env_vars.sh` to compare your current environment to the
-variables listed in `.env.example`, `frontend/src/.env.example`,
-`bot/.env.example`, and `auth/.env.example`. The script prints any required
-variables that are missing and any extras found in the environment. Set
-`JSON_OUTPUT` to a file path to also write a JSON summary for automation.
+Run `env -i PATH="$PATH" bash scripts/audit_env_vars.sh` to compare only the
+variables loaded from `.env.dev` with those listed in `.env.example`,
+`frontend/src/.env.example`, `bot/.env.example`, and `auth/.env.example`. The
+script prints any required variables that are missing and any extras found in
+the environment. Set `JSON_OUTPUT` to a file path for machine-readable results.
