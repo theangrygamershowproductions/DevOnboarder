@@ -471,6 +471,7 @@ All notable changes to this project will be recorded in this file.
   95% coverage requirement.
 - Added feature expansion plan for Llama2 Agile Helper agent with prompts and integration points.
 - Cleaned up outdated verification role ID references across the docs.
+- Added prompts, metrics log, and Codex tasks scaffolding for the Llama2 Agile Helper agent.
 
 ## [0.1.0] - 2025-06-14
 
