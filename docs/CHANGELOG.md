@@ -510,6 +510,8 @@ All notable changes to this project will be recorded in this file.
   LanguageTool checks requires a local server.
 - Updated README to note that `scripts/check_docs.sh` relies on Vale and that
   LanguageTool is optional.
+- Documented that `scripts/check_docs.sh` attempts to download Vale when it is
+  missing and prints a warning without failing if the download fails.
 
 ## [0.1.0] - 2025-06-14
 
