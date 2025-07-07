@@ -508,6 +508,8 @@ All notable changes to this project will be recorded in this file.
 - Documented running `env -i PATH="$PATH" bash scripts/audit_env_vars.sh` in `docs/env.md` and explained the `JSON_OUTPUT` option for machine-readable results.
 - Clarified that `scripts/check_docs.sh` uses Vale only and that running
   LanguageTool checks requires a local server.
+- Updated README to note that `scripts/check_docs.sh` relies on Vale and that
+  LanguageTool is optional.
 
 ## [0.1.0] - 2025-06-14
 
