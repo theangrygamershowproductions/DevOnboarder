@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from utils.cors import get_cors_origins
 
 from devonboarder import auth_service
+
 router = APIRouter()
 
 
@@ -46,9 +47,7 @@ def contribute(
 ) -> dict[str, str]:
     """Record a contribution and award XP."""
     description = data["description"]
-    db.add(
-        auth_service.Contribution(user_id=current_user.id, description=description)
-    )
+    db.add(auth_service.Contribution(user_id=current_user.id, description=description))
     db.add(
         auth_service.XPEvent(user_id=current_user.id, xp=auth_service.CONTRIBUTION_XP)
     )
@@ -92,4 +91,3 @@ def main() -> None:
     import uvicorn
 
     uvicorn.run(create_app(), host="0.0.0.0", port=8001)
-

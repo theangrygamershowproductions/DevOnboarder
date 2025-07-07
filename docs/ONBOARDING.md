@@ -43,6 +43,15 @@ If Codex does not respond, make sure:
 * Codex bot is installed and has permission to comment and create issues.
 * Workflow files (such as `.github/workflows/codex.ci.yml`) include `full-qa` as a supported command.
 
+`pytest.ini` sets `pythonpath=src` so tests can locate `devonboarder`.
+Install the project in editable mode before running the tests to ensure
+all dependencies are available:
+
+```bash
+pip install -e .
+pip install -r requirements-dev.txt
+```
+
 If Vale or LanguageTool cannot run due to network errors, Codex marks the documentation step as a "⚠️ Docs: Lint skipped" warning. You can still merge if all other required checks pass, but please run docs checks locally later to catch formatting errors.
 
 ### Optional Easter Egg (for fun!)
