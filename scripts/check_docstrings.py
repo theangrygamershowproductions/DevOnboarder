@@ -5,6 +5,7 @@ Usage: ``python scripts/check_docstrings.py [PATH]``
 Provide an optional ``PATH`` to scan a different directory. The default path is
 ``src/devonboarder``.
 """
+
 import ast
 import os
 import sys
@@ -47,9 +48,7 @@ def main() -> None:
                     tree = ast.parse(f.read())
                 for node in ast.walk(tree):
                     if isinstance(node, ast.FunctionDef):
-                        if any(
-                            _is_route_decorator(d) for d in node.decorator_list
-                        ):
+                        if any(_is_route_decorator(d) for d in node.decorator_list):
                             if not has_docstring(node):
                                 rel_path = os.path.relpath(path)
                                 msg = (
