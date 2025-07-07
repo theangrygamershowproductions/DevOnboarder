@@ -10,6 +10,8 @@ All notable changes to this project will be recorded in this file.
   `scripts/install_gh_cli.sh`.
 - Added `scripts/check_env_docs.py` to validate environment variable docs and
   referenced it in `docs/merge-checklist.md`.
+- CI workflow now runs `python scripts/check_env_docs.py` after the Black step
+  to fail when environment docs are out of sync.
 - Documented commit-msg hook setup in CONTRIBUTING.md and docs.
 - Offline install instructions now appear in CI logs when package installs fail.
 - CI now checks compose service status early and prints logs on failure.
