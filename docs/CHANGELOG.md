@@ -8,6 +8,7 @@ All notable changes to this project will be recorded in this file.
 - Skip Codex container setup when running in CI.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
+- Detects documentation-only pushes and sets `steps.filter.outputs.code` to `false`.
 - Skips the `test` job when only docs or Markdown files change using
   `dorny/paths-filter`.
 - Disabled the `pytest` pre-commit hook by default and documented how to enable it.
