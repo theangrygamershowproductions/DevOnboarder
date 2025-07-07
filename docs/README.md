@@ -37,7 +37,8 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
 13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`, and `npm run coverage` from the `bot/` directory before committing.
     After installing dependencies, run `npm run coverage` in the `frontend/` directory as well
     (see [../frontend/README.md](../frontend/README.md) for details).
-    Install the project and dev requirements **before running the tests**:
+    Install the project and dev requirements **before running the tests**. Running
+    `pytest` without these installs may fail with `ModuleNotFoundError`:
 
     ```bash
     pip install -e .  # or `pip install -r requirements.txt` if you have one

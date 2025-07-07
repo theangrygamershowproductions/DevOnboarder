@@ -64,6 +64,7 @@ Once commits are pushed to a shared branch, avoid rewriting history. Do not run 
 pip install -e .
 pip install -r requirements-dev.txt
 ```
+Run these commands **before** invoking `pytest` so all dev dependencies are available.
 
 - Run the linter and tests to confirm they pass:
 
