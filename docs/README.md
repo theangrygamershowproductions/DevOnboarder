@@ -158,6 +158,9 @@ All Markdown files must pass Vale and LanguageTool checks.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
+- The script automatically downloads Vale when it is missing. CI issues a
+  warning (not a failure) if the download fails. Set `VALE_BINARY` to
+  use a custom path.
 - Install Vale (version 3.12.0) with `brew install vale` on macOS or
   `choco install vale` on Windows. You can also download it from the
   [Vale releases page](https://github.com/errata-ai/vale/releases).
