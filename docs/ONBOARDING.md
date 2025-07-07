@@ -43,9 +43,9 @@ If Codex does not respond, make sure:
 * Codex bot is installed and has permission to comment and create issues.
 * Workflow files (such as `.github/workflows/codex.ci.yml`) include `full-qa` as a supported command.
 
-If `pytest` exits with `ModuleNotFoundError: No module named 'devonboarder'`
-(referenced in `tests/test_app.py`), install the project in editable mode
-before running the tests:
+`pytest.ini` sets `pythonpath=src` so tests can locate `devonboarder`.
+Install the project in editable mode before running the tests to ensure
+all dependencies are available:
 
 ```bash
 pip install -e .
