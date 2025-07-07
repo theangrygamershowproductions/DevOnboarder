@@ -35,7 +35,6 @@ The short version: everything broke, then got rebuilt. The full recovery story l
 - `bot/` – Discord bot written in TypeScript.
 - `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
-- `xp/` – Environment files for the XP API.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 

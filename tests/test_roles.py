@@ -28,6 +28,3 @@ def test_resolve_user_flags_admin_and_verified(monkeypatch):
         "isVerified": True,
         "verificationType": "member",
     }
-
-
-
