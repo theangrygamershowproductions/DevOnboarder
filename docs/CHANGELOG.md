@@ -8,6 +8,8 @@ All notable changes to this project will be recorded in this file.
 - Skip Codex container setup when running in CI.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
+- Skips the `test` job when only docs or Markdown files change using
+  `dorny/paths-filter`.
 - Added `scripts/check_env_docs.py` to validate environment variable docs and
   referenced it in `docs/merge-checklist.md`.
 - CI workflow now runs `python scripts/check_env_docs.py` after the Black step

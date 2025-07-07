@@ -6,6 +6,12 @@ The `ci.yml` workflow runs on every push and pull request. It sets up Python 3.1
 
 A concurrency group of `${{ github.workflow }}-${{ github.ref }}` cancels in-progress runs when a new commit pushes to the same branch. This prevents stale jobs from consuming minutes.
 
+## Documentation Filter
+
+The workflow runs `dorny/paths-filter` before other jobs. When the filter
+detects that only files under `docs/` or Markdown files were modified, the
+remaining jobs do not run. This keeps documentation-only pull requests fast.
+
 ## Caching
 
 The job caches several directories to speed up subsequent runs:
