@@ -23,6 +23,8 @@ All notable changes to this project will be recorded in this file.
 - Added `scripts/audit_env_vars.sh` to report missing or extra environment variables and documented usage in `docs/env.md`.
 - CI now audits `.env.dev` in CI using `scripts/audit_env_vars.sh` and fails when variables are missing or extra.
 - Added `secret-alignment.md` issue template and referenced it from `docs/merge-checklist.md`.
+- Added `secrets-alignment.yml` workflow to open an issue when environment
+  variables are misaligned.
 - Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
