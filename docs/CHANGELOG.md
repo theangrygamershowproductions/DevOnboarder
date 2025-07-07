@@ -14,6 +14,7 @@ All notable changes to this project will be recorded in this file.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
+- Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
@@ -490,3 +491,4 @@ All notable changes to this project will be recorded in this file.
 - Updated bot and frontend lock files and added tests so `scripts/run_tests.sh` passes
 - Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
 - Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented the job in `docs/README.md`.
+- Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
