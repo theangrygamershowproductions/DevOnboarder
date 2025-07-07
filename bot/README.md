@@ -44,6 +44,16 @@ bot:
   command: ["npm", "start"]
 ```
 
+## Tests
+
+Generate a coverage report with:
+
+```bash
+npm run coverage
+```
+
+The CI workflow requires every suite to maintain **95%** coverage.
+
 ## Adding Commands
 
 Place new command modules in `src/commands`. Each module exports
