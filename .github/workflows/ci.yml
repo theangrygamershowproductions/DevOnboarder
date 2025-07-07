@@ -15,7 +15,7 @@ jobs:
     filter:
         runs-on: ubuntu-latest
         outputs:
-            docs: ${{ steps.filter.outputs.docs }}
+            code: ${{ steps.filter.outputs.code }}
         steps:
             - uses: actions/checkout@v3
               with:
@@ -25,14 +25,16 @@ jobs:
               uses: dorny/paths-filter@v2
               with:
                   filters: |
-                      docs:
-                          - 'docs/**'
-                          - '**/*.md'
+                      code:
+                          - '!docs/**'
+                          - '!**/*.md'
+                          - '**'
     test:
         needs: filter
         if: |
-            (github.event_name != 'push' || !startsWith(github.event.head_commit.message, '[no-ci]')) &&
-            needs.filter.outputs.docs != 'true'
+            github.event_name != 'push' ||
+            !contains(join(github.event.head_commit.message), '[no-ci]') &&
+            needs.filter.outputs.code == 'true'
         runs-on: ubuntu-latest
         strategy:
             matrix:
