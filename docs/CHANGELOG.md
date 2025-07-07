@@ -13,6 +13,12 @@ All notable changes to this project will be recorded in this file.
 - CI now checks compose service status early and prints logs on failure.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
+- Documented offline header check in `tests/test_check_headers.py`.
+- Documented running `pip install -e .` before `pytest` in docs/README.md and
+  docs/ONBOARDING.md to avoid `ModuleNotFoundError: No module named 'devonboarder'`.
+- Documented Teams and Llama2 environment variables in `docs/env.md`.
+- Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
+- Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
@@ -30,6 +36,7 @@ All notable changes to this project will be recorded in this file.
 - CI workflow cancels in-progress runs when new commits push.
 - Added a 60-minute timeout to the `test` job in `ci.yml`.
 - Added `close-codex-issues.yml` workflow to automatically close Codex-created issues referenced by `Fixes #<issue>` after a pull request merges and documented it in `docs/README.md`.
+- Removed obsolete `xp/.env.example`; the XP API now reads from the main `.env` file.
 - Archived `languagetool_check.py` to `archive/` and removed its invocation from `scripts/check_docs.sh`.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `scripts/commit-msg` and `scripts/install_commit_msg_hook.sh` to help contributors set up a local `commit-msg` hook.
@@ -489,3 +496,4 @@ All notable changes to this project will be recorded in this file.
 - Updated bot and frontend lock files and added tests so `scripts/run_tests.sh` passes
 - Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
 - Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented the job in `docs/README.md`.
+- Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.

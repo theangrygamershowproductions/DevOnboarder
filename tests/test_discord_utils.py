@@ -66,6 +66,7 @@ def test_get_user_profile(monkeypatch):
 
 def test_get_user_roles_multiple_guilds(monkeypatch):
     """Collect roles across more than two guilds."""
+
     def fake_get(url: str, headers: dict[str, str], *, timeout=None):
         if url.endswith("/users/@me/guilds"):
             return StubResponse(200, [{"id": "1"}, {"id": "2"}, {"id": "3"}])
@@ -121,4 +122,3 @@ def test_resolve_user_flags_combinations(monkeypatch, roles, expected):
 
     flags = resolve_user_flags({r for rs in roles.values() for r in rs})
     assert flags == expected
-

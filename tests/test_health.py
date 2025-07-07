@@ -1,4 +1,5 @@
 import os
+
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
