@@ -38,6 +38,8 @@ All notable changes to this project will be recorded in this file.
 - Verified GitHub CLI availability across all workflows.
 - Updated README to document the new GitHub CLI installation method.
 - Documented GitHub CLI installation and version output in `docs/ci-workflow.md`.
+- `audit_env_vars.sh` now writes a JSON summary when `JSON_OUTPUT` is set and CI
+  uploads the file for the secrets-alignment workflow.
 - Added CODEOWNERS to automatically request maintainer reviews on pull requests.
 - Added stub agent specs for ID.me verification and AI mentor.
 - CI workflow cancels in-progress runs when new commits push.
