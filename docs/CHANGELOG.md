@@ -473,6 +473,7 @@ All notable changes to this project will be recorded in this file.
 - Documented planned status for Llama2 Agile Helper agent.
 - Documented running `npm run coverage` in `frontend/README.md` and noted the
   95% coverage requirement.
+- Added feature expansion plan for Llama2 Agile Helper agent with prompts and integration points.
 
 ## [0.1.0] - 2025-06-14
 
