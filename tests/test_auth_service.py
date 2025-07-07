@@ -1,5 +1,6 @@
 import importlib
 import os
+
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
@@ -19,12 +20,16 @@ def setup_function(function):
     auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
     auth_service.get_user_roles = lambda token: {}
-    auth_service.resolve_user_flags = (
-        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
-    )
-    auth_service.get_user_profile = (
-        lambda token: {"id": "0", "username": "", "avatar": None}
-    )
+    auth_service.resolve_user_flags = lambda roles: {
+        "isAdmin": False,
+        "isVerified": False,
+        "verificationType": None,
+    }
+    auth_service.get_user_profile = lambda token: {
+        "id": "0",
+        "username": "",
+        "avatar": None,
+    }
 
 
 def _get_token(
@@ -203,6 +208,7 @@ def test_user_levels_and_promote():
         bob = db.query(auth_service.User).filter_by(username="bob").first()
         assert bob.is_admin
 
+
 def test_register_duplicate_username():
     app = auth_service.create_app()
     client = TestClient(app)
@@ -230,11 +236,13 @@ def test_xp_accumulation_and_level_calculation():
     client.post("/api/register", json={"username": "eve", "password": "pw"})
     with auth_service.SessionLocal() as db:
         eve = db.query(auth_service.User).filter_by(username="eve").first()
-        db.add_all([
-            auth_service.XPEvent(user_id=eve.id, xp=120),
-            auth_service.XPEvent(user_id=eve.id, xp=80),
-            auth_service.XPEvent(user_id=eve.id, xp=60),
-        ])
+        db.add_all(
+            [
+                auth_service.XPEvent(user_id=eve.id, xp=120),
+                auth_service.XPEvent(user_id=eve.id, xp=80),
+                auth_service.XPEvent(user_id=eve.id, xp=60),
+            ]
+        )
         db.commit()
 
     token = _get_token(client, "eve", "pw")
@@ -443,12 +451,16 @@ def test_expired_token_rejected(monkeypatch):
     auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
     auth_service.get_user_roles = lambda token: {}
-    auth_service.resolve_user_flags = (
-        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
-    )
-    auth_service.get_user_profile = (
-        lambda token: {"id": "0", "username": "", "avatar": None}
-    )
+    auth_service.resolve_user_flags = lambda roles: {
+        "isAdmin": False,
+        "isVerified": False,
+        "verificationType": None,
+    }
+    auth_service.get_user_profile = lambda token: {
+        "id": "0",
+        "username": "",
+        "avatar": None,
+    }
     app = auth_service.create_app()
     client = TestClient(app)
 
