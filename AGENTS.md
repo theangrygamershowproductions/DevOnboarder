@@ -91,3 +91,7 @@ second attempt fails.
 Prefix a commit message with `[no-ci]` to skip the CI workflow when pushing
 directly to a branch. Pull requests always run the workflow regardless of this
 marker.
+
+The workflow also skips its test job when a push only modifies documentation or
+Markdown files. It uses `dorny/paths-filter` to set `steps.filter.outputs.code`
+to `false` in that case.
