@@ -1,4 +1,4 @@
-ruff==0.12.1  # LTS as of 2025-06
+ruff==0.12.2  # LTS as of 2025-06
 pytest==8.4.1  # LTS as of 2025-06
 pyyaml
 pre-commit==4.2.0  # LTS as of 2025-06
