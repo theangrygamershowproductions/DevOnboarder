@@ -159,6 +159,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - If your network blocks direct downloads, fetch version 3.12.0 from
   `https://github.com/errata-ai/vale/releases` on another machine and copy the
   `vale` binary to a directory in your `PATH`.
+- If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
+  to its location so `scripts/check_docs.sh` can find it.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
 - Set `LANGUAGETOOL_URL` if you use a self-hosted LanguageTool server. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 
