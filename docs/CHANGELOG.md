@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
   `scripts/install_gh_cli.sh`.
 - Skips the `test` job when only docs or Markdown files change using
   `dorny/paths-filter`.
+- Disabled the `pytest` pre-commit hook by default and documented how to enable it.
 - Added `scripts/check_env_docs.py` to validate environment variable docs and
   referenced it in `docs/merge-checklist.md`.
 - CI workflow now runs `python scripts/check_env_docs.py` after the Black step

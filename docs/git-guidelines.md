@@ -81,7 +81,7 @@ pytest --cov=src --cov-fail-under=95
 - CI lints commit messages using `scripts/check_commit_messages.sh`.
   - Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a local `commit-msg` hook so mistakes are caught before you push. See [CONTRIBUTING.md](../CONTRIBUTING.md).
   Past violations do not require rewriting history.
-- Enable the `pytest` pre-commit hook to run tests automatically and catch failures locally.
+  - Enable the `pytest` pre-commit hook to run tests automatically and catch failures locally. Run `pre-commit run pytest --all-files` once to enable it.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
 - Follow the pull request template in `docs/pull_request_template.md`.
