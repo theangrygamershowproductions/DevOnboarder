@@ -21,6 +21,9 @@ All notable changes to this project will be recorded in this file.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Documented offline header check in `tests/test_check_headers.py`.
+- Reminded contributors to run `pip install -r requirements-dev.txt` and
+  `pip install -e .` before running `pytest`. `scripts/check_dependencies.sh`
+  now verifies these packages are installed.
 - Documented running `pip install -e .` before `pytest` in docs/README.md and
   docs/ONBOARDING.md to avoid `ModuleNotFoundError: No module named 'devonboarder'`.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
