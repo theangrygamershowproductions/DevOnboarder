@@ -54,10 +54,9 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
 16. `pre-commit` also verifies environment variable docs with
     `python scripts/check_env_docs.py`.
 17. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
-    This script uses **Vale** for style and **LanguageTool** for grammar.
-    LanguageTool requires network access to `api.languagetool.org` unless you
-    provide a custom server URL in the `LANGUAGETOOL_URL` environment variable.
-    If your environment blocks outbound requests, run your own instance with:
+    The script downloads **Vale** automatically when it is missing and prints a
+    notice if grammar checks require **LanguageTool**.
+    To run LanguageTool locally, start your own instance with:
 
     ```bash
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
@@ -156,7 +155,8 @@ who has contributed and when.
 
 ## Documentation Quality Checks
 
-All Markdown files must pass Vale and LanguageTool checks.
+All Markdown files are checked with **Vale** for style. The docs script prints a
+notice if grammar checks need **LanguageTool**.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
@@ -172,7 +172,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
   to its location so `scripts/check_docs.sh` can find it.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
-- Set `LANGUAGETOOL_URL` if you use a self-hosted LanguageTool server. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+- Set `LANGUAGETOOL_URL` when running your own LanguageTool server if you want
+  local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 
 ## Issues and Pull Requests
 
