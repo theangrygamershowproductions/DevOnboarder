@@ -484,6 +484,7 @@ All notable changes to this project will be recorded in this file.
 - Documented configuring `VALE_BINARY` when the Vale binary is not in `PATH`.
 - Verified builder ethics dossier links, journal log, and coverage doc alignment (`codex/tasks/confirm_doc_alignment.md`)
 - Documented Llama2 Agile Helper integration step in `codex.plan.md` and updated automation bundle.
+- Added `agile-001` task for Llama2 Agile Helper integration in `codex.tasks.json` and verified `codex.plan.md` reference.
 
 ## [0.1.0] - 2025-06-14
 
