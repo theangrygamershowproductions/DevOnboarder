@@ -43,6 +43,15 @@ If Codex does not respond, make sure:
 * Codex bot is installed and has permission to comment and create issues.
 * Workflow files (such as `.github/workflows/codex.ci.yml`) include `full-qa` as a supported command.
 
+If `pytest` exits with `ModuleNotFoundError: No module named 'devonboarder'`
+(referenced in `tests/test_app.py`), install the project in editable mode
+before running the tests:
+
+```bash
+pip install -e .
+pip install -r requirements-dev.txt
+```
+
 If Vale or LanguageTool cannot run due to network errors, Codex marks the documentation step as a "⚠️ Docs: Lint skipped" warning. You can still merge if all other required checks pass, but please run docs checks locally later to catch formatting errors.
 
 ### Optional Easter Egg (for fun!)
