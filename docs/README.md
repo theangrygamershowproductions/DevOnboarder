@@ -44,6 +44,10 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     pip install -r requirements-dev.txt
     ```
 
+    `pytest.ini` sets `pythonpath=src` so tests can locate the
+    `devonboarder` package. Installing the project still ensures
+    dependencies like **FastAPI** are available.
+
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
 15. Install git hooks with `pre-commit install` so these checks run automatically.
@@ -154,7 +158,8 @@ All Markdown files must pass Vale and LanguageTool checks.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
-- Install Vale (version 3.12.0) with `brew install vale` or download it from the
+- Install Vale (version 3.12.0) with `brew install vale` on macOS or
+  `choco install vale` on Windows. You can also download it from the
   [Vale releases page](https://github.com/errata-ai/vale/releases).
 - If your network blocks direct downloads, fetch version 3.12.0 from
   `https://github.com/errata-ai/vale/releases` on another machine and copy the

@@ -35,7 +35,6 @@ The short version: everything broke, then got rebuilt. The full recovery story l
 - `bot/` – Discord bot written in TypeScript.
 - `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
-- `xp/` – Environment files for the XP API.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 
@@ -57,7 +56,10 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 12. Run `./scripts/check_docs.sh` to lint documentation with Vale and
     LanguageTool. Set `LANGUAGETOOL_URL` if you use a local LanguageTool
     server.
-13. Install Vale with `brew install vale` (or see the [Vale installation docs](https://vale.sh/docs/installation/))
+13. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
+    `choco install vale` on Windows. You can also download it from the
+    [Vale releases page](https://github.com/errata-ai/vale/releases).
+    If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
 14. Browse the [agents overview](agents/index.md) for individual service specs.

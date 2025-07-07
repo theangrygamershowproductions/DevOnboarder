@@ -29,4 +29,4 @@ def test_check_headers(monkeypatch):
     module = importlib.import_module("scripts.check_headers")
     importlib.reload(module)
 
-    module.main()
+    assert module.main() is None
