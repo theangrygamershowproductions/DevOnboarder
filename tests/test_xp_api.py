@@ -1,4 +1,5 @@
 import os
+
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
@@ -13,12 +14,16 @@ def setup_function(function):
     auth_service.Base.metadata.drop_all(bind=auth_service.engine)
     auth_service.init_db()
     auth_service.get_user_roles = lambda token: {}
-    auth_service.resolve_user_flags = (
-        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None}
-    )
-    auth_service.get_user_profile = (
-        lambda token: {"id": "0", "username": "", "avatar": None}
-    )
+    auth_service.resolve_user_flags = lambda roles: {
+        "isAdmin": False,
+        "isVerified": False,
+        "verificationType": None,
+    }
+    auth_service.get_user_profile = lambda token: {
+        "id": "0",
+        "username": "",
+        "avatar": None,
+    }
 
 
 def _seed_data():
@@ -28,10 +33,12 @@ def _seed_data():
         db.commit()
         db.refresh(user)
         db.add(auth_service.Contribution(user_id=user.id, description="first"))
-        db.add_all([
-            auth_service.XPEvent(user_id=user.id, xp=120),
-            auth_service.XPEvent(user_id=user.id, xp=70),
-        ])
+        db.add_all(
+            [
+                auth_service.XPEvent(user_id=user.id, xp=120),
+                auth_service.XPEvent(user_id=user.id, xp=70),
+            ]
+        )
         db.commit()
 
 
