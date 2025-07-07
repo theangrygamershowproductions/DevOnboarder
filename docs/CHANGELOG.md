@@ -489,3 +489,4 @@ All notable changes to this project will be recorded in this file.
 - Updated bot and frontend lock files and added tests so `scripts/run_tests.sh` passes
 - Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
 - Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented the job in `docs/README.md`.
+- Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
