@@ -49,3 +49,7 @@ repos:
             language: system
             pass_filenames: false
             working_directory: bot
+          - id: pytest
+            name: Python tests
+            entry: pytest --cov=src --cov-fail-under=95
+            language: system
