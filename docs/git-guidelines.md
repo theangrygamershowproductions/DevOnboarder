@@ -72,9 +72,9 @@ ruff check .
 pytest --cov=src --cov-fail-under=95
 ```
 - Run documentation checks with `./scripts/check_docs.sh`.
-  These use **Vale** and **LanguageTool** and require network access to
--  `api.languagetool.org` or a locally hosted server specified via
-  `LANGUAGETOOL_URL`.
+  The script runs **Vale** only.
+  LanguageTool checks are optional. If desired, run a local server and
+  set `LANGUAGETOOL_URL` to its address.
 - Keep Prettier pinned to `v3.6.2`. Run
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
