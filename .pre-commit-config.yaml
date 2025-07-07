@@ -33,6 +33,10 @@ repos:
             name: Potato ignore policy
             entry: bash scripts/check_potato_ignore.sh
             language: system
+          - id: env-docs-check
+            name: Environment docs check
+            entry: python scripts/check_env_docs.py
+            language: system
           - id: frontend-eslint
             name: Frontend ESLint
             entry: bash -c 'cd frontend && npm run lint'

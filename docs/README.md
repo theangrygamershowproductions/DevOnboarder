@@ -51,7 +51,9 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
 15. Install git hooks with `pre-commit install` so these checks run automatically.
-16. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
+16. `pre-commit` also verifies environment variable docs with
+    `python scripts/check_env_docs.py`.
+17. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     This script uses **Vale** for style and **LanguageTool** for grammar.
     LanguageTool requires network access to `api.languagetool.org` unless you
     provide a custom server URL in the `LANGUAGETOOL_URL` environment variable.
@@ -63,18 +65,18 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
 
 Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
-17. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
+18. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
 
-18. CI posts a coverage summary on pull requests. Run
+19. CI posts a coverage summary on pull requests. Run
     `python scripts/post_coverage_comment.py` to generate the table locally.
-19. Append the coverage numbers to a Markdown file with
+20. Append the coverage numbers to a Markdown file with
     `bash scripts/append_coverage_summary.sh`. Set the following
     environment variables before running the script:
     `COVERED_LINES`, `TOTAL_LINES`, `COVERAGE_PERCENT`,
     `COVERED_BRANCHES`, `TOTAL_BRANCHES`, and `BRANCH_PERCENT`.
     Pass an optional output filename as the first argument
     (defaults to `summary.md`).
-20. Install the GitHub CLI with `./scripts/install_gh_cli.sh` if you plan to run
+21. Install the GitHub CLI with `./scripts/install_gh_cli.sh` if you plan to run
     scripts that use `gh` locally.
 
 The compose files define common service settings using YAML anchors. Each
