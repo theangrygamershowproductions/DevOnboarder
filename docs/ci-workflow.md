@@ -38,3 +38,8 @@ fails, the CI failure issue automation records the details so maintainers can
 investigate.
 
 The `secrets-alignment.yml` workflow runs when the audit step fails or on a daily schedule. It reruns the environment audit and opens an issue using the Secret Alignment template if variables are missing or extra.
+
+After the Black formatting check, CI runs `python scripts/check_env_docs.py`.
+This script compares the environment variable table in `agents/index.md` with
+the example `.env` files. Any differences cause the job to fail so the
+documentation stays in sync with the environment configuration.
