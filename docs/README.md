@@ -44,6 +44,10 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     pip install -r requirements-dev.txt
     ```
 
+    If you skip these commands, `pytest` fails with
+    `ModuleNotFoundError: No module named 'devonboarder'` from
+    `tests/test_app.py`.
+
 14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
 15. Install git hooks with `pre-commit install` so these checks run automatically.
@@ -159,6 +163,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - If your network blocks direct downloads, fetch version 3.12.0 from
   `https://github.com/errata-ai/vale/releases` on another machine and copy the
   `vale` binary to a directory in your `PATH`.
+- If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
+  to its location so `scripts/check_docs.sh` can find it.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
 - Set `LANGUAGETOOL_URL` if you use a self-hosted LanguageTool server. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 

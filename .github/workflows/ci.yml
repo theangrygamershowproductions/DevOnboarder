@@ -70,6 +70,8 @@ jobs:
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
+            - name: Run Black
+              run: black --check .
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package

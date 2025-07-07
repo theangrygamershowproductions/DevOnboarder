@@ -233,14 +233,14 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
         token_resp = httpx.post(
             "https://discord.com/api/oauth2/token",
             data={
-            "client_id": os.getenv("DISCORD_CLIENT_ID"),
-            "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
-            "grant_type": "authorization_code",
-            "code": code,
-            "redirect_uri": os.getenv(
-                "DISCORD_REDIRECT_URI",
-                "http://localhost:8002/login/discord/callback",
-            ),
+                "client_id": os.getenv("DISCORD_CLIENT_ID"),
+                "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": os.getenv(
+                    "DISCORD_REDIRECT_URI",
+                    "http://localhost:8002/login/discord/callback",
+                ),
             },
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=API_TIMEOUT,
@@ -268,8 +268,6 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
     return {"token": create_token(user)}
 
 
-
-
 @router.get("/api/user/onboarding-status")
 def onboarding_status(current_user: User = Depends(get_current_user)) -> dict[str, str]:
     """Return the user's onboarding progress."""
@@ -290,9 +288,7 @@ def user_contributions(
     current_user: User = Depends(get_current_user),
 ) -> dict[str, list[str]]:
     """List the user's recorded contributions."""
-    return {
-        "contributions": [c.description for c in current_user.contributions]
-    }
+    return {"contributions": [c.description for c in current_user.contributions]}
 
 
 @router.post("/api/user/contributions")
@@ -374,4 +370,3 @@ def main() -> None:
     import uvicorn
 
     uvicorn.run(create_app(), host="0.0.0.0", port=8002)
-
