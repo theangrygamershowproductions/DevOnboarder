@@ -53,6 +53,7 @@ All notable changes to this project will be recorded in this file.
 - Added empty commit referencing e541dd5 for additional context.
 - Removed obsolete `xp/.env.example`; the XP API now reads from the main `.env` file.
 - Archived `languagetool_check.py` to `archive/` and removed its invocation from `scripts/check_docs.sh`.
+- `scripts/check_docs.sh` now downloads Vale automatically and prints a notice when a LanguageTool server is required. Updated docs to make LanguageTool optional.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
 - Added `scripts/commit-msg` and `scripts/install_commit_msg_hook.sh` to help contributors set up a local `commit-msg` hook.
 - Replaced `docs/origin.md` with a full recovery story and updated README links.
