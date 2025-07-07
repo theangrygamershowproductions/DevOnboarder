@@ -109,3 +109,10 @@ starting `npm run dev`.
 The base `Dockerfile` installs Python packages with `pip install --root-user-action=ignore`
 to silence warnings when running as the root user. If you create your own image,
 you can activate a virtual environment instead of using this flag.
+
+## Auditing environment variables
+
+Run `scripts/audit_env_vars.sh` to compare your current environment to the
+variables listed in `.env.example`, `frontend/src/.env.example`,
+`bot/.env.example`, and `auth/.env.example`. The script prints any required
+variables that are missing and any extras found in the environment.
