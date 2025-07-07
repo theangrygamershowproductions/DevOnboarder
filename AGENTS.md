@@ -85,3 +85,9 @@ The `codex.ci.yml` workflow watches every CI job and step. When a failure
 occurs, Codex automatically opens a task describing the error so maintainers can
 investigate. The bot retries the build once and includes logs in the task if the
 second attempt fails.
+
+## Skipping CI Runs
+
+Prefix a commit message with `[no-ci]` to skip the CI workflow when pushing
+directly to a branch. Pull requests always run the workflow regardless of this
+marker.
