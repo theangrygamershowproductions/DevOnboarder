@@ -43,7 +43,7 @@ def test_setup_env_ci_skips_docker(tmp_path):
     bin_dir.mkdir()
     docker_stub = bin_dir / "docker"
     docker_stub.write_text(
-        "#!/bin/sh\nif [ \"$1\" = \"info\" ]; then exit 0; else exit 1; fi\n"
+        '#!/bin/sh\nif [ "$1" = "info" ]; then exit 0; else exit 1; fi\n'
     )
     docker_stub.chmod(0o755)
 
