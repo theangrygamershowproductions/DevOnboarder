@@ -32,7 +32,9 @@ The job runs `black --check .` after installing development requirements. Format
 
 After `.env.dev` is generated, the workflow runs `scripts/audit_env_vars.sh`.
 The script compares the generated environment file to the example files and
-fails if any variables are missing or extra. When the step fails, the CI failure
-issue automation records the details so maintainers can investigate.
+fails if any variables are missing or extra. The step writes `env_audit.json`
+so the `secrets-alignment.yml` workflow can reuse the results. When the audit
+fails, the CI failure issue automation records the details so maintainers can
+investigate.
 
 The `secrets-alignment.yml` workflow runs when the audit step fails or on a daily schedule. It reruns the environment audit and opens an issue using the Secret Alignment template if variables are missing or extra.
