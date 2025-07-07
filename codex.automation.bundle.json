@@ -49,6 +49,14 @@
                 "Display XP, level, next milestone via API integration",
                 "Add loader and error states to calls"
             ]
+        },
+        {
+            "name": "llama2_agile_helper",
+            "description": "Provide sprint summaries and backlog grooming tips via the Llama2 Agile Helper agent.",
+            "actions": [
+                "Generate sprint summary after each sprint",
+                "Suggest backlog grooming actions"
+            ]
         }
     ],
     "workflow": "main"
