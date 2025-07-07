@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
   docs/ONBOARDING.md to avoid `ModuleNotFoundError: No module named 'devonboarder'`.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
 - Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
+- Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
