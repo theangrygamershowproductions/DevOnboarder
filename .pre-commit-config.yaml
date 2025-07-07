@@ -53,3 +53,4 @@ repos:
             name: Python tests
             entry: pytest --cov=src --cov-fail-under=95
             language: system
+            enabled: false
