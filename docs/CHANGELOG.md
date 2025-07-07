@@ -15,7 +15,6 @@ All notable changes to this project will be recorded in this file.
 - CI workflow uploads the full job log as the `ci-logs` artifact.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
-- Removed `VERIFIED_GOVERNMENT_ROLE_ID`, `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` from `.env.example` and documentation.
 - Split `docs/Agents.md` into `agents/` pages and updated references.
 - CI workflow now runs `ci_log_audit.py` on failures and appends the `audit.md` summary to CI failure issues.
 - Added tests for `ci_log_audit.py`.
@@ -275,9 +274,6 @@ All notable changes to this project will be recorded in this file.
   conditions when checking expiry.
 - Bot API helpers now accept a `username` argument and bot commands send the
   caller's name in each request.
-- Clarified the purpose of `VERIFIED_GOVERNMENT_ROLE_ID`,
-  `VERIFIED_MILITARY_ROLE_ID`, and `VERIFIED_EDUCATION_ROLE_ID` in
-  `docs/env.md`.
 - XP API now reads `Contribution` and `XPEvent` data to return onboarding
   status and level for the requested user.
 - Moved role flag logic to `utils.roles` and added `resolve_verification_type`.
@@ -474,6 +470,7 @@ All notable changes to this project will be recorded in this file.
 - Documented running `npm run coverage` in `frontend/README.md` and noted the
   95% coverage requirement.
 - Added feature expansion plan for Llama2 Agile Helper agent with prompts and integration points.
+- Cleaned up outdated verification role ID references across the docs.
 - Added prompts, metrics log, and Codex tasks scaffolding for the Llama2 Agile Helper agent.
 
 ## [0.1.0] - 2025-06-14
