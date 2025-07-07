@@ -19,6 +19,7 @@ All notable changes to this project will be recorded in this file.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
 - Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
 - Added `scripts/audit_env_vars.sh` to report missing or extra environment variables and documented usage in `docs/env.md`.
+- CI now audits `.env.dev` in CI using `scripts/audit_env_vars.sh` and fails when variables are missing or extra.
 - Added `secret-alignment.md` issue template and referenced it from `docs/merge-checklist.md`.
 - Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.

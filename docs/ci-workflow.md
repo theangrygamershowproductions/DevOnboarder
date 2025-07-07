@@ -27,3 +27,10 @@ Workflows rely on the GitHub CLI that comes preinstalled in the container image 
 ## Formatting
 
 The job runs `black --check .` after installing development requirements. Formatting issues cause the build to fail.
+
+## Environment Variable Audit
+
+After `.env.dev` is generated, the workflow runs `scripts/audit_env_vars.sh`.
+The script compares the generated environment file to the example files and
+fails if any variables are missing or extra. When the step fails, the CI failure
+issue automation records the details so maintainers can investigate.
