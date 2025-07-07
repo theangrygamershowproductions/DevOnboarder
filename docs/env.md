@@ -89,6 +89,14 @@ status and level.
 - `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
 - `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to verify headers (default `http://localhost:8002/api/user`).
 
+## Integrations
+
+- `TEAMS_APP_ID` &ndash; Azure app ID for the MS Teams integration.
+- `TEAMS_APP_PASSWORD` &ndash; secret used to authenticate the Teams app.
+- `TEAMS_TENANT_ID` &ndash; Azure tenant hosting the Teams app.
+- `TEAMS_CHANNEL_ID_ONBOARD` &ndash; Teams channel ID for onboarding updates.
+- `LLAMA2_API_KEY` &ndash; API key for accessing the Llama2 service.
+
 ## Docker development images
 
 `docker-compose.dev.yaml` builds the bot and frontend containers using
