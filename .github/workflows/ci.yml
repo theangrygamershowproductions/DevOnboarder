@@ -103,6 +103,16 @@ jobs:
                   retention-days: 7
             - name: Generate secrets
               run: ./scripts/generate-secrets.sh
+            - name: Audit environment variables
+              run: |
+                  env -i PATH="$PATH" bash -c 'set -a; source .env.dev; set +a; bash scripts/audit_env_vars.sh' > env_audit.log
+                  cat env_audit.log
+                  missing=$(awk '/^Missing variables:/{flag=1;next}/^$/{flag=0}flag' env_audit.log | tr -d "\n ")
+                  extras=$(awk '/^Extra variables:/{flag=1;next}flag' env_audit.log | grep -v -E "^(PATH|PWD|SHLVL|_)$" | tr -d "\n ")
+                  if [ -n "$missing" ] || [ -n "$extras" ]; then
+                      echo "::error::Environment variable mismatch detected"
+                      exit 1
+                  fi
             - name: Build containers
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build
             - name: Scan images with Trivy
