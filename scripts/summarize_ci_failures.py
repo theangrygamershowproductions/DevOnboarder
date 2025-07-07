@@ -74,7 +74,8 @@ def main() -> None:
         lines.append("")
 
     lines.append(
-        "[Download artifacts](https://github.com/"f"{repo}/actions/runs/{run_id}) "
+        "[Download artifacts](https://github.com/"
+        f"{repo}/actions/runs/{run_id}) "
         "for full logs."
     )
 

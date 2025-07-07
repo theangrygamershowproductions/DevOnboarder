@@ -61,7 +61,3 @@ def get_user_profile(token: str) -> dict[str, str | None]:
         "username": data["username"],
         "avatar": data.get("avatar"),
     }
-
-
-
-
