@@ -37,4 +37,6 @@ The bot in `bot/` calls these routes when users run slash commands:
 | `/profile` | `GET /api/user/level` |
 | `/contribute` | `POST /api/user/contributions` |
 
-For example, typing `/verify` in Discord triggers a request to `/api/user/onboarding-status` and echoes the resulting status back to the channel.
+For example, typing `/verify` in Discord triggers a request to
+`/api/user/onboarding-status` and echoes the resulting status back to the
+channel.
