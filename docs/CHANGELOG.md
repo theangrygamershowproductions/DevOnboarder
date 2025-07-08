@@ -22,6 +22,8 @@ All notable changes to this project will be recorded in this file.
 - Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
 - Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
+- Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
+  checks for both `frontend/` and `bot/`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
   failures and commits the patch when safe.
 - Detects documentation-only pushes and sets `steps.filter.outputs.code` to `false`.

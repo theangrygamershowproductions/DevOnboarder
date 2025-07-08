@@ -211,9 +211,6 @@ Run the same security checks locally before pushing:
 
 ```bash
 bash scripts/security_audit.sh
-bandit -r src -ll
-npm audit --audit-level=high --prefix frontend
-npm audit --audit-level=high --prefix bot
 ```
 
-Each command fails when vulnerabilities are detected.
+The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high` in both `frontend/` and `bot/`. Each command fails when vulnerabilities are detected.
