@@ -43,7 +43,9 @@ Behavioral promises:
 
 **Signature statement:**
 
-"I recognize that every decision I log becomes part of my ethical legacy. I choose to build in a way that makes me proud—and that others can trust."
+"I recognize that every decision I log becomes part of my ethical legacy. I"
+"choose to build in a way that makes me proud—"
+"and that others can trust."
 
 ## 📘 Journal Log: 2025-07-05
 
