@@ -11,6 +11,14 @@ jobs:
               run: ./scripts/install_gh_cli.sh
             - name: Show gh version
               run: which gh && gh --version
+            - name: Debug token and permissions
+              run: |
+                gh auth status
+                gh api rate_limit
+                gh issue list --label ci-failure --state open --json number --jq '.[].number'
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              continue-on-error: true
             - run: |
                   gh_bin=$(which gh)
                   for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
