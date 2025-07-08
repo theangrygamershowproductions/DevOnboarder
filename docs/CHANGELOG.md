@@ -529,6 +529,7 @@ All notable changes to this project will be recorded in this file.
 - Updated ONBOARDING.md to display "Vale warnings" and noted that
   LanguageTool runs only when `LANGUAGETOOL_URL` is set.
 
+- Added governance checklist for bot permissions in `docs/governance/bot_access_governance.md`.
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
