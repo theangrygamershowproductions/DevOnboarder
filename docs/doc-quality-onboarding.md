@@ -70,6 +70,12 @@ bash scripts/check_docs.sh
 This script runs `markdownlint-cli2` and Vale to lint all Markdown files. It
 generates `vale-results.json` for machine-readable output, which CI stores as an
 artifact.
+Markdownlint enforces a 120-character maximum line length via MD013 in `.markdownlint.json`.
+To check for violations manually, run:
+
+```bash
+grep -Rnw '.{121}' docs
+```
 
 CI also saves `test-results/pytest-results.xml` when running the test suite. You
 can download both artifacts from the **Artifacts** section of each GitHub
