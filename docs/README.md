@@ -17,8 +17,9 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
    workflow runs the same script before building containers so your
    environment matches the pipeline.
 3. Build the service containers with `make deps`.
-4. Install the project in editable mode with `pip install -e .`.
-   Install the dev requirements with `pip install -r requirements-dev.txt`.
+4. Install the project in editable mode with `pip install -e .` so the
+   `devonboarder` package can be imported during tests. Then install the dev
+   requirements with `pip install -r requirements-dev.txt`.
 5. Start services with `make up` or run
    `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
@@ -37,8 +38,9 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
 13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`, and `npm run coverage` from the `bot/` directory before committing.
     After installing dependencies, run `npm run coverage` in the `frontend/` directory as well
     (see [../frontend/README.md](../frontend/README.md) for details).
-    Install the project and dev requirements **before running the tests**. Running
-    `pytest` without these installs may fail with `ModuleNotFoundError`:
+    Install the project and dev requirements **before running the tests**. Skipping
+    `pip install -e .` often leads to `ModuleNotFoundError` when `pytest` imports
+    the `devonboarder` package:
 
     ```bash
     pip install -e .  # or `pip install -r requirements.txt` if you have one
