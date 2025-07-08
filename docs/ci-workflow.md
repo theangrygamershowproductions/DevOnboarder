@@ -54,3 +54,11 @@ The `env-doc-alignment.yml` workflow runs when this step fails. It reruns
 `check_env_docs.py`, parses the missing variables from the output, and opens a
 Secret Alignment issue with the commit SHA. The issue lists the missing
 variables so maintainers know which entries to add to `agents/index.md`.
+
+## Codex CI Monitoring
+
+Codex watches the CI workflow using `codex.ci.yml`. When a job fails due to lint
+errors, the `monitor-ci` task attempts an automatic fix by running `ruff --fix`
+and `pre-commit run --files` on the affected files. If the patch applies safely,
+Codex commits the change and reruns the build; otherwise it opens a pull
+request.
