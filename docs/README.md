@@ -123,6 +123,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
+- [Network exception list](network-exception-list.md)
+  &ndash; required firewall exceptions for setup and CI tasks.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
