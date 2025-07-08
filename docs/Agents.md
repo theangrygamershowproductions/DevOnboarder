@@ -4,7 +4,9 @@
 > [agents/index.md](../agents/index.md). The remainder of this file is kept for
 > legacy reference only.
 
-This document defines all agents (services, bots, integrations, and guards) in the TAGS ecosystem. Each entry describes the agent's purpose, configuration, and typical workflow so contributors and Codex automation can keep the platform healthy.
+This document defines all agents (services, bots, integrations, and guards) in the TAGS ecosystem.
+Each entry describes the agent's purpose, configuration, and typical workflow so contributors
+and Codex automation can keep the platform healthy.
 
 <!-- This file is derived from the master merged draft provided during onboarding. -->
 
@@ -242,7 +244,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | DISCORD_CLIENT_SECRET        | Discord application client secret          |
 | DISCORD_REDIRECT_URI         | OAuth callback URL for Discord             |
 | DISCORD_API_TIMEOUT          | HTTP timeout in seconds for Discord API calls |
-| JWT_SECRET_KEY               | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
+| JWT_SECRET_KEY               | Secret key for JWT signing (errors if empty or "secret" outside development) |
 | JWT_ALGORITHM                | Algorithm for JWT signing (default `HS256`) |
 | DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |
@@ -284,7 +286,8 @@ To reduce the attack surface in CI/CD workflows:
 
 ## Deprecation & Retirement
 
-When retiring an agent, mark the section as deprecated with the date and reason. Update the health matrix and remove references from code and docs.
+When retiring an agent, mark the section as deprecated with the date and reason.
+Update the health matrix and remove references from code and docs.
 
 ---
 
