@@ -2,6 +2,7 @@
 
 ## 🚀 Quickstart for Contributors
 
+Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 Welcome to the project! Documentation style is checked with **markdownlint** and
 **Vale**. Grammar checks with **LanguageTool** are optional.
 

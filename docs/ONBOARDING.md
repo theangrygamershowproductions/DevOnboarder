@@ -2,6 +2,7 @@
 
 This page collects helpful tips for new contributors. Follow
 [docs/README.md](README.md) for a complete development setup.
+Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 
 ## Requesting a Codex QA Assessment
 
