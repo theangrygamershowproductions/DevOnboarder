@@ -25,7 +25,8 @@ encounter a reproducible bug or have a feature suggestion so we can track it.
 
 ## Alpha Feature Flag
 
-Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes meant only for testers. See `.env.example` for the default value.
+Set `IS_ALPHA_USER=true` in your `.env.dev` file to enable access to routes
+meant only for testers. See `.env.example` for the default value.
 
 ## Thank You
 
