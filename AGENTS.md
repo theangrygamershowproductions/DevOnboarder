@@ -95,3 +95,9 @@ marker.
 The workflow also skips its test job when a push only modifies documentation or
 Markdown files. It uses `dorny/paths-filter` to set `steps.filter.outputs.code`
 to `false` in that case.
+
+## \U0001F512 Security Note
+
+CI/CD scripts must not fetch and execute remote code via `curl | sh`. Tools like
+Codecov are prohibited due to past security breaches. Use local coverage
+reporting instead and vet all third-party integrations carefully.
