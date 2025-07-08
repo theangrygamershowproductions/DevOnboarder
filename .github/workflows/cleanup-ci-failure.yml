@@ -22,8 +22,13 @@ jobs:
             - run: |
                   gh_bin=$(which gh)
                   failed=0
+                  closed=0
                   for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
-                    "$gh_bin" issue close "$n" --reason completed || failed=1
+                    if "$gh_bin" issue close "$n" --reason completed; then
+                      closed=$((closed+1))
+                    else
+                      failed=1
+                    fi
                   done
                   if [ "$failed" -ne 0 ]; then
                     echo "::error::Cleanup failed"
@@ -32,5 +37,6 @@ jobs:
                       --label ci-failure || true
                     exit 1
                   fi
+                  echo "Closed $closed ci-failure issues"
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
