@@ -156,6 +156,9 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    npm run coverage --prefix bot
    npm run coverage --prefix frontend
    ```
+   **Note:** `pip install -e .` and `pip install -r requirements-dev.txt` must
+   finish before running `pytest`. See
+   [tests/README.md](tests/README.md) for details.
 8. Install git hooks with `pre-commit install` so lint checks run automatically.
 9. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
 

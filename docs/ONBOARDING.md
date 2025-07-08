@@ -25,8 +25,8 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 
 ```markdown
 - ❌ Lint: 3 Python files have PEP8 errors (see ruff logs)
- - ❌ Test: 1 backend test failed (see test-results/pytest-results.xml)
-- ⚠️ Docs: 12 Vale/LanguageTool warnings (docs/README.md)
+- ❌ Test: 1 backend test failed (see test-results/pytest-results.xml)
+- ⚠️ Docs: 12 Vale warnings (docs/README.md)
 - ⚠️ Security: 1 dependency flagged by pip-audit
 - ✅ All workflows run with correct tool versions
 ```
@@ -52,7 +52,7 @@ pip install -e .
 pip install -r requirements-dev.txt
 ```
 
-If Vale or LanguageTool cannot run due to network errors, Codex marks the documentation step as a "⚠️ Docs: Lint skipped" warning. You can still merge if all other required checks pass, but please run docs checks locally later to catch formatting errors.
+If Vale or the optional LanguageTool cannot run due to network errors, Codex marks the documentation step as a "⚠️ Docs: Lint skipped" warning. LanguageTool only runs when `LANGUAGETOOL_URL` is set. You can still merge if all other required checks pass, but please run docs checks locally later to catch formatting errors.
 
 ### Optional Easter Egg (for fun!)
 
