@@ -14,3 +14,5 @@ The following external domains must be reachable for normal setup and CI tasks. 
 - `img.shields.io` – coverage badge fetched during CI. See `scripts/update_coverage_badge.py` line 33.
 
 These domains may require explicit firewall or proxy exceptions in restricted environments.
+
+Remember to update this list whenever new scripts or docs mention additional domains so firewalls stay correctly configured.
