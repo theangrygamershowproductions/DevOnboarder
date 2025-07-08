@@ -551,3 +551,5 @@ All notable changes to this project will be recorded in this file.
 - Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
 - Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented the job in `docs/README.md`.
 - Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
+- Logged `gh auth status` before creating CI failure issues and stopped the job
+  when the GitHub CLI exits with an error.

@@ -82,6 +82,6 @@ Trigger the workflow from the **Actions** tab using the **Run workflow** button.
 
 ## Troubleshooting
 
-- Run `gh auth status` to confirm your token includes the `repo` and `issues: write` scopes. Missing scopes prevent the workflow from creating or updating issues.
+- The workflow logs `gh auth status` before creating the failure issue so you can verify the token scopes in `gh_cli.log`.
 - Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to inspect GitHub CLI output and the log audit summary.
 - Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.
