@@ -64,10 +64,11 @@ After installing dependencies, run the usual setup commands such as `make deps` 
 1. On a machine with internet access, download the Trivy binary:
 
    ```bash
-   mkdir -p ~/devonboarder-offline/trivy
-   curl -L -o ~/devonboarder-offline/trivy/trivy.tar.gz \
-     https://github.com/aquasecurity/trivy/releases/download/v0.47.0/trivy_0.47.0_Linux-64bit.tar.gz
-   tar -xzf ~/devonboarder-offline/trivy/trivy.tar.gz -C ~/devonboarder-offline/trivy
+ mkdir -p ~/devonboarder-offline/trivy
+ curl -L -o ~/devonboarder-offline/trivy/trivy.tar.gz \
+   https://github.com/aquasecurity/trivy/releases/download/v0.47.0/trivy_0.47.0_Linux-64bit.tar.gz
+ tar -xzf ~/devonboarder-offline/trivy/trivy.tar.gz -C ~/devonboarder-offline/trivy
+  # `scripts/trivy_scan.sh` fetches this tarball automatically when network access is available
    ```
 
 2. Copy the `devonboarder-offline` folder to your offline machine.
