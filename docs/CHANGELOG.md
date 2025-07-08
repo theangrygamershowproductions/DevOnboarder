@@ -18,6 +18,9 @@ All notable changes to this project will be recorded in this file.
   to fail when environment docs are out of sync.
 - Documented commit-msg hook setup in CONTRIBUTING.md and docs.
 - Offline install instructions now appear in CI logs when package installs fail.
+- Clarified README step 7 to run `pip install -e .` and
+  `pip install -r requirements-dev.txt` before `pytest` and linked to
+  `tests/README.md`.
 - CI now checks compose service status early and prints logs on failure.
 - Added `docs/fips-golang.md` summarizing FIPS compliance rules for Go projects.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
@@ -35,6 +38,8 @@ All notable changes to this project will be recorded in this file.
 - Added `secret-alignment.md` issue template and referenced it from `docs/merge-checklist.md`.
 - Added `secrets-alignment.yml` workflow to open an issue when environment
   variables are misaligned.
+- Added `env-doc-alignment.yml` workflow that opens a Secret Alignment issue
+  when `check_env_docs.py` reports missing variables.
 - Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
@@ -516,6 +521,8 @@ All notable changes to this project will be recorded in this file.
   missing and prints a warning without failing if the download fails.
 - Summarized the download fallback in `README.md` and linked to
   `docs/README.md#documentation-quality-checks` for full details.
+- Updated ONBOARDING.md to display "Vale warnings" and noted that
+  LanguageTool runs only when `LANGUAGETOOL_URL` is set.
 
 ## [0.1.0] - 2025-06-14
 

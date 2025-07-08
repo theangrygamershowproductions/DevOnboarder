@@ -49,3 +49,8 @@ After the Black formatting check, CI runs `python scripts/check_env_docs.py`.
 This script compares the environment variable table in `agents/index.md` with
 the example `.env` files. Any differences cause the job to fail so the
 documentation stays in sync with the environment configuration.
+
+The `env-doc-alignment.yml` workflow runs when this step fails. It reruns
+`check_env_docs.py`, parses the missing variables from the output, and opens a
+Secret Alignment issue with the commit SHA. The issue lists the missing
+variables so maintainers know which entries to add to `agents/index.md`.
