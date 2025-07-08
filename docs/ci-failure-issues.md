@@ -14,6 +14,18 @@ fork. To update or close issues from those builds, you need a token granted
 `issues: write` permissions. Use a personal access token or run the workflow in
 `pull_request_target` to access repository secrets safely.
 
+### Maintainer Token Setup
+
+Create a personal access token with `issues: write` permission when you need to
+rerun CI on a contributor fork. Provide it via `GH_TOKEN` so the GitHub CLI can
+comment on the failure issue:
+
+```bash
+GH_TOKEN=your_personal_token gh workflow run ci.yml -F ref=<branch>
+```
+
+Remove the token after the run completes.
+
 ## Root Cause Summaries
 
 The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when a step fails and appends the resulting `audit.md` to the failure issue comment.
