@@ -6,6 +6,7 @@ All notable changes to this project will be recorded in this file.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
+- CI now commits a coverage.svg badge using coverage-summary.md.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
