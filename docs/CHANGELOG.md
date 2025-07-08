@@ -24,6 +24,7 @@ All notable changes to this project will be recorded in this file.
   of piping the install script. Offline instructions updated accordingly.
 - Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
 - Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
+- Added `scripts/show_network_exceptions.sh` to print the firewall domain list.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
 - Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
   checks for both `frontend/` and `bot/`.
