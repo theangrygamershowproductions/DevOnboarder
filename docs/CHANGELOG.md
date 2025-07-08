@@ -3,6 +3,8 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- Added SECURITY.md outlining supported versions, reporting instructions, and a
+  30-day response timeframe.
 
 - Documented troubleshooting steps for CI failure issues.
 - Documented CI environment variables used in the workflows.
