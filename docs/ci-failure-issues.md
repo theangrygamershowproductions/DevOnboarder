@@ -35,7 +35,8 @@ Remove the token after the run completes.
 
 ## Root Cause Summaries
 
-The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when a step fails and appends the resulting `audit.md` to the failure issue comment.
+The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when
+ a step fails and appends the resulting `audit.md` to the failure issue comment.
 
 Run the script manually on a downloaded log if you need to dig deeper:
 
