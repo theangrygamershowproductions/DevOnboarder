@@ -47,7 +47,7 @@ bash scripts/check_docs.sh
 - [ ] Codex did **not** introduce any direct commits to `main`
 - [ ] Documentation passes `bash scripts/check_docs.sh`
 - [ ] Are all Codex changes covered by tests and docs?
-- [ ] Coverage does not decrease (see Codecov status)
+- [ ] Coverage does not decrease (see CI summary)
 
 # Reviewer Sign-Off
 
