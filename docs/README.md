@@ -124,6 +124,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Network exception list](network-exception-list.md)
+  &ndash; domains that must be reachable for setup and CI tasks.
   &ndash; required external domains and firewall exceptions.
   &ndash; required firewall exceptions for setup and CI tasks.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
