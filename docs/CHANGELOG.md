@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
   of piping the install script. Offline instructions updated accordingly.
 - Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
+- Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
   failures and commits the patch when safe.
