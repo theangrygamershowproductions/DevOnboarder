@@ -8,6 +8,10 @@ codex-tasks:
         - propose-fix:
             generate-patch: true
             include-commit-message: true
+            on: lint
+            run: |
+                ruff --fix $FILES
+                pre-commit run --files $FILES
         - apply-fix:
             if: safe
             then: commit
