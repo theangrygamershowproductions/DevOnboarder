@@ -1,6 +1,7 @@
 # First PR Walkthrough
 
-This short guide shows how to make your first contribution. It assumes you have already set up Docker, Node.js and Python as described in the main README.
+This short guide shows how to make your first contribution.
+It assumes you have already set up Docker, Node.js and Python as described in the main README.
 
 1. **Clone the repository**
    ```bash

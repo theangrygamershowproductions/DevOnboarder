@@ -26,14 +26,16 @@ bash scripts/check_docs.sh
 
 - Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
 
-- [ ] All Python and JS dependencies installed (`pip install -e .` or `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
+- [ ] All Python and JS dependencies installed (`pip install -e .` or
+      `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
 - [ ] Vale is installed locally (`vale --version`)
 - [ ] All Markdown docs pass checks (`bash scripts/check_docs.sh`)
 - [ ] All new or updated docs are clear, concise, and free of grammar issues
 - [ ] pytest and other test suites pass
 - [ ] Pre-commit hooks installed (`pre-commit install`)
 - [ ] If doc checks failed, issues are resolved before requesting review
-- [ ] If pre-commit cannot download Node.js, review [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+- [ ] If pre-commit cannot download Node.js, review
+      [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
 
 # Checklist
 
