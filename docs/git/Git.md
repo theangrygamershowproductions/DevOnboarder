@@ -124,41 +124,41 @@ Only works if no conflicting changes.
 
 1. Commit your work:
 
-```sh
-git add .
-git commit -m "Feature complete"
-```
+    ```sh
+    git add .
+    git commit -m "Feature complete"
+    ```
 
 2. Switch to development:
 
-```sh
-git switch development
-```
+    ```sh
+    git switch development
+    ```
 
 3. Pull latest
 
-```sh
-git pull origin development
-```
+    ```sh
+    git pull origin development
+    ```
 
 4. Merge your branch
 
-```sh
-git merge your-branch-name
-```
+    ```sh
+    git merge your-branch-name
+    ```
 
 5. Push the result
 
-```sh
-git push origin development
-```
+    ```sh
+    git push origin development
+    ```
 
 6. Optionally delete
 
-```sh
-git branch -d your-branch-name
-git push origin --delete your-branch-name
-```
+    ```sh
+    git branch -d your-branch-name
+    git push origin --delete your-branch-name
+    ```
 
 ---
 
@@ -276,24 +276,24 @@ Hooks ensure:
 
 1. Navigate to hooks folder:
 
-```sh
-cd .git/hooks
-```
+    ```sh
+    cd .git/hooks
+    ```
 
 2. Create a hook
 
-```sh
-touch pre-commit
-chmod +x pre-commit
-```
+    ```sh
+    touch pre-commit
+    chmod +x pre-commit
+    ```
 
 3. Example pre-commit
 
-```sh
-#!/bin/sh
-npm run lint
-[ $? -ne 0 ] && echo "Lint failed!" && exit 1
-```
+    ```sh
+    #!/bin/sh
+    npm run lint
+    [ $? -ne 0 ] && echo "Lint failed!" && exit 1
+    ```
 
 ---
 
@@ -301,18 +301,18 @@ npm run lint
 
 1. Start agent:
 
-```sh
-eval $(ssh-agent -s)
-```
+    ```sh
+    eval $(ssh-agent -s)
+    ```
 
 2. Add key
 
-```sh
-ssh-add /path/to/key
-```
+    ```sh
+    ssh-add /path/to/key
+    ```
 
 3. Push
 
-```sh
-git push
-```
+    ```sh
+    git push
+    ```

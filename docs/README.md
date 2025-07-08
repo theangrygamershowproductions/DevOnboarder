@@ -65,7 +65,7 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
     ```
 
-Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
+    Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
 18. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
 
