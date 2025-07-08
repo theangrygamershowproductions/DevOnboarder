@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
   30-day response timeframe.
 
@@ -610,9 +611,11 @@ All notable changes to this project will be recorded in this file.
     documentation README.
 - Added a debug step to `cleanup-ci-failure.yml` to print token status and open issue numbers before closing them.
 - Linked the network exception list from the docs overview so newcomers can find firewall rules.
+- Reminded contributors to add new domains to this list when scripts or docs reference them.
  - The cleanup workflow now exits with an error when any `gh` command fails and opens a follow-up issue.
 - The cleanup workflow prints `Closed N ci-failure issues` on success or `::error::Cleanup failed` in the job log.
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
+  
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests.
