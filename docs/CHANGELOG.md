@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
+- Added a reminder in `docs/README.md` that forked pull requests require a personal access token or `pull_request_target` workflow to update CI failure issues.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
