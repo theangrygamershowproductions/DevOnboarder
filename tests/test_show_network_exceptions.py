@@ -24,7 +24,9 @@ def test_show_network_exceptions(tmp_path):
     scripts_dst = tmp_path / "scripts"
     docs_dst.mkdir()
     scripts_dst.mkdir()
-    shutil.copy(repo_root / "docs" / "network-exception-list.md", docs_dst / "network-exception-list.md")
+    src = repo_root / "docs" / "network-exception-list.md"
+    dst = docs_dst / "network-exception-list.md"
+    shutil.copy(src, dst)
     shutil.copy(script, scripts_dst / "show_network_exceptions.sh")
 
     result = subprocess.check_output(
