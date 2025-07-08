@@ -55,6 +55,17 @@ The `env-doc-alignment.yml` workflow runs when this step fails. It reruns
 Secret Alignment issue with the commit SHA. The issue lists the missing
 variables so maintainers know which entries to add to `agents/index.md`.
 
+## Security Scans
+
+After the environment checks, the job runs three dependency audits:
+
+- `bandit -r src -ll` scans the Python code for vulnerabilities.
+- `npm audit --audit-level=high` runs in both `frontend/` and `bot/`.
+
+Any reported high severity issues cause the workflow to fail. The detailed
+results appear in the job log, which is uploaded as a CI artifact so
+maintainers can review the findings.
+
 ## Codex CI Monitoring
 
 Codex watches the CI workflow using `codex.ci.yml`. When a job fails due to lint
