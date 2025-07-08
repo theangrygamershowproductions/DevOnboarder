@@ -21,8 +21,16 @@ jobs:
               continue-on-error: true
             - run: |
                   gh_bin=$(which gh)
+                  failed=0
                   for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
-                    "$gh_bin" issue close "$n" --reason completed
+                    "$gh_bin" issue close "$n" --reason completed || failed=1
                   done
+                  if [ "$failed" -ne 0 ]; then
+                    echo "::error::Cleanup failed"
+                    "$gh_bin" issue create --title "Cleanup CI failure issues failed" \
+                      --body "Automatic cleanup could not close one or more ci-failure issues." \
+                      --label ci-failure || true
+                    exit 1
+                  fi
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
