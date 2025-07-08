@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Documented troubleshooting steps for CI failure issues.
 - Documented CI environment variables used in the workflows.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
+- Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
 
