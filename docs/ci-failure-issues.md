@@ -79,3 +79,9 @@ jobs:
 ```
 
 Trigger the workflow from the **Actions** tab using the **Run workflow** button. Schedule it with a `schedule:` trigger if you want regular cleanup.
+
+## Troubleshooting
+
+- Run `gh auth status` to confirm your token includes the `repo` and `issues: write` scopes. Missing scopes prevent the workflow from creating or updating issues.
+- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to inspect GitHub CLI output and the log audit summary.
+- Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.
