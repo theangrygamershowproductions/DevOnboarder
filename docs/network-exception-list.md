@@ -10,6 +10,7 @@ The following external domains must be reachable for normal setup and CI tasks. 
 - `api.languagetool.org` and `languagetool.org` – used by LanguageTool. See `docs/network-troubleshooting.md` lines 10‑16 and `docs/doc-quality-onboarding.md` line 44.
 - `dev.languagetool.org` – documentation for running a local LanguageTool server. See `docs/README.md` line 182.
 - `quay.io` – Docker image for a local LanguageTool server. See `docs/doc-quality-onboarding.md` lines 39‑41.
+- `ghcr.io` – container image for Codex universal setup. See `scripts/setup-env.sh` lines 17‑20 and `docker-compose.codex.yml` line 3.
 - `img.shields.io` – coverage badge fetched during CI. See `scripts/update_coverage_badge.py` line 33.
 
 These domains may require explicit firewall or proxy exceptions in restricted environments.
