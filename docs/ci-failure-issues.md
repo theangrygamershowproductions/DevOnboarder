@@ -16,6 +16,11 @@ fork. To update or close issues from those builds, you need a token granted
 `issues: write` permissions. Use a personal access token or run the workflow in
 `pull_request_target` to access repository secrets safely.
 
+The same guidance appears in the issues section of
+[README.md](README.md#issues-and-pull-requests). Forked pull requests must
+provide a personal access token or run this workflow in `pull_request_target`
+so CI can update the failure issue automatically.
+
 ### Maintainer Token Setup
 
 Create a personal access token with `issues: write` permission when you need to
