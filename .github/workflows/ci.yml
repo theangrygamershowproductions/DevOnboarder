@@ -150,6 +150,8 @@ jobs:
             - name: Build containers
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build
             - name: Scan images with Trivy
+              env:
+                  TRIVY_VERSION: 0.47.0
               run: bash scripts/trivy_scan.sh docker-compose.ci.yaml
             - name: Start docker compose
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
