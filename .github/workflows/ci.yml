@@ -325,6 +325,14 @@ jobs:
                   CHECK_HEADERS_URL: http://localhost:8002/api/user
             - name: Run security audit
               run: bash scripts/security_audit.sh
+            - name: Bandit Security Scan
+              run: bandit -r src -ll
+            - name: NPM Audit (high severity)
+              run: npm audit --audit-level=high
+              working-directory: frontend
+            - name: NPM Audit (bot)
+              run: npm audit --audit-level=high
+              working-directory: bot
             - name: Stop docker compose
               if: always()
               run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down

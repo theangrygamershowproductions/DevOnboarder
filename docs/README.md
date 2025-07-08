@@ -199,3 +199,14 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 We track coverage locally using `pytest --cov=src` and `npm run coverage`. This
 project does **not** use external uploaders like Codecov because remote scripts
 pose a supply chain risk. Only local, inspectable tools are permitted.
+
+Run the same security checks locally before pushing:
+
+```bash
+bash scripts/security_audit.sh
+bandit -r src -ll
+npm audit --audit-level=high --prefix frontend
+npm audit --audit-level=high --prefix bot
+```
+
+Each command fails when vulnerabilities are detected.
