@@ -34,6 +34,14 @@ Workflows rely on the GitHub CLI that comes preinstalled in the container image 
 
 The job runs `black --check .` after installing development requirements. Formatting issues cause the build to fail.
 
+## Codex Auto-Fixes
+
+Codex's `monitor-ci` task watches this workflow. When a lint step fails, the bot
+runs `ruff --fix` and `pre-commit run --files` on the affected files. If the
+patch applies cleanly, Codex commits the changes. Otherwise it opens a pull
+request titled **"chore: auto-fix lint errors via Codex"** summarizing the
+adjustments.
+
 ## Environment Variable Audit
 
 After `.env.dev` is generated, the workflow runs `scripts/audit_env_vars.sh`.

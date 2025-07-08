@@ -14,6 +14,9 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
+- Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
+  and commits the patch automatically if safe. Otherwise it opens a "chore:
+  auto-fix lint errors via Codex" pull request.
 - Added Bandit and npm audit checks to fail CI when high severity issues are found.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
