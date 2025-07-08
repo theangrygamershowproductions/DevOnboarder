@@ -84,6 +84,9 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     outlining contributor ethics and a simple template.
 20. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
+21. See [docs/network-exception-list.md](docs/network-exception-list.md)
+    for required firewall domains. Run
+    `scripts/show_network_exceptions.sh` to print them.
 
 These files expand on the steps listed in the Quickstart section.
 
