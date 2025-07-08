@@ -105,6 +105,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
+- [CI environment variables](ci-env-vars.md)
+  &ndash; summary of tokens and other variables used by the workflows.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
