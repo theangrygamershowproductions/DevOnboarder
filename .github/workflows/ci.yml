@@ -353,9 +353,11 @@ jobs:
               if: always()
               id: ci_failure
               run: |
+                  set -euo pipefail
                   printf '\n' >> summary.md
                   cat audit.md >> summary.md
                   gh_bin=$(which gh)
+                  "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
                   search_query="CI Failures for ${{ github.sha }} in:title"
                   echo "Searching with: $search_query" | tee -a gh_cli.log
                   ISSUE=$($gh_bin issue list --label ci-failure --state open --search "$search_query" --json number --jq '.[0].number' | tee -a gh_cli.log)
