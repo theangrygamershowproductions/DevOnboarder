@@ -186,10 +186,11 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
 6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated with a summary of the failing tests and links to the artifacts.
 7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write` permission. When the pipeline succeeds, it closes every open `ci-failure` issue.
-8. A nightly job (`cleanup-ci-failure.yml`) closes any open `ci-failure` issues so the board stays tidy.
+8. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a token with `issues: write` permission or a `pull_request_target` workflow as explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests).
+9. A nightly job (`cleanup-ci-failure.yml`) closes any open `ci-failure` issues so the board stays tidy.
 
-9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
-10. CODEOWNERS automatically requests reviews from the maintainer team.
+10. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
+11. CODEOWNERS automatically requests reviews from the maintainer team.
 
 ## \U0001F6E1\uFE0F Coverage and Security
 
