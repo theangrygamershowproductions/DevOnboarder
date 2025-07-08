@@ -11,6 +11,8 @@ All notable changes to this project will be recorded in this file.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
 - Added a reminder in `docs/README.md` that forked pull requests require a personal access token or `pull_request_target` workflow to update CI failure issues.
+- Wrapped long documentation lines to satisfy markdownlint rule MD013.
+- Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
@@ -30,6 +32,7 @@ All notable changes to this project will be recorded in this file.
 - Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
 - Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
 - Added `scripts/show_network_exceptions.sh` to print the firewall domain list.
+- Mentioned `scripts/check_network_access.sh` in `docs/README.md` for connectivity checks.
 - `scripts/check_network_access.sh` now parses `docs/network-exception-list.md` instead of using a hard-coded domain array.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
 - Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
