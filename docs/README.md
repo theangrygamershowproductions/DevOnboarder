@@ -123,6 +123,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
+- [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
+- [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
 - [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
 - [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.

@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Documented troubleshooting steps for CI failure issues.
+- Added a first PR guide and service architecture diagram with links from the docs overview.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
