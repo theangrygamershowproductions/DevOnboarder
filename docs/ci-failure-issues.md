@@ -7,6 +7,13 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 - `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
 - The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
 
+## Forked Pull Requests
+
+`${{ secrets.GITHUB_TOKEN }}` is read-only when a pull request originates from a
+fork. To update or close issues from those builds, you need a token granted
+`issues: write` permissions. Use a personal access token or run the workflow in
+`pull_request_target` to access repository secrets safely.
+
 ## Root Cause Summaries
 
 The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when a step fails and appends the resulting `audit.md` to the failure issue comment.
