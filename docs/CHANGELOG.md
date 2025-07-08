@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Documented troubleshooting steps for CI failure issues.
+- Documented CI environment variables used in the workflows.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 
 - Removed the Codecov badge from the README and deleted the upload step.
@@ -13,13 +14,19 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
+- Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
+  and commits the patch automatically if safe. Otherwise it opens a "chore:
+  auto-fix lint errors via Codex" pull request.
 - Added Bandit and npm audit checks to fail CI when high severity issues are found.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
   of piping the install script. Offline instructions updated accordingly.
 - Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
+- Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
+- Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
+  checks for both `frontend/` and `bot/`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
   failures and commits the patch when safe.
 - Detects documentation-only pushes and sets `steps.filter.outputs.code` to `false`.
@@ -542,6 +549,7 @@ All notable changes to this project will be recorded in this file.
 - Added an **Owner** column to that checklist and assigned responsible teams to each task.
 - Documented token requirements for forked pull requests in `docs/ci-failure-issues.md` and referenced it from the documentation README.
 - Added a debug step to `cleanup-ci-failure.yml` to print token status and open issue numbers before closing them.
+- Linked the network exception list from the docs overview so newcomers can find firewall rules.
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)

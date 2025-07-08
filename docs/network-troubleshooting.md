@@ -1,7 +1,8 @@
 # Network Troubleshooting
 
 Some development environments restrict outbound network traffic. These tips help you work around common issues.
-See [network-exception-list.md](network-exception-list.md) for a list of domains that CI must reach.
+See [network-exception-list.md](network-exception-list.md) for a list of domains that CI and setup scripts must reach.
+Run `scripts/check_network_access.sh` to verify connectivity before continuing.
 
 ## Vale download blocked
 - Download `vale` from [the releases page](https://github.com/errata-ai/vale/releases) on a machine with internet access.

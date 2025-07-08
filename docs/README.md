@@ -65,7 +65,7 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
     ```
 
-Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
+    Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
 18. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
 
@@ -105,6 +105,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
+- [CI environment variables](ci-env-vars.md)
+  &ndash; summary of tokens and other variables used by the workflows.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
@@ -123,6 +125,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Network exception list](network-exception-list.md)
   &ndash; domains that must be reachable for setup and CI tasks.
+  &ndash; required external domains and firewall exceptions.
+  &ndash; required firewall exceptions for setup and CI tasks.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
@@ -208,9 +212,6 @@ Run the same security checks locally before pushing:
 
 ```bash
 bash scripts/security_audit.sh
-bandit -r src -ll
-npm audit --audit-level=high --prefix frontend
-npm audit --audit-level=high --prefix bot
 ```
 
-Each command fails when vulnerabilities are detected.
+The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high` in both `frontend/` and `bot/`. Each command fails when vulnerabilities are detected.
