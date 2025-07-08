@@ -105,6 +105,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
+- [CI environment variables](ci-env-vars.md)
+  &ndash; summary of tokens and other variables used by the workflows.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
@@ -123,6 +125,7 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Network exception list](network-exception-list.md)
   &ndash; required external domains and firewall exceptions.
+  &ndash; required firewall exceptions for setup and CI tasks.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
