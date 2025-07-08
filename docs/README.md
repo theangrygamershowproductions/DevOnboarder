@@ -196,6 +196,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
 - Set `LANGUAGETOOL_URL` when running your own LanguageTool server if you want
   local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+- Markdown files must not exceed 120 characters per line (MD013). See
+  [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
 
 ## Issues and Pull Requests
 
