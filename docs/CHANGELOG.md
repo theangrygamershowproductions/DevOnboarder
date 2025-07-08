@@ -552,6 +552,7 @@ All notable changes to this project will be recorded in this file.
 - Documented token requirements for forked pull requests in `docs/ci-failure-issues.md` and referenced it from the documentation README.
 - Added a debug step to `cleanup-ci-failure.yml` to print token status and open issue numbers before closing them.
 - Linked the network exception list from the docs overview so newcomers can find firewall rules.
+- The cleanup workflow now exits with an error when issue closing fails and opens a follow-up issue.
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
