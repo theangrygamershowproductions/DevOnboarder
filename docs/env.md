@@ -87,7 +87,8 @@ status and level.
 ## Testing utilities
 
 - `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
-- `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to verify headers (default `http://localhost:8002/api/user`).
+- `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to
+  verify headers (default `http://localhost:8002/api/user`).
 
 ## Integrations
 
