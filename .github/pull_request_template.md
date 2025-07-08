@@ -21,7 +21,7 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 - [ ] No secrets or sensitive data are present in commits
 - [ ] Did Codex introduce any direct commits to `main`?
 - [ ] Are all Codex changes covered by tests and docs?
-- [ ] Coverage does not decrease (see Codecov status)
+- [ ] Coverage does not decrease (see CI summary)
 
 _Reviewer Sign-Off_
 - [ ] I confirm all checklist items are complete.
