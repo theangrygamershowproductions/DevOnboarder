@@ -128,6 +128,7 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; required external domains and firewall exceptions.
   &ndash; required firewall exceptions for setup and CI tasks.
   &ndash; run `scripts/show_network_exceptions.sh` to print the list.
+  &ndash; run `scripts/check_network_access.sh` to verify connectivity.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
