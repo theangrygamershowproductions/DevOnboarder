@@ -7,7 +7,9 @@ Run `scripts/show_network_exceptions.sh` to print the domain list if you need to
 update your firewall rules.
 
 ## Vale download blocked
-- Download `vale` from [the releases page](https://github.com/errata-ai/vale/releases) on a machine with internet access.
+- Download `vale` from
+  [the releases page](https://github.com/errata-ai/vale/releases) on a machine
+  with internet access.
 - Copy the binary to a directory in your `PATH` and make it executable with `chmod +x vale`.
 - If you host your own mirror, set the `VALE_BINARY` environment variable to the downloaded path.
 

@@ -10,4 +10,6 @@ This document outlines expectations for members of the Founder's Circle and clar
 
 ## Role Policy
 
-Membership is by invitation only. Founder's Circle members may be listed as advisers but hold no legal authority over the project. The maintainers reserve the right to revoke membership if expectations are not met.
+Membership is by invitation only. Founder's Circle members may be listed as
+advisers but hold no legal authority over the project. The maintainers reserve
+the right to revoke membership if expectations are not met.
