@@ -248,8 +248,6 @@ jobs:
                   name: lighthouse-report
                   path: frontend/lhci-report
                   retention-days: 7
-            - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v3
             - name: Install bot dependencies
               run: |
                   npm ci || {

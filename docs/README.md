@@ -190,3 +190,9 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 
 9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
 10. CODEOWNERS automatically requests reviews from the maintainer team.
+
+## \U0001F6E1\uFE0F Coverage and Security
+
+We track coverage locally using `pytest --cov=src` and `npm run coverage`. This
+project does **not** use external uploaders like Codecov because remote scripts
+pose a supply chain risk. Only local, inspectable tools are permitted.

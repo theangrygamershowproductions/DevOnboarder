@@ -263,6 +263,15 @@ Use a small loop in your workflow to wait for the auth service before running te
 CI health and failure events are monitored by Codex. Future outages will trigger
 an automated notification and suggested fix via Codex's reporting channel.
 
+## \U0001F512 Security Policy for Tooling and Dependencies
+
+To reduce the attack surface in CI/CD workflows:
+
+- **Do not use Codecov** or any third-party coverage uploaders that execute
+  remote scripts in CI.
+- Avoid integrations that rely on `bash <curl | sh>` style commands.
+- Vet all external tools for prior security incidents before adoption.
+
 ---
 
 ## How to Extend/Contribute
