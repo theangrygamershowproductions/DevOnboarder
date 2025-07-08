@@ -360,10 +360,14 @@ jobs:
                   "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
                   search_query="CI Failures for ${{ github.sha }} in:title"
                   echo "Searching with: $search_query" | tee -a gh_cli.log
-                  ISSUE=$($gh_bin issue list --label ci-failure --state open --search "$search_query" --json number --jq '.[0].number' | tee -a gh_cli.log)
-                  if [ -n "$ISSUE" ]; then
+                  set +e
+                  ISSUE=$($gh_bin issue list --label ci-failure --state open --search "$search_query" --json number --jq '.[0].number' 2>&1 | tee -a gh_cli.log)
+                  list_exit=$?
+                  set -e
+                  if [ "$list_exit" -eq 0 ] && [ -n "$ISSUE" ]; then
                       "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                   else
+                      echo "::warning::Issue search failed or returned no results" | tee -a gh_cli.log
                       ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number' | tee -a gh_cli.log)
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
