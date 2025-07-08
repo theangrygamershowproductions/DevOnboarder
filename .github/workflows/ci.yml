@@ -336,19 +336,21 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
-              if: failure()
+              if: always()
               run: python scripts/summarize_ci_failures.py
             - name: Run CI log audit
-              if: failure()
+              if: always()
               run: python scripts/ci_log_audit.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
             - name: Create or update CI failure issue
-              if: failure()
+              if: always()
               id: ci_failure
               run: |
                   printf '\n' >> summary.md
                   cat audit.md >> summary.md
                   gh_bin=$(which gh)
-                  ISSUE=$($gh_bin issue list --state open --search "CI Failures for ${{ github.sha }} in:title" --json number --jq '.[0].number' | tee -a gh_cli.log)
+                  search_query="CI Failures for ${{ github.sha }} in:title"
+                  echo "Searching with: $search_query" | tee -a gh_cli.log
+                  ISSUE=$($gh_bin issue list --label ci-failure --state open --search "$search_query" --json number --jq '.[0].number' | tee -a gh_cli.log)
                   if [ -n "$ISSUE" ]; then
                       "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                   else
