@@ -8,7 +8,10 @@ updated: "04 July 2025 10:00 (EST)"
 
 # DevOnboarder – Codex Execution Plan
 
-This document defines the roadmap and execution logic for Codex tasks during the MVP push. It is synchronized with `codex.tasks.json` and ensures unified delivery across the backend (auth, XP), Discord bot, and future frontend modules.
+This document defines the roadmap and execution logic for Codex tasks during the
+MVP push. It is synchronized with `codex.tasks.json` and ensures unified
+delivery across the backend (auth, XP), Discord bot, and future frontend
+modules.
 
 ---
 
@@ -61,7 +64,9 @@ This document defines the roadmap and execution logic for Codex tasks during the
 
 ### 🚧 Phase 5: Llama2 Agile Helper Integration
 
-- [agile-001] Connect Llama2 Agile Helper agent for sprint summaries and backlog suggestions. See [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml).
+- [agile-001] Connect Llama2 Agile Helper agent for sprint summaries and backlog
+  suggestions. See
+  [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml).
 
 ---
 
