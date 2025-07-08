@@ -2,20 +2,10 @@
 set -euo pipefail
 
 # Verifies access to required domains listed in docs/network-exception-list.md
-DOMAINS=(
-  github.com
-  cli.github.com
-  download.docker.com
-  deb.nodesource.com
-  nodejs.org
-  vale.sh
-  api.languagetool.org
-  languagetool.org
-  dev.languagetool.org
-  quay.io
-  ghcr.io
-  img.shields.io
-)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOC="$SCRIPT_DIR/../docs/network-exception-list.md"
+
+readarray -t DOMAINS < <(awk '/^- /{gsub(/`/, ""); for(i=1;i<=NF;i++) if($i ~ /^[A-Za-z0-9.-]+\.(com|org|io|sh)$/) print $i}' "$DOC")
 
 failed=0
 for host in "${DOMAINS[@]}"; do
