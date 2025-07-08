@@ -5,7 +5,8 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 ## 1️⃣ GitHub ReadMe CTA (Copy-Paste Ready)
 
 > **Found DevOnboarder useful?**
-> If this helped you speed up onboarding, save time, or avoid headaches — please [⭐️ star the repo](#), or [open an issue](#) with your feedback or suggestions.
+> If this helped you speed up onboarding, save time, or avoid headaches — please
+> [⭐️ star the repo](#), or [open an issue](#) with your feedback or suggestions.
 > Your input directly shapes future improvements. Thanks for helping make onboarding suck less!
 
 ## 2️⃣ Demo Video Script (60–90 seconds, “Show Don’t Tell” Style)
@@ -38,7 +39,8 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 **[Closing Shot: README with star, issue, and feedback CTA visible]**
 
-* "I built this to scratch my own itch. If it helps you, drop a star or open an issue — let’s make onboarding better for all of us."
+* "I built this to scratch my own itch. If it helps you, drop a star or open an
+  issue — let’s make onboarding better for all of us."
 
 ## 3️⃣ Outreach Message Drafts (Reddit, Discord, etc.)
 
@@ -46,7 +48,8 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 > 🚀 **Built a better onboarding flow for devs — sharing for feedback**
 >
-> Just open-sourced [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder) after getting tired of repeating myself onboarding folks (and myself) for new projects.
+> Just open-sourced [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder)
+> after getting tired of repeating myself onboarding folks (and myself) for new projects.
 >
 > It hooks into VSCode, Discord, and GitHub.
 >
@@ -59,7 +62,8 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 ### Short Discord DM or Channel Drop
 
 > Just open-sourced a tool I built to make onboarding less painful.
-> [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder) — for indie devs, open source, or anyone onboarding new folks.
+> [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder) —
+> for indie devs, open source, or anyone onboarding new folks.
 > Always happy for feedback or stars if it helps!
 
 ## 4️⃣ Impact/Feedback Log Scaffold

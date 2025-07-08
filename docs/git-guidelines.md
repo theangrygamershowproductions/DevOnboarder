@@ -51,7 +51,10 @@ Delete the feature branch after the merge completes.
 
 ## Commit History Policy
 
-Once commits are pushed to a shared branch, avoid rewriting history. Do not run `git commit --amend`, `git rebase -i`, or `git push --force`. If you need to clarify a message, create a follow-up commit or add details in the pull request description.
+Once commits are pushed to a shared branch, avoid rewriting history. Do not run
+`git commit --amend`, `git rebase -i`, or `git push --force`. If you need to
+clarify a message, create a follow-up commit or add details in the pull request
+description.
 
 ## Pre-PR Checklist
 
@@ -80,9 +83,12 @@ pytest --cov=src --cov-fail-under=95
   `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
   to confirm the hook installs correctly.
 - CI lints commit messages using `scripts/check_commit_messages.sh`.
-  - Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a local `commit-msg` hook so mistakes are caught before you push. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+  - Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a
+    local `commit-msg` hook so mistakes are caught before you push. See
+    [CONTRIBUTING.md](../CONTRIBUTING.md).
   Past violations do not require rewriting history.
-  - Enable the `pytest` pre-commit hook to run tests automatically and catch failures locally. Run `pre-commit run pytest --all-files` once to enable it.
+  - Enable the `pytest` pre-commit hook to run tests automatically and catch
+    failures locally. Run `pre-commit run pytest --all-files` once to enable it.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
 - Follow the pull request template in `docs/pull_request_template.md`.
