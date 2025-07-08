@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
 
 - Removed the Codecov badge from the README and deleted the upload step.
+- Fixed indentation in `cleanup-ci-failure.yml` so the closing step runs as a
+  separate action and prints `Closed N ci-failure issues` on success.
 - Updated README star and issue links to point to the repository.
 - CI now commits a coverage.svg badge using coverage-summary.md.
 
