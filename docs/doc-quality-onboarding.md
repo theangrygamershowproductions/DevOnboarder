@@ -2,8 +2,8 @@
 
 ## 🚀 Quickstart for Contributors
 
-Welcome to the project! Documentation style is checked with **Vale**. Grammar
-checks with **LanguageTool** are optional.
+Welcome to the project! Documentation style is checked with **markdownlint** and
+**Vale**. Grammar checks with **LanguageTool** are optional.
 
 ---
 
@@ -12,6 +12,7 @@ checks with **LanguageTool** are optional.
 ```bash
 pip install -e .  # or `pip install -r requirements.txt` if present
 pip install -r requirements-dev.txt
+npm install
 ```
 
 Run these commands **before executing tests or documentation checks** so Python
@@ -60,7 +61,9 @@ Before every push or PR, run:
 bash scripts/check_docs.sh
 ```
 
-This generates `vale-results.json` for machine-readable output, which CI stores as an artifact.
+This script runs `markdownlint-cli2` and Vale to lint all Markdown files. It
+generates `vale-results.json` for machine-readable output, which CI stores as an
+artifact.
 
 CI also saves `test-results/pytest-results.xml` when running the test suite. You can download
 both artifacts from the **Artifacts** section of each GitHub Actions run to
@@ -80,7 +83,8 @@ Install pre-commit hooks so documentation and code checks run automatically:
 pre-commit install
 ```
 
-The hooks run Black, Ruff, Prettier, Codespell, and our docs-quality script.
+The hooks run Black, Ruff, Prettier, Codespell, markdownlint, and our
+docs-quality script.
 Codespell relies on `.codespell-ignore` for project-specific terms you want to
 skip. The default list skips `DevOnboarder`, `nodeenv`, and `pyenv`.
 

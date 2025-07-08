@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Run markdownlint on all Markdown files (excluding dependencies)
+set +e
+npx markdownlint-cli2 '**/*.md' '!**/node_modules'
+ml_status=$?
+set -e
+if [ $ml_status -ne 0 ]; then
+  echo "::warning file=scripts/check_docs.sh,line=$LINENO::Markdownlint issues found"
+fi
+
 FILES=$(git ls-files '*.md')
 RESULTS_FILE="vale-results.json"
 
