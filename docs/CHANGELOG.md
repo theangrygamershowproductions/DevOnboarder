@@ -18,6 +18,9 @@ All notable changes to this project will be recorded in this file.
   to fail when environment docs are out of sync.
 - Documented commit-msg hook setup in CONTRIBUTING.md and docs.
 - Offline install instructions now appear in CI logs when package installs fail.
+- Clarified README step 7 to run `pip install -e .` and
+  `pip install -r requirements-dev.txt` before `pytest` and linked to
+  `tests/README.md`.
 - CI now checks compose service status early and prints logs on failure.
 - Added `docs/fips-golang.md` summarizing FIPS compliance rules for Go projects.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
