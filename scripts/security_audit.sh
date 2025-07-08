@@ -7,7 +7,7 @@ OUT="docs/security-audit-${DATE}.md"
 {
   echo "# Security Audit - ${DATE}"
   echo
-  echo "We ran dependency audits for both Python and Node packages."
+  echo "We ran dependency audits for Python and Node packages and scanned the code with Bandit."
   echo
   echo "## Python (\`pip-audit\`)"
   if pip-audit >/tmp/pip_audit.log 2>&1; then
@@ -16,11 +16,14 @@ OUT="docs/security-audit-${DATE}.md"
     echo "\`pip-audit\` could not complete in the Codex environment due to restricted network access."
   fi
   echo
-  echo "## Node (\`npm audit --production\`)"
+  echo "## Python Static Analysis (\`bandit -r src -ll\`)"
+  bandit -r src -ll || true
+  echo
+  echo "## Node (\`npm audit --audit-level=high\`)"
   for dir in frontend bot; do
     if [ -f "$dir/package.json" ]; then
       echo "### $dir"
-      (cd "$dir" && npm audit --production) || true
+      (cd "$dir" && npm audit --audit-level=high) || true
       echo
     fi
   done
