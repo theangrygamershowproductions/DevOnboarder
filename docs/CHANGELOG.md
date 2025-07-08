@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
 - Added a reminder in `docs/README.md` that forked pull requests require a personal access token or
     `pull_request_target` workflow to update CI failure issues.
+- Expanded `docs/ci-failure-issues.md` with a note linking back to this reminder.
 - Wrapped long documentation lines to satisfy markdownlint rule MD013.
 - Additional documentation line wrapping for MD013.
 - Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
