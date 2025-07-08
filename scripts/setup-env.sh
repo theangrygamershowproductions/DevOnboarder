@@ -3,6 +3,12 @@
 
 set -euo pipefail
 
+# Ensure required domains are reachable before continuing
+SCRIPT_DIR="$(dirname "$0")"
+if [ -x "$SCRIPT_DIR/check_network_access.sh" ]; then
+    "$SCRIPT_DIR/check_network_access.sh"
+fi
+
 echo "Checking Docker availability..."
 docker_ok=false
 if [ -n "${CI:-}" ]; then
