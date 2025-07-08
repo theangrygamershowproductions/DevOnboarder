@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
+- Added Bandit and npm audit checks to fail CI when high severity issues are found.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
