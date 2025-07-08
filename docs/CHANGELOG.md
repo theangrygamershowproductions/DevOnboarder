@@ -38,6 +38,8 @@ All notable changes to this project will be recorded in this file.
 - Added `secret-alignment.md` issue template and referenced it from `docs/merge-checklist.md`.
 - Added `secrets-alignment.yml` workflow to open an issue when environment
   variables are misaligned.
+- Added `env-doc-alignment.yml` workflow that opens a Secret Alignment issue
+  when `check_env_docs.py` reports missing variables.
 - Added `pytest.ini` to load modules from `src` without installing the package.
 - Linked `builder_ethics_dossier.md` from the README and docs overview.
 - Added `scripts/ci_log_audit.py` and documented using it to summarize CI logs in `docs/ci-failure-issues.md`.
