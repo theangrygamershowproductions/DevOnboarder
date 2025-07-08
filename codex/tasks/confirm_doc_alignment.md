@@ -3,7 +3,7 @@
 title: Confirm Documentation Alignment
 status: complete
 date: 2025-07-05
-----------------
+---
 
 ### ✅ Task: Confirm Documentation Updates and Ethics Reference
 
