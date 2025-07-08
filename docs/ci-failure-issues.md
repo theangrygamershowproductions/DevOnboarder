@@ -1,6 +1,8 @@
 # Managing CI Failure Issues
 
-When the CI workflow fails, it opens or updates an issue titled `CI Failures for <sha>` with a summary of the failing tests. The workflow closes all open `ci-failure` issues once any CI run succeeds.
+When the CI workflow fails, it opens or updates an issue titled `CI Failures for
+<sha>` with a summary of the failing tests. The workflow closes all open
+`ci-failure` issues once any CI run succeeds.
 
 ## Automatic Cleanup
 
@@ -14,9 +16,27 @@ fork. To update or close issues from those builds, you need a token granted
 `issues: write` permissions. Use a personal access token or run the workflow in
 `pull_request_target` to access repository secrets safely.
 
+The same guidance appears in the issues section of
+[README.md](README.md#issues-and-pull-requests). Forked pull requests must
+provide a personal access token or run this workflow in `pull_request_target`
+so CI can update the failure issue automatically.
+
+### Maintainer Token Setup
+
+Create a personal access token with `issues: write` permission when you need to
+rerun CI on a contributor fork. Provide it via `GH_TOKEN` so the GitHub CLI can
+comment on the failure issue:
+
+```bash
+GH_TOKEN=your_personal_token gh workflow run ci.yml -F ref=<branch>
+```
+
+Remove the token after the run completes.
+
 ## Root Cause Summaries
 
-The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when a step fails and appends the resulting `audit.md` to the failure issue comment.
+The workflow automatically runs `scripts/ci_log_audit.py` on the CI job log when
+ a step fails and appends the resulting `audit.md` to the failure issue comment.
 
 Run the script manually on a downloaded log if you need to dig deeper:
 
@@ -78,10 +98,16 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Trigger the workflow from the **Actions** tab using the **Run workflow** button. Schedule it with a `schedule:` trigger if you want regular cleanup.
+Trigger the workflow from the **Actions** tab using the **Run workflow** button.
+Schedule it with a `schedule:` trigger if you want regular cleanup.
 
 ## Troubleshooting
 
-- The workflow logs `gh auth status` before creating the failure issue so you can verify the token scopes in `gh_cli.log`.
-- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to inspect GitHub CLI output and the log audit summary.
+- The workflow logs `gh auth status` before creating the failure issue so you can
+  verify the token scopes in `gh_cli.log`.
+- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
+  inspect GitHub CLI output and the log audit summary.
+- Downloading workflow run logs with `curl` or `gh run download` requires a
+  token granted the `actions: read` scope. The built-in `GITHUB_TOKEN` only
+  works inside GitHub Actions.
 - Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.

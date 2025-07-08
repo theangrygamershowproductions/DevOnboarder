@@ -1,6 +1,8 @@
 # Running the Test Suite
 
-Install the project and its development requirements before executing the tests so Python can resolve all imports:
+Install the project and its development requirements before executing the tests
+so Python can resolve all imports. **These commands must run before invoking
+`pytest`.**
 
 ```bash
 pip install -e .

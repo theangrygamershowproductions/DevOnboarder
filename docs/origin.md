@@ -28,7 +28,8 @@ This was not collapse. It was a reclamation moment.
 After relocating and recovering in 2021, the builder:
 - Returned to software, re-learning languages and workflows.
 - Discovered AI tools like Codex and ChatGPT as avenues for resilience.
-- Began rebuilding systems: journaling, CLI interfaces (`sf drop`, `sf ask`, `sf show`), DevContainer setups, Discord workflows, and GitHub CI/CD pipelines.
+- Began rebuilding systems: journaling, CLI interfaces (`sf drop`, `sf ask`,
+  `sf show`), DevContainer setups, Discord workflows, and GitHub CI/CD pipelines.
 - Turned personal necessity into replicable tools for anyone who needs a fresh start.
 
 ---
@@ -37,9 +38,11 @@ After relocating and recovering in 2021, the builder:
 
 This story isn’t shared for sympathy. Sympathy offers momentary comfort—it doesn’t build futures.
 
-What does build futures is **humility in failure**, the hard-earned clarity that follows—and the willingness to teach what was learned.
+What does build futures is **humility in failure**, the hard-earned clarity that follows—
+and the willingness to teach what was learned.
 
-DevOnboarder is a system born from that humility. It’s modular. Tested. Functional. It’s designed to help others rebuild — not to elicit pity.
+DevOnboarder is a system born from that humility. It’s modular. Tested. Functional.
+It’s designed to help others rebuild — not to elicit pity.
 
 ---
 

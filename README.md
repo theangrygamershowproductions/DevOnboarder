@@ -8,13 +8,15 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 ## 🔧 **Project Statement**
 
-> *"This project wasn’t built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."*
+> *"This project wasn’t built to impress — it was built to work. Quietly.
+> Reliably. And in service of those who need it."*
 
 *Designed to automate onboarding, reduce friction, and support developers building from the ground up.*
 
 ## Why This Project Exists
 
-The short version: everything broke, then got rebuilt. The full recovery story lives in [docs/origin.md](docs/origin.md).
+The short version: everything broke, then got rebuilt.
+The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 ## Trunk-Based Workflow
 
@@ -27,7 +29,8 @@ The short version: everything broke, then got rebuilt. The full recovery story l
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
-- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container, forwards port `3000`, and runs `scripts/setup-env.sh`.
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
+  forwards port `3000`, and runs `scripts/setup-env.sh`.
 - `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
 - `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
 - `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
@@ -47,36 +50,43 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 1. Read [docs/README.md](docs/README.md) for development tips and setup details.
 2. Follow [docs/git-guidelines.md](docs/git-guidelines.md) for branch and commit policies.
 3. Use [docs/pull_request_template.md](docs/pull_request_template.md) when opening a pull request.
-4. Run `bash scripts/install_commit_msg_hook.sh` or see [CONTRIBUTING.md](CONTRIBUTING.md) to install the commit-msg hook.
+4. Run `bash scripts/install_commit_msg_hook.sh`
+   or see [CONTRIBUTING.md](CONTRIBUTING.md) to install the commit-msg hook.
 5. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
 6. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
 7. Update all relevant READMEs when new roles are added to the GitHub organization.
 8. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
 9. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
 10. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
-11. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
-12. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
-13. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
-14. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
+11. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
+12. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+13. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
+14. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
+15. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
     - The script automatically downloads Vale if it isn’t installed and
       prints a warning if the download fails. See
       [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
       for more details.
     - LanguageTool checks are optional; start a local server and set
       `LANGUAGETOOL_URL` to enable them.
-15. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
+16. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
     If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
-16. Browse the [agents overview](agents/index.md) for individual service specs.
-17. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
+17. Browse the [agents overview](agents/index.md) for individual service specs.
+18. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
+    `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
-18. Review the [builder ethics dossier](docs/builder_ethics_dossier.md) outlining contributor ethics and a simple template.
-19. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+19. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
+    outlining contributor ethics and a simple template.
+20. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
+21. See [docs/network-exception-list.md](docs/network-exception-list.md)
+    for required firewall domains. Run
+    `scripts/show_network_exceptions.sh` to print them.
 
 These files expand on the steps listed in the Quickstart section.
 
@@ -92,7 +102,9 @@ Alternatively, you can run the Docker Compose setup directly.
 This starts the auth, bot, XP API, frontend, and database services using
 environment variables from `.env.dev`.
 Copy each `*.env.example` to `.env` inside its service directory before starting.
-The `frontend/` directory hosts a Vite-based React app. Run `npm install` (or `pnpm install`) in that folder to install dependencies, commit the generated lockfile, and then start the development server with `npm run dev`:
+The `frontend/` directory hosts a Vite-based React app.
+Run `npm install` (or `pnpm install`) in that folder to install dependencies,
+commit the generated lockfile, and then start the development server with `npm run dev`:
 
 ```bash
 docker compose -f docker-compose.dev.yaml --env-file .env.dev up
@@ -167,12 +179,17 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    fail with `ModuleNotFoundError`. See
    [tests/README.md](tests/README.md) for details.
 8. Install git hooks with `pre-commit install` so lint checks run automatically.
-9. The CI workflow enforces a minimum of **95% code coverage** for all projects (frontend, bot, and backend). Pull requests will fail if any test suite drops below this threshold.
+9. The CI workflow enforces a minimum of **95% code coverage** for all projects
+   (frontend, bot, and backend). Pull requests will fail if any test suite drops
+   below this threshold.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
 ## Found DevOnboarder useful?
-If this project helped speed up onboarding, save time, or avoid headaches, please [⭐ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder) or [open an issue](https://github.com/theangrygamershowproductions/DevOnboarder/issues) with your feedback. Your input directly shapes future improvements.
+If this project helped speed up onboarding, save time, or avoid headaches,
+please [⭐ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder)
+or [open an issue](https://github.com/theangrygamershowproductions/DevOnboarder/issues)
+with your feedback. Your input directly shapes future improvements.
 
 ## License
 
