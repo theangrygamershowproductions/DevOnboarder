@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
   `scripts/install_gh_cli.sh`.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
   of piping the install script. Offline instructions updated accordingly.
+- Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
   failures and commits the patch when safe.
 - Detects documentation-only pushes and sets `steps.filter.outputs.code` to `false`.
