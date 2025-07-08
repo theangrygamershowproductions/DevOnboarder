@@ -72,6 +72,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
 16. Review the [builder ethics dossier](docs/builder_ethics_dossier.md) outlining contributor ethics and a simple template.
+17. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+    [AGENTS.md](AGENTS.md) for details.
 
 These files expand on the steps listed in the Quickstart section.
 
