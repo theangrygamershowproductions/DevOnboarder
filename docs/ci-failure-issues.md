@@ -107,4 +107,7 @@ Schedule it with a `schedule:` trigger if you want regular cleanup.
   verify the token scopes in `gh_cli.log`.
 - Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
   inspect GitHub CLI output and the log audit summary.
+- Downloading workflow run logs with `curl` or `gh run download` requires a
+  token granted the `actions: read` scope. The built-in `GITHUB_TOKEN` only
+  works inside GitHub Actions.
 - Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.
