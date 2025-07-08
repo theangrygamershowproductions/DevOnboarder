@@ -1,4 +1,5 @@
 # DevOnboarder
+![Coverage](coverage.svg)
 
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
