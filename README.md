@@ -1,6 +1,5 @@
 # DevOnboarder
 
-[![codecov](https://codecov.io/gh/theangrygamershowproductions/DevOnboarder/branch/main/graph/badge.svg)](https://codecov.io/gh/theangrygamershowproductions/DevOnboarder)
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 

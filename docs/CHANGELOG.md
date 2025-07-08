@@ -4,7 +4,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
-- Added a Codecov badge to the README.
+- Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
