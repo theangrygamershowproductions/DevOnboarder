@@ -54,11 +54,11 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 10. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
 11. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
 12. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
-    The script tries to download Vale automatically when it isn't
-    available in your `PATH`. If that download fails, it prints a
-    warning and exits without failing.
-    LanguageTool checks are optional; start a local server and set
-    `LANGUAGETOOL_URL` to enable them.
+    The script downloads Vale automatically when it isn't available
+    and prints a warning if that download fails. See
+    [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
+    for full instructions. LanguageTool checks are optional; start a
+    local server and set `LANGUAGETOOL_URL` to enable them.
 13. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
