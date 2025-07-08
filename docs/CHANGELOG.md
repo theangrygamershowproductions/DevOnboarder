@@ -514,6 +514,8 @@ All notable changes to this project will be recorded in this file.
   LanguageTool is optional.
 - Documented that `scripts/check_docs.sh` attempts to download Vale when it is
   missing and prints a warning without failing if the download fails.
+- Updated ONBOARDING.md to display "Vale warnings" and noted that
+  LanguageTool runs only when `LANGUAGETOOL_URL` is set.
 
 ## [0.1.0] - 2025-06-14
 
