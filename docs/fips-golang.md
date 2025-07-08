@@ -1,6 +1,8 @@
 # FIPS Compliance for Golang Projects
 
-Federal Information Processing Standards (FIPS) define security requirements for cryptographic modules used in U.S. government systems. A Go service must use FIPS-validated components and restrict algorithms that are not approved.
+Federal Information Processing Standards (FIPS) define security requirements for
+cryptographic modules used in U.S. government systems. A Go service must use
+FIPS-validated components and restrict algorithms that are not approved.
 
 ## Key Guidelines
 
