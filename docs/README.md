@@ -108,6 +108,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Automatic Codex issue closing](codex-issue-autoclose.md)
   &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
 - [CI failure issue management](ci-failure-issues.md)
   &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
