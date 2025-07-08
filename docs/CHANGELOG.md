@@ -612,6 +612,7 @@ All notable changes to this project will be recorded in this file.
 - Linked the network exception list from the docs overview so newcomers can find firewall rules.
  - The cleanup workflow now exits with an error when any `gh` command fails and opens a follow-up issue.
 - The cleanup workflow prints `Closed N ci-failure issues` on success or `::error::Cleanup failed` in the job log.
+- Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 ## [0.1.0] - 2025-06-14
 
 - Added `src/app.py` with `greet` function and updated smoke tests.
