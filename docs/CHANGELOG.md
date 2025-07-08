@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
 - Wrapped long documentation lines to satisfy markdownlint rule MD013.
+- Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Updated README star and issue links to point to the repository.
