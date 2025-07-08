@@ -1,6 +1,8 @@
 # Managing CI Failure Issues
 
-When the CI workflow fails, it opens or updates an issue titled `CI Failures for <sha>` with a summary of the failing tests. The workflow closes all open `ci-failure` issues once any CI run succeeds.
+When the CI workflow fails, it opens or updates an issue titled `CI Failures for
+<sha>` with a summary of the failing tests. The workflow closes all open
+`ci-failure` issues once any CI run succeeds.
 
 ## Automatic Cleanup
 
@@ -90,10 +92,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Trigger the workflow from the **Actions** tab using the **Run workflow** button. Schedule it with a `schedule:` trigger if you want regular cleanup.
+Trigger the workflow from the **Actions** tab using the **Run workflow** button.
+Schedule it with a `schedule:` trigger if you want regular cleanup.
 
 ## Troubleshooting
 
-- The workflow logs `gh auth status` before creating the failure issue so you can verify the token scopes in `gh_cli.log`.
-- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to inspect GitHub CLI output and the log audit summary.
+- The workflow logs `gh auth status` before creating the failure issue so you can
+  verify the token scopes in `gh_cli.log`.
+- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
+  inspect GitHub CLI output and the log audit summary.
 - Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.
