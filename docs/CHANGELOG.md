@@ -6,6 +6,7 @@ All notable changes to this project will be recorded in this file.
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
   30-day response timeframe.
 
+- Added CODE_OF_CONDUCT.md using the Contributor Covenant and linked it from the README and onboarding docs.
 - Documented troubleshooting steps for CI failure issues.
 - Documented CI environment variables used in the workflows.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
