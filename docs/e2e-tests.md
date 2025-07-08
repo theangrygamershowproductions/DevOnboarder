@@ -45,7 +45,8 @@ These tests exercise the OAuth login flow and assume the dev services are runnin
    The tests read the auth service URL from the `AUTH_URL` environment variable,
    defaulting to `http://localhost:8002` when unset.
 
-The configuration at `frontend/playwright.config.ts` automatically launches the Vite dev server before running the tests.
+The configuration at `frontend/playwright.config.ts` automatically launches the
+Vite dev server before running the tests.
 
 User details rendered by `Login.tsx` expose `data-testid` attributes
 (`user-welcome`, `user-level`, and `onboarding-status`) so tests can

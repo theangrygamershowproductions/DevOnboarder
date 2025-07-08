@@ -1,6 +1,8 @@
 # Offline Setup
 
-Some environments block direct access to package registries. Use another machine with internet access to download the files and copy them to your development system.
+Some environments block direct access to package registries. Use another
+machine with internet access to download the files and copy them to your
+development system.
 
 ## Python wheels
 
