@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Checks that all FastAPI endpoints have docstrings.
 
 Usage: ``python scripts/check_docstrings.py [PATH]``
