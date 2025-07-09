@@ -4,8 +4,11 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Documented health-check curl commands for local and production use and cross-linked from onboarding guide.
+
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
 - Added unit tests for `resolve_verification_type` and `resolve_user_flags`.
+- Added `scripts/generate_openapi.py` and a `make openapi` target for regenerating the FastAPI spec.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
@@ -19,6 +22,8 @@ All notable changes to this project will be recorded in this file.
 - Removed pnpm lockfile commit instructions from `frontend/README.md`.
 - Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
+- Added a plugin registry that loads modules from `plugins/` and documented the
+  structure in the READMEs.
 - Documented `./scripts/run_tests.sh` as the preferred way to run tests.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
@@ -640,6 +645,7 @@ All notable changes to this project will be recorded in this file.
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 - Required Node.js 20+ via the `engines` field in all package.json files.
 - Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
+- Added `docs/service-status.md` summarizing core service health and linked it from the documentation overview.
   
 ## [0.1.0] - 2025-06-14
 
@@ -674,3 +680,4 @@ All notable changes to this project will be recorded in this file.
   to `docs/troubleshooting.md` for troubleshooting help.
 - Documented the language versions provided by `ghcr.io/openai/codex-universal`
   and noted that `scripts/setup-env.sh` pulls this image.
+- Invited contributors to share onboarding feedback by linking a short survey in docs/pull_request_template.md.

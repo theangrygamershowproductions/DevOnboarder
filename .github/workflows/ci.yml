@@ -114,6 +114,15 @@ jobs:
               run: pip install -e .
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
+            - name: Generate OpenAPI spec
+              run: python scripts/generate_openapi.py
+            - name: Check committed OpenAPI spec
+              run: |
+                  git diff --quiet src/devonboarder/openapi.json || {
+                      echo "::error::openapi.json is outdated. Run 'make openapi'" \
+                           " and commit the changes.";
+                      exit 1;
+                  }
             - name: Validate OpenAPI contract
               run: openapi-spec-validator src/devonboarder/openapi.json
             - name: Alembic migration lint

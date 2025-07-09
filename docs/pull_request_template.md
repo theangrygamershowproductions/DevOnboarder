@@ -54,3 +54,5 @@ bash scripts/check_docs.sh
 # Reviewer Sign-Off
 
 - [ ] I, the reviewer, confirm the checklist above is complete.
+
+Thanks for contributing! If this is your first PR, we'd love your feedback: https://example.com/feedback

@@ -5,6 +5,9 @@ codex-tasks:
         - analyze-error:
             summarize: true
             classify: [lint, test, dependency, infra, config]
+        - if: test
+          then:
+            run: pytest --lf
         - if: lint
           then:
             run: |
