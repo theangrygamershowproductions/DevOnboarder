@@ -88,7 +88,8 @@
             "title": "Create Feedback Dashboard UI",
             "module": "frontend",
             "description": "Build React components for the submission form, status board, and analytics snapshot per docs/prd/feedback-dashboard.md.",
-            "status": "complete"
+            "status": "complete",
+            "milestone": "v0.5.0"
         }
     ]
 }
