@@ -689,3 +689,4 @@ All notable changes to this project will be recorded in this file.
 - Added `VITE_FEEDBACK_URL` configuration and implemented React components for the feedback form, status board, and analytics snapshot.
 - Implemented Llama2 Agile Helper service exposing `/sprint-summary` and `/groom-backlog` endpoints.
 - Validated feedback components handle failed requests and show error messages.
+- Ensured the feedback status board uses functional state updates so concurrent changes aren't lost.
