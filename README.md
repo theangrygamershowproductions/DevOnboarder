@@ -175,6 +175,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    npm run coverage --prefix bot
    npm run coverage --prefix frontend
    ```
+   Set `OFFLINE_BADGE=1` if `img.shields.io` is unreachable to skip the badge
+   update.
    **Note:** both installs must finish before running `pytest` or the tests may
    fail with `ModuleNotFoundError`. See
    [tests/README.md](tests/README.md) for details.
