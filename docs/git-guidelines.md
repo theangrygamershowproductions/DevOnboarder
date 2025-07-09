@@ -31,6 +31,9 @@ Add login form UI
 Includes basic username and password fields.
 ```
 
+Commit types like `FEAT`, `FIX` and `DOCS` must be uppercase as shown in
+[AGENTS.md](../AGENTS.md).
+
 Summarize the purpose of the change in the first line. For example:
 
 ```text

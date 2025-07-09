@@ -58,7 +58,7 @@ All contributors **must** follow these standards for commit messages:
 #### Example
 
 ```plaintext
-docs: Document built-in GITHUB_TOKEN usage for CI failure issues
+DOCS(ci): Document built-in GITHUB_TOKEN usage for CI failure issues
 
 - Clarifies workflow token use in README
 - Updates changelog with policy details
