@@ -46,6 +46,8 @@ All notable changes to this project will be recorded in this file.
   doc-quality guide notes this dependency.
 - CI installs markdownlint dependencies before running documentation checks and
   uses `npx -y` with an offline hint on failure.
+- Documented how to cache `markdownlint-cli2` for offline runs and clarified that
+  `scripts/check_docs.sh` invokes `npx -y markdownlint-cli2`.
 - Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
