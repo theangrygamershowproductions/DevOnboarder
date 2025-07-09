@@ -3,11 +3,11 @@ set -euo pipefail
 
 # Run markdownlint-cli2 on all Markdown files before Vale
 set +e
-npx markdownlint-cli2 "**/*.md"
+npx -y markdownlint-cli2 "**/*.md"
 ml_status=$?
 set -e
 if [ $ml_status -ne 0 ]; then
-  echo "::warning file=scripts/check_docs.sh,line=$LINENO::Markdownlint issues found"
+  echo "::warning file=scripts/check_docs.sh,line=$LINENO::Markdownlint issues found. See docs/offline-setup.md for offline instructions."
 fi
 
 FILES=$(git ls-files '*.md')

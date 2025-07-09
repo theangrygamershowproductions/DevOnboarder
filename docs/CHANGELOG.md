@@ -34,6 +34,8 @@ All notable changes to this project will be recorded in this file.
 - Added `markdownlint-cli2` to documentation checks and pre-commit.
 - `check_docs.sh` now runs `markdownlint-cli2 "**/*.md"` before Vale and the
   doc-quality guide notes this dependency.
+- CI installs markdownlint dependencies before running documentation checks and
+  uses `npx -y` with an offline hint on failure.
 - Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
