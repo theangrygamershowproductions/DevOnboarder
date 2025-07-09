@@ -38,6 +38,7 @@ All notable changes to this project will be recorded in this file.
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
 - Added Bandit and npm audit checks to fail CI when high severity issues are found.
+- `scripts/security_audit.sh` now exits with code 1 when `pip-audit` reports vulnerabilities, and CI runs `pip-audit` after installing Python requirements with offline guidance on failures.
 - Install the GitHub CLI in CI using the preinstalled binary or
   `scripts/install_gh_cli.sh`.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
