@@ -17,6 +17,7 @@ describe("FeedbackStatusBoard", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
+        ok: true,
         json: () =>
           Promise.resolve({
             feedback: [
@@ -24,7 +25,7 @@ describe("FeedbackStatusBoard", () => {
             ],
           }),
       })
-      .mockResolvedValueOnce({ json: () => Promise.resolve({}) });
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) });
     vi.stubGlobal("fetch", fetchMock);
 
     render(<FeedbackStatusBoard />);

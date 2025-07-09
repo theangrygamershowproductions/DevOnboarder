@@ -10,25 +10,37 @@ interface FeedbackItem {
 export default function FeedbackStatusBoard() {
   const feedbackUrl = import.meta.env.VITE_FEEDBACK_URL;
   const [items, setItems] = useState<FeedbackItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setError(null);
     fetch(`${feedbackUrl}/feedback`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load feedback');
+        return r.json();
+      })
       .then(d => setItems(d.feedback))
-      .catch(console.error);
+      .catch(() => setError('Failed to load feedback'));
   }, [feedbackUrl]);
 
   function updateStatus(id: number, status: string) {
+    setError(null);
     fetch(`${feedbackUrl}/feedback/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
-    }).then(() => {
-      setItems(items.map(i => (i.id === id ? { ...i, status } : i)));
-    });
+    })
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to update status');
+      })
+      .then(() => {
+        setItems(items.map(i => (i.id === id ? { ...i, status } : i)));
+      })
+      .catch(() => setError('Failed to update status'));
   }
 
   return (
+    <div>
     <table>
       <thead>
         <tr>
@@ -59,5 +71,7 @@ export default function FeedbackStatusBoard() {
         ))}
       </tbody>
     </table>
+    {error && <p role="alert">{error}</p>}
+    </div>
   );
 }

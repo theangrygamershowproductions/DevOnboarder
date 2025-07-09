@@ -14,10 +14,14 @@ describe("FeedbackAnalytics", () => {
   });
 
   it("shows analytics summary", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({ total: 1, breakdown: { bug: { open: 1 } } }),
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () =>
+          Promise.resolve({ total: 1, breakdown: { bug: { open: 1 } } }),
+      })
+    );
 
     render(<FeedbackAnalytics />);
     expect(await screen.findByText(/total feedback: 1/i)).toBeInTheDocument();

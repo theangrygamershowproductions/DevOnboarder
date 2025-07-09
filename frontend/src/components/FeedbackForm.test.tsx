@@ -16,7 +16,7 @@ describe("FeedbackForm", () => {
   it("posts feedback", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValue({ json: () => Promise.resolve({ id: 1 }) });
+      .mockResolvedValue({ ok: true, json: () => Promise.resolve({ id: 1 }) });
     vi.stubGlobal("fetch", fetchMock);
 
     render(<FeedbackForm />);

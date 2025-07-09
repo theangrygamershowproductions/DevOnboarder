@@ -688,3 +688,4 @@ All notable changes to this project will be recorded in this file.
 - Invited contributors to share onboarding feedback by linking a short survey in docs/pull_request_template.md.
 - Added `VITE_FEEDBACK_URL` configuration and implemented React components for the feedback form, status board, and analytics snapshot.
 - Implemented Llama2 Agile Helper service exposing `/sprint-summary` and `/groom-backlog` endpoints.
+- Validated feedback components handle failed requests and show error messages.
