@@ -34,6 +34,9 @@ Includes basic username and password fields.
 Commit types like `FEAT`, `FIX` and `DOCS` must be uppercase as shown in
 [AGENTS.md](../AGENTS.md).
 
+See the **commit-message policy** in [../AGENTS.md](../AGENTS.md) for a detailed
+explanation of the required format and history rules.
+
 Summarize the purpose of the change in the first line. For example:
 
 ```text
