@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Documented health-check curl commands for local and production use and cross-linked from onboarding guide.
 
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
+- Added unit tests for `resolve_verification_type` and `resolve_user_flags`.
 - Added `scripts/generate_openapi.py` and a `make openapi` target for regenerating the FastAPI spec.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
