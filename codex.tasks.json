@@ -1,14 +1,6 @@
 {
   "tasks": [
     {
-      "id": "integration-001",
-      "title": "Implement Discord Integration agent",
-      "module": "discord_integration",
-      "description": "Create `/oauth` and `/roles` routes for Discord account linking and role lookup.",
-      "status": "deferred",
-      "milestone": "v0.4.0"
-    },
-    {
       "id": "feedback-001",
       "title": "Implement Feedback Dashboard API",
       "module": "feedback_service",
@@ -50,6 +42,13 @@
     }
   ],
   "completedTasks": [
+    {
+      "id": "integration-001",
+      "title": "Implement Discord Integration agent",
+      "module": "discord_integration",
+      "description": "Create `/oauth` and `/roles` routes for Discord account linking and role lookup.",
+      "status": "complete"
+    },
     {
       "id": "auth-001",
       "title": "Implement Discord OAuth2 Flow",
