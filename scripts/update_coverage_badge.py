@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import sys
+import os
 from pathlib import Path
 
 import requests
@@ -29,10 +30,33 @@ def badge_color(pct: float) -> str:
 
 
 def fetch_badge(pct: float) -> bytes:
+    """Return an SVG badge for the given coverage percentage."""
+    if os.getenv("OFFLINE_BADGE") == "1":
+        template = Path("scripts/offline_badge_template.svg")
+        if template.exists():
+            color_map = {
+                "brightgreen": "#4c1",
+                "yellow": "#dfb317",
+                "orange": "#fe7d37",
+                "red": "#e05d44",
+            }
+            color = color_map[badge_color(pct)]
+            return (
+                template.read_text(encoding="utf-8")
+                .format(pct=f"{pct:.1f}%", color=color)
+                .encode()
+            )
+        print("OFFLINE_BADGE=1 set; skipping badge generation")
+        return b""
+
     color = badge_color(pct)
     url = f"https://img.shields.io/badge/coverage-{pct:.1f}%25-{color}.svg"
-    resp = requests.get(url, timeout=10)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"Failed to download badge: {exc}")
+        raise SystemExit(1)
     return resp.content
 
 
@@ -41,8 +65,9 @@ def main() -> None:
     output = Path(sys.argv[2] if len(sys.argv) > 2 else "coverage.svg")
     pct = read_coverage(summary)
     svg = fetch_badge(pct)
-    output.write_bytes(svg)
-    print(f"Badge updated to {pct:.1f}%")
+    if svg:
+        output.write_bytes(svg)
+        print(f"Badge updated to {pct:.1f}%")
 
 
 if __name__ == "__main__":

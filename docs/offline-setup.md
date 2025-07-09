@@ -61,6 +61,27 @@ development system.
 
 After installing dependencies, run the usual setup commands such as `make deps` or `pre-commit install`.
 
+## Documentation tooling (markdownlint-cli2)
+
+`scripts/check_docs.sh` calls `npx -y markdownlint-cli2`. Cache this package so the
+command works offline:
+
+1. On the online machine, prime the npm cache from the repository root:
+
+   ```bash
+   mkdir -p ~/devonboarder-offline/npm
+   npm ci --cache ~/devonboarder-offline/npm
+   ```
+
+2. Copy the `devonboarder-offline` folder to your offline machine.
+
+3. Install the package from the cache and run the linter offline:
+
+   ```bash
+   npm ci --offline --cache /path/to/devonboarder-offline/npm
+   npx --offline -y markdownlint-cli2
+   ```
+
 ## Trivy
 
 1. On a machine with internet access, download the Trivy binary:
@@ -103,3 +124,10 @@ Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yam
    ```
 
 The hooks will run without needing network access.
+
+## Coverage badge
+
+`scripts/update_coverage_badge.py` contacts `img.shields.io` to generate the
+coverage badge. Set `OFFLINE_BADGE=1` before running the script to skip the
+request. When the variable is set, the script uses `scripts/offline_badge_template.svg`
+if present or prints a message that badge generation was skipped.

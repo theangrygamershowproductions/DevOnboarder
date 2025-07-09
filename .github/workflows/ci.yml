@@ -122,6 +122,12 @@ jobs:
               run: ruff check --output-format=github .
             - name: Run mypy
               run: mypy src/devonboarder
+            - name: Install docs dependencies
+              run: |
+                  npm ci || {
+                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+                      exit 1
+                  }
             - name: Install Vale
               run: |
                   curl -fsSL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_64-bit.tar.gz | tar xz # pinned version
