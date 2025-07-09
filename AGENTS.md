@@ -58,18 +58,22 @@ All contributors **must** follow these standards for commit messages:
 #### Example
 
 ```plaintext
-docs: Document built-in GITHUB_TOKEN usage for CI failure issues
+DOCS(ci): Document built-in GITHUB_TOKEN usage for CI failure issues
 
 - Clarifies workflow token use in README
 - Updates changelog with policy details
 ```
 
-See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under [docs/git/](./docs/git/) for additional Git best practices.
+See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under
+[docs/git/](./docs/git/) for additional Git best practices.
 
 ## Commit History Policy: No Rewriting or Force-Pushing
 
-- **Commit messages on pushed commits cannot be changed.** Once a commit is pushed to a shared branch, avoid `git commit --amend`, interactive rebases, and `git push --force`.
-- If a commit message is unclear, add context in a new commit or the pull request description instead of rewriting history.
+- **Commit messages on pushed commits cannot be changed.** Once a commit is
+  pushed to a shared branch, avoid `git commit --amend`, interactive rebases,
+  and `git push --force`.
+- If a commit message is unclear, add context in a new commit or the pull request
+  description instead of rewriting history.
 - This rule preserves repository integrity and auditability.
 
 ## Potato Ignore Policy

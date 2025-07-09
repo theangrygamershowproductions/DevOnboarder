@@ -1,8 +1,11 @@
 # Project Git Workflow Reference
 
-> � For advanced Git workflows and configuration (e.g. `.gitignore`, SSH, hooks, submodules), see [Git.md](./Git.md)
+> � For advanced Git workflows and configuration (e.g. `.gitignore`, SSH,
+> hooks, submodules), see [Git.md](./Git.md)
 
-This project uses a structured Git workflow for managing source code, feature development, and deployment. Below is a quick-reference guide to help team members perform common Git tasks correctly.
+This project uses a structured Git workflow for managing source code, feature
+development, and deployment. Below is a quick-reference guide to help team
+members perform common Git tasks correctly.
 
 ---
 
