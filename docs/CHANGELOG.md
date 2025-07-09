@@ -29,7 +29,7 @@ All notable changes to this project will be recorded in this file.
 - Documented `./scripts/run_tests.sh` as the preferred way to run tests.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
-- Added a first PR guide and service architecture diagram with links from the docs overview.
+- Added a first PR guide and service architecture diagram with links from the docs overview. The screencast is now linked externally instead of embedded.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
 - Added a reminder in `docs/README.md` that forked pull requests require a personal access token or
     `pull_request_target` workflow to update CI failure issues.
