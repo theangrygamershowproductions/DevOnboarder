@@ -1,14 +1,6 @@
 {
   "tasks": [
     {
-      "id": "feedback-002",
-      "title": "Create Feedback Dashboard UI",
-      "module": "frontend",
-      "description": "Build React components for the submission form, status board, and analytics snapshot per docs/prd/feedback-dashboard.md.",
-      "status": "planned",
-      "milestone": "v0.5.0"
-    },
-    {
       "id": "agile-001",
       "title": "Llama2 Agile Helper Integration",
       "module": "llama2_agile_helper",
@@ -81,6 +73,13 @@
       "title": "Stub Frontend OAuth Session Component",
       "module": "frontend",
       "description": "Add a simple React/Vite component that consumes the Discord OAuth token (if present), displays XP/level via `/api/user/level`, and shows onboarding state. Use environment variables defined in `.env.example` and align with backend API routes.",
+      "status": "complete"
+    },
+    {
+      "id": "feedback-002",
+      "title": "Create Feedback Dashboard UI",
+      "module": "frontend",
+      "description": "Build React components for the submission form, status board, and analytics snapshot per docs/prd/feedback-dashboard.md.",
       "status": "complete"
     }
   ]
