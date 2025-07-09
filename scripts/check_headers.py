@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Smoke test that verifies CORS and security headers are present."""
 
 import os
