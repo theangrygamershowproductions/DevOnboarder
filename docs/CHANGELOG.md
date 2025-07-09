@@ -15,6 +15,7 @@ All notable changes to this project will be recorded in this file.
 
 - Added CODE_OF_CONDUCT.md using the Contributor Covenant and linked it from the README and onboarding docs.
 - Documented troubleshooting steps for CI failure issues.
+- Removed pnpm lockfile commit instructions from `frontend/README.md`.
 - Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
