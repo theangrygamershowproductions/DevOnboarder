@@ -12,7 +12,28 @@ fi
 
 ruff check .
 mkdir -p test-results
-pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
+
+# Capture pytest output so we can surface helpful hints on failure
+pytest_log=$(mktemp)
+set +e
+pytest --cov=src --cov-fail-under=95 \
+    --junitxml=test-results/pytest-results.xml 2>&1 | tee "$pytest_log"
+pytest_exit=${PIPESTATUS[0]}
+set -e
+
+# Print installation hint when tests fail due to missing packages
+if grep -q "ModuleNotFoundError" "$pytest_log"; then
+    echo
+    echo "ModuleNotFoundError detected during tests."
+    echo "Make sure you've installed the project and development requirements:"
+    echo "  pip install -e ."
+    echo "  pip install -r requirements-dev.txt"
+    echo "See the troubleshooting section in docs/README.md for details."
+fi
+
+if [ $pytest_exit -ne 0 ]; then
+    exit $pytest_exit
+fi
 if [ -d bot ] && [ -f bot/package.json ]; then
     npm ci --prefix bot
     (cd bot && npm run coverage)
