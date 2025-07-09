@@ -43,7 +43,7 @@ and Codex automation can keep the platform healthy.
 | Agent Name          | Endpoint(s)                      | Port | Healthcheck | Depends On | Status   |
 | ------------------- | -------------------------------- | ---- | ----------- | ---------- | -------- |
 | Auth Server         | `/api/*`, `/health`              | 8002 | `/health`   | db         | updating |
-| Discord Integration | `/oauth`, `/roles`               | 8081 | `TBD`       | Auth, db   | deferred |
+| Discord Integration | `/oauth`, `/roles`               | 8081 | `/health`   | Auth, db   | verify   |
 | Frontend Agent      | `/`, `/session`                  | 3000 | N/A         | Auth       | stable   |
 | XP API              | `/xp`, `/health`                 | 8001 | `/health`   | db         | verify   |
 | Database (Postgres) | N/A                              | 5432 | docker      | N/A        | stable   |
@@ -93,11 +93,11 @@ and Codex automation can keep the platform healthy.
 
 ## Discord Integration Agent
 
-**Status:** Deferred – planned endpoints `/oauth` and `/roles` are not yet implemented.
+**Status:** Verify – exposes `/oauth` and `/roles` for account linking and role lookups. 
 
-**Purpose:** Handles Discord OAuth flows and role lookups once the service is built.
+**Purpose:** Handles Discord OAuth flows and role lookups.
 
-**Key Files:** To be determined when development resumes.
+**Key Files:** `src/discord_integration/api.py`
 
 ---
 
@@ -214,7 +214,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 | ------------------- | ----------- | -------------- | ---------------- |
 | Auth Server         | Yes         | Yes            | Yes              |
 | Frontend            | Yes         | Yes            | Yes              |
-| Discord Integration | N/A         | No             | No               |
+| Discord Integration | Yes         | No             | No               |
 | XP API              | Yes         | Yes            | Yes              |
 | Webhook/Bot Agent   | Optional    | No             | Optional         |
 | Database (Postgres) | Yes         | Yes            | Yes              |

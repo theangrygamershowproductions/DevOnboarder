@@ -148,6 +148,14 @@ devonboarder-auth
 
 The auth service listens on `http://localhost:8002`.
 
+To link Discord accounts and fetch roles separately, run:
+
+```bash
+devonboarder-integration
+```
+
+This service listens on `http://localhost:8081`.
+
 The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
 Workflows rely on the preinstalled GitHub CLI or run `./scripts/install_gh_cli.sh`.
 
