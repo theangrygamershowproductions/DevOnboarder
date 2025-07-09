@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run markdownlint on all Markdown files (excluding dependencies)
+# Run markdownlint-cli2 on all Markdown files before Vale
 set +e
-npx markdownlint-cli2 '**/*.md' '!**/node_modules'
+npx markdownlint-cli2 "**/*.md"
 ml_status=$?
 set -e
 if [ $ml_status -ne 0 ]; then
