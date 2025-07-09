@@ -8,6 +8,7 @@ Reviewers must verify the following before merging a pull request:
 - [ ] Documentation passes `bash scripts/check_docs.sh`.
 - [ ] Environment variable docs match `.env.example` files via
       `python scripts/check_env_docs.py`.
+- [ ] Run `make openapi` if API routes changed to update `openapi.json`.
 - [ ] The pull request contains a completed reviewer sign-off section.
 - [ ] Secret variable issues use the [Secret Alignment template](../.github/ISSUE_TEMPLATE/secret-alignment.md).
 
