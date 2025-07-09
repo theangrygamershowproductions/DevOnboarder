@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
+- Added unit tests for `resolve_verification_type` and `resolve_user_flags`.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
