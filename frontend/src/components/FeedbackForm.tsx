@@ -5,14 +5,20 @@ export default function FeedbackForm() {
   const [type, setType] = useState('bug');
   const [description, setDescription] = useState('');
   const [submitted, setSubmitted] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(null);
     const resp = await fetch(`${feedbackUrl}/feedback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type, description }),
     });
+    if (!resp.ok) {
+      setError('Failed to submit feedback');
+      return;
+    }
     const data = await resp.json();
     setSubmitted(data.id);
   }
@@ -38,6 +44,7 @@ export default function FeedbackForm() {
         />
       </label>
       <button type="submit">Submit Feedback</button>
+      {error && <p role="alert">{error}</p>}
     </form>
   );
 }

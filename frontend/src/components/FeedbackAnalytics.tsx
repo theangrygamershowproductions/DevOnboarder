@@ -8,14 +8,22 @@ interface Analytics {
 export default function FeedbackAnalytics() {
   const feedbackUrl = import.meta.env.VITE_FEEDBACK_URL;
   const [data, setData] = useState<Analytics | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setError(null);
     fetch(`${feedbackUrl}/feedback/analytics`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load analytics');
+        return r.json();
+      })
       .then(setData)
-      .catch(console.error);
+      .catch(() => setError('Failed to load analytics'));
   }, [feedbackUrl]);
 
+  if (error) {
+    return <p role="alert">{error}</p>;
+  }
   if (!data) return <p>Loading...</p>;
 
   return (
