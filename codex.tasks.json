@@ -31,6 +31,22 @@
       "description": "Provide sprint summaries and backlog grooming tips.",
       "status": "planned",
       "milestone": "v0.5.0"
+    },
+    {
+      "id": "docs-qa-101",
+      "title": "Document pip-audit enforcement in CI workflow",
+      "module": "docs",
+      "description": "Update docs/ci-workflow.md to explain the pip-audit step, failure behavior, and offline mitigation instructions.",
+      "status": "planned",
+      "milestone": "v0.5.1"
+    },
+    {
+      "id": "docs-qa-102",
+      "title": "Add markdownlint offline guidance to onboarding",
+      "module": "docs",
+      "description": "Extend docs/doc-quality-onboarding.md with instructions for running markdownlint-cli2 offline and reference docs/offline-setup.md.",
+      "status": "planned",
+      "milestone": "v0.5.1"
     }
   ],
   "completedTasks": [
