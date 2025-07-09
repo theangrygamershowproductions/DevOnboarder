@@ -15,6 +15,9 @@ pip install -r requirements-dev.txt
 npm install
 ```
 
+`npm install` installs **markdownlint-cli2**, which `scripts/check_docs.sh` runs
+before Vale to enforce Markdown style.
+
 Run these commands **before executing tests or documentation checks** so Python
 imports resolve correctly.
 
