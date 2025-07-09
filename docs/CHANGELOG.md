@@ -20,6 +20,8 @@ All notable changes to this project will be recorded in this file.
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
 - Added `markdownlint-cli2` to documentation checks and pre-commit.
+- `check_docs.sh` now runs `markdownlint-cli2 "**/*.md"` before Vale and the
+  doc-quality guide notes this dependency.
 - Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
