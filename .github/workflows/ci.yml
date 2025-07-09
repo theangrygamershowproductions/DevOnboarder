@@ -92,6 +92,16 @@ jobs:
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
+            - name: Python dependency audit
+              run: |
+                  if ! pip-audit; then
+                      code=$?
+                      if [ "$code" -eq 1 ]; then
+                          exit 1
+                      else
+                          echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
+                      fi
+                  fi
             - name: Run Black
               run: black --check .
             - name: Validate env docs

@@ -10,9 +10,12 @@ OUT="docs/security-audit-${DATE}.md"
   echo "We ran dependency audits for Python and Node packages and scanned the code with Bandit."
   echo
   echo "## Python (\`pip-audit\`)"
-  if pip-audit >/tmp/pip_audit.log 2>&1; then
-    cat /tmp/pip_audit.log
-  else
+  audit_status=0
+  pip-audit >/tmp/pip_audit.log 2>&1 || audit_status=$?
+  cat /tmp/pip_audit.log
+  if [ "$audit_status" -eq 1 ]; then
+    exit 1
+  elif [ "$audit_status" -gt 1 ]; then
     echo "\`pip-audit\` could not complete in the Codex environment due to restricted network access."
   fi
   echo
