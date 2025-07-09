@@ -1,10 +1,15 @@
 # Developer Onboarding
 
-Welcome to **DevOnboarder**. This page explains how to get your environment running and where to find documentation about our workflow.
+Welcome to **DevOnboarder**. This page explains how to get your environment
+running and where to find documentation about our workflow.
 
-If you're setting up a fresh Ubuntu machine, follow [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker Compose, Node.js 20, and Python 3.12.
+If you're setting up a fresh Ubuntu machine, follow
+[ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker
+Compose, Node.js 20, and Python 3.12.
 
-After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to install a `commit-msg` hook. This ensures your commit messages pass the lint check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to
+install a `commit-msg` hook. This ensures your commit messages pass the lint
+check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
 ## Local Development
 
@@ -35,12 +40,14 @@ After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to i
     `curl http://localhost:8001/api/user/onboarding-status`
     and `curl http://localhost:8001/api/user/level`.
 12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
-13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`, and `npm run coverage` from the `bot/` directory before committing.
-    After installing dependencies, run `npm run coverage` in the `frontend/` directory as well
-    (see [../frontend/README.md](../frontend/README.md) for details).
-    Install the project and dev requirements **before running the tests**. Skipping
-    `pip install -e .` often leads to `ModuleNotFoundError` when `pytest` imports
-    the `devonboarder` package:
+13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`,
+    and `npm run coverage` from the `bot/` directory before committing.
+    After installing dependencies, run `npm run coverage` in the `frontend/`
+    directory as well (see [../frontend/README.md](../frontend/README.md) for
+    details).
+    Install the project and dev requirements **before running the tests**.
+    Skipping `pip install -e .` often leads to `ModuleNotFoundError` when
+    `pytest` imports the `devonboarder` package:
 
     ```bash
     pip install -e .  # or `pip install -r requirements.txt` if you have one
@@ -101,6 +108,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Automatic Codex issue closing](codex-issue-autoclose.md)
   &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
 - [CI failure issue management](ci-failure-issues.md)
   &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
@@ -188,6 +196,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
 - Set `LANGUAGETOOL_URL` when running your own LanguageTool server if you want
   local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+- Markdown files must not exceed 120 characters per line (MD013). See
+  [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
 
 ## Issues and Pull Requests
 
@@ -196,11 +206,22 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 3. Use the pull request template and ensure the checklist passes.
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
-6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated with a summary of the failing tests and links to the artifacts.
-7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write` permission. When the pipeline succeeds, it closes every open `ci-failure` issue.
-8. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a token with `issues: write` permission or a `pull_request_target` workflow as explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests). Maintainers can supply a personal access token as described in [ci-failure-issues.md#maintainer-token-setup].
-9. Maintainers must provide a personal access token or use a `pull_request_target` workflow for forked pull requests so CI can update the failure issue. See [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
-10. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
+6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated
+   with a summary of the failing tests and links to the artifacts.
+7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write`
+   permission. When the pipeline succeeds, it closes every open `ci-failure`
+   issue.
+8. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a
+   token with `issues: write` permission or a `pull_request_target` workflow as
+   explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests).
+   Maintainers can supply a personal access token as described in
+   [ci-failure-issues.md#maintainer-token-setup].
+9. Maintainers must provide a personal access token or use a
+   `pull_request_target` workflow for forked pull requests so CI can update the
+   failure issue. See
+   [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
+10. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
+    `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
 
 11. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
 12. CODEOWNERS automatically requests reviews from the maintainer team.
@@ -217,4 +238,6 @@ Run the same security checks locally before pushing:
 bash scripts/security_audit.sh
 ```
 
-The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high` in both `frontend/` and `bot/`. Each command fails when vulnerabilities are detected.
+The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high`
+in both `frontend/` and `bot/`. Each command fails when vulnerabilities are
+detected.

@@ -2,6 +2,7 @@
 
 ## 🚀 Quickstart for Contributors
 
+Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 Welcome to the project! Documentation style is checked with **markdownlint** and
 **Vale**. Grammar checks with **LanguageTool** are optional.
 
@@ -15,6 +16,9 @@ pip install -r requirements-dev.txt
 npm install
 ```
 
+`npm install` installs **markdownlint-cli2**, which `scripts/check_docs.sh` runs
+before Vale to enforce Markdown style.
+
 Run these commands **before executing tests or documentation checks** so Python
 imports resolve correctly.
 
@@ -25,8 +29,13 @@ imports resolve correctly.
 * On macOS: `brew install vale`
 * On Windows: `choco install vale`
 * Or see [Vale Installation Docs](https://vale.sh/docs/installation/) for other platforms
-* If the script cannot download Vale automatically, manually download `vale_3.12.0_Linux_64-bit.tar.gz` from the [releases page](https://github.com/errata-ai/vale/releases), extract the `vale` binary, and set the `VALE_BINARY` environment variable to its full path when it's not in `PATH`.
-* **The project uses Vale 3.12.0. CI installs this version automatically**, but you still need it locally to run the checks before committing.
+* If the script cannot download Vale automatically, manually download
+  `vale_3.12.0_Linux_64-bit.tar.gz` from the
+  [releases page](https://github.com/errata-ai/vale/releases), extract the `vale`
+  binary, and set the `VALE_BINARY` environment variable to its full path when
+  it's not in `PATH`.
+* **The project uses Vale 3.12.0. CI installs this version automatically**, but
+  you still need it locally to run the checks before committing.
 
 Run `bash scripts/check_dependencies.sh` to confirm Vale and the Node test tools are installed.
 
@@ -34,7 +43,8 @@ Run `bash scripts/check_dependencies.sh` to confirm Vale and the Node test tools
 
 ### Step 3: (Optional) Set Up Local LanguageTool Server
 
-By default the project uses the public LanguageTool API, but CI or firewalls may block it. Start a local server if you want to run grammar checks:
+By default the project uses the public LanguageTool API, but CI or firewalls may
+block it. Start a local server if you want to run grammar checks:
 
 ```bash
 docker run -d -p 8010:8010 --name languagetool \
@@ -64,14 +74,22 @@ bash scripts/check_docs.sh
 This script runs `markdownlint-cli2` and Vale to lint all Markdown files. It
 generates `vale-results.json` for machine-readable output, which CI stores as an
 artifact.
+Markdownlint enforces a 120-character maximum line length via MD013 in `.markdownlint.json`.
+To check for violations manually, run:
 
-CI also saves `test-results/pytest-results.xml` when running the test suite. You can download
-both artifacts from the **Artifacts** section of each GitHub Actions run to
-review Vale output and debug failing tests.
+```bash
+grep -Rnw '.{121}' docs
+```
+
+CI also saves `test-results/pytest-results.xml` when running the test suite. You
+can download both artifacts from the **Artifacts** section of each GitHub
+Actions run to review Vale output and debug failing tests.
 
 The script downloads Vale if it's missing and prints a notice when a LanguageTool server is required for grammar checks.
 
-CI also uploads `test-results/pytest-results.xml` when the test suite runs in GitHub Actions. Visit a workflow run, open the **Artifacts** drop-down, and download the file to review which tests failed and why.
+CI also uploads `test-results/pytest-results.xml` when the test suite runs in
+GitHub Actions. Visit a workflow run, open the **Artifacts** drop-down, and
+download the file to review which tests failed and why.
 
 ---
 
@@ -131,8 +149,10 @@ and commit the change with your documentation update.
 ### Troubleshooting
 
 * **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
-* **Python errors:** ensure `pip install -e .` (or `pip install -r requirements.txt`) and `pip install -r requirements-dev.txt` succeeded.
-* **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to its address if you want to run grammar checks.
+* **Python errors:** ensure `pip install -e .` (or `pip install -r requirements.txt`)
+  and `pip install -r requirements-dev.txt` succeeded.
+* **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to
+  its address if you want to run grammar checks.
 * **pytest fails:** double-check that all dev dependencies and the project itself are installed.
 
 ### Known Limitations
@@ -150,9 +170,13 @@ and commit the change with your documentation update.
 
 ### CI Policy
 
-- **Spelling errors block merging.** Codespell runs in pre-commit and CI. Fix typos or add valid project terms to `.codespell-ignore`.
-- **Formatting warnings do not block CI.** Vale emits GitHub warnings and LanguageTool runs only when configured. Address issues when touching the affected files.
-- Large files skipped by LanguageTool are documented above; run it manually on sections if you want a full grammar review.
+  - **Spelling errors block merging.** Codespell runs in pre-commit and CI. Fix
+    typos or add valid project terms to `.codespell-ignore`.
+  - **Formatting warnings do not block CI.** Vale emits GitHub warnings and
+    LanguageTool runs only when configured. Address issues when touching the
+    affected files.
+  - Large files skipped by LanguageTool are documented above; run it manually on
+    sections if you want a full grammar review.
 
 ---
 

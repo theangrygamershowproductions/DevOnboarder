@@ -1,3 +1,4 @@
+---
 repos:
     - repo: https://github.com/psf/black
       rev: 24.3.0
@@ -26,11 +27,6 @@ repos:
       rev: v0.18.1
       hooks:
           - id: markdownlint-cli2
-    - repo: https://github.com/executablebooks/mdformat
-      rev: 0.7.22
-      hooks:
-          - id: mdformat
-            args: [--wrap, "120"]
     - repo: local
       hooks:
           - id: docs-quality

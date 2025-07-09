@@ -19,24 +19,27 @@ jobs:
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               continue-on-error: true
-            - run: |
-                  gh_bin=$(which gh)
-                  failed=0
-                  closed=0
-                  for n in $($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number'); do
-                    if "$gh_bin" issue close "$n" --reason completed; then
-                      closed=$((closed+1))
-                    else
-                      failed=1
-                    fi
-                  done
-                  if [ "$failed" -ne 0 ]; then
-                    echo "::error::Cleanup failed"
-                    "$gh_bin" issue create --title "Cleanup CI failure issues failed" \
-                      --body "Automatic cleanup could not close one or more ci-failure issues." \
-                      --label ci-failure || true
-                    exit 1
+
+            - name: Close ci-failure issues
+              run: |
+                gh_bin=$(which gh)
+                failed=0
+                closed=0
+                issues=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number') || failed=1
+                for n in $issues; do
+                  if "$gh_bin" issue close "$n" --reason completed; then
+                    closed=$((closed+1))
+                  else
+                    failed=1
                   fi
-                  echo "Closed $closed ci-failure issues"
+                done
+                if [ "$failed" -ne 0 ]; then
+                  echo "::error::Cleanup failed"
+                  "$gh_bin" issue create --title "Cleanup CI failure issues failed" \
+                    --body "Automatic cleanup could not close one or more ci-failure issues." \
+                    --label ci-failure || true
+                  exit 1
+                fi
+                echo "Closed $closed ci-failure issues"
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

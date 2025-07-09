@@ -40,4 +40,5 @@ date: 2025-07-05
 ---
 
 **Action:**
-All issues verified as resolved. This note confirms compliance for audit tracking and closes internal doc alignment tasks.
+All issues verified as resolved. This note confirms compliance for audit
+tracking and closes internal doc alignment tasks.

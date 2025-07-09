@@ -14,3 +14,7 @@ After installing the commit message hook, install our lint hooks so code and doc
 ```bash
 pre-commit install
 ```
+
+The hook prevents bad commit messages from reaching CI. See
+[docs/git-guidelines.md](docs/git-guidelines.md) for style rules and
+[docs/README.md](docs/README.md) for environment setup tips.

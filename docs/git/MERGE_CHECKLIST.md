@@ -1,6 +1,8 @@
 # 🔀 Repo Security Merge Checklist
 
-This checklist helps track the successful integration of the shared `security/` directory and associated documentation into all project repositories under The Angry Gamer Show Productions.
+This checklist helps track the successful integration of the shared `security/`
+directory and associated documentation into all project repositories under The
+Angry Gamer Show Productions.
 
 ---
 
