@@ -103,3 +103,10 @@ Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yam
    ```
 
 The hooks will run without needing network access.
+
+## Coverage badge
+
+`scripts/update_coverage_badge.py` contacts `img.shields.io` to generate the
+coverage badge. Set `OFFLINE_BADGE=1` before running the script to skip the
+request. When the variable is set, the script uses `scripts/offline_badge_template.svg`
+if present or prints a message that badge generation was skipped.
