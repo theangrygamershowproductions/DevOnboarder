@@ -673,3 +673,4 @@ All notable changes to this project will be recorded in this file.
   to `docs/troubleshooting.md` for troubleshooting help.
 - Documented the language versions provided by `ghcr.io/openai/codex-universal`
   and noted that `scripts/setup-env.sh` pulls this image.
+- Invited contributors to share onboarding feedback by linking a short survey in docs/pull_request_template.md.
