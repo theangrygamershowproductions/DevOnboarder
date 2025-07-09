@@ -8,6 +8,8 @@ All notable changes to this project will be recorded in this file.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
+- Added a Python shebang to `scripts/check_headers.py` and made the file executable.
+
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
   30-day response timeframe.
 
