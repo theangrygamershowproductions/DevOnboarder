@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
 - Documented CI environment variables used in the workflows.
 - Added a plugin registry that loads modules from `plugins/` and documented the
   structure in the READMEs.
+- Documented `./scripts/run_tests.sh` as the preferred way to run tests.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
@@ -672,3 +673,5 @@ All notable changes to this project will be recorded in this file.
 - `scripts/alembic_migration_check.sh` now sets `set -euo pipefail` and quotes `$DATABASE_URL`.
 - Added a Quickstart bullet recommending `bash scripts/run_tests.sh` with a link
   to `docs/troubleshooting.md` for troubleshooting help.
+- Documented the language versions provided by `ghcr.io/openai/codex-universal`
+  and noted that `scripts/setup-env.sh` pulls this image.

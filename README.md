@@ -44,6 +44,21 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 
+## Language Versions
+
+`scripts/setup-env.sh` pulls the `ghcr.io/openai/codex-universal` image to provide a unified runtime.
+
+| Language | Version |
+| --- | --- |
+| Python | 3.12 |
+| Node.js | 20 |
+| Ruby | 3.4.4 |
+| Rust | 1.87.0 |
+| Go | 1.24.3 |
+| Bun | 1.2.14 |
+| Java | 21 |
+| Swift | 6.1 |
+
 ## Documentation and Onboarding
 
 Workflow documentation lives under the [docs/](docs/) directory. New contributors should:
@@ -190,7 +205,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    **Note:** both installs must finish before running `pytest` or the tests may
    fail with `ModuleNotFoundError`. See
    [tests/README.md](tests/README.md) for details.
-8. Run `bash scripts/run_tests.sh` to execute all tests. See
+8. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
+   This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
 9. Install git hooks with `pre-commit install` so lint checks run automatically.
 10. The CI workflow enforces a minimum of **95% code coverage** for all projects
