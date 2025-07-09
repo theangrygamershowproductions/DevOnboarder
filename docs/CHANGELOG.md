@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Documented troubleshooting steps for CI failure issues.
+- Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
