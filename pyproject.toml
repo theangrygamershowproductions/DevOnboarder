@@ -30,6 +30,7 @@ devonboarder-server = "devonboarder.server:main"
 devonboarder-api = "xp.api:main"
 devonboarder-auth = "devonboarder.auth_service:main"
 devonboarder-integration = "discord_integration.api:main"
+devonboarder-feedback = "feedback_service.api:main"
 
 [build-system]
 requires = ["setuptools>=61"]
