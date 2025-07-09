@@ -180,7 +180,8 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
    **Note:** both installs must finish before running `pytest` or the tests may
    fail with `ModuleNotFoundError`. See
    [tests/README.md](tests/README.md) for details.
-8. Run `bash scripts/run_tests.sh` to execute all tests. See
+8. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
+   This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
 9. Install git hooks with `pre-commit install` so lint checks run automatically.
 10. The CI workflow enforces a minimum of **95% code coverage** for all projects
