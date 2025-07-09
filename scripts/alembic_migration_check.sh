@@ -1,6 +1,9 @@
 #!/bin/bash
-set -e
-if grep -q "sqlite" <<< "$DATABASE_URL"; then
+set -euo pipefail
+
+database_url="${DATABASE_URL:-}"
+
+if grep -q "sqlite" <<< "$database_url"; then
   alembic upgrade --sql head
 else
   echo "Non-SQLite DB; skipping SQLite-only migration check."
