@@ -4,7 +4,7 @@ This directory houses the DevOnboarder React application built with Vite.
 Node.js 20 is required. Run `nvm install` to use the version defined in `.nvmrc`.
 
 ## Setup
-1. Install dependencies with `pnpm install` (or `npm install` if `pnpm` is not available`). Commit the generated lockfile (`pnpm-lock.yaml` or `package-lock.json`).
+1. Install dependencies with `npm install` (or `pnpm install` if you prefer). Commit the generated `package-lock.json`.
 2. Start the development server with `npm run dev`.
 3. Run `npm run lint` to check code style and `npm run format` to apply Prettier formatting.
 4. Environment variables are defined in `.env.example`.
