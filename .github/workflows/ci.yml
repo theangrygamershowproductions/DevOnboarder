@@ -336,7 +336,7 @@ jobs:
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
             - name: Check CORS & security headers
-              run: python scripts/check_headers.py
+              run: ./scripts/check_headers.py
               env:
                   CHECK_HEADERS_URL: http://localhost:8002/api/user
             - name: Run security audit
