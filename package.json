@@ -3,5 +3,8 @@
   "private": true,
   "devDependencies": {
     "markdownlint-cli2": "^0.18.1"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
