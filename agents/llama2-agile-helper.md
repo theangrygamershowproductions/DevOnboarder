@@ -1,5 +1,5 @@
 # Llama2 Agile Helper Agent
-**Status:** Planned.
+**Status:** Active.
 
 **Purpose:** Offers agile planning suggestions and coaching using the Llama2 language model.
 
@@ -42,6 +42,11 @@ Prompt files live in the `prompts/` folder.
 | Slack/Teams Trigger | Invoke `/retro-summary` or `/groom-backlog` in chat |
 | GitHub Action Hook | Run on PRs labeled `planning` or `retrospective` |
 | Frontend Button | Manual trigger in the dashboard |
+
+## Endpoints
+
+- `POST /sprint-summary` – return a summary for sprint notes.
+- `POST /groom-backlog` – suggest priorities and labels for backlog tickets.
 
 ## Metrics
 
