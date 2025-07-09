@@ -40,4 +40,29 @@ describe("FeedbackStatusBoard", () => {
       )
     );
   });
+
+  it("shows an error when update fails", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            feedback: [
+              { id: 1, type: "bug", status: "open", description: "bad" },
+            ],
+          }),
+      })
+      .mockResolvedValueOnce({ ok: false });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<FeedbackStatusBoard />);
+    await screen.findByText("bad");
+    fireEvent.change(screen.getByLabelText("status-1"), {
+      target: { value: "closed" },
+    });
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toHaveTextContent(/failed/i)
+    );
+  });
 });
