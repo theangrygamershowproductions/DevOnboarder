@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
+
 - Documented health-check curl commands for local and production use and cross-linked from onboarding guide.
 
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
