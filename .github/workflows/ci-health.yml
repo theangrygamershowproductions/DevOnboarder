@@ -1,0 +1,105 @@
+name: CI Health
+
+on:
+  schedule:
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  branches:
+    runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.set.outputs.list }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Fetch branches
+        run: |
+          git fetch origin "+refs/heads/*:refs/remotes/origin/*"
+      - name: Select active branches
+        id: set
+        run: |
+          cutoff=$(date -d '30 days ago' +%s)
+          active=$(git for-each-ref --format='%(refname:strip=3) %(committerdate:unix)' refs/remotes/origin |
+            awk -v cutoff=$cutoff '$1 != "HEAD" && $1 != "main" && $2 >= cutoff {print $1}')
+          if [ -z "$active" ]; then
+            echo "list=[]" >> "$GITHUB_OUTPUT"
+          else
+            json=$(printf '%s\n' $active | jq -R . | jq -s .)
+            echo "list=$json" >> "$GITHUB_OUTPUT"
+          fi
+
+  test:
+    needs: branches
+    if: needs.branches.outputs.list != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ fromJson(needs.branches.outputs.list) }}
+        python-version: ["3.12"]
+        node-version: ["20"]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ matrix.branch }}
+      - name: Install GitHub CLI
+        run: ./scripts/install_gh_cli.sh
+      - name: Show gh version
+        run: which gh && gh --version
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix['python-version'] }}
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix['node-version'] }}
+      - name: Run CI tests
+        run: bash scripts/run_tests.sh
+      - name: Record result
+        if: always()
+        run: echo "${{ matrix.branch }}: ${{ job.status }}" > result.txt
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.branch }}
+          path: result.txt
+
+  report:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: results
+      - name: Install GitHub CLI
+        run: ./scripts/install_gh_cli.sh
+      - name: Show gh version
+        run: which gh && gh --version
+      - id: summarize
+        run: |
+          failures=$(grep -h "" results/result-*/result.txt | awk -F': ' '$2=="failure"{print $1}')
+          echo "failures=$(printf '%s ' $failures | sed 's/ *$//')" >> "$GITHUB_OUTPUT"
+      - name: Create issue for failures
+        if: steps.summarize.outputs.failures != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FAILED: ${{ steps.summarize.outputs.failures }}
+        run: |
+          echo "CI checks failed for the following branches:" > body.md
+          for b in $FAILED; do
+            echo "- $b" >> body.md
+          done
+          gh issue create --title "CI health failures $(date -I)" --label ci-health --body-file body.md
+      - name: Summary if no failures
+        if: steps.summarize.outputs.failures == ''
+        run: echo "All scheduled CI runs passed" > /dev/null
