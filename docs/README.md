@@ -241,3 +241,4 @@ bash scripts/security_audit.sh
 The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high`
 in both `frontend/` and `bot/`. Each command fails when vulnerabilities are
 detected.
+CI also runs `pip-audit` immediately after installing Python requirements. If this step fails to reach the vulnerability database, see [docs/offline-setup.md](offline-setup.md).
