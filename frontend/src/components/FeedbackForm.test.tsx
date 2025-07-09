@@ -33,4 +33,16 @@ describe("FeedbackForm", () => {
     );
     expect(fetchMock).toHaveBeenCalledWith(`${URL}/feedback`, expect.any(Object));
   });
+
+  it("shows an error when submission fails", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<FeedbackForm />);
+    fireEvent.click(screen.getByRole("button"));
+
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toHaveTextContent(/failed/i)
+    );
+  });
 });
