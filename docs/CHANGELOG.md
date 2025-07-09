@@ -630,6 +630,7 @@ All notable changes to this project will be recorded in this file.
 - The cleanup workflow prints `Closed N ci-failure issues` on success or `::error::Cleanup failed` in the job log.
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 - Required Node.js 20+ via the `engines` field in all package.json files.
+- Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
   
 ## [0.1.0] - 2025-06-14
 
