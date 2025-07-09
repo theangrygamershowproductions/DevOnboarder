@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
 - Wrapped long documentation lines to satisfy markdownlint rule MD013.
 - Additional documentation line wrapping for MD013.
 - Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
+- Updated AGENTS and the first PR guide to use uppercase commit types.
 
 - Removed the Codecov badge from the README and deleted the upload step.
 - Fixed indentation in `cleanup-ci-failure.yml` so the closing step runs as a
