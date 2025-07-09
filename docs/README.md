@@ -92,6 +92,17 @@ The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the
 `<<` merge key.
 
+### Service Health Checks
+
+After starting the services with `make up`, confirm each one is running:
+
+```bash
+curl http://localhost:8002/health
+curl http://localhost:8001/health
+```
+
+Production environments expose the same endpoints for monitoring.
+
 ### Platform Verification
 
 These instructions were tested on Windows 11 (with WSL&nbsp;2), macOS Ventura,
@@ -143,6 +154,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
 - [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
+- [Service status dashboard](service-status.md) &ndash; checkbox view of core service health.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
 - [Dependency update policy](dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
 - [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
@@ -175,6 +187,13 @@ who has contributed and when.
 - `.editorconfig` &ndash; ensures consistent indentation and line endings across editors.
 - `.python-version` &ndash; indicates the Python version for pyenv.
 - `.nvmrc` &ndash; defines the Node.js version for nvm.
+
+## Plugin Development
+
+Place optional extensions under the repository's `plugins/` directory. Each
+plugin lives in its own folder with an `__init__.py` file and a `register`
+function. Importing :mod:`devonboarder` loads these modules into the global
+``devonboarder.PLUGINS`` dictionary.
 
 ## Documentation Quality Checks
 
