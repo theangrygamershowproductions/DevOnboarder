@@ -4,11 +4,18 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Wrapped HTTP requests in scripts with try/except to exit on connection errors.
+
+- Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
+
+- Added a Python shebang to `scripts/check_headers.py` and made the file executable.
+
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
   30-day response timeframe.
 
 - Added CODE_OF_CONDUCT.md using the Contributor Covenant and linked it from the README and onboarding docs.
 - Documented troubleshooting steps for CI failure issues.
+- Removed pnpm lockfile commit instructions from `frontend/README.md`.
 - Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
@@ -37,6 +44,10 @@ All notable changes to this project will be recorded in this file.
 - Added `markdownlint-cli2` to documentation checks and pre-commit.
 - `check_docs.sh` now runs `markdownlint-cli2 "**/*.md"` before Vale and the
   doc-quality guide notes this dependency.
+- CI installs markdownlint dependencies before running documentation checks and
+  uses `npx -y` with an offline hint on failure.
+- Documented how to cache `markdownlint-cli2` for offline runs and clarified that
+  `scripts/check_docs.sh` invokes `npx -y markdownlint-cli2`.
 - Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
@@ -55,6 +66,8 @@ All notable changes to this project will be recorded in this file.
 - `scripts/check_network_access.sh` now parses `docs/network-exception-list.md` instead of using a hard-coded domain
     array.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
+- Documented the pip-audit step in `docs/ci-workflow.md` with a note about
+  offline failures linking to `docs/offline-setup.md`.
 - Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
   checks for both `frontend/` and `bot/`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
@@ -624,6 +637,7 @@ All notable changes to this project will be recorded in this file.
 - The cleanup workflow prints `Closed N ci-failure issues` on success or `::error::Cleanup failed` in the job log.
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 - Required Node.js 20+ via the `engines` field in all package.json files.
+- Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
   
 ## [0.1.0] - 2025-06-14
 
@@ -652,3 +666,7 @@ All notable changes to this project will be recorded in this file.
   when the GitHub CLI exits with an error.
 - Noted the Node.js 20 requirement in the bot and frontend READMEs and
   referenced the `.nvmrc` setup.
+- Documented Dependabot PR review steps in docs/dependencies.md and linked the page from CONTRIBUTING.
+- `scripts/alembic_migration_check.sh` now sets `set -euo pipefail` and quotes `$DATABASE_URL`.
+- Added a Quickstart bullet recommending `bash scripts/run_tests.sh` with a link
+  to `docs/troubleshooting.md` for troubleshooting help.
