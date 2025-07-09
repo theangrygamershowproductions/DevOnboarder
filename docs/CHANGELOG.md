@@ -653,3 +653,4 @@ All notable changes to this project will be recorded in this file.
 - Logged `gh auth status` before creating CI failure issues and stopped the job
   when the GitHub CLI exits with an error.
 - Documented Dependabot PR review steps in docs/dependencies.md and linked the page from CONTRIBUTING.
+- `scripts/alembic_migration_check.sh` now sets `set -euo pipefail` and quotes `$DATABASE_URL`.
