@@ -40,6 +40,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `bot/` – Discord bot written in TypeScript.
 - `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
+- `plugins/` – Optional Python packages that extend functionality.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 
@@ -161,6 +162,15 @@ GITHUB_TOKEN=<token> OPENAI_API_KEY=<key> \
 
 The container reads `codex.ci.yml` and `codex.automation.bundle.json` from the
 project root.
+
+## Plugins
+
+The package automatically loads modules found under the top-level `plugins/`
+directory. Each plugin lives in its own subfolder with an `__init__.py` file.
+Importing :mod:`devonboarder` populates ``devonboarder.PLUGINS`` with the
+discovered modules. Enable a plugin by adding a new package under
+`plugins/` and providing any initialization logic in its ``register``
+function.
 
 ## Production Deployment
 
