@@ -650,3 +650,5 @@ All notable changes to this project will be recorded in this file.
 - Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
 - Logged `gh auth status` before creating CI failure issues and stopped the job
   when the GitHub CLI exits with an error.
+- Noted the Node.js 20 requirement in the bot and frontend READMEs and
+  referenced the `.nvmrc` setup.
