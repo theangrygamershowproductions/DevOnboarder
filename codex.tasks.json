@@ -1,14 +1,6 @@
 {
   "tasks": [
     {
-      "id": "feedback-001",
-      "title": "Implement Feedback Dashboard API",
-      "module": "feedback_service",
-      "description": "Add endpoints for submitting feedback, tracking status, and generating analytics as outlined in docs/prd/feedback-dashboard.md.",
-      "status": "planned",
-      "milestone": "v0.5.0"
-    },
-    {
       "id": "feedback-002",
       "title": "Create Feedback Dashboard UI",
       "module": "frontend",
@@ -42,6 +34,13 @@
     }
   ],
   "completedTasks": [
+    {
+      "id": "feedback-001",
+      "title": "Implement Feedback Dashboard API",
+      "module": "feedback_service",
+      "description": "Add endpoints for submitting feedback, tracking status, and generating analytics as outlined in docs/prd/feedback-dashboard.md.",
+      "status": "complete"
+    },
     {
       "id": "integration-001",
       "title": "Implement Discord Integration agent",
