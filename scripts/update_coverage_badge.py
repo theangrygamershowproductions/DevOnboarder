@@ -51,8 +51,12 @@ def fetch_badge(pct: float) -> bytes:
 
     color = badge_color(pct)
     url = f"https://img.shields.io/badge/coverage-{pct:.1f}%25-{color}.svg"
-    resp = requests.get(url, timeout=10)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"Failed to download badge: {exc}")
+        raise SystemExit(1)
     return resp.content
 
 
