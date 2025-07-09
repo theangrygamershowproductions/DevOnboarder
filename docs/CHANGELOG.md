@@ -4,6 +4,10 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added SECURITY.md outlining supported versions, reporting instructions, and a
+  30-day response timeframe.
+
+- Added CODE_OF_CONDUCT.md using the Contributor Covenant and linked it from the README and onboarding docs.
 - Documented troubleshooting steps for CI failure issues.
 - Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
@@ -11,17 +15,25 @@ All notable changes to this project will be recorded in this file.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
 - Added a first PR guide and service architecture diagram with links from the docs overview.
 - Documented how maintainers can provide a personal access token for workflows on forked pull requests.
-- Added a reminder in `docs/README.md` that forked pull requests require a personal access token or `pull_request_target` workflow to update CI failure issues.
+- Added a reminder in `docs/README.md` that forked pull requests require a personal access token or
+    `pull_request_target` workflow to update CI failure issues.
+- Expanded `docs/ci-failure-issues.md` with a note linking back to this reminder.
 - Wrapped long documentation lines to satisfy markdownlint rule MD013.
+- Additional documentation line wrapping for MD013.
 - Clarified that `pip install -e .` and `pip install -r requirements-dev.txt` must run before executing tests.
+- Updated AGENTS and the first PR guide to use uppercase commit types.
 
 - Removed the Codecov badge from the README and deleted the upload step.
+- Fixed indentation in `cleanup-ci-failure.yml` so the closing step runs as a
+  separate action and prints `Closed N ci-failure issues` on success.
 - Updated README star and issue links to point to the repository.
 - CI now commits a coverage.svg badge using coverage-summary.md.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
 - Skip Codex container setup when running in CI.
 - Added `markdownlint-cli2` to documentation checks and pre-commit.
+- `check_docs.sh` now runs `markdownlint-cli2 "**/*.md"` before Vale and the
+  doc-quality guide notes this dependency.
 - Codex now attempts `ruff --fix` and `pre-commit run --files` when linting fails
   and commits the patch automatically if safe. Otherwise it opens a "chore:
   auto-fix lint errors via Codex" pull request.
@@ -30,11 +42,14 @@ All notable changes to this project will be recorded in this file.
   `scripts/install_gh_cli.sh`.
 - `scripts/trivy_scan.sh` now downloads the pinned Trivy release tarball instead
   of piping the install script. Offline instructions updated accordingly.
-- Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-compose.codex.yml`.
-- Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight checks.
+- Added `ghcr.io` to the network exception list with references to `scripts/setup-env.sh` and `docker-
+    compose.codex.yml`.
+- Linked the network exception list from the docs overview and added `scripts/check_network_access.sh` for preflight
+    checks.
 - Added `scripts/show_network_exceptions.sh` to print the firewall domain list.
 - Mentioned `scripts/check_network_access.sh` in `docs/README.md` for connectivity checks.
-- `scripts/check_network_access.sh` now parses `docs/network-exception-list.md` instead of using a hard-coded domain array.
+- `scripts/check_network_access.sh` now parses `docs/network-exception-list.md` instead of using a hard-coded domain
+    array.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
 - Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
   checks for both `frontend/` and `bot/`.
@@ -64,8 +79,10 @@ All notable changes to this project will be recorded in this file.
 - Documented running `pip install -e .` before `pytest` in docs/README.md and
   docs/ONBOARDING.md to avoid `ModuleNotFoundError: No module named 'devonboarder'`.
 - Documented Teams and Llama2 environment variables in `docs/env.md`.
-- Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage requirement.
-- Added `scripts/audit_env_vars.sh` to report missing or extra environment variables and documented usage in `docs/env.md`.
+- Added a Tests section to `bot/README.md` with `npm run coverage` instructions and noted the **95%** coverage
+    requirement.
+- Added `scripts/audit_env_vars.sh` to report missing or extra environment variables and documented usage in
+    `docs/env.md`.
 - CI now audits `.env.dev` in CI using `scripts/audit_env_vars.sh` and fails when variables are missing or extra.
 - Added `secret-alignment.md` issue template and referenced it from `docs/merge-checklist.md`.
 - Added `secrets-alignment.yml` workflow to open an issue when environment
@@ -91,18 +108,23 @@ All notable changes to this project will be recorded in this file.
 - Added stub agent specs for ID.me verification and AI mentor.
 - CI workflow cancels in-progress runs when new commits push.
 - Added a 60-minute timeout to the `test` job in `ci.yml`.
-- Added `close-codex-issues.yml` workflow to automatically close Codex-created issues referenced by `Fixes #<issue>` after a pull request merges and documented it in `docs/README.md`.
+- Added `close-codex-issues.yml` workflow to automatically close Codex-created issues referenced by `Fixes #<issue>`
+    after a pull request merges and documented it in `docs/README.md`.
 - Clarified auth_service test revisions in commit e541dd5.
 - Added empty commit referencing e541dd5 for additional context.
 - Removed obsolete `xp/.env.example`; the XP API now reads from the main `.env` file.
 - Archived `languagetool_check.py` to `archive/` and removed its invocation from `scripts/check_docs.sh`.
-- `scripts/check_docs.sh` now downloads Vale automatically and prints a notice when a LanguageTool server is required. Updated docs to make LanguageTool optional.
+- `scripts/check_docs.sh` now downloads Vale automatically and prints a notice when a LanguageTool server is required.
+    Updated docs to make LanguageTool optional.
 - Added `scripts/install_gh_cli.sh` for local GitHub CLI installation and referenced it in the docs.
-- Added `scripts/commit-msg` and `scripts/install_commit_msg_hook.sh` to help contributors set up a local `commit-msg` hook.
+- Added `scripts/commit-msg` and `scripts/install_commit_msg_hook.sh` to help contributors set up a local `commit-msg`
+    hook.
 - Replaced `docs/origin.md` with a full recovery story and updated README links.
-- Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like `fastapi` are available.
+- Added `tests/README.md` describing how to install project requirements before running `pytest` so modules like
+    `fastapi` are available.
 - `install_gh_cli.sh` now checks `GITHUB_PATH` before appending to prevent local failures.
-- Added `scripts/wait_for_service.sh` and updated the CI workflow to reuse it when waiting for the auth service to start.
+- Added `scripts/wait_for_service.sh` and updated the CI workflow to reuse it when waiting for the auth service to
+    start.
 - `scripts/wait_for_service.sh` now prints auth container logs when startup fails.
 - `wait_for_service.sh` accepts an optional service name and prints that container's logs when provided.
 - Documented the 95% coverage requirement and how to run Python and JavaScript coverage tests in `tests/README.md`.
@@ -112,7 +134,8 @@ All notable changes to this project will be recorded in this file.
 - Added a reusable `.github/actions/setup-gh-cli` action for installing the GitHub CLI.
 - Workflows log the install path with `which gh` and no longer modify `$GITHUB_PATH`.
 - Steps that invoke the GitHub CLI now call the path from `which gh` to ensure the latest version is used.
-- Updated `setup-gh-cli` to remove the old `/usr/bin/gh` binary and export `/usr/local/bin` through `$GITHUB_PATH` so the new CLI is always found.
+- Updated `setup-gh-cli` to remove the old `/usr/bin/gh` binary and export `/usr/local/bin` through `$GITHUB_PATH` so
+    the new CLI is always found.
 - Added `scripts/cache_precommit_hooks.sh` and offline instructions for caching
   pre-commit hooks.
 - CI now lints commit messages with `scripts/check_commit_messages.sh`.
@@ -137,16 +160,19 @@ All notable changes to this project will be recorded in this file.
   and `docs/env.md`.
 - Added `CORS_ALLOW_ORIGINS` environment variable for configuring CORS.
 - Replaced `node-fetch` with the global `fetch` in the Discord bot and updated tests.
-- Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-config.yaml`.
+- Prettier now runs only via the pre-commit mirror. Removed duplicate `npm run format` hooks from `.pre-commit-
+    config.yaml`.
 - Replaced the outdated TODO section in `docs/git/Git.md` with a "Maintenance Notes" summary.
 - Upgraded React packages to 19.1.0 and `dotenv` to 17.0.1.
 - Removed the `API_KEY` generation step from `scripts/generate-secrets.sh`.
 
-- Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-onboarding.md`.
+- Added `scripts/check_dependencies.sh` and documented running it from `docs/README.md` and `docs/doc-quality-
+    onboarding.md`.
 
 - Checked off completed tasks in `docs/Agents.md` for `/health` endpoints, Docker healthchecks, and CI polling.
 - Added outreach templates and a feedback log scaffold for community engagement.
-- Added `pip-audit` and `npm audit --production` security checks run via `scripts/security_audit.sh` and invoked in CI. Results are stored in `docs/security-audit-2025-07-01.md`.
+- Added `pip-audit` and `npm audit --production` security checks run via `scripts/security_audit.sh` and invoked in CI.
+    Results are stored in `docs/security-audit-2025-07-01.md`.
 - Marked the Discord Integration agent as deferred and added a tracking task.
 
 - Added Lighthouse CI performance audits using `npm run perf`. CI uploads the
@@ -162,10 +188,12 @@ All notable changes to this project will be recorded in this file.
 
 - CI failures now trigger an issue summarizing failing tests with links to the run artifacts.
 - CI workflow now uploads `playwright.log` and summarizes failing Playwright tests in the CI failure issue.
-- CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports as an artifact.
+- CI now posts a coverage summary on pull requests using `scripts/post_coverage_comment.py` and uploads the full reports
+    as an artifact.
 - Fixed newline formatting in the coverage summary by quoting the `printf` command with double quotes.
 - Added `scripts/append_coverage_summary.sh` to append the coverage link with proper newline handling.
-- Added ESLint and Prettier configurations for the frontend and bot with new `npm run lint` and `npm run format` scripts.
+- Added ESLint and Prettier configurations for the frontend and bot with new `npm run lint` and `npm run format`
+    scripts.
 - CI workflow now uses this script so the coverage link appears on its own line.
 - CI workflow now exports GitHub variables when generating the coverage summary.
 - CI workflow now comments on the CI failure issue and closes it once a build succeeds.
@@ -180,15 +208,18 @@ All notable changes to this project will be recorded in this file.
   behavior in `docs/env.md`.
 - Set the Vite dev server to listen on port `3000` and ensured all documentation
   and compose files reference the same port.
-- Added coverage scripts for the bot and frontend packages. CI now runs `npm run coverage` and fails if coverage drops below 80%.
+- Added coverage scripts for the bot and frontend packages. CI now runs `npm run coverage` and fails if coverage drops
+    below 80%.
 - Increased required code coverage threshold to 95% for all test suites.
 - Added tests for the React entrypoint and `Login` component to improve frontend
   coverage.
 
 - Documented running `npm test` from the `frontend/` directory after installing dependencies and linked
   `frontend/README.md` for details.
-- Clarified `frontend/README.md` to install dependencies with `pnpm` or `npm`, commit the lockfile, and run `npm run dev`.
-- Added `docs/offline-setup.md` explaining how to install dependencies without internet access and linked it from the onboarding docs.
+- Clarified `frontend/README.md` to install dependencies with `pnpm` or `npm`, commit the lockfile, and run `npm run
+    dev`.
+- Added `docs/offline-setup.md` explaining how to install dependencies without internet access and linked it from the
+    onboarding docs.
 - Extended the offline setup guide with steps for caching and installing npm packages in `bot/`.
 - Added `docs/troubleshooting.md` summarizing setup and CI problems and linked it from the docs README.
 - Added a module-level docstring to `src/devonboarder/cli.py` describing CLI usage.
@@ -213,14 +244,17 @@ All notable changes to this project will be recorded in this file.
 - Documented a sample QA response, randomized Easter egg reply, and the Vale/LanguageTool fallback policy.
 - Refactored `auth_service.create_app()` to instantiate a new `FastAPI` app and
   moved endpoints to an `APIRouter`.
-- Clarified where Codex posts QA results, added a "What happens next?" section, and noted that "⚠️ Docs: Lint skipped" doesn't block merges.
-- Refined the onboarding snippet to show a sample Codex QA response and referenced network troubleshooting and the Codex FAQ.
+- Clarified where Codex posts QA results, added a "What happens next?" section, and noted that "⚠️ Docs: Lint skipped"
+    doesn't block merges.
+- Refined the onboarding snippet to show a sample Codex QA response and referenced network troubleshooting and the Codex
+    FAQ.
 - Documented how `docker-compose.dev.yaml` builds the bot and frontend from
   `Dockerfile.dev`, noting the `pnpm install`/`npm ci` steps from
   `frontend/README.md`.
 
 - Added Dockerfiles for the bot and frontend and updated `docker-compose.dev.yaml` to build them.
-- Documented Ubuntu commands for installing Docker, Docker Compose, Node.js 20, and Python 3.12. Linked the setup guide from the README quickstart.
+- Documented Ubuntu commands for installing Docker, Docker Compose, Node.js 20, and Python 3.12. Linked the setup guide
+    from the README quickstart.
 - CI workflow now builds service containers before starting Compose.
 - CI workflow installs Vale automatically before documentation checks.
 - Added `codespell` pre-commit hook for Markdown and text files.
@@ -251,15 +285,18 @@ All notable changes to this project will be recorded in this file.
 - `scripts/check_docs.sh` now skips the Vale check with a warning when the binary cannot be downloaded or executed.
 - Documented how to install Vale manually when network access is restricted.
 - Added offline instructions for manual Vale installation and running LanguageTool locally.
-- Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move only the binary.
+- Improved the Vale download logic in `scripts/check_docs.sh` to extract the tarball in a temporary directory and move
+    only the binary.
 - Added a cleanup trap to remove the temporary Vale directory automatically.
 - `scripts/check_docs.sh` now verifies that the Vale binary was extracted
   successfully before moving it, exiting with a warning if missing.
 - CI now prints auth container logs if the service fails to start before header checks.
-- Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool checks.
+- Added a Known Limitations section to `doc-quality-onboarding.md` explaining that large files may skip LanguageTool
+    checks.
 - Documented that grammar and style issues only produce CI warnings.
 - `scripts/check_docs.sh` now reports Vale and LanguageTool issues as warnings instead of failing CI.
-- `docker-compose.ci.yaml` exposes the auth service on port 8002 and drops the deprecated `version` key so CI health checks succeed.
+- `docker-compose.ci.yaml` exposes the auth service on port 8002 and drops the deprecated `version` key so CI health
+    checks succeed.
 - Added `docs/network-troubleshooting.md` with tips for working behind restricted networks.
 - CI workflow now waits for the auth service before running the header check to avoid connection errors.
 - The initial auth wait step now fails and prints logs if the service never starts, avoiding test timeouts.
@@ -282,7 +319,8 @@ All notable changes to this project will be recorded in this file.
 - Updated `frontend/README.md` with DevOnboarder branding and removed outdated badge references.
 - Updated `docker-compose.dev.yaml` to run `npm run dev` for the frontend service.
 - Completed alpha onboarding guide and linked a simple marketing site preview.
-- Checked off roadmap tasks for documentation, feedback integration, security audit, marketing preview, and cross-platform verification.
+- Checked off roadmap tasks for documentation, feedback integration, security audit, marketing preview, and cross-
+    platform verification.
 - Documented that setup instructions were validated on Windows, macOS, and Linux.
 - Recorded npm audit results showing zero vulnerabilities and noted pip-audit could not run in the sandbox environment.
 - Removed outdated reference to `bot/npm-audit.json` in the security audit doc.
@@ -313,7 +351,8 @@ All notable changes to this project will be recorded in this file.
 - Synced docs pull request template with `.github` to include OpenAPI and
   migration checks, docstring enforcement, header validation, and coverage
   requirements.
-- Expanded the pull request template with environment variable and coverage checks and noted the template in the Git guidelines.
+- Expanded the pull request template with environment variable and coverage checks and noted the template in the Git
+    guidelines.
 - Header smoke test now queries `CHECK_HEADERS_URL` (defaults to
   `http://localhost:8002/api/user`).
 - Updated CI and container configs to Node 20 and Python 3.12.
@@ -419,7 +458,8 @@ All notable changes to this project will be recorded in this file.
 - Added test ensuring the `/founder` route returns `403` unless `IS_FOUNDER` is set.
 - Documented when to use the feedback form versus filing issues in
   `docs/alpha/README.md` and linked the form.
-- Added README links to `docs/alpha/README.md`, `docs/founders/README.md`, and the email style guide for easier navigation.
+- Added README links to `docs/alpha/README.md`, `docs/founders/README.md`, and the email style guide for easier
+    navigation.
 - Removed `Potato.md` from `.gitignore`.
 - Added Discord message templates and linked them from the docs README.
 - Added example feedback row with notes column in `ALPHA_TESTERS.md` and noted
@@ -435,9 +475,11 @@ All notable changes to this project will be recorded in this file.
 - Documented onboarding phases, XP milestones and contributor logs in `docs/README.md`.
 - Added `docs/endpoint-reference.md` with API routes and Discord command examples.
 - Added Discord utilities for fetching user roles and resolving admin flags.
-- Documented role and guild ID placeholders in `.env.example` and created `docs/env.md` with details on the role-based permission system.
+- Documented role and guild ID placeholders in `.env.example` and created `docs/env.md` with details on the role-based
+    permission system.
 - Added verified role ID placeholders to `.env.example` and documented them in `docs/env.md`.
-- Added a "Secrets" section in `docs/env.md` covering Discord OAuth and bot tokens, with matching placeholders in `.env.example` and `bot/.env.example`.
+- Added a "Secrets" section in `docs/env.md` covering Discord OAuth and bot tokens, with matching placeholders in
+    `.env.example` and `bot/.env.example`.
 - Added `tests/test_roles.py` verifying admin and verified role flags.
 - Documented outdated packages and vulnerability scan results. `pip list` showed
   updates for mypy, pyright, pytest, ruff and typing extensions; `npm outdated`
@@ -453,7 +495,8 @@ All notable changes to this project will be recorded in this file.
 - Replaced `VITE_AUTH_API_BASE_URL` with `VITE_AUTH_URL` and documented `VITE_API_URL`.
 - Added placeholders for `VITE_AUTH_URL`, `VITE_API_URL`, and `VITE_SESSION_REFRESH_INTERVAL` in `.env.example`.
 - Added `VITE_SESSION_REFRESH_INTERVAL` to `frontend/src/.env.example` with a default value and synced `docs/env.md`.
-- Added `VITE_DISCORD_CLIENT_ID` placeholders to `.env.example` and `frontend/src/.env.example` and documented the variable.
+- Added `VITE_DISCORD_CLIENT_ID` placeholders to `.env.example` and `frontend/src/.env.example` and documented the
+    variable.
 - Corrected README quickstart path to `frontend/src/.env.example`.
 
 - Updated development tooling to stable versions and pinned the Vale download
@@ -473,9 +516,11 @@ All notable changes to this project will be recorded in this file.
   `<!-- vale off -->` / `<!-- vale on -->` and a reference to `.pre-commit-config.yaml`.
 - Documented how to add words to `.codespell-ignore`.
 - Added nodeenv SSL troubleshooting steps to `docs/network-troubleshooting.md`.
-- Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale instructions.
+- Rewrote the repository README with a concise introduction and quickstart linking to `docs/README.md` and removed Vale
+    instructions.
 - Added a package docstring to `src/routes/__init__.py` summarizing the routes module.
-- `scripts/run_tests.sh` now always installs development requirements before running tests to ensure packages like PyYAML are available.
+- `scripts/run_tests.sh` now always installs development requirements before running tests to ensure packages like
+    PyYAML are available.
 - `scripts/run_tests.sh` installs bot dependencies with `npm ci --prefix bot` before running Jest and
   installs frontend dependencies with `npm ci --prefix frontend` when frontend tests exist.
 - Added `DISCORD_REDIRECT_URI` placeholder to `.env.example` and documented it under Secrets.
@@ -490,15 +535,18 @@ All notable changes to this project will be recorded in this file.
 
 - CI workflow now uses the GitHub CLI for issue automation tasks instead of third-party actions.
 - Improved CI failure issue detection to search titles for the current commit SHA.
-- CI workflow now closes any open CI failure issue for the current commit by searching titles rather than using artifacts.
+- CI workflow now closes any open CI failure issue for the current commit by searching titles rather than using
+    artifacts.
 - Added `DISCORD_API_TIMEOUT` environment variable and enforced HTTP timeouts when contacting Discord APIs.
 - Added `license = {text = "MIT"}` to `pyproject.toml`.
 - Dependabot now monitors `/frontend` and `/bot` for npm updates.
 - Upgraded React to v19 and dotenv to v17.
 - Aligned Prettier version 3.6.2 across configuration and docs.
 - Documented the 95% coverage policy in `docs/doc-quality-onboarding.md`.
-- Documented that CI failure issues use the built-in `GITHUB_TOKEN`; no personal token is required unless `permissions:` removes `issues: write`.
-- Added `cleanup-ci-failure.yml` workflow to close stale `ci-failure` issues nightly and documented the job in `docs/README.md`.
+- Documented that CI failure issues use the built-in `GITHUB_TOKEN`; no personal token is required unless `permissions:`
+    removes `issues: write`.
+- Added `cleanup-ci-failure.yml` workflow to close stale `ci-failure` issues nightly and documented the job in
+    `docs/README.md`.
 - Granted `issues: write` permission in `ci.yml` so forks can open and close CI failure issues with the built-in token.
 - Noted that new GitHub organization roles require updates to all README files.
 - Verified `.env.dev` matches `.env.example` and added a warning in
@@ -523,11 +571,13 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/origin.md` with the project's backstory and linked it from the README.
 - Expanded `docs/origin.md` with more detail on the 2017–2021 collapse,
   recovery steps, and disclaimers.
-- Added `docs/builder_ethics_dossier.md` documenting project values and a reusable template. Removed the outdated `docs/builder-ethics-dossier.md`.
+- Added `docs/builder_ethics_dossier.md` documenting project values and a reusable template. Removed the outdated
+    `docs/builder-ethics-dossier.md`.
 - Added a journal log section in `docs/builder_ethics_dossier.md` summarizing the removal of
   `docs/builder-ethics-dossier.md` and noting the Quickstart coverage command.
 - Added environment variable summary to `agents/index.md`.
-- Added MS Teams integration variables (`TEAMS_APP_ID`, `TEAMS_APP_PASSWORD`, `TEAMS_TENANT_ID`, `TEAMS_CHANNEL_ID_ONBOARD`) to `.env.example` and documentation.
+- Added MS Teams integration variables (`TEAMS_APP_ID`, `TEAMS_APP_PASSWORD`, `TEAMS_TENANT_ID`,
+    `TEAMS_CHANNEL_ID_ONBOARD`) to `.env.example` and documentation.
 - Documented running `pre-commit install` in README Quickstart.
 - Added a legacy note in `docs/Agents.md` directing readers to `agents/index.md`.
 - Documented `API_BASE_URL` in `.env.example` and environment docs.
@@ -539,12 +589,15 @@ All notable changes to this project will be recorded in this file.
 - Cleaned up outdated verification role ID references across the docs.
 - Added prompts, metrics log, and Codex tasks scaffolding for the Llama2 Agile Helper agent.
 - Documented configuring `VALE_BINARY` when the Vale binary is not in `PATH`.
-- Verified builder ethics dossier links, journal log, and coverage doc alignment (`codex/tasks/confirm_doc_alignment.md`)
+- Verified builder ethics dossier links, journal log, and coverage doc alignment
+    (`codex/tasks/confirm_doc_alignment.md`)
 - Documented Llama2 Agile Helper integration step in `codex.plan.md` and updated automation bundle.
-- Added `agile-001` task for Llama2 Agile Helper integration in `codex.tasks.json` and verified `codex.plan.md` reference.
+- Added `agile-001` task for Llama2 Agile Helper integration in `codex.tasks.json` and verified `codex.plan.md`
+    reference.
 - CI workflow skips push runs when commit messages start with `[no-ci]`; documented the marker in `AGENTS.md`.
 - Added optional `pytest` pre-commit hook so tests can run locally before each commit.
-- Documented running `env -i PATH="$PATH" bash scripts/audit_env_vars.sh` in `docs/env.md` and explained the `JSON_OUTPUT` option for machine-readable results.
+- Documented running `env -i PATH="$PATH" bash scripts/audit_env_vars.sh` in `docs/env.md` and explained the
+    `JSON_OUTPUT` option for machine-readable results.
 - Clarified that `scripts/check_docs.sh` uses Vale only and that running
   LanguageTool checks requires a local server.
 - Updated README to note that `scripts/check_docs.sh` relies on Vale and that
@@ -558,24 +611,37 @@ All notable changes to this project will be recorded in this file.
 
 - Added governance checklist for bot permissions in `docs/governance/bot_access_governance.md`.
 - Added an **Owner** column to that checklist and assigned responsible teams to each task.
-- Documented token requirements for forked pull requests in `docs/ci-failure-issues.md` and referenced it from the documentation README.
+- Documented token requirements for forked pull requests in `docs/ci-failure-issues.md` and referenced it from the
+    documentation README.
 - Added a debug step to `cleanup-ci-failure.yml` to print token status and open issue numbers before closing them.
 - Linked the network exception list from the docs overview so newcomers can find firewall rules.
-- The cleanup workflow now exits with an error when issue closing fails and opens a follow-up issue.
+- Reminded contributors to add new domains to this list when scripts or docs reference them.
+ - The cleanup workflow now exits with an error when any `gh` command fails and opens a follow-up issue.
 - The cleanup workflow prints `Closed N ci-failure issues` on success or `::error::Cleanup failed` in the job log.
+- Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
+  
 ## [0.1.0] - 2025-06-14
 
-- Added `src/app.py` with `greet` function and updated smoke tests. [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
-- Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter. [#22](https://github.com/theangrygamershowproductions/DevOnboarder/pull/22)
-- Added `.env.example` and documented setup steps in the README. [#23](https://github.com/theangrygamershowproductions/DevOnboarder/pull/23)
-- Documented branch naming, commit messages, and rebase policy in the Git guidelines. [#24](https://github.com/theangrygamershowproductions/DevOnboarder/pull/24)
-- Expanded `docs/pull_request_template.md` with sections for summary, linked issues, screenshots, testing steps, and a checklist referencing documentation and changelog updates. [#25](https://github.com/theangrygamershowproductions/DevOnboarder/pull/25)
-- Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-off section to the pull request template. [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
+- Added `src/app.py` with `greet` function and updated smoke tests.
+    [#21](https://github.com/theangrygamershowproductions/DevOnboarder/pull/21)
+- Added `requirements-dev.txt` and `pyproject.toml` with ruff configuration. Updated CI to run the linter.
+    [#22](https://github.com/theangrygamershowproductions/DevOnboarder/pull/22)
+- Added `.env.example` and documented setup steps in the README.
+    [#23](https://github.com/theangrygamershowproductions/DevOnboarder/pull/23)
+- Documented branch naming, commit messages, and rebase policy in the Git guidelines.
+    [#24](https://github.com/theangrygamershowproductions/DevOnboarder/pull/24)
+- Expanded `docs/pull_request_template.md` with sections for summary, linked issues, screenshots, testing steps, and a
+    checklist referencing documentation and changelog updates.
+    [#25](https://github.com/theangrygamershowproductions/DevOnboarder/pull/25)
+- Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-
+    off section to the pull request template.
+    [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
 - Added `codex.ci.yml` to automate CI monitoring and fix failing builds.
 
 - Updated bot and frontend lock files and added tests so `scripts/run_tests.sh` passes
 - Updated pytest artifact path in CI workflow to `artifacts/pytest-results.xml`
-- Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented the job in `docs/README.md`.
+- Added `security-audit.yml` workflow to run dependency audits weekly and upload the report as an artifact. Documented
+    the job in `docs/README.md`.
 - Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
 - Logged `gh auth status` before creating CI failure issues and stopped the job
   when the GitHub CLI exits with an error.

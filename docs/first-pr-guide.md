@@ -24,7 +24,7 @@ It assumes you have already set up Docker, Node.js and Python as described in th
 5. **Commit and push** your work.
    ```bash
    git add <files>
-   git commit -m "docs(first-pr): Add walkthrough"
+   git commit -m "DOCS(first-pr): Add walkthrough"
    git push origin feature/my-first-change
    ```
 6. **Open a pull request** on GitHub and fill out the template. CI must pass before the PR can be merged.

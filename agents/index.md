@@ -1,6 +1,8 @@
 # Agents Overview
 
-This directory documents the services and integrations that make up the DevOnboarder platform. Each agent has its own page describing the purpose and how it fits into the workflow.
+This directory documents the services and integrations that make up the
+DevOnboarder platform. Each agent has its own page describing the purpose and
+how it fits into the workflow.
 
 ## Available Agents
 
@@ -36,7 +38,8 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | DISCORD_CLIENT_SECRET        | Discord application client secret          |
 | DISCORD_REDIRECT_URI         | OAuth callback URL for Discord             |
 | DISCORD_API_TIMEOUT          | HTTP timeout in seconds for Discord API calls |
-| JWT_SECRET_KEY               | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
+| JWT_SECRET_KEY               | Secret key for JWT signing (required; service
+errors if empty or "secret" outside `development`) |
 | JWT_ALGORITHM                | Algorithm for JWT signing (default `HS256`) |
 | DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
 | DISCORD_GUILD_IDS            | Guilds where the bot operates              |

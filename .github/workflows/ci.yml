@@ -358,18 +358,18 @@ jobs:
                   cat audit.md >> summary.md
                 gh_bin=$(which gh)
                 "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
-                search_query="${{ github.sha }} in:title,body"
+                search_query="label:ci-failure ${{ github.sha }} in:title,body"
                 echo "Searching with: $search_query" | tee -a gh_cli.log
                 set +e
-                search_output=$($gh_bin issue list --label ci-failure --state open --search "$search_query" --json number --jq '.[0].number' 2>&1 | tee -a gh_cli.log)
+                search_output=$($gh_bin issue list --state open --search "$search_query" --json number --jq '.[0].number' 2>&1 | tee -a gh_cli.log)
                 list_exit=$?
                 set -e
                 echo "Search exit code: $list_exit" | tee -a gh_cli.log
-                ISSUE="$search_output"
-                if [ "$list_exit" -eq 0 ] && [ -n "$ISSUE" ]; then
+                if [ "$list_exit" -eq 0 ] && [ -n "$search_output" ]; then
+                    ISSUE="$search_output"
                     "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                 else
-                    echo "::warning::No open CI failure issue found for commit ${{ github.sha }}" | tee -a gh_cli.log
+                    echo "::warning::Issue search failed or returned no results" | tee -a gh_cli.log
                     ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number' | tee -a gh_cli.log)
                 fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"

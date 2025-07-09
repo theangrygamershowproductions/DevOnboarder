@@ -58,31 +58,35 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 8. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
 9. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
 10. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
-11. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
-12. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
-13. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
-14. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
+11. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
+12. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+13. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
+14. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
+15. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
     - The script automatically downloads Vale if it isn’t installed and
       prints a warning if the download fails. See
       [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
       for more details.
     - LanguageTool checks are optional; start a local server and set
       `LANGUAGETOOL_URL` to enable them.
-15. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
+16. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
     If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
-16. Browse the [agents overview](agents/index.md) for individual service specs.
-17. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
+17. Browse the [agents overview](agents/index.md) for individual service specs.
+18. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
-18. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
+19. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
     outlining contributor ethics and a simple template.
-19. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+20. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
+21. See [docs/network-exception-list.md](docs/network-exception-list.md)
+    for required firewall domains. Run
+    `scripts/show_network_exceptions.sh` to print them.
 
 These files expand on the steps listed in the Quickstart section.
 
