@@ -652,3 +652,4 @@ All notable changes to this project will be recorded in this file.
 - Added Black formatting checks in CI. The workflow runs `black --check .` after installing dev dependencies.
 - Logged `gh auth status` before creating CI failure issues and stopped the job
   when the GitHub CLI exits with an error.
+- Documented Dependabot PR review steps in docs/dependencies.md and linked the page from CONTRIBUTING.
