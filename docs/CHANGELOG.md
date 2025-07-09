@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Wrapped HTTP requests in scripts with try/except to exit on connection errors.
+
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
