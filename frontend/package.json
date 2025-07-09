@@ -1,40 +1,43 @@
 {
-    "name": "devonboarder-frontend",
-    "version": "0.1.0",
-    "license": "MIT",
-    "private": true,
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "start": "vite",
-        "test": "vitest run --coverage",
-        "coverage": "vitest run --coverage",
-        "test:e2e": "playwright test",
-        "test:a11y": "playwright test e2e/accessibility.spec.ts",
-        "perf": "npm run build && lhci autorun",
-        "lint": "eslint \"src/**/*.{js,ts,tsx}\"",
-        "format": "prettier --write \"src/**/*.{js,ts,tsx}\""
-    },
-    "dependencies": {
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0"
-    },
-    "devDependencies": {
-        "@axe-core/playwright": "^4.10.2",
-        "@lhci/cli": "^0.15.1",
-        "@playwright/test": "^1.53.2",
-        "@testing-library/jest-dom": "^6.6.3",
-        "@testing-library/react": "^16.3.0",
-        "@types/react": "^19.1.8",
-        "@types/react-dom": "^19.1.6",
-        "@vitejs/plugin-react": "^4.6.0",
-        "@vitest/coverage-v8": "^3.2.4",
-        "eslint": "^9.30.0",
-        "jsdom": "^26.1.0",
-        "prettier": "^3.6.2",
-        "typescript": "^5.8.3",
-        "vite": "^7.0.2",
-        "vitest": "^3.2.4"
-    }
+  "name": "devonboarder-frontend",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite",
+    "test": "vitest run --coverage",
+    "coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:a11y": "playwright test e2e/accessibility.spec.ts",
+    "perf": "npm run build && lhci autorun",
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{js,ts,tsx}\""
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.53.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.30.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.2",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }
