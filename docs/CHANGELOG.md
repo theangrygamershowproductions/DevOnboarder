@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 
 - Added SECURITY.md outlining supported versions, reporting instructions, and a
   30-day response timeframe.
+- Implemented the Discord Integration service with `/oauth` and `/roles` endpoints.
 
 - Added CODE_OF_CONDUCT.md using the Contributor Covenant and linked it from the README and onboarding docs.
 - Documented troubleshooting steps for CI failure issues.
