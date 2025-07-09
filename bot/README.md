@@ -6,7 +6,11 @@ using the token provided in `.env`.
 
 ## Setup
 
-1. Copy the example environment file and add your credentials:
+1. Install Node.js 20 using [`nvm`](https://github.com/nvm-sh/nvm):
+   ```bash
+   nvm install  # uses .nvmrc
+   ```
+2. Copy the example environment file and add your credentials:
    ```bash
    cp .env.example .env
    ```
@@ -14,17 +18,17 @@ using the token provided in `.env`.
    and `BOT_JWT`. The bot sends this token in an `Authorization` header
    when calling the API. See [docs/env.md](../docs/env.md) for details
    about this variable.
-2. Install dependencies and build the bot:
+3. Install dependencies and build the bot:
    ```bash
    npm install
    npm run build
    ```
-3. Lint and format the code:
+4. Lint and format the code:
    ```bash
    npm run lint
    npm run format
    ```
-4. Run the bot locally:
+5. Run the bot locally:
    ```bash
    npm start
    ```
