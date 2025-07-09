@@ -18,6 +18,8 @@ All notable changes to this project will be recorded in this file.
 - Removed pnpm lockfile commit instructions from `frontend/README.md`.
 - Added mdformat to pre-commit with `--wrap 120` and documented running `pre-commit install` in CONTRIBUTING.
 - Documented CI environment variables used in the workflows.
+- Added a plugin registry that loads modules from `plugins/` and documented the
+  structure in the READMEs.
 - Documented `./scripts/run_tests.sh` as the preferred way to run tests.
 - Warns when the CI failure issue search fails and logs the message in `gh_cli.log`.
 - Searches the CI failure issue title and body for the commit SHA and logs the search exit code.
