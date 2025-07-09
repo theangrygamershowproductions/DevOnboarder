@@ -63,6 +63,8 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node-version }}
+            - name: Verify language versions
+              run: bash scripts/check_versions.sh
             - name: Cache pip downloads
               uses: actions/cache@v3
               with:
