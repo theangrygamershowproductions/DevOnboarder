@@ -64,6 +64,8 @@ All notable changes to this project will be recorded in this file.
 - `scripts/check_network_access.sh` now parses `docs/network-exception-list.md` instead of using a hard-coded domain
     array.
 - Documented Bandit and npm audit steps in `docs/ci-workflow.md`.
+- Documented the pip-audit step in `docs/ci-workflow.md` with a note about
+  offline failures linking to `docs/offline-setup.md`.
 - Updated `scripts/security_audit.sh` to run Bandit and high severity `npm audit`
   checks for both `frontend/` and `bot/`.
 - `monitor-ci` now runs `ruff --fix` and `pre-commit run --files` on lint
