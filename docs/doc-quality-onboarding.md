@@ -19,6 +19,11 @@ npm install
 `npm install` installs **markdownlint-cli2**, which `scripts/check_docs.sh` runs
 before Vale to enforce Markdown style.
 
+To use `markdownlint-cli2` without internet access, run `npm ci --cache ~/devonboarder-offline/npm` on an online
+machine and copy the `devonboarder-offline` directory to your offline system. Installing from this cache lets
+`npx --offline -y markdownlint-cli2` work as expected. See [offline-setup.md](offline-setup.md#documentation-tooling-markdownlint-cli2)
+for details.
+
 Run these commands **before executing tests or documentation checks** so Python
 imports resolve correctly.
 
@@ -72,7 +77,10 @@ bash scripts/check_docs.sh
 ```
 
 This script runs `markdownlint-cli2` and Vale to lint all Markdown files. It
-generates `vale-results.json` for machine-readable output, which CI stores as an
+invokes `npx -y markdownlint-cli2` so the command never prompts for input. When
+you cache the dependency as described above you can run it offline with
+`npx --offline -y markdownlint-cli2`. The script generates `vale-results.json`
+for machine-readable output, which CI stores as an
 artifact.
 Markdownlint enforces a 120-character maximum line length via MD013 in `.markdownlint.json`.
 To check for violations manually, run:

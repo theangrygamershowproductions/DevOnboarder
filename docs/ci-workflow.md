@@ -80,6 +80,9 @@ variables so maintainers know which entries to add to `agents/index.md`.
 
 After the environment checks, the job runs three dependency audits:
 
+- `pip-audit` runs after installing Python requirements and fails the workflow
+  if vulnerabilities are found. This step may fail without internet access; see
+  [docs/offline-setup.md](offline-setup.md).
 - `bandit -r src -ll` scans the Python code for vulnerabilities.
 - `npm audit --audit-level=high` runs in both `frontend/` and `bot/`.
 
