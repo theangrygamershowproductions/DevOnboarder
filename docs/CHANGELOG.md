@@ -671,3 +671,5 @@ All notable changes to this project will be recorded in this file.
 - `scripts/alembic_migration_check.sh` now sets `set -euo pipefail` and quotes `$DATABASE_URL`.
 - Added a Quickstart bullet recommending `bash scripts/run_tests.sh` with a link
   to `docs/troubleshooting.md` for troubleshooting help.
+- Documented the language versions provided by `ghcr.io/openai/codex-universal`
+  and noted that `scripts/setup-env.sh` pulls this image.
