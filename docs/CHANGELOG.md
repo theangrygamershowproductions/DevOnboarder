@@ -5,6 +5,7 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
+- Added `scripts/generate_openapi.py` and a `make openapi` target for regenerating the FastAPI spec.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
