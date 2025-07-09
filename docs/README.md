@@ -92,6 +92,17 @@ The compose files define common service settings using YAML anchors. Each
 environment file overrides differences like `env_file` or exposed ports below the
 `<<` merge key.
 
+### Service Health Checks
+
+After starting the services with `make up`, confirm each one is running:
+
+```bash
+curl http://localhost:8002/health
+curl http://localhost:8001/health
+```
+
+Production environments expose the same endpoints for monitoring.
+
 ### Platform Verification
 
 These instructions were tested on Windows 11 (with WSL&nbsp;2), macOS Ventura,
