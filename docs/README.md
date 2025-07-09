@@ -176,6 +176,13 @@ who has contributed and when.
 - `.python-version` &ndash; indicates the Python version for pyenv.
 - `.nvmrc` &ndash; defines the Node.js version for nvm.
 
+## Plugin Development
+
+Place optional extensions under the repository's `plugins/` directory. Each
+plugin lives in its own folder with an `__init__.py` file and a `register`
+function. Importing :mod:`devonboarder` loads these modules into the global
+``devonboarder.PLUGINS`` dictionary.
+
 ## Documentation Quality Checks
 
 All Markdown files are checked with **Vale** for style. The docs script prints a
