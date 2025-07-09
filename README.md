@@ -43,6 +43,21 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 
+## Language Versions
+
+`scripts/setup-env.sh` pulls the `ghcr.io/openai/codex-universal` image to provide a unified runtime.
+
+| Language | Version |
+| --- | --- |
+| Python | 3.12 |
+| Node.js | 20 |
+| Ruby | 3.4.4 |
+| Rust | 1.87.0 |
+| Go | 1.24.3 |
+| Bun | 1.2.14 |
+| Java | 21 |
+| Swift | 6.1 |
+
 ## Documentation and Onboarding
 
 Workflow documentation lives under the [docs/](docs/) directory. New contributors should:
