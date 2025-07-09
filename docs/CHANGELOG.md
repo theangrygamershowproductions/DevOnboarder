@@ -644,6 +644,7 @@ All notable changes to this project will be recorded in this file.
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 - Required Node.js 20+ via the `engines` field in all package.json files.
 - Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
+- Added `docs/service-status.md` summarizing core service health and linked it from the documentation overview.
   
 ## [0.1.0] - 2025-06-14
 
