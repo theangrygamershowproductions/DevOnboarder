@@ -4,9 +4,11 @@ This service implements a simple Discord bot using `discord.js` v14.
 It loads slash commands and events dynamically on startup and authenticates
 using the token provided in `.env`.
 
+Node.js 20 is required. Run `nvm install` to use the version defined in `.nvmrc`.
 ## Setup
 
-1. Copy the example environment file and add your credentials:
+1. Use Node.js 20 as specified in `.nvmrc` (run `nvm install`).
+2. Copy the example environment file and add your credentials:
    ```bash
    cp .env.example .env
    ```
@@ -14,17 +16,17 @@ using the token provided in `.env`.
    and `BOT_JWT`. The bot sends this token in an `Authorization` header
    when calling the API. See [docs/env.md](../docs/env.md) for details
    about this variable.
-2. Install dependencies and build the bot:
+3. Install dependencies and build the bot:
    ```bash
    npm install
    npm run build
    ```
-3. Lint and format the code:
+4. Lint and format the code:
    ```bash
    npm run lint
    npm run format
    ```
-4. Run the bot locally:
+5. Run the bot locally:
    ```bash
    npm start
    ```
