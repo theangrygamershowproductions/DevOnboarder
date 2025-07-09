@@ -34,7 +34,7 @@ export default function FeedbackStatusBoard() {
         if (!r.ok) throw new Error('Failed to update status');
       })
       .then(() => {
-        setItems(items.map(i => (i.id === id ? { ...i, status } : i)));
+        setItems(prev => prev.map(i => (i.id === id ? { ...i, status } : i)));
       })
       .catch(() => setError('Failed to update status'));
   }
