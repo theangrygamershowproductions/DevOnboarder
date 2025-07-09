@@ -27,6 +27,11 @@ Requests to these endpoints require a valid JWT unless otherwise noted.
 - `GET /api/user/contributions` – list contribution descriptions.
 - `POST /api/user/promote` – admins only; mark another user as an admin.
 
+## Discord Integration
+
+- `POST /oauth` – exchange an OAuth code and link a Discord account.
+- `GET /roles?username=<name>` – return guild role mappings for the user.
+
 ## Discord Command Mapping
 
 The bot in `bot/` calls these routes when users run slash commands:
