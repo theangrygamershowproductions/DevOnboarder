@@ -43,6 +43,8 @@ lcov-report/
 codeql-*
 auth.db
 vale
+docs/bot-api/
+docs/frontend-api/
 
 Potato
 Potato.md
