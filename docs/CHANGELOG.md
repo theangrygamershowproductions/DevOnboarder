@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 
 - Wrapped HTTP requests in scripts with try/except to exit on connection errors.
 - Added unit tests for `resolve_verification_type` and `resolve_user_flags`.
+- Expanded docs/QA_CHECKLIST.md with sections for architecture, CI/CD, Codex, Discord, ethics, and community.
 - Added `scripts/generate_openapi.py` and a `make openapi` target for regenerating the FastAPI spec.
 - Documented `pip-audit` failure behavior and offline steps in `docs/ci-workflow.md` per task docs-qa-101.
 - Documented offline markdownlint usage in `docs/doc-quality-onboarding.md` per task docs-qa-102.
