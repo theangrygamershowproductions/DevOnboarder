@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - Documented `pip-audit` failure behavior and offline steps in `docs/ci-workflow.md` per task docs-qa-101.
 - Documented offline markdownlint usage in `docs/doc-quality-onboarding.md` per task docs-qa-102.
 - Fixed ordered list formatting in `AGENTS.md` and updated outreach links.
+- Added `/qa_checklist` bot command and the QA checklist document.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
