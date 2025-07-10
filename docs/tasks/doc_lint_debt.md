@@ -11,3 +11,6 @@ Use it when batch-fixing docs.
 4. Open a small pull request targeting a few files at a time.
 
 Add notes below about any tricky files or skipped warnings.
+
+- Fixed `AGENTS.md` list formatting and updated outreach links in
+  `docs/outreach-materials.md`.
