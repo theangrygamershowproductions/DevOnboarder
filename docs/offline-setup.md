@@ -125,6 +125,26 @@ Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yam
 
 The hooks will run without needing network access.
 
+## pip-audit
+
+`pip-audit` caches its vulnerability database under `~/.cache/pip-audit`. To run
+the audit offline, populate this cache on a machine with internet access and
+copy it to your development system.
+
+1. On the online machine, seed the cache:
+
+   ```bash
+   pip-audit --cache-dir ~/devonboarder-offline/pip-audit || true
+   ```
+
+2. Transfer the `devonboarder-offline` folder to the offline machine.
+
+3. Run the audit using the cached database:
+
+   ```bash
+   pip-audit --cache-dir /path/to/devonboarder-offline/pip-audit
+   ```
+
 ## Coverage badge
 
 `scripts/update_coverage_badge.py` contacts `img.shields.io` to generate the
