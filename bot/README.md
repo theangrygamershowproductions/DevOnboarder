@@ -68,6 +68,7 @@ The repository provides the following built-in commands:
 - `/verify` – show your onboarding status from the XP API.
 - `/profile` – display your current XP level.
 - `/contribute` – record a contribution description.
+- `/qa_checklist` – show the documentation and QA checklist.
 
 ## Future Work
 
