@@ -14,6 +14,10 @@ This guide demonstrates a minimal documentation update using the project workflo
    ruff check .
    pytest --cov=src --cov-fail-under=95
    ```
+
+   * run `bash scripts/check_docs.sh`
+   * add a changelog entry in `docs/CHANGELOG.md`
+   * see [docs/pull_request_template.md](pull_request_template.md) for the full checklist
 4. Commit your work and open a pull request using `docs/pull_request_template.md`.
 
 Use this example as a reference when submitting your first contribution.
