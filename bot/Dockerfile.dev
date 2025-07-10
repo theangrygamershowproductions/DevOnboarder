@@ -9,6 +9,8 @@ RUN npm ci
 
 # copy source, compile TS
 COPY bot/ .
+COPY docs /docs
+RUN ln -s /docs /usr/src/docs
 RUN npm run build
 
 # default command
