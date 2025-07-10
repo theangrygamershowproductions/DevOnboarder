@@ -109,3 +109,79 @@ to `false` in that case.
 CI/CD scripts must not fetch and execute remote code via `curl | sh`. Tools like
 Codecov are prohibited due to past security breaches. Use local coverage
 reporting instead and vet all third-party integrations carefully.
+
+## Troubleshooting Guide: CI Failure Issue Automation
+
+If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being closed automatically—or that you’re receiving duplicate or excessive notification emails—follow these steps:
+
+### 1. Check Workflow Logs
+
+* Go to **Actions** in your GitHub repository.
+* Find the run where issues were supposed to be closed (typically on a successful build or during the cleanup job).
+* Open the workflow run and review the logs for any errors or warnings in the steps related to:
+  * `gh issue close`
+  * `gh issue create`
+* **Common error messages:** “Resource not accessible by integration”, “insufficient permission”, “No issues found”, etc.
+
+### 2. Verify Token Usage
+
+* In the workflow YAML (`.github/workflows/ci-health.yml` and others), confirm that you are setting the environment variable:
+
+  ```yaml
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ```
+* Ensure all steps that use the `gh` CLI have access to this variable.
+
+### 3. Confirm Token Permissions
+
+* The default `GITHUB_TOKEN` **should** have `issues: write` permission in your repository’s main branch context.
+* **Forks or external contributors:**
+  * For security, `GITHUB_TOKEN` in forks has reduced permissions. Closing issues may not work from forked PR workflows.
+* **To check:**
+  * Go to your repo → **Settings** → **Actions** → **General** → **Workflow permissions**.
+  * Ensure “Read and write permissions” is enabled for `GITHUB_TOKEN`.
+
+### 4. Review Issue-Cleanup Logic
+
+* Open your workflow YAML and locate the step that closes issues. Example:
+
+  ```yaml
+  - name: Close CI failure issues
+    if: ${{ success() }}
+    run: |
+      gh issue list --label ci-failure --state open | awk '{print $1}' | xargs -n1 gh issue close
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ```
+* Ensure:
+  * The `gh` CLI commands are not being skipped (check any `if:` conditions).
+  * The filter logic (labels, state, etc.) matches the actual issues.
+  * There are no silent failures—add `set -e` or print error output for failed commands.
+
+### 5. Handle Duplicates or Stale Issues
+
+* If issues remain open or duplicate:
+  * Run `gh issue list --label ci-failure --state open` manually in your local terminal (with a PAT or appropriate token).
+  * Close leftover issues by hand if needed.
+* Consider adding a scheduled cleanup workflow (e.g., weekly) to close any lingering CI failure issues automatically.
+
+### 6. Escalate/Automate Further
+
+* If you routinely hit token limitations, create a [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with `issues: write`, and add it as a secret (e.g., `CI_ISSUE_TOKEN`).
+* Update your workflow to use `CI_ISSUE_TOKEN` when available, falling back to `GITHUB_TOKEN` otherwise.
+
+### 7. Document Known Limitations
+
+* Note in your README or AGENTS.md:
+
+  > *“Issue automation may fail or duplicate on forks or when GitHub token permissions are restricted. For persistent problems, see [Troubleshooting Guide](#troubleshooting-guide-ci-failure-issue-automation).”*
+
+## Quick Checklist
+
+* [ ] Reviewed workflow logs for errors.
+* [ ] Confirmed correct token usage and permissions.
+* [ ] Checked issue-closing step logic.
+* [ ] Closed stale issues as needed.
+* [ ] (Optional) Scheduled periodic cleanup workflow.
+* [ ] Documented limitations for future contributors.
