@@ -24,6 +24,15 @@ machine and copy the `devonboarder-offline` directory to your offline system. In
 `npx --offline -y markdownlint-cli2` work as expected. See [offline-setup.md](offline-setup.md#documentation-tooling-markdownlint-cli2)
 for details.
 
+When working offline, install dependencies from the cache and run the linter directly:
+
+```bash
+npm ci --offline --cache /path/to/devonboarder-offline/npm
+npx --offline -y markdownlint-cli2
+```
+
+This note implements **docs-qa-102**.
+
 Run these commands **before executing tests or documentation checks** so Python
 imports resolve correctly.
 
