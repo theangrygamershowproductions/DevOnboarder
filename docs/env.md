@@ -98,6 +98,7 @@ status and level.
 - `TEAMS_TENANT_ID` &ndash; Azure tenant hosting the Teams app.
 - `TEAMS_CHANNEL_ID_ONBOARD` &ndash; Teams channel ID for onboarding updates.
 - `LLAMA2_API_KEY` &ndash; API key for accessing the Llama2 service.
+- `LLAMA2_API_TIMEOUT` &ndash; HTTP timeout in seconds when calling the Llama2 API (default `10`).
 
 ## Docker development images
 
