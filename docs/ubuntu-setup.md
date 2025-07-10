@@ -17,10 +17,17 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 ```
 
 ## Install Node.js 20
+Download the setup script first so it can be reviewed before execution.
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+# Optional: inspect the script or verify it against the NodeSource repository
+sudo bash nodesource_setup.sh
+rm nodesource_setup.sh
 sudo apt-get install -y nodejs
 ```
+
+> **Security note:** The repository's policy forbids piping remote scripts
+> directly to `bash`. Always download scripts first so you can verify them.
 
 ## Install Python 3.12
 ```bash
