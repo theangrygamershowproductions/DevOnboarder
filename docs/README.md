@@ -195,6 +195,14 @@ plugin lives in its own folder with an `__init__.py` file and a `register`
 function. Importing :mod:`devonboarder` loads these modules into the global
 ``devonboarder.PLUGINS`` dictionary.
 
+## Available Bot Commands
+
+The Discord bot exposes several slash commands documented in
+[bot/README.md](../bot/README.md). Use `/qa_checklist` to display the QA
+checklist from `docs/QA_CHECKLIST.md`. The command reads the file and sends it
+back in ephemeral messages, splitting long content into 2000-character chunks so
+each reply fits within Discord's limit.
+
 ## Documentation Quality Checks
 
 All Markdown files are checked with **Vale** for style. The docs script prints a
