@@ -2,12 +2,12 @@
 
 Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pull request template](pull_request_template.md).
 
-## Code Quality
+## Architecture & Code Quality
 - [ ] Lint, type, and security checks succeed
 - [ ] Commit messages follow our conventions
 - [ ] Pre-commit hooks are installed and run
 
-## Testing
+## CI/CD & Test Coverage
 - [ ] All test suites pass
 - [ ] Coverage does not decrease
 - [ ] OpenAPI and migration checks succeed
@@ -31,3 +31,38 @@ Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pu
 - [ ] Changelog entry added
 - [ ] README and other relevant docs updated
 - [ ] Codex did **not** introduce direct commits to `main`
+
+## Codex Integration
+- [ ] Codex tasks run clean
+- [ ] Dashboard shows no blocks
+- [ ] Bot comments resolved
+
+## Discord Integration
+- [ ] Bot commands tested
+- [ ] OAuth flow verified
+- [ ] Roles mapped
+
+## Ethics
+- [ ] Follows builder ethics dossier
+- [ ] No coercive UX
+- [ ] Privacy notices visible
+
+## Ecosystem Integration
+- [ ] API contracts aligned
+- [ ] ENV vars consistent
+- [ ] Inter-service tests pass
+
+## Operational Readiness
+- [ ] Staging healthchecks pass
+- [ ] Alerts verified
+- [ ] Error logs reviewed
+
+## Project Management
+- [ ] PR links to issue or task
+- [ ] Acceptance criteria met
+- [ ] Board updated
+
+## Community
+- [ ] Contributor guide referenced
+- [ ] Code of Conduct linked
+- [ ] Feedback channels open
