@@ -14,6 +14,7 @@ All notable changes to this project will be recorded in this file.
 - Added unit tests for `resolve_verification_type` and `resolve_user_flags`.
 - Added `scripts/generate_openapi.py` and a `make openapi` target for regenerating the FastAPI spec.
 - Documented `pip-audit` failure behavior and offline steps in `docs/ci-workflow.md` per task docs-qa-101.
+- Documented offline markdownlint usage in `docs/doc-quality-onboarding.md` per task docs-qa-102.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 
