@@ -1,11 +1,11 @@
 # ID.me Verification Agent
 
+**Status:** Planned.
+
 **Purpose:** Handles user verification via ID.me.
 
-**Inputs:** TBD
+**Inputs:** OAuth tokens and user account identifiers.
 
-**Outputs:** TBD
+**Outputs:** Confirmation of verification status and assigned roles.
 
-**Environment:** TBD
-
-**Workflow:** TBD
+**Environment:** No variables specified yet; will depend on ID.me application credentials.
