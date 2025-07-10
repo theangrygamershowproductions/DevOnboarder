@@ -103,6 +103,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 21. See [docs/network-exception-list.md](docs/network-exception-list.md)
     for required firewall domains. Run
     `scripts/show_network_exceptions.sh` to print them.
+22. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
+    if CI automation fails to create or close `ci-failure` issues.
 
 These files expand on the steps listed in the Quickstart section.
 
