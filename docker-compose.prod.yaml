@@ -33,6 +33,7 @@ services:
     working_dir: /bot
     volumes:
       - ./bot:/bot
+      - ./docs:/docs
 
   xp:
     <<: [*app-base, *env-prod]
