@@ -57,6 +57,8 @@ All notable changes to this project will be recorded in this file.
 - Fixed indentation in `cleanup-ci-failure.yml` so the closing step runs as a
   separate action and prints `Closed N ci-failure issues` on success.
 - Updated README star and issue links to point to the repository.
+- Mentioned `docs/ci-failure-issues.md` in the README for troubleshooting CI
+  automation.
 - CI now commits a coverage.svg badge using coverage-summary.md.
 
 - CI workflow caches Playwright browsers to reuse ~/.cache/ms-playwright.
