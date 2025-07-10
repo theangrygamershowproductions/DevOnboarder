@@ -34,6 +34,8 @@ services:
       dockerfile: bot/Dockerfile.dev
     env_file:
       - .env.dev
+    volumes:
+      - ./docs:/docs
 
   xp:
     <<: [*app-base, *env-dev]
