@@ -1,26 +1,33 @@
-# Documentation & QA Checklist
+# QA Checklist
 
-Use this list before requesting a review or when Codex posts a QA report.
+Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pull request template](pull_request_template.md).
 
-- [ ] All Python and JS dependencies installed (`pip install -e .` or `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
-- [ ] Vale is installed locally (`vale --version`)
-- [ ] All Markdown docs pass checks (`bash scripts/check_docs.sh`)
-- [ ] All new or updated docs are clear, concise, and free of grammar issues
-- [ ] pytest and other test suites pass
-- [ ] Pre-commit hooks installed (`pre-commit install`)
-- [ ] If doc checks failed, issues are resolved before requesting review
-- [ ] If pre-commit cannot download Node.js, review [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+## Code Quality
+- [ ] Lint, type, and security checks succeed
+- [ ] Commit messages follow our conventions
+- [ ] Pre-commit hooks are installed and run
 
-# Checklist
+## Testing
+- [ ] All test suites pass
+- [ ] Coverage does not decrease
+- [ ] OpenAPI and migration checks succeed
 
-- [ ] All code passes lint, type, and security checks
-- [ ] All new ENV variables are documented in `agents/index.md`
-- [ ] `.env.example` matches the table in `agents/index.md`
-- [ ] OpenAPI/contract and migration checks pass
-- [ ] All API endpoints have docstrings and documentation
+## Documentation
+- [ ] `bash scripts/check_docs.sh` runs without errors
+- [ ] Vale installed (`vale --version`)
+- [ ] New docs are clear and free of grammar issues
+- [ ] Environment variables documented in `agents/index.md`
+
+## Deployment and Environment
+- [ ] `.env.example` matches documented variables
 - [ ] CORS and security headers validated
-- [ ] No secrets or sensitive data are present in commits
-- [ ] Codex did **not** introduce any direct commits to `main`
-- [ ] Documentation passes `bash scripts/check_docs.sh`
-- [ ] Are all Codex changes covered by tests and docs?
-- [ ] Coverage does not decrease (see CI summary)
+- [ ] No secrets or sensitive data in commits
+
+## Plugin System
+- [ ] Plugins under `plugins/` register with `devonboarder.PLUGINS`
+- [ ] Plugin documentation updated
+
+## Additional Checks
+- [ ] Changelog entry added
+- [ ] README and other relevant docs updated
+- [ ] Codex did **not** introduce direct commits to `main`
