@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Added `LLAMA2_API_TIMEOUT` variable with default `10` and documented it.
+
 - Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
 
 - Implemented feedback submission and analytics API.
