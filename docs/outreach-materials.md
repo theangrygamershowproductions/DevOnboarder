@@ -6,40 +6,43 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 > **Found DevOnboarder useful?**
 > If this helped you speed up onboarding, save time, or avoid headaches — please
-> [⭐️ star the repo](#), or [open an issue](#) with your feedback or suggestions.
+> [⭐️ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder),
+> or [open an issue](https://github.com/theangrygamershowproductions/DevOnboarder/issues/new/choose)
+> with your feedback or suggestions.
 > Your input directly shapes future improvements. Thanks for helping make onboarding suck less!
 
 ## 2️⃣ Demo Video Script (60–90 seconds, “Show Don’t Tell” Style)
 
 **[Opening Shot: VSCode open, terminal ready]**
 
-* **Voice/Text overlay:**
-  *"Hey, this is DevOnboarder — a no-BS way to get new devs up and running, fast."*
+- **Voice/Text overlay:**
+  _"Hey, this is DevOnboarder — a no-BS way to get new devs up and running, fast."_
 
 **[Show: `ask` Command]**
 
-* "Need answers fast? Just type:"
+- "Need answers fast? Just type:"
 
-  ```shell
-  devonboarder ask 'How do I set up the local dev server?'
-  ```
-* *Shows answer, points out the snippet drops into the right doc or channel.*
+    ```shell
+    devonboarder ask 'How do I set up the local dev server?'
+    ```
+
+- _Shows answer, points out the snippet drops into the right doc or channel._
 
 **[Show: `drop` Command]**
 
-* "Found something useful? Drop it straight into the onboarding doc or team channel."
+- "Found something useful? Drop it straight into the onboarding doc or team channel."
 
-  ```shell
-  devonboarder drop 'Debugging steps for the staging server'
-  ```
+    ```shell
+    devonboarder drop 'Debugging steps for the staging server'
+    ```
 
 **[Show: Journaling / Log Flow]**
 
-* "Everything’s logged automatically, so nobody’s repeating the same Q&A dance every week."
+- "Everything’s logged automatically, so nobody’s repeating the same Q&A dance every week."
 
 **[Closing Shot: README with star, issue, and feedback CTA visible]**
 
-* "I built this to scratch my own itch. If it helps you, drop a star or open an
+- "I built this to scratch my own itch. If it helps you, drop a star or open an
   issue — let’s make onboarding better for all of us."
 
 ## 3️⃣ Outreach Message Drafts (Reddit, Discord, etc.)
@@ -53,9 +56,9 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 >
 > It hooks into VSCode, Discord, and GitHub.
 >
-> * Instant answers (`ask`)
-> * Fast docs drop-ins (`drop`)
-> * Automatic journaling for repeat questions
+> - Instant answers (`ask`)
+> - Fast docs drop-ins (`drop`)
+> - Automatic journaling for repeat questions
 >
 > If onboarding sucks where you are, maybe this fixes it. Feedback or test drives welcome!
 
