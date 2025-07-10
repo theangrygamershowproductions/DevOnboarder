@@ -49,6 +49,7 @@ errors if empty or "secret" outside `development`) |
 | CHECK_HEADERS_URL            | Endpoint used by header checks (default `http://localhost:8002/api/user`) |
 | VITE_AUTH_URL                | Auth service URL for the frontend          |
 | VITE_API_URL                 | XP API URL for the frontend                |
+| VITE_FEEDBACK_URL            | Feedback service URL                       |
 | VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
 | VITE_SESSION_REFRESH_INTERVAL| How often the frontend refreshes sessions  |
 | INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
@@ -57,4 +58,5 @@ errors if empty or "secret" outside `development`) |
 | TEAMS_TENANT_ID              | Azure tenant hosting the Teams app          |
 | TEAMS_CHANNEL_ID_ONBOARD     | Teams channel ID for onboarding updates     |
 | LLAMA2_API_KEY               | API key for accessing the Llama2 service    |
+| LLAMA2_API_TIMEOUT           | HTTP timeout in seconds for Llama2 API calls |
 
