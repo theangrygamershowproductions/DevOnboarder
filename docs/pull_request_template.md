@@ -25,6 +25,7 @@ bash scripts/check_docs.sh
 ## Documentation & QA Checklist
 
 - Refer to [doc-quality-onboarding.md](doc-quality-onboarding.md) for setup steps.
+- Review [docs/QA_CHECKLIST.md](QA_CHECKLIST.md) for manual QA tasks.
 
 - [ ] All Python and JS dependencies installed (`pip install -e .` or
       `pip install -r requirements.txt`, then `pip install -r requirements-dev.txt`; `npm ci` if needed)
