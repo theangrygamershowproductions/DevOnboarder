@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Documented additional pre-PR checklist steps in `docs/sample-pr.md`.
+- Added `docs/codex-e2e-report.md` to track E2E run results and linked it from
+  `docs/README.md`.
 
 - Added `LLAMA2_API_TIMEOUT` variable with default `10` and documented it.
 - Replaced the Node.js installation command to download the NodeSource script
