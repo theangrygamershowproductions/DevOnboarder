@@ -3,7 +3,7 @@
 ## Documentation & QA Checklist
 
 Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setup instructions.
-Review [docs/QA_CHECKLIST.md](../docs/QA_CHECKLIST.md) for manual QA steps.
+- Review [docs/QA_CHECKLIST.md](../docs/QA_CHECKLIST.md) for manual QA steps.
 
 - [ ] All Python and JS dependencies installed (`pip install -r requirements-dev.txt`, `npm ci` if needed)
 - [ ] Vale is installed locally (`vale --version`)
