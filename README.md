@@ -105,6 +105,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     `scripts/show_network_exceptions.sh` to print them.
 22. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
     if CI automation fails to create or close `ci-failure` issues.
+23. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
+    during onboarding reviews to ensure new features meet the checklist.
 
 These files expand on the steps listed in the Quickstart section.
 
