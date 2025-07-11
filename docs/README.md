@@ -130,6 +130,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
+- [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
+  &ndash; checklist for onboarding reviews of new features.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Agents overview](../agents/index.md) &ndash; service and integration specs.
