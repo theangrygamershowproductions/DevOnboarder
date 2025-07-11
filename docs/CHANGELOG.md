@@ -707,3 +707,4 @@ All notable changes to this project will be recorded in this file.
 - Validated feedback components handle failed requests and show error messages.
 - Ensured the feedback status board uses functional state updates so concurrent changes aren't lost.
 - Added CI failure issue troubleshooting guide to `AGENTS.md` and a typedoc docs build script.
+- Added engineer assessment work items checklist in `docs/assessments/engineer_assessment_work_items.md`.
