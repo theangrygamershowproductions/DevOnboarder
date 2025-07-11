@@ -106,6 +106,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 22. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
     if CI automation fails to create or close `ci-failure` issues.
 23. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
+    and open an issue with the
+    [Engineer Assessment template](.github/ISSUE_TEMPLATE/assessment.md)
     during onboarding reviews to ensure new features meet the checklist.
 
 These files expand on the steps listed in the Quickstart section.
