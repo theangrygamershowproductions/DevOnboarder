@@ -708,3 +708,4 @@ All notable changes to this project will be recorded in this file.
 - Ensured the feedback status board uses functional state updates so concurrent changes aren't lost.
 - Added CI failure issue troubleshooting guide to `AGENTS.md` and a typedoc docs build script.
 - Added engineer assessment work items checklist in `docs/assessments/engineer_assessment_work_items.md`.
+- Linked the checklist from `docs/README.md` and the project README for onboarding reviews.
