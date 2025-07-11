@@ -1,59 +1,41 @@
 ---
 name: Engineer Assessment
-about: Checklist for evaluating new features or services
+about: Checklist for evaluating DevOnboarder contributions
 title: "[Assessment]"
 labels: ["onboarding"]
 ---
 
-Use this issue to track an engineering assessment. Check off each item as it is completed.
+Use this issue to track an engineer assessment. Check off items as they are completed.
 
-### Summary
-- [ ] Code Quality
-- [ ] Testing
-- [ ] Documentation
-- [ ] Roadmap Alignment
-- [ ] Community Engagement
-- [ ] Operational Readiness
-- [ ] Automation
-- [ ] Adoption
+### 1. Code Quality & Architecture
+- [ ] Review code for modularity, separation of concerns, error handling, and clarity.
+- [ ] Check adherence to `/docs/git-guidelines.md` in commit history and PRs.
+- [ ] Validate use of ESLint, Prettier, and type safety (see `bot/package.json`, CI outputs).
 
-### Code Quality
-- [ ] Linting passes for all modules
-- [ ] Complex logic is refactored for clarity
-- [ ] Peer review feedback is addressed
+### 2. Testing & CI/CD
+- [ ] Confirm ≥95% test coverage and quality for critical paths.
+- [ ] Ensure CI/CD blocks merges on test/coverage failures.
 
-### Testing
-- [ ] Unit tests cover new code paths
-- [ ] Integration tests are updated
-- [ ] Edge cases are documented
+### 3. Documentation
+- [ ] Audit docs and confirm Vale checks pass.
+- [ ] Update changelog and guides for all major changes.
 
-### Documentation
-- [ ] Public API references are updated
-- [ ] README or user guides reflect changes
-- [ ] Inline comments explain tricky sections
+### 4. Project Alignment & Roadmap
+- [ ] Map progress to the strategic rollup and verify Codex/Discord workflows exist.
+- [ ] Assess project goals against adoption and feedback.
 
-### Roadmap Alignment
-- [ ] Feature mapped to the correct milestone
-- [ ] Dependencies are tracked
-- [ ] Stakeholders notified about schedule
+### 5. Community & Transparency
+- [ ] Update Ethics Dossier, FOUNDERS, and ALPHA_TESTERS lists.
+- [ ] Promote the repo and encourage external feedback.
 
-### Community Engagement
-- [ ] Announce changes in Discord or forums
-- [ ] Respond to contributor questions
-- [ ] Update community docs
+### 6. Operational Readiness
+- [ ] Test setup with provided scripts and validate production/staging configs.
+- [ ] Document any onboarding or operational pain points.
 
-### Operational Readiness
-- [ ] Monitoring and alerting configured
-- [ ] Logging meets project standards
-- [ ] Runbooks updated for new workflows
+### 7. Codex/Discord Automation
+- [ ] Test `/qa_checklist` and other bot commands.
+- [ ] Record at least one Codex E2E prompt in `docs/codex-e2e-report.md`.
 
-### Automation
-- [ ] CI pipeline updated for new jobs
-- [ ] Deployment scripts tested end-to-end
-- [ ] Auto-merge rules verified
-
-### Adoption
-- [ ] Beta testers onboarded
-- [ ] Training materials prepared
-- [ ] Gather and review early feedback
-
+### 8. Community Adoption & Feedback
+- [ ] Ensure contribution guide is clear and request user feedback.
+- [ ] Act on feedback to improve onboarding and structure.
