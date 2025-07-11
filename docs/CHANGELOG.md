@@ -15,6 +15,7 @@ All notable changes to this project will be recorded in this file.
 - Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
 
 - Implemented feedback submission and analytics API.
+- Added a QA checklist bullet to the GitHub PR template.
 
 - Documented health-check curl commands for local and production use and cross-linked from onboarding guide.
 
