@@ -712,3 +712,4 @@ All notable changes to this project will be recorded in this file.
 - Added engineer assessment work items checklist in `docs/assessments/engineer_assessment_work_items.md`.
 - Linked the checklist from `docs/README.md` and the project README for onboarding reviews.
 - Created `assessment.md` issue template and referenced it from the merge checklist and README.
+- Updated engineer assessment checklist with Codex-compatible work items.
