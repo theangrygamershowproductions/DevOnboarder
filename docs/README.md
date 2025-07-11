@@ -130,6 +130,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
+- [Codex E2E report](codex-e2e-report.md) &ndash; record outcomes of each run.
 - [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
   &ndash; checklist for onboarding reviews of new features.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
