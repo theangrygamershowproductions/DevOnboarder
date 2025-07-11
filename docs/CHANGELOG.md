@@ -25,6 +25,7 @@ All notable changes to this project will be recorded in this file.
 - Fixed ordered list formatting in `AGENTS.md` and updated outreach links.
 - Added `/qa_checklist` bot command and the QA checklist document.
 - Documented `/qa_checklist` usage in `docs/README.md`.
+- Documented `/qa_checklist` usage in `docs/discord/configuration.md`.
 
 - Added a Python shebang to `scripts/check_docstrings.py` and made the file executable.
 

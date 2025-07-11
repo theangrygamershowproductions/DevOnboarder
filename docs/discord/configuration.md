@@ -11,3 +11,10 @@ This guide explains how to configure the Discord server used by the project.
 
 With the Widget enabled, the marketing site and other tools can show who is
 online without requiring users to open Discord.
+
+## Using `/qa_checklist`
+
+Run the `/qa_checklist` command during onboarding to display the
+[QA checklist](../QA_CHECKLIST.md) directly inside Discord. The bot reads the
+document and replies in ephemeral messages so contributors can work through each
+step without leaving the server.
