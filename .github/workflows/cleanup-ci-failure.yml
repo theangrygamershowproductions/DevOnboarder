@@ -2,7 +2,15 @@ on:
     schedule:
         - cron: "0 0 * * *"
 jobs:
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
     cleanup:
+        needs: validate-yaml
         runs-on: ubuntu-latest
         permissions:
             issues: write
