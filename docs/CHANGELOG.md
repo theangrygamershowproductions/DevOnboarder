@@ -26,8 +26,9 @@ All notable changes to this project will be recorded in this file.
   matter and validated the file using `yamllint`.
 
 - Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
-- Introduced `auto-fix.yml` workflow that downloads CI logs, asks OpenAI for a patch,
-  applies it on a new branch, and opens a pull request with `peter-evans/create-pull-request`.
+- Introduced `auto-fix.yml` workflow that downloads CI logs, asks OpenAI for a YAML
+  patch using `yamllint` output, applies it, then requests a broader fix and opens
+  a pull request with `peter-evans/create-pull-request`.
 
 - Implemented feedback submission and analytics API.
 - Added a QA checklist bullet to the GitHub PR template.
