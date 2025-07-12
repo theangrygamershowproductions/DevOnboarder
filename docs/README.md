@@ -260,6 +260,7 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 13. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
+14. The `ci-monitor.yml` workflow checks CI logs for rate-limit errors and opens an issue when detected using `${{ secrets.CI_ISSUE_TOKEN }}`.
 
 ## \U0001F6E1\uFE0F Coverage and Security
 
