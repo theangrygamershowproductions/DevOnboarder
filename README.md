@@ -1,5 +1,7 @@
 # DevOnboarder
 ![Coverage](coverage.svg)
+[![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
+[![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
 
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
