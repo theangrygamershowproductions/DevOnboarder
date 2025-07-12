@@ -9,7 +9,15 @@ permissions:
   contents: read
 
 jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
   audit:
+    needs: validate-yaml
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
