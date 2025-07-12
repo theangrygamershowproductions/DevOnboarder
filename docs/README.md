@@ -136,6 +136,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Agents overview](../agents/index.md) &ndash; service and integration specs.
+- [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
+- [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
 - [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
