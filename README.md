@@ -109,6 +109,10 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     and open an issue with the
     [Engineer Assessment template](.github/ISSUE_TEMPLATE/assessment.md)
     during onboarding reviews to ensure new features meet the checklist.
+24. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
+    services interact inside the TAGS stack.
+25. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
+    steps and feature flag usage.
 
 These files expand on the steps listed in the Quickstart section.
 
