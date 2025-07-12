@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 
 - Replaced `.python-version` and `.nvmrc` with `.tool-versions` and added
   `.mise.yml`.
+- Updated README to instruct running `mise install` using `.tool-versions` for Python and Node.js.
 
 - Added `docs/ecosystem.md` and `docs/tags_integration.md` describing the TAGS
   stack and integration steps. Linked them from both READMEs.
