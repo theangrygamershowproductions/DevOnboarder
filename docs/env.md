@@ -102,7 +102,7 @@ status and level.
 
 ## Docker development images
 
-`docker-compose.dev.yaml` builds the bot and frontend containers using
+`../archive/docker-compose.dev.yaml` builds the bot and frontend containers using
 `bot/Dockerfile.dev` and `frontend/Dockerfile.dev`. These Dockerfiles install
 dependencies with `npm ci` and run the development servers. When running the
 frontend outside Docker, follow [../frontend/README.md](../frontend/README.md)
