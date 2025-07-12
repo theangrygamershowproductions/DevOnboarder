@@ -8,6 +8,9 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/codex-e2e-report.md` to track E2E run results and linked it from
   `docs/README.md`.
 
+- Replaced `.python-version` and `.nvmrc` with `.tool-versions` and added
+  `.mise.yml`.
+
 - Added `docs/ecosystem.md` and `docs/tags_integration.md` describing the TAGS
   stack and integration steps. Linked them from both READMEs.
 

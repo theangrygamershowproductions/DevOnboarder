@@ -4,10 +4,10 @@ This service implements a simple Discord bot using `discord.js` v14.
 It loads slash commands and events dynamically on startup and authenticates
 using the token provided in `.env`.
 
-Node.js 20 is required. Run `nvm install` to use the version defined in `.nvmrc`.
+Node.js 20 is required. Run `mise install` to use the version defined in `.tool-versions`.
 ## Setup
 
-1. Use Node.js 20 as specified in `.nvmrc` (run `nvm install`).
+1. Use Node.js 20 as specified in `.tool-versions` (run `mise use`).
 2. Copy the example environment file and add your credentials:
    ```bash
    cp .env.example .env
