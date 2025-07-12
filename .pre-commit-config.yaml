@@ -59,3 +59,7 @@ repos:
             entry: pytest --cov=src --cov-fail-under=95
             language: system
             enabled: false
+          - id: validate
+            name: Full validation suite
+            entry: bash scripts/validate.sh
+            language: system
