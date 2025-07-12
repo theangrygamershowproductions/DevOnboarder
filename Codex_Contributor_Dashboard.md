@@ -1,15 +1,19 @@
-{
-  "project": "DevOnboarder",
-  "module": "Codex Integration",
-  "phase": "MVP",
-  "tags": ["dashboard", "codex", "contributors", "roadmap", "automation"],
-  "version": "v1.0.0",
-  "author": "Chad Reesey",
-  "email": "reesey275@thenagrygamershow.com",
-  "updated": "21 June 2025 08:25 (EST)",
-  "description": "Dashboard summarizing Codex task progress and module status for contributors."
-}
-
+---
+project: DevOnboarder
+module: Codex Integration
+phase: MVP
+tags:
+  - dashboard
+  - codex
+  - contributors
+  - roadmap
+  - automation
+version: v1.0.0
+author: Chad Reesey
+email: reesey275@thenagrygamershow.com
+updated: "21 June 2025 08:25 (EST)"
+description: Dashboard summarizing Codex task progress and module status for contributors.
+---
 # 🧩 Codex Contributor Dashboard – MVP
 
 This dashboard provides a live snapshot of module status and responsibilities.
