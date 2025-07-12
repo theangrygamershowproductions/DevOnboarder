@@ -10,7 +10,15 @@ permissions:
   issues: write
 
 jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
   branches:
+    needs: validate-yaml
     runs-on: ubuntu-latest
     outputs:
       list: ${{ steps.set.outputs.list }}
