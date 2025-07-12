@@ -4,7 +4,10 @@ import yaml
 
 def load_compose(file_name: str) -> dict:
     """Load a docker-compose YAML file."""
-    path = Path(__file__).resolve().parents[1] / file_name
+    root = Path(__file__).resolve().parents[1]
+    path = root / file_name
+    if not path.exists():
+        path = root / "archive" / file_name
     with path.open() as fh:
         return yaml.safe_load(fh)
 
