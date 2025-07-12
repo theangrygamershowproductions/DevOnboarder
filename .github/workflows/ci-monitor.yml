@@ -1,0 +1,51 @@
+name: CI Monitor
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+permissions:
+  issues: write
+
+jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
+  report-rate-limit:
+    needs: validate-yaml
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          name: ci-logs
+          path: ci-logs
+      - name: Install GitHub CLI
+        run: ./scripts/install_gh_cli.sh
+      - name: Show gh version
+        run: which gh && gh --version
+      - name: Check for rate-limit error
+        id: check
+        run: |
+          if grep -q "rate limit" ci-logs/*.log; then
+            echo "hit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "hit=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Open issue on rate-limit
+        if: steps.check.outputs.hit == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_TOKEN }}
+        run: |
+          gh issue create \
+            --title "\ud83d\udea8 CI Rate Limit Exceeded" \
+            --body "Our CI run failed due to API rate limits. Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --label ci \
+            --assignee "@me"

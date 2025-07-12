@@ -11,6 +11,7 @@ values when running CI jobs locally or configuring new workflows.
 | `GH_TOKEN` | GitHub Actions secret or local environment | `issues: write`,
   `pull_requests: write` if used for cross-repo operations | Token consumed by
   the GitHub CLI to comment on PRs and manage issues | Usually set to `${{ secrets.GITHUB_TOKEN }}` in workflows |
+| `CI_ISSUE_TOKEN` | GitHub Actions secret | `issues: write` | Token used to open rate-limit issues in `ci-monitor.yml` | Optional; falls back to `GITHUB_TOKEN` when unset |
 | `NPM_TOKEN` | GitHub Actions secret | `publish` (npm) | Authenticate `npm
   publish` when releasing packages | Not currently used but reserved for future
   publishing steps |
