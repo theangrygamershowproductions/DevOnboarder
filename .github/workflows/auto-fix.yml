@@ -36,6 +36,36 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           name: ci-logs
           path: ci-logs
+      - name: Ask OpenAI for YAML fix
+        id: openai-yaml
+        run: |
+          if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
+            echo "OPENAI_API_KEY not set" >&2
+            exit 1
+          fi
+          pip install openai
+          file=$(awk -F: '/error/{print $1; exit}' yamllint.log)
+          line=$(awk -F: '/error/{print $2; exit}' yamllint.log)
+          snippet=""
+          if [ -n "$file" ]; then
+            start=$((line>5?line-5:1))
+            end=$((line+5))
+            snippet=$(sed -n "${start},${end}p" "$file" 2>/dev/null || true)
+          fi
+          export SNIPPET="$snippet"
+          patch=$(python - "$OPENAI_API_KEY" <<'PY'
+import sys, os, openai
+openai.api_key = sys.argv[1]
+log=open('yamllint.log').read()
+snippet=os.environ.get('SNIPPET','')
+prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
+resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
+print(resp.choices[0].message.content)
+PY
+          )
+          echo "$patch" > fix-ci-health.patch.diff
+      - name: Apply YAML patch
+        run: git apply fix-ci-health.patch.diff || true
       - name: Suggest fix with OpenAI
         id: openai
         run: |

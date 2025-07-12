@@ -258,8 +258,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 11. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
 12. CODEOWNERS automatically requests reviews from the maintainer team.
 13. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
-    asks OpenAI for a patch, applies the change on a new branch, and opens a pull request
-    with `peter-evans/create-pull-request`.
+    asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
+    broader fix and opens a pull request with `peter-evans/create-pull-request`.
 
 ## \U0001F6E1\uFE0F Coverage and Security
 
