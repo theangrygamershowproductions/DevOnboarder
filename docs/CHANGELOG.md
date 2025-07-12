@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 - Documented additional pre-PR checklist steps in `docs/sample-pr.md`.
 - Added `docs/codex-e2e-report.md` to track E2E run results and linked it from
   `docs/README.md`.
+- Archived unused Dockerfiles and compose files under `archive/`.
 
 - Replaced `.python-version` and `.nvmrc` with `.tool-versions` and added
   `.mise.yml`.

@@ -26,7 +26,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
    `devonboarder` package can be imported during tests. Then install the dev
    requirements with `pip install -r requirements-dev.txt`.
 5. Start services with `make up` or run
-   `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d`.
+   `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
 6. Run `bash scripts/run_migrations.sh` to apply the initial database migration.
@@ -39,7 +39,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 11. Test the XP API with:
     `curl http://localhost:8001/api/user/onboarding-status`
     and `curl http://localhost:8001/api/user/level`.
-12. Stop services with `docker compose -f docker-compose.dev.yaml --env-file .env.dev down`.
+12. Stop services with `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev down`.
 13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`,
     and `npm run coverage` from the `bot/` directory before committing.
     After installing dependencies, run `npm run coverage` in the `frontend/`
