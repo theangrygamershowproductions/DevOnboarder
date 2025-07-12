@@ -16,6 +16,8 @@ All notable changes to this project will be recorded in this file.
   before running it, referencing the security policy.
 
 - Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
+- Introduced `auto-fix.yml` workflow that downloads CI logs, asks OpenAI for a patch,
+  applies it on a new branch, and opens a pull request with `peter-evans/create-pull-request`.
 
 - Implemented feedback submission and analytics API.
 - Added a QA checklist bullet to the GitHub PR template.
