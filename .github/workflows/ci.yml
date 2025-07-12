@@ -96,9 +96,11 @@ jobs:
                       ${{ runner.os }}-node${{ matrix.node-version }}-bot-
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
+            - name: Prepare CI log directory
+              run: mkdir -p ci-logs
             - name: Install dev dependencies
               run: |
-                  pip install -r requirements-dev.txt || {
+                  pip install -r requirements-dev.txt 2>&1 | tee ci-logs/pip-install.log || {
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
@@ -119,7 +121,7 @@ jobs:
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package
-              run: pip install -e .
+              run: pip install -e . 2>&1 | tee ci-logs/pip-install-editable.log
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
             - name: Generate OpenAPI spec
@@ -183,7 +185,7 @@ jobs:
                       env_audit.json
                   retention-days: 7
             - name: Build containers
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build
+              run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build 2>&1 | tee ci-logs/docker-build.log
             - name: Scan images with Trivy
               env:
                   TRIVY_VERSION: 0.47.0
@@ -203,7 +205,7 @@ jobs:
             - name: Prepare test-results directory
               run: mkdir -p test-results
             - name: Run tests with coverage
-              run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml
+              run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml 2>&1 | tee ci-logs/pytest.log
             - name: Upload pytest results
               if: always() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
@@ -437,6 +439,7 @@ jobs:
               with:
                   name: ci-logs
                   path: |
+                      ci-logs
                       ${{ runner.temp }}/_github_workflow/*/job.log
                       gh_cli.log
                       audit.md
