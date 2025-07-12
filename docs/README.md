@@ -190,8 +190,7 @@ who has contributed and when.
 
 - `.pre-commit-config.yaml` &ndash; run `pre-commit install` to set up git hooks that execute the linter and tests.
 - `.editorconfig` &ndash; ensures consistent indentation and line endings across editors.
-- `.python-version` &ndash; indicates the Python version for pyenv.
-- `.nvmrc` &ndash; defines the Node.js version for nvm.
+- `.tool-versions` &ndash; defines the Python and Node.js versions for mise.
 
 ## Plugin Development
 
