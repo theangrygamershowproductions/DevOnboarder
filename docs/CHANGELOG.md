@@ -17,6 +17,8 @@ All notable changes to this project will be recorded in this file.
 - Added `LLAMA2_API_TIMEOUT` variable with default `10` and documented it.
 - Replaced the Node.js installation command to download the NodeSource script
   before running it, referencing the security policy.
+- Replaced the JSON block in `Codex_Contributor_Dashboard.md` with YAML front
+  matter and validated the file using `yamllint`.
 
 - Added weekly `ci-health.yml` workflow that tests active branches and opens an issue on failures.
 - Introduced `auto-fix.yml` workflow that downloads CI logs, asks OpenAI for a patch,
