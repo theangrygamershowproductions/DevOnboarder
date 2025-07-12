@@ -731,3 +731,4 @@ All notable changes to this project will be recorded in this file.
 - Created `assessment.md` issue template and referenced it from the merge checklist and README.
 - Updated engineer assessment checklist with Codex-compatible work items.
 - Added CI and Auto Fix badges to `README.md`.
+- Added `ci-monitor.yml` to open an issue when CI fails due to API rate limits and documented the secret in `docs/ci-env-vars.md`.
