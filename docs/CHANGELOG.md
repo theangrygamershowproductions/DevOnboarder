@@ -18,6 +18,9 @@ All notable changes to this project will be recorded in this file.
 - Added `LLAMA2_API_TIMEOUT` variable with default `10` and documented it.
 - Replaced the Node.js installation command to download the NodeSource script
   before running it, referencing the security policy.
+- Enhanced `scripts/validate.sh` to enforce `.tool-versions`, lint workflows and
+  Markdown files, validate front matter with `ajv`, and list unused Docker
+  artifacts.
 - Replaced the JSON block in `Codex_Contributor_Dashboard.md` with YAML front
   matter and validated the file using `yamllint`.
 
