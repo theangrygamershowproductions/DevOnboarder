@@ -15,7 +15,7 @@ This page collects quick fixes for the most common problems.
 
 ## Docker services won't start
 
-- Run `docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d` to rebuild containers.
+- Run `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev up -d` to rebuild containers.
 - Check container logs with `docker compose logs` for details.
 - If services exit immediately, verify secrets with `./scripts/generate-secrets.sh`.
 
