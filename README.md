@@ -31,12 +31,12 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
 - `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
   forwards port `3000`, and runs `scripts/setup-env.sh`.
-- `docker-compose.dev.yaml` – Compose file for local development using `.env.dev`.
+- `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
 - `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
-- `docker-compose.prod.yaml` – Compose file for production using `.env.prod`.
-- `docker-compose.yml` – Base compose file for generic deployments.
-- `docker-compose.codex.yml` – Compose file used when running in Codex.
-- `docker-compose.override.yaml` – Overrides for the base compose file.
+- `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
+- `archive/docker-compose.yml` – Archived base compose file for generic deployments.
+- `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
+- `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
 - `bot/` – Discord bot written in TypeScript.
 - `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
@@ -133,7 +133,7 @@ Run `npm install` (or `pnpm install`) in that folder to install dependencies,
 commit the generated lockfile, and then start the development server with `npm run dev`:
 
 ```bash
-docker compose -f docker-compose.dev.yaml --env-file .env.dev up
+docker compose -f archive/docker-compose.dev.yaml --env-file .env.dev up
 ```
 
 To experiment with the user-facing API outside Docker, run:
@@ -175,7 +175,7 @@ Codex uses its own compose file. Export your credentials and start the runner:
 
 ```bash
 GITHUB_TOKEN=<token> OPENAI_API_KEY=<key> \
-  docker compose -f docker-compose.codex.yml up
+  docker compose -f archive/docker-compose.codex.yml up
 ```
 
 The container reads `codex.ci.yml` and `codex.automation.bundle.json` from the
@@ -195,7 +195,7 @@ function.
 Deploy the production stack with the dedicated compose file and `.env.prod`:
 
 ```bash
-docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
+docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
