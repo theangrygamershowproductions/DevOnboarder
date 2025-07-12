@@ -26,6 +26,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Run yamllint
+        run: |
+          pip install yamllint
+          yamllint .github/workflows/**/*.yml > yamllint.log || true
       - name: Download CI logs
         uses: actions/download-artifact@v4
         with:
@@ -41,13 +45,16 @@ jobs:
           fi
           pip install openai
           suggestion=$(python - "$OPENAI_API_KEY" <<'PY'
-import os, sys, openai
+import sys, openai
 openai.api_key = sys.argv[1]
+with open('yamllint.log', 'r', encoding='utf-8') as f:
+    yamls = f.read()
 with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
     logs = f.read()
+prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
 response = openai.chat.completions.create(
     model='gpt-4o',
-    messages=[{'role':'user','content':f'Suggest a git patch to fix these CI logs:\n{logs}'}]
+    messages=[{'role':'user','content':prompt}]
 )
 print(response.choices[0].message.content)
 PY
