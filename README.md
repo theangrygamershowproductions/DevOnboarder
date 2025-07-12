@@ -60,6 +60,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 | Bun | 1.2.14 |
 | Java | 21 |
 | Swift | 6.1 |
+Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
 
 ## Documentation and Onboarding
 
@@ -201,8 +202,7 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
-
-1. Install Docker, Docker Compose, Node.js 20, and Python 3.12.
+1. Install Docker and Docker Compose. Run `mise install` to install the Python and Node.js versions defined in `.tool-versions`.
 2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
    The script installs the frontend and bot packages so `npm ci --prefix bot` is
    only needed if you skip this step.
