@@ -45,6 +45,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `plugins/` – Optional Python packages that extend functionality.
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
+- `docs/CHANGELOG.md` – Project history and notable updates.
 
 ## Language Versions
 
