@@ -211,7 +211,9 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 4. Copy each `*.env.example` to `.env` inside its service directory.
 5. Build the containers with `make deps` and start them with `make up`.
 6. Apply database migrations using `bash scripts/run_migrations.sh`.
-7. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package:
+7. Run `python -m diagnostics` to verify required packages load, services are
+   healthy, and environment variables match the examples.
+8. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package:
 
    ```bash
    pip install -e .  # or `pip install -r requirements.txt` if present
@@ -226,11 +228,11 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
    **Note:** both installs must finish before running `pytest` or the tests may
    fail with `ModuleNotFoundError`. See
    [tests/README.md](tests/README.md) for details.
-8. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
+9. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
    This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
-9. Install git hooks with `pre-commit install` so lint checks run automatically.
-10. The CI workflow enforces a minimum of **95% code coverage** for all projects
+10. Install git hooks with `pre-commit install` so lint checks run automatically.
+11. The CI workflow enforces a minimum of **95% code coverage** for all projects
    (frontend, bot, and backend). Pull requests will fail if any test suite drops
    below this threshold.
 
