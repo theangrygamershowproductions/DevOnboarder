@@ -264,6 +264,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
     It quotes the first match and opens an issue using
     `${{ secrets.CI_ISSUE_TOKEN }}` or `${{ secrets.GITHUB_TOKEN }}` when that
     secret isn’t set. See [ci-env-vars.md](ci-env-vars.md) for details.
+15. Workflows share `.github/.yamllint-config` to disable `document-start` and
+    `truthy` checks while warning on lines over 200 characters.
 
 ## \U0001F6E1\uFE0F Coverage and Security
 
