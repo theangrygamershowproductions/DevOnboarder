@@ -194,6 +194,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 - [x] Document each agent's purpose, key files, environment, and workflow.
 - [x] Update this file and the changelog when an agent changes.
 - [x] Ensure healthchecks pass for required services.
+- [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
 
 ---
 

@@ -203,6 +203,15 @@ jobs:
                   fi
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
+            - name: Run diagnostics
+              run: python -m diagnostics > diagnostics.log
+            - name: Upload diagnostics
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: diagnostics
+                  path: diagnostics.log
+                  retention-days: 7
             - name: Prepare test-results directory
               run: mkdir -p test-results
             - name: Run tests with coverage
