@@ -32,6 +32,15 @@
             "status": "planned",
             "milestone": "v0.5.1"
         }
+        ,
+        {
+            "id": "integration-002",
+            "title": "DevOnboarder TAGS integration checklist",
+            "module": "tags_integration",
+            "description": "QA steps for adding DevOnboarder to TAGS. See prompts/devonboarder_integration_task.md",
+            "status": "planned",
+            "milestone": "v0.5.2"
+        }
     ],
     "completedTasks": [
         {

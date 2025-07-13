@@ -14,6 +14,8 @@ All notable changes to this project will be recorded in this file.
   and service health checks. CI runs the script and uploads its log.
 - Added `docs/diagnostics-sample.log` and referenced it from onboarding docs to
   show expected output from `python -m diagnostics`.
+- Added `prompts/devonboarder_integration_task.md` and referenced it from
+  `codex.tasks.json` so Codex can generate integration steps automatically.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
