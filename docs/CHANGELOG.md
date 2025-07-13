@@ -752,3 +752,4 @@ All notable changes to this project will be recorded in this file.
 - Updated docs/README local setup to run `python -m diagnostics` after bootstrap. The script checks package imports, service health, and environment variables.
 - Updated `docs/ONBOARDING.md` to run `python -m diagnostics` once services are
   running and link to `docs/troubleshooting.md` for interpreting failures.
+- Clarified how to obtain the TAGS compose files in `docs/tags_integration.md`.
