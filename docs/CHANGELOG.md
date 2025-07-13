@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
+- Added `.github/.yamllint-config` to centralize workflow lint rules, disabling
+  `document-start` and `truthy` and warning on lines over 200 characters.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
