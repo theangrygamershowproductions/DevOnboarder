@@ -12,6 +12,8 @@ All notable changes to this project will be recorded in this file.
 - Fixed indentation of Python blocks in `auto-fix.yml` to resolve YAML linting errors.
 - Added `src/diagnostics.py` with a `python -m diagnostics` entry for package
   and service health checks. CI runs the script and uploads its log.
+- Added `docs/diagnostics-sample.log` and referenced it from onboarding docs to
+  show expected output from `python -m diagnostics`.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
