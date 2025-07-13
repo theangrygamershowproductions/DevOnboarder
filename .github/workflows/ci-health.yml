@@ -17,6 +17,7 @@ jobs:
       - uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: ".github/workflows/**/*.yml"
+          config_file: .github/.yamllint-config
   branches:
     needs: validate-yaml
     runs-on: ubuntu-latest

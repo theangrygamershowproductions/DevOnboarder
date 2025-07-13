@@ -24,7 +24,7 @@ bash "$(dirname "$0")/check_docs.sh"
 
 # Lint GitHub Actions workflows
 if command -v yamllint >/dev/null 2>&1; then
-  yamllint .github/workflows/**/*.yml
+  yamllint -c .github/.yamllint-config .github/workflows/**/*.yml
 else
   echo "::warning::yamllint not installed; skipping workflow lint"
 fi

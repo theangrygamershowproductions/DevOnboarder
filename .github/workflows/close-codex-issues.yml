@@ -15,6 +15,7 @@ jobs:
       - uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: ".github/workflows/**/*.yml"
+          config_file: .github/.yamllint-config
   close:
     needs: validate-yaml
     if: github.event.pull_request.merged == true
