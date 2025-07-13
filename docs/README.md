@@ -265,7 +265,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
     `${{ secrets.CI_ISSUE_TOKEN }}` or `${{ secrets.GITHUB_TOKEN }}` when that
     secret isn’t set. See [ci-env-vars.md](ci-env-vars.md) for details.
 15. Workflows share `.github/.yamllint-config` to disable `document-start` and
-    `truthy` checks while warning on lines over 200 characters.
+    `truthy` checks and raise the line-length limit to 200 so linting focuses on
+    real YAML syntax errors.
 
 ## \U0001F6E1\uFE0F Coverage and Security
 
