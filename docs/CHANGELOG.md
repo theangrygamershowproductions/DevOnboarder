@@ -9,6 +9,7 @@ All notable changes to this project will be recorded in this file.
   `document-start` and `truthy` and warning on lines over 200 characters.
 - Aligned yamllint invocation across scripts and CI with
   `yamllint -c .github/.yamllint-config .github/workflows/**/*.yml`.
+- Fixed indentation of Python blocks in `auto-fix.yml` to resolve YAML linting errors.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
