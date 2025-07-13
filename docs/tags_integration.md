@@ -1,14 +1,19 @@
 # Integrating with TAGS
 
-The TAGS stack uses dedicated Compose files to coordinate each service. Start a local
-stack with:
+The TAGS stack uses dedicated Compose files to coordinate each service. These
+files are not tracked in this repository because the configuration differs per
+deployment. Obtain the templates from the TAGS infrastructure repository or
+generate them locally by copying `archive/docker-compose.dev.yaml` and adjusting
+the service names. Start a local stack with:
 
 ```bash
 docker compose -f docker-compose.tags.dev.yaml up
 ```
 
-Production deployments rely on `docker-compose.tags.prod.yaml`. Both files extend the
-base `docker-compose.yml` and enable extra logging suitable for the TAGS environment.
+Production deployments rely on `docker-compose.tags.prod.yaml`. Both files
+extend the base `docker-compose.yml` and enable extra logging suitable for the
+TAGS environment.
+
 
 Feature flags control early access routes. Add the following settings to `.env.dev` when
 running against the TAGS stack:
