@@ -33,6 +33,9 @@ All notable changes to this project will be recorded in this file.
 - Added `docs/ecosystem.md` and `docs/tags_integration.md` describing the TAGS
   stack and integration steps. Linked them from both READMEs.
 
+- Linked TAGS stack docs from `docs/ONBOARDING.md` and mentioned `IS_ALPHA_USER`
+  and `IS_FOUNDER` for running in TAGS.
+
 - Added `LLAMA2_API_TIMEOUT` variable with default `10` and documented it.
 - Replaced the Node.js installation command to download the NodeSource script
   before running it, referencing the security policy.

@@ -10,6 +10,10 @@ Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
   health, and environment variables. See
   [diagnostics-sample.log](diagnostics-sample.log) for a sample output and
   [troubleshooting.md](troubleshooting.md) for help interpreting failures.
+* Review [ecosystem.md](ecosystem.md) for how DevOnboarder fits into TAGS and
+  [tags_integration.md](tags_integration.md) for compose templates. Set
+  `IS_ALPHA_USER` or `IS_FOUNDER` in `.env.dev` when running within the TAGS
+  stack to expose early-access endpoints.
 
 ## Requesting a Codex QA Assessment
 
