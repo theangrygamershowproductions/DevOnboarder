@@ -6,6 +6,10 @@ See the [Service Health Checks](README.md#service-health-checks) section for
 monitoring endpoints available locally and in production.
 Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 
+* After services start, run `python -m diagnostics` to verify packages, service
+  health, and environment variables. See
+  [troubleshooting.md](troubleshooting.md) for help interpreting failures.
+
 ## Requesting a Codex QA Assessment
 
 * **To trigger a full QA sweep:** Simply comment
