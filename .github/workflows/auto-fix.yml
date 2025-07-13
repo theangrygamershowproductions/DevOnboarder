@@ -55,13 +55,13 @@ jobs:
           fi
           export SNIPPET="$snippet"
           patch=$(python - "$OPENAI_API_KEY" <<'PY'
-import sys, os, openai
-openai.api_key = sys.argv[1]
-log=open('yamllint.log').read()
-snippet=os.environ.get('SNIPPET','')
-prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
-resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
-print(resp.choices[0].message.content)
+            import sys, os, openai
+            openai.api_key = sys.argv[1]
+            log=open('yamllint.log').read()
+            snippet=os.environ.get('SNIPPET','')
+            prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
+            resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
+            print(resp.choices[0].message.content)
 PY
           )
           echo "$patch" > fix-ci-health.patch.diff
@@ -76,18 +76,18 @@ PY
           fi
           pip install openai
           suggestion=$(python - "$OPENAI_API_KEY" <<'PY'
-import sys, openai
-openai.api_key = sys.argv[1]
-with open('yamllint.log', 'r', encoding='utf-8') as f:
-    yamls = f.read()
-with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
-    logs = f.read()
-prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
-response = openai.chat.completions.create(
-    model='gpt-4o',
-    messages=[{'role':'user','content':prompt}]
-)
-print(response.choices[0].message.content)
+            import sys, openai
+            openai.api_key = sys.argv[1]
+            with open('yamllint.log', 'r', encoding='utf-8') as f:
+                yamls = f.read()
+            with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
+                logs = f.read()
+            prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
+            response = openai.chat.completions.create(
+                model='gpt-4o',
+                messages=[{'role':'user','content':prompt}]
+            )
+            print(response.choices[0].message.content)
 PY
           )
           echo "$suggestion" > patch.diff
