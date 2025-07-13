@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+shopt -s globstar
 
 # Aggregate validation checks documented in AGENTS.md and docs.
 
