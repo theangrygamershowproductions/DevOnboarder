@@ -6,6 +6,9 @@ All notable changes to this project will be recorded in this file.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
+- Broadened `ci-monitor.yml` detection patterns, captures the matched log line,
+  and falls back to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is
+  missing.
 
 - Documented additional pre-PR checklist steps in `docs/sample-pr.md`.
 - Added `docs/codex-e2e-report.md` to track E2E run results and linked it from
