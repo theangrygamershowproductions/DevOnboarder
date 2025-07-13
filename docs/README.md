@@ -30,17 +30,18 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
 6. Run `bash scripts/run_migrations.sh` to apply the initial database migration.
-7. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
-8. Visit `http://localhost:8000` to see the greeting server.
-9. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
+7. Run `python -m diagnostics` to confirm required packages import, all services are healthy, and environment variables match the examples.
+8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
+9. Visit `http://localhost:8000` to see the greeting server.
+10. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
-10. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
+11. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
     It stores data in a local SQLite database.
-11. Test the XP API with:
+12. Test the XP API with:
     `curl http://localhost:8001/api/user/onboarding-status`
     and `curl http://localhost:8001/api/user/level`.
-12. Stop services with `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev down`.
-13. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`,
+13. Stop services with `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev down`.
+14. Verify changes with `ruff check .`, `pytest --cov=src --cov-fail-under=95`,
     and `npm run coverage` from the `bot/` directory before committing.
     After installing dependencies, run `npm run coverage` in the `frontend/`
     directory as well (see [../frontend/README.md](../frontend/README.md) for
@@ -58,12 +59,12 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     `devonboarder` package. Installing the project still ensures
     dependencies like **FastAPI** are available.
 
-14. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
+15. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
-15. Install git hooks with `pre-commit install` so these checks run automatically.
-16. `pre-commit` also verifies environment variable docs with
+16. Install git hooks with `pre-commit install` so these checks run automatically.
+17. `pre-commit` also verifies environment variable docs with
     `python scripts/check_env_docs.py`.
-17. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
+18. Lint all Markdown docs with `./scripts/check_docs.sh` before pushing.
     The script downloads **Vale** automatically when it is missing and prints a
     notice if grammar checks require **LanguageTool**.
     To run LanguageTool locally, start your own instance with:
@@ -74,18 +75,18 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
     Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
-18. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
+19. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
 
-19. CI posts a coverage summary on pull requests. Run
+20. CI posts a coverage summary on pull requests. Run
     `python scripts/post_coverage_comment.py` to generate the table locally.
-20. Append the coverage numbers to a Markdown file with
+21. Append the coverage numbers to a Markdown file with
     `bash scripts/append_coverage_summary.sh`. Set the following
     environment variables before running the script:
     `COVERED_LINES`, `TOTAL_LINES`, `COVERAGE_PERCENT`,
     `COVERED_BRANCHES`, `TOTAL_BRANCHES`, and `BRANCH_PERCENT`.
     Pass an optional output filename as the first argument
     (defaults to `summary.md`).
-21. Install the GitHub CLI with `./scripts/install_gh_cli.sh` if you plan to run
+22. Install the GitHub CLI with `./scripts/install_gh_cli.sh` if you plan to run
     scripts that use `gh` locally.
 
 The compose files define common service settings using YAML anchors. Each
