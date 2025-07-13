@@ -30,7 +30,7 @@ jobs:
       - name: Run yamllint
         run: |
           pip install yamllint
-          yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
+          yamllint -c .github/.yamllint-config .github/workflows/**/*.yml | tee yamllint.log || true
       - name: Download CI logs
         uses: actions/download-artifact@v4
         with:
