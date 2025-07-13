@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
+
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
 - Broadened `ci-monitor.yml` detection patterns, captures the matched log line,
