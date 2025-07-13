@@ -30,7 +30,8 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
    This launches the auth, bot, XP API, frontend, and Postgres services.
    The `frontend/` folder now hosts a React app built with Vite.
 6. Run `bash scripts/run_migrations.sh` to apply the initial database migration.
-7. Run `python -m diagnostics` to confirm required packages import, all services are healthy, and environment variables match the examples.
+7. Run `python -m diagnostics` to confirm required packages import, all services are healthy, and environment variables match the examples. See
+   [diagnostics-sample.log](diagnostics-sample.log) for the expected output.
 8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
 9. Visit `http://localhost:8000` to see the greeting server.
 10. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
