@@ -1,0 +1,24 @@
+fastapi imported
+pytest imported
+auth: 200 OK
+xp: 200 OK
+feedback: 200 OK
+Missing variables:
+
+
+Extra variables:
+JSON_OUTPUT
+LC_CTYPE
+PATH
+PWD
+PYENV_DIR
+PYENV_HOOK_PATH
+PYENV_ROOT
+PYENV_VERSION
+PYTHONPATH
+SHLVL
+_
+{"missing":[],"extra":["JSON_OUTPUT" ,"LC_CTYPE" ,"PATH" ,"PWD" ,"PYENV_DIR" ,"PYENV_HOOK_PATH" ,"PYENV_ROOT" ,"PYENV_VERSION" ,"PYTHONPATH" ,"SHLVL" ,"_"]}
+
+Missing: []
+Extra: ['JSON_OUTPUT', 'LC_CTYPE', 'PATH', 'PWD', 'PYENV_DIR', 'PYENV_HOOK_PATH', 'PYENV_ROOT', 'PYENV_VERSION', 'PYTHONPATH', 'SHLVL', '_']
