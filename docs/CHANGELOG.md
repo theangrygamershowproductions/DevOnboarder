@@ -748,3 +748,5 @@ All notable changes to this project will be recorded in this file.
 - Added CI and Auto Fix badges to `README.md`.
 - Added `ci-monitor.yml` to open an issue when CI fails due to API rate limits and documented the secret in `docs/ci-env-vars.md`.
 - Updated docs/README local setup to run `python -m diagnostics` after bootstrap. The script checks package imports, service health, and environment variables.
+- Updated `docs/ONBOARDING.md` to run `python -m diagnostics` once services are
+  running and link to `docs/troubleshooting.md` for interpreting failures.
