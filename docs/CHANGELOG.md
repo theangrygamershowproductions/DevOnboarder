@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - Fixed indentation of Python blocks in `auto-fix.yml` to resolve YAML linting errors.
 - Added `src/diagnostics.py` with a `python -m diagnostics` entry for package
   and service health checks. CI runs the script and uploads its log.
+- Expanded QA checklist with TAGS-specific deployment and diagnostics items.
 - Added `docs/diagnostics-sample.log` and referenced it from onboarding docs to
   show expected output from `python -m diagnostics`.
 - Added `prompts/devonboarder_integration_task.md` and referenced it from
