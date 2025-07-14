@@ -34,6 +34,69 @@
       "path": "agents/llama2-agile-helper.md",
       "triggers": "Developer questions or metrics updates",
       "output": "Sprint summaries and grooming tips"
+    },
+    {
+      "name": "Agent.CI",
+      "role": "Runs tests and linting for pushes and pull requests",
+      "path": ".github/workflows/ci.yml",
+      "triggers": "Push or pull request events",
+      "output": "Build artifacts and coverage reports"
+    },
+    {
+      "name": "Agent.CiMonitor",
+      "role": "Watches CI logs for rate-limit errors and opens issues",
+      "path": ".github/workflows/ci-monitor.yml",
+      "triggers": "Completed CI workflow runs",
+      "output": "Issue with log excerpt"
+    },
+    {
+      "name": "Agent.CiHealth",
+      "role": "Checks active branches for CI stability",
+      "path": ".github/workflows/ci-health.yml",
+      "triggers": "Scheduled or manual run",
+      "output": "Issue summarizing failing branches"
+    },
+    {
+      "name": "Agent.CleanupCiFailure",
+      "role": "Closes stale ci-failure issues",
+      "path": ".github/workflows/cleanup-ci-failure.yml",
+      "triggers": "Daily schedule",
+      "output": "Closed ci-failure issues log"
+    },
+    {
+      "name": "Agent.CloseCodexIssues",
+      "role": "Closes Codex issues referenced in merged pull requests",
+      "path": ".github/workflows/close-codex-issues.yml",
+      "triggers": "Pull request closed after merge",
+      "output": "Closed Codex issues with comment"
+    },
+    {
+      "name": "Agent.AutoFix",
+      "role": "Proposes fixes for failed CI runs",
+      "path": ".github/workflows/auto-fix.yml",
+      "triggers": "Completed CI workflow runs with failures",
+      "output": "Pull request suggesting patches"
+    },
+    {
+      "name": "Agent.EnvDocAlignment",
+      "role": "Ensures environment docs stay in sync with code",
+      "path": ".github/workflows/env-doc-alignment.yml",
+      "triggers": "CI failures in env doc checks",
+      "output": "Issue listing missing variables"
+    },
+    {
+      "name": "Agent.SecretsAlignment",
+      "role": "Audits environment variables for missing or extra entries",
+      "path": ".github/workflows/secrets-alignment.yml",
+      "triggers": "Scheduled or failed CI audits",
+      "output": "Issue summarizing mismatched variables"
+    },
+    {
+      "name": "Agent.SecurityAudit",
+      "role": "Generates weekly dependency and code audit reports",
+      "path": ".github/workflows/security-audit.yml",
+      "triggers": "Scheduled or manual run",
+      "output": "Uploaded security audit report"
     }
   ]
 }
