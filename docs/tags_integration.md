@@ -1,10 +1,17 @@
 # Integrating with TAGS
 
-The TAGS stack uses dedicated Compose files to coordinate each service. These
-files are not tracked in this repository because the configuration differs per
-deployment. Obtain the templates from the TAGS infrastructure repository or
-generate them locally by copying `archive/docker-compose.dev.yaml` and adjusting
-the service names. Start a local stack with:
+The TAGS stack uses dedicated Compose files to coordinate each service.
+Minimal templates are now provided under `archive/`:
+
+```
+archive/docker-compose.tags.dev.yaml
+archive/docker-compose.tags.prod.yaml
+```
+
+Copy the appropriate file to the repository root and update the service names,
+image tags and environment variables to match your deployment. If your team
+maintains a central infrastructure repository, replace the templates with those
+versions. Start a local stack with:
 
 ```bash
 docker compose -f docker-compose.tags.dev.yaml up
