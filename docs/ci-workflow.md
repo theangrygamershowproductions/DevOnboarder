@@ -21,6 +21,7 @@ remaining jobs do not run. This keeps documentation-only pull requests fast.
 A `validate-yaml` job always runs first and lints the workflow files with
 `ibiqlik/action-yamllint`. This step executes even when the documentation filter
 skips the heavier test job or when a commit message contains `[no-ci]`.
+It also uploads a `yamllint.log` artifact containing the full lint output.
 
 ## Skipping the Test Job
 

@@ -10,6 +10,16 @@ jobs:
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
+            - name: Run yamllint
+              run: |
+                pip install yamllint
+                yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
+            - name: Upload yamllint log
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: yamllint-log
+                  path: yamllint.log
     cleanup:
         needs: validate-yaml
         runs-on: ubuntu-latest
@@ -26,7 +36,7 @@ jobs:
                 gh api rate_limit
                 gh issue list --label ci-failure --state open --json number --jq '.[].number'
               env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               continue-on-error: true
 
             - name: Close ci-failure issues
@@ -51,4 +61,4 @@ jobs:
                 fi
                 echo "Closed $closed ci-failure issues"
               env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
