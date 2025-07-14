@@ -765,3 +765,5 @@ All notable changes to this project will be recorded in this file.
 - Clarified how to obtain the TAGS compose files in `docs/tags_integration.md`.
 - Added example TAGS compose templates under `archive/` and documented how to
   customize them in `docs/tags_integration.md`.
+- Copied the TAGS compose templates to the repository root and clarified the
+  path in `docs/tags_integration.md`.
