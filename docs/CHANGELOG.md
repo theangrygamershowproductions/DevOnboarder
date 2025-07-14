@@ -777,3 +777,5 @@ All notable changes to this project will be recorded in this file.
   indentation of `GH_TOKEN` lines.
 - Replaced `--json` and `--jq` examples in `docs/ci-failure-issues.md` with
   awk-based parsing so the commands work on older GitHub CLI versions.
+
+- Verified GitHub CLI version and piped issue author JSON to jq in `close-codex-issues.yml`.
