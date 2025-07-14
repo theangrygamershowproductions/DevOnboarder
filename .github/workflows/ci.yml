@@ -74,7 +74,7 @@ jobs:
               run: which gh && gh --version
             - name: Verify gh version
               run: |
-                  ver=$(gh --version | head -n1 | awk '{print $3}')
+                    ver=$(gh --version | head -n1 | awk '{print $3}')
                   major=${ver%%.*}
                   if [ "$major" -lt 2 ]; then
                       echo "::error::GitHub CLI v2 or higher required" >&2
@@ -124,10 +124,10 @@ jobs:
             - name: Check Python dependencies
               run: pip check
             - name: Python dependency audit
-                run: |
-                    if ! pip-audit; then
-                        code=$?
-                        if [ "$code" -eq 1 ]; then
+              run: |
+                  if ! pip-audit; then
+                      code=$?
+                      if [ "$code" -eq 1 ]; then
                           exit 1
                       else
                           echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
