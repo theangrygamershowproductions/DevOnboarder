@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.CiHealth
+#   role: Checks active branches for CI stability
+#   scope: .github/workflows/ci-health.yml
+#   triggers: Weekly schedule or manual dispatch
+#   output: Issue summarizing failing branches
+# ---
 name: CI Health
 
 on:
