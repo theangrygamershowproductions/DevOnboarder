@@ -767,3 +767,5 @@ All notable changes to this project will be recorded in this file.
   customize them in `docs/tags_integration.md`.
 - Copied the TAGS compose templates to the repository root and clarified the
   path in `docs/tags_integration.md`.
+- Added a yamllint log upload step to `cleanup-ci-failure.yml` and corrected
+  indentation of `GH_TOKEN` lines.
