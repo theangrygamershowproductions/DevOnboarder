@@ -1,3 +1,12 @@
+---
+codex-agent:
+  name: Agent.AiMentor
+  role: Provides automated mentorship for contributors
+  scope: onboarding workflows
+  triggers: Contributor questions
+  output: Curated resources
+---
+
 # AI Mentor Agent
 
 **Status:** Planned.
