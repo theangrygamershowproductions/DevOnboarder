@@ -1,3 +1,12 @@
+---
+codex-agent:
+  name: Agent.MsTeamsIntegration
+  role: Sends DevOnboarder updates to Microsoft Teams
+  scope: infrastructure notifications
+  triggers: Project events requiring team alerts
+  output: Teams channel messages
+---
+
 # MS Teams Integration Agent
 
 **Status:** Planned.
