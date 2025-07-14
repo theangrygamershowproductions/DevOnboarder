@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.CiMonitor
+#   role: Watches CI logs for rate-limit errors and opens an issue
+#   scope: .github/workflows/ci-monitor.yml
+#   triggers: Completed CI workflow runs
+#   output: Issue with log excerpt
+# ---
 name: CI Monitor
 
 on:
