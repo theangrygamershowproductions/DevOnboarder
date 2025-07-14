@@ -717,6 +717,8 @@ All notable changes to this project will be recorded in this file.
 - Re-added `"milestone": "v0.5.0"` for `feedback-002` in `codex.tasks.json`.
 - Documented Codex agent index and YAML headers for agent docs.
 - Simplified CI failure issue parsing to use `gh` output directly and verified the CLI version in CI workflows.
+- Removed `--json` and `--jq` flags from CI failure issue commands. Workflows now
+  check the GitHub CLI version and fall back to `awk` parsing when searches fail.
 
 ## [0.1.0] - 2025-06-14
 
