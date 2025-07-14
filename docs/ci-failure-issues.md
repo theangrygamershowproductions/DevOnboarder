@@ -61,14 +61,12 @@ log artifact.
 
 ## Clearing Old Issues
 
-Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI:
-
-> **Note**: These examples require GitHub CLI v2 or later for the `--json` and `--jq` flags.
-> Run `./scripts/install_gh_cli.sh` to install the CLI if it isn't already available.
+Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI.
+Run `./scripts/install_gh_cli.sh` if the CLI isn't already available.
 
 ```bash
 export GH_TOKEN=your_personal_token
-for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
+for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]+'); do
   gh issue close "$n" --reason completed
   echo "Closed CI-failure issue #$n"
 done
@@ -90,7 +88,7 @@ jobs:
     steps:
       - name: Bulk close all open ci-failure issues
         run: |
-          for n in $(gh issue list --label ci-failure --state open --json number --jq '.[].number'); do
+          for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]+'); do
             gh issue close "$n" --reason completed
             echo "Closed CI-failure issue #$n"
           done
