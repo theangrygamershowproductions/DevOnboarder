@@ -30,6 +30,11 @@ This repository follows the DevOnboarder protocol. Key points:
 - Keep pull requests focused and small.
 - Update documentation and the changelog with each change.
 
+## Agent Index Requirements
+
+All agent documentation must include a `codex-agent` YAML header and be listed
+in `codex/agents/index.json` so Codex can locate each role during automation.
+
 ## Commit Message Guidelines
 
 All contributors **must** follow these standards for commit messages:
