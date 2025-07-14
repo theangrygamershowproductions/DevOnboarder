@@ -779,3 +779,4 @@ All notable changes to this project will be recorded in this file.
   awk-based parsing so the commands work on older GitHub CLI versions.
 
 - Verified GitHub CLI version and piped issue author JSON to jq in `close-codex-issues.yml`.
+- Added `httpx`, `requests`, and `yaml` checks to `scripts/check_dependencies.sh` and now exit non-zero when any are missing.
