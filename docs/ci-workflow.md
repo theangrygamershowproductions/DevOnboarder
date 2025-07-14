@@ -16,6 +16,17 @@ The workflow runs `dorny/paths-filter` before other jobs. When the filter
 detects that only files under `docs/` or Markdown files were modified, the
 remaining jobs do not run. This keeps documentation-only pull requests fast.
 
+## Minimal Checks
+
+A `validate-yaml` job always runs first and lints the workflow files with
+`ibiqlik/action-yamllint`. This step executes even when the documentation filter
+skips the heavier test job or when a commit message contains `[no-ci]`.
+
+## Skipping the Test Job
+
+Pushes can opt out of the main test job by including `[no-ci]` anywhere in the
+commit message. Pull requests ignore this marker and run the full workflow.
+
 ## Caching
 
 The job caches several directories to speed up subsequent runs:
