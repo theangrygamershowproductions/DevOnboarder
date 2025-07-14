@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
+- Mentioned `codex/agents/index.json` alongside `agents/index.md` and
+  documented the agent index requirement in `AGENTS.md`.
 - Documented that the `validate-yaml` step always runs even when `[no-ci]` skips
   the test job and clarified the `[no-ci]` marker in `docs/ci-workflow.md`.
 - Added `.github/.yamllint-config` to centralize workflow lint rules, disabling
