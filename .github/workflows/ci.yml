@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.CI
+#   role: Runs tests and linting for all pushes and pull requests
+#   scope: .github/workflows/ci.yml
+#   triggers: Push and pull_request events
+#   output: Build artifacts and coverage reports
+# ---
 name: CI
 
 on:

@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.EnvDocAlignment
+#   role: Ensures environment docs stay in sync with code
+#   scope: .github/workflows/env-doc-alignment.yml
+#   triggers: CI workflow failures on env doc checks
+#   output: Issue listing missing variables
+# ---
 name: Env Doc Alignment
 
 on:
