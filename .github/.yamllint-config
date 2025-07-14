@@ -1,9 +1,7 @@
 extends: default
 rules:
-  document-start:
-    enable: false
-  truthy:
-    enable: false
+  document-start: disable
+  truthy: disable
   line-length:
     max: 200
     level: warning
