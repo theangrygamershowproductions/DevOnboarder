@@ -96,6 +96,8 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
 17. Browse the [agents overview](agents/index.md) for individual service specs.
+    Codex reads the machine‑readable list in `codex/agents/index.json` to
+    coordinate automation across these agents.
 18. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
