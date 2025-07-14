@@ -26,9 +26,13 @@ Feature flags control early access routes. Add the following settings to `.env.d
 running against the TAGS stack:
 
 ```
+TAGS_MODE=true
 IS_ALPHA_USER=true
 IS_FOUNDER=true
 ```
+
+`TAGS_MODE` tells the diagnostics script to verify the XP API and
+feedback services in addition to the auth server.
 
 With these flags set, the API exposes the `/alpha` and `/founder` endpoints described in
 [docs/env.md](env.md). Use the TAGS Compose files to run a fully integrated environment

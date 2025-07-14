@@ -22,6 +22,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | APP_ENV                      | Application mode (`development`, etc.)     |
 | DATABASE_URL                 | Postgres connection string                 |
 | TOKEN_EXPIRE_SECONDS         | JWT expiration in seconds                  |
+| TAGS_MODE                    | Expect TAGS services when `true`           |
 | CORS_ALLOW_ORIGINS           | Comma-separated list of allowed CORS origins |
 | IS_ALPHA_USER                | Enable alpha-only routes                   |
 | IS_FOUNDER                   | Enable founder-only routes                 |

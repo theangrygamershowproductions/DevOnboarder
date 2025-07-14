@@ -30,7 +30,19 @@ def test_check_packages_failure(monkeypatch, capsys):
     assert "Failed to import pytest" in capsys.readouterr().out
 
 
-def test_check_health(monkeypatch):
+def test_check_health_basic(monkeypatch):
+    monkeypatch.setenv("AUTH_URL", "http://auth")
+
+    def fake_get(url: str, timeout: int = 5):
+        return StubResp(200)
+
+    monkeypatch.setattr(diagnostics.requests, "get", fake_get)
+    statuses = diagnostics.check_health()
+    assert statuses == {"auth": "200 OK"}
+
+
+def test_check_health_tags_mode(monkeypatch):
+    monkeypatch.setenv("TAGS_MODE", "true")
     monkeypatch.setenv("AUTH_URL", "http://auth")
     monkeypatch.setenv("API_BASE_URL", "http://xp")
     monkeypatch.setenv("VITE_FEEDBACK_URL", "http://feedback")
