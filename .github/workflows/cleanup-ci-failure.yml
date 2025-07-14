@@ -38,11 +38,19 @@ jobs:
               run: ./scripts/install_gh_cli.sh
             - name: Show gh version
               run: which gh && gh --version
+            - name: Verify gh version
+              run: |
+                ver=$(gh --version | head -n1 | awk '{print $3}')
+                major=${ver%%.*}
+                if [ "$major" -lt 2 ]; then
+                  echo "::error::GitHub CLI v2 or higher required" >&2
+                  exit 1
+                fi
             - name: Debug token and permissions
               run: |
                 gh auth status
                 gh api rate_limit
-                gh issue list --label ci-failure --state open --json number --jq '.[].number'
+                gh issue list --label ci-failure --state open | awk '{print $1}'
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               continue-on-error: true
@@ -52,7 +60,7 @@ jobs:
                 gh_bin=$(which gh)
                 failed=0
                 closed=0
-                issues=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number') || failed=1
+                issues=$($gh_bin issue list --label ci-failure --state open | awk '{print $1}') || failed=1
                 for n in $issues; do
                   if "$gh_bin" issue close "$n" --reason completed; then
                     closed=$((closed+1))
