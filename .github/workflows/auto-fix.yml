@@ -62,7 +62,7 @@ jobs:
             prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
             resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
             print(resp.choices[0].message.content)
-PY
+            PY
           )
           echo "$patch" > fix-ci-health.patch.diff
       - name: Apply YAML patch
@@ -88,7 +88,7 @@ PY
                 messages=[{'role':'user','content':prompt}]
             )
             print(response.choices[0].message.content)
-PY
+            PY
           )
           echo "$suggestion" > patch.diff
       - name: Apply patch
