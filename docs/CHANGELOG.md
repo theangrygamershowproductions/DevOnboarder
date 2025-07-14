@@ -5,6 +5,8 @@ All notable changes to this project will be recorded in this file.
 ## [Unreleased]
 
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
+- Documented that the `validate-yaml` step always runs even when `[no-ci]` skips
+  the test job and clarified the `[no-ci]` marker in `docs/ci-workflow.md`.
 - Added `.github/.yamllint-config` to centralize workflow lint rules, disabling
   `document-start` and `truthy` and warning on lines over 200 characters.
 - Aligned yamllint invocation across scripts and CI with
