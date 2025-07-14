@@ -4,10 +4,12 @@ set -euo pipefail
 # Always ensure development requirements are installed
 echo "Installing dev requirements..."
 pip install -r requirements-dev.txt
+pip check
 
 # Ensure runtime dependencies are installed
 if [ -f pyproject.toml ]; then
     pip install -e .
+    pip check
 fi
 
 ruff check .
