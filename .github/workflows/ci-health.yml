@@ -74,7 +74,7 @@ jobs:
         run: bash scripts/run_tests.sh
       - name: Record result
         if: always()
-        run: echo "${{ matrix.branch }}: ${{ job.status }}" > result.txt
+        run: "echo \"${{ matrix.branch }}: ${{ job.status }}\" > result.txt"
       - name: Upload result
         if: always()
         uses: actions/upload-artifact@v4
