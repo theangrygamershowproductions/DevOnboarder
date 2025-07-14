@@ -758,3 +758,5 @@ All notable changes to this project will be recorded in this file.
 - Updated `docs/ONBOARDING.md` to run `python -m diagnostics` once services are
   running and link to `docs/troubleshooting.md` for interpreting failures.
 - Clarified how to obtain the TAGS compose files in `docs/tags_integration.md`.
+- Added example TAGS compose templates under `archive/` and documented how to
+  customize them in `docs/tags_integration.md`.
