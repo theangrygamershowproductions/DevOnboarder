@@ -72,6 +72,14 @@ jobs:
               run: ./scripts/install_gh_cli.sh
             - name: Show gh version
               run: which gh && gh --version
+            - name: Verify gh version
+              run: |
+                  ver=$(gh --version | head -n1 | awk '{print $3}')
+                  major=${ver%%.*}
+                  if [ "$major" -lt 2 ]; then
+                      echo "::error::GitHub CLI v2 or higher required" >&2
+                      exit 1
+                  fi
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -416,16 +424,17 @@ jobs:
                   search_query="label:ci-failure ${{ github.sha }} in:title,body"
                   echo "Searching with: $search_query" | tee -a gh_cli.log
                   set +e
-                  search_output=$($gh_bin issue list --state open --search "$search_query" --json number --jq '.[0].number' 2>&1 | tee -a gh_cli.log)
-                  list_exit=$?
+                  search_output=$($gh_bin issue list --state open --search "$search_query" 2>&1 | tee -a gh_cli.log)
+                  list_exit=${PIPESTATUS[0]}
                   set -e
+                  ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
                   echo "Search exit code: $list_exit" | tee -a gh_cli.log
-                  if [ "$list_exit" -eq 0 ] && [ -n "$search_output" ]; then
-                      ISSUE="$search_output"
+                  if [ "$list_exit" -eq 0 ] && [ -n "$ISSUE" ]; then
                       "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                   else
                       echo "::warning::Issue search failed or returned no results" | tee -a gh_cli.log
-                      ISSUE=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure --json number --jq '.number' | tee -a gh_cli.log)
+                      ISSUE_URL=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
+                      ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
               env:
@@ -444,7 +453,7 @@ jobs:
               if: success()
               run: |
                   gh_bin=$(which gh)
-                  ISSUES=$($gh_bin issue list --label ci-failure --state open --json number --jq '.[].number' | tee -a gh_cli.log)
+                  ISSUES=$($gh_bin issue list --label ci-failure --state open | tee -a gh_cli.log | awk '{print $1}')
                   for ISSUE in $ISSUES; do
                     "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log
                     "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log
