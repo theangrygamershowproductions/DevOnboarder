@@ -12,6 +12,8 @@ when working with those packages directly.
 - `APP_ENV` &ndash; application mode such as `development` or `production`.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
+- `TAGS_MODE` &ndash; set to `true` when running within the TAGS stack so
+  diagnostics expect all services.
 - `CORS_ALLOW_ORIGINS` &ndash; comma-separated list of allowed CORS origins. Defaults to `*` in development.
 - `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
 
