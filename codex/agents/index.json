@@ -1,0 +1,39 @@
+{
+  "agents": [
+    {
+      "name": "Agent.DiscordIntegration",
+      "role": "Handles Discord OAuth flows and role lookups",
+      "path": "agents/discord-integration.md",
+      "triggers": "User Discord login or role sync request",
+      "output": "Discord role mapping"
+    },
+    {
+      "name": "Agent.AiMentor",
+      "role": "Provides automated mentorship for contributors",
+      "path": "agents/ai-mentor.md",
+      "triggers": "Contributor questions via chat or CLI",
+      "output": "Suggested resources and guidance"
+    },
+    {
+      "name": "Agent.MsTeamsIntegration",
+      "role": "Sends DevOnboarder updates to Microsoft Teams",
+      "path": "agents/ms-teams-integration.md",
+      "triggers": "Project events requiring team notifications",
+      "output": "Teams channel messages"
+    },
+    {
+      "name": "Agent.IdmeVerification",
+      "role": "Verifies users through ID.me",
+      "path": "agents/idme-verification.md",
+      "triggers": "User submits ID.me OAuth tokens",
+      "output": "Verification confirmation"
+    },
+    {
+      "name": "Agent.Llama2AgileHelper",
+      "role": "Provides agile planning advice via Llama2",
+      "path": "agents/llama2-agile-helper.md",
+      "triggers": "Developer questions or metrics updates",
+      "output": "Sprint summaries and grooming tips"
+    }
+  ]
+}

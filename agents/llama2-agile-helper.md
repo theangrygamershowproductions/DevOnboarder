@@ -1,3 +1,12 @@
+---
+codex-agent:
+  name: Agent.Llama2AgileHelper
+  role: Provides agile planning advice via Llama2
+  scope: sprint workflows
+  triggers: Developer questions or metrics updates
+  output: Backlog grooming tips
+---
+
 # Llama2 Agile Helper Agent
 **Status:** Active.
 
