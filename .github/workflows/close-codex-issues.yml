@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.CloseCodexIssues
+#   role: Closes Codex issues referenced in merged pull requests
+#   scope: .github/workflows/close-codex-issues.yml
+#   triggers: Pull request closed after merge
+#   output: Closed Codex issues with comment
+# ---
 name: Close Codex Issues
 
 on:

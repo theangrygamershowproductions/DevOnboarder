@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.CleanupCiFailure
+#   role: Closes stale ci-failure issues
+#   scope: .github/workflows/cleanup-ci-failure.yml
+#   triggers: Daily schedule
+#   output: Closed or reported ci-failure issues
+# ---
 on:
     schedule:
         - cron: "0 0 * * *"

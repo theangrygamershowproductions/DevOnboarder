@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.AutoFix
+#   role: Automatically proposes fixes for failed CI runs
+#   scope: .github/workflows/auto-fix.yml
+#   triggers: Completed CI workflow runs with failures
+#   output: Pull request suggesting patches
+# ---
 name: Auto Fix
 
 on:
