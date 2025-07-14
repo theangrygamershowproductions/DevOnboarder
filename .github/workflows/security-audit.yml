@@ -1,3 +1,11 @@
+# ---
+# codex-agent:
+#   name: Agent.SecurityAudit
+#   role: Generates weekly dependency and code audit reports
+#   scope: .github/workflows/security-audit.yml
+#   triggers: Scheduled run or manual dispatch
+#   output: Uploaded security audit report
+# ---
 name: Security Audit
 
 on:
