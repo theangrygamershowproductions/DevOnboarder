@@ -17,11 +17,13 @@ Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pu
 - [ ] Vale installed (`vale --version`)
 - [ ] New docs are clear and free of grammar issues
 - [ ] Environment variables documented in `agents/index.md`
+- [ ] `TAGS_MODE` and related flags explained
 
 ## Deployment and Environment
 - [ ] `.env.example` matches documented variables
 - [ ] CORS and security headers validated
 - [ ] No secrets or sensitive data in commits
+- [ ] TAGS compose files or overrides present
 
 ## Plugin System
 - [ ] Plugins under `plugins/` register with `devonboarder.PLUGINS`
@@ -56,6 +58,7 @@ Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pu
 - [ ] Staging healthchecks pass
 - [ ] Alerts verified
 - [ ] Error logs reviewed
+- [ ] Diagnostics run against TAGS stack when applicable
 
 ## Project Management
 - [ ] PR links to issue or task
