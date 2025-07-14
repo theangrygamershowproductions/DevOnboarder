@@ -47,11 +47,11 @@ jobs:
         if: steps.check.outputs.success == 'false'
         run: |
           cat > body.md <<'BODY'
-## Missing variables
-${{ steps.vars.outputs.missing }}
+            ## Missing variables
+            ${{ steps.vars.outputs.missing }}
 
-- [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
-BODY
+            - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
+          BODY
           gh issue create --title "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" --label ops --template "secret-alignment.md" --body-file body.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
