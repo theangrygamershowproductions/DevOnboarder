@@ -773,3 +773,5 @@ All notable changes to this project will be recorded in this file.
   path in `docs/tags_integration.md`.
 - Added a yamllint log upload step to `cleanup-ci-failure.yml` and corrected
   indentation of `GH_TOKEN` lines.
+- Replaced `--json` and `--jq` examples in `docs/ci-failure-issues.md` with
+  awk-based parsing so the commands work on older GitHub CLI versions.
