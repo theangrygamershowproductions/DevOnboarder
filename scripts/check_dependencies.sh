@@ -37,7 +37,12 @@ check_python_module() {
 
 check_python_module devonboarder "Run 'pip install -e .' before running the tests."
 check_python_module pytest "Run 'pip install -r requirements-dev.txt'."
+check_python_module httpx "Run 'pip install -e .' to install runtime deps."
+check_python_module requests "Run 'pip install -r requirements-dev.txt'."
+check_python_module yaml "Run 'pip install -r requirements-dev.txt'."
 
 if [ "$missing" -eq 0 ]; then
     echo "All optional dependencies installed ✅"
+else
+    exit 1
 fi
