@@ -12,6 +12,8 @@ import requests
 
 
 REQUIRED_PACKAGES = ["fastapi", "pytest"]
+
+# Base service mappings used for health checks
 SERVICE_VARS = {
     "auth": ("AUTH_URL", "http://localhost:8002"),
     "xp": ("API_BASE_URL", "http://localhost:8001"),
@@ -33,10 +35,17 @@ def check_packages() -> list[str]:
     return failures
 
 
+def _get_services() -> dict[str, tuple[str, str]]:
+    """Return service mapping based on TAGS_MODE flag."""
+    if os.getenv("TAGS_MODE", "false").lower() == "true":
+        return SERVICE_VARS
+    return {"auth": SERVICE_VARS["auth"]}
+
+
 def check_health() -> dict[str, str]:
     """Call each service's `/health` endpoint and return statuses."""
     statuses: dict[str, str] = {}
-    for name, (env_var, default) in SERVICE_VARS.items():
+    for name, (env_var, default) in _get_services().items():
         base = os.getenv(env_var, default).rstrip("/")
         url = f"{base}/health"
         try:
