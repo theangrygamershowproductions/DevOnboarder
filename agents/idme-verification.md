@@ -1,3 +1,12 @@
+---
+codex-agent:
+  name: Agent.IdmeVerification
+  role: Verifies users through ID.me
+  scope: user onboarding
+  triggers: ID.me OAuth token submission
+  output: Verification confirmation
+---
+
 # ID.me Verification Agent
 
 **Status:** Planned.
