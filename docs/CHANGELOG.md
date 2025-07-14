@@ -713,6 +713,7 @@ All notable changes to this project will be recorded in this file.
 - Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
 - Added `docs/service-status.md` summarizing core service health and linked it from the documentation overview.
 - Re-added `"milestone": "v0.5.0"` for `feedback-002` in `codex.tasks.json`.
+- Documented Codex agent index and YAML headers for agent docs.
 
 ## [0.1.0] - 2025-06-14
 
