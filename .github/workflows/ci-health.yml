@@ -120,7 +120,8 @@ jobs:
           for b in $FAILED; do
             echo "- $b" >> body.md
           done
-          bash scripts/notify-humans.sh "CI health failures $(date -I)" body.md
+          jq -Rs --arg title "CI health failures $(date -I)" '{title:$title,body:.}' body.md > notify.json
+          gh workflow run notify.yml -f data="$(cat notify.json)"
       - name: Summary if no failures
         if: steps.summarize.outputs.failures == ''
         run: echo "All scheduled CI runs passed" > /dev/null
