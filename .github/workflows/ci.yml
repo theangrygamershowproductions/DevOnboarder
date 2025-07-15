@@ -135,6 +135,8 @@ jobs:
                 fi
             - name: Run Black
               run: black --check .
+            - name: Regenerate env docs
+              run: python scripts/regenerate_env_docs.py
             - name: Validate env docs
               run: python scripts/check_env_docs.py
             - name: Setup environment
