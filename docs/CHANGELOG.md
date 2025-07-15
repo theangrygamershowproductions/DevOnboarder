@@ -7,6 +7,9 @@ All notable changes to this project will be recorded in this file.
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
 
+- chore(docs): regenerate env variable docs from `.env.example` via new script
+  and run it in CI before validation
+
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
 - Mentioned `codex/agents/index.json` alongside `agents/index.md` and
   documented the agent index requirement in `AGENTS.md`.
