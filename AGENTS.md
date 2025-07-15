@@ -110,6 +110,13 @@ The workflow also skips its test job when a push only modifies documentation or
 Markdown files. It uses `dorny/paths-filter` to set `steps.filter.outputs.code`
 to `false` in that case.
 
+## Notification Aggregation Policy
+
+All agents must send human notifications through the `notify.yml` workflow. Use
+`gh workflow run notify.yml -f data=<json>` instead of calling
+`scripts/notify-humans.sh` directly. The workflow aggregates messages via
+`scripts/process_notifications.py` and posts them to a single issue.
+
 ## \U0001F512 Security Note
 
 CI/CD scripts must not fetch and execute remote code via `curl | sh`. Tools like
