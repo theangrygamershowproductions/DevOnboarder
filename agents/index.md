@@ -11,6 +11,12 @@ how it fits into the workflow.
 - [ID.me Verification](idme-verification.md)
 - [AI Mentor](ai-mentor.md)
 - [Llama2 Agile Helper](llama2-agile-helper.md)
+- [Prod Orchestrator](prod-orchestrator.md)
+- [Dev Orchestrator](dev-orchestrator.md)
+- [Staging Orchestrator](staging-orchestrator.md)
+- [Onboarding Agent](onboarding-agent.md)
+- [CI Helper Agent](ci-helper-agent.md)
+- [Diagnostics Bot](diagnostics-bot.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 ## Required Environment Variables
