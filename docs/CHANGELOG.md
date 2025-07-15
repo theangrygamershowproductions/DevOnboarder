@@ -30,7 +30,7 @@ All notable changes to this project will be recorded in this file.
 - Added `prompts/devonboarder_integration_task.md` and referenced it from
   `codex.tasks.json` so Codex can generate integration steps automatically.
 
-- CI matrix now tests Python 3.10, 3.11 and Node 18, 21.
+- CI matrix now tests only Python 3.12 and Node 20.
 
 - Improved `ci-monitor.yml` to detect additional rate-limit phrases and fall back
   to `${{ secrets.GITHUB_TOKEN }}` when `CI_ISSUE_TOKEN` is unavailable.
