@@ -63,7 +63,7 @@ log artifact.
 ## Clearing Old Issues
 
 Past failures may leave old `ci-failure` issues open. You can close them in bulk with the GitHub CLI.
-Run `./scripts/install_gh_cli.sh` if the CLI isn't already available.
+Install the CLI from <https://cli.github.com/> if it isn't already available.
 
 ```bash
 export GH_TOKEN=your_personal_token

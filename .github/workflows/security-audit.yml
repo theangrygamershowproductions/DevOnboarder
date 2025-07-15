@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install GitHub CLI
-        run: ./scripts/install_gh_cli.sh
+        uses: ksivamuthu/actions-setup-gh-cli@v3
       - name: Show gh version
         run: which gh && gh --version
       - name: Set up Python
