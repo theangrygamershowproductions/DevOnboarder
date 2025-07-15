@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+- fix(ci): correct YAML indentation in Verify gh version step
+
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
 - Mentioned `codex/agents/index.json` alongside `agents/index.md` and
   documented the agent index requirement in `AGENTS.md`.
