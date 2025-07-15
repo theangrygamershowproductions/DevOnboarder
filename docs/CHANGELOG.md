@@ -739,6 +739,7 @@ All notable changes to this project will be recorded in this file.
 - Removed `--json` and `--jq` flags from CI failure issue commands. Workflows now
   check the GitHub CLI version and fall back to `awk` parsing when searches fail.
 - Fixed YAML indentation in `ci.yml` for the Python dependency audit step.
+- docs(ci): expand automation tasks with 12-section outline referencing bot permissions and notify workflow
 
 ## [0.1.0] - 2025-06-14
 
