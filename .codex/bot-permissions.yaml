@@ -1,0 +1,30 @@
+# Mapping of bots to repository secrets and GitHub permissions.
+# Ensure the referenced secrets exist in repository settings.
+
+onboarding_agent:
+  secret: ONBOARDING_AGENT_KEY
+  permissions:
+    - issues: write
+    - pull_requests: write
+    - contents: read
+
+ci_helper_agent:
+  secret: CI_HELPER_AGENT_KEY
+  permissions:
+    - actions: read
+    - pull_requests: write
+    - checks: write
+
+diagnostics_bot:
+  secret: DIAGNOSTICS_BOT_KEY
+  permissions:
+    - actions: read
+    - issues: write
+    - repository: read
+
+orchestration_bot:
+  secret: ORCHESTRATION_BOT_KEY
+  permissions:
+    - workflows: write
+    - deployments: read
+    - repository: read
