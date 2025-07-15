@@ -87,7 +87,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     `COVERED_BRANCHES`, `TOTAL_BRANCHES`, and `BRANCH_PERCENT`.
     Pass an optional output filename as the first argument
     (defaults to `summary.md`).
-22. Install the GitHub CLI with `./scripts/install_gh_cli.sh` if you plan to run
+22. Install the GitHub CLI from <https://cli.github.com/> if you plan to run
     scripts that use `gh` locally.
 
 The compose files define common service settings using YAML anchors. Each
