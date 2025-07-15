@@ -106,6 +106,10 @@ jobs:
         run: |
           failures=$(grep -h "" results/result-*/result.txt | awk -F': ' '$2=="failure"{print $1}')
           echo "failures=$(printf '%s ' $failures | sed 's/ *$//')" >> "$GITHUB_OUTPUT"
+      - name: Install PyYAML
+        run: pip install PyYAML
+      - name: Verify bot permission
+        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
       - name: Create issue for failures
         if: steps.summarize.outputs.failures != ''
         env:
@@ -116,7 +120,7 @@ jobs:
           for b in $FAILED; do
             echo "- $b" >> body.md
           done
-          gh issue create --title "CI health failures $(date -I)" --label ci-health --body-file body.md
+          bash scripts/notify-humans.sh "CI health failures $(date -I)" body.md
       - name: Summary if no failures
         if: steps.summarize.outputs.failures == ''
         run: echo "All scheduled CI runs passed" > /dev/null
