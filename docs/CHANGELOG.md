@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- docs(ci): outline CI enforcement tasks in `.codex/automation-tasks.md`
 
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
