@@ -30,6 +30,8 @@ test-results/
 
 # Local/Codex caches
 .codex/
+!.codex/
+!.codex/bot-permissions.yaml
 .vscode-integrations/
 logs/
 .env.dev
