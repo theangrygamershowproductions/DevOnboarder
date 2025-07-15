@@ -17,6 +17,7 @@ This repository follows the DevOnboarder protocol. Key points:
 - Maintainer merge checklist: `docs/merge-checklist.md`.
 - Project changelog: `docs/CHANGELOG.md`.
 - Offline setup instructions: `docs/offline-setup.md`.
+- Multi-bot orchestration guide: `docs/orchestration.md`.
 
 1. **Development Environment**
 
