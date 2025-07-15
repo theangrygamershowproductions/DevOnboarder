@@ -1,0 +1,54 @@
+# ---
+# codex-agent:
+#   name: Agent.ValidatePermissions
+#   role: Lints workflow files and bot permissions
+#   scope: .github/workflows/validate-permissions.yml
+#   triggers: Push and pull_request events
+#   output: CI logs
+# ---
+name: Validate Permissions
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
+          config_file: .github/.yamllint-config
+  check:
+    needs: validate-yaml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Lint bot permissions
+        run: bash scripts/lint-bot-permissions.sh
+      - name: Verify agent docs exist
+        run: |
+          test -f agents/index.md
+          test -f agents/templates/Agent.md
+      - name: Check for disallowed commands
+        run: |
+          if grep -R "gh issue" .github/workflows | grep -v validate-permissions.yml; then
+            echo "Direct gh issue command found" >&2
+            exit 1
+          fi
+          if grep -R "notify-humans.sh" .github/workflows; then
+            echo "External notification script used" >&2
+            exit 1
+          fi
+          if grep -R "hooks.slack.com" .github/workflows; then
+            echo "Direct Slack notification found" >&2
+            exit 1
+          fi
+
