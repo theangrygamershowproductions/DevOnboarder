@@ -8,6 +8,8 @@ All notable changes to this project will be recorded in this file.
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
 
+- chore(codex): record bot secrets and permissions in `.codex/bot-permissions.yaml`
+
 - chore(docs): regenerate env variable docs from `.env.example` via new script
   and run it in CI before validation
 
