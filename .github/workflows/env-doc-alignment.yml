@@ -51,6 +51,12 @@ jobs:
         run: |
           missing=$(awk '/^Variables missing from agents\/index.md:/{flag=1;next}/^$/{flag=0}flag' env_docs.log | tr '\n' ',' | sed 's/,$//')
           echo "missing=$missing" >> "$GITHUB_OUTPUT"
+      - name: Install PyYAML
+        if: steps.check.outputs.success == 'false'
+        run: pip install PyYAML
+      - name: Verify bot permission
+        if: steps.check.outputs.success == 'false'
+        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
       - name: Create issue
         if: steps.check.outputs.success == 'false'
         run: |
@@ -60,6 +66,6 @@ jobs:
 
             - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
           BODY
-          gh issue create --title "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" --label ops --template "secret-alignment.md" --body-file body.md
+          bash scripts/notify-humans.sh "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" body.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
