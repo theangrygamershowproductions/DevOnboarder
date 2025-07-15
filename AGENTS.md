@@ -22,8 +22,8 @@ This repository follows the DevOnboarder protocol. Key points:
 
 - Use the provided container setup and compose files for local development.
 - Ensure all tests pass before submitting a PR.
-    - Workflows rely on the preinstalled GitHub CLI or install it with
-      `scripts/install_gh_cli.sh`.
+    - Workflows rely on the preinstalled GitHub CLI or the
+      `ksivamuthu/actions-setup-gh-cli` action.
 
 1. **Contribution Guidelines**
 
