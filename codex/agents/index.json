@@ -97,6 +97,48 @@
       "path": ".github/workflows/security-audit.yml",
       "triggers": "Scheduled or manual run",
       "output": "Uploaded security audit report"
+    },
+    {
+      "name": "Agent.ProdOrchestrator",
+      "role": "Orchestrates production environment deployments",
+      "path": "agents/prod-orchestrator.md",
+      "triggers": "Push to main or manual dispatch",
+      "output": "Deployment job logs"
+    },
+    {
+      "name": "Agent.DevOrchestrator",
+      "role": "Orchestrates development environment deployments",
+      "path": "agents/dev-orchestrator.md",
+      "triggers": "Push to dev or manual dispatch",
+      "output": "Deployment job logs"
+    },
+    {
+      "name": "Agent.StagingOrchestrator",
+      "role": "Orchestrates staging environment deployments",
+      "path": "agents/staging-orchestrator.md",
+      "triggers": "Push to staging or manual dispatch",
+      "output": "Deployment job logs"
+    },
+    {
+      "name": "Agent.OnboardingAgent",
+      "role": "Guides new contributors through the onboarding checklist",
+      "path": "agents/onboarding-agent.md",
+      "triggers": "Contributor requests or scheduled reminders",
+      "output": "Onboarding guidance"
+    },
+    {
+      "name": "Agent.CIHelperAgent",
+      "role": "Assists with CI troubleshooting and guidance",
+      "path": "agents/ci-helper-agent.md",
+      "triggers": "Failed jobs or developer requests",
+      "output": "Diagnostic notes"
+    },
+    {
+      "name": "Agent.DiagnosticsBot",
+      "role": "Collects environment diagnostics and system health info",
+      "path": "agents/diagnostics-bot.md",
+      "triggers": "Invocation of `python -m diagnostics`",
+      "output": "System check report"
     }
   ]
 }
