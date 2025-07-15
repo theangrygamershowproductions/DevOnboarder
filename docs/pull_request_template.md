@@ -51,6 +51,7 @@ bash scripts/check_docs.sh
 - [ ] Documentation passes `bash scripts/check_docs.sh`
 - [ ] Are all Codex changes covered by tests and docs?
 - [ ] Coverage does not decrease (see CI summary)
+- [ ] This PR updates `.codex/automation-tasks.md`. I have reviewed the automation impact and notified reviewers.
 
 # Reviewer Sign-Off
 
