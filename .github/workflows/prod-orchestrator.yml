@@ -1,0 +1,27 @@
+# ---
+# codex-agent:
+#   name: Agent.ProdOrchestrator
+#   role: Orchestrates production environment deployments
+#   scope: .github/workflows/prod-orchestrator.yml
+#   triggers: Push to main or manual dispatch
+#   output: Deployment job logs
+# ---
+name: Prod Orchestrator
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run production orchestrator
+        run: bash scripts/orchestrate-prod.sh
+        env:
+          ORCHESTRATION_KEY: ${{ secrets.PROD_ORCHESTRATION_BOT_KEY }}
