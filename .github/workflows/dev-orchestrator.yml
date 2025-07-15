@@ -1,0 +1,27 @@
+# ---
+# codex-agent:
+#   name: Agent.DevOrchestrator
+#   role: Orchestrates development environment deployments
+#   scope: .github/workflows/dev-orchestrator.yml
+#   triggers: Push to dev or manual dispatch
+#   output: Deployment job logs
+# ---
+name: Dev Orchestrator
+
+on:
+  push:
+    branches: ["dev"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run dev orchestrator
+        run: bash scripts/orchestrate-dev.sh
+        env:
+          ORCHESTRATION_KEY: ${{ secrets.DEV_ORCHESTRATION_BOT_KEY }}
