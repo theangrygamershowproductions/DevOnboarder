@@ -23,6 +23,7 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 - [ ] Did Codex introduce any direct commits to `main`?
 - [ ] Are all Codex changes covered by tests and docs?
 - [ ] Coverage does not decrease (see CI summary)
+- [ ] This PR updates `.codex/automation-tasks.md`. I have reviewed the automation impact and notified reviewers.
 
 _Reviewer Sign-Off_
 - [ ] I confirm all checklist items are complete.
