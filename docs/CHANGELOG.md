@@ -20,6 +20,7 @@ All notable changes to this project will be recorded in this file.
   documented the agent index requirement in `AGENTS.md`.
 - chore(scripts): add `check-bot-permissions.sh` and `notify-humans.sh`; orchestrator workflows use them
 - Documented bot orchestration policy referencing `.codex/bot-permissions.yaml`
+- Added `docs/orchestration.md` covering multi-bot setup, API key rotation and escalation steps.
 - Documented that the `validate-yaml` step always runs even when `[no-ci]` skips
   the test job and clarified the `[no-ci]` marker in `docs/ci-workflow.md`.
 - Added `.github/.yamllint-config` to centralize workflow lint rules, disabling

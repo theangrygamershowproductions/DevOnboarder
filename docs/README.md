@@ -139,6 +139,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Agents overview](../agents/index.md) &ndash; service and integration specs.
   Codex also reads `codex/agents/index.json` to map these agents for automation.
+- [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
 - [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
 - [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
 - [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
