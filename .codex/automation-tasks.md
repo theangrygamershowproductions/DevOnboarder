@@ -32,3 +32,11 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 - When lint errors occur, Codex attempts `ruff --fix` and `pre-commit run --files`.
 - If the build still fails, the bot opens a `ci-failure` issue with logs and summaries.
 - Subsequent successful runs automatically close these issues.
+
+## Bot Orchestration
+
+All project bots must obey the permissions listed in `.codex/bot-permissions.yaml`.
+Workflows call `scripts/check-bot-permissions.sh` to verify that each bot's
+secrets and scopes match the policy. Only the orchestrator bots are allowed to
+notify humans (for example by opening issues or sending alerts). All other bots
+operate quietly and record their results in CI logs or artifacts.
