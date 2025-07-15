@@ -8,6 +8,7 @@ When the CI workflow fails, it opens or updates an issue titled `CI Failures for
 
 - `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
 - The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
+- The issue number is saved as a `ci-failure-issue` artifact so later runs update the same issue.
 
 ## Forked Pull Requests
 
