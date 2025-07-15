@@ -133,6 +133,10 @@ jobs:
                     echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
                   fi
                 fi
+            - name: Install yamllint
+              run: pip install yamllint
+            - name: Validate bot permissions
+              run: bash scripts/validate-bot-permissions.sh
             - name: Run Black
               run: black --check .
             - name: Regenerate env docs
