@@ -9,3 +9,5 @@
 **Environment:** <Relevant variables or configuration.>
 
 **Workflow:** <Step-by-step outline of how the agent operates.>
+
+**Notification:** Route alerts through `.github/workflows/notify.yml`.
