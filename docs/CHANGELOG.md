@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
   `document-start` and `truthy` and warning on lines over 200 characters.
 - Aligned yamllint invocation across scripts and CI with
   `yamllint -c .github/.yamllint-config .github/workflows/**/*.yml`.
+- fix(ci): correct YAML indentation in `Python dependency audit` step
 - Fixed indentation of Python blocks in `auto-fix.yml` to resolve YAML linting errors.
 - Added `src/diagnostics.py` with a `python -m diagnostics` entry for package
   and service health checks. CI runs the script and uploads its log.
