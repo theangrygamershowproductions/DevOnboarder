@@ -69,7 +69,7 @@ jobs:
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
             - name: Install GitHub CLI
-              run: ./scripts/install_gh_cli.sh
+              uses: ksivamuthu/actions-setup-gh-cli@v3
             - name: Show gh version
               run: which gh && gh --version
             - name: Verify gh version
