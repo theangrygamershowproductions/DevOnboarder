@@ -1,0 +1,27 @@
+# ---
+# codex-agent:
+#   name: Agent.StagingOrchestrator
+#   role: Orchestrates staging environment deployments
+#   scope: .github/workflows/staging-orchestrator.yml
+#   triggers: Push to staging or manual dispatch
+#   output: Deployment job logs
+# ---
+name: Staging Orchestrator
+
+on:
+  push:
+    branches: ["staging"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run staging orchestrator
+        run: bash scripts/orchestrate-staging.sh
+        env:
+          ORCHESTRATION_KEY: ${{ secrets.STAGING_ORCHESTRATION_BOT_KEY }}
