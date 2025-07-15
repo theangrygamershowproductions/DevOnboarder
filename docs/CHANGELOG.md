@@ -13,6 +13,7 @@ All notable changes to this project will be recorded in this file.
 
 - chore(docs): regenerate env variable docs from `.env.example` via new script
   and run it in CI before validation
+- chore(ci): add prod, staging, and dev orchestrator workflows
 
 - Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
 - Mentioned `codex/agents/index.json` alongside `agents/index.md` and
