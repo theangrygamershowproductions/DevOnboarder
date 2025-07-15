@@ -46,6 +46,10 @@ jobs:
                   echo "::error::GitHub CLI v2 or higher required" >&2
                   exit 1
                 fi
+            - name: Install PyYAML
+              run: pip install PyYAML
+            - name: Verify bot permission
+              run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
             - name: Debug token and permissions
               run: |
                 gh auth status
@@ -70,9 +74,8 @@ jobs:
                 done
                 if [ "$failed" -ne 0 ]; then
                   echo "::error::Cleanup failed"
-                  "$gh_bin" issue create --title "Cleanup CI failure issues failed" \
-                    --body "Automatic cleanup could not close one or more ci-failure issues." \
-                    --label ci-failure || true
+                  printf '%s\n' "Automatic cleanup could not close one or more ci-failure issues." > body.md
+                  bash scripts/notify-humans.sh "Cleanup CI failure issues failed" body.md || true
                   exit 1
                 fi
                 echo "Closed $closed ci-failure issues"
