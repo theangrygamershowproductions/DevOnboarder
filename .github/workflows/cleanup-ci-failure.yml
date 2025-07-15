@@ -75,7 +75,8 @@ jobs:
                 if [ "$failed" -ne 0 ]; then
                   echo "::error::Cleanup failed"
                   printf '%s\n' "Automatic cleanup could not close one or more ci-failure issues." > body.md
-                  bash scripts/notify-humans.sh "Cleanup CI failure issues failed" body.md || true
+                  jq -Rs --arg title "Cleanup CI failure issues failed" '{title:$title,body:.}' body.md > notify.json
+                  gh workflow run notify.yml -f data="$(cat notify.json)" || true
                   exit 1
                 fi
                 echo "Closed $closed ci-failure issues"

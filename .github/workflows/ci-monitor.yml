@@ -63,4 +63,5 @@ jobs:
           GH_TOKEN: ${{ secrets.CI_ISSUE_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           printf '%s\n' "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}. Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > body.md
-          bash scripts/notify-humans.sh "\ud83d\udea8 CI Rate Limit Exceeded" body.md
+          jq -Rs --arg title "\ud83d\udea8 CI Rate Limit Exceeded" '{title:$title,body:.}' body.md > notify.json
+          gh workflow run notify.yml -f data="$(cat notify.json)"
