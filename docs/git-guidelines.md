@@ -97,4 +97,4 @@ pytest --cov=src --cov-fail-under=95
     failures locally. Run `pre-commit run pytest --all-files` once to enable it.
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
-- Follow the pull request template in `docs/pull_request_template.md`.
+- Follow the pull request template in `.github/pull_request_template.md`.

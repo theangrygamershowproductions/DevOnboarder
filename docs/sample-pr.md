@@ -17,7 +17,7 @@ This guide demonstrates a minimal documentation update using the project workflo
 
    * run `bash scripts/check_docs.sh`
    * add a changelog entry in `docs/CHANGELOG.md`
-   * see [docs/pull_request_template.md](pull_request_template.md) for the full checklist
-4. Commit your work and open a pull request using `docs/pull_request_template.md`.
+   * see [.github/pull_request_template.md](../.github/pull_request_template.md) for the full checklist
+4. Commit your work and open a pull request using `.github/pull_request_template.md`.
 
 Use this example as a reference when submitting your first contribution.
