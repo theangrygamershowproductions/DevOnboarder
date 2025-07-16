@@ -1,0 +1,29 @@
+name: Audit Retrospective Action Items
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for unresolved action items
+        id: check
+        run: |
+          UNRESOLVED=$(grep -r "^\- \[ \]" docs/checklists/retros/*.md || true)
+          if [ -n "$UNRESOLVED" ]; then
+            echo "unresolved_actions=$UNRESOLVED" >> "$GITHUB_OUTPUT"
+          else
+            echo "unresolved_actions=None" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create issue for unresolved actions
+        if: steps.check.outputs.unresolved_actions != 'None'
+        run: |
+          OWNERS=$(echo "${{ steps.check.outputs.unresolved_actions }}" | grep -oE "@[A-Za-z0-9_-]+" | sort -u | tr '\n' ' ')
+          gh issue create \
+            --title "Unresolved Retrospective Action Items" \
+            --body "The following action items remain open:\n\n${{ steps.check.outputs.unresolved_actions }}\n\nCC: $OWNERS" \
+            --label "auto:created,retrospective"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
