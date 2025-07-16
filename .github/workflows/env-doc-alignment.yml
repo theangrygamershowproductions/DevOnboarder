@@ -56,7 +56,7 @@ jobs:
         run: pip install PyYAML
       - name: Verify bot permission
         if: steps.check.outputs.success == 'false'
-        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
+        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
       - name: Create issue
         if: steps.check.outputs.success == 'false'
         run: |

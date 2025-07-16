@@ -39,7 +39,7 @@ jobs:
       - name: Install PyYAML
         run: pip install PyYAML
       - name: Verify bot permission
-        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
+        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
       - name: Process notification
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
