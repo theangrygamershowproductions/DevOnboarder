@@ -100,29 +100,30 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     Codex reads the machine‑readable list in `codex/agents/index.json` to
     coordinate automation across these agents.
 18. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
-19. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
+19. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
+20. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
-20. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
+21. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
     outlining contributor ethics and a simple template.
-21. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+22. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
-22. See [docs/network-exception-list.md](docs/network-exception-list.md)
+23. See [docs/network-exception-list.md](docs/network-exception-list.md)
     for required firewall domains. Run
     `scripts/show_network_exceptions.sh` to print them.
-23. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
+24. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
     if CI automation fails to create or close `ci-failure` issues.
-24. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
+25. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
     and open an issue with the
     [Engineer Assessment template](.github/ISSUE_TEMPLATE/assessment.md)
     during onboarding reviews to ensure new features meet the checklist.
-25. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
+26. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
     services interact inside the TAGS stack.
-26. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
+27. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
     steps and feature flag usage.
 
-27. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
+28. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
 
 These files expand on the steps listed in the Quickstart section.
 
