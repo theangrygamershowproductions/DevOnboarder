@@ -50,6 +50,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 ## Language Versions
 
 `scripts/setup-env.sh` pulls the `ghcr.io/openai/codex-universal` image to provide a unified runtime.
+When Docker isn't available, the script installs Python 3.12 using `mise` or `asdf` before creating a virtual environment.
 
 | Language | Version |
 | --- | --- |
