@@ -29,7 +29,30 @@ else
     if [ -z "${CI:-}" ]; then
         echo "Docker not usable, falling back to local setup"
     fi
-    python3 -m venv venv
+
+    py_cmd="python3"
+    if ! python3 --version 2>/dev/null | grep -q "3.12"; then
+        if command -v python3.12 >/dev/null 2>&1; then
+            py_cmd="python3.12"
+        elif command -v mise >/dev/null 2>&1; then
+            echo "Installing Python 3.12 via mise..."
+            mise install python >/dev/null
+            eval "$(mise env)"
+            py_cmd="$(which python3)"
+        elif command -v asdf >/dev/null 2>&1; then
+            echo "Installing Python 3.12 via asdf..."
+            asdf install python 3.12 || true
+            asdf global python 3.12
+            py_cmd="$(asdf which python3)"
+        fi
+    fi
+
+    if ! "$py_cmd" --version 2>/dev/null | grep -q "3.12"; then
+        echo "Python 3.12 is required. Install it with mise or asdf." >&2
+        exit 1
+    fi
+
+    "$py_cmd" -m venv venv
     source venv/bin/activate
     python -m pip install --upgrade pip
     if [ -f requirements-dev.txt ]; then
