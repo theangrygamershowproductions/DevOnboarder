@@ -17,6 +17,9 @@ Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 * See [../.codex/Agents.md](../.codex/Agents.md) for agent documentation requirements and notification rules.
 * Review [checklists/continuous-improvement.md](checklists/continuous-improvement.md) during retrospectives.
 
+### Sending Notifications
+Use `gh workflow run notify.yml -f data='{"title":"<title>","body":"<body>"}'`.
+
 ## Requesting a Codex QA Assessment
 
 * **To trigger a full QA sweep:** Simply comment
