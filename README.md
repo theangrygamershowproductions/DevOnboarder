@@ -69,7 +69,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 
 1. Read [docs/README.md](docs/README.md) for development tips and setup details.
 2. Follow [docs/git-guidelines.md](docs/git-guidelines.md) for branch and commit policies.
-3. Use [docs/pull_request_template.md](docs/pull_request_template.md) when opening a pull request.
+3. Use [.github/pull_request_template.md](.github/pull_request_template.md) when opening a pull request.
 4. Run `bash scripts/install_commit_msg_hook.sh`
    or see [CONTRIBUTING.md](CONTRIBUTING.md) to install the commit-msg hook.
 5. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
