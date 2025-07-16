@@ -34,6 +34,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | CHECK_HEADERS_URL             | Endpoint used by header checks (default `http://localhost:8002/api/user`) |
 | CORS_ALLOW_ORIGINS            | Comma-separated list of allowed CORS origins |
 | DATABASE_URL                  | Postgres connection string |
+| DEV_ORCHESTRATION_BOT_KEY     | Secret token for development orchestrator |
 | DISCORD_API_TIMEOUT           | HTTP timeout in seconds for Discord API calls |
 | DISCORD_BOT_TOKEN             | Token for the Discord bot |
 | DISCORD_CLIENT_ID             | Discord application client ID |
@@ -52,6 +53,8 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | MILITARY_ROLE_ID              | Role for military members |
 | MODERATOR_ROLE_ID             | Discord role for moderators |
 | OWNER_ROLE_ID                 | Discord role for system owner |
+| PROD_ORCHESTRATION_BOT_KEY    | Secret token for production orchestrator |
+| STAGING_ORCHESTRATION_BOT_KEY | Secret token for staging orchestrator |
 | TAGS_MODE                     | Expect TAGS services when `true` |
 | TEAMS_APP_ID                  | Azure app ID for the Teams integration |
 | TEAMS_APP_PASSWORD            | Secret used to authenticate the Teams app |
