@@ -11,7 +11,7 @@ jobs:
       - name: Check for unresolved action items
         id: check
         run: |
-          UNRESOLVED=$(grep -r "^\- \[ \]" docs/checklists/retros/*.md || true)
+          UNRESOLVED=$(python scripts/parse_retro_actions.py || true)
           if [ -n "$UNRESOLVED" ]; then
             echo "unresolved_actions=$UNRESOLVED" >> "$GITHUB_OUTPUT"
           else
@@ -20,7 +20,7 @@ jobs:
       - name: Create issue for unresolved actions
         if: steps.check.outputs.unresolved_actions != 'None'
         run: |
-          OWNERS=$(echo "${{ steps.check.outputs.unresolved_actions }}" | grep -oE "@[A-Za-z0-9_-]+" | sort -u | tr '\n' ' ')
+          OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
           gh issue create \
             --title "Unresolved Retrospective Action Items" \
             --body "The following action items remain open:\n\n${{ steps.check.outputs.unresolved_actions }}\n\nCC: $OWNERS" \
