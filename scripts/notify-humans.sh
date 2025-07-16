@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Create an issue or comment to escalate an event.
-# Usage: notify-humans.sh <title> <body-file> [issue-number]
+# Deprecated wrapper that routes notifications through the notify.yml workflow.
+# Usage: notify-humans.sh <title> <body-file>
 # Requires GH_TOKEN environment variable and the gh CLI.
 
 TITLE="${1:-}"
 BODY_FILE="${2:-}"
-ISSUE="${3:-}"
 
 if [ -z "$TITLE" ] || [ -z "$BODY_FILE" ]; then
-  echo "Usage: $0 <title> <body-file> [issue-number]" >&2
+  echo "Usage: $0 <title> <body-file>" >&2
   exit 1
 fi
 
@@ -24,10 +23,11 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 1
 fi
 
-if [ -n "$ISSUE" ]; then
-  gh issue comment "$ISSUE" --body-file "$BODY_FILE"
-else
-  gh issue create --title "$TITLE" --body-file "$BODY_FILE" --label ops
+if ! command -v jq >/dev/null 2>&1; then
+  echo "jq not installed" >&2
+  exit 1
 fi
 
-echo "Notification sent"
+DATA=$(jq -n --arg title "$TITLE" --arg body "$(cat "$BODY_FILE")" '{title:$title, body:$body}')
+gh workflow run notify.yml -f data="$DATA"
+echo "Notification dispatched via notify.yml"
