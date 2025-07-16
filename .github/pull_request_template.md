@@ -27,3 +27,8 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 
 _Reviewer Sign-Off_
 - [ ] I confirm all checklist items are complete.
+
+## Continuous Improvement Checklist
+
+- [ ] `docs/checklists/continuous-improvement.md` reviewed and all items checked
+- [ ] Relevant retrospective updated under `docs/checklists/retros/`
