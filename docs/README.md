@@ -159,7 +159,7 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; run `scripts/check_network_access.sh` to verify connectivity.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
-- [Pull request template](pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Pull request template](../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
 - [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
 - [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
 - [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
