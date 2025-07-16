@@ -56,12 +56,14 @@ jobs:
         run: pip install PyYAML
       - name: Verify bot permission
         if: steps.check.outputs.hit == 'true'
-        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
+        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
       - name: Open issue on rate-limit
         if: steps.check.outputs.hit == 'true'
         env:
           GH_TOKEN: ${{ secrets.CI_ISSUE_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          printf '%s\n' "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}. Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > body.md
+          printf '%s\n' \
+            "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}." \
+            "Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > body.md
           jq -Rs --arg title "\ud83d\udea8 CI Rate Limit Exceeded" '{title:$title,body:.}' body.md > notify.json
           gh workflow run notify.yml -f data="$(cat notify.json)"

@@ -22,7 +22,7 @@ jobs:
         run: pip install PyYAML
       - name: Verify bot permission
         if: steps.check.outputs.unresolved_actions != 'None'
-        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
+        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
       - name: Notify unresolved actions
         if: steps.check.outputs.unresolved_actions != 'None'
         env:
