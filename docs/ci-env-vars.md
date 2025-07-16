@@ -15,6 +15,9 @@ values when running CI jobs locally or configuring new workflows.
 | `NPM_TOKEN` | GitHub Actions secret | `publish` (npm) | Authenticate `npm
   publish` when releasing packages | Not currently used but reserved for future
   publishing steps |
+| `DEV_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the dev orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
+| `STAGING_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the staging orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
+| `PROD_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the production orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
 | `VALE_VERSION` | Workflow `env` block or local environment | n/a | Choose the
   Vale linter version for docs checks | Defaults to `3.12.0` |
 | `TRIVY_VERSION` | Workflow `env` block | n/a | Selects the Trivy version for
