@@ -808,3 +808,4 @@ All notable changes to this project will be recorded in this file.
 - Added a `fastapi` check to `scripts/check_dependencies.sh` so tests fail fast when runtime dependencies are missing.
 - `scripts/run_tests.sh` validates dependencies with `pip check` after installing dev requirements and again after installing the project.
 - Replaced custom GitHub CLI script with the `ksivamuthu/actions-setup-gh-cli` action and updated documentation.
+- Added known error learning loop and review workflow.
