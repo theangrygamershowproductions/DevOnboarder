@@ -76,18 +76,20 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
     Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
-19. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
+19. Lint shell scripts with `shellcheck scripts/*.sh`.
 
-20. CI posts a coverage summary on pull requests. Run
+20. Run `bash scripts/check_dependencies.sh` to verify Jest, Vitest, and Vale are installed.
+
+21. CI posts a coverage summary on pull requests. Run
     `python scripts/post_coverage_comment.py` to generate the table locally.
-21. Append the coverage numbers to a Markdown file with
+22. Append the coverage numbers to a Markdown file with
     `bash scripts/append_coverage_summary.sh`. Set the following
     environment variables before running the script:
     `COVERED_LINES`, `TOTAL_LINES`, `COVERAGE_PERCENT`,
     `COVERED_BRANCHES`, `TOTAL_BRANCHES`, and `BRANCH_PERCENT`.
     Pass an optional output filename as the first argument
     (defaults to `summary.md`).
-22. Install the GitHub CLI from <https://cli.github.com/> if you plan to run
+23. Install the GitHub CLI from <https://cli.github.com/> if you plan to run
     scripts that use `gh` locally.
 
 The compose files define common service settings using YAML anchors. Each
