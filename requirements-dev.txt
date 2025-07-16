@@ -10,3 +10,4 @@ language-tool-python==2.9.4  # LTS as of 2025-06
 pip-audit==2.9.0  # LTS as of 2025-06
 mypy==1.16.1  # LTS as of 2025-06
 bandit==1.8.6  # LTS as of 2025-06
+shellcheck-py==0.10.0.1
