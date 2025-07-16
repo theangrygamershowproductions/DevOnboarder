@@ -1,0 +1,9 @@
+- error_code: ERR001
+  error_message: "ModuleNotFoundError: No module named 'foo'"
+  solution: "pip install foo"
+  context: "Occurs when the optional 'foo' dependency is missing"
+  date_added: "2024-01-01"
+  resolved_by: "maintainers"
+  hits: 0
+  tags:
+    - python
