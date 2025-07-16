@@ -190,6 +190,19 @@ Add yourself to [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md) or
 [../FOUNDERS.md](../FOUNDERS.md) when you participate. These logs help us track
 who has contributed and when.
 
+## Retrospectives
+
+Run `scripts/create-retro-file.sh` whenever you start a new retrospective. It
+copies `docs/checklists/retrospective-template.md` into
+`docs/checklists/retros/` using today's date for the filename.
+
+```bash
+bash scripts/create-retro-file.sh
+```
+
+If a file with the same date already exists, the script prints an error and
+exits so duplicates are not created.
+
 ## Configuration Helpers
 
 - `.pre-commit-config.yaml` &ndash; run `pre-commit install` to set up git hooks that execute the linter and tests.
