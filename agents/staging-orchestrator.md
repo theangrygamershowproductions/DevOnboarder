@@ -17,7 +17,7 @@ codex-agent:
 
 **Outputs:** Logs confirming the orchestration request.
 
-**Environment:** Requires `STAGING_ORCHESTRATION_BOT_KEY` provided as `ORCHESTRATION_KEY`.
+**Environment:** Requires `STAGING_ORCHESTRATION_BOT_KEY` provided as `ORCHESTRATION_KEY`. Optionally set `ORCHESTRATOR_URL` (default `https://orchestrator.example.com`).
 
 **Workflow:** The workflow calls `scripts/orchestrate-staging.sh`, which POSTs to the orchestration service.
 

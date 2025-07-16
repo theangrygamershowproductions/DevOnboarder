@@ -17,6 +17,12 @@ Each bot uses a dedicated token stored in GitHub Actions secrets. The
 `check-bot-permissions.sh` script verifies that permissions match the policy
 before workflows run.
 
+## Orchestrator URL
+
+The orchestration scripts reference an `ORCHESTRATOR_URL` environment variable.
+Workflows set this variable when invoking the scripts. If not provided, the
+scripts default to `https://orchestrator.example.com`.
+
 ## API Key Management
 
 1. Store each bot token as a separate secret in GitHub.
