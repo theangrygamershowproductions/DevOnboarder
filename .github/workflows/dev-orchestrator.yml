@@ -32,3 +32,4 @@ jobs:
         run: bash scripts/orchestrate-dev.sh
         env:
           ORCHESTRATION_KEY: ${{ secrets.DEV_ORCHESTRATION_BOT_KEY }}
+          ORCHESTRATOR_URL: https://orchestrator.example.com
