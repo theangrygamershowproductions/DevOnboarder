@@ -14,6 +14,8 @@ Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
   [tags_integration.md](tags_integration.md) for compose templates. Set
   `IS_ALPHA_USER` or `IS_FOUNDER` in `.env.dev` when running within the TAGS
   stack to expose early-access endpoints.
+* See [../.codex/Agents.md](../.codex/Agents.md) for agent documentation requirements and notification rules.
+* Review [checklists/continuous-improvement.md](checklists/continuous-improvement.md) during retrospectives.
 
 ## Requesting a Codex QA Assessment
 
