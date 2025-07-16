@@ -15,6 +15,8 @@ All notable changes to this project will be recorded in this file.
 - chore(ci): add permissions validation workflow
 - chore(scripts): parse retrospective actions via new Python utility
 
+- chore(scripts): deprecate `notify-humans.sh` in favor of the `notify.yml` workflow
+
 - chore(codex): record bot secrets and permissions in `.codex/bot-permissions.yaml`
 
 - chore(docs): regenerate env variable docs from `.env.example` via new script
