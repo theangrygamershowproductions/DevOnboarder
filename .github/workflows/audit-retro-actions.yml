@@ -17,13 +17,24 @@ jobs:
           else
             echo "unresolved_actions=None" >> "$GITHUB_OUTPUT"
           fi
-      - name: Create issue for unresolved actions
+      - name: Install PyYAML
         if: steps.check.outputs.unresolved_actions != 'None'
+        run: pip install PyYAML
+      - name: Verify bot permission
+        if: steps.check.outputs.unresolved_actions != 'None'
+        run: bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"
+      - name: Notify unresolved actions
+        if: steps.check.outputs.unresolved_actions != 'None'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
-          gh issue create \
-            --title "Unresolved Retrospective Action Items" \
-            --body "The following action items remain open:\n\n${{ steps.check.outputs.unresolved_actions }}\n\nCC: $OWNERS" \
-            --label "auto:created,retrospective"
-        env:
-          GITHUB_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
+          cat > body.md <<'BODY'
+          The following action items remain open:
+
+          ${{ steps.check.outputs.unresolved_actions }}
+
+          CC: $OWNERS
+          BODY
+          jq -Rs --arg title "Unresolved Retrospective Action Items" '{title:$title,body:.}' body.md > notify.json
+          gh workflow run notify.yml -f data="$(cat notify.json)"
