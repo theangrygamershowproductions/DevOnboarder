@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+- chore(ci): route retrospective alerts through notify workflow
 - docs(ci): outline CI enforcement tasks in `.codex/automation-tasks.md`
 - docs(pr-template): add Codex policy checklist bullet to PR templates
 - docs(retros): introduce retrospective framework and audit workflow
