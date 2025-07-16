@@ -6,6 +6,7 @@ Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pu
 - [ ] Lint, type, and security checks succeed
 - [ ] Commit messages follow our conventions
 - [ ] Pre-commit hooks are installed and run
+- [ ] Shell scripts pass `shellcheck`
 
 ## CI/CD & Test Coverage
 - [ ] All test suites pass
