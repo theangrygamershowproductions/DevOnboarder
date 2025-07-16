@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - chore(ci): reuse saved ci-failure issue number across runs
 - chore(ci): validate `.codex/bot-permissions.yaml` via new script
 - chore(ci): add permissions validation workflow
+- chore(scripts): parse retrospective actions via new Python utility
 
 - chore(codex): record bot secrets and permissions in `.codex/bot-permissions.yaml`
 
