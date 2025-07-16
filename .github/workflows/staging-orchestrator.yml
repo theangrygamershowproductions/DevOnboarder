@@ -32,3 +32,4 @@ jobs:
         run: bash scripts/orchestrate-staging.sh
         env:
           ORCHESTRATION_KEY: ${{ secrets.STAGING_ORCHESTRATION_BOT_KEY }}
+          ORCHESTRATOR_URL: https://orchestrator.example.com
