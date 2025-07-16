@@ -19,3 +19,6 @@ The hook prevents bad commit messages from reaching CI. See
 [docs/git-guidelines.md](docs/git-guidelines.md) for style rules and
 [docs/README.md](docs/README.md) for environment setup tips.
 See [docs/dependencies.md](docs/dependencies.md) for the Dependabot update workflow.
+
+See [.codex/Agents.md](.codex/Agents.md) for agent YAML guidelines and notification rules.
+Refer to [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) during each retrospective.
