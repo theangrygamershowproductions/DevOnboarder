@@ -815,3 +815,4 @@ All notable changes to this project will be recorded in this file.
 - `scripts/run_tests.sh` validates dependencies with `pip check` after installing dev requirements and again after installing the project.
 - Replaced custom GitHub CLI script with the `ksivamuthu/actions-setup-gh-cli` action and updated documentation.
 - Added known error learning loop and review workflow.
+- Documented `DEV_ORCHESTRATION_BOT_KEY`, `STAGING_ORCHESTRATION_BOT_KEY`, and `PROD_ORCHESTRATION_BOT_KEY` in `docs/ci-env-vars.md`.
