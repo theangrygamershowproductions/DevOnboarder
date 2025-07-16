@@ -13,7 +13,7 @@ This repository follows the DevOnboarder protocol. Key points:
 
 - General onboarding instructions: `docs/README.md`.
 - Git guidelines: `docs/git-guidelines.md`.
-- Pull request template: `docs/pull_request_template.md`.
+- Pull request template: `.github/pull_request_template.md`.
 - Maintainer merge checklist: `docs/merge-checklist.md`.
 - Project changelog: `docs/CHANGELOG.md`.
 - Offline setup instructions: `docs/offline-setup.md`.

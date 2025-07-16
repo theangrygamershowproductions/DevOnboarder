@@ -1,6 +1,6 @@
 # QA Checklist
 
-Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pull request template](pull_request_template.md).
+Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pull request template](../.github/pull_request_template.md).
 
 ## Architecture & Code Quality
 - [ ] Lint, type, and security checks succeed
