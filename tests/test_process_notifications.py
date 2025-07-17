@@ -27,7 +27,14 @@ def test_process_notifications_adds_comment(tmp_path, monkeypatch):
 
     def fake_run(cmd, capture_output=False, text=False, check=True):
         if "list" in cmd:
-            return subprocess.CompletedProcess(cmd, 0, stdout=json.dumps([{"number": 42, "title": "Operations Notifications"}]), stderr="")
+            return subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout=json.dumps([
+                    {"number": 42, "title": "Operations Notifications"}
+                ]),
+                stderr="",
+            )
         if "comment" in cmd:
             calls.append(cmd)
             return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
