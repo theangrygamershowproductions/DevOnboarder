@@ -56,7 +56,7 @@ jobs:
                 gh api rate_limit
                 gh issue list --label ci-failure --state open | awk '{print $1}'
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               continue-on-error: true
 
             - name: Close ci-failure issues
@@ -81,4 +81,4 @@ jobs:
                 fi
                 echo "Closed $closed ci-failure issues"
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
