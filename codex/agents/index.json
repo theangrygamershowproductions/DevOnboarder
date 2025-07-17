@@ -146,6 +146,13 @@
       "path": "agents/diagnostics-bot.md",
       "triggers": "Invocation of `python -m diagnostics`",
       "output": "System check report"
+    },
+    {
+      "name": "Agent.EnvVarManager",
+      "role": "Audits and synchronizes environment variables across projects",
+      "path": "agents/envvar-manager.md",
+      "triggers": "Workflow runs, scheduled checks, or manual dispatch",
+      "output": "Updated `.env.example` files or issues for misaligned variables"
     }
   ]
 }
