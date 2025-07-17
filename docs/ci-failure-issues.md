@@ -1,14 +1,12 @@
 # Managing CI Failure Issues
 
-When the CI workflow fails, it opens or updates an issue titled `CI Failures for
-<sha>` with a summary of the failing tests. The workflow closes all open
-`ci-failure` issues once any CI run succeeds.
+When the CI workflow fails, it opens or updates an issue titled `CI Failure: PR #<number>` with a summary of the failing tests. The commit SHA is stored as an HTML comment in the issue body for reference. The workflow closes all open `ci-failure` issues once any CI run succeeds.
 
 ## Automatic Cleanup
 
 - `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
 - The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
-- The issue number is saved as a `ci-failure-issue` artifact so later runs update the same issue.
+- The issue number is saved to `ci_failure_issue.txt` and uploaded as a `ci-failure-issue` artifact so later runs update the same issue.
 
 ## Forked Pull Requests
 
