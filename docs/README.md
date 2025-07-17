@@ -257,8 +257,9 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 3. Use the pull request template and ensure the checklist passes.
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
-6. When CI fails, an issue titled `CI Failures for <sha>` is opened or updated
-   with a summary of the failing tests and links to the artifacts.
+6. When CI fails on a pull request, an issue titled `CI Failure: PR #<number>`
+   is opened or updated with a summary of the failing tests. The commit SHA is
+   stored in the issue body as a comment for reference.
 7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write`
    permission. When the pipeline succeeds, it closes every open `ci-failure`
    issue.

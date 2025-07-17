@@ -430,33 +430,28 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Create or update CI failure issue
-              if: always()
+              if: always() && github.event_name == 'pull_request'
               id: ci_failure
               run: |
                   set -euo pipefail
-                  printf '\n' >> summary.md
+                  printf '\n<!-- sha: %s -->\n' "$GITHUB_SHA" >> summary.md
                   cat audit.md >> summary.md
                   gh_bin=$(which gh)
                   "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
                   ISSUE_FILE=ci_failure_issue.txt
+                  ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
                   if [ -f "$ISSUE_FILE" ]; then
                       ISSUE=$(cat "$ISSUE_FILE")
                       echo "Using saved issue number $ISSUE" | tee -a gh_cli.log
                       "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                   else
-                      search_query="label:ci-failure ${{ github.sha }} in:title,body"
-                      echo "Searching with: $search_query" | tee -a gh_cli.log
-                      set +e
-                      search_output=$($gh_bin issue list --state open --search "$search_query" 2>&1 | tee -a gh_cli.log)
-                      list_exit=${PIPESTATUS[0]}
-                      set -e
+                      echo "Searching for existing issue" | tee -a gh_cli.log
+                      search_output=$($gh_bin issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log)
                       ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
-                      echo "Search exit code: $list_exit" | tee -a gh_cli.log
-                      if [ "$list_exit" -eq 0 ] && [ -n "$ISSUE" ]; then
+                      if [ -n "$ISSUE" ]; then
                           "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                       else
-                          echo "::warning::Issue search failed or returned no results" | tee -a gh_cli.log
-                          ISSUE_URL=$($gh_bin issue create --title "CI Failures for ${{ github.sha }}" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
+                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
                           ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                       fi
                   fi
@@ -464,10 +459,10 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number
-              if: failure()
+              if: failure() && github.event_name == 'pull_request'
               run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
             - name: Upload CI failure issue number
-              if: failure()
+              if: failure() && github.event_name == 'pull_request'
               uses: actions/upload-artifact@v4
               with:
                   name: ci-failure-issue
