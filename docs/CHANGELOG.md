@@ -10,6 +10,8 @@ All notable changes to this project will be recorded in this file.
 - docs(retros): introduce retrospective framework and audit workflow
 - docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
 
+- docs(env): document `CI_BOT_TOKEN` variable
+
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
 - chore(ci): track CI failure issues by PR number and store the commit SHA in the issue body
