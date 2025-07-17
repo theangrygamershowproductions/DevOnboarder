@@ -134,6 +134,13 @@
       "output": "Diagnostic notes"
     },
     {
+      "name": "Agent.CIBot",
+      "role": "Manages CI failure issues",
+      "path": "agents/ci-bot.md",
+      "triggers": "Failed CI runs and nightly cleanup",
+      "output": "CI failure issues"
+    },
+    {
       "name": "Agent.DiagnosticsBot",
       "role": "Collects environment diagnostics and system health info",
       "path": "agents/diagnostics-bot.md",

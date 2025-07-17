@@ -16,6 +16,7 @@ how it fits into the workflow.
 - [Staging Orchestrator](staging-orchestrator.md)
 - [Onboarding Agent](onboarding-agent.md)
 - [CI Helper Agent](ci-helper-agent.md)
+- [CI Bot](ci-bot.md)
 - [Diagnostics Bot](diagnostics-bot.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
