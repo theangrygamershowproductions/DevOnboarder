@@ -22,7 +22,13 @@ def test_append_closed_issue(tmp_path, monkeypatch):
         return subprocess.CompletedProcess(
             cmd,
             0,
-            stdout=json.dumps({"title": "Fix bug", "body": "details", "state": "closed"}),
+            stdout=json.dumps(
+                {
+                    "title": "Fix bug",
+                    "body": "details",
+                    "state": "closed",
+                }
+            ),
             stderr="",
         )
 
