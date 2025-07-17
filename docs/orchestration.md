@@ -22,6 +22,8 @@ before workflows run.
 The orchestration scripts reference an `ORCHESTRATOR_URL` environment variable.
 Workflows set this variable when invoking the scripts. If not provided, the
 scripts default to `https://orchestrator.example.com`.
+The workflows also supply an `ORCHESTRATION_KEY` secret token used for
+authentication.
 
 ## API Key Management
 
