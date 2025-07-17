@@ -50,11 +50,17 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | IS_FOUNDER                    | Enable founder-only routes |
 | JWT_ALGORITHM                 | Algorithm for JWT signing (default `HS256`) |
 | JWT_SECRET_KEY                | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
+| JSON_OUTPUT                   | Path to write audit_env_vars JSON summary |
 | LLAMA2_API_KEY                | API key for accessing the Llama2 service |
 | LLAMA2_API_TIMEOUT            | HTTP timeout in seconds for Llama2 API calls |
+| LLAMA2_URL                    | Base URL for the Llama2 API |
 | MILITARY_ROLE_ID              | Role for military members |
 | MODERATOR_ROLE_ID             | Discord role for moderators |
 | OWNER_ROLE_ID                 | Discord role for system owner |
+| OFFLINE_BADGE                  | Set to `1` to skip coverage badge generation |
+| OPENAI_API_KEY                 | Token for OpenAI requests |
+| ORCHESTRATION_KEY              | Secret used by orchestration scripts |
+| ORCHESTRATOR_URL               | Base URL for orchestration service |
 | PROD_ORCHESTRATION_BOT_KEY    | Secret token for production orchestrator |
 | STAGING_ORCHESTRATION_BOT_KEY | Secret token for staging orchestrator |
 | CI_BOT_TOKEN                  | GitHub token used by the CI bot |
