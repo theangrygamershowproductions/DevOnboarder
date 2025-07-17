@@ -67,3 +67,11 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 - Documentation for each agent lives under `/agents` and begins with a `codex-agent` YAML header.
 - Every agent must be listed in `codex/agents/index.json` and permissions are defined in `.codex/bot-permissions.yaml`.
 - CI regenerates environment variable tables with `scripts/regenerate_env_docs.py` and validates them with `scripts/check_env_docs.py`.
+
+## EnvVar Manager Integration
+
+- EnvVar Manager agent audits all ENVARS used in code, workflows, and agent docs.
+- Ensures .env.example files are present and correct in each project directory.
+- Notifies through `.github/workflows/notify.yml`.
+- Escalates via GitHub Issue if misalignment persists >24h.
+- Follows agent doc at agents/envvar-manager.md.
