@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
+- chore(ci): track CI failure issues by PR number and store the commit SHA in the issue body
 - chore(ci): validate `.codex/bot-permissions.yaml` via new script
 - chore(ci): add permissions validation workflow
 - chore(scripts): parse retrospective actions via new Python utility
