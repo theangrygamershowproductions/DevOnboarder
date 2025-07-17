@@ -821,3 +821,4 @@ All notable changes to this project will be recorded in this file.
 - Documented `DEV_ORCHESTRATION_BOT_KEY`, `STAGING_ORCHESTRATION_BOT_KEY`, and `PROD_ORCHESTRATION_BOT_KEY` in `docs/ci-env-vars.md`.
 - Added CI Bot agent documentation and updated agent index.
 - Added CI Bot metadata to codex agent index.
+- Introduced the CI Bot and updated workflows to route automation through it.
