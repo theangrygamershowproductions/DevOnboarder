@@ -18,6 +18,7 @@ how it fits into the workflow.
 - [CI Helper Agent](ci-helper-agent.md)
 - [CI Bot](ci-bot.md)
 - [Diagnostics Bot](diagnostics-bot.md)
+- [EnvVar Manager](envvar-manager.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 ## Required Environment Variables

@@ -28,3 +28,10 @@ orchestration_bot:
     - workflows: write
     - deployments: read
     - repository: read
+envvar_manager:
+  secret: ENVVAR_MANAGER_TOKEN
+  permissions:
+    - contents: read
+    - contents: write
+    - issues: write
+    - pull_requests: write
