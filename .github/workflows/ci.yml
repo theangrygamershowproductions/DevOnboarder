@@ -376,12 +376,12 @@ jobs:
                   gh_bin=$(which gh)
                   "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Update coverage badge
               run: python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
                   git config user.name "${{ github.actor }}"
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
@@ -417,7 +417,7 @@ jobs:
                   gh_bin=$(which gh)
                   "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
               if: always()
               run: python scripts/summarize_ci_failures.py
@@ -428,7 +428,7 @@ jobs:
               if: always()
               run: bash scripts/download_ci_failure_issue.sh
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Create or update CI failure issue
               if: always() && github.event_name == 'pull_request'
               id: ci_failure
@@ -451,13 +451,14 @@ jobs:
                       if [ -n "$ISSUE" ]; then
                           "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                       else
-                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
+                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure --assignee "$CI_BOT_USERNAME" | tee -a gh_cli.log)
                           ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                       fi
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  CI_BOT_USERNAME: ${{ vars.CI_BOT_USERNAME }}
             - name: Save CI failure issue number
               if: failure() && github.event_name == 'pull_request'
               run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
@@ -478,7 +479,7 @@ jobs:
                     "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log
                   done
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Upload CI logs
               if: always()
               uses: actions/upload-artifact@v4
