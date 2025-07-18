@@ -48,9 +48,10 @@ Attach the `audit.md` output to CI failure issues so maintainers can quickly spo
 ## Automated Audit Step
 
 CI runs `scripts/ci_log_audit.py` whenever a job fails. The script searches the
-log for common error patterns such as `Traceback`, `npm ERR`, `ERROR`, and
-`FAIL`. It counts how many times each line appears and writes the results to
-`audit.md`.
+log for common error patterns such as `Traceback`, `AssertionError`,
+`ModuleNotFoundError`, `npm ERR`, and `yarn` failures. It includes the preceding
+step name for each match, counts how many times a line appears, and writes the
+results to `audit.md`.
 
 The workflow uploads `audit.md` with the job logs and appends its contents to
 the failure issue. The file begins with `# CI Log Audit` followed by lines
