@@ -836,3 +836,4 @@ All notable changes to this project will be recorded in this file.
 - Added CI Bot metadata to codex agent index.
 - Introduced the CI Bot and updated workflows to route automation through it.
 - docs(env): document `ONBOARDING_AGENT_KEY`, `CI_HELPER_AGENT_KEY`, and `ENV_VAR_MANAGER_KEY` secrets
+- chore(ci): log closed issue numbers in `cleanup-ci-failure.yml`
