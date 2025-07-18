@@ -3,6 +3,7 @@
 All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
+
 - chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 - chore(ci): validate bot permissions with `list-bots.py`
 - chore(ci): route retrospective alerts through notify workflow
@@ -838,5 +839,8 @@ All notable changes to this project will be recorded in this file.
 - Added CI Bot metadata to codex agent index.
 - Introduced the CI Bot and updated workflows to route automation through it.
 - docs(env): document `ONBOARDING_AGENT_KEY`, `CI_HELPER_AGENT_KEY`, and `ENV_VAR_MANAGER_KEY` secrets
+- Expanded `ci_log_audit.py` patterns to catch `AssertionError`, `ModuleNotFoundError`,
+  and common Node/Yarn failures. The script now includes the preceding step name
+  in its output for easier debugging.
 - chore(ci): log closed issue numbers in `cleanup-ci-failure.yml`
 - docs(ci): add CI resilience hardening prompt for AutoFix
