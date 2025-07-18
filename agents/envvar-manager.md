@@ -37,3 +37,24 @@ Route alerts through `.github/workflows/notify.yml`.
 
 **Escalation:**  
 If environment misalignment persists longer than 24 hours, notify the DevOps lead.
+
+## \U0001F4CC Markdown Standards
+
+- We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38+ to enforce style and consistency.
+- Configured via `.markdownlint.json` with all rules enabled by default.
+- File-specific rule overrides are applied using inline comments.
+- CI automatically runs linting via `markdownlint-cli2-action`.
+
+### Customizations:
+```json
+{
+  "MD013": false,
+  "MD007": { "indent": 4 }
+}
+```
+
+* To disable rules in a file, add:
+
+  ```markdown
+  <!-- markdownlint-disable-file MD### -->
+  ```
