@@ -64,6 +64,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | PROD_ORCHESTRATION_BOT_KEY    | Secret token for production orchestrator |
 | STAGING_ORCHESTRATION_BOT_KEY | Secret token for staging orchestrator |
 | CI_BOT_TOKEN                  | GitHub token used by the CI bot |
+| CI_BOT_USERNAME               | GitHub username used to assign CI failure issues |
 | TAGS_MODE                     | Expect TAGS services when `true` |
 | TEAMS_APP_ID                  | Azure app ID for the Teams integration |
 | TEAMS_APP_PASSWORD            | Secret used to authenticate the Teams app |
