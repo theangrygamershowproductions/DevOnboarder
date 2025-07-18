@@ -15,6 +15,7 @@ All notable changes to this project will be recorded in this file.
 - docs(agents): add EnvVar Manager agent and issue template
 - docs(env): document CI-provided variables in `.env.example`
 - chore(security): add missing bots to `.codex/bot-permissions.yaml` and cross-link governance
+- chore(security): record permissions for additional agents and rename env_var_manager entry
 
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
