@@ -154,6 +154,13 @@
       "path": "agents/envvar-manager.md",
       "triggers": "Workflow runs, scheduled checks, or manual dispatch",
       "output": "Updated `.env.example` files or issues for misaligned variables"
+    },
+    {
+      "name": "Agent.BranchCleanup",
+      "role": "Deletes stale merged branches",
+      "path": "agents/branch-cleanup.md",
+      "triggers": "Nightly schedule or label",
+      "output": "Deleted branch log"
     }
   ]
 }
