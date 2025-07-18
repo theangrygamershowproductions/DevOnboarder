@@ -1,0 +1,33 @@
+# ---
+# codex-agent:
+#   name: Agent.BranchCleanup
+#   role: Deletes stale merged branches
+#   scope: .github/workflows/branch-cleanup.yml
+#   triggers: Nightly schedule or label
+#   output: Deleted branch log
+# ---
+name: Branch Cleanup
+
+on:
+    schedule:
+        - cron: "0 1 * * *"
+    issues:
+        types: [labeled]
+    pull_request:
+        types: [labeled]
+
+permissions:
+    contents: write
+
+jobs:
+    run:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'schedule' || github.event.label.name == 'codex:cleanup'
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - name: Run cleanup script
+              env:
+                  DRY_RUN: ${DRY_RUN:-true}
+              run: bash scripts/cleanup_branches.sh
