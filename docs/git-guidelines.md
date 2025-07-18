@@ -98,3 +98,10 @@ pytest --cov=src --cov-fail-under=95
 - Update `docs/CHANGELOG.md` with a short summary of your change.
 - Update any other relevant documentation under `docs/`.
 - Follow the pull request template in `.github/pull_request_template.md`.
+
+## Stale Branch Cleanup
+
+The `cleanup_branches.sh` script removes merged branches that haven't changed in
+30 days. The nightly `branch-cleanup.yml` workflow runs this task with
+`DRY_RUN=true` by default. To delete branches immediately, set `DRY_RUN=false`
+when triggering the workflow with the `codex:cleanup` label.
