@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - chore(security): add missing bots to `.codex/bot-permissions.yaml` and cross-link governance
 - chore(security): record permissions for additional agents and rename env_var_manager entry
 - docs(env): rename `ENVVAR_MANAGER_TOKEN` to `ENV_VAR_MANAGER_KEY`
+- docs(readme): document `/dependency_inventory` uploads `dependency_inventory.xlsx`
 
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
