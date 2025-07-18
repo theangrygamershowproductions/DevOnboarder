@@ -66,6 +66,8 @@ docker run -d -p 8010:8010 --name languagetool \
 export LANGUAGETOOL_URL="http://localhost:8010"
 ```
 
+Set this variable if you run a local server; otherwise the public API is used.
+
 You can also download a LanguageTool release from <https://languagetool.org/download/> and run it with Java:
 
 ```bash
@@ -168,8 +170,8 @@ and commit the change with your documentation update.
 * **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
 * **Python errors:** ensure `pip install -e .` (or `pip install -r requirements.txt`)
   and `pip install -r requirements-dev.txt` succeeded.
-* **LanguageTool API issues:** run a local server and set `LANGUAGETOOL_URL` to
-  its address if you want to run grammar checks.
+* **LanguageTool API issues:** run a local server and optionally set
+  `LANGUAGETOOL_URL` to its address for grammar checks.
 * **pytest fails:** double-check that all dev dependencies and the project itself are installed.
 
 ### Known Limitations

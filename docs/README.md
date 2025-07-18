@@ -74,7 +74,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     docker run -d --name languagetool -p 8010:8010 silviof/docker-languagetool
     ```
 
-    Then set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
+    Then optionally set `LANGUAGETOOL_URL=http://localhost:8010/v2`.
 
 19. Lint shell scripts with `shellcheck scripts/*.sh`.
 
@@ -245,8 +245,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 - If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
   to its location so `scripts/check_docs.sh` can find it.
 - Install Python dev dependencies with `pip install -r requirements-dev.txt`.
-- Set `LANGUAGETOOL_URL` when running your own LanguageTool server if you want
-  local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+- Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
+  for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 - Markdown files must not exceed 120 characters per line (MD013). See
   [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
 
