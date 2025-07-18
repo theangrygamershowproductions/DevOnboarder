@@ -35,6 +35,8 @@ sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
 ```
+python3 --version  # should print Python 3.12.x
+Running tests require Python 3.12.
 
 ## Install Project Dependencies
 
