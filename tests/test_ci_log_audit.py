@@ -12,9 +12,17 @@ spec.loader.exec_module(ci_log_audit)
 
 
 SAMPLE_LINES = [
-    "All good",
+    "Step: python tests",
     "Traceback (most recent call last):",
+    "AssertionError: boom",
+    "Step: install deps",
+    "ModuleNotFoundError: No module named 'foo'",
+    "Step: build frontend",
     "npm ERR! missing script: test",
+    "yarn ERR! something failed",
+    "error Command failed with exit code 1.",
+    "Cannot find module 'bar'",
+    "Step: unit tests",
     "ERROR: something broke",
     "FAIL MyTest",
     "FAIL MyTest",
@@ -27,11 +35,16 @@ def test_extract_errors(tmp_path):
 
     errors = ci_log_audit.extract_errors(log)
     assert errors == [
-        "Traceback (most recent call last):",
-        "npm ERR! missing script: test",
-        "ERROR: something broke",
-        "FAIL MyTest",
-        "FAIL MyTest",
+        "Step: python tests | Traceback (most recent call last):",
+        "Step: python tests | AssertionError: boom",
+        "Step: install deps | ModuleNotFoundError: No module named 'foo'",
+        "Step: build frontend | npm ERR! missing script: test",
+        "Step: build frontend | yarn ERR! something failed",
+        "Step: build frontend | error Command failed with exit code 1.",
+        "Step: build frontend | Cannot find module 'bar'",
+        "Step: unit tests | ERROR: something broke",
+        "Step: unit tests | FAIL MyTest",
+        "Step: unit tests | FAIL MyTest",
     ]
 
 
@@ -45,8 +58,13 @@ def test_main_summarizes_counts(tmp_path, monkeypatch, capsys):
 
     assert out_lines == [
         "# CI Log Audit",
-        "2x FAIL MyTest",
-        "- Traceback (most recent call last):",
-        "- npm ERR! missing script: test",
-        "- ERROR: something broke",
+        "2x Step: unit tests | FAIL MyTest",
+        "- Step: python tests | Traceback (most recent call last):",
+        "- Step: python tests | AssertionError: boom",
+        "- Step: install deps | ModuleNotFoundError: No module named 'foo'",
+        "- Step: build frontend | npm ERR! missing script: test",
+        "- Step: build frontend | yarn ERR! something failed",
+        "- Step: build frontend | error Command failed with exit code 1.",
+        "- Step: build frontend | Cannot find module 'bar'",
+        "- Step: unit tests | ERROR: something broke",
     ]
