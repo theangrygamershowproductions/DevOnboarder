@@ -5,8 +5,7 @@ running and where to find documentation about our workflow.
 
 If you're setting up a fresh Ubuntu machine, follow
 [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker
-Compose, Node.js 20, and Python 3.12. Running tests requires Python **3.12** or
-newer.
+Compose, Node.js 20, and Python 3.12. Running tests requires Python **3.12**.
 
 After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to
 install a `commit-msg` hook. This ensures your commit messages pass the lint
@@ -27,7 +26,9 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
    `devonboarder` package can be imported during tests. Then install the dev
    requirements with `pip install -r requirements-dev.txt`.
 
-   Running tests requires **Python 3.12**. Verify with `python3 --version` before installing packages.
+   Tests run only on **Python 3.12**. Use `mise use -g python 3.12`
+   (or `asdf install python 3.12`) before running `pip install -e .`.
+   Verify with `python3 --version`.
 5. Start services with `make up` or run
    `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
@@ -62,7 +63,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     `pytest.ini` sets `pythonpath=src` so tests can locate the
     `devonboarder` package. Installing the project still ensures
     dependencies like **FastAPI** are available. The test suite only runs on
-    Python **3.12** or newer.
+    Python **3.12**.
 
 15. Run `npm run coverage` in both the `bot/` and `frontend/` directories to collect test coverage.
     The CI workflow fails if coverage drops below **95%**.
