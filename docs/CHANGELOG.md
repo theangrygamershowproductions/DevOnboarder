@@ -10,6 +10,7 @@ All notable changes to this project will be recorded in this file.
 - docs(pr-template): add Codex policy checklist bullet to PR templates
 - docs(retros): introduce retrospective framework and audit workflow
 - docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
+- docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
 
 - docs(env): document `CI_BOT_TOKEN` variable
 - docs(env): document `CI_BOT_USERNAME` variable
