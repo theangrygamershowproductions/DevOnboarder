@@ -139,7 +139,7 @@ jobs:
                 fi
             - name: Install yamllint
               run: pip install yamllint
-            - name: Validate bot permissions
+            - name: Lint and validate bot permissions
               run: bash scripts/validate-bot-permissions.sh
             - name: Run Black
               run: black --check .
