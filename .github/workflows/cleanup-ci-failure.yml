@@ -67,8 +67,10 @@ jobs:
                 issues=$($gh_bin issue list --label ci-failure --state open | awk '{print $1}') || failed=1
                 for n in $issues; do
                   if "$gh_bin" issue close "$n" --reason completed; then
+                    echo "::debug::Closed issue #$n"
                     closed=$((closed+1))
                   else
+                    echo "::warning::Failed to close issue #$n"
                     failed=1
                   fi
                 done
