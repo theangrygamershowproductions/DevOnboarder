@@ -28,13 +28,15 @@ orchestration_bot:
     - workflows: write
     - deployments: read
     - repository: read
-envvar_manager:
-  secret: ENVVAR_MANAGER_TOKEN
+
+env_var_manager:
+  secret: ENV_VAR_MANAGER_KEY
   permissions:
     - contents: read
     - contents: write
     - issues: write
     - pull_requests: write
+
 ci_bot:
   secret: CI_BOT_TOKEN
   permissions:
@@ -72,5 +74,73 @@ staging_orchestrator:
 
 prod_orchestrator:
   secret: PROD_ORCHESTRATION_BOT_KEY
+  permissions:
+    - contents: read
+
+# New entries generated from codex/agents/index.json and workflows
+ai_mentor:
+  secret: AI_MENTOR_KEY
+  permissions:
+    - issues: write
+    - contents: read
+
+ci:
+  secret: CI_KEY
+  permissions:
+    - contents: read
+    - actions: read
+
+ci_health:
+  secret: CI_HEALTH_KEY
+  permissions:
+    - issues: write
+
+cleanup_ci_failure:
+  secret: CLEANUP_CI_FAILURE_KEY
+  permissions:
+    - issues: write
+
+close_codex_issues:
+  secret: CLOSE_CODEX_ISSUES_KEY
+  permissions:
+    - issues: write
+
+discord_integration:
+  secret: DISCORD_INTEGRATION_KEY
+  permissions:
+    - issues: write
+
+env_doc_alignment:
+  secret: ENV_DOC_ALIGNMENT_KEY
+  permissions:
+    - contents: read
+
+secrets_alignment:
+  secret: SECRETS_ALIGNMENT_KEY
+  permissions:
+    - issues: write
+
+security_audit:
+  secret: SECURITY_AUDIT_KEY
+  permissions:
+    - contents: read
+
+idme_verification:
+  secret: IDME_VERIFICATION_KEY
+  permissions:
+    - issues: write
+
+notify:
+  secret: NOTIFY_KEY
+  permissions:
+    - issues: write
+
+review_known_errors:
+  secret: REVIEW_KNOWN_ERRORS_KEY
+  permissions:
+    - issues: write
+
+validate_permissions:
+  secret: VALIDATE_PERMISSIONS_KEY
   permissions:
     - contents: read
