@@ -26,6 +26,8 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 4. Install the project in editable mode with `pip install -e .` so the
    `devonboarder` package can be imported during tests. Then install the dev
    requirements with `pip install -r requirements-dev.txt`.
+
+   Running tests requires **Python 3.12**. Verify with `python3 --version` before installing packages.
 5. Start services with `make up` or run
    `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev up -d`.
    This launches the auth, bot, XP API, frontend, and Postgres services.
