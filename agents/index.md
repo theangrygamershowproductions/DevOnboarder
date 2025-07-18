@@ -55,6 +55,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | JSON_OUTPUT                   | Path to write audit_env_vars JSON summary |
 | JWT_ALGORITHM                 | Algorithm for JWT signing (default `HS256`) |
 | JWT_SECRET_KEY                | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
+| LANGUAGETOOL_URL              | Base URL for a local LanguageTool server (optional) |
 | LLAMA2_API_KEY                | API key for accessing the Llama2 service |
 | LLAMA2_API_TIMEOUT            | HTTP timeout in seconds for Llama2 API calls |
 | LLAMA2_URL                    | Base URL for the Llama2 API |
