@@ -11,7 +11,7 @@ values when running CI jobs locally or configuring new workflows.
 | `CI_HELPER_AGENT_KEY` | GitHub Actions secret | n/a | Secret token for the CI Helper Agent | Used by `review-known-errors.yml` |
 | `CI_ISSUE_TOKEN` | GitHub Actions secret | `issues: write` | Token used to open rate-limit issues in `ci-monitor.yml` | Optional; falls back to `GITHUB_TOKEN` when unset |
 | `DEV_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the dev orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
-| `ENVVAR_MANAGER_TOKEN` | GitHub Actions secret | n/a | Token for the EnvVar Manager to open misalignment issues | Used by `secrets-alignment.yml` |
+| `ENV_VAR_MANAGER_KEY` | GitHub Actions secret | n/a | Token for the EnvVar Manager to open misalignment issues | Used by `secrets-alignment.yml` |
 | `GH_TOKEN` | GitHub Actions secret or local environment | `issues: write`, `pull_requests: write` if used for cross-repo operations | Token consumed by the GitHub CLI to comment on PRs and manage issues | Usually set to `${{ secrets.GITHUB_TOKEN }}` in workflows |
 | `GITHUB_REPOSITORY` | Auto-injected by GitHub | n/a | `owner/repo` string identifying the project | Used by `post_coverage_comment.py` |
 | `GITHUB_RUN_ID` | Auto-injected by GitHub | n/a | Unique ID for the workflow run | Used when generating coverage links |

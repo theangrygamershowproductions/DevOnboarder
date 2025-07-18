@@ -17,6 +17,7 @@ All notable changes to this project will be recorded in this file.
 - docs(env): document CI-provided variables in `.env.example`
 - chore(security): add missing bots to `.codex/bot-permissions.yaml` and cross-link governance
 - chore(security): record permissions for additional agents and rename env_var_manager entry
+- docs(env): rename `ENVVAR_MANAGER_TOKEN` to `ENV_VAR_MANAGER_KEY`
 
 - fix(ci): correct YAML indentation in Verify gh version step
 - chore(ci): reuse saved ci-failure issue number across runs
@@ -828,4 +829,4 @@ All notable changes to this project will be recorded in this file.
 - Added CI Bot agent documentation and updated agent index.
 - Added CI Bot metadata to codex agent index.
 - Introduced the CI Bot and updated workflows to route automation through it.
-- docs(env): document `ONBOARDING_AGENT_KEY`, `CI_HELPER_AGENT_KEY`, and `ENVVAR_MANAGER_TOKEN` secrets
+- docs(env): document `ONBOARDING_AGENT_KEY`, `CI_HELPER_AGENT_KEY`, and `ENV_VAR_MANAGER_KEY` secrets
