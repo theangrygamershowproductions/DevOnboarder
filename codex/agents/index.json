@@ -74,6 +74,7 @@
       "name": "Agent.AutoFix",
       "role": "Proposes fixes for failed CI runs",
       "path": ".github/workflows/auto-fix.yml",
+      "prompt": "codex/prompts/ci_resilience_hardening.md",
       "triggers": "Completed CI workflow runs with failures",
       "output": "Pull request suggesting patches"
     },
