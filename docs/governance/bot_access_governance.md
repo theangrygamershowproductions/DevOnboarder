@@ -80,6 +80,7 @@
 | - [ ] Add human approval gates and permission review tasks to the project
   management backlog as recurring items. | Project Management Team |
 | - [ ] Link to relevant GitHub/Discord best practices and security docs. | Documentation Team |
+| - [ ] Keep the full matrix of bot secrets and permissions in `.codex/bot-permissions.yaml`. | Documentation Team |
 
 ---
 
