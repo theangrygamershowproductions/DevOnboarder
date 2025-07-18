@@ -31,6 +31,13 @@ else
     fi
 
     py_cmd="python3"
+    if ! python3 - <<'EOF'
+import sys
+sys.exit(0 if sys.version_info >= (3, 12) else 1)
+EOF
+    then
+        echo "::warning file=scripts/setup-env.sh,line=$LINENO::Active Python $(python3 --version 2>&1) is below 3.12" >&2
+    fi
     if ! python3 --version 2>/dev/null | grep -q "3.12"; then
         if command -v python3.12 >/dev/null 2>&1; then
             py_cmd="python3.12"
