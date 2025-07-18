@@ -39,7 +39,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `archive/docker-compose.yml` – Archived base compose file for generic deployments.
 - `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
 - `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
-- `bot/` – Discord bot written in TypeScript.
+- `bot/` – Discord bot written in TypeScript. Run `/dependency_inventory` to export dependencies.
 - `frontend/` – Vite-based React application.
 - `auth/` – Environment files for the authentication service.
 - `plugins/` – Optional Python packages that extend functionality.
