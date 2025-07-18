@@ -35,3 +35,42 @@ envvar_manager:
     - contents: write
     - issues: write
     - pull_requests: write
+ci_bot:
+  secret: CI_BOT_TOKEN
+  permissions:
+    - issues: write
+
+ci_monitor:
+  secret: CI_ISSUE_TOKEN
+  permissions:
+    - issues: write
+
+auto_fix:
+  secret: OPENAI_API_KEY
+  permissions:
+    - contents: write
+    - pull_requests: write
+
+llama2_agile_helper:
+  secret: LLAMA2_API_KEY
+  permissions:
+    - contents: read
+
+ms_teams_integration:
+  secret: TEAMS_APP_PASSWORD
+  permissions: []
+
+dev_orchestrator:
+  secret: DEV_ORCHESTRATION_BOT_KEY
+  permissions:
+    - contents: read
+
+staging_orchestrator:
+  secret: STAGING_ORCHESTRATION_BOT_KEY
+  permissions:
+    - contents: read
+
+prod_orchestrator:
+  secret: PROD_ORCHESTRATION_BOT_KEY
+  permissions:
+    - contents: read
