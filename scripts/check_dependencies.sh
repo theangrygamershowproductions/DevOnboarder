@@ -26,6 +26,16 @@ if ! command -v vale >/dev/null 2>&1; then
     missing=1
 fi
 
+# Verify Python version
+if ! python - <<'PY'
+import sys
+sys.exit(0 if sys.version_info >= (3, 12) else 1)
+PY
+then
+    echo "Python 3.12 or newer is required to run tests."
+    missing=1
+fi
+
 check_python_module() {
     local module=$1
     local hint=$2
