@@ -154,6 +154,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
 - [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
+- [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)

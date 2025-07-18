@@ -19,6 +19,7 @@ how it fits into the workflow.
 - [CI Bot](ci-bot.md)
 - [Diagnostics Bot](diagnostics-bot.md)
 - [EnvVar Manager](envvar-manager.md)
+- [Branch Cleanup](branch-cleanup.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 ## Required Environment Variables
