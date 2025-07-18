@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
 
 - docs(env): document `CI_BOT_TOKEN` variable
+- docs(env): document `CI_BOT_USERNAME` variable
 - docs(agents): add EnvVar Manager agent and issue template
 
 - fix(ci): correct YAML indentation in Verify gh version step
