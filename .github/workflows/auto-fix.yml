@@ -5,6 +5,7 @@
 #   scope: .github/workflows/auto-fix.yml
 #   triggers: Completed CI workflow runs with failures
 #   output: Pull request suggesting patches
+#   note: Requires `OPENAI_API_KEY` secret
 # ---
 name: Auto Fix
 
