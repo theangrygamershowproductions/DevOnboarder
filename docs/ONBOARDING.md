@@ -78,6 +78,9 @@ pip install -e .
 pip install -r requirements-dev.txt
 ```
 
+Tests run only on **Python 3.12**. Run `mise use -g python 3.12`
+(or `asdf install python 3.12`) before installing packages.
+
 If Vale or the optional LanguageTool cannot run due to network errors, Codex
 marks the documentation step as a "⚠️ Docs: Lint skipped" warning. LanguageTool
 only runs when `LANGUAGETOOL_URL` is set. You can still merge if all other

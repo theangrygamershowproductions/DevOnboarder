@@ -8,6 +8,8 @@ All notable changes to this project will be recorded in this file.
 - chore(ci): route retrospective alerts through notify workflow
 - docs(ci): outline CI enforcement tasks in `.codex/automation-tasks.md`
 - docs(pr-template): add Codex policy checklist bullet to PR templates
+- docs(readme): mention `mise use` for installing Python 3.12
+- chore(setup): warn when Python < 3.12 in `setup-env.sh`
 - docs(retros): introduce retrospective framework and audit workflow
 - docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
 - docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
