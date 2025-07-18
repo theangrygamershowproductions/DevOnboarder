@@ -16,7 +16,21 @@ fi
 
 yamllint -c .github/.yamllint-config "$FILE"
 
-missing=$(python - "$FILE" "${REQUIRED[@]}" <<'PY'
+
+# Capture agents missing permission entries
+missing_permissions=$(python scripts/list-bots.py | python - <<'PY'
+import json, sys
+data = json.load(sys.stdin)
+print(",".join(data.get("missing_permissions", [])))
+PY
+)
+
+if [ -n "$missing_permissions" ]; then
+  echo "Bots missing permission entries: $missing_permissions" >&2
+  exit 1
+fi
+
+missing_required=$(python - "$FILE" "${REQUIRED[@]}" <<'PY'
 import sys, yaml
 path = sys.argv[1]
 required = sys.argv[2:]
@@ -26,8 +40,8 @@ print(",".join(missing))
 PY
 )
 
-if [ -n "$missing" ]; then
-  echo "Missing required bot entries: $missing" >&2
+if [ -n "$missing_required" ]; then
+  echo "Missing required bot entries: $missing_required" >&2
   exit 1
 fi
 
