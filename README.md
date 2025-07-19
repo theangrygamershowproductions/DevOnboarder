@@ -1,8 +1,8 @@
 # DevOnboarder
+
 ![Coverage](coverage.svg)
 [![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
-
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
@@ -10,10 +10,10 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 ## 🔧 **Project Statement**
 
-> *"This project wasn’t built to impress — it was built to work. Quietly.
-> Reliably. And in service of those who need it."*
+> _"This project wasn’t built to impress — it was built to work. Quietly.
+> Reliably. And in service of those who need it."_
 
-*Designed to automate onboarding, reduce friction, and support developers building from the ground up.*
+_Designed to automate onboarding, reduce friction, and support developers building from the ground up._
 
 ## Why This Project Exists
 
@@ -22,10 +22,10 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 ## Trunk-Based Workflow
 
-- All stable code lives in the `main` branch.
-- Short-lived branches are created off `main` for each change.
-- Changes are merged back into `main` via pull requests after review.
-- Feature branches are deleted after they are merged to keep history clean.
+-   All stable code lives in the `main` branch.
+-   Short-lived branches are created off `main` for each change.
+-   Changes are merged back into `main` via pull requests after review.
+-   Feature branches are deleted after they are merged to keep history clean.
 
 ## Directory Overview
 
@@ -46,6 +46,28 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 - `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
 - `.env.example` – Sample variables shared across services.
 - `docs/CHANGELOG.md` – Project history and notable updates.
+<!-- markdownlint-disable MD030 -->
+<!-- prettier-ignore-start -->
+
+-   `config/` - Configuration files, including `devonboarder.config.yml`.
+-   `scripts/` - Helper scripts for bootstrapping and environment setup.
+-   `.devcontainer/` - Contains `devcontainer.json` which builds the VS Code development container,
+    forwards port `3000`, and runs `scripts/setup-env.sh`.
+-   `archive/docker-compose.dev.yaml` - Archived compose file for local development using `.env.dev`.
+-   `docker-compose.ci.yaml` - Compose file used by the CI pipeline.
+-   `archive/docker-compose.prod.yaml` - Archived compose file for production using `.env.prod`.
+-   `archive/docker-compose.yml` - Archived base compose file for generic deployments.
+-   `archive/docker-compose.codex.yml` - Archived compose file for Codex runs.
+-   `archive/docker-compose.override.yaml` - Archived overrides for the base compose file.
+-   `bot/` - Discord bot written in TypeScript. Run `/dependency_inventory` to export dependencies.
+-   `frontend/` - Vite-based React application.
+-   `auth/` - Environment files for the authentication service.
+-   `plugins/` - Optional Python packages that extend functionality.
+-   `config/devonboarder.config.yml` - Config for the `devonboarder` tool.
+-   `.env.example` - Sample variables shared across services.
+-   `docs/CHANGELOG.md` - Project history and notable updates.
+    <!-- prettier-ignore-end -->
+    <!-- markdownlint-restore -->
 
 ## Language Versions
 
@@ -53,15 +75,16 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 When Docker isn't available, the script installs Python 3.12 using `mise` or `asdf` before creating a virtual environment.
 
 | Language | Version |
-| --- | --- |
-| Python | 3.12 |
-| Node.js | 20 |
-| Ruby | 3.4.4 |
-| Rust | 1.87.0 |
-| Go | 1.24.3 |
-| Bun | 1.2.14 |
-| Java | 21 |
-| Swift | 6.1 |
+| -------- | ------- |
+| Python   | 3.12    |
+| Node.js  | 20      |
+| Ruby     | 3.4.4   |
+| Rust     | 1.87.0  |
+| Go       | 1.24.3  |
+| Bun      | 1.2.14  |
+| Java     | 21      |
+| Swift    | 6.1     |
+
 Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
 
 ## Documentation and Onboarding
@@ -196,9 +219,9 @@ project root.
 
 The package automatically loads modules found under the top-level `plugins/`
 directory. Each plugin lives in its own subfolder with an `__init__.py` file.
-Importing :mod:`devonboarder` populates ``devonboarder.PLUGINS`` with the
+Importing :mod:`devonboarder` populates `devonboarder.PLUGINS` with the
 discovered modules. Enable a plugin by adding a new package under
-`plugins/` and providing any initialization logic in its ``register``
+`plugins/` and providing any initialization logic in its `register`
 function.
 
 ## Production Deployment
@@ -210,42 +233,49 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 ```
 
 ## Quickstart
+
 1. Install Docker and Docker Compose. Run `mise install` to install the Python and Node.js versions defined in `.tool-versions`.
 2. Run `bash scripts/bootstrap.sh` to create `.env.dev` and install dependencies.
-   The script installs the frontend and bot packages so `npm ci --prefix bot` is
-   only needed if you skip this step.
+   The script installs the frontend and bot packages so `npm ci --prefix bot` and
+   `npm ci --prefix frontend` are only needed if you skip this step.
+   For a manual setup, run `bash scripts/dev_setup.sh` to install Python and Node
+   dependencies and set up pre-commit hooks.
 3. Run `bash scripts/generate-secrets.sh` so `.env.dev` matches the secrets CI uses.
 4. Copy each `*.env.example` to `.env` inside its service directory.
 5. Build the containers with `make deps` and start them with `make up`.
 6. Apply database migrations using `bash scripts/run_migrations.sh`.
 7. Run `python -m diagnostics` to verify required packages load, services are
    healthy, and environment variables match the examples.
-8. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package:
+8. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package.
+   Install Node.js packages with `npm ci` in each subdirectory:
 
-   ```bash
-   pip install -e .  # or `pip install -r requirements.txt` if present
-   pip install -r requirements-dev.txt
-   ruff check .
-   pytest --cov=src --cov-fail-under=95
-   npm run coverage --prefix bot
-   npm run coverage --prefix frontend
-   ```
-   Set `OFFLINE_BADGE=1` if `img.shields.io` is unreachable to skip the badge
-   update.
-   **Note:** both installs must finish before running `pytest` or the tests may
-   fail with `ModuleNotFoundError`. See
-   [tests/README.md](tests/README.md) for details.
+    ```bash
+    pip install -e .  # or `pip install -r requirements.txt` if present
+    pip install -r requirements-dev.txt
+    ruff check .
+    pytest --cov=src --cov-fail-under=95
+    npm ci --prefix bot && npm run coverage --prefix bot
+    npm ci --prefix frontend && npm run coverage --prefix frontend
+    ```
+
+    Set `OFFLINE_BADGE=1` if `img.shields.io` is unreachable to skip the badge
+    update.
+    **Note:** both installs must finish before running `pytest` or the tests may
+    fail with `ModuleNotFoundError`. See
+    [tests/README.md](tests/README.md) for details.
+
 9. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
    This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
 10. Install git hooks with `pre-commit install` so lint checks run automatically.
 11. The CI workflow enforces a minimum of **95% code coverage** for all projects
-   (frontend, bot, and backend). Pull requests will fail if any test suite drops
-   below this threshold.
+    (frontend, bot, and backend). Pull requests will fail if any test suite drops
+    below this threshold.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
 ## Found DevOnboarder useful?
+
 If this project helped speed up onboarding, save time, or avoid headaches,
 please [⭐ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder)
 or [open an issue](https://github.com/theangrygamershowproductions/DevOnboarder/issues)
