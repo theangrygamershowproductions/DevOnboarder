@@ -41,7 +41,8 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 10. Run `devonboarder-api` to start the user API at `http://localhost:8001`.
    This command requires `uvicorn`.
 11. Run `devonboarder-auth` to start the auth service at `http://localhost:8002`.
-    It stores data in a local SQLite database.
+    It stores data in a local SQLite database and automatically loads
+    environment variables from `auth/.env` when that file exists.
 12. Test the XP API with:
     `curl http://localhost:8001/api/user/onboarding-status`
     and `curl http://localhost:8001/api/user/level`.
