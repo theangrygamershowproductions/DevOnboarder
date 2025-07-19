@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+# Delete remote branches merged into BASE_BRANCH and older than DAYS_STALE.
+# DRY_RUN=true (default) only lists branches without deleting.
+#
+# Env vars:
+#   DRY_RUN     - set to false to actually delete branches
+#   BASE_BRANCH - branch used to test merge status (default 'main')
+#   DAYS_STALE  - age threshold in days before deletion (default 30)
 set -euo pipefail
 
 DRY_RUN="${DRY_RUN:-true}"
