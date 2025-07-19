@@ -66,12 +66,12 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 ## 12. Agent Standards
 
 - Documentation for each agent lives under `/agents` and begins with a `codex-agent` YAML header.
-- Every agent must be listed in `codex/agents/index.json` and permissions are defined in `.codex/bot-permissions.yaml`.
+- Every agent must be listed in `.codex/agents/index.json` and permissions are defined in `.codex/bot-permissions.yaml`.
 - CI regenerates environment variable tables with `scripts/regenerate_env_docs.py` and validates them with `scripts/check_env_docs.py`.
 
 ## 13. Bot Inventory
 
-- Run `python scripts/list-bots.py` to list all bots found in `.github/workflows` and `codex/agents/index.json`.
+- Run `python scripts/list-bots.py` to list all bots found in `.github/workflows` and `.codex/agents/index.json`.
 - The script reports any agents missing from `.codex/bot-permissions.yaml`.
 
 ## EnvVar Manager Integration
