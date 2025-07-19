@@ -59,7 +59,7 @@ def scan_workflows() -> dict[str, str]:
 
 def scan_index() -> dict[str, str]:
     bots: dict[str, str] = {}
-    index_path = Path("codex/agents/index.json")
+    index_path = Path(".codex/agents/index.json")
     if not index_path.exists():
         return bots
     data = json.loads(index_path.read_text())

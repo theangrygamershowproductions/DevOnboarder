@@ -65,7 +65,7 @@ All notable changes to this project will be recorded in this file.
 -   feat(orchestration): parameterize orchestrator scripts with `ORCHESTRATOR_URL`
 
 -   Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
--   Mentioned `codex/agents/index.json` alongside `agents/index.md` and
+ -   Mentioned `.codex/agents/index.json` alongside `agents/index.md` and
     documented the agent index requirement in `AGENTS.md`.
 -   chore(scripts): add `check-bot-permissions.sh` and `notify-humans.sh`; orchestrator workflows use them
 -   chore(ci): add `notify.yml` workflow and replace `notify-humans.sh` calls

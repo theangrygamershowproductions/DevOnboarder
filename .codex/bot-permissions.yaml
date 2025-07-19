@@ -77,7 +77,7 @@ prod_orchestrator:
   permissions:
     - contents: read
 
-# New entries generated from codex/agents/index.json and workflows
+# New entries generated from .codex/agents/index.json and workflows
 ai_mentor:
   secret: AI_MENTOR_KEY
   permissions:
