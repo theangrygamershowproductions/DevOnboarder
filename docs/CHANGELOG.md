@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 
 - docs(env): document `CI_BOT_TOKEN` variable
 - docs(env): document `CI_BOT_USERNAME` variable
+- docs(env): document `CI_BUILD_OPENAPI` variable
 - docs(agents): add EnvVar Manager agent and issue template
 - chore(ci): add markdownlint workflow
 - docs(agents): document markdown standards for EnvVar Manager

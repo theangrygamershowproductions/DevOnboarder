@@ -8,6 +8,7 @@ values when running CI jobs locally or configuring new workflows.
 | `AUTH_URL` | Workflow `env` block | n/a | Base URL for auth service during E2E tests | Set to `http://localhost:8002` in CI |
 | `CHECK_HEADERS_URL` | Workflow `env` block | n/a | Endpoint checked by `scripts/check_headers.py` | Defaults to the auth user endpoint |
 | `CI_BOT_USERNAME` | GitHub Actions variable | n/a | GitHub username used to assign CI failure issues | |
+| `CI_BUILD_OPENAPI` | GitHub Actions secret | n/a | OpenAI service account key used in CI | Use instead of `OPENAI_API_KEY` whenever present |
 | `CI_HELPER_AGENT_KEY` | GitHub Actions secret | n/a | Secret token for the CI Helper Agent | Used by `review-known-errors.yml` |
 | `CI_ISSUE_TOKEN` | GitHub Actions secret | `issues: write` | Token used to open rate-limit issues in `ci-monitor.yml` | Optional; falls back to `GITHUB_TOKEN` when unset |
 | `DEV_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the dev orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
