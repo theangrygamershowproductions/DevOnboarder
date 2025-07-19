@@ -101,7 +101,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     and install Python dependencies from `requirements-dev.txt` so the
     documentation checks work locally.
 17. Browse the [agents overview](agents/index.md) for individual service specs.
-    Codex reads the machine‑readable list in `codex/agents/index.json` to
+    Codex reads the machine‑readable list in `.codex/agents/index.json` to
     coordinate automation across these agents.
 18. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
 19. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.

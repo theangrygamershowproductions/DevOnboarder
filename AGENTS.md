@@ -34,7 +34,7 @@ This repository follows the DevOnboarder protocol. Key points:
 ## Agent Index Requirements
 
 All agent documentation must include a `codex-agent` YAML header and be listed
-in `codex/agents/index.json` so Codex can locate each role during automation.
+in `.codex/agents/index.json` so Codex can locate each role during automation.
 
 ## Commit Message Guidelines
 
