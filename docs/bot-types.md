@@ -9,7 +9,7 @@ Codex agents are small automation services orchestrated by Codex for project mai
 - **Purpose** – Perform focused tasks like closing stale issues or validating environment variables.
 - **Location** – Documentation lives under the top‑level [`agents/`](../agents/) folder.
 - **Execution** – Agents usually run within GitHub Actions or other CI jobs using Python scripts.
-- **Naming** – Agent documents begin with a `codex-agent` YAML header and each agent is listed in [`codex/agents/index.json`](../codex/agents/index.json).
+- **Naming** – Agent documents begin with a `codex-agent` YAML header and each agent is listed in [`.codex/agents/index.json`](../.codex/agents/index.json).
 
 ## Discord Bot
 

@@ -147,8 +147,8 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; checklist for onboarding reviews of new features.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
-- [Agents overview](../agents/index.md) &ndash; service and integration specs.
-  Codex also reads `codex/agents/index.json` to map these agents for automation.
+ - [Agents overview](../agents/index.md) &ndash; service and integration specs.
+   Codex also reads `.codex/agents/index.json` to map these agents for automation.
 - [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
 - [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
 - [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
