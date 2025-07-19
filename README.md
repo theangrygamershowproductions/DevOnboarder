@@ -29,6 +29,23 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 ## Directory Overview
 
+- `config/` – Configuration files, including `devonboarder.config.yml`.
+- `scripts/` – Helper scripts for bootstrapping and environment setup.
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
+  forwards port `3000`, and runs `scripts/setup-env.sh`.
+- `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
+- `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
+- `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
+- `archive/docker-compose.yml` – Archived base compose file for generic deployments.
+- `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
+- `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
+- `bot/` – Discord bot written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows.
+- `frontend/` – Vite-based React application.
+- `auth/` – Environment files for the authentication service.
+- `plugins/` – Optional Python packages that extend functionality.
+- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+- `.env.example` – Sample variables shared across services.
+- `docs/CHANGELOG.md` – Project history and notable updates.
 <!-- markdownlint-disable MD030 -->
 <!-- prettier-ignore-start -->
 

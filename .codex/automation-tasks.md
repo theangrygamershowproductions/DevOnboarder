@@ -35,6 +35,7 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 
 - `scripts/check_docs.sh` runs `markdownlint-cli2` and Vale.
 - Results upload as the `vale-results` artifact and fail the build on errors.
+- Contributors should also review [docs/bot-types.md](../docs/bot-types.md) to understand how the Discord bot differs from Codex agents.
 
 ## 7. CI Failure Handling
 
