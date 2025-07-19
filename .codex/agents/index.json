@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Agent.ReviewKnownErrors",
+        "file": "codex/agents/review-known-errors.md",
+        "description": "Analyzes common CI or runtime errors and suggests resolutions.",
+        "trigger": "on_error_detected"
+    },
+    {
+        "name": "Agent.ValidatePermissions",
+        "file": "codex/agents/validate-permissions.md",
+        "description": "Validates permission configurations in workflows or Codex tasks.",
+        "trigger": "pre-deploy"
+    },
+    {
+        "name": "Agent.Notify",
+        "file": "codex/agents/notify.md",
+        "description": "Handles post-task notifications across integrated channels.",
+        "trigger": "on_completion"
+    }
+]
