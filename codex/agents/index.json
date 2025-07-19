@@ -163,25 +163,25 @@
             "output": "Deleted branch log"
         },
         {
-            "name": "Agent.Notify",
-            "role": "Aggregates human notifications from other workflows",
-            "path": ".github/workflows/notify.yml",
-            "triggers": "Manual dispatch",
-            "output": "Comment on operations issue"
-        },
-        {
             "name": "Agent.ReviewKnownErrors",
-            "role": "Audits known error entries and escalates outdated ones",
-            "path": ".github/workflows/review-known-errors.yml",
-            "triggers": "Weekly schedule",
-            "output": "Issue when entries are outdated"
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/review-known-errors.md",
+            "triggers": "TBD",
+            "output": "TBD"
         },
         {
             "name": "Agent.ValidatePermissions",
-            "role": "Lints workflow files and bot permissions",
-            "path": ".github/workflows/validate-permissions.yml",
-            "triggers": "Push and pull_request events",
-            "output": "CI logs"
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/validate-permissions.md",
+            "triggers": "TBD",
+            "output": "TBD"
+        },
+        {
+            "name": "Agent.Notify",
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/notify.md",
+            "triggers": "TBD",
+            "output": "TBD"
         }
     ]
 }
