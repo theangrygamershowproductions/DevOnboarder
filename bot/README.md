@@ -75,3 +75,6 @@ The repository provides the following built-in commands:
 - Sync verified roles back to the auth database.
 - Award XP for community participation.
 - Log quiz completion via slash commands.
+
+For a comparison of this bot and Codex agents, see [../docs/bot-types.md](../docs/bot-types.md).
+
