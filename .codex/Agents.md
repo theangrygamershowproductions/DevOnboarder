@@ -1,6 +1,6 @@
 # Codex Agent Policy
 
-All documentation under `agents/` must start with a `codex-agent` YAML header. This header defines the agent name, its role, and other metadata used by automation. Each agent file must also appear in `codex/agents/index.json` so Codex can map roles during orchestration.
+All documentation under `agents/` must start with a `codex-agent` YAML header. This header defines the agent name, its role, and other metadata used by automation. Each agent file must also appear in `.codex/agents/index.json` so Codex can map roles during orchestration.
 
 All agents send human‑facing messages through the centralized `notify.yml` workflow. Trigger it with:
 
