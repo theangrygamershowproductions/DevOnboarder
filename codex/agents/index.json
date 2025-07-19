@@ -1,166 +1,187 @@
 {
-  "agents": [
-    {
-      "name": "Agent.DiscordIntegration",
-      "role": "Handles Discord OAuth flows and role lookups",
-      "path": "agents/discord-integration.md",
-      "triggers": "User Discord login or role sync request",
-      "output": "Discord role mapping"
-    },
-    {
-      "name": "Agent.AiMentor",
-      "role": "Provides automated mentorship for contributors",
-      "path": "agents/ai-mentor.md",
-      "triggers": "Contributor questions via chat or CLI",
-      "output": "Suggested resources and guidance"
-    },
-    {
-      "name": "Agent.MsTeamsIntegration",
-      "role": "Sends DevOnboarder updates to Microsoft Teams",
-      "path": "agents/ms-teams-integration.md",
-      "triggers": "Project events requiring team notifications",
-      "output": "Teams channel messages"
-    },
-    {
-      "name": "Agent.IdmeVerification",
-      "role": "Verifies users through ID.me",
-      "path": "agents/idme-verification.md",
-      "triggers": "User submits ID.me OAuth tokens",
-      "output": "Verification confirmation"
-    },
-    {
-      "name": "Agent.Llama2AgileHelper",
-      "role": "Provides agile planning advice via Llama2",
-      "path": "agents/llama2-agile-helper.md",
-      "triggers": "Developer questions or metrics updates",
-      "output": "Sprint summaries and grooming tips"
-    },
-    {
-      "name": "Agent.CI",
-      "role": "Runs tests and linting for pushes and pull requests",
-      "path": ".github/workflows/ci.yml",
-      "triggers": "Push or pull request events",
-      "output": "Build artifacts and coverage reports"
-    },
-    {
-      "name": "Agent.CiMonitor",
-      "role": "Watches CI logs for rate-limit errors and opens issues",
-      "path": ".github/workflows/ci-monitor.yml",
-      "triggers": "Completed CI workflow runs",
-      "output": "Issue with log excerpt"
-    },
-    {
-      "name": "Agent.CiHealth",
-      "role": "Checks active branches for CI stability",
-      "path": ".github/workflows/ci-health.yml",
-      "triggers": "Scheduled or manual run",
-      "output": "Issue summarizing failing branches"
-    },
-    {
-      "name": "Agent.CleanupCiFailure",
-      "role": "Closes stale ci-failure issues",
-      "path": ".github/workflows/cleanup-ci-failure.yml",
-      "triggers": "Daily schedule",
-      "output": "Closed ci-failure issues log"
-    },
-    {
-      "name": "Agent.CloseCodexIssues",
-      "role": "Closes Codex issues referenced in merged pull requests",
-      "path": ".github/workflows/close-codex-issues.yml",
-      "triggers": "Pull request closed after merge",
-      "output": "Closed Codex issues with comment"
-    },
-    {
-      "name": "Agent.AutoFix",
-      "role": "Proposes fixes for failed CI runs",
-      "path": ".github/workflows/auto-fix.yml",
-      "prompt": "codex/prompts/ci_resilience_hardening.md",
-      "triggers": "Completed CI workflow runs with failures",
-      "output": "Pull request suggesting patches"
-    },
-    {
-      "name": "Agent.EnvDocAlignment",
-      "role": "Ensures environment docs stay in sync with code",
-      "path": ".github/workflows/env-doc-alignment.yml",
-      "triggers": "CI failures in env doc checks",
-      "output": "Issue listing missing variables"
-    },
-    {
-      "name": "Agent.SecretsAlignment",
-      "role": "Audits environment variables for missing or extra entries",
-      "path": ".github/workflows/secrets-alignment.yml",
-      "triggers": "Scheduled or failed CI audits",
-      "output": "Issue summarizing mismatched variables"
-    },
-    {
-      "name": "Agent.SecurityAudit",
-      "role": "Generates weekly dependency and code audit reports",
-      "path": ".github/workflows/security-audit.yml",
-      "triggers": "Scheduled or manual run",
-      "output": "Uploaded security audit report"
-    },
-    {
-      "name": "Agent.ProdOrchestrator",
-      "role": "Orchestrates production environment deployments",
-      "path": "agents/prod-orchestrator.md",
-      "triggers": "Push to main or manual dispatch",
-      "output": "Deployment job logs"
-    },
-    {
-      "name": "Agent.DevOrchestrator",
-      "role": "Orchestrates development environment deployments",
-      "path": "agents/dev-orchestrator.md",
-      "triggers": "Push to dev or manual dispatch",
-      "output": "Deployment job logs"
-    },
-    {
-      "name": "Agent.StagingOrchestrator",
-      "role": "Orchestrates staging environment deployments",
-      "path": "agents/staging-orchestrator.md",
-      "triggers": "Push to staging or manual dispatch",
-      "output": "Deployment job logs"
-    },
-    {
-      "name": "Agent.OnboardingAgent",
-      "role": "Guides new contributors through the onboarding checklist",
-      "path": "agents/onboarding-agent.md",
-      "triggers": "Contributor requests or scheduled reminders",
-      "output": "Onboarding guidance"
-    },
-    {
-      "name": "Agent.CIHelperAgent",
-      "role": "Assists with CI troubleshooting and guidance",
-      "path": "agents/ci-helper-agent.md",
-      "triggers": "Failed jobs or developer requests",
-      "output": "Diagnostic notes"
-    },
-    {
-      "name": "Agent.CIBot",
-      "role": "Manages CI failure issues",
-      "path": "agents/ci-bot.md",
-      "triggers": "Failed CI runs and nightly cleanup",
-      "output": "Open or closed ci-failure issues"
-    },
-    {
-      "name": "Agent.DiagnosticsBot",
-      "role": "Collects environment diagnostics and system health info",
-      "path": "agents/diagnostics-bot.md",
-      "triggers": "Invocation of `python -m diagnostics`",
-      "output": "System check report"
-    },
-    {
-      "name": "Agent.EnvVarManager",
-      "role": "Audits and synchronizes environment variables across projects",
-      "path": "agents/envvar-manager.md",
-      "triggers": "Workflow runs, scheduled checks, or manual dispatch",
-      "output": "Updated `.env.example` files or issues for misaligned variables"
-    },
-    {
-      "name": "Agent.BranchCleanup",
-      "role": "Deletes stale merged branches",
-      "path": "agents/branch-cleanup.md",
-      "triggers": "Nightly schedule or label",
-      "output": "Deleted branch log"
-    }
-  ]
+    "agents": [
+        {
+            "name": "Agent.DiscordIntegration",
+            "role": "Handles Discord OAuth flows and role lookups",
+            "path": "agents/discord-integration.md",
+            "triggers": "User Discord login or role sync request",
+            "output": "Discord role mapping"
+        },
+        {
+            "name": "Agent.AiMentor",
+            "role": "Provides automated mentorship for contributors",
+            "path": "agents/ai-mentor.md",
+            "triggers": "Contributor questions via chat or CLI",
+            "output": "Suggested resources and guidance"
+        },
+        {
+            "name": "Agent.MsTeamsIntegration",
+            "role": "Sends DevOnboarder updates to Microsoft Teams",
+            "path": "agents/ms-teams-integration.md",
+            "triggers": "Project events requiring team notifications",
+            "output": "Teams channel messages"
+        },
+        {
+            "name": "Agent.IdmeVerification",
+            "role": "Verifies users through ID.me",
+            "path": "agents/idme-verification.md",
+            "triggers": "User submits ID.me OAuth tokens",
+            "output": "Verification confirmation"
+        },
+        {
+            "name": "Agent.Llama2AgileHelper",
+            "role": "Provides agile planning advice via Llama2",
+            "path": "agents/llama2-agile-helper.md",
+            "triggers": "Developer questions or metrics updates",
+            "output": "Sprint summaries and grooming tips"
+        },
+        {
+            "name": "Agent.CI",
+            "role": "Runs tests and linting for pushes and pull requests",
+            "path": ".github/workflows/ci.yml",
+            "triggers": "Push or pull request events",
+            "output": "Build artifacts and coverage reports"
+        },
+        {
+            "name": "Agent.CiMonitor",
+            "role": "Watches CI logs for rate-limit errors and opens issues",
+            "path": ".github/workflows/ci-monitor.yml",
+            "triggers": "Completed CI workflow runs",
+            "output": "Issue with log excerpt"
+        },
+        {
+            "name": "Agent.CiHealth",
+            "role": "Checks active branches for CI stability",
+            "path": ".github/workflows/ci-health.yml",
+            "triggers": "Scheduled or manual run",
+            "output": "Issue summarizing failing branches"
+        },
+        {
+            "name": "Agent.CleanupCiFailure",
+            "role": "Closes stale ci-failure issues",
+            "path": ".github/workflows/cleanup-ci-failure.yml",
+            "triggers": "Daily schedule",
+            "output": "Closed ci-failure issues log"
+        },
+        {
+            "name": "Agent.CloseCodexIssues",
+            "role": "Closes Codex issues referenced in merged pull requests",
+            "path": ".github/workflows/close-codex-issues.yml",
+            "triggers": "Pull request closed after merge",
+            "output": "Closed Codex issues with comment"
+        },
+        {
+            "name": "Agent.AutoFix",
+            "role": "Proposes fixes for failed CI runs",
+            "path": ".github/workflows/auto-fix.yml",
+            "prompt": "codex/prompts/ci_resilience_hardening.md",
+            "triggers": "Completed CI workflow runs with failures",
+            "output": "Pull request suggesting patches"
+        },
+        {
+            "name": "Agent.EnvDocAlignment",
+            "role": "Ensures environment docs stay in sync with code",
+            "path": ".github/workflows/env-doc-alignment.yml",
+            "triggers": "CI failures in env doc checks",
+            "output": "Issue listing missing variables"
+        },
+        {
+            "name": "Agent.SecretsAlignment",
+            "role": "Audits environment variables for missing or extra entries",
+            "path": ".github/workflows/secrets-alignment.yml",
+            "triggers": "Scheduled or failed CI audits",
+            "output": "Issue summarizing mismatched variables"
+        },
+        {
+            "name": "Agent.SecurityAudit",
+            "role": "Generates weekly dependency and code audit reports",
+            "path": ".github/workflows/security-audit.yml",
+            "triggers": "Scheduled or manual run",
+            "output": "Uploaded security audit report"
+        },
+        {
+            "name": "Agent.ProdOrchestrator",
+            "role": "Orchestrates production environment deployments",
+            "path": "agents/prod-orchestrator.md",
+            "triggers": "Push to main or manual dispatch",
+            "output": "Deployment job logs"
+        },
+        {
+            "name": "Agent.DevOrchestrator",
+            "role": "Orchestrates development environment deployments",
+            "path": "agents/dev-orchestrator.md",
+            "triggers": "Push to dev or manual dispatch",
+            "output": "Deployment job logs"
+        },
+        {
+            "name": "Agent.StagingOrchestrator",
+            "role": "Orchestrates staging environment deployments",
+            "path": "agents/staging-orchestrator.md",
+            "triggers": "Push to staging or manual dispatch",
+            "output": "Deployment job logs"
+        },
+        {
+            "name": "Agent.OnboardingAgent",
+            "role": "Guides new contributors through the onboarding checklist",
+            "path": "agents/onboarding-agent.md",
+            "triggers": "Contributor requests or scheduled reminders",
+            "output": "Onboarding guidance"
+        },
+        {
+            "name": "Agent.CIHelperAgent",
+            "role": "Assists with CI troubleshooting and guidance",
+            "path": "agents/ci-helper-agent.md",
+            "triggers": "Failed jobs or developer requests",
+            "output": "Diagnostic notes"
+        },
+        {
+            "name": "Agent.CIBot",
+            "role": "Manages CI failure issues",
+            "path": "agents/ci-bot.md",
+            "triggers": "Failed CI runs and nightly cleanup",
+            "output": "Open or closed ci-failure issues"
+        },
+        {
+            "name": "Agent.DiagnosticsBot",
+            "role": "Collects environment diagnostics and system health info",
+            "path": "agents/diagnostics-bot.md",
+            "triggers": "Invocation of `python -m diagnostics`",
+            "output": "System check report"
+        },
+        {
+            "name": "Agent.EnvVarManager",
+            "role": "Audits and synchronizes environment variables across projects",
+            "path": "agents/envvar-manager.md",
+            "triggers": "Workflow runs, scheduled checks, or manual dispatch",
+            "output": "Updated `.env.example` files or issues for misaligned variables"
+        },
+        {
+            "name": "Agent.BranchCleanup",
+            "role": "Deletes stale merged branches",
+            "path": "agents/branch-cleanup.md",
+            "triggers": "Nightly schedule or label",
+            "output": "Deleted branch log"
+        },
+        {
+            "name": "Agent.ReviewKnownErrors",
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/review-known-errors.md",
+            "triggers": "TBD",
+            "output": "TBD"
+        },
+        {
+            "name": "Agent.ValidatePermissions",
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/validate-permissions.md",
+            "triggers": "TBD",
+            "output": "TBD"
+        },
+        {
+            "name": "Agent.Notify",
+            "role": "Placeholder for future implementation",
+            "path": "codex/agents/notify.md",
+            "triggers": "TBD",
+            "output": "TBD"
+        }
+    ]
 }
