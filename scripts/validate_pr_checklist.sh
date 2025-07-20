@@ -11,7 +11,7 @@ pr_number="$1"
 body=$(gh pr view "$pr_number" --json body --jq '.body')
 
 has_heading=$(echo "$body" | grep -Eiq '^#+[[:space:]]*(✅[[:space:]]*)?Continuous Improvement Checklist' && echo yes || echo no)
-has_checkbox=$(echo "$body" | grep -q '\- \[ \]' && echo yes || echo no)
+has_checkbox=$(echo "$body" | grep -Eq '\- \[[ xX]\]' && echo yes || echo no)
 
 if [ "$has_heading" = "yes" ] && [ "$has_checkbox" = "yes" ]; then
   exit 0
