@@ -240,7 +240,7 @@ The Discord bot exposes several slash commands documented in
 [bot/README.md](../bot/README.md). Use `/qa_checklist` to display the QA
 checklist from `docs/QA_CHECKLIST.md`; the command sends it back in ephemeral
 messages. Run `/dependency_inventory` to upload `dependency_inventory.xlsx` as a
-file for maintainers.
+file for maintainers. The exported spreadsheet now lives at `docs/dependency_inventory.xlsx`.
 
 ## Documentation Quality Checks
 
@@ -301,15 +301,16 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
    [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
 10. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
     `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
+11. Failing jobs run `scripts/ci_failure_diagnoser.py` to create an `audit.md` summary. The file uploads with the CI logs and is appended to any failure issue.
 
-11. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
-12. CODEOWNERS automatically requests reviews from the maintainer team.
-13. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
+12. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
+13. CODEOWNERS automatically requests reviews from the maintainer team.
+14. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
     Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)
     so the workflow can request a patch from OpenAI.
-14. The `ci-monitor.yml` workflow scans CI logs for several rate-limit phrases.
+15. The `ci-monitor.yml` workflow scans CI logs for several rate-limit phrases.
     It quotes the first match and opens an issue using
     `${{ secrets.CI_ISSUE_TOKEN }}` or `${{ secrets.GITHUB_TOKEN }}` when that
     secret isn’t set. See [ci-env-vars.md](ci-env-vars.md) for details.
