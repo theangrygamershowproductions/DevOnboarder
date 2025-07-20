@@ -54,7 +54,7 @@ jobs:
               run: |
                 gh auth status
                 gh api rate_limit
-                gh issue list --label ci-failure --state open | awk '{print $1}'
+                python scripts/list_open_ci_issues.py
               env:
                   GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               continue-on-error: true
