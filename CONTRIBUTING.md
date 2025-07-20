@@ -16,16 +16,19 @@ pre-commit install
 ```
 
 Install the Python and Node.js dependencies before running tests or any
-`pre-commit` commands:
+`pre-commit` commands. Run `pip install -e .` and
+`pip install -r requirements-dev.txt` before executing `pytest`:
 
 ```bash
+pip install -e .
 pip install -r requirements-dev.txt
 npm ci --prefix bot
 npm ci --prefix frontend
 pre-commit install
 ```
 
-You can run `scripts/dev_setup.sh` to perform these steps automatically.
+You can run `scripts/dev_setup.sh` to perform these steps automatically, or
+`scripts/setup_tests.sh` to install only the Python requirements.
 See [docs/dependencies.md](docs/dependencies.md) for the Dependabot update workflow.
 
 See [.codex/Agents.md](.codex/Agents.md) for agent YAML guidelines and notification rules.
