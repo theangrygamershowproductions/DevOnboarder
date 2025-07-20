@@ -1,13 +1,13 @@
-# <Agent Name>
+# AGENT_NAME
 
-**Purpose:** <Describe what the agent does.>
+**Purpose:** AGENT_PURPOSE
 
-**Inputs:** <List required inputs or triggers.>
+**Inputs:** AGENT_INPUTS
 
-**Outputs:** <Describe results or side effects.>
+**Outputs:** AGENT_OUTPUTS
 
-**Environment:** <Relevant variables or configuration.>
+**Environment:** AGENT_ENVIRONMENT
 
-**Workflow:** <Step-by-step outline of how the agent operates.>
+**Workflow:** AGENT_WORKFLOW
 
 **Notification:** Route alerts through `.github/workflows/notify.yml`.
