@@ -7,4 +7,6 @@ codex-agent:
     output: TBD
 ---
 
+# Validate Permissions
+
 This agent is a stub and needs implementation.
