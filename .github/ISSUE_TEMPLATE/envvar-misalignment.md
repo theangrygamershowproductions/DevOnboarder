@@ -1,9 +1,11 @@
-# EnvVar Misalignment
+---
 name: EnvVar Misalignment
 about: Report missing or extra environment variables
 title: "[EnvVar]"
 labels: ["ops"]
 ---
+
+# EnvVar Misalignment
 
 ## Missing variables
 <!-- List required variables that are absent -->
