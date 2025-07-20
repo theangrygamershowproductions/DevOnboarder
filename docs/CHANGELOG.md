@@ -6,6 +6,8 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+-   docs(prompts): clarify dependency inventory saved to `docs/dependency_inventory.xlsx` and CI audits to `audit.md`
+
 -   docs(potato): convert Easter egg line to heading
 
 -   docs(discord): specify `text` language for message templates
