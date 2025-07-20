@@ -144,3 +144,4 @@ validate_permissions:
     secret: VALIDATE_PERMISSIONS_KEY
     permissions:
         - contents: read
+        - pull_requests: write
