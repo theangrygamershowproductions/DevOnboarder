@@ -2,145 +2,145 @@
 # Ensure the referenced secrets exist in repository settings.
 
 onboarding_agent:
-  secret: ONBOARDING_AGENT_KEY
-  permissions:
-    - issues: write
-    - pull_requests: write
-    - contents: read
+    secret: ONBOARDING_AGENT_KEY
+    permissions:
+        - issues: write
+        - pull_requests: write
+        - contents: read
 
 ci_helper_agent:
-  secret: CI_HELPER_AGENT_KEY
-  permissions:
-    - actions: read
-    - pull_requests: write
-    - checks: write
+    secret: CI_HELPER_AGENT_KEY
+    permissions:
+        - actions: read
+        - pull_requests: write
+        # Remove checks: write unless this agent uses REST API only
 
 diagnostics_bot:
-  secret: DIAGNOSTICS_BOT_KEY
-  permissions:
-    - actions: read
-    - issues: write
-    - repository: read
+    secret: DIAGNOSTICS_BOT_KEY
+    permissions:
+        - actions: read
+        - issues: write
+        - contents: read # Fix for repository: read
 
 orchestration_bot:
-  secret: ORCHESTRATION_BOT_KEY
-  permissions:
-    - workflows: write
-    - deployments: read
-    - repository: read
+    secret: ORCHESTRATION_BOT_KEY
+    permissions:
+        - workflows: write
+        - deployments: read
+        - contents: read # Fix for repository: read
 
 env_var_manager:
-  secret: ENV_VAR_MANAGER_KEY
-  permissions:
-    - contents: read
-    - contents: write
-    - issues: write
-    - pull_requests: write
+    secret: ENV_VAR_MANAGER_KEY
+    permissions:
+        - contents: read
+        - contents: write
+        - issues: write
+        - pull_requests: write
 
 ci_bot:
-  secret: CI_BOT_TOKEN
-  permissions:
-    - issues: write
+    secret: CI_BOT_TOKEN
+    permissions:
+        - issues: write
 
 ci_monitor:
-  secret: CI_ISSUE_TOKEN
-  permissions:
-    - issues: write
+    secret: CI_ISSUE_TOKEN
+    permissions:
+        - issues: write
 
 auto_fix:
-  secret: OPENAI_API_KEY
-  permissions:
-    - contents: write
-    - pull_requests: write
+    secret: OPENAI_API_KEY
+    permissions:
+        - contents: write
+        - pull_requests: write
 
 llama2_agile_helper:
-  secret: LLAMA2_API_KEY
-  permissions:
-    - contents: read
+    secret: LLAMA2_API_KEY
+    permissions:
+        - contents: read
 
 ms_teams_integration:
-  secret: TEAMS_APP_PASSWORD
-  permissions: []
+    secret: TEAMS_APP_PASSWORD
+    permissions: []
 
 dev_orchestrator:
-  secret: DEV_ORCHESTRATION_BOT_KEY
-  permissions:
-    - contents: read
+    secret: DEV_ORCHESTRATION_BOT_KEY
+    permissions:
+        - contents: read
 
 staging_orchestrator:
-  secret: STAGING_ORCHESTRATION_BOT_KEY
-  permissions:
-    - contents: read
+    secret: STAGING_ORCHESTRATION_BOT_KEY
+    permissions:
+        - contents: read
 
 prod_orchestrator:
-  secret: PROD_ORCHESTRATION_BOT_KEY
-  permissions:
-    - contents: read
+    secret: PROD_ORCHESTRATION_BOT_KEY
+    permissions:
+        - contents: read
 
 # New entries generated from .codex/agents/index.json and workflows
 ai_mentor:
-  secret: AI_MENTOR_KEY
-  permissions:
-    - issues: write
-    - contents: read
+    secret: AI_MENTOR_KEY
+    permissions:
+        - issues: write
+        - contents: read
 
 ci:
-  secret: CI_KEY
-  permissions:
-    - contents: read
-    - actions: read
+    secret: CI_KEY
+    permissions:
+        - contents: read
+        - actions: read
 
 ci_health:
-  secret: CI_HEALTH_KEY
-  permissions:
-    - issues: write
+    secret: CI_HEALTH_KEY
+    permissions:
+        - issues: write
 
 cleanup_ci_failure:
-  secret: CLEANUP_CI_FAILURE_KEY
-  permissions:
-    - issues: write
+    secret: CLEANUP_CI_FAILURE_KEY
+    permissions:
+        - issues: write
 
 close_codex_issues:
-  secret: CLOSE_CODEX_ISSUES_KEY
-  permissions:
-    - issues: write
+    secret: CLOSE_CODEX_ISSUES_KEY
+    permissions:
+        - issues: write
 
 discord_integration:
-  secret: DISCORD_INTEGRATION_KEY
-  permissions:
-    - issues: write
+    secret: DISCORD_INTEGRATION_KEY
+    permissions:
+        - issues: write
 
 env_doc_alignment:
-  secret: ENV_DOC_ALIGNMENT_KEY
-  permissions:
-    - contents: read
+    secret: ENV_DOC_ALIGNMENT_KEY
+    permissions:
+        - contents: read
 
 secrets_alignment:
-  secret: SECRETS_ALIGNMENT_KEY
-  permissions:
-    - issues: write
+    secret: SECRETS_ALIGNMENT_KEY
+    permissions:
+        - issues: write
 
 security_audit:
-  secret: SECURITY_AUDIT_KEY
-  permissions:
-    - contents: read
+    secret: SECURITY_AUDIT_KEY
+    permissions:
+        - contents: read
 
 idme_verification:
-  secret: IDME_VERIFICATION_KEY
-  permissions:
-    - issues: write
+    secret: IDME_VERIFICATION_KEY
+    permissions:
+        - issues: write
 
 notify:
-  secret: NOTIFY_KEY
-  permissions:
-    - issues: write
+    secret: NOTIFY_KEY
+    permissions:
+        - issues: write
 
 review_known_errors:
-  secret: REVIEW_KNOWN_ERRORS_KEY
-  permissions:
-    - issues: write
+    secret: REVIEW_KNOWN_ERRORS_KEY
+    permissions:
+        - issues: write
 
 validate_permissions:
-  secret: VALIDATE_PERMISSIONS_KEY
-  permissions:
-    - contents: read
+    secret: VALIDATE_PERMISSIONS_KEY
+    permissions:
+        - contents: read
