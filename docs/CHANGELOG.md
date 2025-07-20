@@ -4,19 +4,20 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
-- chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
-- chore(ci): validate bot permissions with `list-bots.py`
-- chore(ci): route retrospective alerts through notify workflow
-- docs(ci): outline CI enforcement tasks in `.codex/automation-tasks.md`
-- docs(pr-template): add Codex policy checklist bullet to PR templates
-- docs(readme): mention `mise use` for installing Python 3.12
-- docs(bot): add `docs/bot-types.md` and update bot README and main README
-- docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
-- chore(setup): warn when Python < 3.12 in `setup-env.sh`
-- docs(retros): introduce retrospective framework and audit workflow
-- docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
-- docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
-- docs(ci): introduce CI-first OpenAI API key policy document
+-   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
+-   chore(ci): validate bot permissions with `list-bots.py`
+-   chore(ci): route retrospective alerts through notify workflow
+-   docs(ci): outline CI enforcement tasks in `.codex/automation-tasks.md`
+-   docs(pr-template): add Codex policy checklist bullet to PR templates
+-   docs(readme): mention `mise use` for installing Python 3.12
+-   docs(bot): add `docs/bot-types.md` and update bot README and main README
+-   docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
+-   chore(setup): warn when Python < 3.12 in `setup-env.sh`
+-   docs(retros): introduce retrospective framework and audit workflow
+-   docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
+-   docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
+-   feat(ci): add `ci_failure_diagnoser.py` and update CI workflow
+-   docs(ci): introduce CI-first OpenAI API key policy document
 -   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 -   chore(ci): validate bot permissions with `list-bots.py`
 -   chore(ci): route retrospective alerts through notify workflow
@@ -65,7 +66,7 @@ All notable changes to this project will be recorded in this file.
 -   feat(orchestration): parameterize orchestrator scripts with `ORCHESTRATOR_URL`
 
 -   Linked `docs/CHANGELOG.md` from `README.md` for easier navigation.
- -   Mentioned `.codex/agents/index.json` alongside `agents/index.md` and
+-   Mentioned `.codex/agents/index.json` alongside `agents/index.md` and
     documented the agent index requirement in `AGENTS.md`.
 -   chore(scripts): add `check-bot-permissions.sh` and `notify-humans.sh`; orchestrator workflows use them
 -   chore(ci): add `notify.yml` workflow and replace `notify-humans.sh` calls
