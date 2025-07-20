@@ -16,7 +16,7 @@ All notable changes to this project will be recorded in this file.
 -   docs(retros): introduce retrospective framework and audit workflow
 -   docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
 -   docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
--   feat(ci): add `ci_failure_diagnoser.py` and update CI workflow
+-   FEAT(ci): add Codex CI failure diagnoser script for auto-triage
 -   docs(ci): introduce CI-first OpenAI API key policy document
 -   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 -   chore(ci): validate bot permissions with `list-bots.py`
