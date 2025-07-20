@@ -3,6 +3,7 @@
 This directory documents the services and integrations that make up the
 DevOnboarder platform. Each agent has its own page describing the purpose and
 how it fits into the workflow.
+See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agent file must start with a `codex-agent` YAML header.
 
 ## Available Agents
 
