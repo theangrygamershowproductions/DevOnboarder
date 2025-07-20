@@ -81,3 +81,10 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 -   Notifies through `.github/workflows/notify.yml`.
 -   Escalates via GitHub Issue if misalignment persists >24h.
 -   Follows agent doc at agents/envvar-manager.md.
+
+## markdown/fix-style-violations
+
+-   Run `npx -y markdownlint-cli2 "**/*.md"` to lint every Markdown file.
+-   Address reported warnings or run `npx -y markdownlint-cli2 --fix "**/*.md"` for auto-fixable rules.
+-   Commit the changes with a `STYLE(markdown):` message describing the cleanup.
+-   Push the branch and open a pull request summarizing the style fixes.
