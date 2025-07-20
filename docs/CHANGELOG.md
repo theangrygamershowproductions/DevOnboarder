@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 -   fix(ci): exclude self from notify-humans check in validate-permissions.yml
 -   fix(ci): exclude self from Slack webhook check in validate-permissions.yml
 -   docs(bot): add `docs/bot-types.md` and update bot README and main README
+-   chore(ci): enforce PR checklist with `scripts/validate_pr_checklist.sh`
 -   docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
 -   chore(setup): warn when Python < 3.12 in `setup-env.sh`
 -   docs(retros): introduce retrospective framework and audit workflow
