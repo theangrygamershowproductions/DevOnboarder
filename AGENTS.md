@@ -145,6 +145,7 @@ If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being
   env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
+
 * Ensure all steps that use the `gh` CLI have access to this variable.
 
 ### 3. Confirm Token Permissions
@@ -168,6 +169,7 @@ If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
+
 * Ensure:
   * The `gh` CLI commands are not being skipped (check any `if:` conditions).
   * The filter logic (labels, state, etc.) matches the actual issues.
