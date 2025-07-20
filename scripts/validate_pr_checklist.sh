@@ -21,7 +21,8 @@ echo "Continuous Improvement Checklist missing or incomplete" >&2
 cat docs/checklists/ci-checklist-snippet.md >&2
 
 if command -v gh >/dev/null 2>&1; then
-  gh pr comment "$pr_number" -b "Please include the Continuous Improvement Checklist from docs/checklists/ci-checklist-snippet.md."
+  gh pr comment "$pr_number" -b "Please include the Continuous Improvement Checklist from docs/checklists/ci-checklist-snippet.md." \
+    || echo "warning: unable to comment on PR" >&2
 fi
 
 exit 1
