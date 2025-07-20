@@ -23,6 +23,7 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 - [Branch Cleanup](branch-cleanup.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
+
 ## Required Environment Variables
 
 The table below lists environment variables used across DevOnboarder agents. Keep `.env.example` in sync with this list.
