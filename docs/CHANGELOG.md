@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+-   docs(potato): convert Easter egg line to heading
+
 -   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 -   chore(ci): validate bot permissions with `list-bots.py`
 -   chore(ci): route retrospective alerts through notify workflow
@@ -19,6 +21,7 @@ All notable changes to this project will be recorded in this file.
 -   docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
 -   FEAT(ci): add Codex CI failure diagnoser script for auto-triage
 -   docs(ci): introduce CI-first OpenAI API key policy document
+-   chore(ci): use list_open_ci_issues script in cleanup workflow
 -   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 -   chore(ci): validate bot permissions with `list-bots.py`
 -   chore(ci): route retrospective alerts through notify workflow
