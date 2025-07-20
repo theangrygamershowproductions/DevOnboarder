@@ -23,6 +23,7 @@ All notable changes to this project will be recorded in this file.
 -   docs(retros): introduce retrospective framework and audit workflow
 -   docs(retros): document `scripts/create-retro-file.sh` usage for new retrospectives
 -   docs(ci): note `OPENAI_API_KEY` secret requirement for `auto-fix.yml`
+-   docs(ci): add PR checklist snippet under `docs/checklists/` and reference it from README
 -   FEAT(ci): add Codex CI failure diagnoser script for auto-triage
 -   docs(ci): introduce CI-first OpenAI API key policy document
 -   chore(ci): use list_open_ci_issues script in cleanup workflow
