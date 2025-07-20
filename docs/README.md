@@ -273,7 +273,8 @@ Pull requests must include the block from
 labeled **## Continuous Improvement Checklist**. The CI workflow fails when this
 heading is missing. See
 [`checklists/continuous-improvement.md`](checklists/continuous-improvement.md)
-for the items.
+for the items. If the GitHub UI does not preload the template, copy the snippet
+from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
 4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
