@@ -1,6 +1,12 @@
 # Managing CI Failure Issues
 
-When the CI workflow fails, it opens or updates an issue titled `CI Failure: PR #<number>` with a summary of the failing tests. The commit SHA is stored as an HTML comment in the issue body for reference. The workflow closes all open `ci-failure` issues once any CI run succeeds.
+When the CI workflow fails, it opens or updates an issue titled `CI Failure: PR #<number>`.
+It includes a short summary of the failing tests.
+The commit SHA is stored as an HTML comment in the issue body for reference.
+The workflow closes all open `ci-failure` issues once any CI run succeeds.
+
+See the [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md).
+The file offers a quick way to analyze failing runs.
 
 ## Automatic Cleanup
 
