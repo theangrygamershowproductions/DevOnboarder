@@ -25,6 +25,8 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 4. Install the project in editable mode with `pip install -e .` so the
    `devonboarder` package can be imported during tests. Then install the dev
    requirements with `pip install -r requirements-dev.txt`.
+   These commands **must run before** you execute `pytest`. Run
+   `scripts/setup_tests.sh` to automate this step.
 
     Tests run only on **Python 3.12**. Use `mise use -g python 3.12`
     (or `asdf install python 3.12`) before running `pip install -e .`.
@@ -53,8 +55,10 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     After installing dependencies, run `npm run coverage` in the `frontend/`
     directory as well (see [../frontend/README.md](../frontend/README.md) for
     details).
-    Install the project and dev requirements **before running the tests**.
-    Skipping `pip install -e .` often leads to `ModuleNotFoundError` when
+    Install the project and dev requirements with `pip install -e .` and
+    `pip install -r requirements-dev.txt` **before running `pytest`**. The
+    helper script `scripts/setup_tests.sh` runs both commands. Skipping
+    `pip install -e .` often leads to `ModuleNotFoundError` when
     `pytest` imports the `devonboarder` package:
 
     ```bash
