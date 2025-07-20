@@ -26,6 +26,7 @@ All notable changes to this project will be recorded in this file.
 -   chore(ci): enforce PR checklist with `scripts/validate_pr_checklist.sh`
 -   fix(ci): ignore comment failures in `validate_pr_checklist.sh`
 -   fix(ci): accept checked or unchecked boxes in `validate_pr_checklist.sh`
+-   fix(ci): include full checklist content in `validate_pr_checklist.sh` comments
 -   docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
 -   chore(setup): warn when Python < 3.12 in `setup-env.sh`
 -   docs(retros): introduce retrospective framework and audit workflow
