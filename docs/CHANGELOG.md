@@ -7,6 +7,7 @@ All notable changes to this project will be recorded in this file.
 -   docs(potato): convert Easter egg line to heading
 
 -   docs(discord): specify `text` language for message templates
+-   docs(readme, contributing): emphasize running `pip install -e .` and `pip install -r requirements-dev.txt` before `pytest`; add `scripts/setup_tests.sh`
 
 -   chore(setup): ensure `setup-env.sh` installs Python 3.12 when Docker is unavailable
 -   chore(ci): validate bot permissions with `list-bots.py`
