@@ -16,6 +16,7 @@ All notable changes to this project will be recorded in this file.
 -   docs(pr-template): add Codex policy checklist bullet to PR templates
 -   docs(readme): mention `mise use` for installing Python 3.12
 -   fix(ci): exclude self from notify-humans check in validate-permissions.yml
+-   fix(ci): exclude self from Slack webhook check in validate-permissions.yml
 -   docs(bot): add `docs/bot-types.md` and update bot README and main README
 -   docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
 -   chore(setup): warn when Python < 3.12 in `setup-env.sh`
