@@ -876,3 +876,4 @@ dev`.
 -   chore(ci): log closed issue numbers in `cleanup-ci-failure.yml`
 -   docs(ci): add CI resilience hardening prompt for AutoFix
 -   docs(templates): add header to EnvVar Misalignment issue template
+-   fix(ci): use dedicated token for PR checklist comments in `validate-permissions.yml`
