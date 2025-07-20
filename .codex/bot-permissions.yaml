@@ -141,7 +141,7 @@ review_known_errors:
         - issues: write
 
 validate_permissions:
-    secret: VALIDATE_PERMISSIONS_KEY
+    secret: BOT_PR_WRITE_TOKEN
     permissions:
         - contents: read
         - pull_requests: write
