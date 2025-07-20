@@ -143,6 +143,8 @@ platforms. Please report any issues you encounter on your operating system.
     &ndash; summary of tokens and other variables used by the workflows.
 -   [CI-first OpenAI API key policy](ci-first-policy.md)
     &ndash; explains why the OpenAI key only exists in CI.
+-   [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
+    &ndash; quick checklist for analyzing failing runs.
 -   [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 -   [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 -   [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
