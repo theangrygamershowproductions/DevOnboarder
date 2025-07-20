@@ -282,39 +282,39 @@ heading is missing. See
 for the items. If the GitHub UI does not preload the template, copy the snippet
 from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
-4. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
-5. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
-6. When CI fails on a pull request, an issue titled `CI Failure: PR #<number>`
+1. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
+2. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
+3. When CI fails on a pull request, an issue titled `CI Failure: PR #<number>`
    is opened or updated with a summary of the failing tests. The commit SHA is
    stored in the issue body as a comment for reference.
-7. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write`
+4. The CI workflow uses the built-in `GITHUB_TOKEN` with `issues: write`
    permission. When the pipeline succeeds, it closes every open `ci-failure`
    issue.
-8. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a
+5. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a
    token with `issues: write` permission or a `pull_request_target` workflow as
    explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests).
    Maintainers can supply a personal access token as described in
    [ci-failure-issues.md#maintainer-token-setup].
-9. Maintainers must provide a personal access token or use a
+6. Maintainers must provide a personal access token or use a
    `pull_request_target` workflow for forked pull requests so CI can update the
    failure issue. See
    [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
-10. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
+7. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
     `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
-11. Failing jobs run `scripts/ci_failure_diagnoser.py` to create an `audit.md` summary. The file uploads with the CI logs and is appended to any failure issue.
+8. Failing jobs run `scripts/ci_failure_diagnoser.py` to create an `audit.md` summary. The file uploads with the CI logs and is appended to any failure issue.
 
-12. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
-13. CODEOWNERS automatically requests reviews from the maintainer team.
-14. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
+9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
+10. CODEOWNERS automatically requests reviews from the maintainer team.
+11. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
     Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)
     so the workflow can request a patch from OpenAI.
-15. The `ci-monitor.yml` workflow scans CI logs for several rate-limit phrases.
+12. The `ci-monitor.yml` workflow scans CI logs for several rate-limit phrases.
     It quotes the first match and opens an issue using
     `${{ secrets.CI_ISSUE_TOKEN }}` or `${{ secrets.GITHUB_TOKEN }}` when that
     secret isn’t set. See [ci-env-vars.md](ci-env-vars.md) for details.
-15. Workflows share `.github/.yamllint-config` to disable `document-start` and
+13. Workflows share `.github/.yamllint-config` to disable `document-start` and
     `truthy` checks and raise the line-length limit to 200 so linting focuses on
     real YAML syntax errors.
 
