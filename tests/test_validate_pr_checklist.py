@@ -21,7 +21,12 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str]]:
     bin_dir.mkdir()
     gh_stub = bin_dir / "gh"
     gh_stub.write_text(
-        f"#!/bin/sh\nif [ \"$1\" = \"pr\" ] && [ \"$2\" = \"view\" ]; then\n  echo '{body}'\n  exit 0\nfi\nexit 0\n"
+        "#!/bin/sh\n"
+        "if [ \"$1\" = \"pr\" ] && [ \"$2\" = \"view\" ]; then\n"
+        f"  echo '{body}'\n"
+        "  exit 0\n"
+        "fi\n"
+        "exit 0\n"
     )
     gh_stub.chmod(0o755)
 
