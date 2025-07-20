@@ -313,7 +313,7 @@ Update the health matrix and remove references from code and docs.
 
 | Date        | Version | Author    | Summary                                |
 | ----------- | ------- | --------- | -------------------------------------- |
-| 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_log_audit script |
+| 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_failure_diagnoser script |
 | 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
 | 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints |
 | 2 Jul 2025  | v0.3.2  | Codex     | Archived languagetool script and updated tasks |
