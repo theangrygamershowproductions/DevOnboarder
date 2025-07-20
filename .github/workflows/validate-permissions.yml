@@ -14,6 +14,7 @@ on:
 
 permissions:
     contents: read
+    pull-requests: write
 
 jobs:
     validate-yaml:
@@ -62,4 +63,4 @@ jobs:
               if: github.event_name == 'pull_request'
               run: bash scripts/validate_pr_checklist.sh "${{ github.event.pull_request.number }}"
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.VALIDATE_PERMISSIONS_KEY }}

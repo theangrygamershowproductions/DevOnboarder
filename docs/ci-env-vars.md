@@ -24,4 +24,5 @@ values when running CI jobs locally or configuring new workflows.
 | `STAGING_ORCHESTRATION_BOT_KEY` | GitHub Actions secret | n/a | Secret token for the staging orchestrator workflow | Passed as `ORCHESTRATION_KEY` |
 | `TRIVY_VERSION` | Workflow `env` block | n/a | Selects the Trivy version for container scanning | Defaults to `0.47.0` |
 | `VALE_VERSION` | Workflow `env` block or local environment | n/a | Choose the Vale linter version for docs checks | Defaults to `3.12.0` |
+| `VALIDATE_PERMISSIONS_KEY` | GitHub Actions secret | `pull_requests: write` | Token used by `validate-permissions.yml` to comment on PRs | Optional; falls back to `${{ secrets.GITHUB_TOKEN }}` when unset |
 
