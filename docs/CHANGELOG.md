@@ -4,6 +4,8 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
+<!-- markdownlint-disable MD030 -->
+
 -   docs(potato): convert Easter egg line to heading
 
 -   docs(discord): specify `text` language for message templates
@@ -18,6 +20,8 @@ All notable changes to this project will be recorded in this file.
 -   docs(readme): mention `mise use` for installing Python 3.12
 -   fix(ci): exclude self from notify-humans check in validate-permissions.yml
 -   fix(ci): exclude self from Slack webhook check in validate-permissions.yml
+-   chore(ci): use `BOT_PR_WRITE_TOKEN` in validate-permissions workflow
+-   docs(env): document `BOT_PR_WRITE_TOKEN` secret
 -   docs(bot): add `docs/bot-types.md` and update bot README and main README
 -   chore(ci): enforce PR checklist with `scripts/validate_pr_checklist.sh`
 -   fix(ci): ignore comment failures in `validate_pr_checklist.sh`
