@@ -47,7 +47,7 @@ jobs:
             echo "External notification script used" >&2
             exit 1
           fi
-          if grep -R "hooks.slack.com" .github/workflows; then
+          if grep -R "hooks.slack.com" .github/workflows | grep -v validate-permissions.yml; then
             echo "Direct Slack notification found" >&2
             exit 1
           fi
