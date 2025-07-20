@@ -78,12 +78,12 @@ jobs:
               run: which gh && gh --version
             - name: Verify gh version
               run: |
-                ver=$(gh --version | head -n1 | awk '{print $3}')
-                major=${ver%%.*}
-                if [ "$major" -lt 2 ]; then
-                echo "::error::GitHub CLI v2 or higher required" >&2
-                exit 1
-                fi
+                  ver=$(gh --version | head -n1 | awk '{print $3}')
+                  major=${ver%%.*}
+                  if [ "$major" -lt 2 ]; then
+                  echo "::error::GitHub CLI v2 or higher required" >&2
+                  exit 1
+                  fi
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -129,14 +129,14 @@ jobs:
               run: pip check
             - name: Python dependency audit
               run: |
-                if ! pip-audit; then
-                  code=$?
-                  if [ "$code" -eq 1 ]; then
-                    exit 1
-                  else
-                    echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
+                  if ! pip-audit; then
+                    code=$?
+                    if [ "$code" -eq 1 ]; then
+                      exit 1
+                    else
+                      echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
+                    fi
                   fi
-                fi
             - name: Install yamllint
               run: pip install yamllint
             - name: Lint and validate bot permissions
@@ -421,9 +421,9 @@ jobs:
             - name: Summarize CI failures
               if: always()
               run: python scripts/summarize_ci_failures.py
-            - name: Run CI log audit
+            - name: Run CI failure diagnoser
               if: always()
-              run: python scripts/ci_log_audit.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
+              run: python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
             - name: Download previous CI failure issue
               if: always()
               run: bash scripts/download_ci_failure_issue.sh
