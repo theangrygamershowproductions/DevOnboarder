@@ -30,3 +30,12 @@ See [docs/dependencies.md](docs/dependencies.md) for the Dependabot update workf
 
 See [.codex/Agents.md](.codex/Agents.md) for agent YAML guidelines and notification rules.
 Refer to [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) during each retrospective.
+
+## Continuous Improvement Checklist
+
+Pull requests must include the block from
+[`.github/pull_request_template.md`](.github/pull_request_template.md) with the
+heading **## Continuous Improvement Checklist**. The CI workflow fails when this
+heading is missing. See
+[docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md)
+for details.
