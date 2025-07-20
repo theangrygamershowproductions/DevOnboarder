@@ -7,4 +7,6 @@ codex-agent:
     output: TBD
 ---
 
+# Notify
+
 This agent is a stub and needs implementation.
