@@ -74,8 +74,7 @@ Install the project in editable mode before running the tests to ensure
 all dependencies are available:
 
 ```bash
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e .[test]
 ```
 
 Tests run only on **Python 3.12**. Run `mise use -g python 3.12`

@@ -16,12 +16,10 @@ pre-commit install
 ```
 
 Install the Python and Node.js dependencies before running tests or any
-`pre-commit` commands. Run `pip install -e .` and
-`pip install -r requirements-dev.txt` before executing `pytest`:
+`pre-commit` commands. Run `pip install -e .[test]` before executing `pytest`:
 
 ```bash
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e .[test]
 npm ci --prefix bot
 npm ci --prefix frontend
 pre-commit install

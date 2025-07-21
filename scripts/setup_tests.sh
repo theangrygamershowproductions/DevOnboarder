@@ -2,8 +2,7 @@
 # Install Python dependencies required for running tests
 set -euo pipefail
 
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e .[test]
 pip check
 
 echo "Test dependencies installed ✅"

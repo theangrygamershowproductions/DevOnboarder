@@ -22,14 +22,13 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
    workflow runs the same script before building containers so your
    environment matches the pipeline.
 3. Build the service containers with `make deps`.
-4. Install the project in editable mode with `pip install -e .` so the
-   `devonboarder` package can be imported during tests. Then install the dev
-   requirements with `pip install -r requirements-dev.txt`.
-   These commands **must run before** you execute `pytest`. Run
+4. Install the project in editable mode with `pip install -e .[test]` so the
+   `devonboarder` package and its test dependencies are available.
+   This command **must run before** you execute `pytest`. Run
    `scripts/setup_tests.sh` to automate this step.
 
     Tests run only on **Python 3.12**. Use `mise use -g python 3.12`
-    (or `asdf install python 3.12`) before running `pip install -e .`.
+    (or `asdf install python 3.12`) before running `pip install -e .[test]`.
     Verify with `python3 --version`.
 
 5. Start services with `make up` or run
@@ -55,15 +54,14 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
     After installing dependencies, run `npm run coverage` in the `frontend/`
     directory as well (see [../frontend/README.md](../frontend/README.md) for
     details).
-    Install the project and dev requirements with `pip install -e .` and
-    `pip install -r requirements-dev.txt` **before running `pytest`**. The
-    helper script `scripts/setup_tests.sh` runs both commands. Skipping
-    `pip install -e .` often leads to `ModuleNotFoundError` when
+    Install the project and test requirements with
+    `pip install -e .[test]` **before running `pytest`**. The helper
+    script `scripts/setup_tests.sh` runs this command. Skipping
+    `pip install -e .[test]` often leads to `ModuleNotFoundError` when
     `pytest` imports the `devonboarder` package:
 
     ```bash
-    pip install -e .  # or `pip install -r requirements.txt` if you have one
-    pip install -r requirements-dev.txt
+    pip install -e .[test]  # or `pip install -r requirements.txt` if you have one
     ```
 
     `pytest.ini` sets `pythonpath=src` so tests can locate the
@@ -260,7 +258,7 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
     `vale` binary to a directory in your `PATH`.
 -   If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
     to its location so `scripts/check_docs.sh` can find it.
--   Install Python dev dependencies with `pip install -r requirements-dev.txt`.
+  -   Install Python dev dependencies with `pip install .[test]`.
 -   Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
     for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 -   Markdown files must not exceed 120 characters per line (MD013). See
