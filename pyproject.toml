@@ -24,6 +24,14 @@ dependencies = [
     "psycopg2-binary",
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "requests",
+    "pyyaml",
+]
+
 [project.scripts]
 devonboarder = "devonboarder.cli:main"
 devonboarder-server = "devonboarder.server:main"

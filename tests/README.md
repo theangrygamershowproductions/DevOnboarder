@@ -5,8 +5,7 @@ so Python can resolve all imports. **These commands must run before invoking
 `pytest`.**
 
 ```bash
-pip install -e .
-pip install -r requirements-dev.txt
+pip install -e .[test]
 ```
 
 Then run `pytest` from the repository root with coverage enabled:
