@@ -65,9 +65,9 @@ EOF
     if [ -f requirements-dev.txt ]; then
         pip install -r requirements-dev.txt
     fi
-    # Install the project so runtime dependencies are available
+    # Install the project with test extras so runtime dependencies are available
     if [ -f pyproject.toml ]; then
-        pip install -e .
+        pip install -e .[test]
     fi
     if [ -d frontend ]; then
         cd frontend
