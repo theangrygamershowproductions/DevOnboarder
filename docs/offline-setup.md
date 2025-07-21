@@ -95,9 +95,7 @@ command works offline:
     tar -xzf ~/devonboarder-offline/trivy/trivy.tar.gz -C ~/devonboarder-offline/trivy
     ```
 
-# `scripts/trivy_scan.sh` fetches this tarball automatically when network access is available
-
-````
+    `scripts/trivy_scan.sh` fetches this tarball automatically when network access is available.
 
 2. Copy the `devonboarder-offline` folder to your offline machine.
 
@@ -105,7 +103,7 @@ command works offline:
 
 ```bash
 sudo install -m 755 /path/to/devonboarder-offline/trivy/trivy /usr/local/bin/trivy
-````
+```
 
 Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yaml`.
 
