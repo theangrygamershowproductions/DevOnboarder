@@ -98,7 +98,7 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: ~/.cache/pip
-                  key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements-dev.txt') }}
+                  key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
                   restore-keys: |
                       ${{ runner.os }}-py${{ matrix.python-version }}-
             - name: Cache frontend node modules
@@ -121,7 +121,7 @@ jobs:
               run: mkdir -p ci-logs
             - name: Install dev dependencies
               run: |
-                  pip install -r requirements-dev.txt 2>&1 | tee ci-logs/pip-install.log || {
+                  pip install .[test] 2>&1 | tee ci-logs/pip-install.log || {
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
