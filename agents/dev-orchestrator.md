@@ -1,9 +1,10 @@
 ---
-agent: dev-orchestrator
-purpose: Orchestrates development environment deployments
-trigger: on_push_to_dev
-environment: CI
-output: .codex/logs/dev-orchestrator.log
+codex-agent:
+  name: Agent.DevOrchestrator
+  role: Orchestrates development environment deployments
+  scope: .github/workflows/dev-orchestrator.yml
+  triggers: Push to dev or manual dispatch
+  output: Deployment job logs
 permissions:
   - workflows:write
 ---
