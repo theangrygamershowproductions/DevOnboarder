@@ -1,4 +1,6 @@
-Hello <Name>,
+# Founders Invite
+
+Hello &lt;Name&gt;,
 
 Welcome to the Founder's Circle! Your insight will help steer our roadmap.
 

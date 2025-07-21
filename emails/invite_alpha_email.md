@@ -1,4 +1,6 @@
-Hello <Name>,
+# Founders Invite
+
+Hello &lt;Name&gt;,
 
 Thanks for joining our alpha! We're excited to hear what you think.
 
