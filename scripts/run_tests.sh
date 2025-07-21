@@ -3,12 +3,11 @@ set -euo pipefail
 
 # Always ensure development requirements are installed
 echo "Installing dev requirements..."
-pip install -r requirements-dev.txt
+pip install -e .[test]
 pip check
 
 # Ensure runtime dependencies are installed
 if [ -f pyproject.toml ]; then
-    pip install -e .
     pip check
 fi
 
@@ -27,9 +26,8 @@ set -e
 if grep -q "ModuleNotFoundError" "$pytest_log"; then
     echo
     echo "ModuleNotFoundError detected during tests."
-    echo "Make sure you've installed the project and development requirements:"
-    echo "  pip install -e ."
-    echo "  pip install -r requirements-dev.txt"
+    echo "Make sure you've installed the project and test requirements:"
+    echo "  pip install -e .[test]"
     echo "See the troubleshooting section in docs/README.md for details."
 fi
 
