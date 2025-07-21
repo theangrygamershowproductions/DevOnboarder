@@ -1,9 +1,10 @@
 ---
-agent: agent-maintenance
-purpose: Migrates and standardizes Codex agents
-trigger: manual
-environment: local or CI
-output: .codex/logs/agent-maintenance.log
+codex-agent:
+  name: Agent.AgentMaintenance
+  role: Migrates and standardizes Codex agents
+  scope: local or CI
+  triggers: manual
+  output: .codex/logs/agent-maintenance.log
 permissions:
   - repo:write
   - contents:read

@@ -1,9 +1,10 @@
 ---
-agent: ai-mentor
-purpose: Provides automated mentorship and resource guidance to new contributors
-trigger: on_question_received
-environment: any
-output: .codex/logs/ai-mentor.log
+codex-agent:
+  name: Agent.AiMentor
+  role: Provides automated mentorship and resource guidance to new contributors
+  scope: onboarding assistance
+  triggers: on_question_received
+  output: .codex/logs/ai-mentor.log
 permissions:
   - repo:read
 ---
