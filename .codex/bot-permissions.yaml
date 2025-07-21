@@ -135,6 +135,12 @@ notify:
     permissions:
         - issues: write
 
+agent_maintenance:
+    secret: AGENT_MAINTENANCE_KEY
+    permissions:
+        - repo: write
+        - contents: read
+
 review_known_errors:
     secret: REVIEW_KNOWN_ERRORS_KEY
     permissions:
