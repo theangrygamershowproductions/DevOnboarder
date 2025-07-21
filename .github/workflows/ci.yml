@@ -150,7 +150,7 @@ jobs:
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package
-              run: pip install -e . 2>&1 | tee ci-logs/pip-install-editable.log
+              run: pip install -e .[test] 2>&1 | tee ci-logs/pip-install-editable.log
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
             - name: Generate OpenAPI spec
