@@ -170,6 +170,13 @@
             "output": "Updated agent registry"
         },
         {
+            "name": "Agent.AgentMaintenance",
+            "role": "Migrates and standardizes Codex agents",
+            "path": ".codex/agents/agent-maintenance.md",
+            "triggers": "Manual run",
+            "output": "Updated agent registry"
+        },
+        {
             "name": "Agent.ReviewKnownErrors",
             "role": "Placeholder for future implementation",
             "path": "codex/agents/review-known-errors.md",
