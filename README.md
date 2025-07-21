@@ -101,7 +101,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
     If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
-    and install Python dependencies from `requirements-dev.txt` so the
+    and install the optional test dependencies with `pip install .[test]` so the
     documentation checks work locally.
 17. Browse the [agents overview](agents/index.md) for individual service specs.
     Codex reads the machine‑readable list in `.codex/agents/index.json` to
@@ -234,8 +234,7 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
    Install Node.js packages with `npm ci` in each subdirectory:
 
     ```bash
-    pip install -e .  # or `pip install -r requirements.txt` if present
-    pip install -r requirements-dev.txt
+    pip install -e .[test]  # or `pip install -r requirements.txt` if present
     ruff check .
     pytest --cov=src --cov-fail-under=95
     npm ci --prefix bot && npm run coverage --prefix bot

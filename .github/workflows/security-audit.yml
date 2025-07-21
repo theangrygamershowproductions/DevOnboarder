@@ -44,7 +44,7 @@ jobs:
           node-version: "20"
       - name: Install Python dependencies
         run: |
-          pip install -r requirements-dev.txt
+          pip install .[test]
           pip install -e .
           pip install pip-audit
       - name: Install frontend dependencies
