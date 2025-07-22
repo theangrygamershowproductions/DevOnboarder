@@ -6,6 +6,11 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+-   fix(ci): markdownlint workflow configuration to exclude dependency directories
+-   feat(docs): comprehensive ROADMAP.md and ROADMAP_SUMMARY.md for DevSecOps Manager review
+-   fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
+-   docs(retro): add retrospective for roadmap documentation project
+
 -   docs(agents): remove duplicate Agent Maintenance documentation entry
 
 -   docs(prompts): clarify dependency inventory saved to `docs/dependency_inventory.xlsx` and CI audits to `audit.md`
