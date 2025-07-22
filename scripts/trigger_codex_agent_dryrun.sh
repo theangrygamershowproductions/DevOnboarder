@@ -35,7 +35,7 @@ validate_agent() {
     if [[ ! -f "$agent_file" ]]; then
         echo "❌ Agent file not found: $agent_file"
         echo "Available agents:"
-        ls -1 .codex/agents/*.md 2>/dev/null | sed 's/.codex\/agents\///; s/\.md$//' | sed 's/^/   /' || echo "   No agents found"
+        find .codex/agents/ -name "*.md" -type f 2>/dev/null | sed 's/.codex\/agents\///; s/\.md$//' | sed 's/^/   /' || echo "   No agents found"
         return 1
     fi
     
@@ -67,7 +67,8 @@ check_dry_run_config() {
 
 # Function to simulate codex agent execution
 simulate_codex_execution() {
-    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    local timestamp
+    timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     local test_command="CTO security audit"
     
     echo "🎭 Simulating Codex agent execution..."

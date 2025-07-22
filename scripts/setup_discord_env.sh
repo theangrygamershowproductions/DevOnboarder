@@ -8,7 +8,6 @@ echo "========================================="
 
 # Configuration
 DEPLOY_ENV="${1:-dev}"
-CONFIG_DIR=".env"
 BOT_DIR="bot"
 
 # Discord Server Configuration

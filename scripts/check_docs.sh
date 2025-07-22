@@ -43,7 +43,7 @@ if ! "$VALE_CMD" --version >/dev/null 2>&1; then
 fi
 
 set +e
-"$VALE_CMD" --output=JSON $FILES >"$RESULTS_FILE"
+"$VALE_CMD" --output=JSON "$FILES" >"$RESULTS_FILE"
 status=$?
 set -e
 if [ $status -ne 0 ]; then
