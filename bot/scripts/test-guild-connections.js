@@ -11,12 +11,12 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const TARGET_GUILDS = {
     dev: {
         id: '1386935663139749998',
-        name: 'TAGS: DevOnboarder'
+        name: 'TAGS: DevOnboarder',
     },
     prod: {
-        id: '1065367728992571444', 
-        name: 'TAGS: Command & Control'
-    }
+        id: '1065367728992571444',
+        name: 'TAGS: Command & Control',
+    },
 };
 
 const client = new Client({
@@ -24,8 +24,8 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers
-    ]
+        GatewayIntentBits.GuildMembers,
+    ],
 });
 
 console.log('🔗 Discord Bot Guild Connection Test');
@@ -36,28 +36,32 @@ client.once('ready', async () => {
     console.log(`✅ Bot logged in as: ${client.user.tag}`);
     console.log(`🆔 Bot ID: ${client.user.id}`);
     console.log('');
-    
+
     // Check total guilds
     const totalGuilds = client.guilds.cache.size;
     console.log(`🏠 Total Connected Guilds: ${totalGuilds}`);
     console.log('');
-    
+
     // Check target guilds specifically
     console.log('🎯 Target Server Connection Status:');
     console.log('=====================================');
-    
+
     let connectedCount = 0;
-    
+
     for (const [env, guild] of Object.entries(TARGET_GUILDS)) {
         const guildObj = client.guilds.cache.get(guild.id);
-        
+
         if (guildObj) {
             console.log(`✅ ${guild.name}`);
             console.log(`   └─ Environment: ${env.toUpperCase()}`);
             console.log(`   └─ Guild ID: ${guild.id}`);
-            console.log(`   └─ Member Count: ${guildObj.memberCount || 'Unknown'}`);
+            console.log(
+                `   └─ Member Count: ${guildObj.memberCount || 'Unknown'}`,
+            );
             console.log(`   └─ Owner: ${guildObj.ownerId || 'Unknown'}`);
-            console.log(`   └─ Bot Permissions: ${guildObj.members.me?.permissions.toArray().length || 0} permissions`);
+            console.log(
+                `   └─ Bot Permissions: ${guildObj.members.me?.permissions.toArray().length || 0} permissions`,
+            );
             connectedCount++;
         } else {
             console.log(`❌ ${guild.name}`);
@@ -67,13 +71,15 @@ client.once('ready', async () => {
         }
         console.log('');
     }
-    
+
     // Summary
     console.log('📊 Connection Summary:');
     console.log('======================');
-    console.log(`Connected Target Servers: ${connectedCount}/${Object.keys(TARGET_GUILDS).length}`);
+    console.log(
+        `Connected Target Servers: ${connectedCount}/${Object.keys(TARGET_GUILDS).length}`,
+    );
     console.log(`Total Connected Servers: ${totalGuilds}`);
-    
+
     if (connectedCount === Object.keys(TARGET_GUILDS).length) {
         console.log('🎉 SUCCESS: Bot connected to all target servers!');
     } else {
@@ -85,22 +91,24 @@ client.once('ready', async () => {
         console.log('   3. Ensure bot has "View Server" permission');
         console.log('   4. Re-generate invite: npm run invite');
     }
-    
+
     // List all connected guilds for reference
     if (totalGuilds > 0) {
         console.log('');
         console.log('📋 All Connected Guilds:');
         console.log('========================');
-        client.guilds.cache.forEach(guild => {
-            const isTarget = Object.values(TARGET_GUILDS).some(tg => tg.id === guild.id);
+        client.guilds.cache.forEach((guild) => {
+            const isTarget = Object.values(TARGET_GUILDS).some(
+                (tg) => tg.id === guild.id,
+            );
             const marker = isTarget ? '🎯' : '📍';
             console.log(`${marker} ${guild.name} (${guild.id})`);
         });
     }
-    
+
     console.log('');
     console.log('🔄 Test complete - Bot will disconnect in 3 seconds...');
-    
+
     setTimeout(() => {
         client.destroy();
         process.exit(0);
@@ -119,7 +127,7 @@ if (!process.env.DISCORD_BOT_TOKEN) {
 }
 
 console.log('🔐 Authenticating with Discord...');
-client.login(process.env.DISCORD_BOT_TOKEN).catch(error => {
+client.login(process.env.DISCORD_BOT_TOKEN).catch((error) => {
     console.error('❌ Failed to login:', error.message);
     process.exit(1);
 });
