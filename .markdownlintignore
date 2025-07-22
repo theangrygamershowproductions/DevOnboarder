@@ -1,5 +1,4 @@
 # Ignore node_modules and dependencies
-
 node_modules/
 frontend/node_modules/
 bot/node_modules/
@@ -9,17 +8,11 @@ venv/
 *.egg-info/
 
 # Ignore archived and temporary files
-
 archive/
 .git/
 .pytest_cache/
 __pycache__/
 
 # Ignore coverage reports
-
 coverage/
 .coverage
-
-# Ignore Potato.md (personal configuration file - see docs/about-potato.md)
-
-Potato.md
