@@ -166,8 +166,8 @@ echo "======================="
 
 if command -v node &> /dev/null && [[ -f "bot/scripts/generate-invite.js" ]]; then
     echo "Testing invite link generation..."
-    cd bot && node scripts/generate-invite.js > /dev/null 2>&1
-    if [[ $? -eq 0 ]]; then
+    cd bot 
+    if node scripts/generate-invite.js > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Bot invite link generation successful${NC}"
     else
         echo -e "${RED}❌ Bot invite link generation failed${NC}"

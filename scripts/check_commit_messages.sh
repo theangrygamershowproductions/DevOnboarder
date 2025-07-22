@@ -8,6 +8,11 @@ if [ -z "$messages" ]; then
 fi
 errors=0
 while IFS= read -r msg; do
+  # Skip merge commits
+  if [[ $msg =~ ^Merge ]]; then
+    echo "Skipping merge commit: $msg"
+    continue
+  fi
   if [[ ! $msg =~ $regex ]]; then
     echo "::error ::Commit message '$msg' does not follow <type>(<scope>): <subject> format"
     errors=$((errors+1))
