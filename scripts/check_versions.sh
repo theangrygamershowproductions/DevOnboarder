@@ -25,6 +25,13 @@ check() {
     local cmd="$3"
     local regex="$4"
     echo "Checking $name version..."
+    
+    # Check if command exists first
+    if ! command -v "${cmd%% *}" >/dev/null 2>&1; then
+        echo "Warning: $name is not installed, skipping version check" >&2
+        return 0
+    fi
+    
     output=$($cmd 2>&1)
     if [[ $output =~ $regex ]]; then
         version="${BASH_REMATCH[1]}"

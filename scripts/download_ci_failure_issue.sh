@@ -9,7 +9,7 @@ if ! command -v gh >/dev/null 2>&1; then
 fi
 
 run_id=$(gh run list -w CI --json databaseId,headSha -L 10 \
-    --jq 'map(select(.headSha=="'"$GITHUB_SHA"'" && .databaseId != '"$GITHUB_RUN_ID"')) | .[0].databaseId' || true)
+    --jq "map(select(.headSha==\"$GITHUB_SHA\" and .databaseId != $GITHUB_RUN_ID)) | .[0].databaseId" || true)
 
 if [ -n "${run_id:-}" ]; then
     echo "Downloading ci-failure-issue artifact from run $run_id" >&2

@@ -170,6 +170,13 @@
             "output": "Updated agent registry"
         },
         {
+            "name": "Agent.DocumentationQuality",
+            "role": "Enforces markdown formatting standards and documentation quality",
+            "path": "agents/documentation-quality.md",
+            "triggers": "Push events, PR creation, or manual dispatch",
+            "output": "Formatted markdown files and quality reports"
+        },
+        {
             "name": "Agent.ReviewKnownErrors",
             "role": "Placeholder for future implementation",
             "path": "codex/agents/review-known-errors.md",
