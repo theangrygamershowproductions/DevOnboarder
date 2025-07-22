@@ -62,9 +62,9 @@ When Docker isn't available, the script installs Python 3.12 using `mise` or `as
 | -------- | ------- |
 | Python   | 3.12    |
 | Node.js  | 20      |
-| Ruby     | 3.4.4   |
-| Rust     | 1.87.0  |
-| Go       | 1.24.3  |
+| Ruby     | 3.2.3   |
+| Rust     | 1.88.0  |
+| Go       | 1.24.4  |
 | Bun      | 1.2.14  |
 | Java     | 21      |
 | Swift    | 6.1     |
