@@ -41,12 +41,15 @@ fi
 for md in $(git ls-files 'docs/**/*.md' '*.md'); do
   if [ "$(head -n1 "$md")" = "---" ]; then
     tmp=$(mktemp)
-    sed -n '/^---$/,/^---$/p' "$md" | sed '1d;$d' |
-      python - <<'EOF' "$tmp"
+    frontmatter_file=$(mktemp)
+    sed -n '/^---$/,/^---$/p' "$md" | sed '1d;$d' > "$frontmatter_file"
+    python -c "
 import sys, yaml, json
-data = yaml.safe_load(sys.stdin.read() or "{}")
-json.dump(data, open(sys.argv[1], 'w'))
-EOF
+with open('$frontmatter_file') as f:
+    data = yaml.safe_load(f.read() or '{}')
+json.dump(data, open('$tmp', 'w'))
+"
+    rm "$frontmatter_file"
     if ! npx -y ajv-cli validate -s schema/frontmatter.schema.json -d "$tmp" >/dev/null; then
       echo "Frontmatter validation failed for $md" >&2
       rm "$tmp"
