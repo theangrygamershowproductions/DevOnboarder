@@ -43,7 +43,7 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 -   `archive/docker-compose.yml` – Archived base compose file for generic deployments.
 -   `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
 -   `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
--   `bot/` – Discord bot written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows.
+-   `bot/` – Discord bot **DevOnboader#3613** (ID: 1397063993213849672) written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows. Serves two environments: TAGS: DevOnboarder (dev) and TAGS: C2C (prod).
     See [docs/bot-types.md](docs/bot-types.md) for details on how the Discord bot differs from Codex agents.
 -   `frontend/` – Vite-based React application.
 -   `auth/` – Environment files for the authentication service.
@@ -70,6 +70,40 @@ When Docker isn't available, the script installs Python 3.12 using `mise` or `as
 | Swift    | 6.1     |
 
 Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
+
+## Discord Bot Integration
+
+Our Discord bot **DevOnboader#3613** (ID: 1397063993213849672) provides automated onboarding workflows and developer assistance. The bot serves two environments:
+
+- **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
+- **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
+
+### Bot Features
+
+- Automated role assignment for new members
+- Developer verification workflows  
+- Command-based project assistance
+- Integration with backend API services
+- Multi-environment guild management
+- Real-time service status monitoring
+
+### Bot Commands
+
+- `/onboard` - Start the onboarding process
+- `/verify` - Verify developer credentials
+- `/dependency_inventory` - Check project dependencies
+- `/qa_checklist` - Display quality assurance checklist
+- `/help` - Display available commands
+- `/status` - Check bot and service status
+
+### Management Commands
+
+- `npm run invite` - Generate bot invite links
+- `npm run status` - Check bot service status  
+- `npm run test-guilds` - Test guild connectivity
+- `npm run dev` - Start development bot instance
+
+The bot automatically connects to both guild environments and provides consistent functionality across development and production workflows.
 
 ## Documentation and Onboarding
 
@@ -143,7 +177,7 @@ devcontainer dev --workspace-folder . --config .devcontainer/devcontainer.json
 ```
 
 Alternatively, you can run the Docker Compose setup directly.
-This starts the auth, bot, XP API, frontend, and database services using
+This starts the auth, bot (DevOnboader#3613), XP API, frontend, and database services using
 environment variables from `.env.dev`.
 Copy each `*.env.example` to `.env` inside its service directory before starting.
 The `frontend/` directory hosts a Vite-based React app.
@@ -253,7 +287,7 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 10. Install git hooks with `pre-commit install` so lint checks run automatically.
 11. The CI workflow enforces a minimum of **95% code coverage** for all projects
     (frontend, bot, and backend). Pull requests will fail if any test suite drops
-    below this threshold.
+    below this threshold. Current coverage: Backend 96%+, Bot 100%, Frontend 100%.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
