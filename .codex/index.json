@@ -1,0 +1,39 @@
+{
+    "agents": {
+        "management-ingest": {
+            "name": "management-ingest",
+            "codex_runtime": false,
+            "codex_dry_run": true,
+            "discord_role_required": "CTO",
+            "authentication_required": true,
+            "environment": "dev",
+            "discord_server_dev": "1386935663139749998",
+            "discord_server_prod": "1065367728992571444",
+            "integration_log": "https://codex.theangrygamershow.com/docs/devonboarder/ci-integration-hold",
+            "webhook_urls": {
+                "dev": "https://discord.com/api/webhooks/1364500164127100969/i_drFE3cZypXFW6740J21Ii3dMZnJdgZ8qov5XtKDGTzyBg37s2pXu4fMdxkIcLY2Ej1/slack",
+                "prod": "https://discord.com/api/webhooks/1364501968764276779/_y22MC-c8rwyl3Hpox52ylog2UwWAOURuNKapC0Eq1PlV5yIn8GJl89nkPr9J70Cy4UD/slack"
+            },
+            "status": "dry_run_active",
+            "last_updated": "2025-07-21"
+        }
+    },
+    "configuration": {
+        "dry_run_mode": true,
+        "live_triggers_enabled": false,
+        "discord_bot_ready": false,
+        "environment": "dev",
+        "safety_guards": {
+            "require_explicit_activation": true,
+            "validate_role_permissions": true,
+            "log_all_actions": true
+        }
+    },
+    "integration_status": {
+        "devonboarder_ci": "resolved",
+        "discord_environment": "configured",
+        "codex_agents": "dry_run_mode",
+        "api_testing": "postman_ready",
+        "live_integration": "awaiting_authorization"
+    }
+}
