@@ -19,3 +19,7 @@ __pycache__/
 
 coverage/
 .coverage
+
+# Ignore Potato.md (personal configuration file - see docs/about-potato.md)
+
+Potato.md
