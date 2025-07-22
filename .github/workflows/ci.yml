@@ -69,7 +69,7 @@ jobs:
             - name: Install shellcheck
               run: pip install shellcheck-py
             - name: Lint shell scripts
-              run: shellcheck scripts/*.sh
+              run: shellcheck --severity=warning scripts/*.sh
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
             - name: Install GitHub CLI

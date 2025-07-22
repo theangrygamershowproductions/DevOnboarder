@@ -33,9 +33,9 @@ Please review and complete the following checklist before merging:
 <details>
 <summary>\xF0\x9F\x93\x8B Continuous Improvement Checklist</summary>
 
-```markdown
+\`\`\`markdown
 $checklist_content
-```
+\`\`\`
 
 </details>
 
