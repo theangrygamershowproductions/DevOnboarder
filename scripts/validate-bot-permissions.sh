@@ -18,12 +18,11 @@ yamllint -c .github/.yamllint-config "$FILE"
 
 
 # Capture agents missing permission entries
-missing_permissions=$(python scripts/list-bots.py | python - <<'PY'
+missing_permissions=$(python scripts/list-bots.py | python -c "
 import json, sys
 data = json.load(sys.stdin)
-print(",".join(data.get("missing_permissions", [])))
-PY
-)
+print(','.join(data.get('missing_permissions', [])))
+")
 
 if [ -n "$missing_permissions" ]; then
   echo "Bots missing permission entries: $missing_permissions" >&2

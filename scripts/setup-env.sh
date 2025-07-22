@@ -67,7 +67,7 @@ EOF
     fi
     # Install the project with test extras so runtime dependencies are available
     if [ -f pyproject.toml ]; then
-        pip install -e .[test]
+        pip install -e ".[test]"
     fi
     if [ -d frontend ]; then
         cd frontend
@@ -90,6 +90,7 @@ EOF
         fi
         cd ..
     fi
-    export PYTHONPATH="$(pwd)"
+    PYTHONPATH="$(pwd)"
+    export PYTHONPATH
     echo "Local environment ready ✅"
 fi
