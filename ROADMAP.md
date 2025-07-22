@@ -187,11 +187,11 @@ Frontend Service (Port 8081)
 1. **Discord Bot Token Security**
    - Current: Environment variable storage with restricted access
    - Required: DevSecOps validation of credential management
-   
+
 2. **Multi-Environment Access Controls**
    - Current: Role-based permissions implemented
    - Required: Security assessment of permission model
-   
+
 3. **API Endpoint Security**
    - Current: Basic authentication and HTTPS
    - Required: Comprehensive security audit
