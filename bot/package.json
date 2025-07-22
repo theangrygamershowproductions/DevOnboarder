@@ -1,53 +1,59 @@
 {
-  "name": "devonboarder-bot",
-  "version": "1.0.0",
-  "license": "MIT",
-  "main": "dist/main.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/main.js",
-    "test": "jest --coverage",
-    "coverage": "jest --coverage",
-    "lint": "eslint \"src/**/*.{js,ts}\"",
-    "format": "prettier --write \"src/**/*.{js,ts}\""
-  },
-  "dependencies": {
-    "discord.js": "^14.21.0",
-    "dotenv": "^17.2.0",
-    "toml": "^3.0.0",
-    "xlsx": "^0.18.5"
-  },
-  "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.13",
-    "eslint": "^9.31.0",
-    "jest": "^30.0.4",
-    "prettier": "^3.6.2",
-    "ts-jest": "^29.1.1",
-    "typescript": "^5.8.3"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text",
-      "lcov"
-    ],
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/src/commands",
-      "<rootDir>/src/utils/loadFiles.ts"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 95,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
+    "name": "devonboarder-bot",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "dist/main.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/main.js",
+        "dev": "npm run build && npm start",
+        "test": "jest --coverage",
+        "coverage": "jest --coverage",
+        "lint": "eslint \"src/**/*.{js,ts}\"",
+        "format": "prettier --write \"src/**/*.{js,ts}\"",
+        "generate-invite": "node scripts/generate-invite.js",
+        "invite": "npm run generate-invite",
+        "guild-check": "node guild-check.js",
+        "test-guilds": "node scripts/test-guild-connections.js",
+        "status": "bash scripts/deployment-status.sh"
+    },
+    "dependencies": {
+        "discord.js": "^14.21.0",
+        "dotenv": "^17.2.0",
+        "toml": "^3.0.0",
+        "xlsx": "^0.18.5"
+    },
+    "devDependencies": {
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.0.13",
+        "eslint": "^9.31.0",
+        "jest": "^30.0.4",
+        "prettier": "^3.6.2",
+        "ts-jest": "^29.1.1",
+        "typescript": "^5.8.3"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node",
+        "collectCoverage": true,
+        "coverageReporters": [
+            "text",
+            "lcov"
+        ],
+        "coveragePathIgnorePatterns": [
+            "<rootDir>/src/commands",
+            "<rootDir>/src/utils/loadFiles.ts"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "branches": 95,
+                "functions": 95,
+                "lines": 95,
+                "statements": 95
+            }
+        }
+    },
+    "engines": {
+        "node": ">=20"
     }
-  },
-  "engines": {
-    "node": ">=20"
-  }
 }
