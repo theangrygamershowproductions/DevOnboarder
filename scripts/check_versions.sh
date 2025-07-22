@@ -5,7 +5,7 @@ README="README.md"
 
 get_expected() {
     local lang="$1"
-    grep -E "^\| ${lang//./\.} \|" "$README" | head -n1 | awk -F'|' '{gsub(/ /,"",$3); print $3}'
+    grep -E "^\| ${lang//./\.}[[:space:]]+\|" "$README" | head -n1 | awk -F'|' '{gsub(/ /,"",$3); print $3}'
 }
 
 expected_python=$(get_expected "Python")
