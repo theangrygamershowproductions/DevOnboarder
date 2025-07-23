@@ -12,12 +12,19 @@ NC='\033[0m' # No Color
 echo "🔧 Simple Markdown Formatting Fixes"
 echo "=================================="
 
-# Target files that need formatting fixes
+# Target files that need formatting fixes (excluding personal files)
 target_files=(
     "VERIFICATION_REPORT.md"
     "PROJECT_RESOLUTION_SUMMARY.md" 
     "ISSUE_RESOLUTION_SUMMARY.md"
     "agents/documentation-quality.md"
+)
+
+# Files to exclude from automation
+excluded_files=(
+    "Potato.md"
+    "*.personal.md"
+)
 )
 
 fixed_count=0

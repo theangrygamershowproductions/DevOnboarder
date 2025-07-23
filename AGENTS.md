@@ -36,6 +36,22 @@ This repository follows the DevOnboarder protocol. Key points:
 All agent documentation must include a `codex-agent` YAML header and be listed
 in `.codex/agents/index.json` so Codex can locate each role during automation.
 
+**📋 HAND-OFF.md Requirement**: All bots/agents must create a `HAND-OFF.md` file when completing significant tasks. This file should document:
+
+- Work completed and validation performed
+- Changes made to automation/configuration
+- Ongoing monitoring and maintenance requirements
+- Next steps and handoff details
+
+Use the template at `templates/HAND-OFF.md` for consistency.
+
+**🚫 Agent Exclusion Policy**: Certain files are excluded from automated agent processing:
+
+- `Potato.md` - Personal configuration file
+- Files matching `**/personal/**` - Personal documentation
+- Files with `.personal.md` suffix
+- Configuration files listed in `.markdownlint-ignore`
+
 ## Commit Message Guidelines
 
 All contributors **must** follow these standards for commit messages:
@@ -88,10 +104,27 @@ See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under
 
 ## Potato Ignore Policy
 
+### CRITICAL: DO NOT MODIFY POTATO.MD UNDER ANY CIRCUMSTANCES
+
 "Potato" and `Potato.md` must remain in `.gitignore`, `.dockerignore`, and `.codespell-ignore`.
 Contributors may not remove or modify these entries without project lead approval and an
 explanation recorded in `docs/CHANGELOG.md`.
-Both pre-commit and CI run `scripts/check_potato_ignore.sh` to verify the entries exist.
+
+### Enforcement Mechanisms
+
+- **Pre-commit hooks**: `scripts/check_potato_ignore.sh` and `scripts/enhanced_potato_check.sh`
+- **CI Pipeline**: `.github/workflows/potato-policy.yml` blocks violations
+- **Git hooks**: Prevent Potato.md modifications at commit time
+- **Agent exclusions**: All automation must exclude Potato.md
+
+### Violation Response
+
+1. **Immediate**: Commit/PR blocked by automation
+2. **Required**: Project lead approval for any exceptions
+3. **Documentation**: Must be recorded in `docs/CHANGELOG.md`
+4. **Review**: Policy violations trigger security review
+
+Both pre-commit and CI run multiple checks to verify compliance and block any violations.
 
 ## Codex CI Monitoring Policy
 
@@ -130,36 +163,36 @@ If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being
 
 ### 1. Check Workflow Logs
 
-* Go to **Actions** in your GitHub repository.
-* Find the run where issues were supposed to be closed (typically on a successful build or during the cleanup job).
-* Open the workflow run and review the logs for any errors or warnings in the steps related to:
-  * `gh issue close`
-  * `gh issue create`
-* **Common error messages:** “Resource not accessible by integration”, “insufficient permission”, “No issues found”, etc.
+- Go to **Actions** in your GitHub repository.
+- Find the run where issues were supposed to be closed (typically on a successful build or during the cleanup job).
+- Open the workflow run and review the logs for any errors or warnings in the steps related to:
+    - `gh issue close`
+    - `gh issue create`
+- **Common error messages:** “Resource not accessible by integration”, “insufficient permission”, “No issues found”, etc.
 
 ### 2. Verify Token Usage
 
-* In the workflow YAML (`.github/workflows/ci-health.yml` and others), confirm that you are setting the environment variable:
+- In the workflow YAML (`.github/workflows/ci-health.yml` and others), confirm that you are setting the environment variable:
 
   ```yaml
   env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
 
-* Ensure all steps that use the `gh` CLI have access to this variable.
+- Ensure all steps that use the `gh` CLI have access to this variable.
 
 ### 3. Confirm Token Permissions
 
-* The default `GITHUB_TOKEN` **should** have `issues: write` permission in your repository’s main branch context.
-* **Forks or external contributors:**
-  * For security, `GITHUB_TOKEN` in forks has reduced permissions. Closing issues may not work from forked PR workflows.
-* **To check:**
-  * Go to your repo → **Settings** → **Actions** → **General** → **Workflow permissions**.
-  * Ensure “Read and write permissions” is enabled for `GITHUB_TOKEN`.
+- The default `GITHUB_TOKEN` **should** have `issues: write` permission in your repository’s main branch context.
+- **Forks or external contributors:**
+    - For security, `GITHUB_TOKEN` in forks has reduced permissions. Closing issues may not work from forked PR workflows.
+- **To check:**
+    - Go to your repo → **Settings** → **Actions** → **General** → **Workflow permissions**.
+    - Ensure “Read and write permissions” is enabled for `GITHUB_TOKEN`.
 
 ### 4. Review Issue-Cleanup Logic
 
-* Open your workflow YAML and locate the step that closes issues. Example:
+- Open your workflow YAML and locate the step that closes issues. Example:
 
   ```yaml
   - name: Close CI failure issues
@@ -170,34 +203,34 @@ If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
 
-* Ensure:
-  * The `gh` CLI commands are not being skipped (check any `if:` conditions).
-  * The filter logic (labels, state, etc.) matches the actual issues.
-  * There are no silent failures—add `set -e` or print error output for failed commands.
+- Ensure:
+    - The `gh` CLI commands are not being skipped (check any `if:` conditions).
+    - The filter logic (labels, state, etc.) matches the actual issues.
+    - There are no silent failures—add `set -e` or print error output for failed commands.
 
 ### 5. Handle Duplicates or Stale Issues
 
-* If issues remain open or duplicate:
-  * Run `gh issue list --label ci-failure --state open` manually in your local terminal (with a PAT or appropriate token).
-  * Close leftover issues by hand if needed.
-* Consider adding a scheduled cleanup workflow (e.g., weekly) to close any lingering CI failure issues automatically.
+- If issues remain open or duplicate:
+    - Run `gh issue list --label ci-failure --state open` manually in your local terminal (with a PAT or appropriate token).
+    - Close leftover issues by hand if needed.
+- Consider adding a scheduled cleanup workflow (e.g., weekly) to close any lingering CI failure issues automatically.
 
 ### 6. Escalate/Automate Further
 
-* If you routinely hit token limitations, create a [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with `issues: write`, and add it as a secret (e.g., `CI_ISSUE_TOKEN`).
-* Update your workflow to use `CI_ISSUE_TOKEN` when available, falling back to `GITHUB_TOKEN` otherwise.
+- If you routinely hit token limitations, create a [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with `issues: write`, and add it as a secret (e.g., `CI_ISSUE_TOKEN`).
+- Update your workflow to use `CI_ISSUE_TOKEN` when available, falling back to `GITHUB_TOKEN` otherwise.
 
 ### 7. Document Known Limitations
 
-* Note in your README or AGENTS.md:
+- Note in your README or AGENTS.md:
 
   > *“Issue automation may fail or duplicate on forks or when GitHub token permissions are restricted. For persistent problems, see [Troubleshooting Guide](#troubleshooting-guide-ci-failure-issue-automation).”*
 
 ## Quick Checklist
 
-* [ ] Reviewed workflow logs for errors.
-* [ ] Confirmed correct token usage and permissions.
-* [ ] Checked issue-closing step logic.
-* [ ] Closed stale issues as needed.
-* [ ] (Optional) Scheduled periodic cleanup workflow.
-* [ ] Documented limitations for future contributors.
+- [ ] Reviewed workflow logs for errors.
+- [ ] Confirmed correct token usage and permissions.
+- [ ] Checked issue-closing step logic.
+- [ ] Closed stale issues as needed.
+- [ ] (Optional) Scheduled periodic cleanup workflow.
+- [ ] Documented limitations for future contributors.

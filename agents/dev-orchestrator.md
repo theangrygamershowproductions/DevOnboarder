@@ -6,6 +6,7 @@ codex-agent:
   triggers: Push to dev or manual dispatch
   output: Deployment job logs
 permissions:
+
   - workflows:write
 ---
 

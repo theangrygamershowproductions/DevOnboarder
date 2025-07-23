@@ -110,3 +110,32 @@ errors, the `monitor-ci` task attempts an automatic fix by running `ruff --fix`
 and `pre-commit run --files` on the affected files. If the patch applies safely,
 Codex commits the change and reruns the build; otherwise it opens a pull
 request.
+
+## Documentation Quality
+
+The **Documentation Quality Agent** ensures all markdown files maintain consistent formatting and quality standards:
+
+### Automated Quality Checks
+
+- **Markdown Linting**: `markdownlint-cli` validates all `.md` files
+- **Formatting Standards**: Enforces consistent heading hierarchy, list formatting, and code blocks
+- **Exclusion Policy**: Protects critical files like `Potato.md` from automated changes
+- **CI Integration**: Quality checks run on every commit and PR
+
+### Agent Configuration
+
+```yaml
+AgentId: Agent.DocumentationQuality
+Trigger: ["commit", "pr", "schedule"]
+Paths: ["**/*.md", "!Potato.md", "!docs/personal/**"]
+Outputs: ["lint_reports", "fixed_files"]
+```
+
+### Enforcement Mechanisms
+
+- **Pre-commit**: Runs quality checks before commits
+- **GitHub Actions**: CI workflow validates documentation
+- **Auto-fix**: Safe formatting corrections applied automatically
+- **Quality Reports**: Generated for review and tracking
+
+This ensures all documentation maintains professional standards while respecting project policies.

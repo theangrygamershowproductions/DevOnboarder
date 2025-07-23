@@ -68,6 +68,7 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 -   Documentation for each agent lives under `/agents` and begins with a `codex-agent` YAML header.
 -   Every agent must be listed in `.codex/agents/index.json` and permissions are defined in `.codex/bot-permissions.yaml`.
 -   CI regenerates environment variable tables with `scripts/regenerate_env_docs.py` and validates them with `scripts/check_env_docs.py`.
+-   **HAND-OFF.md Requirement**: All bots/agents must create a `HAND-OFF.md` file when completing tasks, documenting work completed, validation performed, and ongoing automation status.
 
 ## 13. Bot Inventory
 

@@ -1,0 +1,7 @@
+Potato.md
+**/personal/**
+*.personal.md
+**/node_modules/**
+**/coverage/**
+**/dist/**
+**/build/**

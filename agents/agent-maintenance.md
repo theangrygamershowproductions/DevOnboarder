@@ -6,6 +6,7 @@ codex-agent:
   triggers: manual
   output: .codex/logs/agent-maintenance.log
 permissions:
+
   - repo:write
   - contents:read
 ---

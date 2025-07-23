@@ -6,6 +6,7 @@ codex-agent:
   triggers: manual or `python -m diagnostics`
   output: .codex/logs/diagnostics-bot.log
 permissions:
+
   - repo:read
   - actions:read
 ---

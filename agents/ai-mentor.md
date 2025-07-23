@@ -6,6 +6,7 @@ codex-agent:
   triggers: on_question_received
   output: .codex/logs/ai-mentor.log
 permissions:
+
   - repo:read
 ---
 

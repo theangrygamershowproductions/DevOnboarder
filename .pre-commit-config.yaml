@@ -43,6 +43,11 @@ repos:
             name: Potato ignore policy
             entry: bash scripts/check_potato_ignore.sh
             language: system
+          - id: enhanced-potato-protection
+            name: Enhanced Potato protection
+            entry: bash scripts/enhanced_potato_check.sh
+            language: system
+            stages: [commit, push]
           - id: env-docs-check
             name: Environment docs check
             entry: python scripts/check_env_docs.py

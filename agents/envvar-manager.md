@@ -15,11 +15,13 @@ codex-agent:
 Ensure every project directory maintains an up-to-date `.env.example` file that reflects the variables referenced in code, workflow YAMLs, and agent documentation. The agent scans for variable usage, compares it to existing `.env.example` files, and reports discrepancies.
 
 **Inputs:**  
+
 - Source code and workflow YAML files  
 - Existing `.env.example` files  
 - `agents/index.md` for the authoritative variable list
 
 **Outputs:**  
+
 - Updated `.env.example` files for each project directory  
 - GitHub issues summarizing missing or redundant variables
 
@@ -27,6 +29,7 @@ Ensure every project directory maintains an up-to-date `.env.example` file that 
 Requires read access to the repository and write/PR permissions to update example files or open issues.
 
 **Workflow:**  
+
 1. Parse environment variable references in code and workflows.  
 2. Map each variable to the directories that use it.  
 3. Update or generate `.env.example` files so that each directory reflects the variables it requires.  
@@ -45,7 +48,8 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 - File-specific rule overrides are applied using inline comments.
 - CI automatically runs linting via `markdownlint-cli2-action`.
 
-### Customizations:
+### Customizations
+
 ```json
 {
   "MD013": false,
@@ -53,7 +57,7 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 }
 ```
 
-* To disable rules in a file, add:
+- To disable rules in a file, add:
 
   ```markdown
   <!-- markdownlint-disable-file MD### -->

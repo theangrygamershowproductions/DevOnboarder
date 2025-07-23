@@ -1,0 +1,45 @@
+name: Potato Policy Enforcement
+
+on:
+    push:
+        paths:
+            - "Potato.md"
+            - ".gitignore"
+            - ".dockerignore"
+            - ".codespell-ignore"
+    pull_request:
+        paths:
+            - "Potato.md"
+            - ".gitignore"
+            - ".dockerignore"
+            - ".codespell-ignore"
+
+jobs:
+    potato-policy:
+        runs-on: ubuntu-latest
+        name: Enforce Potato Ignore Policy
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Check for Potato.md modifications
+              run: |
+                  if git diff --name-only origin/main..HEAD | grep -q "^Potato\.md$"; then
+                    echo "❌ POLICY VIOLATION: Potato.md has been modified!"
+                    echo "🚫 The Potato Ignore Policy prohibits editing Potato.md"
+                    echo "📋 See AGENTS.md for policy details"
+                    echo "📝 Required: Project lead approval + CHANGELOG.md documentation"
+                    exit 1
+                  fi
+
+            - name: Verify ignore file entries
+              run: |
+                  bash scripts/enhanced_potato_check.sh
+
+            - name: Validate policy compliance
+              run: |
+                  echo "🥔 Potato Policy Status: COMPLIANT"
+                  echo "✅ All Potato protections active"

@@ -8,6 +8,7 @@ codex-agent:
 ---
 
 # Llama2 Agile Helper Agent
+
 **Status:** Active.
 
 **Purpose:** Offers agile planning suggestions and coaching using the Llama2 language model.
@@ -19,7 +20,6 @@ codex-agent:
 ## Environment Variables
 
 - `LLAMA2_API_KEY` – API key for calling the Llama2 service.
-
 
 ## Planned Workflows
 
@@ -60,6 +60,7 @@ Prompt files live in the `prompts/` folder.
 ## Metrics
 
 Metrics are logged in `metrics/llama2-usage.md`.
+
 - Number of agent invocations
 - Time saved vs. manual planning (estimation)
 - Ticket classification accuracy
