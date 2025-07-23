@@ -1,0 +1,106 @@
+name: PR Automation Framework
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+        branches: [main, master]
+
+    # Allow manual triggering
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: "PR number to process"
+                required: true
+                type: string
+            mode:
+                description: "Automation mode"
+                required: true
+                default: "analyze"
+                type: choice
+                options:
+                    - analyze
+                    - execute
+                    - full-auto
+
+jobs:
+    pr-automation:
+        runs-on: ubuntu-latest
+        if: ${{ !github.event.pull_request.draft }}
+
+        permissions:
+            contents: write
+            pull-requests: write
+            checks: read
+            actions: read
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup dependencies
+              run: |
+                  # Install GitHub CLI if not available
+                  type gh >/dev/null 2>&1 || {
+                    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                    sudo apt update
+                    sudo apt install gh
+                  }
+
+                  # Install other tools
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+
+                  # Install Node.js tools
+                  npm install -g markdownlint-cli
+
+            - name: Setup automation framework
+              run: |
+                  bash scripts/setup_automation.sh
+
+            - name: Authenticate with GitHub
+              run: |
+                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+            - name: Run PR automation
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  # Determine PR number and mode
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                    PR_NUMBER="${{ github.event.inputs.pr_number }}"
+                    MODE="${{ github.event.inputs.mode }}"
+                  else
+                    PR_NUMBER="${{ github.event.pull_request.number }}"
+                    # Use analyze mode by default for automated runs
+                    MODE="analyze"
+                  fi
+
+                  echo "🤖 Running PR automation for PR #${PR_NUMBER} in ${MODE} mode"
+
+                  # Run the automation
+                  bash scripts/automate_pr_process.sh "${PR_NUMBER}" "${MODE}"
+
+            - name: Upload automation reports
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: pr-automation-reports-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+                  path: |
+                      reports/
+                      logs/
+                  retention-days: 30
+
+            - name: Comment automation summary
+              if: always()
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
+
+                  if [[ -f "reports/automation_summary_${PR_NUMBER}.md" ]]; then
+                    echo "📋 Posting automation summary to PR #${PR_NUMBER}"
+                    gh pr comment "${PR_NUMBER}" --body-file "reports/automation_summary_${PR_NUMBER}.md"
+                  fi
