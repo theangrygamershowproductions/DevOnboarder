@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Always ensure development requirements are installed
 echo "Installing dev requirements..."
-pip install -e .[test]
+pip install -e ".[test]"
 pip check
 
 # Ensure runtime dependencies are installed
@@ -31,8 +31,8 @@ if grep -q "ModuleNotFoundError" "$pytest_log"; then
     echo "See the troubleshooting section in docs/README.md for details."
 fi
 
-if [ $pytest_exit -ne 0 ]; then
-    exit $pytest_exit
+if [ "$pytest_exit" -ne 0 ]; then
+    exit "$pytest_exit"
 fi
 if [ -d bot ] && [ -f bot/package.json ]; then
     npm ci --prefix bot
