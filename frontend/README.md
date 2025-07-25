@@ -1,7 +1,7 @@
 # DevOnboarder Frontend
 
 This directory houses the DevOnboarder React application built with Vite.
-Node.js 20 is required. Run `mise install` to use the version defined in `.tool-versions`.
+Node.js 22 is required. Run `mise install` to use the version defined in `.tool-versions`.
 
 ## Setup
 

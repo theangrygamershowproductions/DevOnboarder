@@ -20,14 +20,14 @@ diagnostics_bot:
     permissions:
         - actions: read
         - issues: write
-        - contents: read  # Fix for repository: read
+        - contents: read # Fix for repository: read
 
 orchestration_bot:
     secret: ORCHESTRATION_BOT_KEY
     permissions:
         - workflows: write
         - deployments: read
-        - contents: read  # Fix for repository: read
+        - contents: read # Fix for repository: read
 
 env_var_manager:
     secret: ENV_VAR_MANAGER_KEY
