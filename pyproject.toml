@@ -44,6 +44,10 @@ test = [
     "pyyaml",
     "black",
     "openapi-spec-validator",
+    "ruff",
+    "mypy",
+    "pip-audit",
+    "bandit",
 ]
 
 [project.scripts]
