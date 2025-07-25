@@ -31,4 +31,3 @@ def test_cli_owners(tmp_path: Path, capsys) -> None:
 
     parse_retro_actions.main([str(retro_dir), "--owners"])
     assert capsys.readouterr().out.strip() == "@user"
-

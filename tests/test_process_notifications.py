@@ -30,9 +30,9 @@ def test_process_notifications_adds_comment(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(
                 cmd,
                 0,
-                stdout=json.dumps([
-                    {"number": 42, "title": "Operations Notifications"}
-                ]),
+                stdout=json.dumps(
+                    [{"number": 42, "title": "Operations Notifications"}]
+                ),
                 stderr="",
             )
         if "comment" in cmd:
@@ -46,4 +46,3 @@ def test_process_notifications_adds_comment(tmp_path, monkeypatch):
 
     assert calls
     assert calls[0][3] == "42"
-
