@@ -1,6 +1,8 @@
 {
     "name": "devonboarder-bot",
     "version": "1.0.0",
+    "description": "Discord bot for DevOnboarder multi-guild automation and verification",
+    "author": "DevOnboarder Project",
     "license": "MIT",
     "main": "dist/main.js",
     "scripts": {

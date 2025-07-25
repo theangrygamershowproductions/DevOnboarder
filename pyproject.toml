@@ -1,3 +1,15 @@
+# =============================================================================
+# File: pyproject.toml
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-07-25
+# Updated: 2025-07-25
+# Purpose: Python project configuration and dependencies
+# Dependencies: setuptools, ruff, pytest
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# Format: TOML - Python Project Configuration Standard
+# =============================================================================
+
 [tool.ruff]
 line-length = 88
 target-version = "py312"

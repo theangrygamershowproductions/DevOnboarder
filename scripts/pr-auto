@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Quick alias for PR automation
+bash scripts/automate_pr_process.sh "$@"
