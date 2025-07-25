@@ -1,0 +1,20 @@
+{
+    "version": "1.0",
+    "framework": "DevOnboarder PR Automation",
+    "modes": {
+        "analyze": "Analysis only - safe for all PRs",
+        "execute": "Analysis + automated fixes",
+        "full-auto": "Full automation including potential auto-merge"
+    },
+    "safety": {
+        "protected_files": ["Potato.md", "*.key", "*.pem"],
+        "protected_branches": ["main", "master", "production"],
+        "require_approval": true
+    },
+    "thresholds": {
+        "auto_merge_health": 95,
+        "minor_fixes_threshold": 90,
+        "major_fixes_threshold": 80,
+        "fresh_start_threshold": 80
+    }
+}

@@ -1,0 +1,67 @@
+# Example TAGS development compose file. Copy to the repo root as
+# `docker-compose.tags.dev.yaml` and customize the service names,
+# images, and environment variables to match your deployment.
+x-app-base: &app-base
+  build: .
+
+x-node-base: &node-base
+  image: node:20
+  command: ["npm", "start"]
+
+x-db-base: &db-base
+  image: postgres:15
+  environment:
+    POSTGRES_USER: devuser
+    POSTGRES_PASSWORD: devpass
+    POSTGRES_DB: devdb
+  volumes:
+    - db_data:/var/lib/postgresql/data
+
+x-env-dev: &env-dev
+  env_file:
+    - .env.dev
+
+services:
+  auth:
+    <<: [*app-base, *env-dev]
+    command: ["devonboarder-auth"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+  bot:
+    build:
+      context: .
+      dockerfile: bot/Dockerfile.dev
+    env_file:
+      - .env.dev
+    volumes:
+      - ./docs:/docs
+
+  xp:
+    <<: [*app-base, *env-dev]
+    command: ["devonboarder-api"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    env_file:
+      - .env.dev
+    ports:
+      - "3000:3000"
+
+  db:
+    <<: [*db-base, *env-dev]
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:

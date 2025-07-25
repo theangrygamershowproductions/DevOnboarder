@@ -1,43 +1,65 @@
+# ---
+# codex-agent:
+#   name: Agent.AuditRetroActions
+#   role: Audits open action items from retrospectives and notifies via audit bot
+#   scope: .github/workflows/audit-retro-actions.yml
+#   triggers: Weekly schedule or manual dispatch
+#   output: CI logs, audit-bot issue
+#   tags: [automation, codex, retro, audit, bot]
+#   version: 1.1.0
+#   last_updated: 2025-07-25
+#   owner: TAGS Engineering
+# ---
+
 name: Audit Retrospective Action Items
+
 permissions:
-  contents: read
-  issues: write
+    contents: read
+    issues: write
+
 on:
-  schedule:
-    - cron: '0 0 * * 1'
-  workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * 1"
+    workflow_dispatch:
+
 jobs:
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check for unresolved action items
-        id: check
-        run: |
-          UNRESOLVED=$(python scripts/parse_retro_actions.py || true)
-          if [ -n "$UNRESOLVED" ]; then
-            echo "unresolved_actions=$UNRESOLVED" >> "$GITHUB_OUTPUT"
-          else
-            echo "unresolved_actions=None" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Install PyYAML
-        if: steps.check.outputs.unresolved_actions != 'None'
-        run: pip install PyYAML
-      - name: Verify bot permission
-        if: steps.check.outputs.unresolved_actions != 'None'
-        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-      - name: Notify unresolved actions
-        if: steps.check.outputs.unresolved_actions != 'None'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
-          cat > body.md <<'BODY'
-          The following action items remain open:
+    audit:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-          ${{ steps.check.outputs.unresolved_actions }}
+            - name: Check for unresolved action items
+              id: check
+              run: |
+                  UNRESOLVED=$(python scripts/parse_retro_actions.py || true)
+                  if [ -n "$UNRESOLVED" ]; then
+                    echo "unresolved_actions=$UNRESOLVED" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "unresolved_actions=None" >> "$GITHUB_OUTPUT"
+                  fi
 
-          CC: $OWNERS
-          BODY
-          jq -Rs --arg title "Unresolved Retrospective Action Items" '{title:$title,body:.}' body.md > notify.json
-          gh workflow run notify.yml -f data="$(cat notify.json)"
+            - name: Install PyYAML
+              if: steps.check.outputs.unresolved_actions != 'None'
+              run: pip install PyYAML
+
+            - name: Verify bot permission
+              if: steps.check.outputs.unresolved_actions != 'None'
+              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+              env:
+                  BOT_KEY: ${{ secrets.ORCHESTRATION_BOT_KEY }}
+
+            - name: Notify unresolved actions
+              if: steps.check.outputs.unresolved_actions != 'None'
+              env:
+                  GH_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
+              run: |
+                  OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
+                  cat > body.md <<'BODY'
+                  The following action items remain open:
+
+                  ${{ steps.check.outputs.unresolved_actions }}
+
+                  CC: $OWNERS
+                  BODY
+                  jq -Rs --arg title "Unresolved Retrospective Action Items" '{title:$title,body:.}' body.md > notify.json
+                  gh workflow run notify.yml -f data="$(cat notify.json)"
