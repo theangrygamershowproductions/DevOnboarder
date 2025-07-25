@@ -30,7 +30,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Load environment variables from the auth service's .env file when present
-load_dotenv(Path(__file__).resolve().parents[1] / '..' / 'auth' / '.env')
+load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")
