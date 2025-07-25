@@ -1,7 +1,10 @@
 # DevOnboarder
 
 ![Coverage](coverage.svg)
-[![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
+[![CI](https://git| Language | Version |
+|----------|---------|
+| Python   | 3.12    |
+| Node.js  | 22      |com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
@@ -61,7 +64,7 @@ When Docker isn't available, the script installs Python 3.12 using `mise` or `as
 | Language | Version |
 | -------- | ------- |
 | Python   | 3.12    |
-| Node.js  | 20      |
+| Node.js  | 22      |
 | Ruby     | 3.2.3   |
 | Rust     | 1.88.0  |
 | Go       | 1.24.4  |
