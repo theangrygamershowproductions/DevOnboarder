@@ -163,7 +163,7 @@ jobs:
                       exit 1;
                   }
             - name: Validate OpenAPI contract
-              run: openapi-spec-validator src/devonboarder/openapi.json
+              run: python -m openapi_spec_validator src/devonboarder/openapi.json
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
