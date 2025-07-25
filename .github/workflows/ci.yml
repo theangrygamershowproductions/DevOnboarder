@@ -33,6 +33,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             code: ${{ steps.filter.outputs.code }}
+            docs: ${{ steps.filter.outputs.docs }}
         steps:
             - uses: actions/checkout@v3
               with:
@@ -43,15 +44,31 @@ jobs:
               with:
                   filters: |
                       code:
-                          - '!docs/**'
-                          - '!**/*.md'
-                          - '**'
+                          - 'src/**'
+                          - 'bot/**'
+                          - 'frontend/**'
+                          - 'auth/**'
+                          - 'tests/**'
+                          - 'scripts/**'
+                          - 'config/**'
+                          - '.github/workflows/**'
+                          - 'pyproject.toml'
+                          - 'package*.json'
+                          - '.tool-versions'
+                          - 'docker-compose*.yaml'
+                          - '.env*'
+                          - 'Makefile'
+                          - 'plugins/**'
+                      docs:
+                          - 'docs/**'
+                          - '**/*.md'
+                          - '.github/copilot-instructions.md'
     test:
         needs: filter
         if: |
             github.event_name != 'push' ||
-            !contains(join(github.event.head_commit.message), '[no-ci]') &&
-            needs.filter.outputs.code == 'true'
+            (!contains(join(github.event.head_commit.message), '[no-ci]') &&
+             needs.filter.outputs.code == 'true')
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -164,20 +181,20 @@ jobs:
                   }
             - name: Validate OpenAPI contract
               run: |
-                python -c "
-                import json
-                from openapi_spec_validator import validate_spec
-                
-                with open('src/devonboarder/openapi.json') as f:
-                    spec = json.load(f)
-                
-                try:
-                    validate_spec(spec)
-                    print('✅ OpenAPI spec is valid')
-                except Exception as e:
-                    print(f'❌ OpenAPI spec validation failed: {e}')
-                    exit(1)
-                "
+                  python -c "
+                  import json
+                  from openapi_spec_validator import validate_spec
+
+                  with open('src/devonboarder/openapi.json') as f:
+                      spec = json.load(f)
+
+                  try:
+                      validate_spec(spec)
+                      print('✅ OpenAPI spec is valid')
+                  except Exception as e:
+                      print(f'❌ OpenAPI spec validation failed: {e}')
+                      exit(1)
+                  "
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
