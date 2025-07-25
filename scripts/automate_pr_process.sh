@@ -6,6 +6,7 @@ set -euo pipefail
 # Color definitions
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
+# shellcheck disable=SC2034  # RED reserved for future error messages
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
