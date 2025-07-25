@@ -195,7 +195,7 @@ jobs:
               run: ./scripts/generate-secrets.sh
             - name: Audit environment variables
               run: |
-                  env -i PATH="$PATH" bash -c 'set -a; source .env.dev; set +a; JSON_OUTPUT=env_audit.json bash scripts/audit_env_vars.sh' > env_audit.log
+                  env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=env_audit.json bash scripts/audit_env_vars.sh' > env_audit.log
                   cat env_audit.log
                   cat env_audit.json
                   missing=$(python -c 'import json,sys;print("".join(json.load(open("env_audit.json")).get("missing", [])))')
@@ -214,17 +214,17 @@ jobs:
                       env_audit.json
                   retention-days: 7
             - name: Build containers
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.dev build 2>&1 | tee ci-logs/docker-build.log
+              run: docker compose -f docker-compose.ci.yaml --env-file .env.ci build 2>&1 | tee ci-logs/docker-build.log
             - name: Scan images with Trivy
               env:
                   TRIVY_VERSION: 0.47.0
               run: bash scripts/trivy_scan.sh docker-compose.ci.yaml
             - name: Start docker compose
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.dev up -d
+              run: docker compose -f docker-compose.ci.yaml --env-file .env.ci up -d
             - name: Verify compose services
               run: |
-                  docker compose -f docker-compose.ci.yaml --env-file .env.dev ps
-                  failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.dev ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
+                  docker compose -f docker-compose.ci.yaml --env-file .env.ci ps
+                  failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
                   if [ -n "$failed" ]; then
                       docker compose logs
                       exit 1
@@ -410,7 +410,12 @@ jobs:
               working-directory: bot
             - name: Stop docker compose
               if: always()
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.dev down
+              run: |
+                  if [ -f .env.ci ]; then
+                      docker compose -f docker-compose.ci.yaml --env-file .env.ci down
+                  else
+                      docker compose -f docker-compose.ci.yaml down
+                  fi
             - name: Label Codex PR
               if: github.actor == 'codex[bot]'
               run: |
@@ -451,14 +456,13 @@ jobs:
                       if [ -n "$ISSUE" ]; then
                           "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
                       else
-                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure --assignee "$CI_BOT_USERNAME" | tee -a gh_cli.log)
+                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
                           ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                       fi
                   fi
                   echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
               env:
                   GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-                  CI_BOT_USERNAME: ${{ vars.CI_BOT_USERNAME }}
             - name: Save CI failure issue number
               if: failure() && github.event_name == 'pull_request'
               run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
