@@ -6,6 +6,51 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
 
+## ⚠️ CRITICAL: Virtual Environment Requirements
+
+**NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS**
+
+This project REQUIRES isolated environments for ALL tooling:
+
+### Mandatory Environment Usage
+- **Python**: ALWAYS use `.venv` virtual environment
+- **Node.js**: ALWAYS use project-local `node_modules` 
+- **Development**: ALWAYS use devcontainers or Docker
+- **CI/CD**: ALWAYS runs in isolated containers
+
+### Commands Must Use Virtual Environment Context
+```bash
+# ✅ CORRECT - Virtual environment usage
+source .venv/bin/activate
+pip install -e .[test]
+python -m pytest
+python -m black .
+python -m openapi_spec_validator src/devonboarder/openapi.json
+
+# ❌ WRONG - System installation
+sudo pip install package
+pip install --user package
+black .  # (if not in venv)
+```
+
+### Why This Matters
+- **Reproducible builds**: Same environment everywhere
+- **Security**: No system pollution with project dependencies
+- **Reliability**: Exact version control across team
+- **CI compatibility**: Matches production environment
+- **Multi-project safety**: No conflicts between projects
+
+### Developer Setup Requirements
+```bash
+# Required first step for ALL development
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# Then install project
+pip install -e .[test]
+```
+
 ## Architecture & Technology Stack
 
 ### Core Services
@@ -23,20 +68,40 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 ## Development Guidelines
 
-### 1. Workflow Standards
+### 1. Environment First - ALWAYS
+
+**Before ANY development work:**
+```bash
+# 1. Activate virtual environment
+source .venv/bin/activate
+
+# 2. Verify you're in venv
+which python  # Should show .venv path
+which pip     # Should show .venv path
+
+# 3. Install dependencies
+pip install -e .[test]
+npm ci --prefix bot
+npm ci --prefix frontend
+```
+
+### 2. Workflow Standards
 
 -   **Trunk-based development**: All work branches from `main`, short-lived feature branches
 -   **Pull request requirement**: All changes via PR with review
 -   **Branch cleanup**: Delete feature branches after merge
 -   **95% test coverage minimum** across all services
+-   **Virtual environment enforcement**: All tooling in isolated environments
 
-### 2. Code Quality Requirements
+### 3. Code Quality Requirements
 
 #### Python Standards
 
 -   **Python version**: 3.12 (enforced via `.tool-versions`)
--   **Linting**: ruff with line-length=88, target-version="py312"
--   **Testing**: pytest with coverage requirements
+-   **Virtual environment**: MANDATORY - all Python tools via `.venv`
+-   **Linting**: `python -m ruff` with line-length=88, target-version="py312"
+-   **Testing**: `python -m pytest` with coverage requirements
+-   **Formatting**: `python -m black` for code formatting
 -   **Type hints**: Required for all functions
 -   **Docstrings**: Required for all public functions (use NumPy style)
 
@@ -60,11 +125,12 @@ def greet(name: str) -> str:
 #### TypeScript Standards
 
 -   **Node.js version**: 22 (enforced via `.tool-versions`)
+-   **Package management**: `npm ci` for reproducible installs
 -   **Testing**: Jest for bot, Vitest for frontend
 -   **ESLint + Prettier**: Enforced formatting
 -   **100% coverage** for bot service
 
-### 3. Testing Requirements
+### 4. Testing Requirements
 
 #### Coverage Thresholds
 
@@ -72,21 +138,22 @@ def greet(name: str) -> str:
 -   **TypeScript bot**: 100% (enforced in CI)
 -   **React frontend**: 100% statements, 98.43%+ branches
 
-#### Test Commands
+#### Test Commands (Virtual Environment Required)
 
 ```bash
-# Install dependencies first (CRITICAL)
-pip install -e .[test]
-npm ci --prefix bot
-npm ci --prefix frontend
+# CRITICAL: Install dependencies first in virtual environment
+source .venv/bin/activate  # Activate venv
+pip install -e .[test]     # Install Python deps
+npm ci --prefix bot        # Install bot deps
+npm ci --prefix frontend   # Install frontend deps
 
 # Run tests with coverage
-pytest --cov=src --cov-fail-under=95
+python -m pytest --cov=src --cov-fail-under=95
 npm run coverage --prefix bot
 npm run coverage --prefix frontend
 ```
 
-### 4. Commit Message Standards
+### 5. Commit Message Standards
 
 **MANDATORY**: Use imperative mood, be descriptive and concise
 
@@ -105,6 +172,7 @@ npm run coverage --prefix frontend
 ### Directory Layout
 
 ```
+├── .venv/                     # Python virtual environment (NEVER commit)
 ├── src/devonboarder/          # Python backend application
 ├── bot/                       # Discord bot (TypeScript)
 ├── frontend/                  # React application
@@ -123,6 +191,7 @@ npm run coverage --prefix frontend
 -   `package.json`: Node.js dependencies (bot & frontend)
 -   `docker-compose.ci.yaml`: CI pipeline configuration
 -   `config/devonboarder.config.yml`: Application configuration
+-   `.tool-versions`: Environment version requirements
 
 ## Service Integration Patterns
 
@@ -163,16 +232,35 @@ npm run coverage --prefix frontend
 -   `scripts/assess_pr_health.sh`: PR health assessment
 -   `scripts/run_tests.sh`: Comprehensive test runner
 
+### Virtual Environment in CI
+
+All CI commands use proper virtual environment context:
+
+```yaml
+# Example GitHub Actions step
+- name: Run Python tests
+  run: |
+    source .venv/bin/activate
+    python -m pytest --cov=src --cov-fail-under=95
+
+- name: Validate OpenAPI
+  run: |
+    source .venv/bin/activate
+    python -m openapi_spec_validator src/devonboarder/openapi.json
+```
+
 ### Error Handling Requirements
 
 -   **GitHub CLI availability**: Always check with fallbacks
 -   **Variable initialization**: Initialize all variables early
 -   **Exit codes**: Proper error propagation in shell scripts
+-   **Virtual environment checks**: Verify environment before tool execution
 
 ## Security & Best Practices
 
 ### Security Requirements
 
+-   **No system installation**: All tools in virtual environments
 -   **No remote code execution**: Prohibited `curl | sh` patterns
 -   **Secret management**: Use GitHub Actions secrets
 -   **Token security**: Secure Discord bot token storage
@@ -181,7 +269,7 @@ npm run coverage --prefix frontend
 
 ### Documentation Standards
 
--   **Vale linting**: All Markdown must pass `scripts/check_docs.sh`
+-   **Vale linting**: `python -m vale docs/` (in virtual environment)
 -   **README updates**: Update for all major changes
 -   **Changelog**: Maintain `docs/CHANGELOG.md`
 -   **API docs**: Keep OpenAPI specs current
@@ -190,12 +278,14 @@ npm run coverage --prefix frontend
 
 ### 1. Adding New Features
 
-1. Create feature branch from `main`
-2. Implement with tests (maintain coverage)
-3. Update documentation
-4. Test in development environment
-5. Submit PR with template checklist
-6. Ensure CI passes before merge
+1. **Setup environment**: `source .venv/bin/activate`
+2. Create feature branch from `main`
+3. Install dependencies: `pip install -e .[test]`
+4. Implement with tests (maintain coverage)
+5. Update documentation
+6. Test in development environment
+7. Submit PR with template checklist
+8. Ensure CI passes before merge
 
 ### 2. Bot Command Development
 
@@ -223,14 +313,16 @@ async def get_user_status(user_id: int) -> UserStatus:
 
 ### Pre-Commit Requirements
 
+-   [ ] **Virtual environment activated** and dependencies installed
 -   [ ] All tests pass with required coverage
--   [ ] Linting passes (ruff for Python, ESLint for TypeScript)
+-   [ ] Linting passes (`python -m ruff`, ESLint for TypeScript)
 -   [ ] Documentation updated and passes Vale
 -   [ ] No secrets or sensitive data in commits
 -   [ ] Commit message follows imperative mood standard
 
 ### PR Review Checklist
 
+-   [ ] **Virtual environment setup documented** in PR if needed
 -   [ ] Coverage does not decrease
 -   [ ] All CI checks pass
 -   [ ] Documentation is clear and accurate
@@ -240,7 +332,7 @@ async def get_user_status(user_id: int) -> UserStatus:
 
 ## Plugin Development
 
-### Creating Plugins
+### Creating Plugins (Virtual Environment Required)
 
 ```python
 # plugins/example_plugin/__init__.py
@@ -252,6 +344,13 @@ def initialize():
 ```
 
 Plugins are automatically discovered from the `plugins/` directory.
+
+**Development Setup**:
+```bash
+source .venv/bin/activate
+pip install -e .[test]
+python -m pytest plugins/example_plugin/
+```
 
 ## Environment Variables
 
@@ -272,26 +371,37 @@ Plugins are automatically discovered from the `plugins/` directory.
 
 ### Common Issues
 
-1. **ModuleNotFoundError**: Run `pip install -e .[test]` before tests
-2. **Coverage failures**: Check test quality, not just quantity
-3. **Discord connection issues**: Verify token and guild permissions
-4. **CI failures**: Check GitHub CLI availability and error handling
+1. **ModuleNotFoundError**: 
+   - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+   - ❌ **NOT**: Install to system Python
 
-### Debugging Tools
+2. **Command not found (black, pytest, etc.)**:
+   - ✅ **Solution**: Use `python -m command` syntax in virtual environment
+   - ❌ **NOT**: Install globally with `pip install --user`
+
+3. **Coverage failures**: Check test quality, not just quantity
+
+4. **Discord connection issues**: Verify token and guild permissions
+
+5. **CI failures**: Check GitHub CLI availability and error handling
+
+### Debugging Tools (Virtual Environment Context)
 
 -   `python -m diagnostics`: Verify packages and environment
 -   `npm run status --prefix bot`: Check bot connectivity
--   `scripts/check_docs.sh`: Validate documentation
+-   `python -m vale docs/`: Validate documentation
 -   Coverage reports: Generated by test commands
 
 ## Agent-Specific Guidelines
 
 ### For Code Generation
 
+-   **ALWAYS assume virtual environment context** in examples
 -   Follow established patterns in existing codebase
 -   Maintain the project's "quiet reliability" philosophy
 -   Prioritize error handling and edge cases
 -   Include comprehensive tests with new code
+-   **Use `python -m module` syntax** for all Python tools
 
 ### For Refactoring
 
@@ -299,6 +409,7 @@ Plugins are automatically discovered from the `plugins/` directory.
 -   Maintain or improve test coverage
 -   Update documentation for any public interface changes
 -   Consider multi-environment implications
+-   **Ensure virtual environment compatibility**
 
 ### For Bug Fixes
 
@@ -306,10 +417,20 @@ Plugins are automatically discovered from the `plugins/` directory.
 -   Document root cause in commit message
 -   Consider if fix affects other services
 -   Update troubleshooting documentation if needed
+-   **Test in clean virtual environment**
+
+### Critical Reminders for Agents
+
+1. **NEVER suggest system installation** of Python packages
+2. **ALWAYS use `python -m module` syntax** for tools
+3. **ALWAYS verify virtual environment activation** in examples
+4. **ALWAYS include virtual environment setup** in instructions
+5. **REMEMBER**: This project runs in containers/venvs, not host systems
 
 ---
 
 **Last Updated**: Based on current codebase analysis  
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%  
 **Active Environments**: Development + Production Discord integration  
-**Review Required**: Follow PR template and maintain quality standards
+**Review Required**: Follow PR template and maintain quality standards  
+**Virtual Environment**: MANDATORY for all development and tooling
