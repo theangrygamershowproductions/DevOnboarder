@@ -3,6 +3,13 @@
 
 set -euo pipefail
 
+# Color definitions
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 PR_NUMBER="${1:-}"
 ACTION_MODE="${2:-analyze}"  # analyze, execute, full-auto
 
