@@ -43,6 +43,7 @@ test = [
     "requests",
     "pyyaml",
     "black",
+    "openapi-spec-validator",
 ]
 
 [project.scripts]
