@@ -1,6 +1,9 @@
 {
     "name": "devonboarder-frontend",
-    "version": "0.1.0",
+     },
+    "engines": {
+        "node": ">=22"
+    }version": "0.1.0",
     "description": "React frontend for DevOnboarder onboarding automation platform",
     "author": "DevOnboarder Project",
     "license": "MIT",
@@ -40,6 +43,6 @@
         "vitest": "^3.2.4"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=22"
     }
 }

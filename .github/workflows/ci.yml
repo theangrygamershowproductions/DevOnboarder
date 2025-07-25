@@ -56,7 +56,7 @@ jobs:
         strategy:
             matrix:
                 python-version: ["3.12"]
-                node-version: ["20"]
+                node-version: ["22"]
         timeout-minutes: 60
         env:
             VALE_VERSION: 3.12.0

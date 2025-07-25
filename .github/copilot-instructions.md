@@ -59,7 +59,7 @@ def greet(name: str) -> str:
 
 #### TypeScript Standards
 
--   **Node.js version**: 20 (enforced via `.tool-versions`)
+-   **Node.js version**: 22 (enforced via `.tool-versions`)
 -   **Testing**: Jest for bot, Vitest for frontend
 -   **ESLint + Prettier**: Enforced formatting
 -   **100% coverage** for bot service
