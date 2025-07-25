@@ -163,7 +163,21 @@ jobs:
                       exit 1;
                   }
             - name: Validate OpenAPI contract
-              run: python -m openapi_spec_validator src/devonboarder/openapi.json
+              run: |
+                python -c "
+                import json
+                from openapi_spec_validator import validate_spec
+                
+                with open('src/devonboarder/openapi.json') as f:
+                    spec = json.load(f)
+                
+                try:
+                    validate_spec(spec)
+                    print('✅ OpenAPI spec is valid')
+                except Exception as e:
+                    print(f'❌ OpenAPI spec validation failed: {e}')
+                    exit(1)
+                "
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
