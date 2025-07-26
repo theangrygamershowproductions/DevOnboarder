@@ -170,6 +170,18 @@ jobs:
               run: pip install -e .[test] 2>&1 | tee ci-logs/pip-install-editable.log
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
+            - name: Validate PR Summary
+              if: github.event_name == 'pull_request'
+              run: |
+                  if [ ! -f "PR_SUMMARY.md" ]; then
+                      echo "::error::PR_SUMMARY.md is required for all pull requests"
+                      echo "💡 Use the template: .github/PR_SUMMARY_TEMPLATE.md"
+                      echo "📋 Copy: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
+                      exit 1
+                  fi
+                  
+                  # Validate required sections and content
+                  python scripts/validate_pr_summary.py PR_SUMMARY.md
             - name: Generate OpenAPI spec
               run: python scripts/generate_openapi.py
             - name: Check committed OpenAPI spec
