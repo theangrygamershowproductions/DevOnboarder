@@ -182,6 +182,15 @@ jobs:
 
                   # Validate required sections and content
                   python scripts/validate_pr_summary.py PR_SUMMARY.md
+            - name: Quality Control Gate
+              run: |
+                  # Run comprehensive 95% QC validation
+                  if [[ -x "./scripts/qc_pre_push.sh" ]]; then
+                      echo "🔍 Running 95% Quality Control validation..."
+                      ./scripts/qc_pre_push.sh
+                  else
+                      echo "⚠️  QC script not found, skipping comprehensive validation"
+                  fi
             - name: Generate OpenAPI spec
               run: python scripts/generate_openapi.py
             - name: Check committed OpenAPI spec
