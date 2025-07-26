@@ -179,7 +179,7 @@ jobs:
                       echo "📋 Copy: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
                       exit 1
                   fi
-                  
+
                   # Validate required sections and content
                   python scripts/validate_pr_summary.py PR_SUMMARY.md
             - name: Generate OpenAPI spec
@@ -426,14 +426,26 @@ jobs:
               env:
                   CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
+                  # Ensure we're in virtual environment context for any Python tools
+                  source .venv/bin/activate
+
                   git config user.name "${{ github.actor }}"
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
-                  git add coverage.svg
-                  if git diff --cached --quiet; then
-                      echo "Badge unchanged"
+
+                  # Check if coverage badge file exists and has changes
+                  if [ -f "coverage.svg" ]; then
+                      git add coverage.svg
+                      
+                      # Only commit if there are changes
+                      if git diff --staged --quiet; then
+                          echo "No changes to coverage badge"
+                      else
+                          git commit -m "chore(ci): update coverage badge"
+                          # Use authenticated URL with token for push
+                          git push https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+                      fi
                   else
-                      git commit -m "chore(ci): update coverage badge"
-                      git push https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+                      echo "Coverage badge file not found"
                   fi
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
