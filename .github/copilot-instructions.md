@@ -13,12 +13,14 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 This project REQUIRES isolated environments for ALL tooling:
 
 ### Mandatory Environment Usage
-- **Python**: ALWAYS use `.venv` virtual environment
-- **Node.js**: ALWAYS use project-local `node_modules` 
-- **Development**: ALWAYS use devcontainers or Docker
-- **CI/CD**: ALWAYS runs in isolated containers
+
+-   **Python**: ALWAYS use `.venv` virtual environment
+-   **Node.js**: ALWAYS use project-local `node_modules`
+-   **Development**: ALWAYS use devcontainers or Docker
+-   **CI/CD**: ALWAYS runs in isolated containers
 
 ### Commands Must Use Virtual Environment Context
+
 ```bash
 # ✅ CORRECT - Virtual environment usage
 source .venv/bin/activate
@@ -34,13 +36,15 @@ black .  # (if not in venv)
 ```
 
 ### Why This Matters
-- **Reproducible builds**: Same environment everywhere
-- **Security**: No system pollution with project dependencies
-- **Reliability**: Exact version control across team
-- **CI compatibility**: Matches production environment
-- **Multi-project safety**: No conflicts between projects
+
+-   **Reproducible builds**: Same environment everywhere
+-   **Security**: No system pollution with project dependencies
+-   **Reliability**: Exact version control across team
+-   **CI compatibility**: Matches production environment
+-   **Multi-project safety**: No conflicts between projects
 
 ### Developer Setup Requirements
+
 ```bash
 # Required first step for ALL development
 python -m venv .venv
@@ -66,11 +70,35 @@ pip install -e .[test]
 -   **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
 -   **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
 
+### Service Integration Pattern
+
+All services follow the same FastAPI pattern:
+
+-   **Health checks**: `/health` endpoint returning `{"status": "ok"}`
+-   **CORS middleware**: Configured via `get_cors_origins()` utility
+-   **Security headers**: Custom middleware adds `X-Content-Type-Options: nosniff`
+-   **JWT authentication**: Shared auth service for user sessions
+
+```python
+# Standard service creation pattern
+def create_app() -> FastAPI:
+    app = FastAPI()
+    cors_origins = get_cors_origins()
+
+    app.add_middleware(CORSMiddleware, allow_origins=cors_origins, ...)
+    app.add_middleware(_SecurityHeadersMiddleware)
+
+    @app.get("/health")
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+```
+
 ## Development Guidelines
 
 ### 1. Environment First - ALWAYS
 
 **Before ANY development work:**
+
 ```bash
 # 1. Activate virtual environment
 source .venv/bin/activate
@@ -155,17 +183,27 @@ npm run coverage --prefix frontend
 
 ### 5. Commit Message Standards
 
-**MANDATORY**: Use imperative mood, be descriptive and concise
+**MANDATORY**: Use conventional commit format: `<TYPE>(<scope>): <subject>`
+
+**Required Format**:
+
+-   `TYPE`: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, CI (uppercase)
+-   `scope`: Optional component (bot, frontend, auth, ci, etc.)
+-   `subject`: Imperative mood, descriptive and concise
 
 **Good Examples**:
 
--   `Add user authentication endpoint with JWT validation`
--   `Fix Discord bot connection timeout handling`
--   `Update documentation for multi-environment setup`
+-   `FEAT(auth): add user authentication endpoint with JWT validation`
+-   `FIX(bot): resolve Discord connection timeout handling`
+-   `DOCS(setup): update multi-environment configuration guide`
+-   `CI(build): ensure latest GitHub CLI binary is used`
 
 **Bad Examples**:
 
 -   `update` / `fix` / `misc` / `Applying previous commit`
+-   `Add feature` (missing TYPE format)
+
+**Validation**: Enforced by `scripts/check_commit_messages.sh` in CI
 
 ## File Structure & Conventions
 
@@ -208,6 +246,17 @@ npm run coverage --prefix frontend
 -   **Commands**: `/verify`, `/dependency_inventory`, `/qa_checklist`, `/onboard`
 -   **Role-based access**: Comprehensive permission model
 -   **Management**: Use `npm run invite|status|test-guilds|dev`
+-   **Environment detection**: Guild ID-based routing in bot code
+
+```typescript
+// Multi-environment routing example
+const guildId = interaction.guild?.id;
+const isDevEnvironment = guildId === "1386935663139749998";
+const isProdEnvironment = guildId === "1065367728992571444";
+```
+
+-   **Startup logging**: Bot provides detailed environment info on startup
+-   **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 
@@ -240,13 +289,13 @@ All CI commands use proper virtual environment context:
 # Example GitHub Actions step
 - name: Run Python tests
   run: |
-    source .venv/bin/activate
-    python -m pytest --cov=src --cov-fail-under=95
+      source .venv/bin/activate
+      python -m pytest --cov=src --cov-fail-under=95
 
 - name: Validate OpenAPI
   run: |
-    source .venv/bin/activate
-    python -m openapi_spec_validator src/devonboarder/openapi.json
+      source .venv/bin/activate
+      python -m openapi_spec_validator src/devonboarder/openapi.json
 ```
 
 ### Error Handling Requirements
@@ -264,6 +313,8 @@ All CI commands use proper virtual environment context:
 -   **No remote code execution**: Prohibited `curl | sh` patterns
 -   **Secret management**: Use GitHub Actions secrets
 -   **Token security**: Secure Discord bot token storage
+-   **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+-   **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
 -   **HTTPS enforcement**: All production endpoints
 -   **Input validation**: Sanitize all user inputs
 
@@ -294,6 +345,32 @@ All CI commands use proper virtual environment context:
 const guildId = interaction.guild?.id;
 const isDevEnvironment = guildId === "1386935663139749998";
 const isProdEnvironment = guildId === "1065367728992571444";
+
+// Bot startup pattern with environment detection
+console.log("🤖 DevOnboarder Discord Bot Starting...");
+console.log(`   Environment: ${ENVIRONMENT}`);
+console.log(`   Guild ID: ${process.env.DISCORD_GUILD_ID}`);
+console.log(`   Bot Ready: ${DISCORD_BOT_READY}`);
+```
+
+### 3. Frontend Integration Patterns
+
+```typescript
+// OAuth callback handling
+useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const path = window.location.pathname;
+
+    if (!stored && path === "/login/discord/callback" && code) {
+        fetch(`${authUrl}/login/discord/callback?code=${code}`)
+            .then((r) => r.json())
+            .then((data) => {
+                localStorage.setItem("jwt", data.token);
+                setToken(data.token);
+            });
+    }
+}, [authUrl]);
 ```
 
 ### 3. API Endpoint Development
@@ -308,6 +385,23 @@ async def get_user_status(user_id: int) -> UserStatus:
     """
     # Implementation with proper error handling
 ```
+
+### 4. Key Integration Points
+
+**Discord OAuth Flow**:
+
+1. Frontend redirects to `/login/discord` on auth service
+2. Auth service exchanges code for Discord token via OAuth
+3. User roles fetched from Discord API with timeout handling
+4. JWT issued with user session data
+5. Frontend stores JWT in localStorage for API calls
+
+**Cross-Service Communication**:
+
+-   All services share database via `DATABASE_URL`
+-   Auth service validates JWTs for protected endpoints
+-   XP API depends on auth service's `get_current_user()` function
+-   Bot uses `BOT_JWT` for backend API communication
 
 ## Quality Assurance Checklist
 
@@ -346,6 +440,7 @@ def initialize():
 Plugins are automatically discovered from the `plugins/` directory.
 
 **Development Setup**:
+
 ```bash
 source .venv/bin/activate
 pip install -e .[test]
@@ -371,13 +466,15 @@ python -m pytest plugins/example_plugin/
 
 ### Common Issues
 
-1. **ModuleNotFoundError**: 
-   - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
-   - ❌ **NOT**: Install to system Python
+1. **ModuleNotFoundError**:
+
+    - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+    - ❌ **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
-   - ✅ **Solution**: Use `python -m command` syntax in virtual environment
-   - ❌ **NOT**: Install globally with `pip install --user`
+
+    - ✅ **Solution**: Use `python -m command` syntax in virtual environment
+    - ❌ **NOT**: Install globally with `pip install --user`
 
 3. **Coverage failures**: Check test quality, not just quantity
 
