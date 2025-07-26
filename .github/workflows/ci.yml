@@ -407,12 +407,12 @@ jobs:
                   gh_bin=$(which gh)
                   "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Update coverage badge
               run: python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
                   git config user.name "${{ github.actor }}"
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
@@ -459,7 +459,7 @@ jobs:
                       echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
                   fi
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
               if: always()
               run: python scripts/summarize_ci_failures.py
@@ -470,7 +470,7 @@ jobs:
               if: always()
               run: bash scripts/download_ci_failure_issue.sh
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Create or update CI failure issue
               if: always() && github.event_name == 'pull_request'
               id: ci_failure
@@ -480,14 +480,14 @@ jobs:
                   cat audit.md >> summary.md
                   gh_bin=$(which gh)
                   "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
-                  
+
                   # Check if we have sufficient permissions
                   if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
                       echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
                       echo "Auth check output: $gh_bin_check" | tee -a gh_cli.log
                       exit 0
                   fi
-                  
+
                   ISSUE_FILE=ci_failure_issue.txt
                   ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
                   if [ -f "$ISSUE_FILE" ]; then
@@ -519,7 +519,7 @@ jobs:
                   fi
                   echo "issue-number=${ISSUE:-none}" >> "$GITHUB_OUTPUT"
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number
               if: failure() && github.event_name == 'pull_request'
               run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
@@ -534,13 +534,13 @@ jobs:
               if: success()
               run: |
                   gh_bin=$(which gh)
-                  
+
                   # Check if we have sufficient permissions
                   if ! "$gh_bin" api user >/dev/null 2>&1; then
                       echo "::warning::GitHub CLI authentication failed. Skipping issue closure."
                       exit 0
                   fi
-                  
+
                   if ISSUES=$("$gh_bin" issue list --label ci-failure --state open 2>&1 | tee -a gh_cli.log | awk '{print $1}'); then
                       for ISSUE in $ISSUES; do
                         if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
@@ -556,7 +556,7 @@ jobs:
                       echo "::warning::Failed to list issues for closure"
                   fi
               env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Upload CI logs
               if: always()
               uses: actions/upload-artifact@v4

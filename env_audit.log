@@ -1,0 +1,9 @@
+Missing variables:
+
+
+Extra variables:
+PATH
+PWD
+SHLVL
+_
+{"missing":[],"extra":["PATH" ,"PWD" ,"SHLVL" ,"_"]}
