@@ -107,8 +107,7 @@ def get_db() -> Session:
 def create_token(user: User) -> str:
     """Return a signed JWT for the given user."""
     iat = int(time.time())
-    payload = {"sub": str(user.id), "iat": iat,
-               "exp": iat + TOKEN_EXPIRE_SECONDS}
+    payload = {"sub": str(user.id), "iat": iat, "exp": iat + TOKEN_EXPIRE_SECONDS}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
@@ -156,8 +155,7 @@ def get_current_user(
 
         profile = get_user_profile(discord_token)
     except httpx.TimeoutException as exc:
-        raise HTTPException(
-            status_code=504, detail="Discord API timeout") from exc
+        raise HTTPException(status_code=504, detail="Discord API timeout") from exc
 
     # Attach resolved information to the user object for downstream handlers
     user.roles = roles
@@ -250,8 +248,7 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
             timeout=API_TIMEOUT,
         )
     except httpx.TimeoutException as exc:
-        raise HTTPException(
-            status_code=504, detail="Discord API timeout") from exc
+        raise HTTPException(status_code=504, detail="Discord API timeout") from exc
     token_resp.raise_for_status()
     access_token = token_resp.json()["access_token"]
 
