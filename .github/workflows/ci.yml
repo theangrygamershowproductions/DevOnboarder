@@ -451,7 +451,13 @@ jobs:
               if: github.actor == 'codex[bot]'
               run: |
                   gh_bin=$(which gh)
-                  "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"
+                  if ! "$gh_bin" api user >/dev/null 2>&1; then
+                      echo "::warning::GitHub CLI authentication failed. Skipping PR labeling."
+                      exit 0
+                  fi
+                  if ! "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"; then
+                      echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
+                  fi
               env:
                   GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
@@ -474,24 +480,44 @@ jobs:
                   cat audit.md >> summary.md
                   gh_bin=$(which gh)
                   "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
+                  
+                  # Check if we have sufficient permissions
+                  if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
+                      echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
+                      echo "Auth check output: $gh_bin_check" | tee -a gh_cli.log
+                      exit 0
+                  fi
+                  
                   ISSUE_FILE=ci_failure_issue.txt
                   ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
                   if [ -f "$ISSUE_FILE" ]; then
                       ISSUE=$(cat "$ISSUE_FILE")
                       echo "Using saved issue number $ISSUE" | tee -a gh_cli.log
-                      "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
+                      if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
+                          echo "::warning::Failed to comment on issue $ISSUE. Continuing without issue update."
+                      fi
                   else
                       echo "Searching for existing issue" | tee -a gh_cli.log
-                      search_output=$($gh_bin issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log)
-                      ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
-                      if [ -n "$ISSUE" ]; then
-                          "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log
+                      if search_output=$("$gh_bin" issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
+                          ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
+                          if [ -n "$ISSUE" ]; then
+                              if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
+                                  echo "::warning::Failed to comment on existing issue $ISSUE"
+                              fi
+                          else
+                              if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
+                                  ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+                              else
+                                  echo "::warning::Failed to create new issue. Continuing without issue creation."
+                                  ISSUE=""
+                              fi
+                          fi
                       else
-                          ISSUE_URL=$($gh_bin issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure | tee -a gh_cli.log)
-                          ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+                          echo "::warning::Failed to search for issues. Continuing without issue operations."
+                          ISSUE=""
                       fi
                   fi
-                  echo "issue-number=$ISSUE" >> "$GITHUB_OUTPUT"
+                  echo "issue-number=${ISSUE:-none}" >> "$GITHUB_OUTPUT"
               env:
                   GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number
@@ -508,11 +534,27 @@ jobs:
               if: success()
               run: |
                   gh_bin=$(which gh)
-                  ISSUES=$($gh_bin issue list --label ci-failure --state open | tee -a gh_cli.log | awk '{print $1}')
-                  for ISSUE in $ISSUES; do
-                    "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log
-                    "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log
-                  done
+                  
+                  # Check if we have sufficient permissions
+                  if ! "$gh_bin" api user >/dev/null 2>&1; then
+                      echo "::warning::GitHub CLI authentication failed. Skipping issue closure."
+                      exit 0
+                  fi
+                  
+                  if ISSUES=$("$gh_bin" issue list --label ci-failure --state open 2>&1 | tee -a gh_cli.log | awk '{print $1}'); then
+                      for ISSUE in $ISSUES; do
+                        if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
+                            if ! "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log; then
+                                echo "::warning::Failed to comment on issue $ISSUE during closure"
+                            fi
+                            if ! "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log; then
+                                echo "::warning::Failed to close issue $ISSUE"
+                            fi
+                        fi
+                      done
+                  else
+                      echo "::warning::Failed to list issues for closure"
+                  fi
               env:
                   GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Upload CI logs
