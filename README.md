@@ -284,13 +284,62 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
     fail with `ModuleNotFoundError`. See
     [tests/README.md](tests/README.md) for details.
 
-9. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
+## 🔍 Quality Control Requirements
+
+**95% Quality Threshold**: All changes must pass comprehensive QC validation before merging.
+
+### Pre-Push Quality Control
+
+Before every commit and push, run our QC validation:
+
+```bash
+# Activate virtual environment (MANDATORY)
+source .venv/bin/activate
+
+# Run comprehensive QC checks
+./scripts/qc_pre_push.sh
+
+# Only push if 95% threshold is met
+git push
+```
+
+### QC Validation Checklist
+
+The QC script validates 8 critical quality metrics:
+
+1. **YAML Linting** - Configuration file validation
+2. **Python Linting** - Code quality with Ruff  
+3. **Python Formatting** - Black code formatting
+4. **Type Checking** - MyPy static analysis
+5. **Test Coverage** - Minimum 95% coverage requirement
+6. **Documentation Quality** - Vale documentation linting
+7. **Commit Messages** - Conventional commit format
+8. **Security Scanning** - Bandit security analysis
+
+### Coverage Requirements
+
+- **Backend Python**: 96%+ coverage (enforced in CI)
+- **TypeScript Bot**: 100% coverage (enforced in CI)  
+- **React Frontend**: 100% statements, 98.43%+ branches
+
+### Quality Enforcement
+
+- **CI Pipeline**: Automatically enforces 95% threshold
+- **PR Validation**: Required for all pull requests
+- **Agent Guidelines**: GitHub Copilot follows QC standards
+- **Failure Guidance**: Specific fix commands provided on failures
+
+For complete QC documentation, see [`docs/quality-control-95-rule.md`](docs/quality-control-95-rule.md).
+
+## Testing and Development Continuation
+
+1. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
    This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
-10. Install git hooks with `pre-commit install` so lint checks run automatically.
-11. The CI workflow enforces a minimum of **95% code coverage** for all projects
-    (frontend, bot, and backend). Pull requests will fail if any test suite drops
-    below this threshold. Current coverage: Backend 96%+, Bot 100%, Frontend 100%.
+2. Install git hooks with `pre-commit install` so lint checks run automatically.
+3. The CI workflow enforces a minimum of **95% code coverage** for all projects
+   (frontend, bot, and backend). Pull requests will fail if any test suite drops
+   below this threshold. Current coverage: Backend 96%+, Bot 100%, Frontend 100%.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
