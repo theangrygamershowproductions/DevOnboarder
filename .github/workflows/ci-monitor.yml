@@ -9,61 +9,61 @@
 name: CI Monitor
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+    workflow_run:
+        workflows: ["CI"]
+        types:
+            - completed
 
 permissions:
-  issues: write
+    issues: write
 
 jobs:
-  validate-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
-  report-rate-limit:
-    needs: validate-yaml
-    if: github.event.workflow_run.conclusion == 'failure'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          run-id: ${{ github.event.workflow_run.id }}
-          name: ci-logs
-          path: ci-logs
-      - name: Install GitHub CLI
-        uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Show gh version
-        run: which gh && gh --version
-      - name: Check for rate-limit error
-        id: check
-        run: |
-          match=$(grep -iE 'rate limit|429 Too Many Requests|quota exceeded' -m1 ci-logs/*.log || true)
-          if [ -n "$match" ]; then
-            echo "hit=true" >> "$GITHUB_OUTPUT"
-            echo "match=$match" >> "$GITHUB_OUTPUT"
-            echo "$match"
-          else
-            echo "hit=false" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Install PyYAML
-        if: steps.check.outputs.hit == 'true'
-        run: pip install PyYAML
-      - name: Verify bot permission
-        if: steps.check.outputs.hit == 'true'
-        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-      - name: Open issue on rate-limit
-        if: steps.check.outputs.hit == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_TOKEN || secrets.GITHUB_TOKEN }}
-        run: |
-          printf '%s\n' \
-            "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}." \
-            "Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > body.md
-          jq -Rs --arg title "\ud83d\udea8 CI Rate Limit Exceeded" '{title:$title,body:.}' body.md > notify.json
-          gh workflow run notify.yml -f data="$(cat notify.json)"
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
+                  config_file: .github/.yamllint-config
+    report-rate-limit:
+        needs: validate-yaml
+        if: github.event.workflow_run.conclusion == 'failure'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  run-id: ${{ github.event.workflow_run.id }}
+                  name: ci-logs
+                  path: ci-logs
+            - name: Install GitHub CLI
+              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Show gh version
+              run: which gh && gh --version
+            - name: Check for rate-limit error
+              id: check
+              run: |
+                  match=$(grep -iE 'rate limit|429 Too Many Requests|quota exceeded' -m1 ci-logs/*.log || true)
+                  if [ -n "$match" ]; then
+                    echo "hit=true" >> "$GITHUB_OUTPUT"
+                    echo "match=$match" >> "$GITHUB_OUTPUT"
+                    echo "$match"
+                  else
+                    echo "hit=false" >> "$GITHUB_OUTPUT"
+                  fi
+            - name: Install PyYAML
+              if: steps.check.outputs.hit == 'true'
+              run: pip install PyYAML
+            - name: Verify bot permission
+              if: steps.check.outputs.hit == 'true'
+              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Open issue on rate-limit
+              if: steps.check.outputs.hit == 'true'
+              env:
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_ISSUE_TOKEN || secrets.GITHUB_TOKEN }}
+              run: |
+                  printf '%s\n' \
+                    "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}." \
+                    "Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > body.md
+                  jq -Rs --arg title "\ud83d\udea8 CI Rate Limit Exceeded" '{title:$title,body:.}' body.md > notify.json
+                  gh workflow run notify.yml -f data="$(cat notify.json)"

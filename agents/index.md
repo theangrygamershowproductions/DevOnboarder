@@ -39,6 +39,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | CHECK_HEADERS_URL             | Endpoint used by header checks (default `http://localhost:8002/api/user`) |
 | CI_BOT_TOKEN                  | GitHub token used by the CI bot |
 | CI_BOT_USERNAME               | GitHub username used to assign CI failure issues |
+| CI_ISSUE_AUTOMATION_TOKEN     | Fine-grained GitHub token for CI issue/PR automation (primary token) |
 | CI_ISSUE_TOKEN                | Token used to open CI failure issues |
 | CORS_ALLOW_ORIGINS            | Comma-separated list of allowed CORS origins |
 | DATABASE_URL                  | Postgres connection string |
