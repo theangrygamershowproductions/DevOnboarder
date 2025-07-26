@@ -435,7 +435,7 @@ jobs:
                   # Check if coverage badge file exists and has changes
                   if [ -f "coverage.svg" ]; then
                       git add coverage.svg
-                      
+
                       # Only commit if there are changes
                       if git diff --staged --quiet; then
                           echo "No changes to coverage badge"
