@@ -1,0 +1,32 @@
+name: Potato Policy Enforcement
+
+on:
+    pull_request:
+        paths:
+            - "Potato.md"
+            - ".gitignore"
+            - ".dockerignore"
+            - ".codespell-ignore"
+    push:
+        branches: [main, master]
+
+jobs:
+    potato-policy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Enforce Potato Policy
+              run: |
+                  echo "🥔 Checking Potato.md ignore policy..."
+                  bash scripts/potato_policy_enforce.sh
+
+                  # Check if any changes were made
+                  if ! git diff --quiet; then
+                    echo "❌ Potato policy violations detected"
+                    git diff
+                    exit 1
+                  else
+                    echo "✅ Potato policy compliant"
+                  fi

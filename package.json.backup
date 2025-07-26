@@ -1,0 +1,14 @@
+{
+  "name": "devonboarder-docs",
+  "private": true,
+  "scripts": {
+    "docs": "typedoc --tsconfig bot/tsconfig.json --entryPoints bot/src/main.ts --entryPointStrategy expand --skipErrorChecking --out docs/bot-api && typedoc --tsconfig frontend/tsconfig.json --entryPoints frontend/src/main.tsx --entryPointStrategy expand --skipErrorChecking --out docs/frontend-api"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.18.1",
+    "typedoc": "^0.28.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

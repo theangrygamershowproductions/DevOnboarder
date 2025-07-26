@@ -1,0 +1,33 @@
+
+x-app-base: &app-base
+  build: .
+
+x-db-base: &db-base
+  image: postgres:15
+  environment:
+    POSTGRES_USER: devuser
+    POSTGRES_PASSWORD: devpass
+    POSTGRES_DB: devdb
+  volumes:
+    - db_data:/var/lib/postgresql/data
+
+x-env-dev: &env-dev
+  env_file:
+    - .env.dev
+
+services:
+  auth:
+    <<: [*app-base, *env-dev]
+    command: ["devonboarder-auth"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    ports:
+      - "8002:8002"
+  db:
+    <<: [*db-base, *env-dev]
+
+volumes:
+  db_data:

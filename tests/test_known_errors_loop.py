@@ -61,4 +61,3 @@ def test_unknown_error_triggers_notification(tmp_path, monkeypatch):
 
     notify_calls = [c for c in calls if "notify.yml" in c]
     assert notify_calls, "notify workflow not triggered"
-

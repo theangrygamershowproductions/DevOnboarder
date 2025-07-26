@@ -1,40 +1,50 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# ---
+# codex-agent:
+#   name: Agent.CheckBotPermissions
+#   role: Verifies bot/agent has required permissions for workflow action
+#   scope: scripts/check-bot-permissions.sh
+#   triggers: Called by CI workflows before privileged bot actions
+#   output: CI logs, audit trail
+#   tags: [automation, codex, security, permissions, ci]
+#   version: 1.0.0
+#   last_updated: 2025-07-25
+#   owner: TAGS Engineering
+# ---
 
-# Usage: check-bot-permissions.sh <bot> <permission>
-# Verifies <bot> is allowed the given <permission> according to .codex/bot-permissions.yaml
+set -e
 
-BOT="${1:-}"
-PERM="${2:-}"
-FILE=".codex/bot-permissions.yaml"
+BOT_NAME="$1"
+PERMISSION="$2"
 
-if [ -z "$BOT" ] || [ -z "$PERM" ]; then
-  echo "Usage: $0 <bot> <permission>" >&2
-  exit 1
+echo "🔍 Checking if bot '$BOT_NAME' has '$PERMISSION' permission..."
+
+# Path to your permissions manifest file (update path if needed)
+PERMISSIONS_FILE="agents/permissions.yml"
+
+if [[ ! -f "$PERMISSIONS_FILE" ]]; then
+    echo "❌ Permissions manifest '$PERMISSIONS_FILE' not found."
+    exit 1
 fi
 
-if [ ! -f "$FILE" ]; then
-  echo "$FILE not found" >&2
-  exit 1
+# Use yq to parse YAML manifest; fallback to grep/awk if yq isn't available
+if command -v yq >/dev/null 2>&1; then
+    HAS_PERMISSION=$(yq e ".${BOT_NAME}.permissions[]" "$PERMISSIONS_FILE" | grep -Fx "$PERMISSION" || true)
+else
+    # Fallback (naive): Just search for the key and permission text (not robust for all YAML)
+    HAS_PERMISSION=$(awk "/$BOT_NAME:/,/-/{if(\$1==\"-\" && \$2==\"$PERMISSION\") print \$2}" "$PERMISSIONS_FILE" || true)
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 not installed" >&2
-  exit 1
+if [[ -z "$HAS_PERMISSION" ]]; then
+    echo "❌ Bot '$BOT_NAME' is NOT authorized for '$PERMISSION'"
+    exit 1
+else
+    echo "✅ Bot '$BOT_NAME' IS authorized for '$PERMISSION'"
 fi
 
-has_perm=$(python3 - "$FILE" "$BOT" "$PERM" <<'PY'
-import sys, yaml
-path, bot, perm = sys.argv[1:]
-data = yaml.safe_load(open(path)) or {}
-perms = data.get(bot, {}).get('permissions', [])
-print('true' if perm in perms else 'false')
-PY
-)
-
-if [ "$has_perm" != "true" ]; then
-  echo "Bot '$BOT' is not authorized for '$PERM'" >&2
-  exit 1
+# Optionally, show the token prefix for audit/debugging (never print the whole token)
+if [[ -n "$BOT_KEY" ]]; then
+    echo "🔑 BOT_KEY present (starts with: ${BOT_KEY:0:6}...)"
+else
+    echo "⚠️  BOT_KEY environment variable is NOT set!"
 fi
-
-echo "Bot '$BOT' authorized for '$PERM'"

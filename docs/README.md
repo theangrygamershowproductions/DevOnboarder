@@ -5,7 +5,7 @@ running and where to find documentation about our workflow.
 
 If you're setting up a fresh Ubuntu machine, follow
 [ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker
-Compose, Node.js 20, and Python 3.12. Running tests requires Python **3.12**.
+Compose, Node.js 22, and Python 3.12. Running tests requires Python **3.12**.
 
 After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to
 install a `commit-msg` hook. This ensures your commit messages pass the lint

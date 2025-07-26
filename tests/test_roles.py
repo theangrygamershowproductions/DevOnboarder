@@ -33,11 +33,14 @@ def test_resolve_verification_type_all_roles():
     assert resolve_verification_type([]) is None
 
 
-@pytest.mark.parametrize("admin_key,role", [
-    ("OWNER_ROLE_ID", "owner"),
-    ("ADMINISTRATOR_ROLE_ID", "admin"),
-    ("MODERATOR_ROLE_ID", "mod"),
-])
+@pytest.mark.parametrize(
+    "admin_key,role",
+    [
+        ("OWNER_ROLE_ID", "owner"),
+        ("ADMINISTRATOR_ROLE_ID", "admin"),
+        ("MODERATOR_ROLE_ID", "mod"),
+    ],
+)
 def test_resolve_user_flags_admin_only(monkeypatch, admin_key, role):
     flags = resolve_user_flags([role])
     assert flags == {

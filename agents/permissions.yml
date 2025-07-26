@@ -1,0 +1,4 @@
+# filepath: agents/permissions.yml
+ci_bot:
+    permissions:
+        - issues: write

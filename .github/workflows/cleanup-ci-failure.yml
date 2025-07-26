@@ -6,9 +6,12 @@
 #   triggers: Daily schedule
 #   output: Closed or reported ci-failure issues
 # ---
+name: Cleanup CI Failure
+
 on:
     schedule:
         - cron: "0 0 * * *"
+
 jobs:
     validate-yaml:
         runs-on: ubuntu-latest
@@ -20,67 +23,73 @@ jobs:
                   config_file: .github/.yamllint-config
             - name: Run yamllint
               run: |
-                pip install yamllint
-                yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
+                  pip install yamllint
+                  yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
             - name: Upload yamllint log
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: yamllint-log
                   path: yamllint.log
+
     cleanup:
         needs: validate-yaml
         runs-on: ubuntu-latest
         permissions:
             issues: write
+        env:
+            GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY }}
         steps:
+            - name: Check for Cleanup Token
+              run: |
+                  if [ -z "$GH_TOKEN" ]; then
+                    echo "::error::CLEANUP_CI_FAILURE_KEY is not set! Exiting to prevent unauthenticated GitHub CLI use."
+                    exit 1
+                  fi
             - name: Install GitHub CLI
               uses: ksivamuthu/actions-setup-gh-cli@v3
+              env:
+                  GH_TOKEN: ${{ env.GH_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Verify gh version
               run: |
-                ver=$(gh --version | head -n1 | awk '{print $3}')
-                major=${ver%%.*}
-                if [ "$major" -lt 2 ]; then
-                  echo "::error::GitHub CLI v2 or higher required" >&2
-                  exit 1
-                fi
+                  ver=$(gh --version | head -n1 | awk '{print $3}')
+                  major=${ver%%.*}
+                  if [ "$major" -lt 2 ]; then
+                    echo "::error::GitHub CLI v2 or higher required" >&2
+                    exit 1
+                  fi
             - name: Install PyYAML
               run: pip install PyYAML
             - name: Verify bot permission
               run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
             - name: Debug token and permissions
               run: |
-                gh auth status
-                gh api rate_limit
-                python scripts/list_open_ci_issues.py
-              env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  gh auth status
+                  gh api rate_limit
+                  python scripts/list_open_ci_issues.py
               continue-on-error: true
-
             - name: Close ci-failure issues
               run: |
-                gh_bin=$(which gh)
-                failed=0
-                closed=0
-                issues=$($gh_bin issue list --label ci-failure --state open | awk '{print $1}') || failed=1
-                for n in $issues; do
-                  if "$gh_bin" issue close "$n" --reason completed; then
-                    echo "::debug::Closed issue #$n"
-                    closed=$((closed+1))
-                  else
-                    echo "::warning::Failed to close issue #$n"
-                    failed=1
+                  gh_bin=$(which gh)
+                  failed=0
+                  closed=0
+                  issues=$($gh_bin issue list --label ci-failure --state open | awk '{print $1}') || failed=1
+                  for n in $issues; do
+                    if "$gh_bin" issue close "$n" --reason completed; then
+                      echo "::debug::Closed issue #$n"
+                      closed=$((closed+1))
+                    else
+                      echo "::warning::Failed to close issue #$n"
+                      failed=1
+                    fi
+                  done
+                  if [ "$failed" -ne 0 ]; then
+                    echo "::error::Cleanup failed"
+                    printf '%s\n' "Automatic cleanup could not close one or more ci-failure issues." > body.md
+                    jq -Rs --arg title "Cleanup CI failure issues failed" '{title:$title,body:.}' body.md > notify.json
+                    gh workflow run notify.yml -f data="$(cat notify.json)" || true
+                    exit 1
                   fi
-                done
-                if [ "$failed" -ne 0 ]; then
-                  echo "::error::Cleanup failed"
-                  printf '%s\n' "Automatic cleanup could not close one or more ci-failure issues." > body.md
-                  jq -Rs --arg title "Cleanup CI failure issues failed" '{title:$title,body:.}' body.md > notify.json
-                  gh workflow run notify.yml -f data="$(cat notify.json)" || true
-                  exit 1
-                fi
-                echo "Closed $closed ci-failure issues"
-              env:
-                  GH_TOKEN: ${{ secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  echo "Closed $closed ci-failure issues"
