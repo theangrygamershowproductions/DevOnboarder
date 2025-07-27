@@ -32,7 +32,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
         return False, errors
 
     try:
-        content = file_path.read_text(encoding='utf-8')
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         errors.append(f"Failed to read PR_SUMMARY.md: {e}")
         return False, errors
@@ -45,7 +45,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
         "## Risk Assessment",
         "## Dependencies",
         "## Post-Merge Actions",
-        "## Agent Notes"
+        "## Agent Notes",
     ]
 
     # Check for required sections
@@ -59,7 +59,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
         "[yes/no - describe]",
         "[describe]",
         "[list any]",
-        "[yes/no]"
+        "[yes/no]",
     ]
 
     # Count how many placeholders are still present
@@ -85,13 +85,13 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
 
     # Check minimum content length (excluding template)
     content_lines = [
-        line.strip() for line in content.split('\n')
-        if line.strip() and not line.startswith('#')
+        line.strip()
+        for line in content.split("\n")
+        if line.strip() and not line.startswith("#")
     ]
     if len(content_lines) < 10:
         errors.append(
-            "PR summary appears too brief. "
-            "Please provide more detailed information."
+            "PR summary appears too brief. " "Please provide more detailed information."
         )
 
     return len(errors) == 0, errors
@@ -105,13 +105,10 @@ def main() -> int:
     int
         Exit code (0 for success, 1 for failure)
     """
-    parser = argparse.ArgumentParser(
-        description="Validate PR_SUMMARY.md structure"
-    )
+    parser = argparse.ArgumentParser(description="Validate PR_SUMMARY.md structure")
     parser.add_argument("file", help="Path to PR_SUMMARY.md file")
     parser.add_argument(
-        "--strict", action="store_true",
-        help="Strict mode - fail on warnings"
+        "--strict", action="store_true", help="Strict mode - fail on warnings"
     )
 
     args = parser.parse_args()
