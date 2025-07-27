@@ -31,9 +31,10 @@ pnpm-lock.yaml
 test-results/
 
 # Local/Codex caches
-.codex/
 !.codex/
-!.codex/bot-permissions.yaml
+!.codex/**/*
+.codex/private/
+.codex/cache/
 .vscode-integrations/
 logs/
 .pytest_cache/
@@ -55,3 +56,13 @@ Potato.md
 *.potato.*
 dependency_inventory.xlsx
 # Force CI rerun
+*.env
+*.pem
+*.key
+secrets.yaml
+secrets.yml
+.env.local
+.env.production
+.codex/
+config/secrets.json
+webhook-config.json

@@ -17,16 +17,30 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Enforce Potato Policy
+            - name: Enforce Potato Policy with Reporting
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  echo "🥔 Checking Potato.md ignore policy..."
-                  bash scripts/potato_policy_enforce.sh
+                  echo "🥔 Enhanced Potato Policy Enforcement with Reporting..."
 
-                  # Check if any changes were made
-                  if ! git diff --quiet; then
-                    echo "❌ Potato policy violations detected"
-                    git diff
-                    exit 1
-                  else
+                  # Run violation reporter (creates issues if violations found)
+                  if bash scripts/potato_violation_reporter.sh; then
                     echo "✅ Potato policy compliant"
+                  else
+                    echo "❌ Potato policy violations detected and reported"
+                    exit 1
                   fi
+
+                  # Generate audit report
+                  bash scripts/generate_potato_report.sh
+
+                  # Upload audit report as artifact
+                  echo "📊 Audit report generated for transparency"
+
+            - name: Upload Potato Policy Audit Report
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: potato-policy-audit-${{ github.run_number }}
+                  path: reports/potato-policy-*.md
+                  retention-days: 90
