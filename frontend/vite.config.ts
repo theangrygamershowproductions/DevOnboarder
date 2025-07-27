@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
     server: {
@@ -7,14 +7,14 @@ export default defineConfig({
     },
     plugins: [react()],
     test: {
-        environment: "jsdom",
+        environment: 'jsdom',
         globals: true,
-        setupFiles: "./src/setupTests.ts",
-        include: ["src/**/*.test.tsx"],
-        exclude: ["e2e/**"],
+        setupFiles: './src/setupTests.ts',
+        include: ['src/**/*.test.tsx'],
+        exclude: ['e2e/**'],
         coverage: {
-            provider: "v8",
-            reporter: ["text", "lcov"],
+            provider: 'v8',
+            reporter: ['text', 'lcov'],
             all: true,
             thresholds: {
                 lines: 95,

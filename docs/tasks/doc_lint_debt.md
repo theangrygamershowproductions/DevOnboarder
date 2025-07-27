@@ -12,5 +12,5 @@ Use it when batch-fixing docs.
 
 Add notes below about any tricky files or skipped warnings.
 
-- Fixed `AGENTS.md` list formatting and updated outreach links in
-  `docs/outreach-materials.md`.
+-   Fixed `AGENTS.md` list formatting and updated outreach links in
+    `docs/outreach-materials.md`.

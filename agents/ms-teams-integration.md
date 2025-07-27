@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.MsTeamsIntegration
-  role: Sends DevOnboarder updates to Microsoft Teams
-  scope: infrastructure notifications
-  triggers: Project events requiring team alerts
-  output: Teams channel messages
+    name: Agent.MsTeamsIntegration
+    role: Sends DevOnboarder updates to Microsoft Teams
+    scope: infrastructure notifications
+    triggers: Project events requiring team alerts
+    output: Teams channel messages
 ---
 
 # MS Teams Integration Agent
@@ -17,7 +17,7 @@ codex-agent:
 
 ## Environment Variables
 
-- `TEAMS_APP_ID` – Azure application (client) ID for the integration.
-- `TEAMS_APP_PASSWORD` – application secret used to obtain access tokens.
-- `TEAMS_TENANT_ID` – Azure tenant that hosts the Teams app.
-- `TEAMS_CHANNEL_ID_ONBOARD` – channel ID for onboarding notifications.
+-   `TEAMS_APP_ID` – Azure application (client) ID for the integration.
+-   `TEAMS_APP_PASSWORD` – application secret used to obtain access tokens.
+-   `TEAMS_TENANT_ID` – Azure tenant that hosts the Teams app.
+-   `TEAMS_CHANNEL_ID_ONBOARD` – channel ID for onboarding notifications.

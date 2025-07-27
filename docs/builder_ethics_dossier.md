@@ -9,37 +9,38 @@ version: v1.0.0
 
 ## Builder Profile & Integrity Snapshot
 
-- **Name (alias):** `reesey275`
-- **Role:** `Systems Realignment Architect`
-- **Core values:** transparency, resilience, service-through-systems, humility in failure
+-   **Name (alias):** `reesey275`
+-   **Role:** `Systems Realignment Architect`
+-   **Core values:** transparency, resilience, service-through-systems, humility in failure
 
 ### Boundary statements
-- Will not misuse nonprofit or OSS resources for personal gain
-- Will not obscure or hide bugs/errors
-- Will maintain full audit trails through journaling and commits
+
+-   Will not misuse nonprofit or OSS resources for personal gain
+-   Will not obscure or hide bugs/errors
+-   Will maintain full audit trails through journaling and commits
 
 ## Values in Action – Real Decisions
 
-- Rebuilding DevOnboarder after data and health loss (2017–2021)
-- Public logs, Codex journaling, and GitHub transparency
-- Refusal to compromise on documentation or clarity
-- Designed systems that make unethical behavior *technically difficult*
+-   Rebuilding DevOnboarder after data and health loss (2017–2021)
+-   Public logs, Codex journaling, and GitHub transparency
+-   Refusal to compromise on documentation or clarity
+-   Designed systems that make unethical behavior _technically difficult_
 
 ## Template for Other Builders
 
 Checklist and commitment form:
 
-- [ ] Transparency
-- [ ] Accountability
-- [ ] Resilience
-- [ ] Service-through-systems
-- [ ] Humility in failure
+-   [ ] Transparency
+-   [ ] Accountability
+-   [ ] Resilience
+-   [ ] Service-through-systems
+-   [ ] Humility in failure
 
 Behavioral promises:
 
-- [ ] I will not misuse project resources for personal gain
-- [ ] I will not obscure or hide bugs/errors
-- [ ] I will maintain clear audit trails in commits
+-   [ ] I will not misuse project resources for personal gain
+-   [ ] I will not obscure or hide bugs/errors
+-   [ ] I will maintain clear audit trails in commits
 
 **Signature statement:**
 
@@ -53,4 +54,3 @@ Removed the outdated `docs/builder-ethics-dossier.md` in favor of this
 `docs/builder_ethics_dossier.md`. The Quickstart now instructs running
 `npm run coverage --prefix frontend` so React tests meet the coverage
 policy.
-

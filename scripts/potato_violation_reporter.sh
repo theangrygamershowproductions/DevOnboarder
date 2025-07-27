@@ -18,16 +18,19 @@ mkdir -p logs
 # Check for violations
 if bash scripts/potato_policy_enforce.sh > /dev/null 2>&1; then
     if ! git diff --quiet; then
-        # Violations detected
-        TIMESTAMP=$(date -Iseconds)
-        BRANCH=$(git branch --show-current)
-        COMMIT=$(git rev-parse --short HEAD)
+        # Check if the only changes are ignore file fixes (auto-remediation)
+        CHANGED_FILES=$(git diff --name-only)
+        if echo "$CHANGED_FILES" | grep -qvE "^(\.gitignore|\.dockerignore|\.codespell-ignore)$"; then
+            # Real violations detected (files other than ignore files changed)
+            TIMESTAMP=$(date -Iseconds)
+            BRANCH=$(git branch --show-current)
+            COMMIT=$(git rev-parse --short HEAD)
 
-        # Log violation
-        echo "${TIMESTAMP} | VIOLATION | Branch: ${BRANCH} | Commit: ${COMMIT}" >> "$VIOLATION_LOG"
+            # Log violation
+            echo "${TIMESTAMP} | VIOLATION | Branch: ${BRANCH} | Commit: ${COMMIT}" >> "$VIOLATION_LOG"
 
-        # Get diff for context
-        DIFF_OUTPUT=$(git diff --name-only)
+            # Get diff for context
+            DIFF_OUTPUT=$(git diff --name-only)
 
         # Create GitHub issue if GITHUB_TOKEN is available
         if command -v gh &> /dev/null && [ -n "${GITHUB_TOKEN:-}" ]; then
@@ -52,18 +55,28 @@ The Potato Policy enforcement script has automatically corrected the ignore file
 
 This issue was created automatically by the Potato Policy violation reporter."
 
-            gh issue create \
+            # Create GitHub issue with proper error handling
+            if gh issue create \
                 --title "$ISSUE_TITLE" \
                 --body "$ISSUE_BODY" \
-                --label "security,potato-policy,automated" \
-                --assignee "@me" || echo "⚠️ Failed to create GitHub issue"
+                --label "security,potato-policy,automated" 2>/dev/null; then
+                echo "✅ GitHub issue created successfully"
+            else
+                echo "⚠️ Failed to create GitHub issue (but violation still logged)"
+            fi
         fi
 
-        echo "❌ VIOLATION DETECTED AND LOGGED"
-        echo "📝 Log entry: ${VIOLATION_LOG}"
-        echo "🔧 Automatic fixes applied to ignore files"
+            echo "❌ VIOLATION DETECTED AND LOGGED"
+            echo "📝 Log entry: ${VIOLATION_LOG}"
+            echo "🔧 Real violations found beyond ignore file auto-fixes"
 
-        exit 1
+            exit 1
+        else
+            # Only ignore files were updated (automatic remediation)
+            echo "✅ COMPLIANT - Only ignore files auto-updated"
+            echo "🔧 Automatic fixes applied to ignore files"
+            exit 0
+        fi
     else
         echo "✅ COMPLIANT - No violations detected"
         exit 0

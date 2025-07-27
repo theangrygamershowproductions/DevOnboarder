@@ -20,13 +20,13 @@ check() {
     local cmd="$3"
     local regex="$4"
     echo "Checking $name version..."
-    
+
     # Check if command exists
     if ! command -v "${cmd%% *}" >/dev/null 2>&1; then
         echo "Warning: $name is not installed, skipping version check"
         return 0
     fi
-    
+
     output=$($cmd 2>&1)
     if [[ $output =~ $regex ]]; then
         version="${BASH_REMATCH[1]}"
@@ -55,12 +55,12 @@ check_optional() {
     local expected="$2"
     local cmd="$3"
     local regex="$4"
-    
+
     if ! command -v "${cmd%% *}" >/dev/null 2>&1; then
         echo "$name: Not installed"
         return 0
     fi
-    
+
     output=$($cmd 2>&1) || { echo "$name: Command failed"; return 0; }
     if [[ $output =~ $regex ]]; then
         version="${BASH_REMATCH[1]}"
@@ -83,4 +83,3 @@ check_optional "Bun" "$expected_bun" "bun --version" '([0-9]+\.[0-9]+\.[0-9]+)'
 if [ "$errors" -ne 0 ]; then
     exit 1
 fi
-

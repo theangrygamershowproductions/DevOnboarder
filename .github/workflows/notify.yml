@@ -9,41 +9,41 @@
 name: Notify
 
 on:
-  workflow_dispatch:
-    inputs:
-      data:
-        description: JSON payload with title and body
-        required: true
+    workflow_dispatch:
+        inputs:
+            data:
+                description: JSON payload with title and body
+                required: true
 
 permissions:
-  issues: write
+    issues: write
 
 jobs:
-  validate-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
-  process:
-    needs: validate-yaml
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install GitHub CLI
-        uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Show gh version
-        run: which gh && gh --version
-      - name: Install PyYAML
-        run: pip install PyYAML
-      - name: Verify bot permission
-        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-      - name: Process notification
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PAYLOAD: ${{ inputs.data }}
-        run: |
-          echo "$PAYLOAD" > notify.json
-          python scripts/process_notifications.py notify.json
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
+                  config_file: .github/.yamllint-config
+    process:
+        needs: validate-yaml
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Install GitHub CLI
+              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Show gh version
+              run: which gh && gh --version
+            - name: Install PyYAML
+              run: pip install PyYAML
+            - name: Verify bot permission
+              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Process notification
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PAYLOAD: ${{ inputs.data }}
+              run: |
+                  echo "$PAYLOAD" > notify.json
+                  python scripts/process_notifications.py notify.json

@@ -1,0 +1,21 @@
+# markdownlint-cli2 configuration
+# Uses existing .markdownlint.json for rules and .markdownlintignore for excludes
+
+config:
+    extends: ".markdownlint.json"
+
+globs:
+    - "**/*.md"
+
+ignores:
+    - "node_modules/**"
+    - "frontend/node_modules/**"
+    - "bot/node_modules/**"
+    - "htmlcov/**"
+    - ".venv/**"
+    - "venv/**"
+    - "*.egg-info/**"
+    - "archive/**"
+    - "logs/**"
+    - "tmp/**"
+    - ".git/**"

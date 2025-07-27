@@ -78,18 +78,18 @@ log "Recommendation: $RECOMMENDATION"
 # Step 4: Automated Actions (if execute or full-auto mode)
 if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
     echo -e "${YELLOW}🔧 STEP 4: Automated Fixes${NC}"
-    
+
     # Get PR branch
     PR_BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
     CURRENT_BRANCH=$(git branch --show-current)
-    
+
     if [ "$PR_BRANCH" != "$CURRENT_BRANCH" ]; then
         echo "⚠️  Already on correct branch: $CURRENT_BRANCH"
     fi
-    
+
     # Apply automated fixes based on pattern analysis
     # FIXES_APPLIED is already initialized at the top
-    
+
     # Fix markdown issues
     if echo "$PATTERN_RESULT" | grep -q "Documentation\|Markdown"; then
         echo "🔧 Applying markdown fixes..."
@@ -101,7 +101,7 @@ if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
             fi
         fi
     fi
-    
+
     # Fix Python formatting
     if echo "$PATTERN_RESULT" | grep -q "Formatting\|lint"; then
         echo "🔧 Applying Python formatting fixes..."
@@ -110,14 +110,14 @@ if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
             echo "✅ Black formatting applied"
             ((FIXES_APPLIED++))
         fi
-        
+
         if command -v ruff >/dev/null 2>&1; then
             ruff check . --fix --quiet --exclude "Potato.md" 2>/dev/null || true
             echo "✅ Ruff fixes applied"
             ((FIXES_APPLIED++))
         fi
     fi
-    
+
     # Commit fixes if any were applied
     if [ $FIXES_APPLIED -gt 0 ]; then
         git add . 2>/dev/null || true
@@ -131,11 +131,11 @@ Applied by PR Automation Controller:
 
 [automated-commit]" 2>/dev/null || true
             echo "✅ Automated fixes committed"
-            
+
             # Push fixes
             git push origin "$PR_BRANCH" 2>/dev/null || echo "⚠️  Push failed - may need manual intervention"
             echo "✅ Fixes pushed to PR branch"
-            
+
             log "Applied $FIXES_APPLIED automated fixes"
         else
             echo "ℹ️  No changes to commit after fixes"
@@ -146,15 +146,15 @@ fi
 # Step 5: Auto-merge logic (if full-auto mode)
 if [ "$ACTION_MODE" = "full-auto" ]; then
     echo -e "${YELLOW}🚀 STEP 5: Auto-Merge Evaluation${NC}"
-    
+
     # Re-evaluate health
     UPDATED_HEALTH=$(bash scripts/assess_pr_health.sh "$PR_NUMBER" 2>/dev/null | grep "PR Health Score:" | sed 's/.*: \([0-9]*\)%.*/\1/' || echo "0")
-    
+
     log "Updated health score: ${UPDATED_HEALTH}%"
-    
+
     # Auto-merge criteria
     AUTO_MERGE=false
-    
+
     if [ "${UPDATED_HEALTH:-0}" -ge 80 ]; then
         AUTO_MERGE=true
         log "✅ Auto-merge criteria met: Health score >= 80%"
@@ -162,7 +162,7 @@ if [ "$ACTION_MODE" = "full-auto" ]; then
         AUTO_MERGE=true
         log "✅ Auto-merge criteria met: Health >= 70% + merge recommendation"
     fi
-    
+
     if [ "$AUTO_MERGE" = true ]; then
         echo -e "${GREEN}🎉 AUTO-MERGE CONDITIONS MET${NC}"
         echo "Note: Auto-merge would be executed here in production mode"
@@ -180,8 +180,8 @@ echo -e "${YELLOW}📋 STEP 6: Automation Report${NC}"
 cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 # PR #$PR_NUMBER Automation Report
 
-**Generated:** $TIMESTAMP  
-**Mode:** $ACTION_MODE  
+**Generated:** $TIMESTAMP
+**Mode:** $ACTION_MODE
 **Controller:** PR Automation Framework v1.0
 
 ## 📊 Analysis Results

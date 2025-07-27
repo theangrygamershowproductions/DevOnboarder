@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.StagingOrchestrator
-  role: Orchestrates staging environment deployments
-  scope: .github/workflows/staging-orchestrator.yml
-  triggers: Push to staging or manual dispatch
-  output: Deployment job logs
+    name: Agent.StagingOrchestrator
+    role: Orchestrates staging environment deployments
+    scope: .github/workflows/staging-orchestrator.yml
+    triggers: Push to staging or manual dispatch
+    output: Deployment job logs
 ---
 
 # Staging Orchestrator Agent

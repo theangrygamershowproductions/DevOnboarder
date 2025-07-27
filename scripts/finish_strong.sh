@@ -67,9 +67,9 @@ Applied comprehensive fixes:
 
 Target: 95% CI health compliance
 [final-push-to-95]"
-    
+
     echo "    ✅ Fixes committed and ready for push"
-    
+
     # Push changes
     git push
     echo "    ✅ Changes pushed to PR #$PR_NUMBER"

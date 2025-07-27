@@ -49,7 +49,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 name: '⚙️ Configuration',
                 value: [
                     `${getStatusIcon(botReady)} Bot Ready: ${botReady}`,
-                    `${getStatusIcon(liveTriggersEnabled)} Live Triggers: ${liveTriggersEnabled}`,
+                    `${getStatusIcon(
+                        liveTriggersEnabled,
+                    )} Live Triggers: ${liveTriggersEnabled}`,
                     `${getModeIcon(dryRunMode)} Dry-run Mode: ${dryRunMode}`,
                 ].join('\n'),
                 inline: true,

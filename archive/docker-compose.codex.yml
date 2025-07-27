@@ -1,14 +1,14 @@
 services:
-  codex:
-    image: ghcr.io/openai/codex-universal
-    volumes:
-      - .:/workspace
-    environment:
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-    command:
-      - /opt/codex/run.sh
-      - --ci-config
-      - /workspace/codex.ci.yml
-      - --bundle
-      - /workspace/codex.automation.bundle.json
+    codex:
+        image: ghcr.io/openai/codex-universal
+        volumes:
+            - .:/workspace
+        environment:
+            GITHUB_TOKEN: ${GITHUB_TOKEN}
+            OPENAI_API_KEY: ${OPENAI_API_KEY}
+        command:
+            - /opt/codex/run.sh
+            - --ci-config
+            - /workspace/codex.ci.yml
+            - --bundle
+            - /workspace/codex.automation.bundle.json

@@ -16,7 +16,7 @@ Infrastructure Repair Status ✓
 Current Assessment for PR #968:
 - Infrastructure-aware health: 70-75%
 - Core functionality: DELIVERED ✅
-- Potato policy enforcement: IMPLEMENTED ✅  
+- Potato policy enforcement: IMPLEMENTED ✅
 - GitHub Actions: CONFIGURED ✅
 - Quality standards: APPLIED ✅
 
@@ -28,6 +28,6 @@ Recommendation:
 
 Next Phase:
 - Continue environment restoration
-- Monitor infrastructure improvements  
+- Monitor infrastructure improvements
 - Validate full functionality post-repair
 - Maintain quality standards with realistic expectations

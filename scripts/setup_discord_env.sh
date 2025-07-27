@@ -27,9 +27,9 @@ create_env_file() {
     local guild_id="$2"
     local webhook_url="$3"
     local env_file="${BOT_DIR}/.env.${env_name}"
-    
+
     echo "📝 Creating $env_file..."
-    
+
     cat > "$env_file" << EOF
 # Discord Bot Configuration - $env_name Environment
 # Generated on $(date -u +"%Y-%m-%d %H:%M:%S UTC")
@@ -72,13 +72,13 @@ EOF
 # Function to setup bot configuration
 setup_bot_config() {
     echo "🤖 Setting up bot configuration..."
-    
+
     # Ensure bot directory exists
     if [[ ! -d "$BOT_DIR" ]]; then
         echo "❌ Bot directory not found: $BOT_DIR"
         exit 1
     fi
-    
+
     # Create environment-specific configurations
     if [[ "$DEPLOY_ENV" == "dev" ]]; then
         create_env_file "dev" "$DISCORD_DEV_GUILD_ID" "$DISCORD_DEV_WEBHOOK"
@@ -93,7 +93,7 @@ setup_bot_config() {
         create_env_file "dev" "$DISCORD_DEV_GUILD_ID" "$DISCORD_DEV_WEBHOOK"
         create_env_file "prod" "$DISCORD_PROD_GUILD_ID" "$DISCORD_PROD_WEBHOOK"
     fi
-    
+
     # Create main .env file pointing to current environment
     local main_env_file="${BOT_DIR}/.env"
     if [[ "$DEPLOY_ENV" == "dev" || "$DEPLOY_ENV" == "prod" ]]; then
@@ -106,30 +106,30 @@ setup_bot_config() {
 # Function to validate configuration
 validate_config() {
     echo "🔍 Validating Discord configuration..."
-    
+
     local env_file="${BOT_DIR}/.env"
     if [[ ! -f "$env_file" ]]; then
         echo "❌ Main .env file not found: $env_file"
         return 1
     fi
-    
+
     # Check required variables
     local required_vars=("DISCORD_GUILD_ID" "ENVIRONMENT" "API_BASE_URL")
     local missing_vars=()
-    
+
     for var in "${required_vars[@]}"; do
         if ! grep -q "^${var}=" "$env_file"; then
             missing_vars+=("$var")
         fi
     done
-    
+
     if [[ ${#missing_vars[@]} -gt 0 ]]; then
         echo "❌ Missing required variables: ${missing_vars[*]}"
         return 1
     fi
-    
+
     echo "✅ Configuration validation passed"
-    
+
     # Display current configuration
     echo ""
     echo "📋 Current Configuration:"
@@ -142,11 +142,11 @@ validate_config() {
 # Function to setup Discord role mapping
 setup_role_mapping() {
     echo "🎭 Setting up Discord role mapping..."
-    
+
     # Create role mapping configuration
     local roles_config="${BOT_DIR}/config/roles.json"
     mkdir -p "${BOT_DIR}/config"
-    
+
     cat > "$roles_config" << 'EOF'
 {
   "environments": {
@@ -198,7 +198,7 @@ EOF
 # Function to create deployment scripts
 create_deployment_scripts() {
     echo "🚀 Creating deployment scripts..."
-    
+
     # Bot start script for development
     cat > "${BOT_DIR}/start-dev.sh" << 'EOF'
 #!/bin/bash
@@ -272,7 +272,7 @@ EOF
     # Make scripts executable
     chmod +x "${BOT_DIR}/start-dev.sh"
     chmod +x "${BOT_DIR}/start-prod.sh"
-    
+
     echo "✅ Deployment scripts created:"
     echo "   ${BOT_DIR}/start-dev.sh"
     echo "   ${BOT_DIR}/start-prod.sh"
@@ -281,7 +281,7 @@ EOF
 # Function to test Discord connection
 test_discord_connection() {
     echo "🧪 Testing Discord configuration..."
-    
+
     # Check if bot token is configured
     local env_file="${BOT_DIR}/.env"
     if grep -q "DISCORD_BOT_TOKEN=changeme" "$env_file"; then
@@ -291,12 +291,12 @@ test_discord_connection() {
     else
         echo "✅ Discord bot token appears to be configured"
     fi
-    
+
     # Check webhook connectivity (if in live mode)
     if [[ "${LIVE_TRIGGERS_ENABLED:-false}" == "true" ]]; then
         local webhook_url
         webhook_url=$(grep '^DISCORD_WEBHOOK_URL=' "$env_file" | cut -d'=' -f2)
-        
+
         if [[ -n "$webhook_url" ]] && [[ "$webhook_url" != "changeme" ]]; then
             echo "🔗 Testing webhook connectivity..."
             if curl -s -o /dev/null -w "%{http_code}" "$webhook_url" | grep -q "2[0-9][0-9]"; then
@@ -318,7 +318,7 @@ display_summary() {
     echo ""
     echo "📋 Configuration Summary:"
     echo "   Environment: $DEPLOY_ENV"
-    
+
     if [[ "$DEPLOY_ENV" == "dev" ]]; then
         echo "   Discord Server: TAGS: DevOnboarder"
         echo "   Guild ID: $DISCORD_DEV_GUILD_ID"
@@ -332,7 +332,7 @@ display_summary() {
         echo "   Start Dev: cd bot && ./start-dev.sh"
         echo "   Start Prod: cd bot && ./start-prod.sh"
     fi
-    
+
     echo ""
     echo "🔧 Next Steps:"
     echo "   1. Set your Discord bot token:"
@@ -356,7 +356,7 @@ display_summary() {
 main() {
     echo "🎮 Starting Discord environment setup for: $DEPLOY_ENV"
     echo ""
-    
+
     # Execute setup steps
     setup_bot_config
     setup_role_mapping
@@ -364,7 +364,7 @@ main() {
     validate_config
     test_discord_connection
     display_summary
-    
+
     echo ""
     echo "✅ Discord environment setup completed successfully!"
 }

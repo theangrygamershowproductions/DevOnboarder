@@ -9,45 +9,45 @@
 name: Review Known Errors
 
 on:
-  schedule:
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * 0"
+    workflow_dispatch:
 
 permissions:
-  issues: write
+    issues: write
 
 jobs:
-  review:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Install PyYAML
-        run: pip install PyYAML
-      - name: Check for outdated entries
-        id: check
-        run: |
-          python - <<'PY'
-          import datetime, json, yaml
-          from pathlib import Path
-          path = Path('.codex/known_errors.yaml')
-          data = yaml.safe_load(path.read_text()) or []
-          threshold = datetime.datetime.utcnow() - datetime.timedelta(days=30)
-          outdated = [e for e in data if datetime.datetime.fromisoformat(e['date_added']) < threshold and e.get('hits',0) == 0]
-          if outdated:
-              Path('outdated.json').write_text(json.dumps(outdated, indent=2))
-          PY
-          if [ -f outdated.json ]; then echo "has_outdated=true" >> "$GITHUB_OUTPUT"; else echo "has_outdated=false" >> "$GITHUB_OUTPUT"; fi
-      - name: Escalate outdated entries
-        if: steps.check.outputs.has_outdated == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          payload=$(python - <<'PY'
-          import json
-          from pathlib import Path
-          body = Path('outdated.json').read_text()
-          print(json.dumps({'title': 'Outdated known error entries', 'body': body}))
-          PY
-          )
-          gh workflow run notify.yml -f data="$payload"
+    review:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Install PyYAML
+              run: pip install PyYAML
+            - name: Check for outdated entries
+              id: check
+              run: |
+                  python - <<'PY'
+                  import datetime, json, yaml
+                  from pathlib import Path
+                  path = Path('.codex/known_errors.yaml')
+                  data = yaml.safe_load(path.read_text()) or []
+                  threshold = datetime.datetime.utcnow() - datetime.timedelta(days=30)
+                  outdated = [e for e in data if datetime.datetime.fromisoformat(e['date_added']) < threshold and e.get('hits',0) == 0]
+                  if outdated:
+                      Path('outdated.json').write_text(json.dumps(outdated, indent=2))
+                  PY
+                  if [ -f outdated.json ]; then echo "has_outdated=true" >> "$GITHUB_OUTPUT"; else echo "has_outdated=false" >> "$GITHUB_OUTPUT"; fi
+            - name: Escalate outdated entries
+              if: steps.check.outputs.has_outdated == 'true'
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  payload=$(python - <<'PY'
+                  import json
+                  from pathlib import Path
+                  body = Path('outdated.json').read_text()
+                  print(json.dumps({'title': 'Outdated known error entries', 'body': body}))
+                  PY
+                  )
+                  gh workflow run notify.yml -f data="$payload"

@@ -37,7 +37,7 @@ echo
 echo "$FAILING_CHECKS" | jq -r '.[] | "\(.name): \(.conclusion)"' | while read -r check; do
     check_name=$(echo "$check" | cut -d: -f1)
     echo "❌ $check_name"
-    
+
     # Pattern matching for common failure types
     case "$check_name" in
         *"test"*)

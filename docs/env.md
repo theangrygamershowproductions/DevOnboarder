@@ -9,36 +9,36 @@ when working with those packages directly.
 
 ## Core settings
 
-- `APP_ENV` &ndash; application mode such as `development` or `production`.
-- `DATABASE_URL` &ndash; Postgres connection string for the main database.
-- `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
-- `TAGS_MODE` &ndash; set to `true` when running within the TAGS stack so
-  diagnostics expect all services.
-- `CORS_ALLOW_ORIGINS` &ndash; comma-separated list of allowed CORS origins. Defaults to `*` in development.
-- `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
+-   `APP_ENV` &ndash; application mode such as `development` or `production`.
+-   `DATABASE_URL` &ndash; Postgres connection string for the main database.
+-   `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
+-   `TAGS_MODE` &ndash; set to `true` when running within the TAGS stack so
+    diagnostics expect all services.
+-   `CORS_ALLOW_ORIGINS` &ndash; comma-separated list of allowed CORS origins. Defaults to `*` in development.
+-   `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
 
 ## Feature flags
 
-- `IS_ALPHA_USER` &ndash; enable routes restricted to early testers.
-- `IS_FOUNDER` &ndash; enable routes and perks for Founder's Circle members.
+-   `IS_ALPHA_USER` &ndash; enable routes restricted to early testers.
+-   `IS_FOUNDER` &ndash; enable routes and perks for Founder's Circle members.
 
 ## Secrets
 
 The following tokens and keys are required but **must not** be committed to
 the repository. Provide them through your build or deployment secret store:
 
-- `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` &ndash; OAuth credentials for
-  authenticating with Discord.
-- `JWT_SECRET_KEY` &ndash; signing key used by the auth service.
-- `JWT_ALGORITHM` &ndash; signing algorithm for JWTs (default `HS256`).
-- `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
-- `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
-- `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
-  `http://localhost:8002/login/discord/callback`.
-- `DISCORD_API_TIMEOUT` &ndash; HTTP timeout in seconds when contacting Discord APIs (default `10`).
-- `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
-  API helpers send this JWT when no other token is provided.
-- `API_BASE_URL` &ndash; base URL for the XP API used by the bot.
+-   `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` &ndash; OAuth credentials for
+    authenticating with Discord.
+-   `JWT_SECRET_KEY` &ndash; signing key used by the auth service.
+-   `JWT_ALGORITHM` &ndash; signing algorithm for JWTs (default `HS256`).
+-   `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
+-   `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
+-   `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
+    `http://localhost:8002/login/discord/callback`.
+-   `DISCORD_API_TIMEOUT` &ndash; HTTP timeout in seconds when contacting Discord APIs (default `10`).
+-   `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
+    API helpers send this JWT when no other token is provided.
+-   `API_BASE_URL` &ndash; base URL for the XP API used by the bot.
 
 ## Discord role-based permissions
 
@@ -66,7 +66,6 @@ resolving these flags, so roles from other guilds do not influence admin or
 verification status. These flags appear in the `/api/user` response and control
 access to certain commands and pages.
 
-
 ### Discord OAuth login
 
 Users sign in by visiting `/login/discord`, which redirects to Discord's consent
@@ -81,26 +80,26 @@ status and level.
 
 ## Frontend
 
-- `VITE_AUTH_URL` &ndash; base URL for the auth API.
-- `VITE_API_URL` &ndash; base URL for the XP API.
-- `VITE_FEEDBACK_URL` &ndash; base URL for the feedback service.
-- `VITE_DISCORD_CLIENT_ID` &ndash; OAuth client ID for Discord.
-- `VITE_SESSION_REFRESH_INTERVAL` &ndash; interval (seconds) between session refreshes.
+-   `VITE_AUTH_URL` &ndash; base URL for the auth API.
+-   `VITE_API_URL` &ndash; base URL for the XP API.
+-   `VITE_FEEDBACK_URL` &ndash; base URL for the feedback service.
+-   `VITE_DISCORD_CLIENT_ID` &ndash; OAuth client ID for Discord.
+-   `VITE_SESSION_REFRESH_INTERVAL` &ndash; interval (seconds) between session refreshes.
 
 ## Testing utilities
 
-- `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
-- `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to
-  verify headers (default `http://localhost:8002/api/user`).
+-   `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
+-   `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to
+    verify headers (default `http://localhost:8002/api/user`).
 
 ## Integrations
 
-- `TEAMS_APP_ID` &ndash; Azure app ID for the MS Teams integration.
-- `TEAMS_APP_PASSWORD` &ndash; secret used to authenticate the Teams app.
-- `TEAMS_TENANT_ID` &ndash; Azure tenant hosting the Teams app.
-- `TEAMS_CHANNEL_ID_ONBOARD` &ndash; Teams channel ID for onboarding updates.
-- `LLAMA2_API_KEY` &ndash; API key for accessing the Llama2 service.
-- `LLAMA2_API_TIMEOUT` &ndash; HTTP timeout in seconds when calling the Llama2 API (default `10`).
+-   `TEAMS_APP_ID` &ndash; Azure app ID for the MS Teams integration.
+-   `TEAMS_APP_PASSWORD` &ndash; secret used to authenticate the Teams app.
+-   `TEAMS_TENANT_ID` &ndash; Azure tenant hosting the Teams app.
+-   `TEAMS_CHANNEL_ID_ONBOARD` &ndash; Teams channel ID for onboarding updates.
+-   `LLAMA2_API_KEY` &ndash; API key for accessing the Llama2 service.
+-   `LLAMA2_API_TIMEOUT` &ndash; HTTP timeout in seconds when calling the Llama2 API (default `10`).
 
 ## Docker development images
 

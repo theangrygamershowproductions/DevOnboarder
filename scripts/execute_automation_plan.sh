@@ -17,7 +17,7 @@ HEALTH_SCORE=$(bash scripts/assess_pr_health.sh $PR_NUMBER | grep "PR Health Sco
 echo "Health Score: ${HEALTH_SCORE}%"
 echo ""
 
-# Step 2: Pattern Analysis  
+# Step 2: Pattern Analysis
 echo "📋 Step 2: CI Pattern Analysis"
 bash scripts/simple_pattern_analysis.sh $PR_NUMBER
 echo "Pattern analysis saved to reports/pattern_analysis_$PR_NUMBER.txt"
@@ -44,10 +44,10 @@ echo ""
 if [[ "$MODE" == "analyze" ]]; then
     echo "📋 ANALYZE MODE: Recommendations only"
     echo "Current Assessment: $DECISION"
-    
+
 elif [[ "$MODE" == "execute" ]]; then
     echo "⚡ EXECUTE MODE: Applying automated fixes"
-    
+
     # Apply markdown fixes if pattern analysis shows documentation issues
     if grep -q "DOCUMENTATION QUALITY" reports/pattern_analysis_$PR_NUMBER.txt; then
         echo "🔧 Applying markdown fixes..."
@@ -57,7 +57,7 @@ elif [[ "$MODE" == "execute" ]]; then
             echo "   ✅ Applied markdownlint fixes to agents/"
         fi
     fi
-    
+
     # Apply Python code fixes if needed
     if grep -q "TEST FAILURE" reports/pattern_analysis_$PR_NUMBER.txt; then
         echo "🐍 Checking Python code formatting..."
@@ -68,20 +68,20 @@ elif [[ "$MODE" == "execute" ]]; then
             }
         fi
     fi
-    
+
     echo "   ✅ Automated fixes applied"
-    
+
 elif [[ "$MODE" == "full-auto" ]]; then
     echo "🤖 FULL-AUTO MODE: Complete automation"
     echo "⚠️  This would apply fixes AND potentially auto-merge"
     echo "🛡️  Safety check: Potato.md protection active"
-    
+
     # Safety check
     if git diff --name-only | grep -q "Potato.md"; then
         echo "🚨 SAFETY STOP: Potato.md changes detected - manual review required"
         exit 1
     fi
-    
+
     echo "   → Would execute: $DECISION"
 fi
 
