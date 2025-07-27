@@ -9,64 +9,64 @@
 name: Env Doc Alignment
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+    workflow_run:
+        workflows: ["CI"]
+        types:
+            - completed
 
 permissions:
-  contents: read
-  issues: write
+    contents: read
+    issues: write
 
 jobs:
-  validate-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
-  audit:
-    needs: validate-yaml
-    if: github.event.workflow_run.conclusion == 'failure'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-      - name: Install GitHub CLI
-        uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Show gh version
-        run: which gh && gh --version
-      - name: Validate env docs
-        id: check
-        run: |
-          python scripts/check_env_docs.py > env_docs.log && echo "success=true" >> "$GITHUB_OUTPUT" || echo "success=false" >> "$GITHUB_OUTPUT"
-          cat env_docs.log
-      - name: Parse missing variables
-        if: steps.check.outputs.success == 'false'
-        id: vars
-        run: |
-          missing=$(awk '/^Variables missing from agents\/index.md:/{flag=1;next}/^$/{flag=0}flag' env_docs.log | tr '\n' ',' | sed 's/,$//')
-          echo "missing=$missing" >> "$GITHUB_OUTPUT"
-      - name: Install PyYAML
-        if: steps.check.outputs.success == 'false'
-        run: pip install PyYAML
-      - name: Verify bot permission
-        if: steps.check.outputs.success == 'false'
-        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-      - name: Create issue
-        if: steps.check.outputs.success == 'false'
-        run: |
-          cat > body.md <<'BODY'
-            ## Missing variables
-            ${{ steps.vars.outputs.missing }}
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
+                  config_file: .github/.yamllint-config
+    audit:
+        needs: validate-yaml
+        if: github.event.workflow_run.conclusion == 'failure'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+                  ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+            - name: Install GitHub CLI
+              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Show gh version
+              run: which gh && gh --version
+            - name: Validate env docs
+              id: check
+              run: |
+                  python scripts/check_env_docs.py > env_docs.log && echo "success=true" >> "$GITHUB_OUTPUT" || echo "success=false" >> "$GITHUB_OUTPUT"
+                  cat env_docs.log
+            - name: Parse missing variables
+              if: steps.check.outputs.success == 'false'
+              id: vars
+              run: |
+                  missing=$(awk '/^Variables missing from agents\/index.md:/{flag=1;next}/^$/{flag=0}flag' env_docs.log | tr '\n' ',' | sed 's/,$//')
+                  echo "missing=$missing" >> "$GITHUB_OUTPUT"
+            - name: Install PyYAML
+              if: steps.check.outputs.success == 'false'
+              run: pip install PyYAML
+            - name: Verify bot permission
+              if: steps.check.outputs.success == 'false'
+              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Create issue
+              if: steps.check.outputs.success == 'false'
+              run: |
+                  cat > body.md <<'BODY'
+                    ## Missing variables
+                    ${{ steps.vars.outputs.missing }}
 
-            - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
-          BODY
-          jq -Rs --arg title "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" '{title:$title,body:.}' body.md > notify.json
-          gh workflow run notify.yml -f data="$(cat notify.json)"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
+                  BODY
+                  jq -Rs --arg title "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" '{title:$title,body:.}' body.md > notify.json
+                  gh workflow run notify.yml -f data="$(cat notify.json)"
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -11,6 +11,7 @@ and Codex automation can keep the platform healthy.
 <!-- This file is derived from the master merged draft provided during onboarding. -->
 
 ## Table of Contents
+
 1. [Agent Service Map](#agent-service-map)
 2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
 3. [XP API](#xp-api)
@@ -40,13 +41,13 @@ and Codex automation can keep the platform healthy.
 
 ## Agent Service Map
 
-| Agent Name          | Endpoint(s)                      | Port | Healthcheck | Depends On | Status   |
-| ------------------- | -------------------------------- | ---- | ----------- | ---------- | -------- |
-| Auth Server         | `/api/*`, `/health`              | 8002 | `/health`   | db         | updating |
-| Discord Integration | `/oauth`, `/roles`               | 8081 | `/health`   | Auth, db   | verify   |
-| Frontend Agent      | `/`, `/session`                  | 3000 | N/A         | Auth       | stable   |
-| XP API              | `/xp`, `/health`                 | 8001 | `/health`   | db         | verify   |
-| Database (Postgres) | N/A                              | 5432 | docker      | N/A        | stable   |
+| Agent Name          | Endpoint(s)         | Port | Healthcheck | Depends On | Status   |
+| ------------------- | ------------------- | ---- | ----------- | ---------- | -------- |
+| Auth Server         | `/api/*`, `/health` | 8002 | `/health`   | db         | updating |
+| Discord Integration | `/oauth`, `/roles`  | 8081 | `/health`   | Auth, db   | verify   |
+| Frontend Agent      | `/`, `/session`     | 3000 | N/A         | Auth       | stable   |
+| XP API              | `/xp`, `/health`    | 8001 | `/health`   | db         | verify   |
+| Database (Postgres) | N/A                 | 5432 | docker      | N/A        | stable   |
 
 ---
 
@@ -59,6 +60,7 @@ and Codex automation can keep the platform healthy.
 **Environment:** Discord client credentials, role IDs, JWT secret and config.
 
 **Typical Workflow:**
+
 1. Receive code from frontend.
 2. Exchange it for a Discord token and fetch roles.
 3. Issue a JWT and session payload to the frontend.
@@ -93,7 +95,7 @@ and Codex automation can keep the platform healthy.
 
 ## Discord Integration Agent
 
-**Status:** Verify – exposes `/oauth` and `/roles` for account linking and role lookups. 
+**Status:** Verify – exposes `/oauth` and `/roles` for account linking and role lookups.
 
 **Purpose:** Handles Discord OAuth flows and role lookups.
 
@@ -144,12 +146,13 @@ Examples include a Discord bot/webhook agent and ID.me integration.
 **Purpose:** Exposes `/health` endpoints so CI/CD and Docker Compose can verify service readiness before running tests.
 
 **Example Docker Compose Healthcheck:**
+
 ```yaml
 healthcheck:
-  test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-  interval: 5s
-  timeout: 2s
-  retries: 10
+    test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+    interval: 5s
+    timeout: 2s
+    retries: 10
 ```
 
 ## Healthcheck Implementation Guide
@@ -159,7 +162,7 @@ Add a simple `/health` route in each service so CI and Compose can poll for read
 **Express:**
 
 ```js
-app.get('/health', (req, res) => res.status(200).send('OK'));
+app.get("/health", (req, res) => res.status(200).send("OK"));
 ```
 
 **FastAPI:**
@@ -177,35 +180,35 @@ Use a small loop in your workflow to wait for the auth service before running te
 ```yaml
 - name: Wait for Auth service
   run: |
-    for i in {1..20}; do
-      if curl -sf http://localhost:8002/health; then
-        echo "Auth is up"
-        exit 0
-      fi
-      sleep 3
-    done
-    exit 1
+      for i in {1..20}; do
+        if curl -sf http://localhost:8002/health; then
+          echo "Auth is up"
+          exit 0
+        fi
+        sleep 3
+      done
+      exit 1
 ```
 
 ---
 
 ## Agent Task Checklist
 
-- [x] Document each agent's purpose, key files, environment, and workflow.
-- [x] Update this file and the changelog when an agent changes.
-- [x] Ensure healthchecks pass for required services.
-- [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
+-   [x] Document each agent's purpose, key files, environment, and workflow.
+-   [x] Update this file and the changelog when an agent changes.
+-   [x] Ensure healthchecks pass for required services.
+-   [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
 
 ---
 
 ## Next Steps / Remediation Timeline
 
-- [x] Implement `/health` in Auth
-- [x] Add Docker healthcheck to compose
-- [x] CI workflow update to poll `/health`
-- [x] Env var audit/cleanup in `.env.dev`
-- [x] Doc/Agents.md/Changelog update
-- [x] Retire obsolete scripts
+-   [x] Implement `/health` in Auth
+-   [x] Add Docker healthcheck to compose
+-   [x] CI workflow update to poll `/health`
+-   [x] Env var audit/cleanup in `.env.dev`
+-   [x] Doc/Agents.md/Changelog update
+-   [x] Retire obsolete scripts
 
 ---
 
@@ -224,40 +227,40 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 ## Environment Variable Reference
 
-| Variable                     | Description                                |
-| ---------------------------- | ------------------------------------------ |
-| APP_ENV                      | Application mode (`development`, etc.)     |
-| DATABASE_URL                 | Postgres connection string                 |
-| TOKEN_EXPIRE_SECONDS         | JWT expiration in seconds                  |
-| CORS_ALLOW_ORIGINS           | Comma-separated list of allowed CORS origins |
-| IS_ALPHA_USER                | Enable alpha-only routes                   |
-| IS_FOUNDER                   | Enable founder-only routes                 |
-| ADMIN_SERVER_GUILD_ID        | Discord guild ID used for admin checks     |
-| OWNER_ROLE_ID                | Discord role for system owner              |
-| ADMINISTRATOR_ROLE_ID        | Discord role for administrators            |
-| MODERATOR_ROLE_ID            | Discord role for moderators                |
-| VERIFIED_USER_ROLE_ID        | Role granted to verified community members |
-| VERIFIED_MEMBER_ROLE_ID      | Alias role for verified members            |
-| GOVERNMENT_ROLE_ID           | Role for government employees              |
-| MILITARY_ROLE_ID             | Role for military members                  |
-| EDUCATION_ROLE_ID            | Role for school or university affiliation  |
-| DISCORD_CLIENT_ID            | Discord application client ID              |
-| DISCORD_CLIENT_SECRET        | Discord application client secret          |
-| DISCORD_REDIRECT_URI         | OAuth callback URL for Discord             |
-| DISCORD_API_TIMEOUT          | HTTP timeout in seconds for Discord API calls |
-| JWT_SECRET_KEY               | Secret key for JWT signing (errors if empty or "secret" outside development) |
-| JWT_ALGORITHM                | Algorithm for JWT signing (default `HS256`) |
-| DISCORD_BOT_TOKEN            | Token for the Discord bot                  |
-| DISCORD_GUILD_IDS            | Guilds where the bot operates              |
-| BOT_JWT                      | JWT used by the bot for API calls          |
-| API_BASE_URL                 | XP API URL for the bot                     |
-| AUTH_URL                     | Auth service URL for Playwright tests      |
-| CHECK_HEADERS_URL            | Endpoint used by header checks (default `http://localhost:8002/api/user`) |
-| VITE_AUTH_URL                | Auth service URL for the frontend          |
-| VITE_API_URL                 | XP API URL for the frontend                |
-| VITE_DISCORD_CLIENT_ID       | Discord client ID for the frontend         |
-| VITE_SESSION_REFRESH_INTERVAL| How often the frontend refreshes sessions  |
-| INIT_DB_ON_STARTUP           | Auto-run migrations when the auth service starts |
+| Variable                      | Description                                                                  |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| APP_ENV                       | Application mode (`development`, etc.)                                       |
+| DATABASE_URL                  | Postgres connection string                                                   |
+| TOKEN_EXPIRE_SECONDS          | JWT expiration in seconds                                                    |
+| CORS_ALLOW_ORIGINS            | Comma-separated list of allowed CORS origins                                 |
+| IS_ALPHA_USER                 | Enable alpha-only routes                                                     |
+| IS_FOUNDER                    | Enable founder-only routes                                                   |
+| ADMIN_SERVER_GUILD_ID         | Discord guild ID used for admin checks                                       |
+| OWNER_ROLE_ID                 | Discord role for system owner                                                |
+| ADMINISTRATOR_ROLE_ID         | Discord role for administrators                                              |
+| MODERATOR_ROLE_ID             | Discord role for moderators                                                  |
+| VERIFIED_USER_ROLE_ID         | Role granted to verified community members                                   |
+| VERIFIED_MEMBER_ROLE_ID       | Alias role for verified members                                              |
+| GOVERNMENT_ROLE_ID            | Role for government employees                                                |
+| MILITARY_ROLE_ID              | Role for military members                                                    |
+| EDUCATION_ROLE_ID             | Role for school or university affiliation                                    |
+| DISCORD_CLIENT_ID             | Discord application client ID                                                |
+| DISCORD_CLIENT_SECRET         | Discord application client secret                                            |
+| DISCORD_REDIRECT_URI          | OAuth callback URL for Discord                                               |
+| DISCORD_API_TIMEOUT           | HTTP timeout in seconds for Discord API calls                                |
+| JWT_SECRET_KEY                | Secret key for JWT signing (errors if empty or "secret" outside development) |
+| JWT_ALGORITHM                 | Algorithm for JWT signing (default `HS256`)                                  |
+| DISCORD_BOT_TOKEN             | Token for the Discord bot                                                    |
+| DISCORD_GUILD_IDS             | Guilds where the bot operates                                                |
+| BOT_JWT                       | JWT used by the bot for API calls                                            |
+| API_BASE_URL                  | XP API URL for the bot                                                       |
+| AUTH_URL                      | Auth service URL for Playwright tests                                        |
+| CHECK_HEADERS_URL             | Endpoint used by header checks (default `http://localhost:8002/api/user`)    |
+| VITE_AUTH_URL                 | Auth service URL for the frontend                                            |
+| VITE_API_URL                  | XP API URL for the frontend                                                  |
+| VITE_DISCORD_CLIENT_ID        | Discord client ID for the frontend                                           |
+| VITE_SESSION_REFRESH_INTERVAL | How often the frontend refreshes sessions                                    |
+| INIT_DB_ON_STARTUP            | Auto-run migrations when the auth service starts                             |
 
 ---
 
@@ -270,10 +273,10 @@ an automated notification and suggested fix via Codex's reporting channel.
 
 To reduce the attack surface in CI/CD workflows:
 
-- **Do not use Codecov** or any third-party coverage uploaders that execute
-  remote scripts in CI.
-- Avoid integrations that rely on `bash <curl | sh>` style commands.
-- Vet all external tools for prior security incidents before adoption.
+-   **Do not use Codecov** or any third-party coverage uploaders that execute
+    remote scripts in CI.
+-   Avoid integrations that rely on `bash <curl | sh>` style commands.
+-   Vet all external tools for prior security incidents before adoption.
 
 ---
 
@@ -294,32 +297,31 @@ Update the health matrix and remove references from code and docs.
 
 ## Glossary
 
-- **Agent:** Any service, bot, or integration that manages part of the TAGS platform.
-- **RBAC:** Role-Based Access Control.
-- **Codex:** The automation system that verifies docs and code quality.
+-   **Agent:** Any service, bot, or integration that manages part of the TAGS platform.
+-   **RBAC:** Role-Based Access Control.
+-   **Codex:** The automation system that verifies docs and code quality.
 
 ---
 
 ## Related Docs
 
-- [Project README](../README.md)
-- [Security Policy](../SECURITY.md)
-- [Onboarding Guide](../ONBOARDING.md)
-- [.env.example](../.env.example)
+-   [Project README](../README.md)
+-   [Security Policy](../SECURITY.md)
+-   [Onboarding Guide](../ONBOARDING.md)
+-   [.env.example](../.env.example)
 
 ---
 
 ## Revision History
 
-| Date        | Version | Author    | Summary                                |
-| ----------- | ------- | --------- | -------------------------------------- |
-| 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_failure_diagnoser script |
-| 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide |
-| 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints |
+| Date        | Version | Author    | Summary                                        |
+| ----------- | ------- | --------- | ---------------------------------------------- |
+| 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_failure_diagnoser script    |
+| 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide        |
+| 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints                 |
 | 2 Jul 2025  | v0.3.2  | Codex     | Archived languagetool script and updated tasks |
-| 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars |
-| 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary |
-| 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                          |
+| 21 Jun 2025 | v0.2.1  | Codex     | Added database agent and updated env vars      |
+| 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary         |
+| 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                                  |
 
-*Last updated: 3 July 2025*
-
+_Last updated: 3 July 2025_

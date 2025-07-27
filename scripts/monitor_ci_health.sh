@@ -14,16 +14,16 @@ echo "🔄 CI Performance Analysis:"
 # Get recent workflow runs with error handling
 if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
     echo "✅ Retrieved recent CI run data"
-    
+
     # Calculate success metrics
     total_runs=$(echo "$runs" | jq length)
     successful_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "success")] | length')
     failed_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "failure")] | length')
-    
+
     if [ "$total_runs" -gt 0 ]; then
         success_rate=$((successful_runs * 100 / total_runs))
         echo "📈 Success Rate: ${success_rate}% ($successful_runs/$total_runs successful, $failed_runs failed)"
-        
+
         # Assessment based on recalibrated standards
         if [ "$success_rate" -ge 90 ]; then
             echo "🎉 EXCELLENT: CI infrastructure highly reliable"
@@ -34,7 +34,7 @@ if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt
         else
             echo "❌ POOR: CI infrastructure requires immediate repair"
         fi
-        
+
         # Show recent runs
         echo ""
         echo "🕒 Recent Runs:"

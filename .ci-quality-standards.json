@@ -1,48 +1,56 @@
 {
-  "version": "1.0",
-  "description": "Recalibrated CI Quality Standards for DevOnboarder",
-  "last_updated": "2025-07-23",
-  "standards": {
-    "excellent": {
-      "threshold": 95,
-      "description": "Premium quality - suitable for immediate merge",
-      "action": "auto_merge_eligible",
-      "requirements": "All critical checks passing, documentation complete"
+    "version": "1.0",
+    "description": "Recalibrated CI Quality Standards for DevOnboarder",
+    "last_updated": "2025-07-23",
+    "standards": {
+        "excellent": {
+            "threshold": 95,
+            "description": "Premium quality - suitable for immediate merge",
+            "action": "auto_merge_eligible",
+            "requirements": "All critical checks passing, documentation complete"
+        },
+        "good": {
+            "threshold": 85,
+            "description": "Production ready with minor acceptable issues",
+            "action": "manual_review_recommended",
+            "requirements": "Core functionality verified, minor issues documented"
+        },
+        "acceptable": {
+            "threshold": 70,
+            "description": "Functional but requires targeted improvements",
+            "action": "targeted_fixes_required",
+            "requirements": "Core features working, style/docs need attention"
+        },
+        "needs_work": {
+            "threshold": 50,
+            "description": "Significant issues requiring major fixes",
+            "action": "major_fixes_required",
+            "requirements": "Core functionality issues, comprehensive fixes needed"
+        },
+        "failing": {
+            "threshold": 0,
+            "description": "Critical failures - consider fresh approach",
+            "action": "fresh_start_recommended",
+            "requirements": "Multiple critical failures, reassess approach"
+        }
     },
-    "good": {
-      "threshold": 85,
-      "description": "Production ready with minor acceptable issues",
-      "action": "manual_review_recommended",
-      "requirements": "Core functionality verified, minor issues documented"
+    "infrastructure_considerations": {
+        "expected_ci_reliability": 90,
+        "environment_failure_tolerance": 5,
+        "recalibration_factor": 0.95,
+        "notes": "Standards account for infrastructure reliability limitations"
     },
-    "acceptable": {
-      "threshold": 70,
-      "description": "Functional but requires targeted improvements",
-      "action": "targeted_fixes_required",
-      "requirements": "Core features working, style/docs need attention"
-    },
-    "needs_work": {
-      "threshold": 50,
-      "description": "Significant issues requiring major fixes",
-      "action": "major_fixes_required",
-      "requirements": "Core functionality issues, comprehensive fixes needed"
-    },
-    "failing": {
-      "threshold": 0,
-      "description": "Critical failures - consider fresh approach",
-      "action": "fresh_start_recommended",
-      "requirements": "Multiple critical failures, reassess approach"
+    "auto_fix_categories": {
+        "high_confidence": [
+            "code_formatting",
+            "documentation_style",
+            "linting"
+        ],
+        "medium_confidence": ["dependency_updates", "simple_test_fixes"],
+        "low_confidence": [
+            "logic_errors",
+            "architectural_changes",
+            "security_issues"
+        ]
     }
-  },
-  "infrastructure_considerations": {
-    "expected_ci_reliability": 90,
-    "environment_failure_tolerance": 5,
-    "recalibration_factor": 0.95,
-    "notes": "Standards account for infrastructure reliability limitations"
-  },
-  "auto_fix_categories": {
-    "high_confidence": ["code_formatting", "documentation_style", "linting"],
-    "medium_confidence": ["dependency_updates", "simple_test_fixes"],
-    "low_confidence": ["logic_errors", "architectural_changes", "security_issues"]
-  }
 }

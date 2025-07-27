@@ -39,12 +39,14 @@ python -m diagnostics --check-codex --dry-run
 ## Dry-Run Logic
 
 **Command Flow**:
+
 1. Parse executive command (CEO, CTO, COO directives)
 2. Validate role permissions via DevOnboarder auth service (simulated)
 3. Log intended Discord routing without actual webhook calls
 4. Output structured response for CI validation
 
 **Safety Guards**:
+
 - All Discord API calls simulated
 - No actual webhook notifications sent
 - Role validation logged but not enforced

@@ -1,6 +1,6 @@
 # Codex Task: Llama2 Agile Helper Integration
 steps:
-  - name: Generate sprint summary after each sprint
-    trigger: codex_post_sprint
-  - name: Suggest backlog grooming actions
-    trigger: manual
+    - name: Generate sprint summary after each sprint
+      trigger: codex_post_sprint
+    - name: Suggest backlog grooming actions
+      trigger: manual

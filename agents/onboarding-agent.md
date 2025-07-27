@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.OnboardingAgent
-  role: Guides new contributors through the onboarding checklist
-  scope: docs/ONBOARDING.md
-  triggers: Contributor requests or scheduled reminders
-  output: Onboarding guidance
+    name: Agent.OnboardingAgent
+    role: Guides new contributors through the onboarding checklist
+    scope: docs/ONBOARDING.md
+    triggers: Contributor requests or scheduled reminders
+    output: Onboarding guidance
 ---
 
 # Onboarding Agent

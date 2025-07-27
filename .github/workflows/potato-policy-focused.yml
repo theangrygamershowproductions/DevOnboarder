@@ -23,8 +23,10 @@ jobs:
 
             - name: Enforce Potato Policy with Reporting
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  # Use fine-grained token hierarchy for issue automation
+                  GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
+                  set -euo pipefail
                   echo "🥔 Enhanced Potato Policy Enforcement with Reporting..."
 
                   # Run violation reporter (creates issues if violations found)
@@ -37,6 +39,9 @@ jobs:
 
                   # Generate audit report
                   bash scripts/generate_potato_report.sh
+
+                  # Ensure reports directory exists for artifact upload
+                  mkdir -p reports
 
                   # Upload audit report as artifact
                   echo "📊 Audit report generated for transparency"

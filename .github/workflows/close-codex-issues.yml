@@ -9,52 +9,52 @@
 name: Close Codex Issues
 
 on:
-  pull_request:
-    types: [closed]
+    pull_request:
+        types: [closed]
 
 permissions:
-  issues: write
+    issues: write
 
 jobs:
-  validate-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
-  close:
-    needs: validate-yaml
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install GitHub CLI
-        uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Show gh version
-        run: which gh && gh --version
-      - name: Verify gh version
-        run: |
-          ver=$(gh --version | head -n1 | awk '{print $3}')
-          major=${ver%%.*}
-          if [ "$major" -lt 2 ]; then
-            echo "::error::GitHub CLI v2 or higher required" >&2
-            exit 1
-          fi
-      - name: Install PyYAML
-        run: pip install PyYAML
-      - name: Verify bot permission
-        run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-      - name: Close referenced Codex issues
-        run: |
-          echo "${{ github.event.pull_request.body }}" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
-          gh_bin=$(which gh)
-          for ISSUE in $(cat issues.txt); do
-            AUTHOR=$($gh_bin api repos/${{ github.repository }}/issues/$ISSUE | jq -r '.user.login')
-            if [ "$AUTHOR" = "codex[bot]" ]; then
-              $gh_bin issue comment "$ISSUE" --body "Closed via merge of #${{ github.event.pull_request.number }}."
-              $gh_bin issue close "$ISSUE" --reason completed
-            fi
-          done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
+                  config_file: .github/.yamllint-config
+    close:
+        needs: validate-yaml
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install GitHub CLI
+              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Show gh version
+              run: which gh && gh --version
+            - name: Verify gh version
+              run: |
+                  ver=$(gh --version | head -n1 | awk '{print $3}')
+                  major=${ver%%.*}
+                  if [ "$major" -lt 2 ]; then
+                    echo "::error::GitHub CLI v2 or higher required" >&2
+                    exit 1
+                  fi
+            - name: Install PyYAML
+              run: pip install PyYAML
+            - name: Verify bot permission
+              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Close referenced Codex issues
+              run: |
+                  echo "${{ github.event.pull_request.body }}" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
+                  gh_bin=$(which gh)
+                  for ISSUE in $(cat issues.txt); do
+                    AUTHOR=$($gh_bin api repos/${{ github.repository }}/issues/$ISSUE | jq -r '.user.login')
+                    if [ "$AUTHOR" = "codex[bot]" ]; then
+                      $gh_bin issue comment "$ISSUE" --body "Closed via merge of #${{ github.event.pull_request.number }}."
+                      $gh_bin issue close "$ISSUE" --reason completed
+                    fi
+                  done
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

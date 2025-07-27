@@ -32,9 +32,9 @@ commit message. Pull requests ignore this marker and run the full workflow.
 
 The job caches several directories to speed up subsequent runs:
 
-- `~/.cache/pip` for Python packages
-- `frontend/node_modules` and `bot/node_modules` for JavaScript dependencies
-- `~/.cache/ms-playwright` for Playwright browsers
+-   `~/.cache/pip` for Python packages
+-   `frontend/node_modules` and `bot/node_modules` for JavaScript dependencies
+-   `~/.cache/ms-playwright` for Playwright browsers
 
 Cache keys include the runner OS, language version, and the related lock files
 so mismatched dependencies do not restore.
@@ -92,12 +92,12 @@ variables so maintainers know which entries to add to `agents/index.md`.
 
 After the environment checks, the job runs three dependency audits:
 
-- `pip-audit` runs immediately after the development requirements install. An
-  exit code of `1` indicates vulnerable dependencies and fails the job. Other
-  non-zero codes usually mean the tool couldn't download the vulnerability database. In that case the step logs `pip-audit failed. See [docs/offline-setup.md](offline-setup.md) for offline instructions.` and
-  continues to the next audit.
-- `bandit -r src -ll` scans the Python code for vulnerabilities.
-- `npm audit --audit-level=high` runs in both `frontend/` and `bot/`.
+-   `pip-audit` runs immediately after the development requirements install. An
+    exit code of `1` indicates vulnerable dependencies and fails the job. Other
+    non-zero codes usually mean the tool couldn't download the vulnerability database. In that case the step logs `pip-audit failed. See [docs/offline-setup.md](offline-setup.md) for offline instructions.` and
+    continues to the next audit.
+-   `bandit -r src -ll` scans the Python code for vulnerabilities.
+-   `npm audit --audit-level=high` runs in both `frontend/` and `bot/`.
 
 Any reported high severity issues cause the workflow to fail. The detailed
 results appear in the job log, which is uploaded as a CI artifact so

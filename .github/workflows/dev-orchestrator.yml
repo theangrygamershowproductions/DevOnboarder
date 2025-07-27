@@ -9,27 +9,27 @@
 name: Dev Orchestrator
 
 on:
-  push:
-    branches: ["dev"]
-  workflow_dispatch:
+    push:
+        branches: ["dev"]
+    workflow_dispatch:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  orchestrate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Known errors learning loop
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip install PyYAML
-          python scripts/known_errors_loop.py
-      - name: Run dev orchestrator
-        run: bash scripts/orchestrate-dev.sh
-        env:
-          ORCHESTRATION_KEY: ${{ secrets.DEV_ORCHESTRATION_BOT_KEY }}
-          ORCHESTRATOR_URL: https://orchestrator.example.com
+    orchestrate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Known errors learning loop
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  pip install PyYAML
+                  python scripts/known_errors_loop.py
+            - name: Run dev orchestrator
+              run: bash scripts/orchestrate-dev.sh
+              env:
+                  ORCHESTRATION_KEY: ${{ secrets.DEV_ORCHESTRATION_BOT_KEY }}
+                  ORCHESTRATOR_URL: https://orchestrator.example.com

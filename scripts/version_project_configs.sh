@@ -47,10 +47,10 @@ version_pyproject_toml() {
 version_docker_configs() {
     local docker_files=(
         "docker-compose.ci.yaml"
-        "docker-compose.tags.dev.yaml" 
+        "docker-compose.tags.dev.yaml"
         "docker-compose.tags.prod.yaml"
     )
-    
+
     for file in "${docker_files[@]}"; do
         if [[ -f "$file" ]]; then
             echo "🐳 Versioning $file..."
@@ -147,13 +147,13 @@ update_env_example() {
 main() {
     echo "🚀 Starting DevOnboarder configuration versioning..."
     echo
-    
+
     # Version core project files
     version_pyproject_toml
     version_docker_configs
     create_env_dev_template
     update_env_example
-    
+
     echo
     echo "📊 Summary:"
     echo "  ✅ Project configuration files processed"
@@ -165,7 +165,7 @@ main() {
     echo "  2. Ensure .env.dev is NOT committed (should be in .gitignore)"
     echo "  3. Run CI to test with new environment structure"
     echo "  4. Update any documentation referencing environment setup"
-    
+
     # Git staging recommendation
     if git rev-parse --git-dir >/dev/null 2>&1; then
         echo

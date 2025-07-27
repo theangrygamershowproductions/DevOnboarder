@@ -16,38 +16,38 @@ attempt_gh_command() {
     local description="$2"
     local max_attempts=5
     local attempt=1
-    
+
     echo "🔄 Attempting: $description"
-    
+
     while [ $attempt -le $max_attempts ]; do
         echo "   Attempt $attempt/$max_attempts..."
-        
+
         # Try GitHub CLI with various approaches
         if output=$(timeout 30 gh $command 2>&1); then
             echo "   ✅ Success on attempt $attempt"
             echo "$output"
             return 0
         fi
-        
+
         # Try with different authentication
         if output=$(GH_TOKEN="${GITHUB_TOKEN:-}" timeout 30 gh $command 2>&1); then
             echo "   ✅ Success with token auth on attempt $attempt"
             echo "$output"
             return 0
         fi
-        
+
         # Try with explicit host
         if output=$(timeout 30 gh $command --hostname github.com 2>&1); then
             echo "   ✅ Success with explicit host on attempt $attempt"
             echo "$output"
             return 0
         fi
-        
+
         echo "   ❌ Attempt $attempt failed"
         ((attempt++))
         sleep 2
     done
-    
+
     echo "   🚨 All attempts failed for: $description"
     return 1
 }
@@ -55,21 +55,21 @@ attempt_gh_command() {
 # Alternative assessment using API calls if CLI completely fails
 fallback_assessment() {
     echo "🔄 Using fallback assessment methods..."
-    
+
     # Use curl to GitHub API if available
     if command -v curl >/dev/null 2>&1; then
         echo "   📡 Attempting GitHub API access via curl..."
-        
+
         if response=$(curl -s -H "Authorization: token ${GITHUB_TOKEN:-}" \
             "https://api.github.com/repos/theangrygamershowproductions/DevOnboarder/pulls/$PR_NUMBER" 2>/dev/null); then
-            
+
             echo "   ✅ GitHub API accessible via curl"
-            
+
             # Extract basic health info from API response
             if echo "$response" | grep -q '"state"'; then
                 state=$(echo "$response" | grep -o '"state":"[^"]*"' | cut -d'"' -f4)
                 echo "   📊 PR State: $state"
-                
+
                 # Estimate health based on available info
                 if [ "$state" = "open" ]; then
                     echo "   📊 Estimated Health: 75% (API-based assessment)"
@@ -81,34 +81,34 @@ fallback_assessment() {
             fi
         fi
     fi
-    
+
     # File-based assessment as last resort
     echo "   📁 Using file-based assessment..."
-    
+
     # Check for recent commits
     if git log --oneline -10 | grep -q "feat\|fix\|docs"; then
         echo "   ✅ Recent meaningful commits detected"
         health_points=$((health_points + 20))
     fi
-    
+
     # Check for CI configuration
     if [ -d ".github/workflows" ] && [ "$(find .github/workflows -name "*.yml" -o -name "*.yaml" | wc -l)" -gt 0 ]; then
         echo "   ✅ CI workflows configured"
         health_points=$((health_points + 20))
     fi
-    
+
     # Check for documentation
     if [ -f "README.md" ] && [ -f "docs/ci-infrastructure-repair-epic.md" ]; then
         echo "   ✅ Documentation present"
         health_points=$((health_points + 20))
     fi
-    
+
     # Check for our robust scripts
     if [ -f "scripts/assess_pr_health_robust.sh" ] && [ -f "scripts/monitor_ci_health.sh" ]; then
         echo "   ✅ Robust infrastructure deployed"
         health_points=$((health_points + 25))
     fi
-    
+
     echo "   📊 File-based Health Assessment: ${health_points}%"
     return 0
 }
@@ -120,7 +120,7 @@ health_points=0
 # Try to get PR status
 if attempt_gh_command "pr view $PR_NUMBER --json state,title" "PR basic information"; then
     echo "✅ GitHub CLI working - proceeding with full assessment"
-    
+
     # Get detailed status if CLI works
     if attempt_gh_command "pr checks $PR_NUMBER --json name,conclusion" "CI check status"; then
         echo "✅ CI check data retrieved successfully"

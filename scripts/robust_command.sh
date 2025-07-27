@@ -7,10 +7,10 @@ execute_with_output() {
     local cmd="$1"
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         echo "Executing: $cmd" >&2
-        
+
         # Execute command with explicit output capture and error handling
         if output=$(eval "$cmd" 2>&1); then
             echo "$output"
@@ -21,7 +21,7 @@ execute_with_output() {
             sleep 1
         fi
     done
-    
+
     echo "Command failed after $max_retries attempts" >&2
     return 1
 }

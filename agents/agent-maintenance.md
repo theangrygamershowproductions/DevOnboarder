@@ -1,13 +1,13 @@
 ---
 codex-agent:
-  name: Agent.AgentMaintenance
-  role: Migrates and standardizes Codex agents
-  scope: local or CI
-  triggers: manual
-  output: .codex/logs/agent-maintenance.log
+    name: Agent.AgentMaintenance
+    role: Migrates and standardizes Codex agents
+    scope: local or CI
+    triggers: manual
+    output: .codex/logs/agent-maintenance.log
 permissions:
-  - repo:write
-  - contents:read
+    - repo:write
+    - contents:read
 ---
 
 # Agent Maintenance
@@ -32,5 +32,5 @@ permissions:
 
 **Permissions Required:**
 
-- `repo:write` — to create/update agent files
-- `contents:read` — to process existing documentation
+-   `repo:write` — to create/update agent files
+-   `contents:read` — to process existing documentation
