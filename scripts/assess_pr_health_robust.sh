@@ -17,18 +17,18 @@ execute_gh_command() {
     local cmd="$1"
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         if result=$(gh $cmd 2>&1); then
             echo "$result"
             return 0
         fi
-        
+
         ((retry++))
         echo "GitHub CLI retry $retry/$max_retries..." >&2
         sleep 2
     done
-    
+
     echo "GitHub CLI command failed: gh $cmd" >&2
     return 1
 }

@@ -1,13 +1,13 @@
 ---
 codex-agent:
-  name: Agent.DiagnosticsBot
-  role: Collects environment diagnostics and system health info
-  scope: repo utilities
-  triggers: manual or `python -m diagnostics`
-  output: .codex/logs/diagnostics-bot.log
+    name: Agent.DiagnosticsBot
+    role: Collects environment diagnostics and system health info
+    scope: repo utilities
+    triggers: manual or `python -m diagnostics`
+    output: .codex/logs/diagnostics-bot.log
 permissions:
-  - repo:read
-  - actions:read
+    - repo:read
+    - actions:read
 ---
 
 # Diagnostics Bot
@@ -24,14 +24,14 @@ permissions:
 
 **Workflow:**
 
-- Executes diagnostics module
-- Aggregates results
-- Outputs to `.codex/logs/diagnostics-bot.log`
-- Sends alerts via `.github/workflows/notify.yml` if issues are found
+-   Executes diagnostics module
+-   Aggregates results
+-   Outputs to `.codex/logs/diagnostics-bot.log`
+-   Sends alerts via `.github/workflows/notify.yml` if issues are found
 
 **Logging:** Output goes to `.codex/logs/diagnostics-bot.log`
 
 **Permissions Required:**
 
-- `repo:read` – to inspect the project context
-- `actions:read` – to check CI metadata, if invoked from workflow
+-   `repo:read` – to inspect the project context
+-   `actions:read` – to check CI metadata, if invoked from workflow

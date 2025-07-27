@@ -65,7 +65,7 @@ if git diff --quiet; then
 else
     echo "   → Changes applied, would need to commit and re-run CI for new score"
     POST_FIX_SCORE="Pending"
-    
+
     # Show what would be committed
     echo ""
     echo "📝 Changes that would be committed:"

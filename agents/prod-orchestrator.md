@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.ProdOrchestrator
-  role: Orchestrates production environment deployments
-  scope: .github/workflows/prod-orchestrator.yml
-  triggers: Push to main or manual dispatch
-  output: Deployment job logs
+    name: Agent.ProdOrchestrator
+    role: Orchestrates production environment deployments
+    scope: .github/workflows/prod-orchestrator.yml
+    triggers: Push to main or manual dispatch
+    output: Deployment job logs
 ---
 
 # Prod Orchestrator Agent

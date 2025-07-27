@@ -8,16 +8,36 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
-**NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS**
+### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
 
 This project REQUIRES isolated environments for ALL tooling:
 
+## 🥔 Enhanced Potato Policy
+
+DevOnboarder implements a unique **Enhanced Potato Policy** - an automated security mechanism that protects sensitive files from accidental exposure. This is a core architectural feature that affects all development work:
+
+**Protected Patterns**:
+
+- `Potato.md` - SSH keys, setup instructions
+- `*.env` - Environment variables
+- `*.pem`, `*.key` - Private keys and certificates
+- `secrets.yaml/yml` - Configuration secrets
+
+**Enforcement Points**:
+
+- `.gitignore`, `.dockerignore`, `.codespell-ignore` must contain "Potato" entries
+- Pre-commit hooks via `scripts/check_potato_ignore.sh`
+- CI validation in `potato-policy-focused.yml` workflow
+- Automatic violation reporting and issue creation
+
+**Developer Impact**: Any attempt to remove "Potato" entries or expose sensitive files will fail CI and require project lead approval with changelog documentation.
+
 ### Mandatory Environment Usage
 
--   **Python**: ALWAYS use `.venv` virtual environment
--   **Node.js**: ALWAYS use project-local `node_modules`
--   **Development**: ALWAYS use devcontainers or Docker
--   **CI/CD**: ALWAYS runs in isolated containers
+- **Python**: ALWAYS use `.venv` virtual environment
+- **Node.js**: ALWAYS use project-local `node_modules`
+- **Development**: ALWAYS use devcontainers or Docker
+- **CI/CD**: ALWAYS runs in isolated containers
 
 ### Commands Must Use Virtual Environment Context
 
@@ -37,11 +57,11 @@ black .  # (if not in venv)
 
 ### Why This Matters
 
--   **Reproducible builds**: Same environment everywhere
--   **Security**: No system pollution with project dependencies
--   **Reliability**: Exact version control across team
--   **CI compatibility**: Matches production environment
--   **Multi-project safety**: No conflicts between projects
+- **Reproducible builds**: Same environment everywhere
+- **Security**: No system pollution with project dependencies
+- **Reliability**: Exact version control across team
+- **CI compatibility**: Matches production environment
+- **Multi-project safety**: No conflicts between projects
 
 ### Developer Setup Requirements
 
@@ -59,25 +79,50 @@ pip install -e .[test]
 
 ### Core Services
 
--   **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
--   **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
--   **Frontend**: React + Vite + TypeScript (Port 8081)
--   **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
--   **Database**: PostgreSQL (production), SQLite (development)
+- **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
+- **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
+- **Frontend**: React + Vite + TypeScript (Port 8081)
+- **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
+- **XP System**: Gamification API with user levels and contributions tracking
+- **Database**: PostgreSQL (production), SQLite (development)
+
+### Service Discovery Pattern
+
+All FastAPI services follow a consistent pattern for health checks and CORS:
+
+```python
+# Standard service creation pattern (src/llama2_agile_helper/api.py, src/xp/api/__init__.py)
+def create_app() -> FastAPI:
+    app = FastAPI()
+    cors_origins = get_cors_origins()  # From utils.cors
+
+    class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            resp = await call_next(request)
+            resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+            return resp
+
+    app.add_middleware(CORSMiddleware, allow_origins=cors_origins, ...)
+    app.add_middleware(_SecurityHeadersMiddleware)
+
+    @app.get("/health")
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+```
 
 ### Multi-Environment Setup
 
--   **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
--   **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
+- **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
+- **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
 
 ### Service Integration Pattern
 
 All services follow the same FastAPI pattern:
 
--   **Health checks**: `/health` endpoint returning `{"status": "ok"}`
--   **CORS middleware**: Configured via `get_cors_origins()` utility
--   **Security headers**: Custom middleware adds `X-Content-Type-Options: nosniff`
--   **JWT authentication**: Shared auth service for user sessions
+- **Health checks**: `/health` endpoint returning `{"status": "ok"}`
+- **CORS middleware**: Configured via `get_cors_origins()` utility
+- **Security headers**: Custom middleware adds `X-Content-Type-Options: nosniff`
+- **JWT authentication**: Shared auth service for user sessions
 
 ```python
 # Standard service creation pattern
@@ -115,23 +160,42 @@ npm ci --prefix frontend
 
 ### 2. Workflow Standards
 
--   **Trunk-based development**: All work branches from `main`, short-lived feature branches
--   **Pull request requirement**: All changes via PR with review
--   **Branch cleanup**: Delete feature branches after merge
--   **95% test coverage minimum** across all services
--   **Virtual environment enforcement**: All tooling in isolated environments
+- **Trunk-based development**: All work branches from `main`, short-lived feature branches
+- **Pull request requirement**: All changes via PR with review
+- **Branch cleanup**: Delete feature branches after merge
+- **95% test coverage minimum** across all services
+- **Virtual environment enforcement**: All tooling in isolated environments
 
 ### 3. Code Quality Requirements
 
+### ⚠️ CRITICAL: Linting Rule Policy
+
+**NEVER modify linting configuration files without explicit human approval**:
+
+- `.markdownlint.json` - Markdown formatting standards
+- `.eslintrc*` - JavaScript/TypeScript linting rules
+- `.ruff.toml`/`pyproject.toml` - Python linting configuration
+- `.prettierrc*` - Code formatting rules
+- Any other linting/formatting configuration files
+
+**Policy Enforcement**:
+
+- **Fix content issues** in files to meet existing standards
+- **Do NOT suggest** changing linting rules to avoid errors
+- **Assume all linting rules** are intentionally configured
+- **Only modify configs** when explicitly requested by a human
+
+**Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
+
 #### Python Standards
 
--   **Python version**: 3.12 (enforced via `.tool-versions`)
--   **Virtual environment**: MANDATORY - all Python tools via `.venv`
--   **Linting**: `python -m ruff` with line-length=88, target-version="py312"
--   **Testing**: `python -m pytest` with coverage requirements
--   **Formatting**: `python -m black` for code formatting
--   **Type hints**: Required for all functions
--   **Docstrings**: Required for all public functions (use NumPy style)
+- **Python version**: 3.12 (enforced via `.tool-versions`)
+- **Virtual environment**: MANDATORY - all Python tools via `.venv`
+- **Linting**: `python -m ruff` with line-length=88, target-version="py312"
+- **Testing**: `python -m pytest` with coverage requirements
+- **Formatting**: `python -m black` for code formatting
+- **Type hints**: Required for all functions
+- **Docstrings**: Required for all public functions (use NumPy style)
 
 ```python
 def greet(name: str) -> str:
@@ -152,19 +216,19 @@ def greet(name: str) -> str:
 
 #### TypeScript Standards
 
--   **Node.js version**: 22 (enforced via `.tool-versions`)
--   **Package management**: `npm ci` for reproducible installs
--   **Testing**: Jest for bot, Vitest for frontend
--   **ESLint + Prettier**: Enforced formatting
--   **100% coverage** for bot service
+- **Node.js version**: 22 (enforced via `.tool-versions`)
+- **Package management**: `npm ci` for reproducible installs
+- **Testing**: Jest for bot, Vitest for frontend
+- **ESLint + Prettier**: Enforced formatting
+- **100% coverage** for bot service
 
 ### 4. Testing Requirements
 
 #### Coverage Thresholds
 
--   **Python backend**: 96%+ (enforced in CI)
--   **TypeScript bot**: 100% (enforced in CI)
--   **React frontend**: 100% statements, 98.43%+ branches
+- **Python backend**: 96%+ (enforced in CI)
+- **TypeScript bot**: 100% (enforced in CI)
+- **React frontend**: 100% statements, 98.43%+ branches
 
 #### Test Commands (Virtual Environment Required)
 
@@ -181,27 +245,29 @@ npm run coverage --prefix bot
 npm run coverage --prefix frontend
 ```
 
+**Test Pattern**: The `scripts/run_tests.sh` automatically detects `ModuleNotFoundError` and provides installation hints if dependencies are missing.
+
 ### 5. Commit Message Standards
 
 **MANDATORY**: Use conventional commit format: `<TYPE>(<scope>): <subject>`
 
 **Required Format**:
 
--   `TYPE`: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, CI (uppercase)
--   `scope`: Optional component (bot, frontend, auth, ci, etc.)
--   `subject`: Imperative mood, descriptive and concise
+- `TYPE`: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, CI (uppercase)
+- `scope`: Optional component (bot, frontend, auth, ci, etc.)
+- `subject`: Imperative mood, descriptive and concise
 
 **Good Examples**:
 
--   `FEAT(auth): add user authentication endpoint with JWT validation`
--   `FIX(bot): resolve Discord connection timeout handling`
--   `DOCS(setup): update multi-environment configuration guide`
--   `CI(build): ensure latest GitHub CLI binary is used`
+- `FEAT(auth): add user authentication endpoint with JWT validation`
+- `FIX(bot): resolve Discord connection timeout handling`
+- `DOCS(setup): update multi-environment configuration guide`
+- `CI(build): ensure latest GitHub CLI binary is used`
 
 **Bad Examples**:
 
--   `update` / `fix` / `misc` / `Applying previous commit`
--   `Add feature` (missing TYPE format)
+- `update` / `fix` / `misc` / `Applying previous commit`
+- `Add feature` (missing TYPE format)
 
 **Validation**: Enforced by `scripts/check_commit_messages.sh` in CI
 
@@ -209,7 +275,7 @@ npm run coverage --prefix frontend
 
 ### Directory Layout
 
-```
+```text
 ├── .venv/                     # Python virtual environment (NEVER commit)
 ├── src/devonboarder/          # Python backend application
 ├── bot/                       # Discord bot (TypeScript)
@@ -225,28 +291,28 @@ npm run coverage --prefix frontend
 
 ### Key Configuration Files
 
--   `pyproject.toml`: Python dependencies and tools config
--   `package.json`: Node.js dependencies (bot & frontend)
--   `docker-compose.ci.yaml`: CI pipeline configuration
--   `config/devonboarder.config.yml`: Application configuration
--   `.tool-versions`: Environment version requirements
+- `pyproject.toml`: Python dependencies and tools config
+- `package.json`: Node.js dependencies (bot & frontend)
+- `docker-compose.ci.yaml`: CI pipeline configuration
+- `config/devonboarder.config.yml`: Application configuration
+- `.tool-versions`: Environment version requirements
 
 ## Service Integration Patterns
 
 ### 1. API Conventions
 
--   **Health checks**: All services expose `/health` endpoint
--   **Authentication**: JWT tokens issued by auth service
--   **CORS**: Properly configured for frontend integration
--   **Documentation**: FastAPI auto-generated docs required
+- **Health checks**: All services expose `/health` endpoint
+- **Authentication**: JWT tokens issued by auth service
+- **CORS**: Properly configured for frontend integration
+- **Documentation**: FastAPI auto-generated docs required
 
 ### 2. Discord Bot Patterns
 
--   **Multi-guild support**: Automatic environment routing
--   **Commands**: `/verify`, `/dependency_inventory`, `/qa_checklist`, `/onboard`
--   **Role-based access**: Comprehensive permission model
--   **Management**: Use `npm run invite|status|test-guilds|dev`
--   **Environment detection**: Guild ID-based routing in bot code
+- **Multi-guild support**: Automatic environment routing
+- **Commands**: `/verify`, `/dependency_inventory`, `/qa_checklist`, `/onboard`
+- **Role-based access**: Comprehensive permission model
+- **Management**: Use `npm run invite|status|test-guilds|dev`
+- **Environment detection**: Guild ID-based routing in bot code
 
 ```typescript
 // Multi-environment routing example
@@ -255,31 +321,44 @@ const isDevEnvironment = guildId === "1386935663139749998";
 const isProdEnvironment = guildId === "1065367728992571444";
 ```
 
--   **Startup logging**: Bot provides detailed environment info on startup
--   **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
+- **Startup logging**: Bot provides detailed environment info on startup
+- **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 
--   **Migrations**: Alembic for schema changes
--   **Models**: SQLAlchemy with proper relationships
--   **Connection**: Environment-specific (SQLite dev, PostgreSQL prod)
+- **Migrations**: Alembic for schema changes
+- **Models**: SQLAlchemy with proper relationships
+- **Connection**: Environment-specific (SQLite dev, PostgreSQL prod)
 
 ## CI/CD & Automation
 
 ### GitHub Actions Workflows
 
--   **ci.yml**: Main test pipeline with 95% coverage enforcement
--   **pr-automation.yml**: PR automation framework
--   **auto-fix.yml**: Automated fixes and formatting
--   **ci-health.yml**: CI pipeline monitoring
--   **security-audit.yml**: Security scanning
+- **ci.yml**: Main test pipeline with 95% coverage enforcement
+- **pr-automation.yml**: PR automation framework
+- **auto-fix.yml**: Automated fixes and formatting
+- **ci-health.yml**: CI pipeline monitoring
+- **security-audit.yml**: Security scanning
 
 ### Critical Scripts
 
--   `scripts/automate_pr_process.sh`: PR automation
--   `scripts/pr_decision_engine.sh`: Strategic decision engine
--   `scripts/assess_pr_health.sh`: PR health assessment
--   `scripts/run_tests.sh`: Comprehensive test runner
+- `scripts/automate_pr_process.sh`: PR automation
+- `scripts/pr_decision_engine.sh`: Strategic decision engine
+- `scripts/assess_pr_health.sh`: PR health assessment
+- `scripts/run_tests.sh`: Comprehensive test runner
+- `scripts/check_potato_ignore.sh`: Potato Policy enforcement
+- `scripts/generate_potato_report.sh`: Security audit reporting
+- `scripts/check_commit_messages.sh`: Commit message validation
+
+### Automation Ecosystem
+
+DevOnboarder includes 100+ automation scripts in `scripts/` covering:
+
+- **CI Health Monitoring**: `monitor_ci_health.sh`, `analyze_ci_patterns.sh`
+- **Security Auditing**: `potato_policy_enforce.sh`, `security_audit.sh`
+- **Environment Management**: `setup-env.sh`, `check_dependencies.sh`
+- **Issue Management**: `close_resolved_issues.sh`, `batch_close_ci_noise.sh`
+- **Quality Assurance**: `validate_pr_checklist.sh`, `standards_enforcement_assessment.sh`
 
 ### Virtual Environment in CI
 
@@ -300,30 +379,30 @@ All CI commands use proper virtual environment context:
 
 ### Error Handling Requirements
 
--   **GitHub CLI availability**: Always check with fallbacks
--   **Variable initialization**: Initialize all variables early
--   **Exit codes**: Proper error propagation in shell scripts
--   **Virtual environment checks**: Verify environment before tool execution
+- **GitHub CLI availability**: Always check with fallbacks
+- **Variable initialization**: Initialize all variables early
+- **Exit codes**: Proper error propagation in shell scripts
+- **Virtual environment checks**: Verify environment before tool execution
 
 ## Security & Best Practices
 
 ### Security Requirements
 
--   **No system installation**: All tools in virtual environments
--   **No remote code execution**: Prohibited `curl | sh` patterns
--   **Secret management**: Use GitHub Actions secrets
--   **Token security**: Secure Discord bot token storage
--   **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
--   **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
--   **HTTPS enforcement**: All production endpoints
--   **Input validation**: Sanitize all user inputs
+- **No system installation**: All tools in virtual environments
+- **No remote code execution**: Prohibited `curl | sh` patterns
+- **Secret management**: Use GitHub Actions secrets
+- **Token security**: Secure Discord bot token storage
+- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
+- **HTTPS enforcement**: All production endpoints
+- **Input validation**: Sanitize all user inputs
 
 ### Documentation Standards
 
--   **Vale linting**: `python -m vale docs/` (in virtual environment)
--   **README updates**: Update for all major changes
--   **Changelog**: Maintain `docs/CHANGELOG.md`
--   **API docs**: Keep OpenAPI specs current
+- **Vale linting**: `python -m vale docs/` (in virtual environment)
+- **README updates**: Update for all major changes
+- **Changelog**: Maintain `docs/CHANGELOG.md`
+- **API docs**: Keep OpenAPI specs current
 
 ## Common Integration Points
 
@@ -398,31 +477,47 @@ async def get_user_status(user_id: int) -> UserStatus:
 
 **Cross-Service Communication**:
 
--   All services share database via `DATABASE_URL`
--   Auth service validates JWTs for protected endpoints
--   XP API depends on auth service's `get_current_user()` function
--   Bot uses `BOT_JWT` for backend API communication
+- All services share database via `DATABASE_URL`
+- Auth service validates JWTs for protected endpoints
+- XP API depends on auth service's `get_current_user()` function
+- Bot uses `BOT_JWT` for backend API communication
+
+**XP/Gamification System**:
+
+```python
+# XP API pattern (src/xp/api/__init__.py)
+@router.get("/api/user/level")
+def user_level(username: str, db: Session = Depends(auth_service.get_db)):
+    user = db.query(auth_service.User).filter_by(username=username).first()
+    xp_total = sum(evt.xp for evt in user.events)
+    level = xp_total // 100 + 1
+    return {"level": level}
+
+@router.post("/api/user/contribute")
+def contribute(data: dict, current_user = Depends(auth_service.get_current_user)):
+    # Award XP for contributions
+```
 
 ## Quality Assurance Checklist
 
 ### Pre-Commit Requirements
 
--   [ ] **Virtual environment activated** and dependencies installed
--   [ ] All tests pass with required coverage
--   [ ] Linting passes (`python -m ruff`, ESLint for TypeScript)
--   [ ] Documentation updated and passes Vale
--   [ ] No secrets or sensitive data in commits
--   [ ] Commit message follows imperative mood standard
+- [ ] **Virtual environment activated** and dependencies installed
+- [ ] All tests pass with required coverage
+- [ ] Linting passes (`python -m ruff`, ESLint for TypeScript)
+- [ ] Documentation updated and passes Vale
+- [ ] No secrets or sensitive data in commits
+- [ ] Commit message follows imperative mood standard
 
 ### PR Review Checklist
 
--   [ ] **Virtual environment setup documented** in PR if needed
--   [ ] Coverage does not decrease
--   [ ] All CI checks pass
--   [ ] Documentation is clear and accurate
--   [ ] Security best practices followed
--   [ ] Multi-environment considerations addressed
--   [ ] Breaking changes properly documented
+- [ ] **Virtual environment setup documented** in PR if needed
+- [ ] Coverage does not decrease
+- [ ] All CI checks pass
+- [ ] Documentation is clear and accurate
+- [ ] Security best practices followed
+- [ ] Multi-environment considerations addressed
+- [ ] Breaking changes properly documented
 
 ## Plugin Development
 
@@ -451,28 +546,26 @@ python -m pytest plugins/example_plugin/
 
 ### Required Variables
 
--   `DISCORD_TOKEN`: Bot authentication token
--   `DATABASE_URL`: Database connection string
--   `JWT_SECRET`: Token signing secret
--   `IS_ALPHA_USER` / `IS_FOUNDER`: Feature flag access
+- `DISCORD_TOKEN`: Bot authentication token
+- `DATABASE_URL`: Database connection string
+- `JWT_SECRET`: Token signing secret
+- `IS_ALPHA_USER` / `IS_FOUNDER`: Feature flag access
 
 ### Development vs Production
 
--   Use `.env.dev` for development
--   Environment-specific Discord guild routing
--   Different database backends (SQLite vs PostgreSQL)
+- Use `.env.dev` for development
+- Environment-specific Discord guild routing
+- Different database backends (SQLite vs PostgreSQL)
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **ModuleNotFoundError**:
-
     - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
     - ❌ **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
-
     - ✅ **Solution**: Use `python -m command` syntax in virtual environment
     - ❌ **NOT**: Install globally with `pip install --user`
 
@@ -484,37 +577,81 @@ python -m pytest plugins/example_plugin/
 
 ### Debugging Tools (Virtual Environment Context)
 
--   `python -m diagnostics`: Verify packages and environment
--   `npm run status --prefix bot`: Check bot connectivity
--   `python -m vale docs/`: Validate documentation
--   Coverage reports: Generated by test commands
+- `python -m diagnostics`: Verify packages and environment
+- `npm run status --prefix bot`: Check bot connectivity
+- `python -m vale docs/`: Validate documentation
+- Coverage reports: Generated by test commands
+
+### Enhanced Logging and CI Troubleshooting
+
+**Test Execution with Persistent Logs**:
+
+```bash
+# Enhanced test runner with comprehensive logging
+bash scripts/run_tests_with_logging.sh
+
+# Standard test runner (CI compatible)
+bash scripts/run_tests.sh
+```
+
+**Log Management**:
+
+```bash
+# List all log files and sizes
+bash scripts/manage_logs.sh list
+
+# Clean logs older than 7 days
+bash scripts/manage_logs.sh clean
+
+# Remove all logs (with confirmation)
+bash scripts/manage_logs.sh purge
+
+# Archive current logs
+bash scripts/manage_logs.sh archive
+
+# Custom retention (3 days) with dry-run
+bash scripts/manage_logs.sh --days 3 --dry-run clean
+```
+
+**Log Locations**:
+
+- Test logs: `logs/test_run_TIMESTAMP.log`
+- Coverage data: `logs/coverage_data_TIMESTAMP`
+- CI diagnostics: `logs/ci_diagnostic_TIMESTAMP.log`
+- All logs excluded from git via `.gitignore`
+
+**When Terminal Output Fails**:
+
+- Check `logs/test_run_*.log` for complete test output
+- Use `bash scripts/run_tests_with_logging.sh` for persistent logging
+- Review CI failure patterns in diagnostic logs
 
 ## Agent-Specific Guidelines
 
 ### For Code Generation
 
--   **ALWAYS assume virtual environment context** in examples
--   Follow established patterns in existing codebase
--   Maintain the project's "quiet reliability" philosophy
--   Prioritize error handling and edge cases
--   Include comprehensive tests with new code
--   **Use `python -m module` syntax** for all Python tools
+- **ALWAYS assume virtual environment context** in examples
+- Follow established patterns in existing codebase
+- Maintain the project's "quiet reliability" philosophy
+- Prioritize error handling and edge cases
+- Include comprehensive tests with new code
+- **Use `python -m module` syntax** for all Python tools
 
 ### For Refactoring
 
--   Preserve existing API contracts
--   Maintain or improve test coverage
--   Update documentation for any public interface changes
--   Consider multi-environment implications
--   **Ensure virtual environment compatibility**
+- Preserve existing API contracts
+- Maintain or improve test coverage
+- Update documentation for any public interface changes
+- Consider multi-environment implications
+- **Ensure virtual environment compatibility**
 
 ### For Bug Fixes
 
--   Write regression tests first
--   Document root cause in commit message
--   Consider if fix affects other services
--   Update troubleshooting documentation if needed
--   **Test in clean virtual environment**
+- Write regression tests first
+- Document root cause in commit message
+- Consider if fix affects other services
+- Update troubleshooting documentation if needed
+- **Test in clean virtual environment**
 
 ### Critical Reminders for Agents
 
@@ -522,12 +659,13 @@ python -m pytest plugins/example_plugin/
 2. **ALWAYS use `python -m module` syntax** for tools
 3. **ALWAYS verify virtual environment activation** in examples
 4. **ALWAYS include virtual environment setup** in instructions
-5. **REMEMBER**: This project runs in containers/venvs, not host systems
+5. **NEVER modify linting configuration files** without explicit human request
+6. **REMEMBER**: This project runs in containers/venvs, not host systems
 
 ---
 
-**Last Updated**: Based on current codebase analysis  
-**Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%  
-**Active Environments**: Development + Production Discord integration  
-**Review Required**: Follow PR template and maintain quality standards  
+**Last Updated**: Based on current codebase analysis
+**Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
+**Active Environments**: Development + Production Discord integration
+**Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling

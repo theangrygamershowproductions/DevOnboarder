@@ -5,31 +5,40 @@ It loads slash commands and events dynamically on startup and authenticates
 using the token provided in `.env`.
 
 Node.js 22 is required. Run `mise install` to use the version defined in `.tool-versions`.
+
 ## Setup
 
 1. Use Node.js 22 as specified in `.tool-versions` (run `mise use`).
 2. Copy the example environment file and add your credentials:
-   ```bash
-   cp .env.example .env
-   ```
-   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
-   and `BOT_JWT`. The bot sends this token in an `Authorization` header
-   when calling the API. See [docs/env.md](../docs/env.md) for details
-   about this variable.
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
+    and `BOT_JWT`. The bot sends this token in an `Authorization` header
+    when calling the API. See [docs/env.md](../docs/env.md) for details
+    about this variable.
+
 3. Install dependencies and build the bot:
-   ```bash
-   npm install
-   npm run build
-   ```
+
+    ```bash
+    npm install
+    npm run build
+    ```
+
 4. Lint and format the code:
-   ```bash
-   npm run lint
-   npm run format
-   ```
+
+    ```bash
+    npm run lint
+    npm run format
+    ```
+
 5. Run the bot locally:
-   ```bash
-   npm start
-   ```
+
+    ```bash
+    npm start
+    ```
 
 ## Docker
 
@@ -38,12 +47,12 @@ The development compose file mounts the source for hot reload:
 
 ```yaml
 bot:
-  build: ./bot
-  env_file:
-    - ./bot/.env
-  volumes:
-    - ./bot:/usr/src/app
-  command: ["npm", "start"]
+    build: ./bot
+    env_file:
+        - ./bot/.env
+    volumes:
+        - ./bot:/usr/src/app
+    command: ['npm', 'start']
 ```
 
 ## Tests
@@ -64,17 +73,16 @@ loaded automatically when the bot starts.
 
 The repository provides the following built-in commands:
 
-- `/ping` – simple health check returning `Pong!`.
-- `/verify` – show your onboarding status from the XP API.
-- `/profile` – display your current XP level.
-- `/contribute` – record a contribution description.
-- `/qa_checklist` – show the documentation and QA checklist.
+-   `/ping` – simple health check returning `Pong!`.
+-   `/verify` – show your onboarding status from the XP API.
+-   `/profile` – display your current XP level.
+-   `/contribute` – record a contribution description.
+-   `/qa_checklist` – show the documentation and QA checklist.
 
 ## Future Work
 
-- Sync verified roles back to the auth database.
-- Award XP for community participation.
-- Log quiz completion via slash commands.
+-   Sync verified roles back to the auth database.
+-   Award XP for community participation.
+-   Log quiz completion via slash commands.
 
 For a comparison of this bot and Codex agents, see [../docs/bot-types.md](../docs/bot-types.md).
-

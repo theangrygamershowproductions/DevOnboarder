@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.DiscordIntegration
-  role: Handles Discord OAuth flows and role lookups
-  scope: auth service
-  triggers: User Discord login or role sync request
-  output: Discord role mapping
+    name: Agent.DiscordIntegration
+    role: Handles Discord OAuth flows and role lookups
+    scope: auth service
+    triggers: User Discord login or role sync request
+    output: Discord role mapping
 ---
 
 # Discord Integration Agent

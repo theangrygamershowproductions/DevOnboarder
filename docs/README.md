@@ -258,7 +258,7 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
     `vale` binary to a directory in your `PATH`.
 -   If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
     to its location so `scripts/check_docs.sh` can find it.
-  -   Install Python dev dependencies with `pip install .[test]`.
+-   Install Python dev dependencies with `pip install .[test]`.
 -   Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
     for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 -   Markdown files must not exceed 120 characters per line (MD013). See
@@ -298,7 +298,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
    failure issue. See
    [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
 7. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
-    `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
+   `ci-failure` issues, and opens a follow-up ticket if cleanup fails.
 8. Failing jobs run `scripts/ci_failure_diagnoser.py` to create an `audit.md` summary. The file uploads with the CI logs and is appended to any failure issue.
 
 9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.

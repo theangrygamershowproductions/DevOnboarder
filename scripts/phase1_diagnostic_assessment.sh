@@ -47,7 +47,7 @@ echo "📋 GitHub CLI Communication:"
 if command -v gh >/dev/null 2>&1; then
     echo "  ✅ GitHub CLI installed"
     log "SUCCESS: GitHub CLI found"
-    
+
     # Test GitHub CLI output capture
     if GH_VERSION=$(gh --version 2>&1 | head -1); then
         echo "  ✅ GitHub CLI output: $GH_VERSION"
@@ -56,7 +56,7 @@ if command -v gh >/dev/null 2>&1; then
         echo "  ❌ GitHub CLI output: FAILED"
         log "ERROR: GitHub CLI output failed"
     fi
-    
+
     # Test authentication
     if gh auth status >/dev/null 2>&1; then
         echo "  ✅ GitHub CLI authentication: WORKING"
@@ -82,7 +82,7 @@ if [ -f "scripts/assess_pr_health.sh" ]; then
     echo "📋 Existing Health Assessment Script:"
     echo "  ✅ Script exists: scripts/assess_pr_health.sh"
     log "SUCCESS: Health assessment script found"
-    
+
     # Test with a known PR (968)
     echo "  🧪 Testing with PR #968..."
     if timeout 10 bash scripts/assess_pr_health.sh 968 >/dev/null 2>&1; then
@@ -103,7 +103,7 @@ echo "📋 JSON Field Compatibility:"
 if command -v jq >/dev/null 2>&1; then
     echo "  ✅ jq installed"
     log "SUCCESS: jq available"
-    
+
     # Test GitHub CLI JSON output
     if gh pr view 968 --json number >/dev/null 2>&1; then
         echo "  ✅ GitHub CLI JSON output: WORKING"
@@ -131,7 +131,7 @@ if [ -d ".github/workflows" ]; then
     echo "  ✅ Workflow directory exists"
     echo "  📊 Workflow files: $WORKFLOW_COUNT"
     log "SUCCESS: Found $WORKFLOW_COUNT workflow files"
-    
+
     # List workflow files
     find .github/workflows -name "*.yml" -o -name "*.yaml" | while read -r workflow; do
         echo "    - $(basename "$workflow")"
@@ -168,17 +168,17 @@ echo "📋 CI Performance Analysis:"
 if gh run list --limit 10 --json conclusion >/dev/null 2>&1; then
     echo "  ✅ CI run data accessible"
     log "SUCCESS: CI run data accessible"
-    
+
     # Calculate recent success rate
     RECENT_RUNS=$(gh run list --limit 10 --json conclusion)
     TOTAL_RUNS=$(echo "$RECENT_RUNS" | jq length)
     SUCCESS_RUNS=$(echo "$RECENT_RUNS" | jq '[.[] | select(.conclusion == "success")] | length')
-    
+
     if [ "$TOTAL_RUNS" -gt 0 ]; then
         SUCCESS_RATE=$((SUCCESS_RUNS * 100 / TOTAL_RUNS))
         echo "  📊 Recent CI success rate: ${SUCCESS_RATE}% ($SUCCESS_RUNS/$TOTAL_RUNS)"
         log "INFO: CI success rate $SUCCESS_RATE% ($SUCCESS_RUNS/$TOTAL_RUNS)"
-        
+
         if [ "$SUCCESS_RATE" -ge 95 ]; then
             echo "  🎉 95% standard: ACHIEVABLE (currently meeting)"
         elif [ "$SUCCESS_RATE" -ge 80 ]; then

@@ -17,7 +17,7 @@ echo ""
 echo "Testing GitHub CLI:"
 if command -v gh >/dev/null 2>&1; then
     echo "✅ gh command available"
-    
+
     # Test auth status
     if gh auth status 2>/dev/null; then
         echo "✅ GitHub authentication working"

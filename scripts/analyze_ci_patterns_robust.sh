@@ -16,18 +16,18 @@ echo "======================================"
 get_failing_checks() {
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         if check_data=$(gh pr checks "$PR_NUMBER" --json name,conclusion 2>&1); then
             echo "$check_data" | jq -r '.[] | select(.conclusion == "failure") | .name'
             return 0
         fi
-        
+
         ((retry++))
         echo "Retry $retry/$max_retries for check data..." >&2
         sleep 2
     done
-    
+
     echo "" # Return empty if all retries fail
     return 1
 }

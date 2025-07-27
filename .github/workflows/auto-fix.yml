@@ -10,103 +10,103 @@
 name: Auto Fix
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+    workflow_run:
+        workflows: ["CI"]
+        types:
+            - completed
 
 jobs:
-  validate-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
-  fix:
-    needs: validate-yaml
-    if: github.event.workflow_run.conclusion == 'failure'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
-      - name: Run yamllint
-        run: |
-          pip install yamllint
-          yamllint -c .github/.yamllint-config .github/workflows/**/*.yml | tee yamllint.log || true
-      - name: Download CI logs
-        uses: actions/download-artifact@v4
-        with:
-          run-id: ${{ github.event.workflow_run.id }}
-          name: ci-logs
-          path: ci-logs
-      - name: Ask OpenAI for YAML fix
-        id: openai-yaml
-        run: |
-          if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
-            echo "OPENAI_API_KEY not set" >&2
-            exit 1
-          fi
-          pip install openai
-          file=$(awk -F: '/error/{print $1; exit}' yamllint.log)
-          line=$(awk -F: '/error/{print $2; exit}' yamllint.log)
-          snippet=""
-          if [ -n "$file" ]; then
-            start=$((line>5?line-5:1))
-            end=$((line+5))
-            snippet=$(sed -n "${start},${end}p" "$file" 2>/dev/null || true)
-          fi
-          export SNIPPET="$snippet"
-          patch=$(python - "$OPENAI_API_KEY" <<'PY'
-            import sys, os, openai
-            openai.api_key = sys.argv[1]
-            log=open('yamllint.log').read()
-            snippet=os.environ.get('SNIPPET','')
-            prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
-            resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
-            print(resp.choices[0].message.content)
-            PY
-          )
-          echo "$patch" > fix-ci-health.patch.diff
-      - name: Apply YAML patch
-        run: git apply fix-ci-health.patch.diff || true
-      - name: Suggest fix with OpenAI
-        id: openai
-        run: |
-          if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
-            echo "OPENAI_API_KEY not set" >&2
-            exit 1
-          fi
-          pip install openai
-          suggestion=$(python - "$OPENAI_API_KEY" <<'PY'
-            import sys, openai
-            openai.api_key = sys.argv[1]
-            with open('yamllint.log', 'r', encoding='utf-8') as f:
-                yamls = f.read()
-            with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
-                logs = f.read()
-            prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
-            response = openai.chat.completions.create(
-                model='gpt-4o',
-                messages=[{'role':'user','content':prompt}]
-            )
-            print(response.choices[0].message.content)
-            PY
-          )
-          echo "$suggestion" > patch.diff
-      - name: Apply patch
-        run: git apply patch.diff
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          commit-message: "chore(auto-fix): apply patch from OpenAI"
-          branch: auto-fix/${{ github.event.workflow_run.head_sha }}
-          title: "chore(auto-fix): propose fix for failed CI run"
-          body: |
-            Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.
+    validate-yaml:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ibiqlik/action-yamllint@v3
+              with:
+                  file_or_dir: ".github/workflows/**/*.yml"
+                  config_file: .github/.yamllint-config
+    fix:
+        needs: validate-yaml
+        if: github.event.workflow_run.conclusion == 'failure'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+                  ref: ${{ github.event.workflow_run.head_sha }}
+            - name: Run yamllint
+              run: |
+                  pip install yamllint
+                  yamllint -c .github/.yamllint-config .github/workflows/**/*.yml | tee yamllint.log || true
+            - name: Download CI logs
+              uses: actions/download-artifact@v4
+              with:
+                  run-id: ${{ github.event.workflow_run.id }}
+                  name: ci-logs
+                  path: ci-logs
+            - name: Ask OpenAI for YAML fix
+              id: openai-yaml
+              run: |
+                  if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
+                    echo "OPENAI_API_KEY not set" >&2
+                    exit 1
+                  fi
+                  pip install openai
+                  file=$(awk -F: '/error/{print $1; exit}' yamllint.log)
+                  line=$(awk -F: '/error/{print $2; exit}' yamllint.log)
+                  snippet=""
+                  if [ -n "$file" ]; then
+                    start=$((line>5?line-5:1))
+                    end=$((line+5))
+                    snippet=$(sed -n "${start},${end}p" "$file" 2>/dev/null || true)
+                  fi
+                  export SNIPPET="$snippet"
+                  patch=$(python - "$OPENAI_API_KEY" <<'PY'
+                    import sys, os, openai
+                    openai.api_key = sys.argv[1]
+                    log=open('yamllint.log').read()
+                    snippet=os.environ.get('SNIPPET','')
+                    prompt=f"yamllint output:\n{log}\n\nRelevant YAML snippet:\n{snippet}\nProvide a unified diff patch to fix these errors."
+                    resp=openai.chat.completions.create(model='gpt-4o', messages=[{'role':'user','content':prompt}])
+                    print(resp.choices[0].message.content)
+                    PY
+                  )
+                  echo "$patch" > fix-ci-health.patch.diff
+            - name: Apply YAML patch
+              run: git apply fix-ci-health.patch.diff || true
+            - name: Suggest fix with OpenAI
+              id: openai
+              run: |
+                  if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
+                    echo "OPENAI_API_KEY not set" >&2
+                    exit 1
+                  fi
+                  pip install openai
+                  suggestion=$(python - "$OPENAI_API_KEY" <<'PY'
+                    import sys, openai
+                    openai.api_key = sys.argv[1]
+                    with open('yamllint.log', 'r', encoding='utf-8') as f:
+                        yamls = f.read()
+                    with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
+                        logs = f.read()
+                    prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
+                    response = openai.chat.completions.create(
+                        model='gpt-4o',
+                        messages=[{'role':'user','content':prompt}]
+                    )
+                    print(response.choices[0].message.content)
+                    PY
+                  )
+                  echo "$suggestion" > patch.diff
+            - name: Apply patch
+              run: git apply patch.diff
+            - name: Create pull request
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  commit-message: "chore(auto-fix): apply patch from OpenAI"
+                  branch: auto-fix/${{ github.event.workflow_run.head_sha }}
+                  title: "chore(auto-fix): propose fix for failed CI run"
+                  body: |
+                      Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.

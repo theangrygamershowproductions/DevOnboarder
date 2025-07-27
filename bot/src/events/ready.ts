@@ -48,7 +48,9 @@ export async function execute(client: Client) {
         const guild = client.guilds.cache.get(targetGuildId);
         if (guild) {
             console.log(
-                `   ✅ ${env.toUpperCase()}: ${guild.name} (${guild.memberCount} members)`,
+                `   ✅ ${env.toUpperCase()}: ${guild.name} (${
+                    guild.memberCount
+                } members)`,
             );
             connectedToTarget = true;
         } else {
@@ -56,7 +58,9 @@ export async function execute(client: Client) {
                 `   ❌ ${env.toUpperCase()}: Guild ${targetGuildId} not accessible`,
             );
             console.log(
-                `      Invite bot: https://discord.com/api/oauth2/authorize?client_id=${config.clientId || 'CLIENT_ID'}&permissions=1342565456&scope=bot%20applications.commands`,
+                `      Invite bot: https://discord.com/api/oauth2/authorize?client_id=${
+                    config.clientId || 'CLIENT_ID'
+                }&permissions=1342565456&scope=bot%20applications.commands`,
             );
         }
     }

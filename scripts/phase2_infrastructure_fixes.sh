@@ -36,10 +36,10 @@ execute_with_output() {
     local cmd="$1"
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         echo "Executing: $cmd" >&2
-        
+
         # Execute command with explicit output capture and error handling
         if output=$(eval "$cmd" 2>&1); then
             echo "$output"
@@ -50,7 +50,7 @@ execute_with_output() {
             sleep 1
         fi
     done
-    
+
     echo "Command failed after $max_retries attempts" >&2
     return 1
 }
@@ -91,18 +91,18 @@ execute_gh_command() {
     local cmd="$1"
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         if result=$(gh $cmd 2>&1); then
             echo "$result"
             return 0
         fi
-        
+
         ((retry++))
         echo "GitHub CLI retry $retry/$max_retries..." >&2
         sleep 2
     done
-    
+
     echo "GitHub CLI command failed: gh $cmd" >&2
     return 1
 }
@@ -221,18 +221,18 @@ echo "======================================"
 get_failing_checks() {
     local max_retries=3
     local retry=0
-    
+
     while [ $retry -lt $max_retries ]; do
         if check_data=$(gh pr checks "$PR_NUMBER" --json name,conclusion 2>&1); then
             echo "$check_data" | jq -r '.[] | select(.conclusion == "failure") | .name'
             return 0
         fi
-        
+
         ((retry++))
         echo "Retry $retry/$max_retries for check data..." >&2
         sleep 2
     done
-    
+
     echo "" # Return empty if all retries fail
     return 1
 }
@@ -438,16 +438,16 @@ echo "🔄 CI Performance Analysis:"
 # Get recent workflow runs with error handling
 if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
     echo "✅ Retrieved recent CI run data"
-    
+
     # Calculate success metrics
     total_runs=$(echo "$runs" | jq length)
     successful_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "success")] | length')
     failed_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "failure")] | length')
-    
+
     if [ "$total_runs" -gt 0 ]; then
         success_rate=$((successful_runs * 100 / total_runs))
         echo "📈 Success Rate: ${success_rate}% ($successful_runs/$total_runs successful)"
-        
+
         # Assessment based on recalibrated standards
         if [ "$success_rate" -ge 90 ]; then
             echo "🎉 EXCELLENT: CI infrastructure highly reliable"
@@ -458,7 +458,7 @@ if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt
         else
             echo "❌ POOR: CI infrastructure requires immediate repair"
         fi
-        
+
         # Show recent runs
         echo ""
         echo "🕒 Recent Runs:"
@@ -526,7 +526,7 @@ echo ""
 echo "🎯 Infrastructure Repair Status:"
 echo "  ✅ Terminal communication issues: ADDRESSED"
 echo "  ✅ Health score calculation: ROBUST VERSION CREATED"
-echo "  ✅ GitHub CLI reliability: RETRY LOGIC IMPLEMENTED"  
+echo "  ✅ GitHub CLI reliability: RETRY LOGIC IMPLEMENTED"
 echo "  ✅ Quality standards: RECALIBRATED FOR REALITY"
 
 echo ""

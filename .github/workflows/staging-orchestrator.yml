@@ -9,27 +9,27 @@
 name: Staging Orchestrator
 
 on:
-  push:
-    branches: ["staging"]
-  workflow_dispatch:
+    push:
+        branches: ["staging"]
+    workflow_dispatch:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  orchestrate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ksivamuthu/actions-setup-gh-cli@v3
-      - name: Known errors learning loop
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip install PyYAML
-          python scripts/known_errors_loop.py
-      - name: Run staging orchestrator
-        run: bash scripts/orchestrate-staging.sh
-        env:
-          ORCHESTRATION_KEY: ${{ secrets.STAGING_ORCHESTRATION_BOT_KEY }}
-          ORCHESTRATOR_URL: https://orchestrator.example.com
+    orchestrate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Known errors learning loop
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  pip install PyYAML
+                  python scripts/known_errors_loop.py
+            - name: Run staging orchestrator
+              run: bash scripts/orchestrate-staging.sh
+              env:
+                  ORCHESTRATION_KEY: ${{ secrets.STAGING_ORCHESTRATION_BOT_KEY }}
+                  ORCHESTRATOR_URL: https://orchestrator.example.com

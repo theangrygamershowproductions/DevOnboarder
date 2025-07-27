@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 validate_token() {
     local token="$1"
     local name="$2"
-    
+
     if [[ -z "$token" || "$token" == "YOUR_BOT_TOKEN_HERE" ]]; then
         echo -e "${RED}❌ $name: Token not set${NC}"
         return 1
@@ -35,7 +35,7 @@ validate_token() {
 validate_client_id() {
     local client_id="$1"
     local name="$2"
-    
+
     if [[ -z "$client_id" || "$client_id" == "YOUR_CLIENT_ID_HERE" ]]; then
         echo -e "${RED}❌ $name: Client ID not set${NC}"
         return 1
@@ -52,7 +52,7 @@ validate_client_id() {
 validate_guild_id() {
     local guild_id="$1"
     local name="$2"
-    
+
     if [[ -z "$guild_id" ]]; then
         echo -e "${RED}❌ $name: Guild ID not set${NC}"
         return 1
@@ -71,12 +71,12 @@ echo "================================"
 
 if [[ -f ".env" ]]; then
     source .env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
-    
+
     validate_token "${DISCORD_BOT_TOKEN:-}" "Main Bot Token"
     validate_client_id "${DISCORD_CLIENT_ID:-}" "Main Client ID"
     validate_guild_id "${DISCORD_DEV_GUILD_ID:-}" "Development Guild ID"
     validate_guild_id "${DISCORD_PROD_GUILD_ID:-}" "Production Guild ID"
-    
+
     echo -e "${GREEN}✅ Main .env file exists${NC}"
 else
     echo -e "${RED}❌ Main .env file not found${NC}"
@@ -88,11 +88,11 @@ echo "=================================="
 
 if [[ -f "bot/.env" ]]; then
     source bot/.env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
-    
+
     validate_token "${DISCORD_BOT_TOKEN:-}" "Bot Token"
     validate_client_id "${DISCORD_CLIENT_ID:-}" "Bot Client ID"
     validate_guild_id "${DISCORD_GUILD_ID:-}" "Bot Guild ID"
-    
+
     echo -e "${GREEN}✅ Bot .env file exists${NC}"
 else
     echo -e "${RED}❌ Bot .env file not found${NC}"
@@ -107,11 +107,11 @@ if [[ -f "bot/.env.dev" ]]; then
     ENV_DEV_TOKEN=$(grep "DISCORD_BOT_TOKEN=" bot/.env.dev | cut -d'=' -f2 2>/dev/null || echo "")
     ENV_DEV_CLIENT_ID=$(grep "DISCORD_CLIENT_ID=" bot/.env.dev | cut -d'=' -f2 2>/dev/null || echo "")
     ENV_DEV_GUILD_ID=$(grep "DISCORD_GUILD_ID=" bot/.env.dev | cut -d'=' -f2 2>/dev/null || echo "")
-    
+
     validate_token "$ENV_DEV_TOKEN" "Dev Bot Token"
     validate_client_id "$ENV_DEV_CLIENT_ID" "Dev Client ID"
     validate_guild_id "$ENV_DEV_GUILD_ID" "Dev Guild ID"
-    
+
     echo -e "${GREEN}✅ Bot .env.dev file exists${NC}"
 else
     echo -e "${RED}❌ Bot .env.dev file not found${NC}"
@@ -166,7 +166,7 @@ echo "======================="
 
 if command -v node &> /dev/null && [[ -f "bot/scripts/generate-invite.js" ]]; then
     echo "Testing invite link generation..."
-    cd bot 
+    cd bot
     if node scripts/generate-invite.js > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Bot invite link generation successful${NC}"
     else

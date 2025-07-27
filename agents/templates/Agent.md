@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.Template
-  role: Template for documenting new agents
-  scope: agents/templates/Agent.md
-  triggers: n/a
-  output: Agent documentation template
+    name: Agent.Template
+    role: Template for documenting new agents
+    scope: agents/templates/Agent.md
+    triggers: n/a
+    output: Agent documentation template
 ---
 
 # Agent Documentation Template
