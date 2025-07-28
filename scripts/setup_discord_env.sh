@@ -221,9 +221,9 @@ fi
 # Copy dev environment to main .env
 cp .env.dev .env
 
-# Install dependencies if needed
+# Install bot dependencies if needed
 if [[ ! -d "node_modules" ]]; then
-    echo "📦 Installing dependencies..."
+    echo "📦 Installing bot dependencies..."
     npm install
 fi
 
@@ -259,7 +259,7 @@ fi
 # Copy prod environment to main .env
 cp .env.prod .env
 
-# Ensure dependencies are installed
+# Ensure bot dependencies are installed
 npm ci --only=production
 
 # Build for production

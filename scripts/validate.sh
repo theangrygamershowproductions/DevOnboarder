@@ -67,7 +67,13 @@ except Exception as e:
     sys.exit(1)
 "
     rm "$frontmatter_file"
-    if ! ./node_modules/.bin/ajv validate -s schema/frontmatter.schema.json -d "$tmp" >/dev/null 2>&1; then
+    # Check if ajv is available locally, fallback to npx
+    if [ -f "./node_modules/.bin/ajv" ]; then
+        AJV_CMD="./node_modules/.bin/ajv"
+    else
+        AJV_CMD="npx -y ajv-cli"
+    fi
+    if ! $AJV_CMD validate -s schema/frontmatter.schema.json -d "$tmp" >/dev/null 2>&1; then
       echo "Frontmatter validation failed for $md" >&2
       rm "$tmp"
       exit 1
