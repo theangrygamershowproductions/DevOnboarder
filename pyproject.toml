@@ -17,6 +17,10 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F"]
 
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+
 [project]
 name = "devonboarder"
 version = "0.1.0"
@@ -66,3 +70,25 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.coverage.run]
+source = ["src"]
+data_file = "logs/.coverage"
+parallel = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "logs/htmlcov"

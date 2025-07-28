@@ -38,6 +38,13 @@ repos:
           - id: markdownlint-cli2
     - repo: local
       hooks:
+          - id: enforce-no-root-artifacts
+            name: Root Artifact Guard
+            entry: scripts/enforce_output_location.sh
+            language: script
+            always_run: true
+            pass_filenames: false
+            stages: [pre-commit]
           - id: clean-pytest-artifacts
             name: Clean pytest sandbox artifacts
             entry: scripts/clean_pytest_artifacts.sh
