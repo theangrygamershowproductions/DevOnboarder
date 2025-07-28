@@ -12,6 +12,7 @@ Usage: $0 [OPTIONS] COMMAND
 
 Commands:
     clean       Remove old log files (older than $DAYS_TO_KEEP days)
+    pre-run     Clean ALL test artifacts for fresh diagnosis (aggressive)
     purge       Remove ALL log files (use with caution)
     list        List all log files with sizes
     archive     Create timestamped archive of current logs
@@ -23,6 +24,7 @@ Options:
 
 Examples:
     $0 clean                    # Remove logs older than 7 days
+    $0 pre-run                  # Clean ALL test artifacts for fresh run
     $0 --days 3 clean          # Remove logs older than 3 days
     $0 --dry-run purge         # Show what would be purged
     $0 list                    # List all log files
@@ -46,7 +48,7 @@ while [[ $# -gt 0 ]]; do
             usage
             exit 0
             ;;
-        clean|purge|list|archive)
+        clean|pre-run|purge|list|archive)
             COMMAND="$1"
             shift
             ;;
@@ -79,8 +81,62 @@ list_logs() {
     fi
 }
 
+clean_pytest_artifacts() {
+    echo "🧪 Cleaning pytest temporary directories and test artifacts..."
+
+    if [ ! -d "$LOGS_DIR" ]; then
+        return 0
+    fi
+
+    # Remove specific pytest-of-creesey directory
+    if [ -d "$LOGS_DIR/pytest-of-creesey" ]; then
+        echo "   Removing: $LOGS_DIR/pytest-of-creesey/"
+        rm -rf "$LOGS_DIR/pytest-of-creesey"
+        echo "   ✅ pytest-of-creesey cleaned"
+    fi
+
+    # Find pytest temporary directories (pytest-of-*)
+    pytest_dirs=$(find "$LOGS_DIR" -type d -name "pytest-of-*" 2>/dev/null || true)
+
+    if [ -n "$pytest_dirs" ]; then
+        echo "   Additional pytest directories to remove:"
+        echo "$pytest_dirs" | while read -r dir; do
+            echo "     - $dir"
+        done
+
+        if [ "$DRY_RUN" = "false" ]; then
+            echo "$pytest_dirs" | xargs rm -rf
+            echo "   ✅ Cleaned $(echo "$pytest_dirs" | wc -l) pytest directories"
+        else
+            echo "   🔍 DRY RUN: Would remove $(echo "$pytest_dirs" | wc -l) pytest directories"
+        fi
+    else
+        echo "   ✅ No pytest directories found"
+    fi
+
+    # Clean ALL previous test artifacts for clean diagnosis (not just old ones)
+    if [ "$DRY_RUN" = "false" ]; then
+        echo "   Cleaning ALL previous test artifacts for clean diagnosis..."
+        # Remove all timestamped log files from previous runs
+        find "$LOGS_DIR" -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
+        # Remove coverage artifacts
+        find "$LOGS_DIR" -name ".coverage*" -delete 2>/dev/null || true
+        find "$LOGS_DIR" -name "coverage.xml" -delete 2>/dev/null || true
+        rm -rf "$LOGS_DIR/htmlcov/" 2>/dev/null || true
+        # Remove validation artifacts
+        find "$LOGS_DIR" -name "validation_*.log" -delete 2>/dev/null || true
+        remaining_files=$(find "$LOGS_DIR" -type f 2>/dev/null | wc -l)
+        echo "   ✅ ALL test artifacts cleaned ($remaining_files files remaining)"
+    else
+        echo "   🔍 DRY RUN: Would clean ALL test artifacts"
+    fi
+}
+
 clean_logs() {
     echo "🧹 Cleaning logs older than $DAYS_TO_KEEP days..."
+
+    # Clean pytest artifacts first
+    clean_pytest_artifacts
 
     if [ ! -d "$LOGS_DIR" ]; then
         echo "   No logs directory found"
@@ -88,7 +144,7 @@ clean_logs() {
     fi
 
     # Find files older than specified days
-    old_files=$(find "$LOGS_DIR" -type f -mtime +$DAYS_TO_KEEP 2>/dev/null || true)
+    old_files=$(find "$LOGS_DIR" -type f -mtime +"$DAYS_TO_KEEP" 2>/dev/null || true)
 
     if [ -z "$old_files" ]; then
         echo "   No old log files to clean"
@@ -110,6 +166,9 @@ clean_logs() {
 
 purge_logs() {
     echo "💥 Purging ALL log files..."
+
+    # Clean pytest artifacts first
+    clean_pytest_artifacts
 
     if [ ! -d "$LOGS_DIR" ]; then
         echo "   No logs directory found"
@@ -161,6 +220,11 @@ case "$COMMAND" in
     clean)
         clean_logs
         ;;
+    pre-run)
+        echo "🧹 Pre-run cleanup: Removing ALL test artifacts for fresh diagnosis..."
+        clean_pytest_artifacts
+        echo "✅ Pre-run cleanup complete - logs directory ready for fresh run"
+        ;;
     purge)
         if [ "$DRY_RUN" = "false" ]; then
             echo "⚠️  Are you sure you want to purge ALL logs? This cannot be undone."
@@ -174,5 +238,10 @@ case "$COMMAND" in
         ;;
     archive)
         archive_logs
+        ;;
+    *)
+        echo "Unknown command: $COMMAND" >&2
+        usage >&2
+        exit 1
         ;;
 esac

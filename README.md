@@ -25,10 +25,10 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 <!-- markdownlint-disable MD030 -->
 
--   All stable code lives in the `main` branch.
--   Short-lived branches are created off `main` for each change.
--   Changes are merged back into `main` via pull requests after review.
--   Feature branches are deleted after they are merged to keep history clean.
+- All stable code lives in the `main` branch.
+- Short-lived branches are created off `main` for each change.
+- Changes are merged back into `main` via pull requests after review.
+- Feature branches are deleted after they are merged to keep history clean.
 
 ## 🥔 Security: Potato Policy
 
@@ -38,19 +38,19 @@ The policy ensures sensitive files (SSH keys, secrets, environment configs) are 
 
 **Protected Files:**
 
--   `Potato.md` - SSH keys, setup instructions
--   `*.env` - Environment variables
--   `*.pem`, `*.key` - Private keys and certificates
--   `secrets.yaml/yml` - Configuration secrets
+- `Potato.md` - SSH keys, setup instructions
+- `*.env` - Environment variables
+- `*.pem`, `*.key` - Private keys and certificates
+- `secrets.yaml/yml` - Configuration secrets
 
 **How it works:**
 
--   🔍 **Auto-detection**: CI automatically scans `.gitignore`, `.dockerignore`, and `.codespell-ignore`
--   ➕ **Auto-correction**: Missing entries are automatically added
--   🚨 **Enforcement**: Builds fail if violations are detected, forcing manual review
--   📝 **Violation Reporting**: Automatic GitHub issue creation for audit trail
--   📊 **Audit Reports**: Generated for transparency and compliance
--   ✅ **Compliance**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+- 🔍 **Auto-detection**: CI automatically scans `.gitignore`, `.dockerignore`, and `.codespell-ignore`
+- ➕ **Auto-correction**: Missing entries are automatically added
+- 🚨 **Enforcement**: Builds fail if violations are detected, forcing manual review
+- 📝 **Violation Reporting**: Automatic GitHub issue creation for audit trail
+- 📊 **Audit Reports**: Generated for transparency and compliance
+- ✅ **Compliance**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 
 This acts as a **"canary in the repository"** - any attempt to expose sensitive files is immediately caught, blocked, and reported.
 
@@ -61,24 +61,24 @@ This acts as a **"canary in the repository"** - any attempt to expose sensitive 
 
 <!-- markdownlint-disable MD030 -->
 
--   `config/` – Configuration files, including `devonboarder.config.yml`.
--   `scripts/` – Helper scripts for bootstrapping and environment setup.
--   `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
+- `config/` – Configuration files, including `devonboarder.config.yml`.
+- `scripts/` – Helper scripts for bootstrapping and environment setup.
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
     forwards port `3000`, and runs `scripts/setup-env.sh`.
--   `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
--   `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
--   `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
--   `archive/docker-compose.yml` – Archived base compose file for generic deployments.
--   `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
--   `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
--   `bot/` – Discord bot **DevOnboader#3613** (ID: 1397063993213849672) written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows. Serves two environments: TAGS: DevOnboarder (dev) and TAGS: C2C (prod).
+- `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
+- `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
+- `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
+- `archive/docker-compose.yml` – Archived base compose file for generic deployments.
+- `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
+- `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
+- `bot/` – Discord bot **DevOnboader#3613** (ID: 1397063993213849672) written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows. Serves two environments: TAGS: DevOnboarder (dev) and TAGS: C2C (prod).
     See [docs/bot-types.md](docs/bot-types.md) for details on how the Discord bot differs from Codex agents.
--   `frontend/` – Vite-based React application.
--   `auth/` – Environment files for the authentication service.
--   `plugins/` – Optional Python packages that extend functionality.
--   `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
--   `.env.example` – Sample variables shared across services.
--   `docs/CHANGELOG.md` – Project history and notable updates.
+- `frontend/` – Vite-based React application.
+- `auth/` – Environment files for the authentication service.
+- `plugins/` – Optional Python packages that extend functionality.
+- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+- `.env.example` – Sample variables shared across services.
+- `docs/CHANGELOG.md` – Project history and notable updates.
 <!-- markdownlint-restore -->
 
 ## Language Versions
@@ -103,33 +103,33 @@ Install the required runtimes with `mise install` (or `asdf install`) to match t
 
 Our Discord bot **DevOnboader#3613** (ID: 1397063993213849672) provides automated onboarding workflows and developer assistance. The bot serves two environments:
 
--   **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
--   **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
+- **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
+- **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
 
 ### Bot Features
 
--   Automated role assignment for new members
--   Developer verification workflows
--   Command-based project assistance
--   Integration with backend API services
--   Multi-environment guild management
--   Real-time service status monitoring
+- Automated role assignment for new members
+- Developer verification workflows
+- Command-based project assistance
+- Integration with backend API services
+- Multi-environment guild management
+- Real-time service status monitoring
 
 ### Bot Commands
 
--   `/onboard` - Start the onboarding process
--   `/verify` - Verify developer credentials
--   `/dependency_inventory` - Check project dependencies
--   `/qa_checklist` - Display quality assurance checklist
--   `/help` - Display available commands
--   `/status` - Check bot and service status
+- `/onboard` - Start the onboarding process
+- `/verify` - Verify developer credentials
+- `/dependency_inventory` - Check project dependencies
+- `/qa_checklist` - Display quality assurance checklist
+- `/help` - Display available commands
+- `/status` - Check bot and service status
 
 ### Management Commands
 
--   `npm run invite` - Generate bot invite links
--   `npm run status` - Check bot service status
--   `npm run test-guilds` - Test guild connectivity
--   `npm run dev` - Start development bot instance
+- `npm run invite` - Generate bot invite links
+- `npm run status` - Check bot service status
+- `npm run test-guilds` - Test guild connectivity
+- `npm run dev` - Start development bot instance
 
 The bot automatically connects to both guild environments and provides consistent functionality across development and production workflows.
 
@@ -344,16 +344,16 @@ The QC script validates 8 critical quality metrics:
 
 ### Coverage Requirements
 
--   **Backend Python**: 96%+ coverage (enforced in CI)
--   **TypeScript Bot**: 100% coverage (enforced in CI)
--   **React Frontend**: 100% statements, 98.43%+ branches
+- **Backend Python**: 96%+ coverage (enforced in CI)
+- **TypeScript Bot**: 100% coverage (enforced in CI)
+- **React Frontend**: 100% statements, 98.43%+ branches
 
 ### Quality Enforcement
 
--   **CI Pipeline**: Automatically enforces 95% threshold
--   **PR Validation**: Required for all pull requests
--   **Agent Guidelines**: GitHub Copilot follows QC standards
--   **Failure Guidance**: Specific fix commands provided on failures
+- **CI Pipeline**: Automatically enforces 95% threshold
+- **PR Validation**: Required for all pull requests
+- **Agent Guidelines**: GitHub Copilot follows QC standards
+- **Failure Guidance**: Specific fix commands provided on failures
 
 For complete QC documentation, see [`docs/quality-control-95-rule.md`](docs/quality-control-95-rule.md).
 

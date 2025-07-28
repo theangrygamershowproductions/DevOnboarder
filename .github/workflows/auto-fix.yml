@@ -6,7 +6,11 @@
 #   triggers: Completed CI workflow runs with failures
 #   output: Pull request suggesting patches
 #   note: Requires `OPENAI_API_KEY` secret
+#   security: Uses workflow_run trigger with trusted code checkout only
 # ---
+# SECURITY: This workflow uses workflow_run trigger which runs in privileged context.
+# It intentionally does NOT checkout untrusted PR code to prevent code execution attacks.
+# Only trusted code from the default branch is used for generating fixes.
 name: Auto Fix
 
 on:
@@ -35,7 +39,15 @@ jobs:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
-                  ref: ${{ github.event.workflow_run.head_sha }}
+                  # Security: Only checkout trusted code from the default branch
+                  # Do not checkout untrusted PR code in privileged context
+            - name: Get PR information
+              id: pr-info
+              run: |
+                  # Safely get PR information without checking out untrusted code
+                  echo "head_sha=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
+                  echo "head_branch=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_OUTPUT
+                  echo "Run triggered by: ${{ github.event.workflow_run.event }}"
             - name: Run yamllint
               run: |
                   pip install yamllint
@@ -106,7 +118,11 @@ jobs:
               uses: peter-evans/create-pull-request@v6
               with:
                   commit-message: "chore(auto-fix): apply patch from OpenAI"
-                  branch: auto-fix/${{ github.event.workflow_run.head_sha }}
+                  branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}
                   title: "chore(auto-fix): propose fix for failed CI run"
                   body: |
                       Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.
+
+                      **Security Note**: This fix was generated from trusted code only.
+                      Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
+                      Original branch: ${{ steps.pr-info.outputs.head_branch }}

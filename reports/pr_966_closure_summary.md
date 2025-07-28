@@ -17,10 +17,10 @@
 
 ### **CI/CD Insights:**
 
--   Multiple markdown quality checks failing
--   Test failures due to integration complexity
--   Permission/validation issues with new workflows
--   Large changeset created review complexity
+- Multiple markdown quality checks failing
+- Test failures due to integration complexity
+- Permission/validation issues with new workflows
+- Large changeset created review complexity
 
 ### **Process Improvements:**
 
@@ -43,17 +43,17 @@
 
 ### **Automation Scripts (to adapt for new PR):**
 
--   `scripts/assess_pr_health.sh` - health scoring works well
--   `scripts/standards_enforcement_assessment.sh` - proper quality gates
--   Documentation formatting fixes (successful markdownlint integration)
+- `scripts/assess_pr_health.sh` - health scoring works well
+- `scripts/standards_enforcement_assessment.sh` - proper quality gates
+- Documentation formatting fixes (successful markdownlint integration)
 
 ## **New PR Strategy**
 
 ### **Core Focus:**
 
--   **Single objective:** Implement Potato.md ignore documentation policy
--   **Minimal scope:** Target only essential files
--   **Quality first:** 95%+ health score from initial commit
+- **Single objective:** Implement Potato.md ignore documentation policy
+- **Minimal scope:** Target only essential files
+- **Quality first:** 95%+ health score from initial commit
 
 ### **Implementation Plan:**
 
@@ -67,10 +67,10 @@
 
 **Rationale for Closure:**
 
--   64% health score violates 95% quality standard
--   36% CI failure rate indicates systemic issues
--   Large scope compounds quality problems
--   Fresh start more efficient than 31-point health deficit repair
+- 64% health score violates 95% quality standard
+- 36% CI failure rate indicates systemic issues
+- Large scope compounds quality problems
+- Fresh start more efficient than 31-point health deficit repair
 
 **Quality Gate Success:**
 ✅ Standards properly enforced

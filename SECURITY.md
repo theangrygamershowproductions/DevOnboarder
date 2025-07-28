@@ -21,9 +21,9 @@ issues, discussions or pull requests.**
 
 Please include as much information as possible:
 
--   A description of the issue and its impact
--   Steps to reproduce the vulnerability
--   Any relevant logs or screenshots
+- A description of the issue and its impact
+- Steps to reproduce the vulnerability
+- Any relevant logs or screenshots
 
 ## Response Timeframe
 

@@ -19,7 +19,7 @@ codex-agent:
 
 ## Environment Variables
 
--   `LLAMA2_API_KEY` – API key for calling the Llama2 service.
+- `LLAMA2_API_KEY` – API key for calling the Llama2 service.
 
 ## Planned Workflows
 
@@ -54,14 +54,14 @@ Prompt files live in the `prompts/` folder.
 
 ## Endpoints
 
--   `POST /sprint-summary` – return a summary for sprint notes.
--   `POST /groom-backlog` – suggest priorities and labels for backlog tickets.
+- `POST /sprint-summary` – return a summary for sprint notes.
+- `POST /groom-backlog` – suggest priorities and labels for backlog tickets.
 
 ## Metrics
 
 Metrics are logged in `metrics/llama2-usage.md`.
 
--   Number of agent invocations
--   Time saved vs. manual planning (estimation)
--   Ticket classification accuracy
--   Team satisfaction via periodic polls
+- Number of agent invocations
+- Time saved vs. manual planning (estimation)
+- Ticket classification accuracy
+- Team satisfaction via periodic polls

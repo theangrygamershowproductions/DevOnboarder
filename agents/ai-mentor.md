@@ -23,11 +23,11 @@ permissions:
 
 **Workflow:**
 
--   Monitors contributor prompts (once integrated)
--   Suggests responses based on documentation, team contacts, and project workflow
+- Monitors contributor prompts (once integrated)
+- Suggests responses based on documentation, team contacts, and project workflow
 
 **Logging:** Output goes to `.codex/logs/ai-mentor.log`
 
 **Permissions Required:**
 
--   `repo:read` – to read project context and docs for recommendations
+- `repo:read` – to read project context and docs for recommendations

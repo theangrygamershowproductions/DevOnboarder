@@ -32,5 +32,5 @@ permissions:
 
 **Permissions Required:**
 
--   `repo:write` — to create/update agent files
--   `contents:read` — to process existing documentation
+- `repo:write` — to create/update agent files
+- `contents:read` — to process existing documentation

@@ -19,9 +19,9 @@ All code changes MUST achieve a minimum 95% quality score before pushing to any 
 
 ### Virtual Environment Requirements
 
--   **ALWAYS** run QC in virtual environment: `source .venv/bin/activate`
--   **NEVER** install packages to system Python
--   **VERIFY** environment before any validation: `which python` should show `.venv`
+- **ALWAYS** run QC in virtual environment: `source .venv/bin/activate`
+- **NEVER** install packages to system Python
+- **VERIFY** environment before any validation: `which python` should show `.venv`
 
 ## Usage
 
@@ -68,9 +68,9 @@ bash scripts/check_commit_messages.sh
 
 ## Quality Score Calculation
 
--   **Total Checks**: 8 mandatory checks
--   **Success Threshold**: ≥95% (8/8 or 7/8 checks passing)
--   **Failure Action**: Block push, provide specific fix guidance
+- **Total Checks**: 8 mandatory checks
+- **Success Threshold**: ≥95% (8/8 or 7/8 checks passing)
+- **Failure Action**: Block push, provide specific fix guidance
 
 ## CI Integration
 
@@ -93,10 +93,10 @@ The QC process is enforced in CI but should be run locally first:
 
 ### QC Rule Enforcement
 
--   **No exceptions** to 95% threshold
--   **Fix issues immediately** rather than bypassing
--   **Update QC script** if new quality requirements emerge
--   **Document deviations** in PR summaries if temporary workarounds needed
+- **No exceptions** to 95% threshold
+- **Fix issues immediately** rather than bypassing
+- **Update QC script** if new quality requirements emerge
+- **Document deviations** in PR summaries if temporary workarounds needed
 
 ## Common Issues & Fixes
 
@@ -131,17 +131,17 @@ python -m mypy src/devonboarder --show-error-codes
 
 ## Benefits
 
--   **Consistent Quality**: All changes meet same high standards
--   **Early Detection**: Catch issues before CI/review
--   **Team Efficiency**: Reduces review cycles
--   **Reliability**: Maintains project's "quiet reliability" philosophy
--   **Automation**: Reduces manual oversight burden
+- **Consistent Quality**: All changes meet same high standards
+- **Early Detection**: Catch issues before CI/review
+- **Team Efficiency**: Reduces review cycles
+- **Reliability**: Maintains project's "quiet reliability" philosophy
+- **Automation**: Reduces manual oversight burden
 
 ## Monitoring
 
--   QC score tracked in CI artifacts
--   Failed QC attempts logged for process improvement
--   Regular review of QC effectiveness and thresholds
+- QC score tracked in CI artifacts
+- Failed QC attempts logged for process improvement
+- Regular review of QC effectiveness and thresholds
 
 ---
 

@@ -1,17 +1,21 @@
 ---
 repos:
     - repo: https://github.com/psf/black
-      rev: 24.3.0
+      rev: 24.10.0
       hooks:
           - id: black
+            language_version: python3
+            args: ["--line-length=88", "--target-version=py312"]
     - repo: https://github.com/charliermarsh/ruff-pre-commit
       rev: v0.12.0
       hooks:
           - id: ruff
+            args: [--fix, --exit-non-zero-on-fix]
     - repo: https://github.com/pre-commit/mirrors-prettier
       rev: v3.1.0
       hooks:
           - id: prettier
+            exclude: '\.(md)$' # Exclude markdown files to prevent conflicts with markdownlint
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v4.4.0
       hooks:
@@ -34,37 +38,90 @@ repos:
           - id: markdownlint-cli2
     - repo: local
       hooks:
+          - id: clean-pytest-artifacts
+            name: Clean pytest sandbox artifacts
+            entry: scripts/clean_pytest_artifacts.sh
+            language: script
+            always_run: true
+            pass_filenames: false
+            stages: [pre-commit]
           - id: docs-quality
             name: Docs quality checks
-            entry: bash scripts/check_docs.sh
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && bash scripts/check_docs.sh 2>&1 | tee logs/docs_check_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
             files: \.md$
           - id: potato-ignore-check
             name: Potato ignore policy
-            entry: bash scripts/check_potato_ignore.sh
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && bash scripts/check_potato_ignore.sh 2>&1 | tee logs/potato_check_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
           - id: env-docs-check
             name: Environment docs check
-            entry: python scripts/check_env_docs.py
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && python scripts/check_env_docs.py 2>&1 | tee logs/env_docs_check_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
+          - id: validate-agents
+            name: Validate Codex Agents
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_agents.py 2>&1 | tee logs/agent_validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
+            language: system
+            pass_filenames: false
           - id: frontend-eslint
             name: Frontend ESLint
-            entry: bash -c 'cd frontend && npm run lint'
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && cd frontend && npm run lint 2>&1 | tee ../logs/frontend_eslint_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
             pass_filenames: false
-            working_directory: frontend
           - id: bot-eslint
             name: Bot ESLint
-            entry: bash -c 'cd bot && npm run lint'
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && cd bot && npm run lint 2>&1 | tee ../logs/bot_eslint_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
             pass_filenames: false
-            working_directory: bot
           - id: pytest
             name: Python tests
-            entry: pytest --cov=src --cov-fail-under=95
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && TMPDIR=logs python -m pytest --cov=src --cov-fail-under=95 --cov-report=term --cov-report=html:logs/htmlcov --cov-report=xml:logs/coverage.xml --cov-config=.coveragerc --tb=short 2>&1 | tee logs/pytest_$(date +%Y%m%d_%H%M%S).log; exit ${PIPESTATUS[0]}",
+                ]
             language: system
-            enabled: false
+            pass_filenames: false
+            always_run: false
+            files: ^(src/|tests/|\.coveragerc|pytest\.ini|pyproject\.toml).*$
           - id: validate
             name: Full validation suite
-            entry: bash scripts/validate.sh
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && bash scripts/validate.sh 2>&1 | tee logs/validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
             language: system
+            pass_filenames: false

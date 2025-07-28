@@ -4,15 +4,15 @@ Members of the Founder's Circle help guide the long-term vision of the project.
 
 ## What We Ask
 
--   Provide strategic feedback on features and roadmap direction.
--   Participate in invite-only alphas and share insight on usability.
--   Act as ambassadors and help spread the word once we launch.
+- Provide strategic feedback on features and roadmap direction.
+- Participate in invite-only alphas and share insight on usability.
+- Act as ambassadors and help spread the word once we launch.
 
 ## Perks
 
--   Early or permanent access to new functionality.
--   Recognition in project documentation.
--   A direct line to the maintainers for major decisions.
+- Early or permanent access to new functionality.
+- Recognition in project documentation.
+- A direct line to the maintainers for major decisions.
 
 ## Getting Started
 

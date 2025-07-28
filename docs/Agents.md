@@ -194,21 +194,21 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 ## Agent Task Checklist
 
--   [x] Document each agent's purpose, key files, environment, and workflow.
--   [x] Update this file and the changelog when an agent changes.
--   [x] Ensure healthchecks pass for required services.
--   [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
+- [x] Document each agent's purpose, key files, environment, and workflow.
+- [x] Update this file and the changelog when an agent changes.
+- [x] Ensure healthchecks pass for required services.
+- [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
 
 ---
 
 ## Next Steps / Remediation Timeline
 
--   [x] Implement `/health` in Auth
--   [x] Add Docker healthcheck to compose
--   [x] CI workflow update to poll `/health`
--   [x] Env var audit/cleanup in `.env.dev`
--   [x] Doc/Agents.md/Changelog update
--   [x] Retire obsolete scripts
+- [x] Implement `/health` in Auth
+- [x] Add Docker healthcheck to compose
+- [x] CI workflow update to poll `/health`
+- [x] Env var audit/cleanup in `.env.dev`
+- [x] Doc/Agents.md/Changelog update
+- [x] Retire obsolete scripts
 
 ---
 
@@ -273,10 +273,10 @@ an automated notification and suggested fix via Codex's reporting channel.
 
 To reduce the attack surface in CI/CD workflows:
 
--   **Do not use Codecov** or any third-party coverage uploaders that execute
+- **Do not use Codecov** or any third-party coverage uploaders that execute
     remote scripts in CI.
--   Avoid integrations that rely on `bash <curl | sh>` style commands.
--   Vet all external tools for prior security incidents before adoption.
+- Avoid integrations that rely on `bash <curl | sh>` style commands.
+- Vet all external tools for prior security incidents before adoption.
 
 ---
 
@@ -297,18 +297,18 @@ Update the health matrix and remove references from code and docs.
 
 ## Glossary
 
--   **Agent:** Any service, bot, or integration that manages part of the TAGS platform.
--   **RBAC:** Role-Based Access Control.
--   **Codex:** The automation system that verifies docs and code quality.
+- **Agent:** Any service, bot, or integration that manages part of the TAGS platform.
+- **RBAC:** Role-Based Access Control.
+- **Codex:** The automation system that verifies docs and code quality.
 
 ---
 
 ## Related Docs
 
--   [Project README](../README.md)
--   [Security Policy](../SECURITY.md)
--   [Onboarding Guide](../ONBOARDING.md)
--   [.env.example](../.env.example)
+- [Project README](../README.md)
+- [Security Policy](../SECURITY.md)
+- [Onboarding Guide](../ONBOARDING.md)
+- [.env.example](../.env.example)
 
 ---
 
@@ -324,4 +324,6 @@ Update the health matrix and remove references from code and docs.
 | 21 Jun 2025 | v0.2.0  | C. Reesey | Master merged, health matrix, glossary         |
 | 21 Jun 2025 | v0.1.0  | C. Reesey | Initial draft                                  |
 
-_Last updated: 3 July 2025_
+## Last Updated
+
+Last updated: 3 July 2025

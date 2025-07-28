@@ -28,10 +28,10 @@ Use this template after each sprint or major incident. Mark completed actions wi
 
 ## Action Items (with Owners and Deadlines)
 
--   [ ] Example action (@owner, YYYY-MM-DD)
+- [ ] Example action (@owner, YYYY-MM-DD)
 
 ## Links to Updated Knowledge Base/Automation
 
--   ***
+- ***
 
 Review and update the Continuous Improvement Checklist (`docs/checklists/continuous-improvement.md`) as needed.

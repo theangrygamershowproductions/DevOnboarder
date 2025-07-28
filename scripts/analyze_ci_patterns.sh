@@ -85,7 +85,7 @@ echo "🎯 Overall Assessment:"
 echo "  Total Failures: $FAILURE_COUNT"
 
 # Check for auto-fixable issues
-AUTO_FIXABLE=$(echo "$FAILING_CHECKS" | jq -r '.[] | .name' | grep -E "(lint|format|markdown|quality)" | wc -l)
+AUTO_FIXABLE=$(echo "$FAILING_CHECKS" | jq -r '.[] | .name' | grep -cE "(lint|format|markdown|quality)")
 MANUAL_FIXES=$(( FAILURE_COUNT - AUTO_FIXABLE ))
 
 echo "  Auto-fixable: $AUTO_FIXABLE"

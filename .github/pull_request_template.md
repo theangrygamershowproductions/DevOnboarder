@@ -26,7 +26,7 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 - [ ] Coverage does not decrease (see CI summary)
 - [ ] This PR updates `.codex/automation-tasks.md`. I have reviewed the automation impact and notified reviewers.
 
-_Reviewer Sign-Off_
+## Reviewer Sign-Off
 
 - [ ] I confirm all checklist items are complete.
 

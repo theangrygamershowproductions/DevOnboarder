@@ -1,3 +1,18 @@
+---
+agent: "documentation_index"
+purpose: "Documentation index and overview for all DevOnboarder agents"
+trigger: "documentation updates and agent additions"
+environment: "any"
+output: ".codex/logs/documentation.log"
+permissions:
+  - "repo:read"
+codex_runtime: false
+codex_dry_run: false
+discord_role_required: ""
+authentication_required: false
+integration_log: "Agent index and documentation overview"
+---
+
 # Agents Overview
 
 This directory documents the services and integrations that make up the
@@ -7,20 +22,20 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 
 ## Available Agents
 
--   [Discord Integration](discord-integration.md)
--   [MS Teams Integration](ms-teams-integration.md)
--   [ID.me Verification](idme-verification.md)
--   [AI Mentor](ai-mentor.md)
--   [Llama2 Agile Helper](llama2-agile-helper.md)
--   [Prod Orchestrator](prod-orchestrator.md)
--   [Dev Orchestrator](dev-orchestrator.md)
--   [Staging Orchestrator](staging-orchestrator.md)
--   [Onboarding Agent](onboarding-agent.md)
--   [CI Helper Agent](ci-helper-agent.md)
--   [CI Bot](ci-bot.md)
--   [Diagnostics Bot](diagnostics-bot.md)
--   [EnvVar Manager](envvar-manager.md)
--   [Branch Cleanup](branch-cleanup.md)
+- [Discord Integration](discord-integration.md)
+- [MS Teams Integration](ms-teams-integration.md)
+- [ID.me Verification](idme-verification.md)
+- [AI Mentor](ai-mentor.md)
+- [Llama2 Agile Helper](llama2-agile-helper.md)
+- [Prod Orchestrator](prod-orchestrator.md)
+- [Dev Orchestrator](dev-orchestrator.md)
+- [Staging Orchestrator](staging-orchestrator.md)
+- [Onboarding Agent](onboarding-agent.md)
+- [CI Helper Agent](ci-helper-agent.md)
+- [CI Bot](ci-bot.md)
+- [Diagnostics Bot](diagnostics-bot.md)
+- [EnvVar Manager](envvar-manager.md)
+- [Branch Cleanup](branch-cleanup.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 
@@ -34,23 +49,40 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | ADMIN_SERVER_GUILD_ID         | Discord guild ID used for admin checks                                                           |
 | API_BASE_URL                  | XP API URL for the bot                                                                           |
 | APP_ENV                       | Application mode (`development`, etc.)                                                           |
+| AUTH_PORT                     | Port for the authentication service                                                              |
 | AUTH_URL                      | Auth service URL for Playwright tests                                                            |
+| BACKEND_PORT                  | Port for the backend API service                                                                 |
+| BOT_API_URL                   | API URL for bot-to-backend communication                                                         |
 | BOT_JWT                       | JWT used by the bot for API calls                                                                |
+| BOT_PORT                      | Port for the Discord bot service                                                                 |
+| BOT_PREFIX                    | Command prefix for Discord bot commands                                                          |
 | CHECK_HEADERS_URL             | Endpoint used by header checks (default `http://localhost:8002/api/user`)                        |
+| CI                           | Continuous Integration environment flag                                                           |
 | CI_BOT_TOKEN                  | GitHub token used by the CI bot                                                                  |
 | CI_BOT_USERNAME               | GitHub username used to assign CI failure issues                                                 |
 | CI_ISSUE_AUTOMATION_TOKEN     | Fine-grained GitHub token for CI issue/PR automation (primary token)                             |
 | CI_ISSUE_TOKEN                | Token used to open CI failure issues                                                             |
+| CODEX_DRY_RUN                 | Enable dry-run mode for Codex operations                                                         |
 | CORS_ALLOW_ORIGINS            | Comma-separated list of allowed CORS origins                                                     |
 | DATABASE_URL                  | Postgres connection string                                                                       |
+| DEBUG                         | Enable debug logging and features                                                                |
 | DEV_ORCHESTRATION_BOT_KEY     | Secret token for development orchestrator                                                        |
 | DISCORD_API_TIMEOUT           | HTTP timeout in seconds for Discord API calls                                                    |
+| DISCORD_BOT_READY             | Flag indicating Discord bot readiness state                                                      |
 | DISCORD_BOT_TOKEN             | Token for the Discord bot                                                                        |
 | DISCORD_CLIENT_ID             | Discord application client ID                                                                    |
 | DISCORD_CLIENT_SECRET         | Discord application client secret                                                                |
+| DISCORD_DEV_GUILD_ID          | Discord guild ID for development environment                                                     |
+| DISCORD_GUILD_ID              | Primary Discord guild ID for bot operations                                                      |
 | DISCORD_GUILD_IDS             | Guilds where the bot operates                                                                    |
+| DISCORD_PROD_GUILD_ID         | Discord guild ID for production environment                                                      |
 | DISCORD_REDIRECT_URI          | OAuth callback URL for Discord                                                                   |
+| DISCORD_TOKEN                 | Primary Discord authentication token                                                             |
+| DISCORD_WEBHOOK_URL           | Webhook URL for Discord notifications                                                            |
 | EDUCATION_ROLE_ID             | Role for school or university affiliation                                                        |
+| ENVIRONMENT                   | Current deployment environment (dev/staging/prod)                                                |
+| FRONTEND_PORT                 | Port for the frontend development server                                                         |
+| FRONTEND_URL                  | Base URL for the frontend application                                                            |
 | GH_TOKEN                      | GitHub CLI token for automation                                                                  |
 | GOVERNMENT_ROLE_ID            | Role for government employees                                                                    |
 | INIT_DB_ON_STARTUP            | Auto-run migrations when the auth service starts                                                 |
@@ -60,11 +92,14 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | JWT_ALGORITHM                 | Algorithm for JWT signing (default `HS256`)                                                      |
 | JWT_SECRET_KEY                | Secret key for JWT signing (required; service errors if empty or "secret" outside `development`) |
 | LANGUAGETOOL_URL              | Base URL for a local LanguageTool server (optional)                                              |
+| LIVE_TRIGGERS_ENABLED         | Enable live trigger functionality                                                                |
 | LLAMA2_API_KEY                | API key for accessing the Llama2 service                                                         |
 | LLAMA2_API_TIMEOUT            | HTTP timeout in seconds for Llama2 API calls                                                     |
 | LLAMA2_URL                    | Base URL for the Llama2 API                                                                      |
+| LOG_LEVEL                     | Logging level (debug/info/warn/error)                                                            |
 | MILITARY_ROLE_ID              | Role for military members                                                                        |
 | MODERATOR_ROLE_ID             | Discord role for moderators                                                                      |
+| NODE_ENV                      | Node.js environment (development/production)                                                     |
 | NPM_TOKEN                     | Authenticate `npm publish`                                                                       |
 | OFFLINE_BADGE                 | Set to `1` to skip coverage badge generation                                                     |
 | OPENAI_API_KEY                | Token for OpenAI requests                                                                        |
@@ -72,6 +107,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | ORCHESTRATOR_URL              | Base URL for orchestration service                                                               |
 | OWNER_ROLE_ID                 | Discord role for system owner                                                                    |
 | PROD_ORCHESTRATION_BOT_KEY    | Secret token for production orchestrator                                                         |
+| PYTHON_ENV                    | Python environment configuration                                                                 |
 | STAGING_ORCHESTRATION_BOT_KEY | Secret token for staging orchestrator                                                            |
 | TAGS_MODE                     | Expect TAGS services when `true`                                                                 |
 | TEAMS_APP_ID                  | Azure app ID for the Teams integration                                                           |
