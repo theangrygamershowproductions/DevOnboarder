@@ -11,7 +11,9 @@ if [ $ml_status -ne 0 ]; then
 fi
 
 FILES=$(git ls-files '*.md')
-RESULTS_FILE="vale-results.json"
+# Ensure logs directory exists for Vale output
+mkdir -p logs
+RESULTS_FILE="logs/vale-results.json"
 
 # Try to locate or download Vale
 VALE_CMD="${VALE_BINARY:-vale}"

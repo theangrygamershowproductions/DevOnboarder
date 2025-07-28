@@ -23,6 +23,7 @@ venv/
 
 # JS artifacts
 node_modules/
+**/node_modules/
 dist/
 coverage/
 .coverage
@@ -70,3 +71,23 @@ secrets.yml
 .codex/
 config/secrets.json
 webhook-config.json
+
+# Root pollution block - CI hygiene enforcement
+/vale-results.json
+/vale-*.json
+/test.db
+/.coverage*
+*.db-journal
+/.pytest_cache/
+/__pycache__/
+/config_backups/
+/.tox/
+/pytest-of-*/
+/test.db
+/.coverage*
+*.db-journal
+/.pytest_cache/
+/__pycache__/
+/config_backups/
+/.tox/
+/pytest-of-*/

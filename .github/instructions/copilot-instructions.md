@@ -32,33 +32,6 @@ DevOnboarder implements a unique **Enhanced Potato Policy** - an automated secur
 
 **Developer Impact**: Any attempt to remove "Potato" entries or expose sensitive files will fail CI and require project lead approval with changelog documentation.
 
-**Validation Commands**:
-
-```bash
-# Check Potato Policy compliance
-bash scripts/check_potato_ignore.sh
-
-# Generate security audit report
-bash scripts/generate_potato_report.sh
-
-# Enforce policy across all ignore files
-bash scripts/potato_policy_enforce.sh
-```
-
-**What Gets Protected**:
-
-- SSH keys and certificates in `Potato.md`
-- Database credentials in environment files
-- API tokens and webhooks configurations
-- Any file matching protected patterns
-
-**Enforcement Points Detail**:
-
-- **Pre-commit**: `scripts/check_potato_ignore.sh` validates ignore files
-- **CI/CD**: `potato-policy-focused.yml` workflow enforces compliance
-- **Docker builds**: `.dockerignore` prevents sensitive files in images
-- **Spell checking**: `.codespell-ignore` prevents exposure via docs
-
 ### Mandatory Environment Usage
 
 - **Python**: ALWAYS use `.venv` virtual environment
@@ -393,20 +366,6 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 - `docker-compose.ci.yaml`: CI pipeline configuration
 - `config/devonboarder.config.yml`: Application configuration
 - `.tool-versions`: Environment version requirements
-- `.env.ci`: CI-specific environment variables (auto-generated)
-- `schema/agent-schema.json`: JSON schema for agent validation
-
-**CI Environment Pattern**:
-The project uses `.env.ci` for CI-specific settings that differ from development:
-
-```bash
-# CI uses sanitized test values
-DATABASE_URL=sqlite:///./test_devonboarder.db
-DISCORD_BOT_TOKEN=ci_test_discord_bot_token_placeholder
-CI=true
-NODE_ENV=test
-PYTHON_ENV=test
-```
 
 ## Service Integration Patterns
 
@@ -458,10 +417,6 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - **ci-monitor.yml**: Continuous CI health monitoring
 - **markdownlint.yml**: Dedicated markdown style enforcement
 - **review-known-errors.yml**: Pattern recognition for recurring issues
-- **audit-retro-actions.yml**: Retrospective action item auditing
-- **dev-orchestrator.yml**: Development environment orchestration
-- **prod-orchestrator.yml**: Production environment orchestration
-- **staging-orchestrator.yml**: Staging environment orchestration
 
 ### Critical Scripts
 
@@ -475,8 +430,6 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/enforce_output_location.sh`: Root Artifact Guard enforcement
 - `scripts/clean_pytest_artifacts.sh`: Comprehensive artifact cleanup
 - `scripts/manage_logs.sh`: Advanced log management system
-- `scripts/validate_agent_files.py`: Agent validation with JSON schema
-- `scripts/validate-bot-permissions.sh`: Bot permission verification
 
 ### Automation Ecosystem
 
@@ -489,7 +442,6 @@ DevOnboarder includes 100+ automation scripts in `scripts/` covering:
 - **Quality Assurance**: `validate_pr_checklist.sh`, `standards_enforcement_assessment.sh`
 - **Artifact Management**: `clean_pytest_artifacts.sh`, `enforce_output_location.sh`
 - **Log Management**: `run_tests_with_logging.sh`, `manage_logs.sh`
-- **Agent Validation**: `validate_agent_files.py`, `validate-bot-permissions.sh`
 
 ### Virtual Environment in CI
 
@@ -860,7 +812,6 @@ description: "Brief description of agent purpose"
 - **Validation**: Checked by `scripts/validate-bot-permissions.sh`
 - **Standards**: Documentation under `agents/` directory
 - **Orchestration**: Coordinated via orchestrator agents
-- **Schema Validation**: JSON schema validation for agent frontmatter with RBAC support
 
 ### CI Integration Patterns
 
@@ -873,55 +824,15 @@ python scripts/list-bots.py
 
 # Environment variable documentation alignment
 bash scripts/check_env_docs.py
-
-# Agent frontmatter validation
-python scripts/validate_agent_files.py
 ```
-
-### Agent Validation System
-
-**JSON Schema Enforcement**: All Codex agents must include valid YAML frontmatter validated against `schema/agent-schema.json`:
-
-```yaml
----
-agent: agent-name
-purpose: Brief description of agent purpose
-trigger: when the agent activates (e.g., "manual", "on_push_to_dev")
-environment: execution environment (e.g., "CI", "development")
-output: log file location (e.g., ".codex/logs/agent-name.log")
-permissions:
-    - permission-type (e.g., "repo:read", "workflows:write")
----
-```
-
-**Validation Commands**:
-
-```bash
-# Validate all agent files against schema
-python scripts/validate_agent_files.py
-
-# Validate specific agent file
-bash scripts/validate_agents.sh agents/specific-agent.md
-
-# Check agent permissions compliance
-bash scripts/validate-bot-permissions.sh
-```
-
-**Integration Points**:
-
-- Pre-commit hooks enforce agent validation
-- CI pipeline validates all agent files on every commit
-- Schema violations block PR merges
-- Automatic issue creation for validation failures
 
 ---
 
-**Last Updated**: 2025-07-28 (Enhanced with Agent Validation & Infrastructure Repair)
+**Last Updated**: 2025-07-28 (Enhanced with CI Hygiene & Automation Framework)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
 **Security**: Enhanced Potato Policy + Root Artifact Guard active
-**Agent System**: JSON schema validation with YAML frontmatter enforcement
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution

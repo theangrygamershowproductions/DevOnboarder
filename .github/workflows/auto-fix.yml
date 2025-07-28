@@ -22,6 +22,8 @@ on:
 jobs:
     validate-yaml:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         steps:
             - uses: actions/checkout@v3
             - uses: ibiqlik/action-yamllint@v3
@@ -43,11 +45,15 @@ jobs:
                   # Do not checkout untrusted PR code in privileged context
             - name: Get PR information
               id: pr-info
+              env:
+                  HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+                  HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+                  RUN_EVENT: ${{ github.event.workflow_run.event }}
               run: |
                   # Safely get PR information without checking out untrusted code
-                  echo "head_sha=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
-                  echo "head_branch=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_OUTPUT
-                  echo "Run triggered by: ${{ github.event.workflow_run.event }}"
+                  echo "head_sha=${HEAD_SHA}" >> $GITHUB_OUTPUT
+                  echo "head_branch=${HEAD_BRANCH}" >> $GITHUB_OUTPUT
+                  echo "Run triggered by: ${RUN_EVENT}"
             - name: Run yamllint
               run: |
                   pip install yamllint
