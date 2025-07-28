@@ -136,16 +136,26 @@ jobs:
               uses: docker/setup-buildx-action@v3
             - name: Prepare CI log directory
               run: mkdir -p ci-logs
+            - name: Create virtual environment
+              run: |
+                  python -m venv .venv
+                  source .venv/bin/activate
+                  echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+                  echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
             - name: Install dev dependencies
               run: |
+                  source .venv/bin/activate
                   pip install .[test] 2>&1 | tee ci-logs/pip-install.log || {
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
             - name: Check Python dependencies
-              run: pip check
+              run: |
+                  source .venv/bin/activate
+                  pip check
             - name: Python dependency audit
               run: |
+                  source .venv/bin/activate
                   if ! pip-audit; then
                     code=$?
                     if [ "$code" -eq 1 ]; then
@@ -155,17 +165,27 @@ jobs:
                     fi
                   fi
             - name: Install yamllint
-              run: pip install yamllint
+              run: |
+                  source .venv/bin/activate
+                  pip install yamllint
             - name: Lint and validate bot permissions
               run: bash scripts/validate-bot-permissions.sh
             - name: Run Black
-              run: black --check .
+              run: |
+                  source .venv/bin/activate
+                  black --check .
             - name: Regenerate env docs
-              run: python scripts/regenerate_env_docs.py
+              run: |
+                  source .venv/bin/activate
+                  python scripts/regenerate_env_docs.py
             - name: Validate env docs
-              run: python scripts/check_env_docs.py
+              run: |
+                  source .venv/bin/activate
+                  python scripts/check_env_docs.py
             - name: Validate Codex Agents
-              run: python scripts/validate_agents.py
+              run: |
+                  source .venv/bin/activate
+                  python scripts/validate_agents.py
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package
@@ -194,7 +214,9 @@ jobs:
                       echo "⚠️  QC script not found, skipping comprehensive validation"
                   fi
             - name: Generate OpenAPI spec
-              run: python scripts/generate_openapi.py
+              run: |
+                  source .venv/bin/activate
+                  python scripts/generate_openapi.py
             - name: Check committed OpenAPI spec
               run: |
                   git diff --quiet src/devonboarder/openapi.json || {
@@ -204,6 +226,7 @@ jobs:
                   }
             - name: Validate OpenAPI contract
               run: |
+                  source .venv/bin/activate
                   python -c "
                   import json
                   from openapi_spec_validator import validate_spec
@@ -286,7 +309,9 @@ jobs:
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
             - name: Run diagnostics
-              run: python -m diagnostics > diagnostics.log
+              run: |
+                  source .venv/bin/activate
+                  python -m diagnostics > diagnostics.log
             - name: Upload diagnostics
               if: always()
               uses: actions/upload-artifact@v4
@@ -297,7 +322,9 @@ jobs:
             - name: Prepare test-results directory
               run: mkdir -p test-results
             - name: Run tests with coverage
-              run: pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml 2>&1 | tee ci-logs/pytest.log
+              run: |
+                  source .venv/bin/activate
+                  pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml 2>&1 | tee ci-logs/pytest.log
             - name: Upload pytest results
               if: always() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
