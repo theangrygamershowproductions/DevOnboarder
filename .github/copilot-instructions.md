@@ -214,6 +214,78 @@ npm ci --prefix frontend
 
 **Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
 
+### ⚠️ MANDATORY: Markdown Standards Compliance
+
+**ALL markdown content MUST comply with project linting rules before creation**:
+
+- **MD022**: Headings surrounded by blank lines (before and after)
+- **MD032**: Lists surrounded by blank lines (before and after)
+- **MD031**: Fenced code blocks surrounded by blank lines (before and after)
+- **MD007**: Proper list indentation (4 spaces for nested items)
+- **MD009**: No trailing spaces (except 2 for line breaks)
+
+**Pre-Creation Requirements**:
+
+1. Review existing compliant markdown in the repository
+2. Follow established spacing and formatting patterns
+3. Never create content that will fail markdownlint validation
+4. Treat linting rules as requirements, not post-creation fixes
+
+**Example Compliant Format**:
+
+```markdown
+## Section Title
+
+Paragraph text with proper spacing.
+
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
+
+Another paragraph after blank line.
+
+### Subsection
+
+More content following the same pattern.
+```
+
+**Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
+
+- **MD022**: Headings surrounded by blank lines (before and after)
+- **MD032**: Lists surrounded by blank lines (before and after)
+- **MD031**: Fenced code blocks surrounded by blank lines (before and after)
+- **MD007**: Proper list indentation (4 spaces for nested items)
+- **MD009**: No trailing spaces (except 2 for line breaks)
+
+**Pre-Creation Requirements**:
+
+1. Review existing compliant markdown in the repository
+2. Follow established spacing and formatting patterns
+3. Never create content that will fail markdownlint validation
+4. Treat linting rules as requirements, not post-creation fixes
+
+**Example Compliant Format**:
+
+```markdown
+## Section Title
+
+Paragraph text with proper spacing.
+
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
+
+Another paragraph after blank line.
+
+### Subsection
+
+More content following the same pattern.
+```
+
+**Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
+
 ### ⚠️ CRITICAL: CI Hygiene & Artifact Management
 
 **Root Artifact Guard System**: DevOnboarder enforces strict artifact hygiene to prevent repository pollution:
