@@ -189,7 +189,9 @@ jobs:
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package
-              run: pip install -e .[test] 2>&1 | tee ci-logs/pip-install-editable.log
+              run: |
+                  source .venv/bin/activate
+                  pip install -e .[test] 2>&1 | tee ci-logs/pip-install-editable.log
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
             - name: Validate PR Summary
@@ -203,6 +205,7 @@ jobs:
                   fi
 
                   # Validate required sections and content
+                  source .venv/bin/activate
                   python scripts/validate_pr_summary.py PR_SUMMARY.md
             - name: Quality Control Gate
               run: |
@@ -244,21 +247,28 @@ jobs:
             - name: Alembic migration lint
               run: ./scripts/alembic_migration_check.sh
             - name: Doc coverage check
-              run: python scripts/check_docstrings.py src/devonboarder
-            - name: Run linter
-              run: ruff check --output-format=github .
-            - name: Run mypy
-              run: mypy src/devonboarder
-            - name: Install docs dependencies
               run: |
-                  npm ci || {
-                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
-                      exit 1
-                  }
+                  source .venv/bin/activate
+                  python scripts/check_docstrings.py src/devonboarder
+            - name: Run linter
+              run: |
+                  source .venv/bin/activate
+                  ruff check --output-format=github .
+            - name: Run mypy
+              run: |
+                  source .venv/bin/activate
+                  mypy src/devonboarder
             - name: Install Vale
               run: |
-                  curl -fsSL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_64-bit.tar.gz | tar xz # pinned version
-                  sudo mv vale /usr/local/bin/
+                  # Download and install Vale 3.12.0 to /usr/local/bin
+                  VALE_VERSION=3.12.0
+                  VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+                  TMP_DIR=$(mktemp -d)
+                  trap 'rm -rf "$TMP_DIR"' EXIT
+                  curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
+                  sudo install -m 755 "$TMP_DIR/vale" /usr/local/bin/vale
+                  # Verify installation
+                  vale --version
             - name: Documentation style check
               run: ./scripts/check_docs.sh
             - name: Upload Vale results
@@ -432,6 +442,7 @@ jobs:
                   GITHUB_REPOSITORY: ${{ github.repository }}
                   GITHUB_RUN_ID: ${{ github.run_id }}
               run: |
+                  source .venv/bin/activate
                   python scripts/post_coverage_comment.py coverage-summary.md
                   bash scripts/append_coverage_summary.sh coverage-summary.md
             - name: Upload coverage summary
@@ -459,7 +470,9 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Update coverage badge
-              run: python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
+              run: |
+                  source .venv/bin/activate
+                  python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
               env:
                   CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
@@ -524,10 +537,14 @@ jobs:
                   GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Summarize CI failures
               if: always()
-              run: python scripts/summarize_ci_failures.py
+              run: |
+                  source .venv/bin/activate
+                  python scripts/summarize_ci_failures.py
             - name: Run CI failure diagnoser
               if: always()
-              run: python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
+              run: |
+                  source .venv/bin/activate
+                  python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
             - name: Download previous CI failure issue
               if: always()
               run: bash scripts/download_ci_failure_issue.sh
