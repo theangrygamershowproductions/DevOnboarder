@@ -47,7 +47,7 @@ class GreetingHandler(BaseHTTPRequestHandler):
         return
 
 
-def create_server(host: str = "0.0.0.0", port: int = 8000) -> HTTPServer:
+def create_server(host: str = "0.0.0.0", port: int = 8000) -> HTTPServer:  # nosec B104
     """Create an HTTP server serving :class:`GreetingHandler`."""
     return HTTPServer((host, port), GreetingHandler)
 

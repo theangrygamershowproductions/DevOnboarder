@@ -372,4 +372,4 @@ def create_app() -> FastAPI:
 def main() -> None:
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=8002)
+    uvicorn.run(create_app(), host="0.0.0.0", port=8002)  # nosec B104

@@ -24,7 +24,7 @@ declare -a FAILURES=()
 
 # 1. YAML Linting
 echo "📋 Checking YAML files..."
-if yamllint .github/workflows/ 2>/dev/null; then
+if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
     CHECKS+=("✅ YAML lint")
 else
     CHECKS+=("❌ YAML lint")
@@ -51,7 +51,7 @@ fi
 
 # 4. Type Checking
 echo "🔤 Checking type hints..."
-if python -m mypy src/devonboarder --quiet 2>/dev/null; then
+if python -m mypy src/devonboarder 2>/dev/null; then
     CHECKS+=("✅ MyPy types")
 else
     CHECKS+=("❌ MyPy types")
@@ -132,7 +132,7 @@ else
     echo "  • Run: python -m ruff check . && python -m ruff check . --fix"
     echo "  • Run: python -m black ."
     echo "  • Run: python -m mypy src/devonboarder"
-    echo "  • Run: yamllint .github/workflows/"
+    echo "  • Run: yamllint -c .github/.yamllint-config .github/workflows/"
     echo "  • Run: python -m pytest --cov=src --cov-fail-under=95"
     exit 1
 fi
