@@ -68,7 +68,6 @@ secrets.yaml
 secrets.yml
 .env.local
 .env.production
-.codex/
 config/secrets.json
 webhook-config.json
 
