@@ -1,15 +1,17 @@
-# Management Ingest Agent
-
-## Agent Configuration
-
-```yaml
-codex_runtime: false         # Ensures Codex doesn't execute runtime code
-codex_dry_run: true          # Custom signal for simulated output logging
+---
+agent: management-ingest
+purpose: Processes executive commands and routes them to appropriate Discord servers based on environment
+trigger: executive commands
+environment: development
+output: .codex/logs/management-ingest.log
+codex_runtime: false
+codex_dry_run: true
 discord_role_required: "CTO"
 authentication_required: true
-environment: dev
 integration_log: "https://codex.theangrygamershow.com/docs/devonboarder/ci-integration-hold"
-```
+---
+
+# Management Ingest Agent
 
 > ⚠️ **This agent is currently in dry-run mode.** All outputs are logged, but no live actions are executed.
 

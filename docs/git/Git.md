@@ -2,32 +2,32 @@
 
 ## Table of Contents
 
--   [Git.md Documentation](#gitmd-documentation)
-    -   [Table of Contents](#table-of-contents)
-    -   [Adding Entries to .gitignore](#adding-entries-to-gitignore)
-    -   [Repository Structure and Submodules](#repository-structure-and-submodules)
-        -   [🔜 Submodule Plan](#-submodule-plan)
-    -   [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
-        -   [Option 1: `git stash`](#option-1-git-stash)
-        -   [Option 2: WIP Commit](#option-2-wip-commit)
-        -   [Option 3: Use `git switch`](#option-3-use-git-switch)
-    -   [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
-    -   [Managing Multiple Remotes](#managing-multiple-remotes)
-        -   [Add a second remote](#add-a-second-remote)
-        -   [Make a remote fetch-only](#make-a-remote-fetch-only)
-        -   [Rename a remote](#rename-a-remote)
-    -   [Maintenance Notes](#maintenance-notes)
-    -   [Git Commit Message SOP](#git-commit-message-sop)
-        -   [Purpose](#purpose)
-        -   [Guidelines](#guidelines)
-        -   [Format](#format)
-            -   [Types](#types)
-            -   [Example](#example)
-            -   [Versioning](#versioning)
-    -   [Using Git Hooks](#using-git-hooks)
-        -   [Why?](#why)
-        -   [Setup](#setup)
-    -   [Steps to Push with SSH](#steps-to-push-with-ssh)
+- [Git.md Documentation](#gitmd-documentation)
+    - [Table of Contents](#table-of-contents)
+    - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
+    - [Repository Structure and Submodules](#repository-structure-and-submodules)
+        - [🔜 Submodule Plan](#-submodule-plan)
+    - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
+        - [Option 1: `git stash`](#option-1-git-stash)
+        - [Option 2: WIP Commit](#option-2-wip-commit)
+        - [Option 3: Use `git switch`](#option-3-use-git-switch)
+    - [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
+    - [Managing Multiple Remotes](#managing-multiple-remotes)
+        - [Add a second remote](#add-a-second-remote)
+        - [Make a remote fetch-only](#make-a-remote-fetch-only)
+        - [Rename a remote](#rename-a-remote)
+    - [Maintenance Notes](#maintenance-notes)
+    - [Git Commit Message SOP](#git-commit-message-sop)
+        - [Purpose](#purpose)
+        - [Guidelines](#guidelines)
+        - [Format](#format)
+            - [Types](#types)
+            - [Example](#example)
+            - [Versioning](#versioning)
+    - [Using Git Hooks](#using-git-hooks)
+        - [Why?](#why)
+        - [Setup](#setup)
+    - [Steps to Push with SSH](#steps-to-push-with-ssh)
 
 ---
 
@@ -67,8 +67,8 @@ Our current structure:
 ├── backend/ ← Separate Git repo (ignored)
 ```
 
--   `frontend/`: React + TypeScript + Tailwind stack
--   `backend/`: Auth microservice
+- `frontend/`: React + TypeScript + Tailwind stack
+- `backend/`: Auth microservice
 
 ### 🔜 Submodule Plan
 
@@ -206,10 +206,10 @@ git remote -v
 
 The following tasks are now part of our standard workflow:
 
--   `.gitignore` entries are validated by `scripts/check_potato_ignore.sh` and reviewed each release.
--   Commit messages follow the guidelines in [docs/git-guidelines.md](../git-guidelines.md).
--   Pre-commit hooks enforce linting and formatting.
--   Merging and remote management workflows are documented in [docs/git/README.md](./README.md).
+- `.gitignore` entries are validated by `scripts/check_potato_ignore.sh` and reviewed each release.
+- Commit messages follow the guidelines in [docs/git-guidelines.md](../git-guidelines.md).
+- Pre-commit hooks enforce linting and formatting.
+- Merging and remote management workflows are documented in [docs/git/README.md](./README.md).
 
 Submodule support will be revisited once the frontend and backend repositories stabilize.
 
@@ -223,11 +223,11 @@ Ensure clear, consistent commit messages that aid review and traceability.
 
 ### Guidelines
 
--   Commit early and often (locally)
--   Use descriptive messages
--   Keep `main` and `release` clean
--   Squash local commits when needed
--   Use feature branches for WIP
+- Commit early and often (locally)
+- Use descriptive messages
+- Keep `main` and `release` clean
+- Squash local commits when needed
+- Use feature branches for WIP
 
 ### Format
 
@@ -237,13 +237,13 @@ Ensure clear, consistent commit messages that aid review and traceability.
 
 #### Types
 
--   **FEAT**: New features
--   **FIX**: Bug/security fixes
--   **DOCS**: Documentation
--   **STYLE**: Formatting/linting
--   **REFACTOR**: Structural changes
--   **TEST**: Tests
--   **CHORE**: Tooling, config, CI/CD
+- **FEAT**: New features
+- **FIX**: Bug/security fixes
+- **DOCS**: Documentation
+- **STYLE**: Formatting/linting
+- **REFACTOR**: Structural changes
+- **TEST**: Tests
+- **CHORE**: Tooling, config, CI/CD
 
 #### Example
 
@@ -268,9 +268,9 @@ PATCH v0.0.6 — Adds debug logging to session management (useSession.ts)
 
 Hooks ensure:
 
--   Code quality (lint/tests)
--   Team consistency (commit format)
--   Safer workflows (e.g. block `main` pushes)
+- Code quality (lint/tests)
+- Team consistency (commit format)
+- Safer workflows (e.g. block `main` pushes)
 
 ### Setup
 

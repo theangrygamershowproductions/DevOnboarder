@@ -70,6 +70,7 @@ echo -e "\n📄 Main Environment File (.env)"
 echo "================================"
 
 if [[ -f ".env" ]]; then
+    # shellcheck source=/dev/null
     source .env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
 
     validate_token "${DISCORD_BOT_TOKEN:-}" "Main Bot Token"
@@ -87,6 +88,7 @@ echo -e "\n🤖 Bot Environment File (bot/.env)"
 echo "=================================="
 
 if [[ -f "bot/.env" ]]; then
+    # shellcheck source=/dev/null
     source bot/.env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
 
     validate_token "${DISCORD_BOT_TOKEN:-}" "Bot Token"

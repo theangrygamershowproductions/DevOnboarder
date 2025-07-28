@@ -5,7 +5,11 @@
 #   scope: .github/workflows/env-doc-alignment.yml
 #   triggers: CI workflow failures on env doc checks
 #   output: Issue listing missing variables
+#   security: Uses workflow_run trigger with trusted code checkout only
 # ---
+# SECURITY: This workflow uses workflow_run trigger which runs in privileged context.
+# It intentionally does NOT checkout untrusted PR code to prevent code execution attacks.
+# Only trusted code from the default branch is used for documentation validation.
 name: Env Doc Alignment
 
 on:
@@ -35,7 +39,13 @@ jobs:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
-                  ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+                  # Security: Only checkout trusted code, not untrusted PR head
+                  ref: ${{ github.sha }}
+            - name: Get workflow run information
+              id: workflow-info
+              run: |
+                  # Safely capture workflow run details without checking out untrusted code
+                  echo "head_sha=${{ github.event.workflow_run.head_sha || github.sha }}" >> $GITHUB_OUTPUT
             - name: Install GitHub CLI
               uses: ksivamuthu/actions-setup-gh-cli@v3
             - name: Show gh version
@@ -66,7 +76,7 @@ jobs:
 
                     - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
                   BODY
-                  jq -Rs --arg title "Secrets misaligned in docs for ${{ github.event.workflow_run.head_sha || github.sha }}" '{title:$title,body:.}' body.md > notify.json
+                  jq -Rs --arg title "Secrets misaligned in docs for ${{ steps.workflow-info.outputs.head_sha }}" '{title:$title,body:.}' body.md > notify.json
                   gh workflow run notify.yml -f data="$(cat notify.json)"
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

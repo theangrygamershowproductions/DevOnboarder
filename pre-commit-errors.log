@@ -1,0 +1,118 @@
+black....................................................................Passed
+ruff (legacy alias)......................................................Passed
+prettier.................................................................Passed
+trim trailing whitespace.................................................Passed
+fix end of files.........................................................Passed
+shellcheck...............................................................Failed
+- hook id: shellcheck
+- exit code: 1
+
+In scripts/verify_and_commit.sh line 3:
+    log_and_display "🧹 Cleaning ALL test artifacts before validation for clean diagnosis..."
+    ^-- SC2218 (error): This function is only defined later. Move the definition up.
+
+
+In scripts/verify_and_commit.sh line 13:
+    log_and_display ""nboarder
+    ^------------------------^ SC2218 (error): This function is only defined later. Move the definition up.
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2218 -- This function is only defined lat...
+
+codespell................................................................Passed
+markdownlint-cli2........................................................Passed
+Clean pytest sandbox artifacts...........................................Passed
+Docs quality checks......................................................Passed
+Potato ignore policy.....................................................Passed
+Environment docs check...................................................Passed
+Validate Codex Agents....................................................Passed
+Frontend ESLint..........................................................Passed
+Bot ESLint...............................................................Passed
+Python tests.............................................................Failed
+- hook id: pytest
+- files were modified by this hook
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /home/potato/DevOnboarder
+configfile: pytest.ini
+plugins: cov-6.2.1, mock-3.14.1, anyio-4.9.0
+collected 115 items
+
+test_pr_validation.py .                                                  [  0%]
+tests/test_app.py ..                                                     [  2%]
+tests/test_auth_service.py ....................                          [ 20%]
+tests/test_bootstrap_script.py .                                         [ 20%]
+tests/test_check_headers.py ..                                           [ 22%]
+tests/test_ci_failure_diagnoser.py ..                                    [ 24%]
+tests/test_cli.py ...                                                    [ 26%]
+tests/test_create_retro_file.py ..                                       [ 28%]
+tests/test_diagnostics.py ......                                         [ 33%]
+tests/test_discord_integration.py .....                                  [ 38%]
+tests/test_discord_utils.py .......                                      [ 44%]
+tests/test_docker_compose.py ......                                      [ 49%]
+tests/test_feedback_api.py .                                             [ 50%]
+tests/test_health.py ..                                                  [ 52%]
+tests/test_hello_world.py .                                              [ 53%]
+tests/test_known_errors_loop.py ..                                       [ 54%]
+tests/test_llama2_agile_helper.py ....                                   [ 58%]
+tests/test_parse_retro_actions.py ..                                     [ 60%]
+tests/test_plugins.py .                                                  [ 60%]
+tests/test_process_notifications.py .                                    [ 61%]
+tests/test_qa_checklist.py .                                             [ 62%]
+tests/test_roles.py .....................                                [ 80%]
+tests/test_server.py .........                                           [ 88%]
+tests/test_setup_env.py ..                                               [ 90%]
+tests/test_show_network_exceptions.py .                                  [ 91%]
+tests/test_smoke.py .                                                    [ 92%]
+tests/test_sync_issue_to_kekb.py .                                       [ 93%]
+tests/test_validate_pr_checklist.py ..                                   [ 94%]
+tests/test_xp_api.py ......                                              [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/potato/DevOnboarder/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+tests/test_cli.py::test_cli_invocation_via_module
+  <frozen runpy>:128: RuntimeWarning: 'devonboarder.cli' found in sys.modules after import of package 'devonboarder', but prior to execution of 'devonboarder.cli'; this may result in unpredictable behaviour
+
+tests/test_known_errors_loop.py::test_known_error_increments_hits
+tests/test_known_errors_loop.py::test_unknown_error_triggers_notification
+  /home/potato/DevOnboarder/scripts/known_errors_loop.py:46: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow().isoformat()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                  Stmts   Miss  Cover
+---------------------------------------------------------
+src/devonboarder/__init__.py             21      1    95%
+src/devonboarder/app.py                   3      0   100%
+src/devonboarder/auth_service.py        204     12    94%
+src/devonboarder/cli.py                   7      0   100%
+src/devonboarder/server.py               39      0   100%
+src/diagnostics.py                       46      0   100%
+src/discord_integration/__init__.py       2      0   100%
+src/discord_integration/api.py           59      4    93%
+src/feedback_service/__init__.py          2      0   100%
+src/feedback_service/api.py              63      4    94%
+src/llama2_agile_helper/__init__.py       2      0   100%
+src/llama2_agile_helper/api.py           51      0   100%
+src/routes/__init__.py                    0      0   100%
+src/routes/user.py                        8      0   100%
+src/utils/__init__.py                     2      0   100%
+src/utils/cors.py                         9      1    89%
+src/utils/discord.py                     24      0   100%
+src/utils/roles.py                       30      0   100%
+src/xp/__init__.py                        0      0   100%
+src/xp/api/__init__.py                   49      2    96%
+---------------------------------------------------------
+TOTAL                                   621     24    96%
+Coverage HTML written to dir logs/htmlcov
+Coverage XML written to file logs/coverage.xml
+Required test coverage of 95% reached. Total coverage: 96.14%
+======================= 115 passed, 4 warnings in 43.29s =======================
+
+Full validation suite....................................................Passed

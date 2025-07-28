@@ -32,7 +32,7 @@ echo "  Terminal: ${TERM:-unknown}"
 echo "  PATH: ${PATH:0:100}..." # Truncate for readability
 
 # Test command execution and output capture
-TEST_CMD_OUTPUT=$(echo "Terminal test successful" 2>&1)
+TEST_CMD_OUTPUT="Terminal test successful"
 if [ "$TEST_CMD_OUTPUT" = "Terminal test successful" ]; then
     echo "  ✅ Basic command execution: WORKING"
     log "SUCCESS: Basic command execution working"

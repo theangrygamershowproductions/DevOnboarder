@@ -7,9 +7,9 @@ This document explains how we use Git in this project.
 Create short-lived branches directly from `main`. Branch names use lowercase
 words separated by hyphens and are prefixed with their purpose:
 
--   `feature/` – new functionality
--   `fix/` – bug fixes
--   `chore/` – maintenance tasks
+- `feature/` – new functionality
+- `fix/` – bug fixes
+- `chore/` – maintenance tasks
 
 Examples:
 
@@ -64,10 +64,10 @@ description.
 
 ## Pre-PR Checklist
 
--   Before opening a pull request, make sure to:
+- Before opening a pull request, make sure to:
 
--   Rebase your branch on the latest `main`.
--   Install the project and dev requirements:
+- Rebase your branch on the latest `main`.
+- Install the project and dev requirements:
 
 ```bash
 pip install -e .
@@ -76,30 +76,30 @@ pip install -r requirements-dev.txt
 
 Run these commands **before** invoking `pytest` so all dev dependencies are available.
 
--   Run the linter and tests to confirm they pass:
+- Run the linter and tests to confirm they pass:
 
 ```bash
 ruff check .
 pytest --cov=src --cov-fail-under=95
 ```
 
--   Run documentation checks with `./scripts/check_docs.sh`.
+- Run documentation checks with `./scripts/check_docs.sh`.
     The script runs **Vale** only.
     LanguageTool checks are optional. If desired, run a local server and
     set `LANGUAGETOOL_URL` to its address.
--   Keep Prettier pinned to `v3.6.2`. Run
+- Keep Prettier pinned to `v3.6.2`. Run
     `pre-commit autoupdate --repo https://github.com/pre-commit/mirrors-prettier`
     to confirm the hook installs correctly.
--   CI lints commit messages using `scripts/check_commit_messages.sh`.
-    -   Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a
+- CI lints commit messages using `scripts/check_commit_messages.sh`.
+    - Run `bash scripts/install_commit_msg_hook.sh` after cloning to install a
         local `commit-msg` hook so mistakes are caught before you push. See
         [CONTRIBUTING.md](../CONTRIBUTING.md).
         Past violations do not require rewriting history.
-    -   Enable the `pytest` pre-commit hook to run tests automatically and catch
+    - Enable the `pytest` pre-commit hook to run tests automatically and catch
         failures locally. Run `pre-commit run pytest --all-files` once to enable it.
--   Update `docs/CHANGELOG.md` with a short summary of your change.
--   Update any other relevant documentation under `docs/`.
--   Follow the pull request template in `.github/pull_request_template.md`.
+- Update `docs/CHANGELOG.md` with a short summary of your change.
+- Update any other relevant documentation under `docs/`.
+- Follow the pull request template in `.github/pull_request_template.md`.
 
 ## Stale Branch Cleanup
 

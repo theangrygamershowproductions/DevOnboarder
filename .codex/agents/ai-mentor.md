@@ -5,7 +5,7 @@ trigger: on_question_received
 environment: any
 output: .codex/logs/ai-mentor.log
 permissions:
-  - repo:read
+    - repo:read
 ---
 
 # AI Mentor Agent

@@ -5,8 +5,8 @@ trigger: manual or `python -m diagnostics`
 environment: any
 output: .codex/logs/diagnostics-bot.log
 permissions:
-  - repo:read
-  - actions:read
+    - repo:read
+    - actions:read
 ---
 
 # Diagnostics Bot

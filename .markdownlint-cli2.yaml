@@ -19,3 +19,4 @@ ignores:
     - "logs/**"
     - "tmp/**"
     - ".git/**"
+    - "Potato.md" # Potato Policy - contains sensitive SSH/setup info

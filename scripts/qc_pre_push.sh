@@ -10,6 +10,7 @@ echo "🔍 Running 95% QC Pre-Push Validation..."
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
         echo "🐍 Activating virtual environment..."
+        # shellcheck source=/dev/null
         source .venv/bin/activate
     else
         echo "❌ Virtual environment not found. Run: python -m venv .venv && source .venv/bin/activate"

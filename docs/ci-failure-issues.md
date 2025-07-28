@@ -10,9 +10,9 @@ The file offers a quick way to analyze failing runs.
 
 ## Automatic Cleanup
 
--   `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
--   The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
--   The issue number is saved to `ci_failure_issue.txt` and uploaded as a `ci-failure-issue` artifact so later runs update the same issue.
+- `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
+- The workflow uploads a `ci-logs` artifact with the full job log for download after each run.
+- The issue number is saved to `ci_failure_issue.txt` and uploaded as a `ci-failure-issue` artifact so later runs update the same issue.
 
 ## Forked Pull Requests
 
@@ -107,11 +107,11 @@ Schedule it with a `schedule:` trigger if you want regular cleanup.
 
 ## Troubleshooting
 
--   The workflow logs `gh auth status` before creating the failure issue so you can
+- The workflow logs `gh auth status` before creating the failure issue so you can
     verify the token scopes in `gh_cli.log`.
--   Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
+- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
     inspect GitHub CLI output and the log audit summary.
--   Downloading workflow run logs with `curl` or `gh run download` requires a
+- Downloading workflow run logs with `curl` or `gh run download` requires a
     token granted the `actions: read` scope. The built-in `GITHUB_TOKEN` only
     works inside GitHub Actions.
--   Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.
+- Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.

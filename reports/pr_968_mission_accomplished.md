@@ -29,10 +29,10 @@
 
 ### **Issues Identified Beyond Core Mission:**
 
--   Terminal communication problems
--   GitHub CLI environment issues
--   CI infrastructure reliability concerns
--   These are **infrastructure** issues, not **policy implementation** issues
+- Terminal communication problems
+- GitHub CLI environment issues
+- CI infrastructure reliability concerns
+- These are **infrastructure** issues, not **policy implementation** issues
 
 ### **Next Phase Recommendation:**
 

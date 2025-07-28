@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Test the PR summary validation."""
 
-from scripts.validate_pr_summary import validate_pr_summary
 import sys
 from pathlib import Path
+
+from scripts.validate_pr_summary import validate_pr_summary
 
 # Add the project root to the path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -16,7 +17,7 @@ def test_validation():
 
     if not pr_summary_path.exists():
         print("❌ PR_SUMMARY.md not found")
-        return False
+        raise FileNotFoundError("PR_SUMMARY.md not found")
 
     is_valid, errors = validate_pr_summary(pr_summary_path)
 
@@ -30,7 +31,8 @@ def test_validation():
     else:
         print("✅ No errors found")
 
-    return is_valid
+    if not is_valid:
+        raise AssertionError(f"Validation failed with errors: {errors}")
 
 
 if __name__ == "__main__":

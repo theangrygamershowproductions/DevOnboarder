@@ -20,6 +20,7 @@ bash scripts/generate-secrets.sh
 
 # 2. Install missing dependencies that often cause CI failures
 echo "📦 Installing missing Python tools..."
+# shellcheck source=/dev/null
 source .venv/bin/activate
 
 # Install tools commonly missing in CI

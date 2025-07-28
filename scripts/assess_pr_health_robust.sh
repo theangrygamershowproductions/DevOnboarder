@@ -19,7 +19,7 @@ execute_gh_command() {
     local retry=0
 
     while [ $retry -lt $max_retries ]; do
-        if result=$(gh $cmd 2>&1); then
+        if result=$(gh "$cmd" 2>&1); then
             echo "$result"
             return 0
         fi

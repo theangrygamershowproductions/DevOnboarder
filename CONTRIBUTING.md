@@ -30,6 +30,8 @@ You can run `scripts/dev_setup.sh` to perform these steps automatically, or
 See [docs/dependencies.md](docs/dependencies.md) for the Dependabot update workflow.
 
 See [.codex/Agents.md](.codex/Agents.md) for agent YAML guidelines and notification rules.
+Agent files are automatically validated against the schema in `schema/agent-schema.json` during pre-commit and CI.
+Run `python scripts/validate_agents.py` to manually validate all agent files.
 Refer to [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) during each retrospective.
 
 ## Continuous Improvement Checklist

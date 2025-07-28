@@ -6,6 +6,7 @@ echo "🔍 DevOnboarder Coverage Monitor"
 echo "================================"
 
 # Activate virtual environment
+# shellcheck source=/dev/null
 source .venv/bin/activate
 
 # Run Python backend coverage

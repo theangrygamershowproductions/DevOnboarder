@@ -17,18 +17,18 @@ branches.
 
 **Inputs:**
 
--   Remote git history
--   Environment variables controlling branch selection
+- Remote git history
+- Environment variables controlling branch selection
 
 **Outputs:**
 
--   Log of deleted branches or a dry-run summary
+- Log of deleted branches or a dry-run summary
 
 **Environment:**
 
--   `DRY_RUN` – when `true`, list branches without deleting (default `true`)
--   `BASE_BRANCH` – branch used to check merge status (default `main`)
--   `DAYS_STALE` – age threshold in days before deletion (default `30`)
+- `DRY_RUN` – when `true`, list branches without deleting (default `true`)
+- `BASE_BRANCH` – branch used to check merge status (default `main`)
+- `DAYS_STALE` – age threshold in days before deletion (default `30`)
 
 **Workflow:**
 The nightly workflow runs `scripts/cleanup_branches.sh`. Maintainers can also

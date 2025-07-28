@@ -13,28 +13,28 @@ date: 2025-07-05
 
 #### ✅ Ethics Dossier Visibility
 
--   `README.md` (line 67) links to `docs/builder_ethics_dossier.md`
--   `docs/README.md` (line 121) also links to the dossier
--   ➕ No further linking required
+- `README.md` (line 67) links to `docs/builder_ethics_dossier.md`
+- `docs/README.md` (line 121) also links to the dossier
+- ➕ No further linking required
 
 ---
 
 #### ✅ Journal Entry Coverage
 
--   `docs/builder_ethics_dossier.md` includes:
+- `docs/builder_ethics_dossier.md` includes:
 
-    -   `📘 Journal Log: 2025‑07‑05` section
-    -   Notes on ethics file consolidation
-    -   Mentions Quickstart test coverage changes
+    - `📘 Journal Log: 2025‑07‑05` section
+    - Notes on ethics file consolidation
+    - Mentions Quickstart test coverage changes
 
 ---
 
 #### ✅ Frontend Coverage Command
 
--   `frontend/README.md` includes:
+- `frontend/README.md` includes:
 
-    -   `npm run coverage --prefix frontend`
-    -   Statement on ≥95% coverage requirement
+    - `npm run coverage --prefix frontend`
+    - Statement on ≥95% coverage requirement
 
 ---
 
