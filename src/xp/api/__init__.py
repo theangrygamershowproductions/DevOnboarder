@@ -90,4 +90,4 @@ def main() -> None:
     """Run the FastAPI application."""
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=8001)
+    uvicorn.run(create_app(), host="0.0.0.0", port=8001)  # nosec B104

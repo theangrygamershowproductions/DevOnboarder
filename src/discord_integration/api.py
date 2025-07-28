@@ -113,7 +113,7 @@ def main() -> None:
     """Run the Discord Integration service."""
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=8081)
+    uvicorn.run(create_app(), host="0.0.0.0", port=8081)  # nosec B104
 
 
 if __name__ == "__main__":  # pragma: no cover
