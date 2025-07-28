@@ -185,7 +185,7 @@ esac
 
 echo
 echo "⚠️  QUALITY REMINDER: Our standard is 95%+ health score"
-echo "📊 Current: ${HEALTH_SCORE}% | Required: 95% | Gap: $((95 - ${HEALTH_SCORE})) percentage points"
+echo "📊 Current: ${HEALTH_SCORE}% | Required: 95% | Gap: $((95 - HEALTH_SCORE)) percentage points"
 
 echo
 echo "🤖 Decision Engine Complete - Use this guidance for strategic planning"

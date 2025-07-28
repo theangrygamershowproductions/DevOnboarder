@@ -16,14 +16,14 @@ Ensure every project directory maintains an up-to-date `.env.example` file that 
 
 **Inputs:**
 
--   Source code and workflow YAML files
--   Existing `.env.example` files
--   `agents/index.md` for the authoritative variable list
+- Source code and workflow YAML files
+- Existing `.env.example` files
+- `agents/index.md` for the authoritative variable list
 
 **Outputs:**
 
--   Updated `.env.example` files for each project directory
--   GitHub issues summarizing missing or redundant variables
+- Updated `.env.example` files for each project directory
+- GitHub issues summarizing missing or redundant variables
 
 **Environment:**
 Requires read access to the repository and write/PR permissions to update example files or open issues.
@@ -43,10 +43,10 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 
 ## \U0001F4CC Markdown Standards
 
--   We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38+ to enforce style and consistency.
--   Configured via `.markdownlint.json` with all rules enabled by default.
--   File-specific rule overrides are applied using inline comments.
--   CI automatically runs linting via `markdownlint-cli2-action`.
+- We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38+ to enforce style and consistency.
+- Configured via `.markdownlint.json` with all rules enabled by default.
+- File-specific rule overrides are applied using inline comments.
+- CI automatically runs linting via `markdownlint-cli2-action`.
 
 ### Customizations
 
@@ -57,7 +57,7 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 }
 ```
 
--   To disable rules in a file, add:
+- To disable rules in a file, add:
 
     ```markdown
     <!-- markdownlint-disable-file MD### -->

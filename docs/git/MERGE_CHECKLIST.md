@@ -8,11 +8,11 @@ Angry Gamer Show Productions.
 
 ## 📋 Integration Items
 
--   [x] SECURITY_POLICY.md
--   [x] threat-model.md
--   [x] penetration-test-plan.md
--   [x] run-all-scans.sh
--   [ ] CI/CD pipeline hooks (optional/next phase)
+- [x] SECURITY_POLICY.md
+- [x] threat-model.md
+- [x] penetration-test-plan.md
+- [x] run-all-scans.sh
+- [ ] CI/CD pipeline hooks (optional/next phase)
 
 ---
 
@@ -30,10 +30,10 @@ Angry Gamer Show Productions.
 
 ## 📝 Action Items
 
--   [ ] Confirm tool execution (`run-all-scans.sh`) works in each repo
--   [ ] Begin wiring scan scripts into CI/CD flows (GitHub Actions, Azure Pipelines)
--   [ ] Add Snyk configuration if applicable
--   [ ] Begin first cycle of monthly manual scans
+- [ ] Confirm tool execution (`run-all-scans.sh`) works in each repo
+- [ ] Begin wiring scan scripts into CI/CD flows (GitHub Actions, Azure Pipelines)
+- [ ] Add Snyk configuration if applicable
+- [ ] Begin first cycle of monthly manual scans
 
 ---
 

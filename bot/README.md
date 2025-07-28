@@ -73,16 +73,16 @@ loaded automatically when the bot starts.
 
 The repository provides the following built-in commands:
 
--   `/ping` – simple health check returning `Pong!`.
--   `/verify` – show your onboarding status from the XP API.
--   `/profile` – display your current XP level.
--   `/contribute` – record a contribution description.
--   `/qa_checklist` – show the documentation and QA checklist.
+- `/ping` – simple health check returning `Pong!`.
+- `/verify` – show your onboarding status from the XP API.
+- `/profile` – display your current XP level.
+- `/contribute` – record a contribution description.
+- `/qa_checklist` – show the documentation and QA checklist.
 
 ## Future Work
 
--   Sync verified roles back to the auth database.
--   Award XP for community participation.
--   Log quiz completion via slash commands.
+- Sync verified roles back to the auth database.
+- Award XP for community participation.
+- Log quiz completion via slash commands.
 
 For a comparison of this bot and Codex agents, see [../docs/bot-types.md](../docs/bot-types.md).

@@ -13,6 +13,7 @@ fi
 
 # Load environment variables
 set -a
+# shellcheck source=/dev/null
 source .env
 set +a
 

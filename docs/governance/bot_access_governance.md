@@ -63,6 +63,6 @@
 
 **Meta:**
 
--   Each item should reference an owning team or individual.
--   Checklist can be tracked in an Issue, Project Board, or in a Markdown doc (`codex/tasks/bot_access_governance.md`).
--   On each quarterly review, update the review date and summarize findings in the doc.
+- Each item should reference an owning team or individual.
+- Checklist can be tracked in an Issue, Project Board, or in a Markdown doc (`codex/tasks/bot_access_governance.md`).
+- On each quarterly review, update the review date and summarize findings in the doc.

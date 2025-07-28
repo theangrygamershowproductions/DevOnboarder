@@ -13,4 +13,4 @@ labels: ["ops"]
 
 <!-- List variables present but not documented. -->
 
--   [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
+- [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)

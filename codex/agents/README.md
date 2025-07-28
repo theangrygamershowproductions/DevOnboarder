@@ -1,3 +1,18 @@
+---
+agent: "codex_agents_documentation"
+purpose: "Documentation for the Codex agents directory structure and metadata format"
+trigger: "agent system updates and documentation maintenance"
+environment: "any"
+output: "codex/agents/index.json"
+permissions:
+  - "repo:read"
+codex_runtime: false
+codex_dry_run: false
+discord_role_required: ""
+authentication_required: false
+integration_log: "Codex agents system documentation"
+---
+
 # Codex Agents
 
 This directory holds metadata about automation agents used in the DevOnboarder project.

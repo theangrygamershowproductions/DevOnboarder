@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Codex Agent File Schema",
+    "description": "Schema for validating Codex agent frontmatter",
+    "type": "object",
+    "oneOf": [
+        {
+            "description": "Nested codex-agent format",
+            "required": ["codex-agent"],
+            "properties": {
+                "codex-agent": {
+                    "type": "object",
+                    "required": ["name", "role", "scope", "triggers"],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "Unique agent identifier (e.g., Agent.AiMentor)",
+                            "pattern": "^Agent\\.[A-Za-z0-9_]+$"
+                        },
+                        "role": {
+                            "type": "string",
+                            "description": "Description of the agent's role and purpose"
+                        },
+                        "scope": {
+                            "type": "string",
+                            "description": "Operational scope of the agent"
+                        },
+                        "triggers": {
+                            "type": "string",
+                            "description": "What triggers this agent to run"
+                        },
+                        "output": {
+                            "type": "string",
+                            "description": "Where the agent outputs its results"
+                        },
+                        "environment": {
+                            "type": "string",
+                            "description": "Environment where agent operates",
+                            "enum": [
+                                "development",
+                                "staging",
+                                "production",
+                                "CI",
+                                "any"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "permissions": {
+                    "type": "array",
+                    "description": "List of required permissions",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[a-z]+:[a-z]+$"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        {
+            "description": "Flat agent format",
+            "required": ["agent", "purpose", "trigger"],
+            "properties": {
+                "agent": {
+                    "type": "string",
+                    "description": "Unique agent identifier",
+                    "pattern": "^[a-z0-9_-]+$"
+                },
+                "purpose": {
+                    "type": "string",
+                    "description": "Clear description of the agent's purpose and functionality"
+                },
+                "trigger": {
+                    "type": "string",
+                    "description": "What triggers this agent to activate"
+                },
+                "environment": {
+                    "type": "string",
+                    "description": "Environment where agent operates",
+                    "enum": [
+                        "development",
+                        "staging",
+                        "production",
+                        "CI",
+                        "any"
+                    ]
+                },
+                "output": {
+                    "type": "string",
+                    "description": "Where the agent outputs its results"
+                },
+                "permissions": {
+                    "type": "array",
+                    "description": "List of required permissions",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "codex_runtime": {
+                    "type": "boolean",
+                    "description": "Whether the agent runs in the Codex runtime environment"
+                },
+                "codex_dry_run": {
+                    "type": "boolean",
+                    "description": "Whether the agent runs in dry-run mode"
+                },
+                "discord_role_required": {
+                    "type": "string",
+                    "description": "Required Discord role to use this agent"
+                },
+                "authentication_required": {
+                    "type": "boolean",
+                    "description": "Whether authentication is required for this agent"
+                },
+                "integration_log": {
+                    "type": "string",
+                    "description": "URL or path to integration logs"
+                }
+            },
+            "additionalProperties": false
+        }
+    ]
+}

@@ -26,6 +26,7 @@ node_modules/
 dist/
 coverage/
 .coverage
+.coveragerc
 .nyc_output/
 pnpm-lock.yaml
 test-results/
@@ -46,7 +47,10 @@ logs/
 lcov-report/
 codeql-*
 auth.db
+test.db
 vale
+vale-results.json
+vale-*.json
 docs/bot-api/
 docs/frontend-api/
 

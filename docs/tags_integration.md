@@ -3,7 +3,7 @@
 The TAGS stack uses dedicated Compose files to coordinate each service.
 Templates are tracked in the repository root and under `archive/`:
 
-```
+```yaml
 docker-compose.tags.dev.yaml    # or archive/docker-compose.tags.dev.yaml
 docker-compose.tags.prod.yaml   # or archive/docker-compose.tags.prod.yaml
 ```
@@ -25,7 +25,7 @@ TAGS environment.
 Feature flags control early access routes. Add the following settings to `.env.dev` when
 running against the TAGS stack:
 
-```
+```bash
 TAGS_MODE=true
 IS_ALPHA_USER=true
 IS_FOUNDER=true

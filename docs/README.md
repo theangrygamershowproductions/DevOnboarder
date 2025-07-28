@@ -124,68 +124,68 @@ platforms. Please report any issues you encounter on your operating system.
 
 ## Key Documentation
 
--   [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
--   [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
--   [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
--   [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
--   [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
--   [Automatic Codex issue closing](codex-issue-autoclose.md)
+- [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
+- [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
+- [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
+- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
+- [Automatic Codex issue closing](codex-issue-autoclose.md)
     &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
--   [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
--   [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
--   [CI failure issue management](ci-failure-issues.md)
+- [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
+- [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
+- [CI failure issue management](ci-failure-issues.md)
     &ndash; how automatic cleanup works and how to close old issues.
--   [CI workflow](ci-workflow.md)
+- [CI workflow](ci-workflow.md)
     &ndash; overview of job steps, caching, concurrency, and coverage requirements.
--   [CI environment variables](ci-env-vars.md)
+- [CI environment variables](ci-env-vars.md)
     &ndash; summary of tokens and other variables used by the workflows.
--   [CI-first OpenAI API key policy](ci-first-policy.md)
+- [CI-first OpenAI API key policy](ci-first-policy.md)
     &ndash; explains why the OpenAI key only exists in CI.
--   [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
+- [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
     &ndash; quick checklist for analyzing failing runs.
--   [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
--   [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
--   [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
--   [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
--   [Codex E2E report](codex-e2e-report.md) &ndash; record outcomes of each run.
--   [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
+- [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
+- [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
+- [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
+- [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
+- [Codex E2E report](codex-e2e-report.md) &ndash; record outcomes of each run.
+- [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
     &ndash; checklist for onboarding reviews of new features.
--   [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
--   [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
--   [Agents overview](../agents/index.md) &ndash; service and integration specs.
+- [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
+- [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
+- [Agents overview](../agents/index.md) &ndash; service and integration specs.
     Codex also reads `.codex/agents/index.json` to map these agents for automation.
--   [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
--   [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
--   [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
--   [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
--   [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
--   [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
--   [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
--   [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
--   [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
--   [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
--   [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
--   [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+- [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
+- [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
+- [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
+- [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
+- [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
+- [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+- [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
+- [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
+- [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
+- [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
+- [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
+- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
     &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
--   [Network exception list](network-exception-list.md)
+- [Network exception list](network-exception-list.md)
     &ndash; domains that must be reachable for setup and CI tasks.
     &ndash; required external domains and firewall exceptions.
     &ndash; required firewall exceptions for setup and CI tasks.
     &ndash; run `scripts/show_network_exceptions.sh` to print the list.
     &ndash; run `scripts/check_network_access.sh` to verify connectivity.
--   [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
--   [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
--   [Pull request template](../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
--   [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
--   [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
--   [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
--   [Service status dashboard](service-status.md) &ndash; checkbox view of core service health.
--   [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
--   [Dependency update policy](dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
--   [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
--   [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
--   [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
--   [Troubleshooting guide](troubleshooting.md)
+- [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
+- [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
+- [Pull request template](../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
+- [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
+- [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
+- [Service status dashboard](service-status.md) &ndash; checkbox view of core service health.
+- [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
+- [Dependency update policy](dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
+- [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
+- [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
+- [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
+- [Troubleshooting guide](troubleshooting.md)
     &ndash; quick fixes for setup problems and failing CI jobs.
 
 ## Onboarding Phases
@@ -221,9 +221,9 @@ exits so duplicates are not created.
 
 ## Configuration Helpers
 
--   `.pre-commit-config.yaml` &ndash; run `pre-commit install` to set up git hooks that execute the linter and tests.
--   `.editorconfig` &ndash; ensures consistent indentation and line endings across editors.
--   `.tool-versions` &ndash; defines the Python and Node.js versions for mise.
+- `.pre-commit-config.yaml` &ndash; run `pre-commit install` to set up git hooks that execute the linter and tests.
+- `.editorconfig` &ndash; ensures consistent indentation and line endings across editors.
+- `.tool-versions` &ndash; defines the Python and Node.js versions for mise.
 
 ## Plugin Development
 
@@ -246,22 +246,22 @@ All Markdown files are checked with **Vale** for style. The docs script prints a
 notice if grammar checks need **LanguageTool**.
 See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
 
--   Run `bash scripts/check_docs.sh` before pushing any changes.
--   The script automatically downloads Vale when it is missing. CI issues a
+- Run `bash scripts/check_docs.sh` before pushing any changes.
+- The script automatically downloads Vale when it is missing. CI issues a
     warning (not a failure) if the download fails. Set `VALE_BINARY` to
     use a custom path.
--   Install Vale (version 3.12.0) with `brew install vale` on macOS or
+- Install Vale (version 3.12.0) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
--   If your network blocks direct downloads, fetch version 3.12.0 from
+- If your network blocks direct downloads, fetch version 3.12.0 from
     `https://github.com/errata-ai/vale/releases` on another machine and copy the
     `vale` binary to a directory in your `PATH`.
--   If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
+- If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
     to its location so `scripts/check_docs.sh` can find it.
--   Install Python dev dependencies with `pip install .[test]`.
--   Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
+- Install Python dev dependencies with `pip install .[test]`.
+- Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
     for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
--   Markdown files must not exceed 120 characters per line (MD013). See
+- Markdown files must not exceed 120 characters per line (MD013). See
     [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
 
 ## Issues and Pull Requests

@@ -21,16 +21,16 @@ permissions:
 
 **Environment:**
 
--   Requires `DEV_ORCHESTRATION_BOT_KEY` provided as `ORCHESTRATION_KEY`.
--   Optionally set `ORCHESTRATOR_URL` (default: `https://orchestrator.example.com`).
+- Requires `DEV_ORCHESTRATION_BOT_KEY` provided as `ORCHESTRATION_KEY`.
+- Optionally set `ORCHESTRATOR_URL` (default: `https://orchestrator.example.com`).
 
 **Workflow:**
 
--   The workflow calls `scripts/orchestrate-dev.sh`
--   The script POSTs orchestration instructions to a remote service.
+- The workflow calls `scripts/orchestrate-dev.sh`
+- The script POSTs orchestration instructions to a remote service.
 
 **Logging:** Output goes to `.codex/logs/dev-orchestrator.log`
 
 **Permissions Required:**
 
--   `workflows:write` — to trigger sub-jobs or notify results
+- `workflows:write` — to trigger sub-jobs or notify results

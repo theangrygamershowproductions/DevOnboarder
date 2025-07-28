@@ -164,6 +164,8 @@ jobs:
               run: python scripts/regenerate_env_docs.py
             - name: Validate env docs
               run: python scripts/check_env_docs.py
+            - name: Validate Codex Agents
+              run: python scripts/validate_agents.py
             - name: Setup environment
               run: ./scripts/setup-env.sh
             - name: Install package

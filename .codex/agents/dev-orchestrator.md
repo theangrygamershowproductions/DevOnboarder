@@ -5,7 +5,7 @@ trigger: on_push_to_dev
 environment: CI
 output: .codex/logs/dev-orchestrator.log
 permissions:
-  - workflows:write
+    - workflows:write
 ---
 
 # Dev Orchestrator Agent

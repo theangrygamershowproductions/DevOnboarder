@@ -32,5 +32,5 @@ It also tracks onboarding readiness for Codex contributors.
 
 ## ✅ Summary
 
--   Use this table to assign, track, and verify Codex contributor progress across all modules.
--   Keep this dashboard updated with each commit or milestone push to ensure alignment.
+- Use this table to assign, track, and verify Codex contributor progress across all modules.
+- Keep this dashboard updated with each commit or milestone push to ensure alignment.

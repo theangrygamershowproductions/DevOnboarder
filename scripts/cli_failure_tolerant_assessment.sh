@@ -23,21 +23,21 @@ attempt_gh_command() {
         echo "   Attempt $attempt/$max_attempts..."
 
         # Try GitHub CLI with various approaches
-        if output=$(timeout 30 gh $command 2>&1); then
+        if output=$(timeout 30 gh "$command" 2>&1); then
             echo "   ✅ Success on attempt $attempt"
             echo "$output"
             return 0
         fi
 
         # Try with different authentication
-        if output=$(GH_TOKEN="${GITHUB_TOKEN:-}" timeout 30 gh $command 2>&1); then
+        if output=$(GH_TOKEN="${GITHUB_TOKEN:-}" timeout 30 gh "$command" 2>&1); then
             echo "   ✅ Success with token auth on attempt $attempt"
             echo "$output"
             return 0
         fi
 
         # Try with explicit host
-        if output=$(timeout 30 gh $command --hostname github.com 2>&1); then
+        if output=$(timeout 30 gh "$command" --hostname github.com 2>&1); then
             echo "   ✅ Success with explicit host on attempt $attempt"
             echo "$output"
             return 0
