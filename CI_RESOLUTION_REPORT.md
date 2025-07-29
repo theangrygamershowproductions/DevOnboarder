@@ -77,7 +77,7 @@
 
 ### Immediate (High Priority)
 
-1. **Commit CI fixes**: `git add -A && git commit -m "Fix CI environment and dependency issues"`
+1. **Commit CI fixes**: `git add -A && git commit -m "FIX(ci): resolve environment and dependency issues"`
 2. **Test CI pipeline**: Push changes and monitor GitHub Actions
 3. **Verify GitHub Secrets**: Ensure repository secrets match `.env.example` variables
 
@@ -110,4 +110,4 @@
 
 ---
 
-**Next Command**: `git add -A && git commit -m "Fix CI environment and dependency issues - resolve major CI failures"`
+**Next Command**: `git add -A && git commit -m "FIX(ci): resolve environment and dependency issues - resolve major CI failures"`
