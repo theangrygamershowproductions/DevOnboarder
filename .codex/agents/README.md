@@ -1,3 +1,15 @@
+---
+codex-agent:
+  name: "Agent.AgentsDocumentation"
+  role: "Documentation for Codex agent infrastructure and integration"
+  scope: "DevOnboarder agent system overview and file listing"
+  triggers: "when users need to understand agent infrastructure"
+  output: ".codex/logs/agents-documentation.log"
+  environment: "any"
+permissions:
+  - "repo:read"
+---
+
 # Codex Integration Infrastructure
 
 This directory contains optional infrastructure for enhanced Codex integration and automation.
