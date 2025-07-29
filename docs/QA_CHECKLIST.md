@@ -19,6 +19,8 @@ Use this checklist alongside the [git guidelines](git-guidelines.md) and the [pu
 
 - [ ] `bash scripts/check_docs.sh` runs without errors
 - [ ] Vale installed (`vale --version`)
+- [ ] All markdown files pass linting (`npx markdownlint *.md docs/**/*.md`)
+- [ ] MD032 compliance verified: Lists surrounded by blank lines
 - [ ] New docs are clear and free of grammar issues
 - [ ] Environment variables documented in `agents/index.md`
 - [ ] `TAGS_MODE` and related flags explained
