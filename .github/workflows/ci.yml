@@ -89,8 +89,10 @@ jobs:
               run: shellcheck --severity=warning scripts/*.sh
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
-            - name: Install GitHub CLI
-              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Install the gh cli
+              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              with:
+                  version: stable
             - name: Show gh version
               run: which gh && gh --version
             - name: Verify gh version
