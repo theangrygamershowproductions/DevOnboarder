@@ -212,7 +212,7 @@ In rare cases, the agent can be bypassed with:
 
 ```bash
 # Temporary override (requires justification)
-SKIP_ROOT_ARTIFACT_GUARD=1 git commit -m "emergency: override artifact guard"
+SKIP_ROOT_ARTIFACT_GUARD=1 git commit -m "CHORE(emergency): override artifact guard"
 ```
 
 ### **Agent Maintenance**

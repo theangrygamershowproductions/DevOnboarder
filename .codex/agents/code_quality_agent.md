@@ -166,7 +166,7 @@ done
 if ! git diff --quiet; then
     echo "✅ Auto-fixes applied, creating commit..."
     git add .
-    git commit -m "auto: Fix code quality issues
+    git commit -m "CHORE(auto): fix code quality issues
 
 $(git diff --name-only HEAD^ HEAD | sed 's/^/- /')"
 else
