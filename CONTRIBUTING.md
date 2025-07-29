@@ -25,6 +25,9 @@ npm ci --prefix frontend
 pre-commit install
 ```
 
+**Markdown Standards**: All documentation must follow markdownlint rules including MD032 (lists surrounded by blank lines).
+Check compliance with: `npx markdownlint *.md docs/**/*.md`
+
 You can run `scripts/dev_setup.sh` to perform these steps automatically, or
 `scripts/setup_tests.sh` to install only the Python requirements.
 See [docs/dependencies.md](docs/dependencies.md) for the Dependabot update workflow.
