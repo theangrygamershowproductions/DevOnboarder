@@ -1,0 +1,164 @@
+{
+  "enhanced_ci_analysis": {
+    "version": "1.0",
+    "framework": "Phase 4: CI Triage Guard Enhancement",
+    "virtual_env": "/home/potato/DevOnboarder/.venv",
+    "analysis": {
+      "timestamp": "2025-07-29T03:05:31.797942",
+      "log_size": 7498,
+      "detected_failures": [
+        {
+          "type": "pre_commit",
+          "severity": "medium",
+          "auto_fixable": true,
+          "resolution": "fix_pre_commit_issues",
+          "matches": [
+            {
+              "pattern": "hook id:.*\\n.*exit code: [1-9]",
+              "match": "hook id: shellcheck\n- exit code: 1",
+              "line_context": [
+                "fix end of files.........................................................Passed",
+                "shellcheck...............................................................Failed",
+                "- hook id: shellcheck",
+                "- exit code: 1",
+                ""
+              ]
+            },
+            {
+              "pattern": "shellcheck.*Failed",
+              "match": "shellcheck...............................................................Failed",
+              "line_context": [
+                "trim trailing whitespace.................................................Passed",
+                "fix end of files.........................................................Passed",
+                "shellcheck...............................................................Failed",
+                "- hook id: shellcheck",
+                "- exit code: 1"
+              ]
+            },
+            {
+              "pattern": "SC\\d+.*error.*:",
+              "match": "SC2218 (error):",
+              "line_context": [
+                "In scripts/verify_and_commit.sh line 3:",
+                "    log_and_display \"🧹 Cleaning ALL test artifacts before validation for clean diagnosis...\"",
+                "    ^-- SC2218 (error): This function is only defined later. Move the definition up.",
+                "",
+                ""
+              ]
+            },
+            {
+              "pattern": "SC\\d+.*error.*:",
+              "match": "SC2218 (error):",
+              "line_context": [
+                "In scripts/verify_and_commit.sh line 13:",
+                "    log_and_display \"\"nboarder",
+                "    ^------------------------^ SC2218 (error): This function is only defined later. Move the definition up.",
+                "",
+                "For more information:"
+              ]
+            },
+            {
+              "pattern": "files were modified by this hook",
+              "match": "files were modified by this hook",
+              "line_context": [
+                "Python tests.............................................................Failed",
+                "- hook id: pytest",
+                "- files were modified by this hook",
+                "",
+                "============================= test session starts =============================="
+              ]
+            }
+          ],
+          "match_count": 5
+        }
+      ],
+      "primary_failure": {
+        "type": "pre_commit",
+        "severity": "medium",
+        "auto_fixable": true,
+        "resolution": "fix_pre_commit_issues",
+        "matches": [
+          {
+            "pattern": "hook id:.*\\n.*exit code: [1-9]",
+            "match": "hook id: shellcheck\n- exit code: 1",
+            "line_context": [
+              "fix end of files.........................................................Passed",
+              "shellcheck...............................................................Failed",
+              "- hook id: shellcheck",
+              "- exit code: 1",
+              ""
+            ]
+          },
+          {
+            "pattern": "shellcheck.*Failed",
+            "match": "shellcheck...............................................................Failed",
+            "line_context": [
+              "trim trailing whitespace.................................................Passed",
+              "fix end of files.........................................................Passed",
+              "shellcheck...............................................................Failed",
+              "- hook id: shellcheck",
+              "- exit code: 1"
+            ]
+          },
+          {
+            "pattern": "SC\\d+.*error.*:",
+            "match": "SC2218 (error):",
+            "line_context": [
+              "In scripts/verify_and_commit.sh line 3:",
+              "    log_and_display \"🧹 Cleaning ALL test artifacts before validation for clean diagnosis...\"",
+              "    ^-- SC2218 (error): This function is only defined later. Move the definition up.",
+              "",
+              ""
+            ]
+          },
+          {
+            "pattern": "SC\\d+.*error.*:",
+            "match": "SC2218 (error):",
+            "line_context": [
+              "In scripts/verify_and_commit.sh line 13:",
+              "    log_and_display \"\"nboarder",
+              "    ^------------------------^ SC2218 (error): This function is only defined later. Move the definition up.",
+              "",
+              "For more information:"
+            ]
+          },
+          {
+            "pattern": "files were modified by this hook",
+            "match": "files were modified by this hook",
+            "line_context": [
+              "Python tests.............................................................Failed",
+              "- hook id: pytest",
+              "- files were modified by this hook",
+              "",
+              "============================= test session starts =============================="
+            ]
+          }
+        ],
+        "match_count": 5
+      },
+      "recommended_resolution": {
+        "command": "pre-commit run --all-files && git add . && git commit --amend --no-edit",
+        "description": "Fix pre-commit hooks and update commit",
+        "success_rate": 0.85
+      },
+      "auto_fixable": true,
+      "confidence_score": 0.8
+    },
+    "resolution_plan": {
+      "failure_type": "pre_commit",
+      "severity": "medium",
+      "auto_fixable": true,
+      "confidence": 0.8,
+      "resolution_strategy": "fix_pre_commit_issues",
+      "estimated_success_rate": 0.85,
+      "description": "Fix pre-commit hooks and update commit",
+      "command": "pre-commit run --all-files && git add . && git commit --amend --no-edit",
+      "next_steps": [
+        "Automated resolution available",
+        "Execute: pre-commit run --all-files && git add . && git commit --amend --no-edit",
+        "Monitor resolution success",
+        "Escalate if resolution fails"
+      ]
+    }
+  }
+}
