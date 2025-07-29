@@ -15,6 +15,11 @@ echo "🔄 CI Performance Analysis:"
 if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
     echo "✅ Retrieved recent CI run data"
 
+    # Also get failed runs specifically for detailed analysis
+    if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --conclusion FAILURE 2>/dev/null); then
+        echo "✅ Retrieved detailed failed run data"
+    fi
+
     # Calculate success metrics
     total_runs=$(echo "$runs" | jq length)
     successful_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "success")] | length')
@@ -39,6 +44,18 @@ if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt
         echo ""
         echo "🕒 Recent Runs:"
         echo "$runs" | jq -r '.[] | "\(.createdAt[0:19]) \(.workflowName): \(.conclusion // .status)"' | head -10
+
+        # Show failed runs detail if available
+        if [ -n "${failed_runs_detailed:-}" ]; then
+            failed_count=$(echo "$failed_runs_detailed" | jq length)
+            if [ "$failed_count" -gt 0 ]; then
+                echo ""
+                echo "🚨 Recent Failed Runs (detailed):"
+                echo "$failed_runs_detailed" | jq -r '.[] | "  ❌ \(.workflowName): \(.displayTitle // "No title") (\(.createdAt[0:19]))"' | head -5
+                echo "   💡 Use: bash scripts/analyze_failed_ci_runs.sh for detailed failure analysis"
+            fi
+        fi
+
     else
         echo "⚠️  No recent runs found"
     fi
