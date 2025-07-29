@@ -68,9 +68,9 @@ jobs:
     test:
         needs: filter
         if: |
-            github.event_name != 'push' ||
-            (!contains(join(github.event.head_commit.message), '[no-ci]') &&
-             needs.filter.outputs.code == 'true')
+            github.event_name == 'pull_request' ||
+            (github.event_name == 'push' &&
+             !contains(join(github.event.head_commit.message), '[no-ci]'))
         runs-on: ubuntu-latest
         strategy:
             matrix:
