@@ -81,7 +81,7 @@ repos:
                 ]
             language: system
           - id: validate-agents
-            name: Validate Codex Agents
+            name: Validate Codex Agents with DevOnboarder Standards
             entry: bash
             args:
                 [
@@ -90,6 +90,18 @@ repos:
                 ]
             language: system
             pass_filenames: false
+            files: ^(agents/.*\.md|\.codex/agents/.*\.md|codex/agents/.*\.md)$
+          - id: validate-metadata-standards
+            name: Core Metadata Standards Compliance
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_metadata_standards.py 2>&1 | tee logs/metadata_validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
+            language: system
+            pass_filenames: false
+            files: ^(docs/.*\.md|agents/.*\.md|\.codex/.*\.md)$
           - id: frontend-eslint
             name: Frontend ESLint
             entry: bash
