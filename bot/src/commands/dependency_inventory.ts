@@ -3,9 +3,8 @@ import {
     ChatInputCommandInteraction,
     AttachmentBuilder,
 } from 'discord.js';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
-import * as XLSX from 'xlsx';
 import toml from 'toml';
 
 interface InventoryItem {
@@ -102,11 +101,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     items.push(...(await parsePackageJson(root, 'frontend')));
     items.push(...(await parsePackageJson(root, 'bot')));
 
-    const wb = XLSX.utils.book_new();
-    const sheet = XLSX.utils.json_to_sheet(items);
-    XLSX.utils.book_append_sheet(wb, sheet, 'Inventory');
-    const outPath = path.join(root, 'dependency_inventory.xlsx');
-    XLSX.writeFile(wb, outPath);
+    // Generate CSV content
+    const csvHeader = 'Type,File,Package,Version\n';
+    const csvRows = items
+        .map(
+            (item) =>
+                `"${item.Type}","${item.File}","${item.Package}","${item.Version}"`,
+        )
+        .join('\n');
+    const csvContent = csvHeader + csvRows;
+
+    const outPath = path.join(root, 'dependency_inventory.csv');
+    await writeFile(outPath, csvContent, 'utf8');
 
     const attachment = new AttachmentBuilder(outPath);
     await interaction.reply({ files: [attachment] });

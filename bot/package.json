@@ -23,8 +23,7 @@
     "dependencies": {
         "discord.js": "^14.21.0",
         "dotenv": "^17.2.0",
-        "toml": "^3.0.0",
-        "xlsx": "^0.18.5"
+        "toml": "^3.0.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.31.0",
