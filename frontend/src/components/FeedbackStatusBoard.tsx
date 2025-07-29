@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface FeedbackItem {
     id: number;
@@ -16,29 +16,29 @@ export default function FeedbackStatusBoard() {
         setError(null);
         fetch(`${feedbackUrl}/feedback`)
             .then((r) => {
-                if (!r.ok) throw new Error('Failed to load feedback');
+                if (!r.ok) throw new Error("Failed to load feedback");
                 return r.json();
             })
             .then((d) => setItems(d.feedback))
-            .catch(() => setError('Failed to load feedback'));
+            .catch(() => setError("Failed to load feedback"));
     }, [feedbackUrl]);
 
     function updateStatus(id: number, status: string) {
         setError(null);
         fetch(`${feedbackUrl}/feedback/${id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status }),
         })
             .then((r) => {
-                if (!r.ok) throw new Error('Failed to update status');
+                if (!r.ok) throw new Error("Failed to update status");
             })
             .then(() => {
                 setItems((prev) =>
                     prev.map((i) => (i.id === id ? { ...i, status } : i)),
                 );
             })
-            .catch(() => setError('Failed to update status'));
+            .catch(() => setError("Failed to update status"));
     }
 
     return (

@@ -65,8 +65,8 @@ modules.
 ### 🚧 Phase 5: Llama2 Agile Helper Integration
 
 - [agile-001] Connect Llama2 Agile Helper agent for sprint summaries and backlog
-    suggestions. See
-    [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml).
+  suggestions. See
+  [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml).
 
 ---
 

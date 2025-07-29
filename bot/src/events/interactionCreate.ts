@@ -1,7 +1,7 @@
-import { Interaction } from 'discord.js';
-import { Commands } from '../utils/loadFiles';
+import { Interaction } from "discord.js";
+import { Commands } from "../utils/loadFiles";
 
-export const name = 'interactionCreate';
+export const name = "interactionCreate";
 export const once = false;
 
 export async function execute(interaction: Interaction, commands: Commands) {

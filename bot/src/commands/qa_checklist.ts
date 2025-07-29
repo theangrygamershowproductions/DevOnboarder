@@ -1,19 +1,19 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import { readFile } from 'fs/promises';
-import path from 'path';
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
+import { readFile } from "fs/promises";
+import path from "path";
 
 export const data = new SlashCommandBuilder()
-    .setName('qa_checklist')
-    .setDescription('Display the QA checklist');
+    .setName("qa_checklist")
+    .setDescription("Display the QA checklist");
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-    const filePath = path.resolve(__dirname, '../../../docs/QA_CHECKLIST.md');
+    const filePath = path.resolve(__dirname, "../../../docs/QA_CHECKLIST.md");
     try {
-        const text = await readFile(filePath, 'utf8');
+        const text = await readFile(filePath, "utf8");
         const chunks = text.match(/([\s\S]{1,2000})/g) || [];
         if (chunks.length === 0) {
             await interaction.reply({
-                content: 'QA checklist is empty.',
+                content: "QA checklist is empty.",
                 ephemeral: true,
             });
             return;
@@ -24,7 +24,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     } catch {
         await interaction.reply({
-            content: 'Unable to read QA checklist.',
+            content: "Unable to read QA checklist.",
             ephemeral: true,
         });
     }

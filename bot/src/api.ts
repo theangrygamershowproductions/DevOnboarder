@@ -1,10 +1,10 @@
-const baseUrl = process.env.API_BASE_URL || 'http://localhost:8001';
+const baseUrl = process.env.API_BASE_URL || "http://localhost:8001";
 
 function buildHeaders(token?: string) {
     const headers: Record<string, string> = {};
     const jwt = token ?? process.env.BOT_JWT;
     if (jwt) {
-        headers['Authorization'] = `Bearer ${jwt}`;
+        headers["Authorization"] = `Bearer ${jwt}`;
     }
     return headers;
 }
@@ -64,11 +64,11 @@ export async function submitContribution(
     description: string,
     token?: string,
 ): Promise<void> {
-    const path = '/api/user/contributions';
+    const path = "/api/user/contributions";
     const resp = await fetch(`${baseUrl}${path}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             ...buildHeaders(token),
         },
         body: JSON.stringify({ username, description }),

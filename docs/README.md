@@ -130,30 +130,30 @@ platforms. Please report any issues you encounter on your operating system.
 - [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 - [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 - [Automatic Codex issue closing](codex-issue-autoclose.md)
-    &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
+  &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 - [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
 - [CI failure issue management](ci-failure-issues.md)
-    &ndash; how automatic cleanup works and how to close old issues.
+  &ndash; how automatic cleanup works and how to close old issues.
 - [CI workflow](ci-workflow.md)
-    &ndash; overview of job steps, caching, concurrency, and coverage requirements.
+  &ndash; overview of job steps, caching, concurrency, and coverage requirements.
 - [CI environment variables](ci-env-vars.md)
-    &ndash; summary of tokens and other variables used by the workflows.
+  &ndash; summary of tokens and other variables used by the workflows.
 - [CI-first OpenAI API key policy](ci-first-policy.md)
-    &ndash; explains why the OpenAI key only exists in CI.
+  &ndash; explains why the OpenAI key only exists in CI.
 - [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
-    &ndash; quick checklist for analyzing failing runs.
+  &ndash; quick checklist for analyzing failing runs.
 - [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
 - [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
 - [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 - [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
 - [Codex E2E report](codex-e2e-report.md) &ndash; record outcomes of each run.
 - [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
-    &ndash; checklist for onboarding reviews of new features.
+  &ndash; checklist for onboarding reviews of new features.
 - [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 - [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 - [Agents overview](../agents/index.md) &ndash; service and integration specs.
-    Codex also reads `.codex/agents/index.json` to map these agents for automation.
+  Codex also reads `.codex/agents/index.json` to map these agents for automation.
 - [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
 - [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
 - [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
@@ -166,13 +166,13 @@ platforms. Please report any issues you encounter on your operating system.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
-    &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
+  &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 - [Network exception list](network-exception-list.md)
-    &ndash; domains that must be reachable for setup and CI tasks.
-    &ndash; required external domains and firewall exceptions.
-    &ndash; required firewall exceptions for setup and CI tasks.
-    &ndash; run `scripts/show_network_exceptions.sh` to print the list.
-    &ndash; run `scripts/check_network_access.sh` to verify connectivity.
+  &ndash; domains that must be reachable for setup and CI tasks.
+  &ndash; required external domains and firewall exceptions.
+  &ndash; required firewall exceptions for setup and CI tasks.
+  &ndash; run `scripts/show_network_exceptions.sh` to print the list.
+  &ndash; run `scripts/check_network_access.sh` to verify connectivity.
 - [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 - [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
 - [Pull request template](../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
@@ -186,7 +186,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
 - [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
 - [Troubleshooting guide](troubleshooting.md)
-    &ndash; quick fixes for setup problems and failing CI jobs.
+  &ndash; quick fixes for setup problems and failing CI jobs.
 
 ## Onboarding Phases
 
@@ -248,21 +248,21 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
 - The script automatically downloads Vale when it is missing. CI issues a
-    warning (not a failure) if the download fails. Set `VALE_BINARY` to
-    use a custom path.
+  warning (not a failure) if the download fails. Set `VALE_BINARY` to
+  use a custom path.
 - Install Vale (version 3.12.0) with `brew install vale` on macOS or
-    `choco install vale` on Windows. You can also download it from the
-    [Vale releases page](https://github.com/errata-ai/vale/releases).
+  `choco install vale` on Windows. You can also download it from the
+  [Vale releases page](https://github.com/errata-ai/vale/releases).
 - If your network blocks direct downloads, fetch version 3.12.0 from
-    `https://github.com/errata-ai/vale/releases` on another machine and copy the
-    `vale` binary to a directory in your `PATH`.
+  `https://github.com/errata-ai/vale/releases` on another machine and copy the
+  `vale` binary to a directory in your `PATH`.
 - If the binary lives outside `PATH`, set the `VALE_BINARY` environment variable
-    to its location so `scripts/check_docs.sh` can find it.
+  to its location so `scripts/check_docs.sh` can find it.
 - Install Python dev dependencies with `pip install .[test]`.
 - Optionally set `LANGUAGETOOL_URL` when running your own LanguageTool server
-    for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
+  for local grammar checks. See the [LanguageTool HTTP server guide](https://dev.languagetool.org/http-server).
 - Markdown files must not exceed 120 characters per line (MD013). See
-    [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
+  [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
 
 ## Issues and Pull Requests
 

@@ -24,7 +24,7 @@ This repository follows the DevOnboarder protocol. Key points:
 - Use the provided container setup and compose files for local development.
 - Ensure all tests pass before submitting a PR.
     - Workflows rely on the preinstalled GitHub CLI or the
-        `ksivamuthu/actions-setup-gh-cli` action.
+      `ksivamuthu/actions-setup-gh-cli` action.
 
 1. **Contribution Guidelines**
 
@@ -80,10 +80,10 @@ See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under
 ## Commit History Policy: No Rewriting or Force-Pushing
 
 - **Commit messages on pushed commits cannot be changed.** Once a commit is
-    pushed to a shared branch, avoid `git commit --amend`, interactive rebases,
-    and `git push --force`.
+  pushed to a shared branch, avoid `git commit --amend`, interactive rebases,
+  and `git push --force`.
 - If a commit message is unclear, add context in a new commit or the pull request
-    description instead of rewriting history.
+  description instead of rewriting history.
 - This rule preserves repository integrity and auditability.
 
 ## Potato Ignore Policy

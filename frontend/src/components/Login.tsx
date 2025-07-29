@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface UserInfo {
     id: string | null;
@@ -15,17 +15,17 @@ export default function Login() {
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
-        const stored = localStorage.getItem('jwt');
+        const code = params.get("code");
+        const stored = localStorage.getItem("jwt");
         const path = window.location.pathname;
 
-        if (!stored && path === '/login/discord/callback' && code) {
+        if (!stored && path === "/login/discord/callback" && code) {
             fetch(`${authUrl}/login/discord/callback?code=${code}`)
                 .then((r) => r.json())
                 .then((data) => {
-                    localStorage.setItem('jwt', data.token);
+                    localStorage.setItem("jwt", data.token);
                     setToken(data.token);
-                    window.history.replaceState({}, '', '/');
+                    window.history.replaceState({}, "", "/");
                 })
                 .catch(console.error);
         } else if (stored) {
@@ -72,9 +72,9 @@ export default function Login() {
                     )}
                 </p>
             )}
-            <p data-testid="user-level">Level: {level ?? '...'}</p>
-            <p data-testid="onboarding-status">Onboarding: {status ?? '...'}</p>
-            {status === 'intro' && <button>Start Onboarding</button>}
+            <p data-testid="user-level">Level: {level ?? "..."}</p>
+            <p data-testid="onboarding-status">Onboarding: {status ?? "..."}</p>
+            {status === "intro" && <button>Start Onboarding</button>}
         </div>
     );
 }

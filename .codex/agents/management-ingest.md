@@ -68,15 +68,15 @@ DEPLOY_ENV=dev CODEX_DRY_RUN=true python -m codex.agents.management_ingest
 
 ```json
 {
-  "agent": "management-ingest",
-  "mode": "dry-run",
-  "input_command": "CTO security audit",
-  "role_validation": "simulated_success",
-  "intended_action": "route_to_discord_dev_server",
-  "discord_server": "1386935663139749998",
-  "webhook_target": "simulated",
-  "timestamp": "2025-07-21T10:00:00Z",
-  "status": "dry_run_complete"
+    "agent": "management-ingest",
+    "mode": "dry-run",
+    "input_command": "CTO security audit",
+    "role_validation": "simulated_success",
+    "intended_action": "route_to_discord_dev_server",
+    "discord_server": "1386935663139749998",
+    "webhook_target": "simulated",
+    "timestamp": "2025-07-21T10:00:00Z",
+    "status": "dry_run_complete"
 }
 ```
 

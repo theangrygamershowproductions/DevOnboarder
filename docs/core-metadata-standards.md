@@ -170,26 +170,26 @@ name: Metadata Validation
 on: [push, pull_request]
 
 jobs:
-  validate-metadata:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    validate-metadata:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup Python Virtual Environment
-        run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -e .[test]
+            - name: Setup Python Virtual Environment
+              run: |
+                  python -m venv .venv
+                  source .venv/bin/activate
+                  pip install -e .[test]
 
-      - name: Validate Agent Files
-        run: |
-          source .venv/bin/activate
-          python scripts/validate_agent_files.py
+            - name: Validate Agent Files
+              run: |
+                  source .venv/bin/activate
+                  python scripts/validate_agent_files.py
 
-      - name: Check Markdown Compliance
-        run: |
-          npm ci --prefix . --no-save
-          npx markdownlint-cli2 "**/*.md"
+            - name: Check Markdown Compliance
+              run: |
+                  npm ci --prefix . --no-save
+                  npx markdownlint-cli2 "**/*.md"
 ```
 
 ## DevOnboarder Document Types
@@ -234,14 +234,14 @@ ci_integration: true
 ```yaml
 # .pre-commit-config.yaml integration
 repos:
-  - repo: local
-    hooks:
-      - id: validate-metadata
-        name: Validate YAML Frontmatter
-        entry: python scripts/validate_agent_files.py
-        language: system
-        pass_filenames: false
-        always_run: true
+    - repo: local
+      hooks:
+          - id: validate-metadata
+            name: Validate YAML Frontmatter
+            entry: python scripts/validate_agent_files.py
+            language: system
+            pass_filenames: false
+            always_run: true
 ```
 
 ### Markdown Compliance Requirements
@@ -265,7 +265,7 @@ Following DevOnboarder's **mandatory markdown standards**:
 discord_role_required: "CEO|CTO|CFO|CMO|COO"
 authentication_required: true
 integration_guards_active: true
-live_triggers_enabled: false  # During draft mode
+live_triggers_enabled: false # During draft mode
 ```
 
 ### DevOnboarder Security Standards
@@ -282,15 +282,15 @@ live_triggers_enabled: false  # During draft mode
 ```json
 // .codex/agents/index.json
 {
-  "agents": [
-    {
-      "name": "ci-monitor",
-      "file": "agents/ci-monitor.md",
-      "type": "monitoring",
-      "status": "production_ready",
-      "virtual_env_required": true
-    }
-  ]
+    "agents": [
+        {
+            "name": "ci-monitor",
+            "file": "agents/ci-monitor.md",
+            "type": "monitoring",
+            "status": "production_ready",
+            "virtual_env_required": true
+        }
+    ]
 }
 ```
 

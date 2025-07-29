@@ -1,6 +1,6 @@
-import { Client, Collection } from 'discord.js';
-import { readdirSync } from 'fs';
-import path from 'path';
+import { Client, Collection } from "discord.js";
+import { readdirSync } from "fs";
+import path from "path";
 
 export type CommandModule = {
     data: { name: string };
@@ -12,7 +12,7 @@ export type Commands = Collection<string, CommandModule>;
 export async function loadCommands(dir: string): Promise<Commands> {
     const commands: Commands = new Collection();
     const files = readdirSync(dir).filter(
-        (f) => f.endsWith('.js') || f.endsWith('.ts'),
+        (f) => f.endsWith(".js") || f.endsWith(".ts"),
     );
     for (const file of files) {
         const mod = await import(path.join(dir, file));
@@ -26,7 +26,7 @@ export async function loadEvents(
     dir: string,
     commands: Commands,
 ) {
-    const files = readdirSync(dir).filter((f) => f.endsWith('.js'));
+    const files = readdirSync(dir).filter((f) => f.endsWith(".js"));
     for (const file of files) {
         const event = await import(path.join(dir, file));
         if (event.once) {

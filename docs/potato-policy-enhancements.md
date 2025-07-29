@@ -105,12 +105,10 @@ cat reports/potato-policy-latest.md
 ## 🚀 **Next Steps for Maximum Spice**
 
 1. **Enable Branch Protection Rules:**
-
     - Require Potato Policy checks to pass before merge
     - Enforce through GitHub repository settings
 
 2. **Discord Webhook Integration:**
-
     - Add webhook URL to violation reporter
     - Real-time notifications to development team
 
