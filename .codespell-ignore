@@ -26,3 +26,5 @@ pyenv
 secrets.yaml
 secrets.yml
 webhook-config.json
+.codex/private/
+.codex/cache/
