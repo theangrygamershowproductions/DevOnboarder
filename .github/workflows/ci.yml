@@ -546,7 +546,23 @@ jobs:
               if: always()
               run: |
                   source .venv/bin/activate
-                  python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md
+                  # Create audit.md even if diagnoser fails
+                  if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
+                      echo "CI failure diagnoser completed successfully"
+                  else
+                      echo "# CI Failure Analysis" > audit.md
+                      echo "" >> audit.md
+                      echo "CI failure diagnoser encountered an issue:" >> audit.md
+                      echo "- Log files may not be available at expected location" >> audit.md
+                      echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`" >> audit.md
+                      echo "" >> audit.md
+                      echo "Please check the workflow logs for detailed error information." >> audit.md
+                  fi
+                  # Ensure audit.md exists and has content
+                  if [ ! -f audit.md ] || [ ! -s audit.md ]; then
+                      echo "# CI Status" > audit.md
+                      echo "No failure patterns detected in available logs." >> audit.md
+                  fi
             - name: Download previous CI failure issue
               if: always()
               run: bash scripts/download_ci_failure_issue.sh
@@ -558,7 +574,15 @@ jobs:
               run: |
                   set -euo pipefail
                   printf '\n<!-- sha: %s -->\n' "$GITHUB_SHA" >> summary.md
-                  cat audit.md >> summary.md
+
+                  # Ensure audit.md exists before trying to read it
+                  if [ -f audit.md ]; then
+                      cat audit.md >> summary.md
+                  else
+                      echo "# CI Analysis" >> summary.md
+                      echo "Audit file not available." >> summary.md
+                  fi
+
                   gh_bin=$(which gh)
                   "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
 
