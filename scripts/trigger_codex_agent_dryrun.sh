@@ -31,14 +31,14 @@ echo ""
 # Function to validate agent exists
 validate_agent() {
     local agent_file=".codex/agents/${AGENT_NAME}.md"
-    
+
     if [[ ! -f "$agent_file" ]]; then
         echo "❌ Agent file not found: $agent_file"
         echo "Available agents:"
         find .codex/agents/ -name "*.md" -type f 2>/dev/null | sed 's/.codex\/agents\///; s/\.md$//' | sed 's/^/   /' || echo "   No agents found"
         return 1
     fi
-    
+
     echo "✅ Agent file found: $agent_file"
     return 0
 }
@@ -46,9 +46,9 @@ validate_agent() {
 # Function to check dry-run configuration
 check_dry_run_config() {
     local agent_file=".codex/agents/${AGENT_NAME}.md"
-    
+
     echo "🔍 Checking dry-run configuration..."
-    
+
     if [[ -f "$agent_file" ]]; then
         if grep -q "codex_dry_run: true" "$agent_file"; then
             echo "✅ Dry-run mode enabled in agent configuration"
@@ -56,7 +56,7 @@ check_dry_run_config() {
             echo "⚠️  Dry-run mode not explicitly set in agent configuration"
             echo "   Adding dry-run safety check..."
         fi
-        
+
         if grep -q "⚠️.*dry-run mode" "$agent_file"; then
             echo "✅ Dry-run warning notice present"
         else
@@ -70,12 +70,12 @@ simulate_codex_execution() {
     local timestamp
     timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     local test_command="CTO security audit"
-    
+
     echo "🎭 Simulating Codex agent execution..."
     echo "   Command: $test_command"
     echo "   Target Discord Server: 1386935663139749998 (TAGS: DevOnboarder)"
     echo ""
-    
+
     # Create simulated output
     cat > "${OUTPUT_DIR}/management-ingest-dryrun-${timestamp}.json" << EOF
 {
@@ -113,9 +113,9 @@ EOF
 # Function to validate integration readiness
 validate_integration_readiness() {
     echo "🔍 Validating integration readiness..."
-    
+
     local errors=0
-    
+
     # Check Discord environment setup
     if [[ -f "scripts/setup_discord_env.sh" ]]; then
         echo "✅ Discord environment setup script available"
@@ -123,14 +123,14 @@ validate_integration_readiness() {
         echo "❌ Discord environment setup script missing"
         ((errors++))
     fi
-    
+
     # Check bot configuration
     if [[ -f "bot/.env.dev" ]]; then
         echo "✅ Bot development environment configured"
     else
         echo "⚠️  Bot development environment not set up"
     fi
-    
+
     # Check Codex directory structure
     if [[ -d ".codex" ]]; then
         echo "✅ Codex directory exists"
@@ -139,14 +139,14 @@ validate_integration_readiness() {
         echo "⚠️  Codex directory missing, creating structure..."
         mkdir -p .codex/agents .codex/state .codex/logs
     fi
-    
+
     # Check CI configuration
     if [[ -f ".github/workflows/ci.yml" ]] || [[ -f ".github/workflows/discord-integration.yml" ]]; then
         echo "✅ CI workflows configured"
     else
         echo "⚠️  CI workflows not found"
     fi
-    
+
     if [[ $errors -gt 0 ]]; then
         echo "❌ $errors critical integration issues found"
         return 1
@@ -159,7 +159,7 @@ validate_integration_readiness() {
 # Function to run integration tests
 run_integration_tests() {
     echo "🧪 Running integration tests..."
-    
+
     # Test 1: Directory structure
     echo "   Test 1: Directory structure..."
     if [[ -d ".codex" ]] && [[ -d "bot" ]] && [[ -d "scripts" ]]; then
@@ -168,7 +168,7 @@ run_integration_tests() {
         echo "   ❌ Directory structure test failed"
         return 1
     fi
-    
+
     # Test 2: Environment setup
     echo "   Test 2: Environment setup..."
     if [[ -f "bot/.env.dev" ]]; then
@@ -176,12 +176,12 @@ run_integration_tests() {
     else
         echo "   ⚠️  Environment setup test had warnings (expected if first run)"
     fi
-    
+
     # Test 3: Dry-run execution
     echo "   Test 3: Dry-run execution..."
     simulate_codex_execution
     echo "   ✅ Dry-run execution test passed"
-    
+
     # Test 4: Integration readiness
     echo "   Test 4: Integration readiness..."
     if validate_integration_readiness; then
@@ -221,17 +221,17 @@ main() {
     # Log all output
     exec > >(tee -a "$LOG_FILE")
     exec 2>&1
-    
+
     echo "🧪 Starting Codex agent dry-run at $(date)"
     echo "Arguments: $*"
     echo ""
-    
+
     # Run integration tests
     run_integration_tests
-    
+
     # Display summary
     display_summary
-    
+
     echo ""
     echo "✅ Codex agent dry-run complete!"
     echo "📝 Full log saved to: $LOG_FILE"

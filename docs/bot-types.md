@@ -21,4 +21,3 @@ The `bot/` directory contains a stand‑alone TypeScript bot built with `discord
 - **Naming** – Command files are named after their slash command and reside in `bot/src/commands`.
 
 Use this file as a reference when deciding whether a script should be a Codex agent or part of the Discord bot.
-

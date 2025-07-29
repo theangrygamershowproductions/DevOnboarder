@@ -137,22 +137,128 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
             ]);
 
-        // TODO: Integrate with actual deployment API
-        console.log(`🚀 LIVE: Deploy command executed`, {
-            user: interaction.user.username,
-            service,
-            environment: targetEnv,
-            guild: interaction.guildId,
-            timestamp: new Date().toISOString(),
-        });
+        // Integrate with actual deployment API
+        try {
+            const backendUrl = config.backendUrl || 'http://localhost:8001';
+            const deploymentEndpoint = `${backendUrl}/api/deploy`;
+
+            const deploymentPayload = {
+                service,
+                environment: targetEnv,
+                initiatedBy: interaction.user.username,
+                guildId: interaction.guildId,
+                timestamp: new Date().toISOString(),
+            };
+
+            console.log(
+                `🚀 LIVE: Initiating deployment via API`,
+                deploymentPayload,
+            );
+
+            const response = await fetch(deploymentEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${config.botJwt || ''}`,
+                },
+                body: JSON.stringify(deploymentPayload),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Deployment API call successful:', result);
+
+                // Update embed with deployment ID if provided
+                if (result.deploymentId) {
+                    embed.addFields([
+                        {
+                            name: '🆔 Deployment ID',
+                            value: result.deploymentId,
+                            inline: true,
+                        },
+                    ]);
+                }
+            } else {
+                console.error(
+                    '❌ Deployment API call failed:',
+                    response.status,
+                    response.statusText,
+                );
+
+                // Update embed to indicate API failure
+                embed.setColor(0xff8800).addFields([
+                    {
+                        name: '⚠️ API Status',
+                        value: 'Deployment API unavailable - logged for manual processing',
+                        inline: false,
+                    },
+                ]);
+            }
+        } catch (error) {
+            console.error('❌ Error calling deployment API:', error);
+
+            // Fallback to logging when API is unavailable
+            embed.setColor(0xff8800).addFields([
+                {
+                    name: '⚠️ Fallback Mode',
+                    value: 'Deployment logged for manual processing',
+                    inline: false,
+                },
+            ]);
+        }
 
         // Send webhook notification if configured
         if (config.webhookUrl) {
-            // TODO: Send actual webhook notification
-            console.log(
-                '📡 Webhook notification would be sent to:',
-                config.webhookUrl,
-            );
+            try {
+                const webhookPayload = {
+                    content: '🚀 DevOnboarder Deployment Notification',
+                    embeds: [
+                        {
+                            title: 'Deployment Initiated',
+                            description: `${service} service deployment to ${targetEnv} environment`,
+                            color: 0x00ff00,
+                            fields: [
+                                {
+                                    name: 'Service',
+                                    value: service,
+                                    inline: true,
+                                },
+                                {
+                                    name: 'Environment',
+                                    value: targetEnv,
+                                    inline: true,
+                                },
+                                {
+                                    name: 'Initiated By',
+                                    value: interaction.user.displayName,
+                                    inline: true,
+                                },
+                            ],
+                            timestamp: new Date().toISOString(),
+                        },
+                    ],
+                };
+
+                const response = await fetch(config.webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(webhookPayload),
+                });
+
+                if (response.ok) {
+                    console.log('📡 Webhook notification sent successfully');
+                } else {
+                    console.error(
+                        '❌ Webhook notification failed:',
+                        response.status,
+                        response.statusText,
+                    );
+                }
+            } catch (error) {
+                console.error('❌ Error sending webhook notification:', error);
+            }
         }
     } else {
         // Safety mode - triggers not enabled

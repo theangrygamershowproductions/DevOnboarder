@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.CIBot
-  role: Manages CI failure issues
-  scope: CI workflows
-  triggers: Failed CI runs and nightly cleanup
-  output: Open or closed ci-failure issues
+    name: Agent.CIBot
+    role: Manages CI failure issues
+    scope: CI workflows
+    triggers: Failed CI runs and nightly cleanup
+    output: Open or closed ci-failure issues
 ---
 
 # CI Bot

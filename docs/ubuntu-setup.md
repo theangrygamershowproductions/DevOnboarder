@@ -3,6 +3,7 @@
 These commands install Docker, Docker Compose, Node.js 20, and Python 3.12 on Ubuntu 22.04 or newer.
 
 ## Install Docker and Docker Compose
+
 ```bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg
@@ -17,7 +18,9 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 ```
 
 ## Install Node.js 20
+
 Download the setup script first so it can be reviewed before execution.
+
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
 # Optional: inspect the script or verify it against the NodeSource repository
@@ -30,12 +33,14 @@ sudo apt-get install -y nodejs
 > directly to `bash`. Always download scripts first so you can verify them.
 
 ## Install Python 3.12
+
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
 ```
-python3 --version  # should print Python 3.12.x
+
+python3 --version # should print Python 3.12.x
 Running tests require Python 3.12.
 
 ## Install Project Dependencies
@@ -47,4 +52,3 @@ scripts can run:
 pip install -e .  # or `pip install -r requirements.txt` if you created one
 pip install -r requirements-dev.txt
 ```
-

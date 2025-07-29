@@ -46,6 +46,7 @@ EOF
 if command -v gh >/dev/null 2>&1; then
   pr_id=$(gh pr view "$pr_number" --json id -q '.id' 2>/dev/null || echo "")
   if [ -n "$pr_id" ]; then
+    # shellcheck disable=SC2016
     gh api graphql -F subjectId="$pr_id" -F body="$comment_body" \
       -f query='mutation($subjectId: ID!, $body: String!) { addComment(input:{subjectId:$subjectId, body:$body}) { commentEdge { node { url } } } }' \
       >/dev/null || echo "warning: unable to comment on PR" >&2

@@ -1,15 +1,17 @@
-# Management Ingest Agent
-
-## Agent Configuration
-
-```yaml
-codex_runtime: false         # Ensures Codex doesn't execute runtime code
-codex_dry_run: true          # Custom signal for simulated output logging
+---
+agent: management-ingest
+purpose: Processes executive commands and routes them to appropriate Discord servers based on environment
+trigger: executive commands
+environment: development
+output: .codex/logs/management-ingest.log
+codex_runtime: false
+codex_dry_run: true
 discord_role_required: "CTO"
 authentication_required: true
-environment: dev
 integration_log: "https://codex.theangrygamershow.com/docs/devonboarder/ci-integration-hold"
-```
+---
+
+# Management Ingest Agent
 
 > ⚠️ **This agent is currently in dry-run mode.** All outputs are logged, but no live actions are executed.
 
@@ -39,12 +41,14 @@ python -m diagnostics --check-codex --dry-run
 ## Dry-Run Logic
 
 **Command Flow**:
+
 1. Parse executive command (CEO, CTO, COO directives)
 2. Validate role permissions via DevOnboarder auth service (simulated)
 3. Log intended Discord routing without actual webhook calls
 4. Output structured response for CI validation
 
 **Safety Guards**:
+
 - All Discord API calls simulated
 - No actual webhook notifications sent
 - Role validation logged but not enforced
@@ -64,15 +68,15 @@ DEPLOY_ENV=dev CODEX_DRY_RUN=true python -m codex.agents.management_ingest
 
 ```json
 {
-  "agent": "management-ingest",
-  "mode": "dry-run",
-  "input_command": "CTO security audit",
-  "role_validation": "simulated_success",
-  "intended_action": "route_to_discord_dev_server",
-  "discord_server": "1386935663139749998",
-  "webhook_target": "simulated",
-  "timestamp": "2025-07-21T10:00:00Z",
-  "status": "dry_run_complete"
+    "agent": "management-ingest",
+    "mode": "dry-run",
+    "input_command": "CTO security audit",
+    "role_validation": "simulated_success",
+    "intended_action": "route_to_discord_dev_server",
+    "discord_server": "1386935663139749998",
+    "webhook_target": "simulated",
+    "timestamp": "2025-07-21T10:00:00Z",
+    "status": "dry_run_complete"
 }
 ```
 

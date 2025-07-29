@@ -5,8 +5,6 @@ date_created: 2025-07-05
 version: v1.0.0
 ---
 
-# Builder Ethics Dossier
-
 ## Builder Profile & Integrity Snapshot
 
 - **Name (alias):** `reesey275`
@@ -14,6 +12,7 @@ version: v1.0.0
 - **Core values:** transparency, resilience, service-through-systems, humility in failure
 
 ### Boundary statements
+
 - Will not misuse nonprofit or OSS resources for personal gain
 - Will not obscure or hide bugs/errors
 - Will maintain full audit trails through journaling and commits
@@ -23,7 +22,7 @@ version: v1.0.0
 - Rebuilding DevOnboarder after data and health loss (2017–2021)
 - Public logs, Codex journaling, and GitHub transparency
 - Refusal to compromise on documentation or clarity
-- Designed systems that make unethical behavior *technically difficult*
+- Designed systems that make unethical behavior _technically difficult_
 
 ## Template for Other Builders
 
@@ -53,4 +52,3 @@ Removed the outdated `docs/builder-ethics-dossier.md` in favor of this
 `docs/builder_ethics_dossier.md`. The Quickstart now instructs running
 `npm run coverage --prefix frontend` so React tests meet the coverage
 policy.
-

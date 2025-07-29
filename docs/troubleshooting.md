@@ -9,9 +9,10 @@ This page collects quick fixes for the most common problems.
 - If the Node.js download fails during the Prettier hook, see
   [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors).
 - Missing Python packages? Install dev requirements with:
-  ```bash
-  pip install -r requirements-dev.txt
-  ```
+
+    ```bash
+    pip install -r requirements-dev.txt
+    ```
 
 ## Docker services won't start
 
@@ -24,4 +25,3 @@ This page collects quick fixes for the most common problems.
 - Use `bash scripts/run_tests.sh` locally to reproduce lint and test failures.
 - For network-restricted environments, follow [Offline setup](offline-setup.md) to cache dependencies.
 - If CI cannot download tools or packages, review [Network troubleshooting](network-troubleshooting.md) for proxy tips.
-

@@ -56,9 +56,7 @@ def test_roles_returns_mapping(monkeypatch):
     app = create_app()
     client = TestClient(app)
 
-    monkeypatch.setattr(
-        di_api, "get_user_roles", lambda token: {"1": ["a", "b"]}
-    )
+    monkeypatch.setattr(di_api, "get_user_roles", lambda token: {"1": ["a", "b"]})
 
     resp = client.get("/roles", params={"username": "bob"})
     assert resp.status_code == 200

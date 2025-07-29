@@ -60,6 +60,7 @@ EOF
     fi
 
     "$py_cmd" -m venv venv
+    # shellcheck source=/dev/null
     source venv/bin/activate
     python -m pip install --upgrade pip
     if [ -f requirements-dev.txt ]; then

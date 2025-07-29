@@ -1,11 +1,11 @@
 {
-  "ci": {
-    "collect": {
-      "staticDistDir": "dist"
-    },
-    "upload": {
-      "target": "filesystem",
-      "outputDir": "lhci-report"
+    "ci": {
+        "collect": {
+            "staticDistDir": "dist"
+        },
+        "upload": {
+            "target": "filesystem",
+            "outputDir": "lhci-report"
+        }
     }
-  }
 }

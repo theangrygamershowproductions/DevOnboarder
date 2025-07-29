@@ -30,7 +30,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Load environment variables from the auth service's .env file when present
-load_dotenv(Path(__file__).resolve().parents[1] / '..' / 'auth' / '.env')
+load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")
@@ -142,7 +142,7 @@ def get_current_user(
 
     # Fetch Discord roles and profile using the stored OAuth token. Handle
     # timeouts from the Discord API so the service can respond with a 504.
-    discord_token = user.discord_token
+    discord_token: str = user.discord_token  # type: ignore[assignment]
     try:
         roles = get_user_roles(discord_token)
         admin_guild = os.getenv("ADMIN_SERVER_GUILD_ID")
@@ -328,9 +328,10 @@ def promote(
     target = db.query(User).filter_by(username=data["username"]).first()
     if not target:
         raise HTTPException(status_code=404, detail="User not found")
-    target.is_admin = True
+    target.is_admin = True  # type: ignore[assignment]
     db.commit()
-    return {"promoted": target.username}
+    target_username: str = target.username  # type: ignore[assignment]
+    return {"promoted": target_username}
 
 
 def create_app() -> FastAPI:
@@ -371,4 +372,4 @@ def create_app() -> FastAPI:
 def main() -> None:
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=8002)
+    uvicorn.run(create_app(), host="0.0.0.0", port=8002)  # nosec B104

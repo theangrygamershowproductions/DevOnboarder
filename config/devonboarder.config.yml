@@ -1,2 +1,13 @@
+# =============================================================================
+# File: devonboarder.config.yml
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-07-25
+# Updated: 2025-07-25
+# Purpose: Main application configuration settings
+# Dependencies: None
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# =============================================================================
+
 workspace: .
 setup_script: ./scripts/setup-env.sh
