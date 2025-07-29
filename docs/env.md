@@ -13,7 +13,7 @@ when working with those packages directly.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
 - `TAGS_MODE` &ndash; set to `true` when running within the TAGS stack so
-    diagnostics expect all services.
+  diagnostics expect all services.
 - `CORS_ALLOW_ORIGINS` &ndash; comma-separated list of allowed CORS origins. Defaults to `*` in development.
 - `INIT_DB_ON_STARTUP` &ndash; run database migrations automatically when the auth service starts.
 
@@ -28,16 +28,16 @@ The following tokens and keys are required but **must not** be committed to
 the repository. Provide them through your build or deployment secret store:
 
 - `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` &ndash; OAuth credentials for
-    authenticating with Discord.
+  authenticating with Discord.
 - `JWT_SECRET_KEY` &ndash; signing key used by the auth service.
 - `JWT_ALGORITHM` &ndash; signing algorithm for JWTs (default `HS256`).
 - `DISCORD_BOT_TOKEN` &ndash; bot token used when running the Discord bot.
 - `DISCORD_GUILD_IDS` &ndash; comma-separated guilds where the bot operates.
 - `DISCORD_REDIRECT_URI` &ndash; callback URL for Discord OAuth. Defaults to
-    `http://localhost:8002/login/discord/callback`.
+  `http://localhost:8002/login/discord/callback`.
 - `DISCORD_API_TIMEOUT` &ndash; HTTP timeout in seconds when contacting Discord APIs (default `10`).
 - `BOT_JWT` &ndash; fallback token used by the bot when calling the API. Bot
-    API helpers send this JWT when no other token is provided.
+  API helpers send this JWT when no other token is provided.
 - `API_BASE_URL` &ndash; base URL for the XP API used by the bot.
 
 ## Discord role-based permissions
@@ -90,7 +90,7 @@ status and level.
 
 - `AUTH_URL` &ndash; base URL for the auth API used by Playwright tests. Defaults to `http://localhost:8002`.
 - `CHECK_HEADERS_URL` &ndash; endpoint queried by `scripts/check_headers.py` to
-    verify headers (default `http://localhost:8002/api/user`).
+  verify headers (default `http://localhost:8002/api/user`).
 
 ## Integrations
 

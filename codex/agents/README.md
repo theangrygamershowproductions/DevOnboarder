@@ -5,7 +5,7 @@ trigger: "agent system updates and documentation maintenance"
 environment: "any"
 output: "codex/agents/index.json"
 permissions:
-  - "repo:read"
+    - "repo:read"
 codex_runtime: false
 codex_dry_run: false
 discord_role_required: ""

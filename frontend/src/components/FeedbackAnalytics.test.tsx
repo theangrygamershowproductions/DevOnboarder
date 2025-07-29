@@ -1,21 +1,21 @@
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
-import FeedbackAnalytics from './FeedbackAnalytics';
+import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
+import FeedbackAnalytics from "./FeedbackAnalytics";
 
-const URL = 'http://feedback.example.com';
+const URL = "http://feedback.example.com";
 
-describe('FeedbackAnalytics', () => {
+describe("FeedbackAnalytics", () => {
     beforeEach(() => {
-        vi.stubEnv('VITE_FEEDBACK_URL', URL);
+        vi.stubEnv("VITE_FEEDBACK_URL", URL);
     });
     afterEach(() => {
         vi.unstubAllEnvs();
         vi.restoreAllMocks();
     });
 
-    it('shows analytics summary', async () => {
+    it("shows analytics summary", async () => {
         vi.stubGlobal(
-            'fetch',
+            "fetch",
             vi.fn().mockResolvedValue({
                 ok: true,
                 json: () =>

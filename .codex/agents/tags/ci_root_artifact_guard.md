@@ -7,10 +7,10 @@ codex_visibility: internal
 codex_owner: DevOps CI Team
 discord_role_required: "TAGS::Automation"
 codex_trigger:
-  - "pre-commit run"
-  - "CI hygiene scan"
-  - "file detected in repo root matching artifact patterns"
-  - "vale-results.json, test.db, .coverage in root"
+    - "pre-commit run"
+    - "CI hygiene scan"
+    - "file detected in repo root matching artifact patterns"
+    - "vale-results.json, test.db, .coverage in root"
 ---
 
 # 🧼 CI ROOT ARTIFACT GUARD – TAGS Codex Agent
@@ -114,8 +114,8 @@ pre-commit run root-artifact-guard        # Must pass
 
 ```yaml
 # .pre-commit-config.yaml
--   repo: local
-    hooks:
+- repo: local
+  hooks:
       - id: root-artifact-guard
         name: Root Artifact Guard
         entry: bash scripts/enforce_output_location.sh
@@ -131,12 +131,12 @@ pre-commit run root-artifact-guard        # Must pass
 # .github/workflows/ci.yml
 - name: Root Artifact Guard
   run: |
-    if bash scripts/enforce_output_location.sh; then
-      echo "✅ Repository hygiene validated"
-    else
-      echo "🛑 Root artifact pollution detected"
-      exit 1
-    fi
+      if bash scripts/enforce_output_location.sh; then
+        echo "✅ Repository hygiene validated"
+      else
+        echo "🛑 Root artifact pollution detected"
+        exit 1
+      fi
 ```
 
 ### **Developer Workflow Integration**

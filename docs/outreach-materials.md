@@ -16,7 +16,7 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 **[Opening Shot: VSCode open, terminal ready]**
 
 - **Voice/Text overlay:**
-    _"Hey, this is DevOnboarder — a no-BS way to get new devs up and running, fast."_
+  _"Hey, this is DevOnboarder — a no-BS way to get new devs up and running, fast."_
 
 **[Show: `ask` Command]**
 
@@ -43,7 +43,7 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 **[Closing Shot: README with star, issue, and feedback CTA visible]**
 
 - "I built this to scratch my own itch. If it helps you, drop a star or open an
-    issue — let’s make onboarding better for all of us."
+  issue — let’s make onboarding better for all of us."
 
 ## 3️⃣ Outreach Message Drafts (Reddit, Discord, etc.)
 

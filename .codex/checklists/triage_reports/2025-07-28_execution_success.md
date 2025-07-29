@@ -51,10 +51,10 @@ reference_pr: "#970"
 ### **Primary Issue**
 
 ```markdown
-logs/pytest-of-creesey/pytest-0/test_*/
-├── .codex/known_errors.yaml  → ModuleNotFoundError: No module named 'foo'
-├── error_log.txt             → foo import errors
-└── log.txt                   → foo module errors
+logs/pytest-of-creesey/pytest-0/test\_\*/
+├── .codex/known_errors.yaml → ModuleNotFoundError: No module named 'foo'
+├── error_log.txt → foo import errors
+└── log.txt → foo module errors
 ```
 
 ### **False Positive Mechanism**
@@ -161,9 +161,9 @@ codex_status: active
 
 # Automatic detection of known failure patterns
 trigger_patterns:
-  - "ModuleNotFoundError: No module named 'foo'"
-  - "logs/pytest-of-*"
-  - "vale-results.json"
+    - "ModuleNotFoundError: No module named 'foo'"
+    - "logs/pytest-of-*"
+    - "vale-results.json"
 ```
 
 ### **3. Updated .gitignore**

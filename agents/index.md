@@ -5,7 +5,7 @@ trigger: "documentation updates and agent additions"
 environment: "any"
 output: ".codex/logs/documentation.log"
 permissions:
-  - "repo:read"
+    - "repo:read"
 codex_runtime: false
 codex_dry_run: false
 discord_role_required: ""
@@ -57,7 +57,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | BOT_PORT                      | Port for the Discord bot service                                                                 |
 | BOT_PREFIX                    | Command prefix for Discord bot commands                                                          |
 | CHECK_HEADERS_URL             | Endpoint used by header checks (default `http://localhost:8002/api/user`)                        |
-| CI                           | Continuous Integration environment flag                                                           |
+| CI                            | Continuous Integration environment flag                                                          |
 | CI_BOT_TOKEN                  | GitHub token used by the CI bot                                                                  |
 | CI_BOT_USERNAME               | GitHub username used to assign CI failure issues                                                 |
 | CI_ISSUE_AUTOMATION_TOKEN     | Fine-grained GitHub token for CI issue/PR automation (primary token)                             |

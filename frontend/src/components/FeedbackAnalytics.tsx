@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface Analytics {
     total: number;
@@ -14,11 +14,11 @@ export default function FeedbackAnalytics() {
         setError(null);
         fetch(`${feedbackUrl}/feedback/analytics`)
             .then((r) => {
-                if (!r.ok) throw new Error('Failed to load analytics');
+                if (!r.ok) throw new Error("Failed to load analytics");
                 return r.json();
             })
             .then(setData)
-            .catch(() => setError('Failed to load analytics'));
+            .catch(() => setError("Failed to load analytics"));
     }, [feedbackUrl]);
 
     if (error) {

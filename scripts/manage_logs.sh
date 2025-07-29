@@ -125,6 +125,8 @@ clean_pytest_artifacts() {
         rm -rf "$LOGS_DIR/htmlcov/" 2>/dev/null || true
         # Remove validation artifacts
         find "$LOGS_DIR" -name "validation_*.log" -delete 2>/dev/null || true
+        # Remove temporary database files
+        find "$LOGS_DIR" -name "tmp*.db" -delete 2>/dev/null || true
         remaining_files=$(find "$LOGS_DIR" -type f 2>/dev/null | wc -l)
         echo "   ✅ ALL test artifacts cleaned ($remaining_files files remaining)"
     else
