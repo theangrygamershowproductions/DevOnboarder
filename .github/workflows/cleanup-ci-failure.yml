@@ -46,8 +46,10 @@ jobs:
                     echo "::error::CLEANUP_CI_FAILURE_KEY is not set! Exiting to prevent unauthenticated GitHub CLI use."
                     exit 1
                   fi
-            - name: Install GitHub CLI
-              uses: ksivamuthu/actions-setup-gh-cli@v3
+            - name: Install the gh cli
+              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              with:
+                  version: stable
               env:
                   GH_TOKEN: ${{ env.GH_TOKEN }}
             - name: Show gh version
