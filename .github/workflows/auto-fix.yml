@@ -123,9 +123,9 @@ jobs:
             - name: Create pull request
               uses: peter-evans/create-pull-request@v6
               with:
-                  commit-message: "chore(auto-fix): apply patch from OpenAI"
+                  commit-message: "CHORE(auto-fix): apply patch from OpenAI"
                   branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}
-                  title: "chore(auto-fix): propose fix for failed CI run"
+                  title: "CHORE(auto-fix): propose fix for failed CI run"
                   body: |
                       Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.
 
