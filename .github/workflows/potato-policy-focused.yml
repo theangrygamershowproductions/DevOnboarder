@@ -175,18 +175,18 @@ jobs:
                   echo "  VIOLATIONS='$VIOLATIONS'"
                   echo "  VIRTUAL_ENV='${VIRTUAL_ENV:-none}'"
 
-                  # Create metrics summary with explicit numeric validation
+                  # Sanitize VIRTUAL_ENV for JSON safety
+                  VIRTUAL_ENV_SAFE="${VIRTUAL_ENV:-none}"
+                  VIRTUAL_ENV_SAFE=$(echo "$VIRTUAL_ENV_SAFE" | tr -d '"' | tr -d "'" | tr ' ' '_')
+
+                  # Create metrics summary with safe JSON generation using printf
                   mkdir -p reports
-                  cat > reports/security-metrics.json << EOF
-                  {
-                      "timestamp": "$(date -Iseconds)",
-                      "protected_patterns": ${PROTECTED_PATTERNS:-0},
-                      "sensitive_files_detected": ${SENSITIVE_FILES:-0},
-                      "total_violations": ${VIOLATIONS:-0},
-                      "virtual_environment": "${VIRTUAL_ENV:-none}",
-                      "framework_version": "Enhanced Potato Policy v2.0"
-                  }
-                  EOF
+                  printf '{\n    "timestamp": "%s",\n    "protected_patterns": %d,\n    "sensitive_files_detected": %d,\n    "total_violations": %d,\n    "virtual_environment": "%s",\n    "framework_version": "Enhanced Potato Policy v2.0"\n}\n' \
+                      "$(date -Iseconds)" \
+                      "$PROTECTED_PATTERNS" \
+                      "$SENSITIVE_FILES" \
+                      "$VIOLATIONS" \
+                      "$VIRTUAL_ENV_SAFE" > reports/security-metrics.json
 
                   # Validate generated JSON
                   echo "📋 Generated JSON content:"
