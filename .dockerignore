@@ -1,54 +1,60 @@
-# Ignore version control directory
-.git
 
-# Python artifacts
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
-# Node artifacts
-node_modules/
-dist/
-coverage/
-.coverage
-.nyc_output/
-pnpm-lock.yaml
-
-# Environment files
-.env*
 !.env.example
-
+# Environment files
+# Ignore version control directory
 # Local caches and logs
-.vscode/
-.vscode-integrations/
-.idea/
-logs/
-.pytest_cache/
-.ruff_cache/
-
-# Tests and coverage reports
-tests/
-test-results/
-
 # Misc
-.DS_Store
-Thumbs.db
-.Trash-*
-.terraform/
-lcov-report/
-codeql-*
-
-Potato
-Potato.md
+# Node artifacts
+# Python artifacts
+# Tests and coverage reports
 *.env
-*.pem
 *.key
-secrets.yaml
-secrets.yml
+*.p12
+*.pem
+*.py[cod]
+.DS_Store
+.Trash-*
+.codex/cache/
+.codex/cache/*
+.codex/private/
+.codex/private/*
+.coverage
+.env*
+.env.*
 .env.local
 .env.production
-.codex/private/
-.codex/cache/
+.git
+.idea/
+.nyc_output/
+.pytest_cache/
+.ruff_cache/
+.terraform/
+.venv/
+.vscode-integrations/
+.vscode/
+Potato
+Potato.md
+Thumbs.db
+__pycache__/
+auth.db
+backup-configs.*
+ci-secrets.*
+codeql-*
+config/secrets.*
 config/secrets.json
+coverage/
+deployment-keys.*
+discord-tokens.*
+dist/
+github-tokens.*
+id_rsa*
+lcov-report/
+logs/
+node_modules/
+pnpm-lock.yaml
+secrets.yaml
+secrets.yml
+test-results/
+tests/
+venv/
 webhook-config.json
