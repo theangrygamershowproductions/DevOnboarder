@@ -168,9 +168,9 @@ jobs:
                   cat > reports/security-metrics.json << EOF
                   {
                       "timestamp": "$(date -Iseconds)",
-                      "protected_patterns": $PROTECTED_PATTERNS,
-                      "sensitive_files_detected": $SENSITIVE_FILES,
-                      "total_violations": $VIOLATIONS,
+                      "protected_patterns": ${PROTECTED_PATTERNS:-0},
+                      "sensitive_files_detected": ${SENSITIVE_FILES:-0},
+                      "total_violations": ${VIOLATIONS:-0},
                       "virtual_environment": "${VIRTUAL_ENV:-none}",
                       "framework_version": "Enhanced Potato Policy v2.0"
                   }
