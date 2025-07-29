@@ -332,7 +332,7 @@ jobs:
                   path: diagnostics.log
                   retention-days: 7
             - name: Prepare test-results directory
-              run: mkdir -p test-results
+              run: mkdir -p test-results logs
             - name: Run tests with coverage
               run: |
                   source .venv/bin/activate

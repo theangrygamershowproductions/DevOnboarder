@@ -23,15 +23,25 @@ def read_js_coverage(path: str) -> float | None:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return float(data["total"]["lines"]["pct"])
-    except Exception:
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
         return None
 
 
 def read_py_coverage(path: str = ".coverage") -> float | None:
     """Return total coverage percentage from a coverage data file."""
-    if not os.path.exists(path):
+    # Check for coverage file in configured location first (logs/.coverage)
+    coverage_paths = ["logs/.coverage", path]
+
+    coverage_file = None
+    for check_path in coverage_paths:
+        if os.path.exists(check_path):
+            coverage_file = check_path
+            break
+
+    if coverage_file is None:
         return None
-    cov = Coverage(data_file=path)
+
+    cov = Coverage(data_file=coverage_file)
     cov.load()
     buf = io.StringIO()
     percent = cov.report(file=buf)
