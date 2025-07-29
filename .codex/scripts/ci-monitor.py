@@ -22,6 +22,29 @@ class CIMonitor:
         """Initialize CI monitor for specific PR."""
         self.pr_number = pr_number
 
+    def get_failed_workflow_runs(self) -> Dict[str, Any]:
+        """Fetch recent failed workflow runs for additional context."""
+        cmd = [
+            "gh",
+            "run",
+            "list",
+            "--limit",
+            "10",
+            "--json",
+            "conclusion,status,workflowName,createdAt,url,displayTitle",
+            "--conclusion",
+            "FAILURE",
+        ]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            return {"failed_runs": json.loads(result.stdout)}
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️  Failed to fetch failed workflow runs: {e}")
+            return {"failed_runs": []}
+        except json.JSONDecodeError as e:
+            print(f"❌ Error parsing failed workflow runs: {e}")
+            return {"failed_runs": []}
+
     def get_pr_data(self) -> Dict[str, Any]:
         """Fetch PR data and CI status from GitHub API."""
         cmd = [
@@ -33,9 +56,7 @@ class CIMonitor:
             "title,state,url,statusCheckRollup",
         ]
         try:
-            result = subprocess.run(  # noqa: B603
-                cmd, capture_output=True, text=True, check=True
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
             print(f"⚠️  GitHub CLI error for PR #{self.pr_number}")
@@ -51,9 +72,7 @@ class CIMonitor:
         try:
             # Try basic PR view without checks
             cmd = ["gh", "pr", "view", str(self.pr_number)]
-            result = subprocess.run(  # noqa: B603
-                cmd, capture_output=True, text=True, check=True
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             # Parse basic text output
             output = result.stdout
             lines = output.split("\n")
@@ -212,6 +231,9 @@ class CIMonitor:
 
         analysis = self.analyze_ci_status(checks)
 
+        # Get additional failed workflow context
+        failed_workflows = self.get_failed_workflow_runs()
+
         # Header
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
         report = f"# 🔍 CI Status Report - PR #{self.pr_number}\n\n"
@@ -295,6 +317,41 @@ class CIMonitor:
             report += "3. **Install dependencies**: `pip install -e .[test]`\n"
             report += "4. **Run quality checks**: " "`python -m pytest --cov=src`\n"
             report += "5. **Check linting**: `python -m ruff check src/`\n\n"
+
+            # Add recent failed workflow context if available
+            if failed_workflows.get("failed_runs"):
+                report += "### 🚨 Recent Failed Workflow Runs\n\n"
+                for run in failed_workflows["failed_runs"][:5]:  # Show top 5
+                    workflow_name = run.get("workflowName", "Unknown")
+                    display_title = run.get("displayTitle", "No title")
+                    url = run.get("url", "")
+                    created_at = run.get("createdAt", "")
+
+                    if created_at:
+                        try:
+                            created = datetime.fromisoformat(
+                                created_at.replace("Z", "+00:00")
+                            )
+                            time_ago = (
+                                datetime.now().replace(tzinfo=created.tzinfo) - created
+                            )
+                            time_str = (
+                                f" ({time_ago.days}d ago)"
+                                if time_ago.days > 0
+                                else f" ({time_ago.seconds//3600}h ago)"
+                            )
+                        except (ValueError, AttributeError):
+                            time_str = ""
+                    else:
+                        time_str = ""
+
+                    report += (
+                        f"- ❌ **{workflow_name}**: " f"{display_title}{time_str}\n"
+                    )
+                    if url:
+                        report += f"  [View Run]({url})\n"
+                report += "\n"
+
         elif analysis["status"] == "pending":
             report += "## ⏳ Status: In Progress\n\n"
             report += "CI checks are still running. "
@@ -325,7 +382,7 @@ class CIMonitor:
         """Post status report as PR comment."""
         try:
             cmd = ["gh", "pr", "comment", str(self.pr_number), "--body", report]
-            subprocess.run(cmd, check=True)  # noqa: B603
+            subprocess.run(cmd, check=True)  # nosec B603
             print(f"✅ Posted status comment to PR #{self.pr_number}")
         except subprocess.CalledProcessError as e:
             print(f"❌ Failed to post comment: {e}")
@@ -335,7 +392,7 @@ def get_current_pr_number() -> Optional[int]:
     """Try to detect current PR number from git context."""
     try:
         cmd = ["gh", "pr", "view", "--json", "number"]
-        result = subprocess.run(  # noqa: B603
+        result = subprocess.run(  # nosec B603
             cmd, capture_output=True, text=True, check=True
         )
         data = json.loads(result.stdout)
@@ -378,7 +435,7 @@ def prompt_for_pr_number() -> int:
     print("\n📋 Recent Pull Requests:")
     try:
         cmd = ["gh", "pr", "list", "--limit", "5", "--json", "number,title,state"]
-        result = subprocess.run(  # noqa: B603
+        result = subprocess.run(  # nosec B603
             cmd, capture_output=True, text=True, check=True
         )
         prs = json.loads(result.stdout)
