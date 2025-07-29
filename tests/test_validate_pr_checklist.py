@@ -22,7 +22,7 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str]]:
     gh_stub = bin_dir / "gh"
     gh_stub.write_text(
         "#!/bin/sh\n"
-        "if [ \"$1\" = \"pr\" ] && [ \"$2\" = \"view\" ]; then\n"
+        'if [ "$1" = "pr" ] && [ "$2" = "view" ]; then\n'
         f"  echo '{body}'\n"
         "  exit 0\n"
         "fi\n"
@@ -38,11 +38,15 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str]]:
 def test_validate_pr_checklist_success(tmp_path: Path) -> None:
     body = "## Continuous Improvement Checklist\n- [ ] item"
     script, env = setup_script(tmp_path, body)
-    result = subprocess.run([
-        "bash",
-        str(script),
-        "1",
-    ], cwd=tmp_path, env=env)
+    result = subprocess.run(
+        [
+            "bash",
+            str(script),
+            "1",
+        ],
+        cwd=tmp_path,
+        env=env,
+    )
     assert result.returncode == 0
 
 

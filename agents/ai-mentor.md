@@ -1,12 +1,12 @@
 ---
 codex-agent:
-  name: Agent.AiMentor
-  role: Provides automated mentorship and resource guidance to new contributors
-  scope: onboarding assistance
-  triggers: on_question_received
-  output: .codex/logs/ai-mentor.log
+    name: Agent.AiMentor
+    role: Provides automated mentorship and resource guidance to new contributors
+    scope: onboarding assistance
+    triggers: on_question_received
+    output: .codex/logs/ai-mentor.log
 permissions:
-  - repo:read
+    - repo:read
 ---
 
 # AI Mentor Agent

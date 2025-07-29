@@ -28,7 +28,7 @@ git stash pop
 
 ```bash
 git add .
-git commit -m "WIP: partial changes"
+git commit -m "WIP(feature): partial changes"
 git switch target-branch
 ```
 
@@ -52,7 +52,7 @@ git switch target-branch
 
 ```bash
 git add .
-git commit -m "Feature complete"
+git commit -m "FEAT(feature): complete implementation"
 ```
 
 1. Switch to `development`:

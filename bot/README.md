@@ -4,32 +4,41 @@ This service implements a simple Discord bot using `discord.js` v14.
 It loads slash commands and events dynamically on startup and authenticates
 using the token provided in `.env`.
 
-Node.js 20 is required. Run `mise install` to use the version defined in `.tool-versions`.
+Node.js 22 is required. Run `mise install` to use the version defined in `.tool-versions`.
+
 ## Setup
 
-1. Use Node.js 20 as specified in `.tool-versions` (run `mise use`).
+1. Use Node.js 22 as specified in `.tool-versions` (run `mise use`).
 2. Copy the example environment file and add your credentials:
-   ```bash
-   cp .env.example .env
-   ```
-   Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
-   and `BOT_JWT`. The bot sends this token in an `Authorization` header
-   when calling the API. See [docs/env.md](../docs/env.md) for details
-   about this variable.
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Fill in `DISCORD_BOT_TOKEN`, `DISCORD_CLIENT_ID`, `DISCORD_GUILD_IDS`,
+    and `BOT_JWT`. The bot sends this token in an `Authorization` header
+    when calling the API. See [docs/env.md](../docs/env.md) for details
+    about this variable.
+
 3. Install dependencies and build the bot:
-   ```bash
-   npm install
-   npm run build
-   ```
+
+    ```bash
+    npm install
+    npm run build
+    ```
+
 4. Lint and format the code:
-   ```bash
-   npm run lint
-   npm run format
-   ```
+
+    ```bash
+    npm run lint
+    npm run format
+    ```
+
 5. Run the bot locally:
-   ```bash
-   npm start
-   ```
+
+    ```bash
+    npm start
+    ```
 
 ## Docker
 
@@ -38,12 +47,12 @@ The development compose file mounts the source for hot reload:
 
 ```yaml
 bot:
-  build: ./bot
-  env_file:
-    - ./bot/.env
-  volumes:
-    - ./bot:/usr/src/app
-  command: ["npm", "start"]
+    build: ./bot
+    env_file:
+        - ./bot/.env
+    volumes:
+        - ./bot:/usr/src/app
+    command: ['npm', 'start']
 ```
 
 ## Tests
@@ -77,4 +86,3 @@ The repository provides the following built-in commands:
 - Log quiz completion via slash commands.
 
 For a comparison of this bot and Codex agents, see [../docs/bot-types.md](../docs/bot-types.md).
-

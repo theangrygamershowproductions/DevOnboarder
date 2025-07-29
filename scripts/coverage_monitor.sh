@@ -6,6 +6,7 @@ echo "🔍 DevOnboarder Coverage Monitor"
 echo "================================"
 
 # Activate virtual environment
+# shellcheck source=/dev/null
 source .venv/bin/activate
 
 # Run Python backend coverage
@@ -13,7 +14,7 @@ echo "📊 Python Backend Coverage:"
 pytest --cov=src --cov-report=term --cov-fail-under=95 --tb=short -q
 PYTHON_EXIT=$?
 
-# Run Bot coverage  
+# Run Bot coverage
 echo "📊 Bot Coverage:"
 cd bot
 npm run coverage --silent
@@ -21,7 +22,7 @@ BOT_EXIT=$?
 cd ..
 
 # Run Frontend coverage
-echo "📊 Frontend Coverage:" 
+echo "📊 Frontend Coverage:"
 cd frontend
 npm run coverage --silent
 FRONTEND_EXIT=$?

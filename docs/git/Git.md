@@ -3,31 +3,31 @@
 ## Table of Contents
 
 - [Git.md Documentation](#gitmd-documentation)
-  - [Table of Contents](#table-of-contents)
-  - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
-  - [Repository Structure and Submodules](#repository-structure-and-submodules)
-    - [🔜 Submodule Plan](#-submodule-plan)
-  - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
-    - [Option 1: `git stash`](#option-1-git-stash)
-    - [Option 2: WIP Commit](#option-2-wip-commit)
-    - [Option 3: Use `git switch`](#option-3-use-git-switch)
-  - [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
-  - [Managing Multiple Remotes](#managing-multiple-remotes)
-    - [Add a second remote](#add-a-second-remote)
-    - [Make a remote fetch-only](#make-a-remote-fetch-only)
-    - [Rename a remote](#rename-a-remote)
-  - [Maintenance Notes](#maintenance-notes)
-  - [Git Commit Message SOP](#git-commit-message-sop)
-    - [Purpose](#purpose)
-    - [Guidelines](#guidelines)
-    - [Format](#format)
-      - [Types](#types)
-      - [Example](#example)
-      - [Versioning](#versioning)
-  - [Using Git Hooks](#using-git-hooks)
-    - [Why?](#why)
-    - [Setup](#setup)
-  - [Steps to Push with SSH](#steps-to-push-with-ssh)
+    - [Table of Contents](#table-of-contents)
+    - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
+    - [Repository Structure and Submodules](#repository-structure-and-submodules)
+        - [🔜 Submodule Plan](#-submodule-plan)
+    - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
+        - [Option 1: `git stash`](#option-1-git-stash)
+        - [Option 2: WIP Commit](#option-2-wip-commit)
+        - [Option 3: Use `git switch`](#option-3-use-git-switch)
+    - [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
+    - [Managing Multiple Remotes](#managing-multiple-remotes)
+        - [Add a second remote](#add-a-second-remote)
+        - [Make a remote fetch-only](#make-a-remote-fetch-only)
+        - [Rename a remote](#rename-a-remote)
+    - [Maintenance Notes](#maintenance-notes)
+    - [Git Commit Message SOP](#git-commit-message-sop)
+        - [Purpose](#purpose)
+        - [Guidelines](#guidelines)
+        - [Format](#format)
+            - [Types](#types)
+            - [Example](#example)
+            - [Versioning](#versioning)
+    - [Using Git Hooks](#using-git-hooks)
+        - [Why?](#why)
+        - [Setup](#setup)
+    - [Steps to Push with SSH](#steps-to-push-with-ssh)
 
 ---
 
@@ -35,24 +35,24 @@
 
 1. **Navigate to your project directory**
 
-   ```sh
-   cd /path/to/your/project
-   ```
+    ```sh
+    cd /path/to/your/project
+    ```
 
 2. **Add entries**
 
-   ```sh
-   echo "node_modules/" >> .gitignore
-   echo "config.py" >> .gitignore
-   ```
+    ```sh
+    echo "node_modules/" >> .gitignore
+    echo "config.py" >> .gitignore
+    ```
 
-   `>>` appends. Use `>` to overwrite the file.
+    `>>` appends. Use `>` to overwrite the file.
 
 3. **Verify**
 
-   ```sh
-   cat .gitignore
-   ```
+    ```sh
+    cat .gitignore
+    ```
 
 ---
 
@@ -63,8 +63,8 @@ Our current structure:
 ```markdown
 /company-project
 ├── .gitignore
-├── frontend/    ← Separate Git repo (ignored)
-├── backend/     ← Separate Git repo (ignored)
+├── frontend/ ← Separate Git repo (ignored)
+├── backend/ ← Separate Git repo (ignored)
 ```
 
 - `frontend/`: React + TypeScript + Tailwind stack
@@ -100,7 +100,7 @@ git stash pop
 
 ```sh
 git add .
-git commit -m "WIP: partial changes"
+git commit -m "WIP(feature): partial changes"
 git switch target-branch
 ```
 
@@ -126,7 +126,7 @@ Only works if no conflicting changes.
 
     ```sh
     git add .
-    git commit -m "Feature complete"
+    git commit -m "FEAT(feature): complete implementation"
     ```
 
 2. Switch to development:

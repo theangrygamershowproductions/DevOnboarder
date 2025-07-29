@@ -1,31 +1,31 @@
 codex-tasks:
-  - monitor-ci:
-      workflows: all
-      on_failure:
-        - analyze-error:
-            summarize: true
-            classify: [lint, test, dependency, infra, config]
-        - if: test
-          then:
-            run: pytest --lf
-        - if: lint
-          then:
-            run: |
-              ruff --fix {files}
-              pre-commit run --files {files}
-        - propose-fix:
-            generate-patch: true
-            include-commit-message: true
-            on: lint
-            run: |
-                ruff --fix $FILES
-                pre-commit run --files $FILES
-        - apply-fix:
-            if: safe
-            then: commit
-            else: open-pr
-        - retry-build: true
-        - if: build-fails-again
-          then:
-            notify: maintainer
-            include: [error-summary, fix-attempts, logs]
+    - monitor-ci:
+          workflows: all
+          on_failure:
+              - analyze-error:
+                    summarize: true
+                    classify: [lint, test, dependency, infra, config]
+              - if: test
+                then:
+                    run: pytest --lf
+              - if: lint
+                then:
+                    run: |
+                        ruff --fix {files}
+                        pre-commit run --files {files}
+              - propose-fix:
+                    generate-patch: true
+                    include-commit-message: true
+                    on: lint
+                    run: |
+                        ruff --fix $FILES
+                        pre-commit run --files $FILES
+              - apply-fix:
+                    if: safe
+                    then: commit
+                    else: open-pr
+              - retry-build: true
+              - if: build-fails-again
+                then:
+                    notify: maintainer
+                    include: [error-summary, fix-attempts, logs]

@@ -1,0 +1,251 @@
+name: Enhanced Potato Policy Enforcement
+
+permissions:
+    contents: read
+    issues: write
+    actions: read
+
+on:
+    pull_request:
+        paths:
+            - "Potato.md"
+            - ".gitignore"
+            - ".dockerignore"
+            - ".codespell-ignore"
+            - "*.env"
+            - "*.pem"
+            - "*.key"
+            - "secrets.*"
+            - "scripts/enhanced_potato_check.sh"
+            - "scripts/potato_violation_reporter.sh"
+            - "scripts/generate_potato_report.sh"
+            - "docs/enhanced-potato-policy.md"
+    push:
+        branches: [main, master]
+    schedule:
+        # Daily security audit at 2 AM UTC
+        - cron: "0 2 * * *"
+    workflow_dispatch:
+        inputs:
+            audit_type:
+                description: "Type of audit to run"
+                required: true
+                default: "comprehensive"
+                type: choice
+                options:
+                    - "comprehensive"
+                    - "quick"
+                    - "violation-check-only"
+
+jobs:
+    enhanced-potato-policy:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        env:
+            # Use fine-grained token hierarchy for issue automation
+            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0  # Full history for comprehensive analysis
+
+            - name: Setup Python Virtual Environment
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+                  cache: "pip"
+
+            - name: Install DevOnboarder Dependencies
+              run: |
+                  python -m venv .venv
+                  source .venv/bin/activate
+                  pip install --upgrade pip
+                  pip install -e .[test]
+                  echo "Virtual environment setup complete"
+
+            - name: Validate Virtual Environment
+              run: |
+                  source .venv/bin/activate
+                  echo "✅ Virtual environment active: $VIRTUAL_ENV"
+                  echo "✅ Python location: $(which python)"
+                  echo "✅ Pip location: $(which pip)"
+                  python --version
+                  pip list | head -10
+
+            - name: Enhanced Potato Policy Comprehensive Check
+              if: ${{ github.event.inputs.audit_type != 'violation-check-only' }}
+              run: |
+                  set -euo pipefail
+                  source .venv/bin/activate
+
+                  echo "🥔 Enhanced Potato Policy Comprehensive Check..."
+                  echo "Framework: v2.0 - Pain → Protocol → Protection"
+                  echo "Virtual Environment: $VIRTUAL_ENV"
+                  echo ""
+
+                  # Run comprehensive enhanced check
+                  if bash scripts/enhanced_potato_check.sh --verbose; then
+                      echo "✅ Enhanced Potato Policy: ALL CHECKS PASSED"
+                      echo "::notice title=Security Status::Enhanced Potato Policy fully compliant"
+                  else
+                      echo "❌ Enhanced Potato Policy: VIOLATIONS DETECTED"
+                      echo "::error title=Security Violation::Enhanced Potato Policy violations require attention"
+                      exit 1
+                  fi
+
+            - name: Violation Detection and Reporting
+              run: |
+                  set -euo pipefail
+                  source .venv/bin/activate
+
+                  echo "🚨 Enhanced Potato Policy Violation Detection..."
+                  echo ""
+
+                  # Run enhanced violation reporter
+                  if bash scripts/potato_violation_reporter.sh; then
+                      echo "✅ No violations detected - system compliant"
+                      echo "::notice title=Compliance::No Enhanced Potato Policy violations"
+                  else
+                      echo "❌ Violations detected and reported"
+                      echo "::error title=Security Alert::Enhanced Potato Policy violations detected and GitHub issue created"
+                      # Don't exit 1 here - let the job continue to generate reports
+                  fi
+
+            - name: Generate Comprehensive Audit Report
+              if: always()
+              run: |
+                  source .venv/bin/activate
+
+                  echo "📊 Generating Enhanced Potato Policy Audit Report..."
+
+                  # Generate comprehensive audit report
+                  bash scripts/generate_potato_report.sh true
+
+                  echo "📄 Audit report generated successfully"
+
+                  # Display summary
+                  if [ -f reports/potato-policy-latest.md ]; then
+                      echo "::notice title=Audit Complete::Enhanced Potato Policy audit report generated"
+                      echo "📏 Report size: $(wc -l < reports/potato-policy-latest.md) lines"
+                  fi
+
+            - name: Security Metrics Collection
+              if: always()
+              run: |
+                  source .venv/bin/activate
+
+                  echo "📈 Collecting Security Metrics..."
+
+                  # Count protected patterns in ignore files
+                  PROTECTED_PATTERNS=0
+                  for file in .gitignore .dockerignore .codespell-ignore; do
+                      if [ -f "$file" ]; then
+                          COUNT=$(wc -l < "$file" 2>/dev/null || echo "0")
+                          PROTECTED_PATTERNS=$((PROTECTED_PATTERNS + COUNT))
+                          echo "  $file: $COUNT patterns"
+                      fi
+                  done
+
+                  # Count potential sensitive files
+                  SENSITIVE_FILES=$(find . -type f \
+                      \( -name "*.env" -o -name "*.pem" -o -name "*.key" -o -name "secrets.*" \) \
+                      -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" \
+                      2>/dev/null | wc -l 2>/dev/null || echo "0")
+                  SENSITIVE_FILES=$(echo "$SENSITIVE_FILES" | tr -d '[:space:]')
+
+                  # Count violation log entries
+                  VIOLATIONS=0
+                  if [ -f logs/potato-violations.log ]; then
+                      VIOLATIONS=$(grep -c "VIOLATION_DETECTED" logs/potato-violations.log 2>/dev/null || echo "0")
+                  fi
+                  VIOLATIONS=$(echo "$VIOLATIONS" | tr -d '[:space:]')
+
+                  # Ensure all variables are numeric
+                  PROTECTED_PATTERNS=$(echo "$PROTECTED_PATTERNS" | tr -d '[:space:]')
+
+                  echo "::notice title=Security Metrics::Protected patterns: $PROTECTED_PATTERNS, Sensitive files: $SENSITIVE_FILES, Total violations: $VIOLATIONS"
+
+                  # Debug output for JSON generation
+                  echo "📊 Debug: Variables before JSON creation:"
+                  echo "  PROTECTED_PATTERNS='$PROTECTED_PATTERNS'"
+                  echo "  SENSITIVE_FILES='$SENSITIVE_FILES'"
+                  echo "  VIOLATIONS='$VIOLATIONS'"
+                  echo "  VIRTUAL_ENV='${VIRTUAL_ENV:-none}'"
+
+                  # Sanitize VIRTUAL_ENV for JSON safety
+                  VIRTUAL_ENV_SAFE="${VIRTUAL_ENV:-none}"
+                  VIRTUAL_ENV_SAFE=$(echo "$VIRTUAL_ENV_SAFE" | tr -d '"' | tr -d "'" | tr ' ' '_')
+
+                  # Create metrics summary with safe JSON generation using printf
+                  mkdir -p reports
+                  # Build JSON with shorter lines for yamllint compliance
+                  printf '{\n' > reports/security-metrics.json
+                  printf '    "timestamp": "%s",\n' "$(date -Iseconds)" >> reports/security-metrics.json
+                  printf '    "protected_patterns": %d,\n' "$PROTECTED_PATTERNS" >> reports/security-metrics.json
+                  printf '    "sensitive_files_detected": %d,\n' "$SENSITIVE_FILES" >> reports/security-metrics.json
+                  printf '    "total_violations": %d,\n' "$VIOLATIONS" >> reports/security-metrics.json
+                  printf '    "virtual_environment": "%s",\n' "$VIRTUAL_ENV_SAFE" >> reports/security-metrics.json
+                  printf '    "framework_version": "Enhanced Potato Policy v2.0"\n' >> reports/security-metrics.json
+                  printf '}\n' >> reports/security-metrics.json
+
+                  # Validate generated JSON
+                  echo "📋 Generated JSON content:"
+                  cat reports/security-metrics.json
+                  echo ""
+                  echo "🔍 JSON validation:"
+                  if command -v python3 >/dev/null 2>&1; then
+                      if python3 -m json.tool reports/security-metrics.json >/dev/null 2>&1; then
+                          echo "✅ JSON is valid"
+                      else
+                          echo "❌ JSON validation failed"
+                          echo "Raw JSON content:"
+                          cat reports/security-metrics.json
+                          exit 1
+                      fi
+                  else
+                      echo "⚠️  Python not available for JSON validation"
+                  fi
+
+            - name: Upload Enhanced Audit Reports
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: enhanced-potato-policy-audit-${{ github.run_number }}
+                  path: |
+                      reports/enhanced-potato-policy-*.md
+                      reports/potato-policy-latest.md
+                      reports/security-metrics.json
+                      logs/enhanced_potato_check_*.log
+                      logs/potato_violations.log
+                  retention-days: 90
+
+            - name: Notify on Scheduled Failure
+              if: ${{ failure() && github.event_name == 'schedule' }}
+              run: |
+                  echo "::error title=Scheduled Security Audit Failed::Enhanced Potato Policy scheduled audit detected violations"
+                  echo "Review the audit report and violation logs for details."
+                  echo "Manual intervention may be required to address security issues."
+
+            - name: Summary Report
+              if: always()
+              run: |
+                  echo "==============================================="
+                  echo "Enhanced Potato Policy Enforcement Complete"
+                  echo "==============================================="
+                  echo "Framework: v2.0 - Pain → Protocol → Protection"
+                  echo "Virtual Environment: ✅ Required and validated"
+                  echo "Audit Type: ${{ github.event.inputs.audit_type || 'automatic' }}"
+                  echo "Trigger: ${{ github.event_name }}"
+                  echo ""
+                  if [ -f reports/security-metrics.json ]; then
+                      echo "Security Metrics:"
+                      cat reports/security-metrics.json | python -m json.tool
+                  fi
+                  echo ""
+                  echo "📊 Full audit report: reports/enhanced-potato-policy-audit-*.md"
+                  echo "🔗 Latest report: reports/potato-policy-latest.md"
+                  echo "📈 Metrics: reports/security-metrics.json"
+                  echo "==============================================="

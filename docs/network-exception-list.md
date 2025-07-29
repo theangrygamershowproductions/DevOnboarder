@@ -4,7 +4,7 @@ The following external domains must be reachable for normal setup and CI tasks.
 Each entry references where the domain appears in the documentation or scripts.
 
 - `github.com` – used throughout the docs for cloning and fetching dependencies.
-  The `ksivamuthu/actions-setup-gh-cli` action downloads the CLI from
+  The `sersoft-gmbh/setup-gh-cli-action` action downloads the CLI from
   `cli.github.com`. See `docs/git-guidelines.md` line 80.
 - `download.docker.com` – Docker packages are pulled from this repository. See `docs/ubuntu-setup.md` lines 8‑13.
 - `deb.nodesource.com` – Node.js 20 installer script comes from this domain. See `docs/ubuntu-setup.md` lines 18‑19.

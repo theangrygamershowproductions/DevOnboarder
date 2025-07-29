@@ -6,4 +6,3 @@ pip install -e ".[test]"
 pip check
 
 echo "Test dependencies installed ✅"
-

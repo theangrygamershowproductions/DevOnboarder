@@ -3,6 +3,7 @@
 ![Coverage](coverage.svg)
 [![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
+[![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
@@ -24,34 +25,61 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 <!-- markdownlint-disable MD030 -->
 
--   All stable code lives in the `main` branch.
--   Short-lived branches are created off `main` for each change.
--   Changes are merged back into `main` via pull requests after review.
--   Feature branches are deleted after they are merged to keep history clean.
+- All stable code lives in the `main` branch.
+- Short-lived branches are created off `main` for each change.
+- Changes are merged back into `main` via pull requests after review.
+- Feature branches are deleted after they are merged to keep history clean.
+
+## 🥔 Security: Potato Policy
+
+DevOnboarder implements an **Enhanced Potato Policy** - an automated security mechanism that protects sensitive configuration files from accidental exposure.
+
+The policy ensures sensitive files (SSH keys, secrets, environment configs) are **never committed**, **never included in Docker builds**, and **never exposed in CI artifacts**.
+
+**Protected Files:**
+
+- `Potato.md` - SSH keys, setup instructions
+- `*.env` - Environment variables
+- `*.pem`, `*.key` - Private keys and certificates
+- `secrets.yaml/yml` - Configuration secrets
+
+**How it works:**
+
+- 🔍 **Auto-detection**: CI automatically scans `.gitignore`, `.dockerignore`, and `.codespell-ignore`
+- ➕ **Auto-correction**: Missing entries are automatically added
+- 🚨 **Enforcement**: Builds fail if violations are detected, forcing manual review
+- 📝 **Violation Reporting**: Automatic GitHub issue creation for audit trail
+- 📊 **Audit Reports**: Generated for transparency and compliance
+- ✅ **Compliance**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+
+This acts as a **"canary in the repository"** - any attempt to expose sensitive files is immediately caught, blocked, and reported.
+
+> **🥔 Potato Policy Certified**
+> Built with scars. Hardened with automation.
 
 ## Directory Overview
 
 <!-- markdownlint-disable MD030 -->
 
--   `config/` – Configuration files, including `devonboarder.config.yml`.
--   `scripts/` – Helper scripts for bootstrapping and environment setup.
--   `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
-    forwards port `3000`, and runs `scripts/setup-env.sh`.
--   `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
--   `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
--   `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
--   `archive/docker-compose.yml` – Archived base compose file for generic deployments.
--   `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
--   `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
--   `bot/` – Discord bot **DevOnboader#3613** (ID: 1397063993213849672) written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows. Serves two environments: TAGS: DevOnboarder (dev) and TAGS: C2C (prod).
-    See [docs/bot-types.md](docs/bot-types.md) for details on how the Discord bot differs from Codex agents.
--   `frontend/` – Vite-based React application.
--   `auth/` – Environment files for the authentication service.
--   `plugins/` – Optional Python packages that extend functionality.
--   `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
--   `.env.example` – Sample variables shared across services.
--   `docs/CHANGELOG.md` – Project history and notable updates.
-<!-- markdownlint-restore -->
+- `config/` – Configuration files, including `devonboarder.config.yml`.
+- `scripts/` – Helper scripts for bootstrapping and environment setup.
+- `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
+  forwards port `3000`, and runs `scripts/setup-env.sh`.
+- `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
+- `docker-compose.ci.yaml` – Compose file used by the CI pipeline.
+- `archive/docker-compose.prod.yaml` – Archived compose file for production using `.env.prod`.
+- `archive/docker-compose.yml` – Archived base compose file for generic deployments.
+- `archive/docker-compose.codex.yml` – Archived compose file for Codex runs.
+- `archive/docker-compose.override.yaml` – Archived overrides for the base compose file.
+- `bot/` – Discord bot **DevOnboader#3613** (ID: 1397063993213849672) written in TypeScript. Provides slash commands like `/verify`, `/dependency_inventory`, and `/qa_checklist`. This bot runs on its own and is not tied to Codex agents or CI workflows. Serves two environments: TAGS: DevOnboarder (dev) and TAGS: C2C (prod).
+  See [docs/bot-types.md](docs/bot-types.md) for details on how the Discord bot differs from Codex agents.
+- `frontend/` – Vite-based React application.
+- `auth/` – Environment files for the authentication service.
+- `plugins/` – Optional Python packages that extend functionality.
+- `config/devonboarder.config.yml` – Config for the `devonboarder` tool.
+- `.env.example` – Sample variables shared across services.
+- `docs/CHANGELOG.md` – Project history and notable updates.
+      <!-- markdownlint-restore -->
 
 ## Language Versions
 
@@ -61,7 +89,7 @@ When Docker isn't available, the script installs Python 3.12 using `mise` or `as
 | Language | Version |
 | -------- | ------- |
 | Python   | 3.12    |
-| Node.js  | 20      |
+| Node.js  | 22      |
 | Ruby     | 3.2.3   |
 | Rust     | 1.88.0  |
 | Go       | 1.24.4  |
@@ -81,7 +109,7 @@ Our Discord bot **DevOnboader#3613** (ID: 1397063993213849672) provides automate
 ### Bot Features
 
 - Automated role assignment for new members
-- Developer verification workflows  
+- Developer verification workflows
 - Command-based project assistance
 - Integration with backend API services
 - Multi-environment guild management
@@ -99,7 +127,7 @@ Our Discord bot **DevOnboader#3613** (ID: 1397063993213849672) provides automate
 ### Management Commands
 
 - `npm run invite` - Generate bot invite links
-- `npm run status` - Check bot service status  
+- `npm run status` - Check bot service status
 - `npm run test-guilds` - Test guild connectivity
 - `npm run dev` - Start development bot instance
 
@@ -146,6 +174,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
+    For the security philosophy and origin story, see [docs/potato-policy-aar.md](docs/potato-policy-aar.md).
 21. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
     outlining contributor ethics and a simple template.
 22. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
@@ -219,7 +248,7 @@ devonboarder-integration
 This service listens on `http://localhost:8081`.
 
 The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
-Workflows rely on the preinstalled GitHub CLI or the `ksivamuthu/actions-setup-gh-cli` action.
+Workflows rely on the preinstalled GitHub CLI or the `sersoft-gmbh/setup-gh-cli-action` action.
 
 ## Codex Runs
 
@@ -281,13 +310,62 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
     fail with `ModuleNotFoundError`. See
     [tests/README.md](tests/README.md) for details.
 
-9. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
+## 🔍 Quality Control Requirements
+
+**95% Quality Threshold**: All changes must pass comprehensive QC validation before merging.
+
+### Pre-Push Quality Control
+
+Before every commit and push, run our QC validation:
+
+```bash
+# Activate virtual environment (MANDATORY)
+source .venv/bin/activate
+
+# Run comprehensive QC checks
+./scripts/qc_pre_push.sh
+
+# Only push if 95% threshold is met
+git push
+```
+
+### QC Validation Checklist
+
+The QC script validates 8 critical quality metrics:
+
+1. **YAML Linting** - Configuration file validation
+2. **Python Linting** - Code quality with Ruff
+3. **Python Formatting** - Black code formatting
+4. **Type Checking** - MyPy static analysis
+5. **Test Coverage** - Minimum 95% coverage requirement
+6. **Documentation Quality** - Vale documentation linting
+7. **Commit Messages** - Conventional commit format
+8. **Security Scanning** - Bandit security analysis
+
+### Coverage Requirements
+
+- **Backend Python**: 96%+ coverage (enforced in CI)
+- **TypeScript Bot**: 100% coverage (enforced in CI)
+- **React Frontend**: 100% statements, 98.43%+ branches
+
+### Quality Enforcement
+
+- **CI Pipeline**: Automatically enforces 95% threshold
+- **PR Validation**: Required for all pull requests
+- **Agent Guidelines**: GitHub Copilot follows QC standards
+- **Failure Guidance**: Specific fix commands provided on failures
+
+For complete QC documentation, see [`docs/quality-control-95-rule.md`](docs/quality-control-95-rule.md).
+
+## Testing and Development Continuation
+
+1. Run `./scripts/run_tests.sh` to install dependencies and execute all tests.
    This wrapper prints helpful hints when packages are missing. See
    [docs/troubleshooting.md](docs/troubleshooting.md) if any failures occur.
-10. Install git hooks with `pre-commit install` so lint checks run automatically.
-11. The CI workflow enforces a minimum of **95% code coverage** for all projects
-    (frontend, bot, and backend). Pull requests will fail if any test suite drops
-    below this threshold. Current coverage: Backend 96%+, Bot 100%, Frontend 100%.
+2. Install git hooks with `pre-commit install` so lint checks run automatically.
+3. The CI workflow enforces a minimum of **95% code coverage** for all projects
+   (frontend, bot, and backend). Pull requests will fail if any test suite drops
+   below this threshold. Current coverage: Backend 96%+, Bot 100%, Frontend 100%.
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 

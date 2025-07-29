@@ -1,42 +1,42 @@
 {
-  "environments": {
-    "dev": {
-      "guild_id": "1386935663139749998",
-      "guild_name": "TAGS: DevOnboarder",
-      "roles": {
-        "admin": ["CTO", "CEO", "Admin"],
-        "developer": ["Developer", "Engineer", "Tech Lead"],
-        "tester": ["QA", "Tester", "Quality Assurance"],
-        "member": ["Member", "User"]
-      },
-      "permissions": {
-        "admin": ["all"],
-        "developer": ["deploy", "test", "debug"],
-        "tester": ["test", "report"],
-        "member": ["view"]
-      }
+    "environments": {
+        "dev": {
+            "guild_id": "1386935663139749998",
+            "guild_name": "TAGS: DevOnboarder",
+            "roles": {
+                "admin": ["CTO", "CEO", "Admin"],
+                "developer": ["Developer", "Engineer", "Tech Lead"],
+                "tester": ["QA", "Tester", "Quality Assurance"],
+                "member": ["Member", "User"]
+            },
+            "permissions": {
+                "admin": ["all"],
+                "developer": ["deploy", "test", "debug"],
+                "tester": ["test", "report"],
+                "member": ["view"]
+            }
+        },
+        "prod": {
+            "guild_id": "1065367728992571444",
+            "guild_name": "TAGS: C2C",
+            "roles": {
+                "admin": ["CTO", "CEO", "COO", "Admin"],
+                "operator": ["Ops", "DevOps", "Site Reliability"],
+                "support": ["Support", "Customer Success"],
+                "member": ["Member", "User"]
+            },
+            "permissions": {
+                "admin": ["all"],
+                "operator": ["deploy", "monitor", "troubleshoot"],
+                "support": ["view", "report"],
+                "member": ["view"]
+            }
+        }
     },
-    "prod": {
-      "guild_id": "1065367728992571444",
-      "guild_name": "TAGS: C2C",
-      "roles": {
-        "admin": ["CTO", "CEO", "COO", "Admin"],
-        "operator": ["Ops", "DevOps", "Site Reliability"],
-        "support": ["Support", "Customer Success"],
-        "member": ["Member", "User"]
-      },
-      "permissions": {
-        "admin": ["all"],
-        "operator": ["deploy", "monitor", "troubleshoot"],
-        "support": ["view", "report"],
-        "member": ["view"]
-      }
+    "command_permissions": {
+        "deploy": ["admin", "developer"],
+        "test": ["admin", "developer", "tester"],
+        "status": ["admin", "developer", "tester", "member"],
+        "help": ["admin", "developer", "tester", "member"]
     }
-  },
-  "command_permissions": {
-    "deploy": ["admin", "developer"],
-    "test": ["admin", "developer", "tester"],
-    "status": ["admin", "developer", "tester", "member"],
-    "help": ["admin", "developer", "tester", "member"]
-  }
 }

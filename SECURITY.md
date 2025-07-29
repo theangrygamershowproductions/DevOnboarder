@@ -8,10 +8,10 @@ We actively maintain the latest release line. Security fixes are backported for
 minor versions released in the last six months. The project targets Python 3.12
 and Node.js 20.
 
-| Version | Supported |
-| ------- | --------- |
+| Version | Supported          |
+| ------- | ------------------ |
 | 0.1.x   | :white_check_mark: |
-| < 0.1   | :x: |
+| < 0.1   | :x:                |
 
 ## Reporting a Vulnerability
 

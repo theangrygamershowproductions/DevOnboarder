@@ -1,12 +1,12 @@
 ---
 codex-agent:
-  name: Agent.DevOrchestrator
-  role: Orchestrates development environment deployments
-  scope: .github/workflows/dev-orchestrator.yml
-  triggers: Push to dev or manual dispatch
-  output: Deployment job logs
+    name: Agent.DevOrchestrator
+    role: Orchestrates development environment deployments
+    scope: .github/workflows/dev-orchestrator.yml
+    triggers: Push to dev or manual dispatch
+    output: Deployment job logs
 permissions:
-  - workflows:write
+    - workflows:write
 ---
 
 # Dev Orchestrator Agent

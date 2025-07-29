@@ -18,4 +18,5 @@
 ## Testimonials
 
 > "We got three remote interns up to speed in a day, instead of a week. Huge win." — @remoteteamops
+
 - 2025-07-07 — Added origin story documentation focusing on humility and learning from failure

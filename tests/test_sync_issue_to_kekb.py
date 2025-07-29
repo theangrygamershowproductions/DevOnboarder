@@ -39,4 +39,3 @@ def test_append_closed_issue(tmp_path, monkeypatch):
     content = (tmp_path / "docs" / "KEKB.md").read_text()
     assert "## 123: Fix bug" in content
     assert "details" in content
-

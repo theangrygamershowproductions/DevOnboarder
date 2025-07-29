@@ -3,6 +3,7 @@
 ## Documentation & QA Checklist
 
 Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setup instructions.
+
 - Review [docs/QA_CHECKLIST.md](../docs/QA_CHECKLIST.md) for manual QA steps.
 
 - [ ] All Python and JS dependencies installed (`pip install .[test]`, `npm ci` if needed)
@@ -25,7 +26,8 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 - [ ] Coverage does not decrease (see CI summary)
 - [ ] This PR updates `.codex/automation-tasks.md`. I have reviewed the automation impact and notified reviewers.
 
-_Reviewer Sign-Off_
+## Reviewer Sign-Off
+
 - [ ] I confirm all checklist items are complete.
 
 ## Continuous Improvement Checklist

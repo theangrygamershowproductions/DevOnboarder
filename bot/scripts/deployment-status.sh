@@ -41,14 +41,14 @@ fi
 # Check environment file
 if [[ -f ".env" ]]; then
     echo -e "✅ Environment file: .env exists"
-    
+
     # Check critical environment variables
     if grep -q "DISCORD_BOT_TOKEN=" .env; then
         echo -e "✅ Bot token: Configured"
     else
         echo -e "${RED}❌ Bot token: Missing${NC}"
     fi
-    
+
     if grep -q "DISCORD_CLIENT_ID=" .env; then
         echo -e "✅ Client ID: Configured"
     else

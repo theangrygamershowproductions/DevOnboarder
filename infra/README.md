@@ -13,13 +13,13 @@ the repository. Deployments rely on environment variables provided via a
    on).
 3. Start the services with the matching compose file:
 
-   ```bash
-   # Local development
-   docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d
+    ```bash
+    # Local development
+    docker compose -f docker-compose.dev.yaml --env-file .env.dev up -d
 
-   # Production deployment
-   docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
-   ```
+    # Production deployment
+    docker compose -f docker-compose.prod.yaml --env-file .env.prod up -d
+    ```
 
 4. When finished, shut down the stack with `docker compose down`.
 

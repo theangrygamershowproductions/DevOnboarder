@@ -18,13 +18,13 @@ Angry Gamer Show Productions.
 
 ## 📁 Merge Tracker
 
-| Repo Name     | Local Path       | Maintainer   | Merged to `dev`? | Notes                             |
-|---------------|------------------|--------------|-------------------|------------------------------------|
-| Frontend      | `./frontend/`    | Chad         | ✅ Yes             | Tools tested, merged to dev        |
-| Auth Service  | `./auth/`        | Chad         | ✅ Yes             | Fully integrated                   |
-| Admin UI      | `./admin-ui/`    | TBD          | ⬜ No              | Not yet reviewed                   |
-| Docs          | `./docs/`        | Chad         | ✅ Yes             | Host for shared policy references  |
-| Main Project  | `./`             | Chad         | ✅ Yes             | Source of truth for security setup |
+| Repo Name    | Local Path    | Maintainer | Merged to `dev`? | Notes                              |
+| ------------ | ------------- | ---------- | ---------------- | ---------------------------------- |
+| Frontend     | `./frontend/` | Chad       | ✅ Yes           | Tools tested, merged to dev        |
+| Auth Service | `./auth/`     | Chad       | ✅ Yes           | Fully integrated                   |
+| Admin UI     | `./admin-ui/` | TBD        | ⬜ No            | Not yet reviewed                   |
+| Docs         | `./docs/`     | Chad       | ✅ Yes           | Host for shared policy references  |
+| Main Project | `./`          | Chad       | ✅ Yes           | Source of truth for security setup |
 
 ---
 
@@ -37,5 +37,5 @@ Angry Gamer Show Productions.
 
 ---
 
-Maintained by: **Information System Security Officer (ISSO)**  
+Maintained by: **Information System Security Officer (ISSO)**
 Last updated: {{DATE}}

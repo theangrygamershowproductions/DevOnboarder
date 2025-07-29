@@ -1,10 +1,10 @@
 ---
 codex-agent:
-  name: Agent.CIHelperAgent
-  role: Assists with CI troubleshooting and guidance
-  scope: CI workflows
-  triggers: Failed jobs or developer requests
-  output: Diagnostic notes
+    name: Agent.CIHelperAgent
+    role: Assists with CI troubleshooting and guidance
+    scope: CI workflows
+    triggers: Failed jobs or developer requests
+    output: Diagnostic notes
 ---
 
 # CI Helper Agent

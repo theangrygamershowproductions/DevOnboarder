@@ -1,13 +1,13 @@
 ---
 codex-agent:
-  name: Agent.DiagnosticsBot
-  role: Collects environment diagnostics and system health info
-  scope: repo utilities
-  triggers: manual or `python -m diagnostics`
-  output: .codex/logs/diagnostics-bot.log
+    name: Agent.DiagnosticsBot
+    role: Collects environment diagnostics and system health info
+    scope: repo utilities
+    triggers: manual or `python -m diagnostics`
+    output: .codex/logs/diagnostics-bot.log
 permissions:
-  - repo:read
-  - actions:read
+    - repo:read
+    - actions:read
 ---
 
 # Diagnostics Bot

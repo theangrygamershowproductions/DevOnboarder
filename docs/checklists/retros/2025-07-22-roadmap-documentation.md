@@ -1,6 +1,6 @@
 # Retrospective: Roadmap Documentation Project
 
-**Date:** July 22, 2025  
+**Date:** July 22, 2025
 **Contributors:** AI Agent (GitHub Copilot)
 
 ## Who Attended/Contributed

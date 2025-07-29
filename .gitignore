@@ -1,55 +1,99 @@
-# OS files
-.DS_Store
-Thumbs.db
-.Trash-*
 
-# IDE folders
-.vscode/
-.idea/
-*.sublime-*
-
-# Python artifacts
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.env*
-!*.env.example
-!*/.env.example
 !*.env.*.example
+!*.env.example
 !*/.env.*.example
-
-# JS artifacts
-node_modules/
-dist/
-coverage/
-.coverage
-.nyc_output/
-pnpm-lock.yaml
-test-results/
-
-# Local/Codex caches
-.codex/
+!*/.env.example
 !.codex/
-!.codex/bot-permissions.yaml
-.vscode-integrations/
-logs/
-.env.dev
-.pytest_cache/
-.ruff_cache/
-*.egg-info/
-
+!.codex/**/*
+!.env.ci
+# Force CI rerun
+# IDE folders
+# JS artifacts
+# Local/Codex caches
 # Misc
-.terraform/
-lcov-report/
-codeql-*
-auth.db
-vale
-docs/bot-api/
-docs/frontend-api/
-
-Potato
-Potato.md
+# OS files
+# Python artifacts
+# Root pollution block - CI hygiene enforcement
+**/node_modules/
+*.db-journal
+*.egg-info/
+*.env
+*.key
+*.p12
+*.pem
 *.potato
 *.potato.*
+*.py[cod]
+*.sublime-*
+.DS_Store
+.Trash-*
+.codex/cache/
+.codex/cache/*
+.codex/private/
+.codex/private/*
+.coverage
+.coveragerc
+.env
+.env.*
+.env.local
+.env.production
+.idea/
+.mypy_cache/
+.nyc_output/
+.pytest_cache/
+.ruff_cache/
+.terraform/
+.venv/
+.vscode-integrations/
+.vscode/
+/.coverage*
+/.pytest_cache/
+/.tox/
+/__pycache__/
+/config_backups/
+/pytest-of-*/
+/test.db
+/vale-*.json
+/vale-results.json
+Potato
+Potato.md
+Thumbs.db
+__pycache__/
+auth.db
+backup-configs.*
+ci-secrets.*
+codeql-*
+config/secrets.*
+config/secrets.json
+coverage/
 dependency_inventory.xlsx
+deployment-keys.*
+discord-tokens.*
+dist/
+docs/bot-api/
+docs/frontend-api/
+github-tokens.*
+id_rsa*
+lcov-report/
+logs/
+node_modules/
+pnpm-lock.yaml
+secrets.yaml
+secrets.yml
+test-results/
+test.db
+vale
+vale-*.json
+vale-results.json
+venv/
+webhook-config.json
+
+# Enhanced Potato Policy v2.0 - Additional Security Patterns
+id_rsa*
+*.p12
+config/secrets.*
+discord-tokens.*
+github-tokens.*
+ci-secrets.*
+deployment-keys.*
+backup-configs.*

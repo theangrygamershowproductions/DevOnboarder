@@ -20,6 +20,7 @@ bash scripts/generate-secrets.sh
 
 # 2. Install missing dependencies that often cause CI failures
 echo "📦 Installing missing Python tools..."
+# shellcheck source=/dev/null
 source .venv/bin/activate
 
 # Install tools commonly missing in CI
@@ -92,7 +93,7 @@ pytest tests/test_smoke.py -v --tb=short 2>/dev/null || echo "⚠️  Smoke test
 echo "============================="
 echo "🎯 CI Fix Summary:"
 echo "- Environment variables: Generated/updated"
-echo "- Dependencies: Installed where possible"  
+echo "- Dependencies: Installed where possible"
 echo "- Docker: Configuration checked"
 echo "- Files: Permissions and existence verified"
 echo "- Tests: Smoke test attempted"

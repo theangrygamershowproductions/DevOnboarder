@@ -1,9 +1,25 @@
+# =============================================================================
+# File: pyproject.toml
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-07-25
+# Updated: 2025-07-25
+# Purpose: Python project configuration and dependencies
+# Dependencies: setuptools, ruff, pytest
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# Format: TOML - Python Project Configuration Standard
+# =============================================================================
+
 [tool.ruff]
 line-length = 88
 target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
 
 [project]
 name = "devonboarder"
@@ -30,6 +46,19 @@ test = [
     "pytest-cov",
     "requests",
     "pyyaml",
+    "jsonschema",
+    "black",
+    "openapi-spec-validator",
+    "ruff",
+    "mypy",
+    "pip-audit",
+    "bandit",
+    # Phase 5: Advanced Orchestration dependencies
+    "aiohttp",
+    "psutil",
+    "scikit-learn",
+    "numpy",
+    "pandas",
 ]
 
 [project.scripts]
@@ -48,3 +77,24 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.coverage.run]
+source = ["src"]
+data_file = "logs/.coverage"
+parallel = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "logs/htmlcov"

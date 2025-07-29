@@ -1,14 +1,14 @@
 services:
-  app:
-    build: .
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpass
-      POSTGRES_DB: devdb
-    volumes:
-      - db_data:/var/lib/postgresql/data
+    app:
+        build: .
+    db:
+        image: postgres:15
+        environment:
+            POSTGRES_USER: devuser
+            POSTGRES_PASSWORD: devpass
+            POSTGRES_DB: devdb
+        volumes:
+            - db_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+    db_data:
