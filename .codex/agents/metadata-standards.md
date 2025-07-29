@@ -1,18 +1,14 @@
 ---
-title: "Core Instructions Metadata Standards"
-description: "Standardized YAML frontmatter structure for all prompt files and documentation in the core-instructions repository"
-author: "TAGS Engineering"
-created_at: "2025-07-21"
-updated_at: "2025-07-21"
-tags: ["codex", "metadata", "standards", "yaml", "frontmatter", "documentation"]
-project: "core-instructions"
-document_type: "standards"
-status: "active"
-visibility: "internal"
-codex_scope: "TAGS"
-codex_role: "Engineering"
-codex_type: "STANDARDS"
-codex_runtime: false
+codex-agent:
+    name: Agent.MetadataStandards
+    role: Standardized YAML frontmatter structure for all prompt files and documentation
+    scope: metadata validation and standards enforcement
+    triggers: on_file_changed
+    output: .codex/logs/metadata-standards.log
+    environment: CI
+permissions:
+    - repo:read
+    - repo:write
 ---
 
 # Core Instructions Metadata Standards
