@@ -53,6 +53,12 @@ test = [
     "mypy",
     "pip-audit",
     "bandit",
+    # Phase 5: Advanced Orchestration dependencies
+    "aiohttp",
+    "psutil",
+    "scikit-learn",
+    "numpy",
+    "pandas",
 ]
 
 [project.scripts]
