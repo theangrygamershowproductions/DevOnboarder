@@ -153,17 +153,29 @@ jobs:
                   SENSITIVE_FILES=$(find . -type f \
                       \( -name "*.env" -o -name "*.pem" -o -name "*.key" -o -name "secrets.*" \) \
                       -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" \
-                      2>/dev/null | wc -l || echo "0")
+                      2>/dev/null | wc -l 2>/dev/null || echo "0")
+                  SENSITIVE_FILES=$(echo "$SENSITIVE_FILES" | tr -d '[:space:]')
 
                   # Count violation log entries
                   VIOLATIONS=0
                   if [ -f logs/potato-violations.log ]; then
                       VIOLATIONS=$(grep -c "VIOLATION_DETECTED" logs/potato-violations.log 2>/dev/null || echo "0")
                   fi
+                  VIOLATIONS=$(echo "$VIOLATIONS" | tr -d '[:space:]')
+
+                  # Ensure all variables are numeric
+                  PROTECTED_PATTERNS=$(echo "$PROTECTED_PATTERNS" | tr -d '[:space:]')
 
                   echo "::notice title=Security Metrics::Protected patterns: $PROTECTED_PATTERNS, Sensitive files: $SENSITIVE_FILES, Total violations: $VIOLATIONS"
 
-                  # Create metrics summary
+                  # Debug output for JSON generation
+                  echo "📊 Debug: Variables before JSON creation:"
+                  echo "  PROTECTED_PATTERNS='$PROTECTED_PATTERNS'"
+                  echo "  SENSITIVE_FILES='$SENSITIVE_FILES'"
+                  echo "  VIOLATIONS='$VIOLATIONS'"
+                  echo "  VIRTUAL_ENV='${VIRTUAL_ENV:-none}'"
+
+                  # Create metrics summary with explicit numeric validation
                   mkdir -p reports
                   cat > reports/security-metrics.json << EOF
                   {
@@ -175,6 +187,24 @@ jobs:
                       "framework_version": "Enhanced Potato Policy v2.0"
                   }
                   EOF
+
+                  # Validate generated JSON
+                  echo "📋 Generated JSON content:"
+                  cat reports/security-metrics.json
+                  echo ""
+                  echo "🔍 JSON validation:"
+                  if command -v python3 >/dev/null 2>&1; then
+                      if python3 -m json.tool reports/security-metrics.json >/dev/null 2>&1; then
+                          echo "✅ JSON is valid"
+                      else
+                          echo "❌ JSON validation failed"
+                          echo "Raw JSON content:"
+                          cat reports/security-metrics.json
+                          exit 1
+                      fi
+                  else
+                      echo "⚠️  Python not available for JSON validation"
+                  fi
 
             - name: Upload Enhanced Audit Reports
               uses: actions/upload-artifact@v4
