@@ -57,7 +57,7 @@ echo "💾 Step 5: Committing fixes..."
 
 if ! git diff --quiet; then
     git add .
-    git commit -m "🎯 Final push to 95% health score
+    git commit -m "CHORE(qc): implement comprehensive quality control fixes
 
 Applied comprehensive fixes:
 - Unicode comment formatting resolved

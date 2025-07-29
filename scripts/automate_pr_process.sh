@@ -122,7 +122,7 @@ if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
     if [ $FIXES_APPLIED -gt 0 ]; then
         git add . 2>/dev/null || true
         if ! git diff --cached --quiet 2>/dev/null; then
-            git commit -m "🤖 Automated fixes: $FIXES_APPLIED categories addressed
+            git commit -m "CHORE(automation): apply automated fixes for $FIXES_APPLIED categories
 
 Applied by PR Automation Controller:
 - Markdown linting fixes

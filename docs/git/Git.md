@@ -100,7 +100,7 @@ git stash pop
 
 ```sh
 git add .
-git commit -m "WIP: partial changes"
+git commit -m "WIP(feature): partial changes"
 git switch target-branch
 ```
 
@@ -126,7 +126,7 @@ Only works if no conflicting changes.
 
     ```sh
     git add .
-    git commit -m "Feature complete"
+    git commit -m "FEAT(feature): complete implementation"
     ```
 
 2. Switch to development:
