@@ -1,22 +1,14 @@
 ---
-title: "DEVOPS:CI:AGENT - Code Quality Auto-Fix Agent"
-description: "Automatically detects and fixes common linting issues across markdown, shell, Python, and YAML files"
-tags: ["automation", "ci", "code_quality", "linting", "auto_fix"]
-author: "TAGS Engineering"
-version: "1.0.0"
-created_at: "2025-07-22"
-updated_at: "2025-07-22"
-project: "core-instructions"
-document_type: "agent"
-status: "ready"
-visibility: "internal"
-codex_scope: "DEVOPS"
-codex_role: "CI"
-codex_type: "AGENT"
-codex_runtime: true
-integration_status: "production_ready"
-trigger_conditions: ["pr_created", "pr_updated", "file_changed"]
-automation_level: "full"
+codex-agent:
+    name: Agent.CodeQuality
+    role: Automatically detects and fixes common linting issues across markdown, shell, Python, and YAML files
+    scope: code quality automation
+    triggers: on_pr_created, on_pr_updated, on_file_changed
+    output: .codex/logs/code-quality.log
+    environment: CI
+permissions:
+    - repo:write
+    - workflows:write
 ---
 
 # Code Quality Auto-Fix Agent
