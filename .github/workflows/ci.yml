@@ -540,12 +540,31 @@ jobs:
             - name: Summarize CI failures
               if: always()
               run: |
-                  source .venv/bin/activate
+                  # Ensure virtual environment exists before activating
+                  if [ ! -d ".venv" ]; then
+                      echo "Virtual environment not found, creating minimal environment..."
+                      python -m venv .venv
+                      source .venv/bin/activate
+                      # Install minimal dependencies if needed
+                      pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
+                  else
+                      source .venv/bin/activate
+                  fi
                   python scripts/summarize_ci_failures.py
             - name: Run CI failure diagnoser
               if: always()
               run: |
-                  source .venv/bin/activate
+                  # Ensure virtual environment exists before activating
+                  if [ ! -d ".venv" ]; then
+                      echo "Virtual environment not found, creating minimal environment..."
+                      python -m venv .venv
+                      source .venv/bin/activate
+                      # Install minimal dependencies needed for diagnoser
+                      pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
+                  else
+                      source .venv/bin/activate
+                  fi
+
                   # Create audit.md even if diagnoser fails
                   if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
                       echo "CI failure diagnoser completed successfully"
