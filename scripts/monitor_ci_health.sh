@@ -16,7 +16,7 @@ if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt
     echo "✅ Retrieved recent CI run data"
 
     # Also get failed runs specifically for detailed analysis
-    if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --conclusion FAILURE 2>/dev/null); then
+    if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
         echo "✅ Retrieved detailed failed run data"
     fi
 

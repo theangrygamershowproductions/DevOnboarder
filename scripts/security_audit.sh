@@ -11,8 +11,9 @@ OUT="docs/security-audit-${DATE}.md"
   echo
   echo "## Python (\`pip-audit\`)"
   audit_status=0
-  pip-audit >/tmp/pip_audit.log 2>&1 || audit_status=$?
-  cat /tmp/pip_audit.log
+  mkdir -p logs
+  pip-audit >logs/pip_audit.log 2>&1 || audit_status=$?
+  cat logs/pip_audit.log
   if [ "$audit_status" -eq 1 ]; then
     exit 1
   elif [ "$audit_status" -gt 1 ]; then

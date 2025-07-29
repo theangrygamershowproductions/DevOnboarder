@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Enhanced CI Failure Analysis Tool
-# Uses --conclusion FAILURE filter to focus on relevant failures only
+# Uses --status failure filter to focus on relevant failures only
 
 echo "🔍 Analyzing Failed CI Runs (conclusion: FAILURE)"
 echo "=================================================="
@@ -17,7 +17,7 @@ fi
 
 # Get failed workflow runs with detailed information
 echo "📊 Fetching recent failed workflow runs..."
-if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,createdAt,url,displayTitle,event --conclusion FAILURE 2>/dev/null); then
+if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,createdAt,url,displayTitle,event --status failure 2>/dev/null); then
     echo "✅ Retrieved failed run data"
 
     # Count failed runs
@@ -73,7 +73,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         echo "gh run view <run_id>"
         echo ""
         echo "# List runs for specific workflow:"
-        echo "gh run list -w 'workflow-name' --conclusion FAILURE"
+        echo "gh run list -w 'workflow-name' --status failure"
 
     else
         echo "🎉 No recent failed runs found!"

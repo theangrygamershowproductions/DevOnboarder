@@ -35,7 +35,7 @@ jobs:
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
-                  path: ci-logs
+                  path: logs
             - name: Install the gh cli
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
@@ -45,7 +45,7 @@ jobs:
             - name: Check for rate-limit error
               id: check
               run: |
-                  match=$(grep -iE 'rate limit|429 Too Many Requests|quota exceeded' -m1 ci-logs/*.log || true)
+                  match=$(grep -iE 'rate limit|429 Too Many Requests|quota exceeded' -m1 logs/*.log || true)
                   if [ -n "$match" ]; then
                     echo "hit=true" >> "$GITHUB_OUTPUT"
                     echo "match=$match" >> "$GITHUB_OUTPUT"

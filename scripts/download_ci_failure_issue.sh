@@ -8,7 +8,7 @@ if ! command -v gh >/dev/null 2>&1; then
     exit 1
 fi
 
-run_id=$(gh run list -w CI --json databaseId,headSha,conclusion -L 10 --conclusion FAILURE \
+run_id=$(gh run list -w CI --json databaseId,headSha,conclusion -L 10 --status failure \
     --jq 'map(select(.headSha=="'"$GITHUB_SHA"'" && .databaseId != '"$GITHUB_RUN_ID"')) | .[0].databaseId' || true)
 
 if [ -n "${run_id:-}" ]; then

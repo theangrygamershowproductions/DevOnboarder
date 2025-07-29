@@ -43,13 +43,21 @@
                                 "CI",
                                 "any"
                             ]
+                        },
+                        "permissions": {
+                            "type": "array",
+                            "description": "List of required permissions (can also be at top level)",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^[a-z]+:[a-z]+$"
+                            }
                         }
                     },
                     "additionalProperties": false
                 },
                 "permissions": {
                     "type": "array",
-                    "description": "List of required permissions",
+                    "description": "List of required permissions (alternative to codex-agent.permissions)",
                     "items": {
                         "type": "string",
                         "pattern": "^[a-z]+:[a-z]+$"

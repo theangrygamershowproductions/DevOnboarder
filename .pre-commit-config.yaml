@@ -49,6 +49,13 @@ repos:
             always_run: true
             pass_filenames: false
             stages: [pre-commit]
+          - id: centralized-logging-policy
+            name: Centralized Logging Policy Enforcement
+            entry: scripts/validate_log_centralization.sh
+            language: script
+            always_run: true
+            pass_filenames: false
+            stages: [pre-commit]
           - id: docs-quality
             name: Docs quality checks
             entry: bash

@@ -32,8 +32,8 @@ class CIMonitor:
             "10",
             "--json",
             "conclusion,status,workflowName,createdAt,url,displayTitle",
-            "--conclusion",
-            "FAILURE",
+            "--status",
+            "failure",
         ]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
