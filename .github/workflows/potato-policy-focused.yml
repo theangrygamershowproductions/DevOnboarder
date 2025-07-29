@@ -186,7 +186,8 @@ jobs:
                       "$PROTECTED_PATTERNS" \
                       "$SENSITIVE_FILES" \
                       "$VIOLATIONS" \
-                      "$VIRTUAL_ENV_SAFE" > reports/security-metrics.json
+                      "$VIRTUAL_ENV_SAFE" \
+                      > reports/security-metrics.json
 
                   # Validate generated JSON
                   echo "📋 Generated JSON content:"
