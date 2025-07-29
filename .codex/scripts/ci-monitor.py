@@ -12,6 +12,7 @@ import subprocess
 import sys
 from datetime import datetime
 from typing import Dict, Any, Optional
+from urllib.parse import urlparse
 
 
 class CIMonitor:
@@ -29,7 +30,7 @@ class CIMonitor:
             "view",
             str(self.pr_number),
             "--json",
-            "title,state,url,checks",
+            "title,state,url,statusCheckRollup",
         ]
         try:
             result = subprocess.run(  # noqa: B603
@@ -89,19 +90,22 @@ class CIMonitor:
                     state = "MERGED"
 
                 # Extract clean URL
-                elif line_clean.startswith("https://github.com"):
+                elif urlparse(line_clean).hostname == "github.com":
                     url = line_clean
-                elif "url:" in line_lower and "github.com" in line:
+                elif "url:" in line_lower:
                     # Handle "url: https://..." format
                     url_part = line.split("url:", 1)[-1].strip()
                     if url_part.startswith("https://"):
-                        url = url_part
+                        # Validate that this is actually a GitHub URL
+                        parsed = urlparse(url_part)
+                        if parsed.hostname == "github.com":
+                            url = url_part
 
             return {
                 "title": title,
                 "state": state,
                 "url": url,
-                "checks": [],  # No check data available
+                "statusCheckRollup": [],  # No check data available
             }
         except subprocess.CalledProcessError:
             return self._create_minimal_pr_data()
@@ -114,7 +118,7 @@ class CIMonitor:
             "title": f"PR #{self.pr_number} (GitHub CLI unavailable)",
             "state": "UNKNOWN",
             "url": pr_url,
-            "checks": [],
+            "statusCheckRollup": [],
         }
 
     def categorize_check(self, check_name: str) -> str:
@@ -196,7 +200,15 @@ class CIMonitor:
         title = pr_data.get("title", "Unknown PR")
         state = pr_data.get("state", "UNKNOWN")
         url = pr_data.get("url", "")
-        checks = pr_data.get("checks", [])
+
+        # Handle both old 'checks' and new 'statusCheckRollup' formats
+        status_check_rollup = pr_data.get("statusCheckRollup", [])
+        if status_check_rollup and isinstance(status_check_rollup, list):
+            # statusCheckRollup contains the checks directly
+            checks = status_check_rollup
+        else:
+            # Fallback to old checks format
+            checks = pr_data.get("checks", [])
 
         analysis = self.analyze_ci_status(checks)
 
