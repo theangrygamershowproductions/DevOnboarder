@@ -23,6 +23,9 @@ fi
 # Lint documentation with markdownlint and Vale
 bash "$(dirname "$0")/check_docs.sh"
 
+# CRITICAL: Validate centralized logging policy compliance
+bash "$(dirname "$0")/validate_log_centralization.sh"
+
 # Lint GitHub Actions workflows
 if command -v yamllint >/dev/null 2>&1; then
   yamllint -c .github/.yamllint-config .github/workflows/**/*.yml
@@ -38,7 +41,7 @@ else
 fi
 
 # Validate frontmatter schema
-for md in $(git ls-files '*.md' | grep -v '^\.codex/agents/' | grep -v '^codex/agents/' | grep -v '^codex/tasks/' | grep -v '^agents/' | grep -v '^\.github/' | grep -v '^docs/' | grep -v '^infra/' | grep -v '^Codex_Contributor_Dashboard.md$' | grep -v '^codex.plan.md$'); do
+for md in $(git ls-files '*.md' | grep -v '^\.codex/agents/' | grep -v '^\.codex/checklists/' | grep -v '^codex/agents/' | grep -v '^codex/tasks/' | grep -v '^agents/' | grep -v '^\.github/' | grep -v '^docs/' | grep -v '^infra/' | grep -v '^Codex_Contributor_Dashboard.md$' | grep -v '^codex.plan.md$'); do
   if [ "$(head -n1 "$md")" = "---" ]; then
     tmp=$(mktemp)
     frontmatter_file=$(mktemp)

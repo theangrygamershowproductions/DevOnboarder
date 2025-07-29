@@ -25,6 +25,17 @@ npm ci --prefix frontend
 pre-commit install
 ```
 
+## Centralized Logging Policy
+
+**CRITICAL**: ALL logging must use the centralized `logs/` directory. This is enforced by CI/CD:
+
+- Scripts: `mkdir -p logs && exec > >(tee -a "logs/script_$(date +%Y%m%d_%H%M%S).log") 2>&1`
+- Workflows: `command 2>&1 | tee logs/step-name.log`
+- Policy: `docs/standards/centralized-logging-policy.md`
+- Validation: `scripts/validate_log_centralization.sh`
+
+Violations block all commits and CI runs. No exceptions.
+
 **Markdown Standards**: All documentation must follow markdownlint rules including MD032 (lists surrounded by blank lines).
 Check compliance with: `npx markdownlint *.md docs/**/*.md`
 

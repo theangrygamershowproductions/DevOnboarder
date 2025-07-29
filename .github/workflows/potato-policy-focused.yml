@@ -50,7 +50,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0 # Full history for comprehensive analysis
+                  fetch-depth: 0  # Full history for comprehensive analysis
 
             - name: Setup Python Virtual Environment
               uses: actions/setup-python@v5
@@ -181,13 +181,15 @@ jobs:
 
                   # Create metrics summary with safe JSON generation using printf
                   mkdir -p reports
-                  printf '{\n    "timestamp": "%s",\n    "protected_patterns": %d,\n    "sensitive_files_detected": %d,\n    "total_violations": %d,\n    "virtual_environment": "%s",\n    "framework_version": "Enhanced Potato Policy v2.0"\n}\n' \
-                      "$(date -Iseconds)" \
-                      "$PROTECTED_PATTERNS" \
-                      "$SENSITIVE_FILES" \
-                      "$VIOLATIONS" \
-                      "$VIRTUAL_ENV_SAFE" \
-                      > reports/security-metrics.json
+                  # Build JSON with shorter lines for yamllint compliance
+                  printf '{\n' > reports/security-metrics.json
+                  printf '    "timestamp": "%s",\n' "$(date -Iseconds)" >> reports/security-metrics.json
+                  printf '    "protected_patterns": %d,\n' "$PROTECTED_PATTERNS" >> reports/security-metrics.json
+                  printf '    "sensitive_files_detected": %d,\n' "$SENSITIVE_FILES" >> reports/security-metrics.json
+                  printf '    "total_violations": %d,\n' "$VIOLATIONS" >> reports/security-metrics.json
+                  printf '    "virtual_environment": "%s",\n' "$VIRTUAL_ENV_SAFE" >> reports/security-metrics.json
+                  printf '    "framework_version": "Enhanced Potato Policy v2.0"\n' >> reports/security-metrics.json
+                  printf '}\n' >> reports/security-metrics.json
 
                   # Validate generated JSON
                   echo "📋 Generated JSON content:"

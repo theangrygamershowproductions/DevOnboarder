@@ -63,7 +63,7 @@ jobs:
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
-                  path: ci-logs
+                  path: logs
             - name: Ask OpenAI for YAML fix
               id: openai-yaml
               run: |
@@ -107,7 +107,7 @@ jobs:
                     openai.api_key = sys.argv[1]
                     with open('yamllint.log', 'r', encoding='utf-8') as f:
                         yamls = f.read()
-                    with open('ci-logs/pytest.log', 'r', encoding='utf-8') as f:
+                    with open('logs/pytest.log', 'r', encoding='utf-8') as f:
                         logs = f.read()
                     prompt = f"""Yamllint output:\n{yamls}\n\nCI logs:\n{logs}\n\nFirst fix YAML syntax errors, then address remaining issues. Provide a git patch."""
                     response = openai.chat.completions.create(

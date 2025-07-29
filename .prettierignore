@@ -1,0 +1,8 @@
+# Exclude GitHub workflow files from Prettier formatting
+# These files need to follow yamllint rules, not Prettier formatting
+.github/workflows/*.yml
+.github/workflows/*.yaml
+
+# Exclude other files that have specific linting requirements
+*.yml
+*.yaml
