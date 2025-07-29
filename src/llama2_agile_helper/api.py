@@ -93,7 +93,7 @@ def create_app() -> FastAPI:
 def main() -> None:  # pragma: no cover - convenience runner
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=8100)
+    uvicorn.run(create_app(), host="0.0.0.0", port=8100)  # nosec B104
 
 
 if __name__ == "__main__":  # pragma: no cover

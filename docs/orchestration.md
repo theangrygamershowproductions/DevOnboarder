@@ -47,4 +47,3 @@ If automation breaks or a bot is unresponsive:
    `docs/governance/bot_access_governance.md`.
 4. Document the incident in `docs/CHANGELOG.md` if manual recovery steps were
    required.
-

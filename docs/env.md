@@ -46,7 +46,7 @@ The API determines a user's admin and verification status from Discord
 roles. Set the guild and role IDs below to match your server
 configuration. The bot and API read these values at runtime:
 
-```
+```bash
 ADMIN_SERVER_GUILD_ID=
 OWNER_ROLE_ID=
 ADMINISTRATOR_ROLE_ID=
@@ -65,7 +65,6 @@ service filters roles to the guild specified by `ADMIN_SERVER_GUILD_ID` before
 resolving these flags, so roles from other guilds do not influence admin or
 verification status. These flags appear in the `/api/user` response and control
 access to certain commands and pages.
-
 
 ### Discord OAuth login
 

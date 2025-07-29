@@ -1,7 +1,10 @@
 {
     "name": "devonboarder-bot",
     "version": "1.0.0",
+    "description": "Discord bot for DevOnboarder multi-guild automation and verification",
+    "author": "DevOnboarder Project",
     "license": "MIT",
+    "type": "module",
     "main": "dist/main.js",
     "scripts": {
         "build": "tsc",
@@ -20,12 +23,14 @@
     "dependencies": {
         "discord.js": "^14.21.0",
         "dotenv": "^17.2.0",
-        "toml": "^3.0.0",
-        "xlsx": "^0.18.5"
+        "toml": "^3.0.0"
     },
     "devDependencies": {
+        "@eslint/js": "^9.31.0",
         "@types/jest": "^30.0.0",
         "@types/node": "^24.0.13",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
         "eslint": "^9.31.0",
         "jest": "^30.0.4",
         "prettier": "^3.6.2",
@@ -54,6 +59,6 @@
         }
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=22"
     }
 }

@@ -25,7 +25,7 @@ def test_compose_uses_env_files():
     for fname, env in [
         ("docker-compose.dev.yaml", ".env.dev"),
         ("docker-compose.prod.yaml", ".env.prod"),
-        ("docker-compose.ci.yaml", ".env.dev"),
+        ("docker-compose.ci.yaml", ".env.ci"),
     ]:
         compose = load_compose(fname)
         # use auth service if present, otherwise db

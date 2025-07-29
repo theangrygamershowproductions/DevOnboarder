@@ -1,33 +1,43 @@
+# =============================================================================
+# File: docker-compose.ci.yaml
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-07-25
+# Updated: 2025-07-25
+# Purpose: CI/CD pipeline container orchestration
+# Dependencies: docker, docker-compose
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# =============================================================================
 
 x-app-base: &app-base
-  build: .
+    build: .
 
 x-db-base: &db-base
-  image: postgres:15
-  environment:
-    POSTGRES_USER: devuser
-    POSTGRES_PASSWORD: devpass
-    POSTGRES_DB: devdb
-  volumes:
-    - db_data:/var/lib/postgresql/data
+    image: postgres:15
+    environment:
+        POSTGRES_USER: devuser
+        POSTGRES_PASSWORD: devpass
+        POSTGRES_DB: devdb
+    volumes:
+        - db_data:/var/lib/postgresql/data
 
 x-env-dev: &env-dev
-  env_file:
-    - .env.dev
+    env_file:
+        - .env.ci
 
 services:
-  auth:
-    <<: [*app-base, *env-dev]
-    command: ["devonboarder-auth"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
-    ports:
-      - "8002:8002"
-  db:
-    <<: [*db-base, *env-dev]
+    auth:
+        <<: [*app-base, *env-dev]
+        command: ["devonboarder-auth"]
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+            interval: 5s
+            timeout: 2s
+            retries: 10
+        ports:
+            - "8002:8002"
+    db:
+        <<: [*db-base, *env-dev]
 
 volumes:
-  db_data:
+    db_data:

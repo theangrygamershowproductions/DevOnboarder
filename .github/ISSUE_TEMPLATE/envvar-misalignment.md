@@ -5,12 +5,12 @@ title: "[EnvVar]"
 labels: ["ops"]
 ---
 
-# EnvVar Misalignment
-
 ## Missing variables
+
 <!-- List required variables that are absent -->
 
 ## Extra variables
+
 <!-- List variables present but not documented -->
 
 - [ ] Reviewed `agents/index.md` and all `.env.example` files

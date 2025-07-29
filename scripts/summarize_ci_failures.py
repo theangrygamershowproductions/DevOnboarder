@@ -52,21 +52,21 @@ def main() -> None:
             lines.append(f"- {name}")
         lines.append("")
 
-    vitest_fails = parse_log(Path("frontend") / "vitest.log")
+    vitest_fails = parse_log(Path("logs") / "vitest.log")
     if vitest_fails:
         lines.append("## Vitest Failures")
         for item in vitest_fails[:5]:
             lines.append(f"- {item}")
         lines.append("")
 
-    playwright_fails = parse_log(Path("frontend") / "playwright.log")
+    playwright_fails = parse_log(Path("logs") / "playwright.log")
     if playwright_fails:
         lines.append("## Playwright Failures")
         for item in playwright_fails[:5]:
             lines.append(f"- {item}")
         lines.append("")
 
-    jest_fails = parse_log(Path("bot") / "jest.log")
+    jest_fails = parse_log(Path("logs") / "jest.log")
     if jest_fails:
         lines.append("## Jest Failures")
         for item in jest_fails[:5]:

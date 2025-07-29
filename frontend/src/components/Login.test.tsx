@@ -23,16 +23,16 @@ describe("Login", () => {
 
     it("exchanges OAuth code and stores token", async () => {
         window.history.replaceState({}, "", "/login/discord/callback?code=abc");
-        const fetchMock = vi
-            .fn()
-            .mockResolvedValue({ json: () => Promise.resolve({ token: "tok" }) });
+        const fetchMock = vi.fn().mockResolvedValue({
+            json: () => Promise.resolve({ token: "tok" }),
+        });
         vi.stubGlobal("fetch", fetchMock);
 
         render(<Login />);
 
         await waitFor(() => expect(localStorage.getItem("jwt")).toBe("tok"));
         expect(fetchMock).toHaveBeenCalledWith(
-            `${AUTH_URL}/login/discord/callback?code=abc`
+            `${AUTH_URL}/login/discord/callback?code=abc`,
         );
         expect(window.location.pathname).toBe("/");
     });
@@ -43,7 +43,11 @@ describe("Login", () => {
             .fn()
             .mockResolvedValueOnce({
                 json: () =>
-                    Promise.resolve({ id: "1", username: "dev", avatar: "img" }),
+                    Promise.resolve({
+                        id: "1",
+                        username: "dev",
+                        avatar: "img",
+                    }),
             })
             .mockResolvedValueOnce({
                 json: () => Promise.resolve({ level: 3 }),
@@ -56,20 +60,20 @@ describe("Login", () => {
         render(<Login />);
 
         expect(await screen.findByTestId("user-welcome")).toHaveTextContent(
-            "Logged in as dev"
+            "Logged in as dev",
         );
         expect(screen.getByRole("img", { name: "avatar" })).toHaveAttribute(
             "src",
-            "https://cdn.discordapp.com/avatars/1/img.png"
+            "https://cdn.discordapp.com/avatars/1/img.png",
         );
         expect(await screen.findByTestId("user-level")).toHaveTextContent(
-            "Level: 3"
-        );
-        expect(await screen.findByTestId("onboarding-status")).toHaveTextContent(
-            "Onboarding: intro"
+            "Level: 3",
         );
         expect(
-            screen.getByRole("button", { name: /start onboarding/i })
+            await screen.findByTestId("onboarding-status"),
+        ).toHaveTextContent("Onboarding: intro");
+        expect(
+            screen.getByRole("button", { name: /start onboarding/i }),
         ).toBeInTheDocument();
     });
 });

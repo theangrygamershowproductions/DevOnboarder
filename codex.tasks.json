@@ -31,8 +31,7 @@
             "description": "Extend docs/doc-quality-onboarding.md with instructions for running markdownlint-cli2 offline and reference docs/offline-setup.md.",
             "status": "planned",
             "milestone": "v0.5.1"
-        }
-        ,
+        },
         {
             "id": "integration-002",
             "title": "DevOnboarder TAGS integration checklist",

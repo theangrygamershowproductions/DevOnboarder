@@ -1,60 +1,73 @@
+# =============================================================================
+# File: docker-compose.tags.prod.yaml
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-07-25
+# Updated: 2025-07-25
+# Purpose: TAGS production environment container orchestration
+# Dependencies: docker, docker-compose
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# Environment: Production (Guild ID: 1065367728992571444)
+# =============================================================================
+
 # Example TAGS production compose file. Copy to the repo root as
 # `docker-compose.tags.prod.yaml` and customize the service names,
 # images, and environment variables to match your deployment.
+
 x-app-base: &app-base
-  build: .
+    build: .
 
 x-node-base: &node-base
-  image: node:20
-  command: ["npm", "start"]
+    image: node:20
+    command: ["npm", "start"]
 
 x-db-base: &db-base
-  image: postgres:15
-  environment:
-    POSTGRES_USER: devuser
-    POSTGRES_PASSWORD: devpass
-    POSTGRES_DB: devdb
-  volumes:
-    - db_data:/var/lib/postgresql/data
+    image: postgres:15
+    environment:
+        POSTGRES_USER: devuser
+        POSTGRES_PASSWORD: devpass
+        POSTGRES_DB: devdb
+    volumes:
+        - db_data:/var/lib/postgresql/data
 
 x-env-prod: &env-prod
-  env_file:
-    - .env.prod
+    env_file:
+        - .env.prod
 
 services:
-  auth:
-    <<: [*app-base, *env-prod]
-    command: ["devonboarder-auth"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
+    auth:
+        <<: [*app-base, *env-prod]
+        command: ["devonboarder-auth"]
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+            interval: 5s
+            timeout: 2s
+            retries: 10
 
-  bot:
-    <<: [*node-base, *env-prod]
-    working_dir: /bot
-    volumes:
-      - ./bot:/bot
-      - ./docs:/docs
+    bot:
+        <<: [*node-base, *env-prod]
+        working_dir: /bot
+        volumes:
+            - ./bot:/bot
+            - ./docs:/docs
 
-  xp:
-    <<: [*app-base, *env-prod]
-    command: ["devonboarder-api"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-      interval: 5s
-      timeout: 2s
-      retries: 10
+    xp:
+        <<: [*app-base, *env-prod]
+        command: ["devonboarder-api"]
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+            interval: 5s
+            timeout: 2s
+            retries: 10
 
-  frontend:
-    <<: [*node-base, *env-prod]
-    working_dir: /frontend
-    volumes:
-      - ./frontend:/frontend
+    frontend:
+        <<: [*node-base, *env-prod]
+        working_dir: /frontend
+        volumes:
+            - ./frontend:/frontend
 
-  db:
-    <<: [*db-base, *env-prod]
+    db:
+        <<: [*db-base, *env-prod]
 
 volumes:
-  db_data:
+    db_data:

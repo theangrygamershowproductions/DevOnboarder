@@ -19,11 +19,27 @@ from devonboarder.auth_service import create_app  # noqa: E402
 
 def main() -> None:
     """Write the application's OpenAPI spec to ``src/devonboarder/openapi.json``."""
+    import subprocess  # nosec B404
+
     app = create_app()
     spec = app.openapi()
     output = ROOT / "src" / "devonboarder" / "openapi.json"
+
+    # Write with minimal formatting first
     output.write_text(json.dumps(spec, indent=2))
-    print(f"Wrote {output}")
+
+    # Use prettier to format consistently
+    try:
+        subprocess.run(  # nosec B603, B607
+            ["npx", "prettier", "--write", str(output)],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        )
+        print(f"Wrote and formatted {output}")
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: prettier formatting failed: {e}")
+        print(f"Wrote {output} (unformatted)")
 
 
 if __name__ == "__main__":

@@ -36,11 +36,11 @@ Requests to these endpoints require a valid JWT unless otherwise noted.
 
 The bot in `bot/` calls these routes when users run slash commands:
 
-| Command | Endpoint |
-| ------- | -------- |
-| `/verify` | `GET /api/user/onboarding-status` |
-| `/profile` | `GET /api/user/level` |
-| `/contribute` | `POST /api/user/contributions` |
+| Command       | Endpoint                          |
+| ------------- | --------------------------------- |
+| `/verify`     | `GET /api/user/onboarding-status` |
+| `/profile`    | `GET /api/user/level`             |
+| `/contribute` | `POST /api/user/contributions`    |
 
 For example, typing `/verify` in Discord triggers a request to
 `/api/user/onboarding-status` and echoes the resulting status back to the
