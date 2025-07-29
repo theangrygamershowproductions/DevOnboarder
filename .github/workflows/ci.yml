@@ -17,7 +17,9 @@ concurrency:
     cancel-in-progress: true
 
 permissions:
-    issues: write
+    contents: write # Required for coverage badge commits
+    issues: write # Required for issue creation
+    pull-requests: write # Required for PR comments
 
 jobs:
     validate-yaml:
