@@ -185,7 +185,31 @@ npm ci --prefix bot
 npm ci --prefix frontend
 ```
 
-### 2. Workflow Standards
+### 2. Centralized Logging Policy - MANDATORY
+
+**ALL logging MUST use the centralized `logs/` directory. NO EXCEPTIONS.**
+
+This is a **CRITICAL INFRASTRUCTURE REQUIREMENT** enforced by CI/CD pipelines:
+
+```bash
+# MANDATORY: All scripts create logs in centralized location
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# MANDATORY: All workflows use centralized logging
+command 2>&1 | tee logs/step-name.log
+```
+
+**Policy Enforcement**:
+
+- **Pre-commit validation**: `scripts/validate_log_centralization.sh`
+- **CI enforcement**: Root Artifact Guard blocks scattered logs
+- **Documentation**: `docs/standards/centralized-logging-policy.md`
+
+**Violation Severity**: CRITICAL - Blocks all commits and CI runs
+
+### 3. Workflow Standards
 
 - **Trunk-based development**: All work branches from `main`, short-lived feature branches
 - **Pull request requirement**: All changes via PR with review
@@ -238,10 +262,10 @@ npm ci --prefix frontend
 
 Paragraph text with proper spacing.
 
-- List item with blank line above
-- Second list item
-    - Nested item with 4-space indentation
-    - Another nested item
+-   List item with blank line above
+-   Second list item
+    -   Nested item with 4-space indentation
+    -   Another nested item
 
 Another paragraph after blank line.
 
@@ -272,10 +296,10 @@ More content following the same pattern.
 
 Paragraph text with proper spacing.
 
-- List item with blank line above
-- Second list item
-    - Nested item with 4-space indentation
-    - Another nested item
+-   List item with blank line above
+-   Second list item
+    -   Nested item with 4-space indentation
+    -   Another nested item
 
 Another paragraph after blank line.
 
@@ -769,10 +793,12 @@ python -m pytest plugins/example_plugin/
 ### Common Issues
 
 1. **ModuleNotFoundError**:
+
     - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
     - ❌ **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
+
     - ✅ **Solution**: Use `python -m command` syntax in virtual environment
     - ❌ **NOT**: Install globally with `pip install --user`
 
