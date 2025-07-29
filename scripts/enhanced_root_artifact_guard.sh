@@ -317,7 +317,10 @@ cleanup_wizard() {
 main() {
     cd "$PROJECT_ROOT"
 
-    if ! check_root_pollution; then
+    check_root_pollution
+    violations_found=$?
+
+    if [[ $violations_found -eq 0 ]]; then
         log_message "$GREEN" "✅ $SCRIPT_NAME: Repository root is clean!"
         log_message "$GREEN" "   No pollution artifacts detected"
 
@@ -352,7 +355,9 @@ case "${1:-check}" in
         main
         ;;
     --auto-clean|auto-clean)
-        if check_root_pollution; then
+        check_root_pollution
+        violations_found=$?
+        if [[ $violations_found -gt 0 ]]; then
             auto_cleanup
             main  # Re-check after cleanup
         else
@@ -360,7 +365,9 @@ case "${1:-check}" in
         fi
         ;;
     --wizard|wizard)
-        if check_root_pollution; then
+        check_root_pollution
+        violations_found=$?
+        if [[ $violations_found -gt 0 ]]; then
             cleanup_wizard
             main  # Re-check after wizard
         else
