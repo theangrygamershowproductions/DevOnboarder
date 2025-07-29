@@ -497,7 +497,7 @@ jobs:
                       if git diff --staged --quiet; then
                           echo "No changes to coverage badge"
                       else
-                          git commit -m "chore(ci): update coverage badge"
+                          git commit -m "CHORE(ci): update coverage badge"
                           # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
                           if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
                               echo "Attempting push with CI_BOT_TOKEN..."
