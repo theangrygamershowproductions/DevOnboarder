@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Enforce strict conventional commit format per project standards
-# Format: <TYPE>(<scope>): <subject> OR <TYPE>: <subject>
+# Format: <TYPE>(<scope>): <subject>
 # Types must be uppercase: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, CI
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|CI)(\([^)]+\))?: .+'
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|CI)\([^)]+\): .+'
 
 messages=$(git log --format=%s origin/main..HEAD)
 if [ -z "$messages" ]; then
