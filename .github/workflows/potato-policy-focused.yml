@@ -171,7 +171,7 @@ jobs:
                       "protected_patterns": $PROTECTED_PATTERNS,
                       "sensitive_files_detected": $SENSITIVE_FILES,
                       "total_violations": $VIOLATIONS,
-                      "virtual_environment": "$VIRTUAL_ENV",
+                      "virtual_environment": "${VIRTUAL_ENV:-none}",
                       "framework_version": "Enhanced Potato Policy v2.0"
                   }
                   EOF
