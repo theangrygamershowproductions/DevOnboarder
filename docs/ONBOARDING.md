@@ -7,13 +7,13 @@ monitoring endpoints available locally and in production.
 Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 
 - After services start, run `python -m diagnostics` to verify packages, service
-    health, and environment variables. See
-    [diagnostics-sample.log](diagnostics-sample.log) for a sample output and
-    [troubleshooting.md](troubleshooting.md) for help interpreting failures.
+  health, and environment variables. See
+  [diagnostics-sample.log](diagnostics-sample.log) for a sample output and
+  [troubleshooting.md](troubleshooting.md) for help interpreting failures.
 - Review [ecosystem.md](ecosystem.md) for how DevOnboarder fits into TAGS and
-    [tags_integration.md](tags_integration.md) for compose templates. Set
-    `IS_ALPHA_USER` or `IS_FOUNDER` in `.env.dev` when running within the TAGS
-    stack to expose early-access endpoints.
+  [tags_integration.md](tags_integration.md) for compose templates. Set
+  `IS_ALPHA_USER` or `IS_FOUNDER` in `.env.dev` when running within the TAGS
+  stack to expose early-access endpoints.
 - See [../.codex/Agents.md](../.codex/Agents.md) for agent documentation requirements and notification rules.
 - Review [checklists/continuous-improvement.md](checklists/continuous-improvement.md) during retrospectives.
 
@@ -32,13 +32,13 @@ Use `gh workflow run notify.yml -f data='{"title":"<title>","body":"<body>"}'`.
     on any Pull Request or GitHub Issue.
 
 - **What this does:** Codex will analyze CI logs, code quality, test coverage,
-    lint results, and documentation checks. It will reply with a **detailed
-    checklist** of all issues it finds—each with actionable tasks you can assign,
-    discuss, or address.
+  lint results, and documentation checks. It will reply with a **detailed
+  checklist** of all issues it finds—each with actionable tasks you can assign,
+  discuss, or address.
 - **Note:** You must resolve all critical issues before merging, per project policy.
 - The CI workflow enforces a minimum of **95% code coverage** across the
-    frontend, bot, and backend projects. Pull requests will fail if any suite drops
-    below this threshold.
+  frontend, bot, and backend projects. Pull requests will fail if any suite drops
+  below this threshold.
 
 ### Sample Codex QA Response
 

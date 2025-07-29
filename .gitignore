@@ -41,6 +41,7 @@ test-results/
 logs/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 *.egg-info/
 
 # Misc

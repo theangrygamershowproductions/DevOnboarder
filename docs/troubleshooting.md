@@ -7,7 +7,7 @@ This page collects quick fixes for the most common problems.
 
 - Ensure you have run `pre-commit install` so git hooks execute automatically.
 - If the Node.js download fails during the Prettier hook, see
-    [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors).
+  [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors).
 - Missing Python packages? Install dev requirements with:
 
     ```bash

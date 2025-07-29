@@ -1,20 +1,20 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-    testDir: './e2e',
+    testDir: "./e2e",
     fullyParallel: true,
     webServer: {
-        command: 'npm run dev',
+        command: "npm run dev",
         port: 3000,
         reuseExistingServer: !process.env.CI,
     },
     use: {
-        baseURL: 'http://localhost:3000',
+        baseURL: "http://localhost:3000",
     },
     projects: [
         {
-            name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            name: "chromium",
+            use: { ...devices["Desktop Chrome"] },
         },
     ],
 });

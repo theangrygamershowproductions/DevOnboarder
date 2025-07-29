@@ -1,7 +1,7 @@
-import Login from './components/Login';
-import FeedbackForm from './components/FeedbackForm';
-import FeedbackStatusBoard from './components/FeedbackStatusBoard';
-import FeedbackAnalytics from './components/FeedbackAnalytics';
+import Login from "./components/Login";
+import FeedbackForm from "./components/FeedbackForm";
+import FeedbackStatusBoard from "./components/FeedbackStatusBoard";
+import FeedbackAnalytics from "./components/FeedbackAnalytics";
 
 export default function App() {
     return (

@@ -11,7 +11,7 @@ Several bots operate together:
 - **Codex** – monitors CI jobs, opens issues, and proposes YAML fixes.
 - **Discord bot** – provides slash commands and onboarding checks.
 - **Orchestrator workflows** – scheduled jobs that manage bot permissions
-    using `.codex/bot-permissions.yaml`.
+  using `.codex/bot-permissions.yaml`.
 
 Each bot uses a dedicated token stored in GitHub Actions secrets. The
 `check-bot-permissions.sh` script verifies that permissions match the policy

@@ -31,12 +31,12 @@ resolution_status: "enforceable"
 **Common Pollution Patterns**:
 
 ```markdown
-./vale-results.json     → Should be logs/vale-results.json
-./test.db               → Temporary file should be cleaned
-./.coverage*            → Should be logs/.coverage
-./config_backups/       → Unnecessary when committing changes
-./__pycache__/          → Should be cleaned after use
-./pytest-of-*/         → Pytest sandbox directories
+./vale-results.json → Should be logs/vale-results.json
+./test.db → Temporary file should be cleaned
+./.coverage* → Should be logs/.coverage
+./config_backups/ → Unnecessary when committing changes
+./**pycache**/ → Should be cleaned after use
+./pytest-of-*/ → Pytest sandbox directories
 ```
 
 **Pattern**: Any artifacts in repository root that should be contained or cleaned
@@ -48,9 +48,9 @@ resolution_status: "enforceable"
 ```markdown
 🔍 Root Artifact Guard: Scanning repository root for pollution artifacts...
 ❌ VIOLATION: Vale results in root (should be in logs/)
-   ./vale-results.json → should be logs/vale-results.json
+./vale-results.json → should be logs/vale-results.json
 ❌ VIOLATION: Temporary database files in root
-   ./test.db → temporary file should be cleaned
+./test.db → temporary file should be cleaned
 ❌ Root Artifact Guard: Found 2 types of root pollution
 ```
 
@@ -104,45 +104,44 @@ resolution_status: "enforceable"
 
 1. **Execute comprehensive cleanup**:
 
-   ```bash
-   rm -f vale-results.json test.db .coverage*
-   rm -rf .pytest_cache __pycache__ .tox config_backups/
-   find . -name 'pytest-of-*' -type d -exec rm -rf {} +
-   ```
+    ```bash
+    rm -f vale-results.json test.db .coverage*
+    rm -rf .pytest_cache __pycache__ .tox config_backups/
+    find . -name 'pytest-of-*' -type d -exec rm -rf {} +
+    ```
 
 2. **Verify clean state**:
 
-   ```bash
-   bash scripts/enforce_output_location.sh
-   ```
+    ```bash
+    bash scripts/enforce_output_location.sh
+    ```
 
 ### **Long-term Prevention**
 
 1. **Tool Output Redirection**:
-
-   - Vale: `vale --output=JSON . > logs/vale-results.json`
-   - Coverage: `data_file = logs/.coverage` in pytest config
-   - Database: Temporary files in `logs/` or proper cleanup
+    - Vale: `vale --output=JSON . > logs/vale-results.json`
+    - Coverage: `data_file = logs/.coverage` in pytest config
+    - Database: Temporary files in `logs/` or proper cleanup
 
 2. **Pre-commit Enforcement**:
 
-   ```yaml
-   - id: root-artifact-guard
-     name: Root Artifact Guard
-     entry: bash scripts/enforce_output_location.sh
-     language: script
-     always_run: true
-   ```
+    ```yaml
+    - id: root-artifact-guard
+      name: Root Artifact Guard
+      entry: bash scripts/enforce_output_location.sh
+      language: script
+      always_run: true
+    ```
 
 3. **Enhanced .gitignore**:
 
-   ```gitignore
-   # Root pollution block
-   /vale-results.json
-   /test.db
-   /.coverage*
-   *.db-journal
-   ```
+    ```gitignore
+    # Root pollution block
+    /vale-results.json
+    /test.db
+    /.coverage*
+    *.db-journal
+    ```
 
 ---
 
@@ -204,10 +203,10 @@ git status --porcelain | grep -v '^[AM]'
 
 ```yaml
 trigger_patterns:
-  - "vale-results.json in root"
-  - "test.db found in repository root"
-  - ".coverage files outside logs/"
-  - "Root Artifact Guard: Found [0-9]+ types of root pollution"
+    - "vale-results.json in root"
+    - "test.db found in repository root"
+    - ".coverage files outside logs/"
+    - "Root Artifact Guard: Found [0-9]+ types of root pollution"
 ```
 
 ### **Automatic Response**

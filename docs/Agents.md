@@ -274,7 +274,7 @@ an automated notification and suggested fix via Codex's reporting channel.
 To reduce the attack surface in CI/CD workflows:
 
 - **Do not use Codecov** or any third-party coverage uploaders that execute
-    remote scripts in CI.
+  remote scripts in CI.
 - Avoid integrations that rely on `bash <curl | sh>` style commands.
 - Vet all external tools for prior security incidents before adoption.
 

@@ -27,7 +27,7 @@ After relocating and recovering in 2021, the builder:
 - Returned to software, re-learning languages and workflows.
 - Discovered AI tools like Codex and ChatGPT as avenues for resilience.
 - Began rebuilding systems: journaling, CLI interfaces (`sf drop`, `sf ask`,
-    `sf show`), DevContainer setups, Discord workflows, and GitHub CI/CD pipelines.
+  `sf show`), DevContainer setups, Discord workflows, and GitHub CI/CD pipelines.
 - Turned personal necessity into replicable tools for anyone who needs a fresh start.
 
 ## Not Sympathy — Humility & Growth

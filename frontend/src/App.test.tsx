@@ -1,12 +1,12 @@
-import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
+import App from "./App";
 
-describe('App', () => {
+describe("App", () => {
     beforeEach(() => {
-        vi.stubEnv('VITE_FEEDBACK_URL', 'http://test');
+        vi.stubEnv("VITE_FEEDBACK_URL", "http://test");
         vi.stubGlobal(
-            'fetch',
+            "fetch",
             vi.fn().mockResolvedValue({
                 json: () => Promise.resolve({ feedback: [] }),
             }),
@@ -17,10 +17,10 @@ describe('App', () => {
         vi.restoreAllMocks();
     });
 
-    it('renders heading', () => {
+    it("renders heading", () => {
         render(<App />);
         expect(
-            screen.getByRole('heading', { name: /DevOnboarder/i }),
+            screen.getByRole("heading", { name: /DevOnboarder/i }),
         ).toBeInTheDocument();
     });
 });

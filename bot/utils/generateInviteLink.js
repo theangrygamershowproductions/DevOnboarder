@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require("discord.js");
 
 /**
  * Generate Discord bot invite link with proper permissions

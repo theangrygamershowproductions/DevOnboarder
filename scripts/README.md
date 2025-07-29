@@ -126,7 +126,7 @@ bash scripts/clean_pytest_artifacts.sh
 
 **Features**:
 
-- ✅ **Removes pytest-of-* directories**: Eliminates false positive "import foo" results
+- ✅ **Removes pytest-of-\* directories**: Eliminates false positive "import foo" results
 - ✅ **Cleans old test artifacts**: Removes stale test runs, coverage data, validation logs
 - ✅ **Integrated into workflow**: Runs automatically in pre-commit hooks and verify script
 - ✅ **CI compatibility**: Prevents log pollution during continuous integration

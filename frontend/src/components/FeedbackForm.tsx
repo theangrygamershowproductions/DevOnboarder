@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function FeedbackForm() {
     const feedbackUrl = import.meta.env.VITE_FEEDBACK_URL;
-    const [type, setType] = useState('bug');
-    const [description, setDescription] = useState('');
+    const [type, setType] = useState("bug");
+    const [description, setDescription] = useState("");
     const [submitted, setSubmitted] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -11,12 +11,12 @@ export default function FeedbackForm() {
         e.preventDefault();
         setError(null);
         const resp = await fetch(`${feedbackUrl}/feedback`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ type, description }),
         });
         if (!resp.ok) {
-            setError('Failed to submit feedback');
+            setError("Failed to submit feedback");
             return;
         }
         const data = await resp.json();

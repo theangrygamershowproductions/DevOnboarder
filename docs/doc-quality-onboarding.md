@@ -44,12 +44,12 @@ imports resolve correctly.
 - On Windows: `choco install vale`
 - Or see [Vale Installation Docs](https://vale.sh/docs/installation/) for other platforms
 - If the script cannot download Vale automatically, manually download
-    `vale_3.12.0_Linux_64-bit.tar.gz` from the
-    [releases page](https://github.com/errata-ai/vale/releases), extract the `vale`
-    binary, and set the `VALE_BINARY` environment variable to its full path when
-    it's not in `PATH`.
+  `vale_3.12.0_Linux_64-bit.tar.gz` from the
+  [releases page](https://github.com/errata-ai/vale/releases), extract the `vale`
+  binary, and set the `VALE_BINARY` environment variable to its full path when
+  it's not in `PATH`.
 - **The project uses Vale 3.12.0. CI installs this version automatically**, but
-    you still need it locally to run the checks before committing.
+  you still need it locally to run the checks before committing.
 
 Run `bash scripts/check_dependencies.sh` to confirm Vale and the Node test tools are installed.
 
@@ -169,33 +169,33 @@ and commit the change with your documentation update.
 
 - **Vale not found:** install it as shown above or download the binary manually and set `VALE_BINARY` to its path.
 - **Python errors:** ensure `pip install -e .` (or `pip install -r requirements.txt`)
-    and `pip install -r requirements-dev.txt` succeeded.
+  and `pip install -r requirements-dev.txt` succeeded.
 - **LanguageTool API issues:** run a local server and optionally set
-    `LANGUAGETOOL_URL` to its address for grammar checks.
+  `LANGUAGETOOL_URL` to its address for grammar checks.
 - **pytest fails:** double-check that all dev dependencies and the project itself are installed.
 
 ### Known Limitations
 
 - **LanguageTool Skips Large Files:**
-    When a Markdown file exceeds LanguageTool's request size limit, grammar checks
-    are skipped. Spelling and style are still enforced via Codespell and Vale.
-    Run LanguageTool manually on smaller sections or split the file if you need a
-    full grammar review.
+  When a Markdown file exceeds LanguageTool's request size limit, grammar checks
+  are skipped. Spelling and style are still enforced via Codespell and Vale.
+  Run LanguageTool manually on smaller sections or split the file if you need a
+  full grammar review.
 
 - **Suppressing False Positives:**
-    Add valid project terms to `.codespell-ignore` and use Vale suppression
-    comments (`<!-- vale off -->` ... `<!-- vale on -->`) for persistent warnings
-    in code blocks or technical docs.
+  Add valid project terms to `.codespell-ignore` and use Vale suppression
+  comments (`<!-- vale off -->` ... `<!-- vale on -->`) for persistent warnings
+  in code blocks or technical docs.
 
 ### CI Policy
 
 - **Spelling errors block merging.** Codespell runs in pre-commit and CI. Fix
-    typos or add valid project terms to `.codespell-ignore`.
+  typos or add valid project terms to `.codespell-ignore`.
 - **Formatting warnings do not block CI.** Vale emits GitHub warnings and
-    LanguageTool runs only when configured. Address issues when touching the
-    affected files.
+  LanguageTool runs only when configured. Address issues when touching the
+  affected files.
 - Large files skipped by LanguageTool are documented above; run it manually on
-    sections if you want a full grammar review.
+  sections if you want a full grammar review.
 
 ---
 

@@ -649,12 +649,10 @@ python -m pytest plugins/example_plugin/
 ### Common Issues
 
 1. **ModuleNotFoundError**:
-
     - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
     - ❌ **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
-
     - ✅ **Solution**: Use `python -m command` syntax in virtual environment
     - ❌ **NOT**: Install globally with `pip install --user`
 
