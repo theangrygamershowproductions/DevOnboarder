@@ -18,7 +18,7 @@ while IFS= read -r msg; do
     echo "Skipping merge commit: $msg"
     continue
   fi
-  if [[ ! $msg =~ $regex ]]; then
+  if ! echo "$msg" | grep -E "$regex" >/dev/null; then
     echo "::error ::Commit message '$msg' does not follow <TYPE>(<scope>): <subject> format"
     echo "::error ::Expected format: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|CI(scope): subject"
     errors=$((errors+1))
@@ -29,3 +29,4 @@ if [ $errors -ne 0 ]; then
   echo "::error ::See scripts/commit-msg for the enforced standard"
   exit 1
 fi
+echo "✅ All commit messages pass validation!"
