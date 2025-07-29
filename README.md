@@ -248,7 +248,7 @@ devonboarder-integration
 This service listens on `http://localhost:8081`.
 
 The CI pipeline uses `docker-compose.ci.yaml` to start the Postgres database during tests.
-Workflows rely on the preinstalled GitHub CLI or the `ksivamuthu/actions-setup-gh-cli` action.
+Workflows rely on the preinstalled GitHub CLI or the `sersoft-gmbh/setup-gh-cli-action` action.
 
 ## Codex Runs
 

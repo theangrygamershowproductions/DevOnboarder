@@ -21,7 +21,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - uses: ksivamuthu/actions-setup-gh-cli@v3
+            - uses: sersoft-gmbh/setup-gh-cli-action@v2
+              with:
+                  version: stable
             - name: Known errors learning loop
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
