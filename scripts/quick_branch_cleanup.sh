@@ -4,6 +4,98 @@
 
 set -euo pipefail
 
+# Function to review pre-commit logs
+review_precommit_logs() {
+    echo ""
+    echo "📋 REVIEWING PRE-COMMIT LOGS"
+    echo "============================"
+
+    # Check for pre-commit error logs
+    if [ -f "logs/pre-commit-errors.log" ]; then
+        echo "🔍 Found pre-commit error log. Analyzing..."
+        echo ""
+
+        # Show shellcheck errors
+        if grep -q "shellcheck.*Failed" logs/pre-commit-errors.log; then
+            echo "🚨 SHELLCHECK ERRORS DETECTED:"
+            grep -A 20 "shellcheck.*Failed" logs/pre-commit-errors.log | head -20
+            echo ""
+            echo "💡 Fix Required: Review shellcheck errors above"
+            echo "   Common fixes:"
+            echo "   - Move function definitions before function calls"
+            echo "   - Fix quoting issues"
+            echo "   - Address variable usage warnings"
+            echo ""
+        fi
+
+        # Show other critical errors
+        if grep -q "Failed" logs/pre-commit-errors.log; then
+            echo "❌ Other Pre-commit Failures Found:"
+            grep "Failed" logs/pre-commit-errors.log
+            echo ""
+        fi
+
+        # Show successful items for context
+        echo "✅ Pre-commit Items That Passed:"
+        grep "Passed" logs/pre-commit-errors.log | tail -5
+        echo ""
+
+        read -r -p "⚠️  Pre-commit errors found. Review complete? Press Enter to continue or Ctrl+C to exit and fix issues..."
+        return 1
+    else
+        echo "✅ No pre-commit error log found - assuming clean run"
+        return 0
+    fi
+}
+
+# Function to handle commit with pre-commit log review
+commit_with_log_review() {
+    local commit_message="$1"
+
+    echo "💾 Committing changes..."
+    echo "Message: $commit_message"
+
+    if git commit -m "$commit_message"; then
+        echo "✅ Commit successful"
+        return 0
+    else
+        echo ""
+        echo "⚠️  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES"
+        echo "=================================================="
+
+        # Call the log review function
+        review_precommit_logs
+
+        echo ""
+        echo "🔍 LOG REVIEW REQUIRED:"
+        echo "Pre-commit hooks have flagged issues that must be fixed before commit."
+        echo ""
+        echo "📋 Based on logs/pre-commit-errors.log analysis:"
+        echo "  • Check shellcheck errors in scripts/verify_and_commit.sh"
+        echo "  • Function definition order issues (SC2218)"
+        echo "  • Review any other failures shown above"
+        echo ""
+        echo "🛠️  To Fix Issues:"
+        echo "  1. Review the logs/pre-commit-errors.log file"
+        echo "  2. Fix all reported violations in the affected files"
+        echo "  3. Stage your fixes: git add ."
+        echo "  4. Re-attempt commit: git commit -m \"$commit_message\""
+        echo "  5. Or use: git commit --amend --no-edit (if you want to amend)"
+        echo ""
+        echo "🔄 Alternative Recovery Options:"
+        echo "  • Reset last commit: git reset --soft HEAD~1"
+        echo "  • Check what's staged: git status"
+        echo "  • Use enhanced commit tool: ./scripts/commit_changes.sh"
+        echo ""
+
+        read -r -p "⏸️  Press Enter after you've reviewed the errors and are ready to proceed..."
+        echo ""
+        echo "💡 Remember: All issues must be fixed for the commit to succeed."
+        echo "   DevOnboarder enforces strict quality standards via pre-commit hooks."
+        return 1
+    fi
+}
+
 echo "🧹 DevOnboarder Quick Branch Cleanup"
 echo "===================================="
 echo "This script will safely clean up obviously stale branches."
@@ -19,14 +111,22 @@ fi
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 echo "Current branch: $current_branch"
 
-# Switch to main if not already there
-if [ "$current_branch" != "main" ]; then
-    echo "Switching to main branch..."
-    git checkout main || {
-        echo "❌ Failed to switch to main branch"
-        exit 1
-    }
+# Create a feature branch for cleanup work
+cleanup_branch="chore/automated-branch-cleanup-$(date +%Y%m%d-%H%M%S)"
+echo "Creating feature branch: $cleanup_branch"
+
+if ! git checkout -b "$cleanup_branch"; then
+    echo "❌ Failed to create cleanup branch"
+    exit 1
 fi
+
+echo "✅ Working on feature branch: $cleanup_branch"
+echo ""
+
+# Ensure we're working from latest main
+echo "📥 Fetching latest main branch..."
+git fetch origin main
+git merge origin/main --no-edit
 
 # Fetch and prune
 echo "🔄 Fetching latest changes and pruning deleted branches..."
@@ -99,6 +199,47 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "✅ Stale remote branch cleanup complete"
 else
     echo "Skipped remote branch cleanup"
+fi
+
+# Check if there are any changes to commit from cleanup
+echo ""
+echo "🔍 Checking for changes to commit from cleanup..."
+if ! git diff --quiet || ! git diff --staged --quiet; then
+    echo "📝 Found changes that need to be committed"
+    echo ""
+
+    # Show what changes were made
+    echo "Changes from branch cleanup:"
+    git status --short
+    echo ""
+
+    # Stage changes
+    echo "📋 Staging cleanup changes..."
+    git add .
+
+    # Commit with appropriate message
+    commit_msg="CHORE(scripts): automated branch cleanup - removed stale local and remote branches"
+
+    # Use the enhanced commit function with log review
+    if commit_with_log_review "$commit_msg"; then
+        echo ""
+        echo "✅ Commit successful! Now creating pull request..."
+        echo ""
+        echo "🚀 Next Steps:"
+        echo "1. Push feature branch: git push origin $cleanup_branch"
+        echo "2. Create PR to merge cleanup changes into main"
+        echo "3. Review and merge PR after approval"
+        echo ""
+        echo "Current branch: $cleanup_branch"
+        echo "Changes committed and ready for PR creation"
+    else
+        echo ""
+        echo "❌ Commit failed. Please fix the issues identified in the log review."
+        echo "   Then retry: git commit -m \"$commit_msg\""
+        exit 1
+    fi
+else
+    echo "✅ No changes to commit from cleanup"
 fi
 
 # Final status

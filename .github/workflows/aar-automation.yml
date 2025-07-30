@@ -1,0 +1,143 @@
+name: AAR Automation
+
+on:
+  issues:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      aar_type:
+        description: 'Type of AAR to generate'
+        required: true
+        type: choice
+        options:
+          - issue
+          - sprint
+          - incident
+          - automation
+      reference:
+        description: 'Issue number (for issue AAR) or title/description'
+        required: false
+        type: string
+      title:
+        description: 'AAR title (for non-issue AARs)'
+        required: false
+        type: string
+
+jobs:
+  generate-aar:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' &&
+       (contains(github.event.issue.labels.*.name, 'needs-aar') ||
+        contains(github.event.issue.labels.*.name, 'critical') ||
+        contains(github.event.issue.labels.*.name, 'infrastructure') ||
+        contains(github.event.issue.labels.*.name, 'security'))) ||
+      github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+
+      - name: Install GitHub CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh -y
+
+      - name: Generate AAR (Issue Closure)
+        if: github.event_name == 'issues'
+        run: |
+          chmod +x scripts/generate_aar.sh
+          ./scripts/generate_aar.sh issue ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate AAR (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          chmod +x scripts/generate_aar.sh
+          case "${{ github.event.inputs.aar_type }}" in
+            "issue")
+              ./scripts/generate_aar.sh issue "${{ github.event.inputs.reference }}"
+              ;;
+            "sprint"|"incident"|"automation")
+              ./scripts/generate_aar.sh "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.title }}"
+              ;;
+          esac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit AAR files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .aar/
+          git add logs/
+          if git diff --staged --quiet; then
+            echo "No AAR files to commit"
+          else
+            git commit -m "DOCS(aar): add after actions report for ${{ github.event_name == 'issues' && github.event.issue.number || github.event.inputs.aar_type }}"
+            git push
+          fi
+
+      - name: Create follow-up issue for action items
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const issueTitle = context.payload.issue.title;
+
+            const body = `## AAR Follow-up: Action Items for #${issueNumber}
+
+            This issue tracks the action items identified in the After Actions Report for #${issueNumber}.
+
+            **Original Issue**: #${issueNumber} - ${issueTitle}
+            **AAR Location**: \`.aar/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
+
+            ## Action Items
+            <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
+
+            - [ ] Review AAR and extract specific action items
+            - [ ] Assign owners and due dates for each action item
+            - [ ] Update documentation as specified in AAR
+            - [ ] Implement process improvements identified in AAR
+
+            ## Next Steps
+            1. Review the generated AAR file
+            2. Extract specific action items and update this issue
+            3. Assign action items to appropriate team members
+            4. Set due dates based on priority and complexity
+            5. Close this issue when all action items are complete
+
+            **Labels**: \`aar-follow-up\`, \`process-improvement\`
+            `;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `AAR Follow-up: Action Items for #${issueNumber}`,
+              body: body,
+              labels: ['aar-follow-up', 'process-improvement']
+            });
+
+      - name: Upload AAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aar-files-${{ github.run_number }}
+          path: |
+            .aar/
+            logs/aar_generation_*.log
+          retention-days: 30

@@ -250,7 +250,7 @@ The `<scope>` section is optional but recommended for clarity.
 #### Example
 
 ```plaintext
-feat(api): add token validation logic
+FEAT(api): add token validation logic
 
 - Added JWT parsing
 - Included `express-jwt` middleware
