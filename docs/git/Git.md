@@ -235,6 +235,8 @@ Ensure clear, consistent commit messages that aid review and traceability.
 <type>(<scope>): <subject>
 ```
 
+The `<scope>` section is optional but recommended for clarity.
+
 #### Types
 
 - **FEAT**: New features
