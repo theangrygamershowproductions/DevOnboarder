@@ -18,6 +18,7 @@ All notable changes to this project will be recorded in this file.
 - docs(potato): convert Easter egg line to heading
 
 - docs(discord): specify `text` language for message templates
+- docs(git): clarify CHORE usage in commit examples
 - docs(readme, contributing): emphasize running `pip install -e .[test]` before `pytest`; add `scripts/setup_tests.sh`
 - feat(project): add optional `test` extras and use `pip install .[test]` in CI
 - chore(ci): install package with test extras during setup
