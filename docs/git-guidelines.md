@@ -31,8 +31,12 @@ Add login form UI
 Includes basic username and password fields.
 ```
 
-Commit types like `FEAT`, `FIX` and `DOCS` must be uppercase as shown in
-[AGENTS.md](../AGENTS.md).
+Commit types like `FEAT`, `FIX`, `DOCS`, and `CHORE` must be uppercase as shown in
+[AGENTS.md](../AGENTS.md). Use `CHORE` for routine maintenance or CI changes, e.g.:
+
+```text
+CHORE(ci): update Node version in workflow
+```
 
 See the **commit-message policy** in [../AGENTS.md](../AGENTS.md) for a detailed
 explanation of the required format and history rules.
