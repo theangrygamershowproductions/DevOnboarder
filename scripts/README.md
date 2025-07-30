@@ -155,6 +155,81 @@ bash scripts/analyze_logs.sh
 
 **Features**: Pattern analysis, failure detection, automated reporting
 
+### 🔄 Git Utilities
+
+#### `commit_changes.sh`
+
+**Purpose**: Interactive commit utility with smart message generation
+
+**Usage**:
+
+```bash
+# Run interactively with guided prompts
+./scripts/commit_changes.sh
+```
+
+**Features**:
+
+- ✅ **Smart staging**: Prompts to stage unstaged changes
+- ✅ **Intelligent suggestions**: Auto-generates multiple commit message options based on file analysis
+- ✅ **Interactive selection**: Choose from suggested messages or enter custom
+- ✅ **File analysis**: Shows what files are being committed and suggests appropriate types
+- ✅ **Status reporting**: Displays final git status and recent commits
+
+#### `commit_message_guide.sh`
+
+**Purpose**: Educational tool to learn DevOnboarder commit message conventions
+
+**Usage**:
+
+```bash
+# Learn commit message patterns and get help
+./scripts/commit_message_guide.sh
+```
+
+**Features**:
+
+- ✅ **Examples library**: Comprehensive examples for each commit type (FEAT, FIX, DOCS, etc.)
+- ✅ **Interactive builder**: Step-by-step commit message construction
+- ✅ **Current change analysis**: Analyzes your staged files and suggests appropriate commit types
+- ✅ **Scope guidance**: Learn when and how to use different scopes (auth, bot, scripts, etc.)
+- ✅ **Format validation**: Learn the proper structure and rules
+
+#### `sync_with_remote.sh`
+
+**Purpose**: Comprehensive git synchronization with conflict detection
+
+**Usage**:
+
+```bash
+# Safe sync with full conflict handling
+./scripts/sync_with_remote.sh
+```
+
+**Features**:
+
+- ✅ **Conflict detection**: Handles pull/push rejections safely
+- ✅ **Branch awareness**: Works with any current branch
+- ✅ **Safety checks**: Validates uncommitted changes before operations
+- ✅ **Recovery guidance**: Provides clear error messages and next steps
+
+#### `simple_sync.sh`
+
+**Purpose**: Quick pull and push for conflict-free scenarios
+
+**Usage**:
+
+```bash
+# Fast sync when no conflicts expected
+./scripts/simple_sync.sh
+```
+
+**Features**:
+
+- ✅ **Speed optimized**: Minimal checks for fast operations
+- ✅ **Main branch focused**: Specifically targets origin/main
+- ✅ **Basic logging**: Simple operation status reporting
+
 ## Development Workflow Integration
 
 ### Pre-commit Hooks
@@ -189,6 +264,8 @@ This ensures reproducible builds and matches CI/production environments.
 
 ### Recommended Commit Process
 
+#### Option 1: Comprehensive validation (for critical changes)
+
 ```bash
 # 1. Activate virtual environment
 source .venv/bin/activate
@@ -196,8 +273,34 @@ source .venv/bin/activate
 # 2. Use comprehensive verification script (includes automatic cleanup)
 ./scripts/verify_and_commit.sh
 
-# 3. Check logs for any issues
+# 3. Sync with remote safely
+./scripts/sync_with_remote.sh
+
+# 4. Check logs for any issues
 bash scripts/analyze_logs.sh
+```
+
+#### Option 2: Interactive workflow (for regular development)
+
+```bash
+# 1. Activate virtual environment
+source .venv/bin/activate
+
+# 2. Interactive commit with smart defaults
+./scripts/commit_changes.sh
+
+# 3. Safe remote sync with conflict handling
+./scripts/sync_with_remote.sh
+```
+
+#### Option 3: Quick workflow (for simple updates)
+
+```bash
+# 1. Activate virtual environment
+source .venv/bin/activate
+
+# 2. Quick commit and sync (when confident no conflicts)
+./scripts/commit_changes.sh && ./scripts/simple_sync.sh
 ```
 
 This ensures all quality checks pass before commit and provides full diagnostic logs.
