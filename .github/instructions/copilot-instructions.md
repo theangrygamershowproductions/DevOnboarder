@@ -332,7 +332,7 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 - `FEAT(auth): add user authentication endpoint with JWT validation`
 - `FIX(bot): resolve Discord connection timeout handling`
 - `DOCS(setup): update multi-environment configuration guide`
-- `CI(build): ensure latest GitHub CLI binary is used`
+- `CHORE(ci): ensure latest GitHub CLI binary is used`
 
 **Bad Examples**:
 
