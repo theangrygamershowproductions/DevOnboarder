@@ -6,6 +6,7 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+- docs(node): update setup and troubleshooting guides for Node.js 22
 - fix(ci): markdownlint workflow configuration to exclude dependency directories
 - feat(docs): comprehensive ROADMAP.md and ROADMAP_SUMMARY.md for DevSecOps Manager review
 - fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
