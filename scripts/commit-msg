@@ -1,6 +1,7 @@
 #!/bin/sh
 # Prevent commits if the message does not match <TYPE>(<scope>): <subject>
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE)(\([^)]+\))?: .+'
+# `[no-ci]` may prefix the type to skip CI on direct pushes
+regex='^(\[no-ci\]\s*)?(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE)(\([^)]+\))?: .+'
 message=$(cat "$1")
 
 if ! printf '%s' "$message" | grep -Eq "$regex"; then

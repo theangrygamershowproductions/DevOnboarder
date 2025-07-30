@@ -38,6 +38,13 @@ Commit types like `FEAT`, `FIX`, `DOCS`, and `CHORE` must be uppercase as shown 
 CHORE(ci): update Node version in workflow
 ```
 
+Prefixing the message with `[no-ci]` is allowed when you need to bypass the CI
+workflow for a direct push:
+
+```text
+[no-ci] CHORE(ci): bump dev dependency versions
+```
+
 See the **commit-message policy** in [../AGENTS.md](../AGENTS.md) for a detailed
 explanation of the required format and history rules.
 

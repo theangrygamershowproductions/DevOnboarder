@@ -26,7 +26,9 @@ It also uploads a `yamllint.log` artifact containing the full lint output.
 ## Skipping the Test Job
 
 Pushes can opt out of the main test job by including `[no-ci]` anywhere in the
-commit message. Pull requests ignore this marker and run the full workflow.
+commit message. Pull requests ignore this marker and run the full workflow. The
+`commit-msg` hook in `scripts/` recognizes this prefix so local linting does not
+fail when `[no-ci]` is used.
 
 ## Caching
 
