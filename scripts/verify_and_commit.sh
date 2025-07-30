@@ -57,7 +57,7 @@ main() {
     git status --short | tee -a "$LOG_FILE"
 
     # Clean all test artifacts before validation for clean state
-    log_and_display "� Cleaning all test artifacts before validation..."
+    log_and_display "🧹 Cleaning all test artifacts before validation..."
     if [ -f "scripts/manage_logs.sh" ]; then
         log_and_display "   Running comprehensive log cleanup..."
         bash scripts/manage_logs.sh clean 2>&1 | tee -a "$LOG_FILE"
