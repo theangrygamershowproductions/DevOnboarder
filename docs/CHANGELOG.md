@@ -39,6 +39,7 @@ All notable changes to this project will be recorded in this file.
 - chore(ci): enforce PR checklist with `scripts/validate_pr_checklist.sh`
 - fix(ci): ignore comment failures in `validate_pr_checklist.sh`
 - fix(ci): accept checked or unchecked boxes in `validate_pr_checklist.sh`
+- docs(guidelines): update commit message examples to use `CHORE(ci)` instead of `CI(build)`
 - fix(ci): include full checklist content in `validate_pr_checklist.sh` comments
 - feat(ci): comment checklist with GraphQL in `validate_pr_checklist.sh`
 - docs(readme): link to `docs/bot-types.md` for Discord bot versus Codex agents
