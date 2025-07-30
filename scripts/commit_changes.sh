@@ -60,33 +60,144 @@ git diff --staged --name-status
 
 echo ""
 
-# Ask for commit message
-read -r -p "Enter commit message (or press Enter for default): " commit_msg
+# Generate intelligent commit message suggestions
+changed_files=$(git diff --staged --name-only)
+changed_count=$(echo "$changed_files" | wc -l)
 
-if [ -z "$commit_msg" ]; then
-    # Generate a default commit message based on changed files
-    changed_files=$(git diff --staged --name-only | head -5)
-    if echo "$changed_files" | grep -q "\.md$"; then
-        commit_msg="DOCS: update documentation files"
-    elif echo "$changed_files" | grep -q "scripts/"; then
-        commit_msg="CHORE(scripts): update automation scripts"
+echo -e "${YELLOW}📝 Analyzing changes for commit message suggestions...${NC}"
+echo ""
+
+# Analyze file types and changes
+doc_files=$(echo "$changed_files" | grep -cE "\.(md|rst|txt)$")
+script_files=$(echo "$changed_files" | grep -cE "scripts/.*\.sh$")
+python_files=$(echo "$changed_files" | grep -cE "\.(py)$")
+config_files=$(echo "$changed_files" | grep -cE "\.(yml|yaml|json|toml|ini)$")
+js_ts_files=$(echo "$changed_files" | grep -cE "\.(js|ts|jsx|tsx)$")
+
+# Show what's being committed
+echo -e "${YELLOW}Files to be committed ($changed_count total):${NC}"
+echo "$changed_files" | head -10
+if [ "$changed_count" -gt 10 ]; then
+    echo "... and $((changed_count - 10)) more files"
+fi
+echo ""
+
+# Generate smart suggestions based on content
+suggestions=()
+
+if [ "$script_files" -gt 0 ]; then
+    if echo "$changed_files" | grep -q "git\|sync\|commit"; then
+        suggestions+=("FEAT(scripts): add git workflow utilities for safer sync operations")
+        suggestions+=("CHORE(scripts): enhance git utilities with conflict detection")
+    elif echo "$changed_files" | grep -q "branch\|cleanup"; then
+        suggestions+=("FEAT(scripts): add comprehensive branch cleanup utilities")
+        suggestions+=("CHORE(scripts): enhance branch management automation")
     else
-        commit_msg="CHORE: update project files"
+        suggestions+=("CHORE(scripts): update automation scripts")
     fi
-    echo "Using default commit message: $commit_msg"
+fi
+
+if [ "$doc_files" -gt 0 ]; then
+    if echo "$changed_files" | grep -q "README"; then
+        suggestions+=("DOCS: update README with new utilities and workflow guidance")
+    elif echo "$changed_files" | grep -q "git-utilities"; then
+        suggestions+=("DOCS: add comprehensive git utilities documentation")
+    elif echo "$changed_files" | grep -q "scripts"; then
+        suggestions+=("DOCS: document new script utilities and usage examples")
+    else
+        suggestions+=("DOCS: update documentation files")
+    fi
+fi
+
+if [ "$config_files" -gt 0 ]; then
+    suggestions+=("CONFIG: update configuration files")
+fi
+
+if [ "$python_files" -gt 0 ]; then
+    suggestions+=("FEAT: update Python components")
+fi
+
+if [ "$js_ts_files" -gt 0 ]; then
+    suggestions+=("FEAT: update TypeScript/JavaScript components")
+fi
+
+# Default fallback
+if [ ${#suggestions[@]} -eq 0 ]; then
+    suggestions+=("CHORE: update project files")
+fi
+
+# Show suggestions
+echo -e "${YELLOW}💡 Suggested commit messages:${NC}"
+for i in "${!suggestions[@]}"; do
+    echo "  $((i+1)). ${suggestions[$i]}"
+done
+echo "  0. Enter custom message"
+echo ""
+
+# Ask for selection
+read -r -p "Select option (1-${#suggestions[@]}) or press Enter for option 1: " selection
+
+if [ -z "$selection" ]; then
+    selection=1
+fi
+
+if [ "$selection" = "0" ]; then
+    read -r -p "Enter custom commit message: " commit_msg
+elif [ "$selection" -ge 1 ] && [ "$selection" -le "${#suggestions[@]}" ]; then
+    commit_msg="${suggestions[$((selection-1))]}"
+    echo "Selected: $commit_msg"
+else
+    echo "Invalid selection, using first suggestion"
+    commit_msg="${suggestions[0]}"
 fi
 
 # Commit the changes
 echo ""
 echo -e "${GREEN}📝 Committing changes...${NC}"
-git commit -m "$commit_msg"
 
-echo -e "${GREEN}✅ Commit successful!${NC}"
+if git commit -m "$commit_msg"; then
+    echo -e "${GREEN}✅ Commit successful!${NC}"
 
-# Show the latest commit
-echo ""
-echo -e "${YELLOW}Latest commit:${NC}"
-git log --oneline -1
+    # Show the latest commit
+    echo ""
+    echo -e "${YELLOW}Latest commit:${NC}"
+    git log --oneline -1
 
-echo ""
-echo -e "${GREEN}🎉 All changes committed successfully!${NC}"
+    echo ""
+    echo -e "${GREEN}🎉 All changes committed successfully!${NC}"
+else
+    echo ""
+    echo -e "${RED}⚠️  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES${NC}"
+    echo "====================================================="
+    echo ""
+    echo -e "${YELLOW}🔍 LOG REVIEW REQUIRED:${NC}"
+    echo "Pre-commit hooks have flagged issues that must be fixed before commit."
+    echo ""
+    echo -e "${YELLOW}📋 Common Issues to Check:${NC}"
+    echo "  • Markdown violations (MD022: headings need blank lines, MD032: lists need blank lines)"
+    echo "  • Bash shellcheck warnings (formatting, quoting, etc.)"
+    echo "  • File formatting issues (trailing spaces, line endings)"
+    echo "  • Python linting errors (ruff, black formatting)"
+    echo "  • TypeScript/JavaScript ESLint violations"
+    echo ""
+    echo -e "${YELLOW}🛠️  To Fix Issues:${NC}"
+    echo "  1. Review the error output above carefully"
+    echo "  2. Fix all reported violations in the affected files"
+    echo "  3. Stage your fixes: git add ."
+    echo "  4. Re-attempt commit: git commit -m \"$commit_msg\""
+    echo "  5. Or use: git commit --amend --no-edit (to amend this commit)"
+    echo ""
+    echo -e "${YELLOW}🔄 Alternative Recovery Options:${NC}"
+    echo "  • Reset this commit: git reset --soft HEAD~1"
+    echo "  • Check what's staged: git status"
+    echo "  • Run this script again: ./scripts/commit_changes.sh"
+    echo "  • Use educational guide: ./scripts/commit_message_guide.sh"
+    echo ""
+
+    read -r -p "⏸️  Press Enter after you've reviewed the errors and are ready to proceed..."
+    echo ""
+    echo -e "${YELLOW}💡 Remember: All issues must be fixed for the commit to succeed.${NC}"
+    echo "   DevOnboarder enforces strict quality standards via pre-commit hooks."
+    echo ""
+    echo -e "${GREEN}🚀 Once fixed, you can retry with: git commit -m \"$commit_msg\"${NC}"
+fi
