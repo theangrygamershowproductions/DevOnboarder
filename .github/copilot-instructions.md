@@ -209,7 +209,49 @@ command 2>&1 | tee logs/step-name.log
 
 **Violation Severity**: CRITICAL - Blocks all commits and CI runs
 
-### 3. Workflow Standards
+### 3. Terminal Output Best Practices - MANDATORY
+
+**For multi-line terminal output, ALWAYS use simple echo commands to prevent terminal hanging:**
+
+```bash
+# ✅ CORRECT - Use simple echo commands
+echo "✅ Multi-line output here"
+echo "📋 Works with emojis and unicode"
+echo "🎯 No escaping issues"
+echo "🚀 Clean terminal behavior"
+
+# ❌ WRONG - Multi-line echo or here-doc can hang terminal
+echo "Multi-line
+output that
+hangs terminal"
+
+cat << 'EOF'
+This can also hang
+EOF
+```
+
+**Key Advantages**:
+
+- **No terminal hanging** - Commands complete cleanly
+- **Simple syntax** - No complex escaping required
+- **Reliable execution** - Works consistently across environments
+- **Easy maintenance** - Clear, readable syntax
+
+**Usage Examples**:
+
+```bash
+# Status summaries
+echo "✅ Task completed successfully"
+echo "📋 Files processed: 5"
+echo "🎯 Next steps: Review and commit"
+
+# Error reporting
+echo "❌ Operation failed"
+echo "🔍 Check logs in: logs/error.log"
+echo "📝 Resolution: Fix configuration"
+```
+
+### 4. Workflow Standards
 
 - **Trunk-based development**: All work branches from `main`, short-lived feature branches
 - **Pull request requirement**: All changes via PR with review
