@@ -29,6 +29,7 @@ while read -r branch; do
   [[ "$b" == "$BASE_BRANCH" ]] && continue
   [[ "$b" == "HEAD" ]] && continue
   [[ "$b" == "dev" ]] && continue
+  [[ "$b" == "feat/potato-ignore-policy-focused" ]] && continue
   [[ "$b" == release/* ]] && continue
   if git merge-base --is-ancestor "origin/$b" "origin/$BASE_BRANCH"; then
     ts=$(git show -s --format=%ct "origin/$b")
