@@ -261,7 +261,7 @@ jobs:
             - name: Run mypy
               run: |
                   source .venv/bin/activate
-                  mypy src/devonboarder
+                  mypy --cache-dir=logs/.mypy_cache src/devonboarder
             - name: Install Vale
               run: |
                   # Download and install Vale 3.12.0 to /usr/local/bin
