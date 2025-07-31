@@ -905,4 +905,4 @@ dev`.
 - chore(ci): use `gh pr comment` in `validate_pr_checklist.sh` for posting checklists
 - fix(ci): redirect pytest artifacts to logs and clean after tests
 - fix(ci): include coverage.xml in uploaded data
-- docs(tests): document coverage path and cleanup command
+- docs(tests): document coverage and junitxml paths and cleanup command
