@@ -209,7 +209,72 @@ command 2>&1 | tee logs/step-name.log
 
 **Violation Severity**: CRITICAL - Blocks all commits and CI runs
 
-### 3. Workflow Standards
+### 3. Terminal Output Best Practices - MANDATORY
+
+**CRITICAL: For terminal output, ALWAYS use simple echo commands to prevent hanging:**
+
+```bash
+# ✅ CORRECT - Use individual echo commands (MANDATORY)
+echo "✅ Multi-line output here"
+echo "📋 Works with emojis and unicode"
+echo "🎯 No escaping issues"
+echo "🚀 Clean terminal behavior"
+
+# ❌ WRONG - These approaches cause terminal hanging (FORBIDDEN)
+echo "Multi-line
+output that
+hangs terminal"
+
+cat << 'EOF'
+This also hangs terminals
+EOF
+
+echo -e "Line1\nLine2\nLine3"  # Also problematic
+```
+
+**Enforcement Policy**:
+
+- **NEVER use multi-line echo** - Causes terminal hanging in DevOnboarder environment
+- **NEVER use here-doc syntax** - Also causes terminal hanging issues
+- **NEVER use echo -e with \n** - Unreliable and can hang
+- **ALWAYS use individual echo commands** - Only reliable method tested
+
+**Key Advantages**:
+
+- **No terminal hanging** - Commands complete cleanly every time
+- **Simple syntax** - No complex escaping required
+- **Reliable execution** - Works consistently across all environments
+- **Easy maintenance** - Clear, readable syntax
+- **Proven approach** - Tested extensively in DevOnboarder workflows
+
+**Standard Usage Patterns**:
+
+```bash
+# Status summaries (use this pattern)
+echo "✅ Task completed successfully"
+echo "📋 Files processed: 5"
+echo "🎯 Next steps: Review and commit"
+
+# Error reporting (use this pattern)
+echo "❌ Operation failed"
+echo "🔍 Check logs in: logs/error.log"
+echo "📝 Resolution: Fix configuration"
+
+# Multi-step progress (use this pattern)
+echo "🚀 Starting deployment process"
+echo "📦 Building application"
+echo "🔍 Running tests"
+echo "✅ Deployment complete"
+```
+
+**Agent Requirements**:
+
+- All AI agents MUST use individual echo commands for terminal output
+- Any multi-line output MUST be broken into separate echo statements
+- Terminal hanging is considered a critical failure in DevOnboarder
+- This policy is enforced to maintain system reliability
+
+### 4. Workflow Standards
 
 - **Trunk-based development**: All work branches from `main`, short-lived feature branches
 - **Pull request requirement**: All changes via PR with review
@@ -571,7 +636,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/enforce_output_location.sh`: Root Artifact Guard enforcement
 - `scripts/clean_pytest_artifacts.sh`: Comprehensive artifact cleanup
 - `scripts/manage_logs.sh`: Advanced log management system
-- `scripts/validate_agent_files.py`: Agent validation with JSON schema
+- `scripts/validate_agents.py`: Agent validation with JSON schema
 - `scripts/validate-bot-permissions.sh`: Bot permission verification
 
 ### Automation Ecosystem
@@ -585,7 +650,7 @@ DevOnboarder includes 100+ automation scripts in `scripts/` covering:
 - **Quality Assurance**: `validate_pr_checklist.sh`, `standards_enforcement_assessment.sh`
 - **Artifact Management**: `clean_pytest_artifacts.sh`, `enforce_output_location.sh`
 - **Log Management**: `run_tests_with_logging.sh`, `manage_logs.sh`
-- **Agent Validation**: `validate_agent_files.py`, `validate-bot-permissions.sh`
+- **Agent Validation**: `validate_agents.py`, `validate-bot-permissions.sh`
 
 ### Virtual Environment in CI
 
@@ -929,9 +994,11 @@ git status --short  # Should show only intended changes
 3. **ALWAYS verify virtual environment activation** in examples
 4. **ALWAYS include virtual environment setup** in instructions
 5. **NEVER modify linting configuration files** without explicit human request
-6. **REMEMBER**: This project runs in containers/venvs, not host systems
-7. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
-8. **FOLLOW**: Node modules hygiene standards and placement requirements
+6. **NEVER use multi-line echo or here-doc syntax** - Use individual echo commands only
+7. **ALWAYS use simple echo commands** for terminal output to prevent hanging
+8. **REMEMBER**: This project runs in containers/venvs, not host systems
+9. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
+10. **FOLLOW**: Node modules hygiene standards and placement requirements
 
 ## Agent Documentation Standards
 
@@ -971,7 +1038,7 @@ python scripts/list-bots.py
 bash scripts/check_env_docs.py
 
 # Agent frontmatter validation
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 ```
 
 ### Agent Validation System
@@ -994,7 +1061,7 @@ permissions:
 
 ```bash
 # Validate all agent files against schema
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 
 # Validate specific agent file
 bash scripts/validate_agents.sh agents/specific-agent.md

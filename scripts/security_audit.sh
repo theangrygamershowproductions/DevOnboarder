@@ -12,6 +12,22 @@ OUT="docs/security-audit-${DATE}.md"
   echo "## Python (\`pip-audit\`)"
   audit_status=0
   mkdir -p logs
+
+  # Check for ignored vulnerabilities and report them
+  if [ -f ".pip-audit-ignore" ]; then
+    echo
+    echo "### ⚠️ Ignored Vulnerabilities (Require Periodic Review)"
+    echo
+    echo "The following vulnerabilities are currently ignored:"
+    echo "\`\`\`"
+    cat .pip-audit-ignore
+    echo "\`\`\`"
+    echo
+    echo "**ACTION REQUIRED**: These ignored vulnerabilities should be reviewed quarterly."
+    echo "Next review due: $(date -d '+3 months' '+%Y-%m-%d')"
+    echo
+  fi
+
   pip-audit >logs/pip_audit.log 2>&1 || audit_status=$?
   cat logs/pip_audit.log
   if [ "$audit_status" -eq 1 ]; then

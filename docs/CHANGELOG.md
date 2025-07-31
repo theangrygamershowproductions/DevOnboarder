@@ -6,6 +6,7 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+- docs(node): update setup and troubleshooting guides for Node.js 22
 - fix(ci): markdownlint workflow configuration to exclude dependency directories
 - feat(docs): comprehensive ROADMAP.md and ROADMAP_SUMMARY.md for DevSecOps Manager review
 - fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
@@ -824,6 +825,8 @@ dev`.
 - Fixed YAML indentation in `ci.yml` for the Python dependency audit step.
 - docs(ci): expand automation tasks with 12-section outline referencing bot permissions and notify workflow
 - docs: fix markdownlint warnings in about-potato, offline setup, and invite emails
+- chore(ci): sync check_commit_messages.sh with commit-msg hook (optional scope)
+- docs(git): document optional commit scope and update allowed types
 
 ## [0.1.0] - 2025-06-14
 
