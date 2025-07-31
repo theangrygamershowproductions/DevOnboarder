@@ -235,6 +235,8 @@ Ensure clear, consistent commit messages that aid review and traceability.
 <type>(<scope>): <subject>
 ```
 
+The `<scope>` section is optional but recommended for clarity.
+
 #### Types
 
 - **FEAT**: New features
@@ -248,7 +250,7 @@ Ensure clear, consistent commit messages that aid review and traceability.
 #### Example
 
 ```plaintext
-feat(api): add token validation logic
+FEAT(api): add token validation logic
 
 - Added JWT parsing
 - Included `express-jwt` middleware
