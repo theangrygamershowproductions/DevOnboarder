@@ -825,6 +825,7 @@ dev`.
 - Fixed YAML indentation in `ci.yml` for the Python dependency audit step.
 - docs(ci): expand automation tasks with 12-section outline referencing bot permissions and notify workflow
 - docs: fix markdownlint warnings in about-potato, offline setup, and invite emails
+- docs(changelog): note commit `8270ca8` used non-conforming message "Applying previous commit."; future commits must use the uppercase `<TYPE>(<scope>): <SUBJECT>` format
 - chore(ci): sync check_commit_messages.sh with commit-msg hook (optional scope)
 - docs(git): document optional commit scope and update allowed types
 
