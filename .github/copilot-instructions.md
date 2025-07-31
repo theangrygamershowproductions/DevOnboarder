@@ -636,7 +636,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/enforce_output_location.sh`: Root Artifact Guard enforcement
 - `scripts/clean_pytest_artifacts.sh`: Comprehensive artifact cleanup
 - `scripts/manage_logs.sh`: Advanced log management system
-- `scripts/validate_agent_files.py`: Agent validation with JSON schema
+- `scripts/validate_agents.py`: Agent validation with JSON schema
 - `scripts/validate-bot-permissions.sh`: Bot permission verification
 
 ### Automation Ecosystem
@@ -650,7 +650,7 @@ DevOnboarder includes 100+ automation scripts in `scripts/` covering:
 - **Quality Assurance**: `validate_pr_checklist.sh`, `standards_enforcement_assessment.sh`
 - **Artifact Management**: `clean_pytest_artifacts.sh`, `enforce_output_location.sh`
 - **Log Management**: `run_tests_with_logging.sh`, `manage_logs.sh`
-- **Agent Validation**: `validate_agent_files.py`, `validate-bot-permissions.sh`
+- **Agent Validation**: `validate_agents.py`, `validate-bot-permissions.sh`
 
 ### Virtual Environment in CI
 
@@ -1038,7 +1038,7 @@ python scripts/list-bots.py
 bash scripts/check_env_docs.py
 
 # Agent frontmatter validation
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 ```
 
 ### Agent Validation System
@@ -1061,7 +1061,7 @@ permissions:
 
 ```bash
 # Validate all agent files against schema
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 
 # Validate specific agent file
 bash scripts/validate_agents.sh agents/specific-agent.md
