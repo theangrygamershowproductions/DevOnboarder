@@ -280,17 +280,18 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: vale-results
-                  path: vale-results.json
+                  path: logs/vale-results.json
                   retention-days: 7
             - name: Generate secrets
               run: ./scripts/generate-secrets.sh
             - name: Audit environment variables
               run: |
-                  env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=env_audit.json bash scripts/audit_env_vars.sh' > env_audit.log
-                  cat env_audit.log
-                  cat env_audit.json
-                  missing=$(python -c 'import json,sys;print("".join(json.load(open("env_audit.json")).get("missing", [])))')
-                  extras=$(python -c 'import json,sys;d=json.load(open("env_audit.json"));print("".join(e for e in d.get("extra", []) if e not in ("PATH","PWD","SHLVL","_")))')
+                  mkdir -p logs
+                  env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' > logs/env_audit.log
+                  cat logs/env_audit.log
+                  cat logs/env_audit.json
+                  missing=$(python -c 'import json,sys;print("".join(json.load(open("logs/env_audit.json")).get("missing", [])))')
+                  extras=$(python -c 'import json,sys;d=json.load(open("logs/env_audit.json"));print("".join(e for e in d.get("extra", []) if e not in ("PATH","PWD","SHLVL","_")))')
                   if [ -n "$missing" ] || [ -n "$extras" ]; then
                       echo "::error::Environment variable mismatch detected"
                       exit 1
@@ -301,8 +302,8 @@ jobs:
               with:
                   name: env-audit
                   path: |
-                      env_audit.log
-                      env_audit.json
+                      logs/env_audit.log
+                      logs/env_audit.json
                   retention-days: 7
             - name: Build containers
               run: docker compose -f docker-compose.ci.yaml --env-file .env.ci build 2>&1 | tee logs/docker-build.log
@@ -324,21 +325,28 @@ jobs:
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
             - name: Run diagnostics
               run: |
+                  mkdir -p logs
                   source .venv/bin/activate
-                  python -m diagnostics > diagnostics.log
+                  python -m diagnostics > logs/diagnostics.log
             - name: Upload diagnostics
               if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: diagnostics
-                  path: diagnostics.log
+                  path: logs/diagnostics.log
                   retention-days: 7
             - name: Prepare test-results directory
               run: mkdir -p test-results logs
             - name: Run tests with coverage
               run: |
                   source .venv/bin/activate
-                  pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml 2>&1 | tee logs/pytest.log
+                  COVERAGE_FILE=logs/.coverage pytest \
+                      --cache-dir=logs/.pytest_cache \
+                      --cov=src \
+                      --cov-report=xml:logs/coverage.xml \
+                      --cov-fail-under=95 \
+                      --junitxml=test-results/pytest-results.xml \
+                      2>&1 | tee logs/pytest.log
             - name: Upload pytest results
               if: always() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
@@ -464,7 +472,8 @@ jobs:
                   path: |
                       bot/coverage
                       frontend/coverage
-                      .coverage
+                      logs/.coverage
+                      logs/coverage.xml
                   retention-days: 7
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
@@ -528,6 +537,9 @@ jobs:
                   name: coverage-badge-fallback
                   path: coverage.svg
                   retention-days: 30
+            - name: Clean test artifacts
+              if: always()
+              run: bash scripts/clean_pytest_artifacts.sh
 
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
@@ -710,6 +722,12 @@ jobs:
                   fi
               env:
                   GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+            - name: Prepare CI log artifacts
+              if: always()
+              run: |
+                  mkdir -p logs
+                  mv -f gh_cli.log logs/ 2>/dev/null || true
+                  mv -f audit.md logs/ 2>/dev/null || true
             - name: Upload CI logs
               if: always()
               uses: actions/upload-artifact@v4
@@ -718,5 +736,6 @@ jobs:
                   path: |
                       logs
                       ${{ runner.temp }}/_github_workflow/*/job.log
-                      gh_cli.log
-                      audit.md
+            - name: Root Artifact Guard
+              if: always()
+              run: bash scripts/enforce_output_location.sh
