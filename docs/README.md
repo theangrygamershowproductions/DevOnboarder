@@ -163,6 +163,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 - [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
+- [Issue labeling guide](contributing/issue-labeling-guide.md) &ndash; comprehensive labeling system for strategic issue management.
+- [Issue labels quick reference](contributing/labels-quick-reference.md) &ndash; essential labels and common filtering examples.
 - [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 - [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
@@ -269,6 +271,8 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 1. Search existing issues to avoid duplicates and provide clear reproduction steps.
 2. Start branches from the latest `main` and follow the git guidelines.
 3. Use the pull request template and ensure the checklist passes.
+4. Review our [issue labeling guide](contributing/issue-labeling-guide.md) for proper categorization and prioritization.
+5. Use the [labels quick reference](contributing/labels-quick-reference.md) for common labeling scenarios.
 
 ### Continuous Improvement Checklist
 

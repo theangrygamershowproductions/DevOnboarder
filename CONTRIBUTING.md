@@ -48,6 +48,17 @@ Agent files are automatically validated against the schema in `schema/agent-sche
 Run `python scripts/validate_agents.py` to manually validate all agent files.
 Refer to [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) during each retrospective.
 
+## Issue Management
+
+DevOnboarder uses a comprehensive labeling system for issue organization and project planning.
+See [docs/contributing/issue-labeling-guide.md](docs/contributing/issue-labeling-guide.md) for:
+
+- **Priority and effort estimation** (`priority-high`, `effort-medium`, etc.)
+- **Component categorization** (`testing-infrastructure`, `developer-experience`, etc.)
+- **Strategic planning guidelines** and implementation sequences
+- **Label usage examples** and filter combinations
+- **Integration with CI/CD workflows** and automation
+
 ## Continuous Improvement Checklist
 
 Pull requests must include the block from

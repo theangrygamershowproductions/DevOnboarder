@@ -6,7 +6,7 @@ Thanks for helping make DevOnboarder safe for everyone.
 
 We actively maintain the latest release line. Security fixes are backported for
 minor versions released in the last six months. The project targets Python 3.12
-and Node.js 20.
+and Node.js 22.
 
 | Version | Supported          |
 | ------- | ------------------ |
