@@ -1,7 +1,7 @@
 # Continuous Integration Workflow
 
 The `ci.yml` workflow runs on every push and pull request. It sets up Python
-3.12 and Node.js 20 before building the containers and executing the test
+3.12 and Node.js 22 before building the containers and executing the test
 suites.
 
 ## Concurrency
