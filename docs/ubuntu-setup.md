@@ -1,6 +1,6 @@
 # Ubuntu Setup
 
-These commands install Docker, Docker Compose, Node.js 20, and Python 3.12 on Ubuntu 22.04 or newer.
+These commands install Docker, Docker Compose, Node.js 22, and Python 3.12 on Ubuntu 22.04 or newer.
 
 ## Install Docker and Docker Compose
 
@@ -17,12 +17,12 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-## Install Node.js 20
+## Install Node.js 22
 
 Download the setup script first so it can be reviewed before execution.
 
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
 # Optional: inspect the script or verify it against the NodeSource repository
 sudo bash nodesource_setup.sh
 rm nodesource_setup.sh
