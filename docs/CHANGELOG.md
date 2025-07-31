@@ -464,7 +464,7 @@ dev`.
 - Confirmed all Docker healthchecks and CI wait steps use `/health` instead of the deprecated `/healthz` path.
 - Generated `frontend/package-lock.json` to pin npm dependencies.
 - Added Vale and LanguageTool documentation linting in CI.
-- CI now saves Vale results as `vale-results.json` and uploads them as an artifact.
+- CI now saves Vale results as `logs/vale-results.json` and uploads them as an artifact.
 - Linter step now uses `ruff check --output-format=github .`.
 - Improved LanguageTool script with line/column output and graceful connection error handling.
 - CI workflow now records pytest results and uploads them as an artifact.
@@ -906,3 +906,6 @@ dev`.
 - fix(ci): redirect pytest artifacts to logs and clean after tests
 - fix(ci): include coverage.xml in uploaded data
 - docs(tests): document coverage and junitxml paths and cleanup command
+- fix(ci): save Vale results to logs/vale-results.json and update docs
+- fix(ci): output env audit and diagnostics to logs directory
+- chore(ci): enforce Root Artifact Guard after uploading CI logs
