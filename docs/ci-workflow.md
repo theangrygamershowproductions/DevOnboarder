@@ -69,8 +69,8 @@ adjustments.
 
 After `.env.dev` is generated, the workflow runs `scripts/audit_env_vars.sh`.
 The script compares the generated environment file to the example files and
-fails if any variables are missing or extra. The step writes `env_audit.json`
-so the `secrets-alignment.yml` workflow can reuse the results. When the audit
+fails if any variables are missing or extra. The step writes `logs/env_audit.json`
+and `logs/env_audit.log` so the `secrets-alignment.yml` workflow can reuse the results. When the audit
 fails, the CI failure issue automation records the details so maintainers can
 investigate.
 
@@ -102,6 +102,10 @@ After the environment checks, the job runs three dependency audits:
 Any reported high severity issues cause the workflow to fail. The detailed
 results appear in the job log, which is uploaded as a CI artifact so
 maintainers can review the findings.
+
+After all CI logs are uploaded, `scripts/enforce_output_location.sh` runs.
+This **Root Artifact Guard** step fails the job if coverage data or other
+artifacts pollute the repository root.
 
 ## Codex CI Monitoring
 
