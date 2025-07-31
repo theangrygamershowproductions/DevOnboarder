@@ -21,19 +21,26 @@ find . -name ".nyc_output" -type d -not -path "./.venv/*" -exec rm -rf {} + 2>/d
 rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 # Clean coverage artifacts in logs/
-if [[ -d "logs/" ]]; then
-    echo "   📊 Cleaning logs coverage artifacts..."
-    find logs/ -name ".coverage*" -delete 2>/dev/null || true
-    find logs/ -name "coverage.xml" -delete 2>/dev/null || true
-    find logs/ -name "coverage.json" -delete 2>/dev/null || true
-    rm -rf logs/htmlcov/ 2>/dev/null || true
+    if [[ -d "logs/" ]]; then
+        echo "   📊 Cleaning logs coverage artifacts..."
+        find logs/ -name ".coverage*" -delete 2>/dev/null || true
+        find logs/ -name "coverage.xml" -delete 2>/dev/null || true
+        find logs/ -name "coverage.json" -delete 2>/dev/null || true
+        rm -rf logs/htmlcov/ 2>/dev/null || true
 
-    echo "   📝 Cleaning timestamped log files..."
-    find logs/ -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
+        echo "   📝 Cleaning timestamped log files..."
+        find logs/ -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
 
-    echo "   🔍 Cleaning validation artifacts..."
-    find logs/ -name "validation_*.log" -delete 2>/dev/null || true
-fi
+        echo "   🔍 Cleaning validation artifacts..."
+        find logs/ -name "validation_*.log" -delete 2>/dev/null || true
+
+        echo "   📝 Moving stray root logs into logs/ ..."
+        for lf in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
+            if [[ -f "$lf" ]]; then
+                mv -f "$lf" logs/ 2>/dev/null || true
+            fi
+        done
+    fi
 
 # Clean pytest cache directories more thoroughly
 echo "   📦 Cleaning pytest cache..."
