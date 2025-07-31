@@ -107,10 +107,10 @@ Schedule it with a `schedule:` trigger if you want regular cleanup.
 
 ## Troubleshooting
 
-- The workflow logs `gh auth status` before creating the failure issue so you can
-  verify the token scopes in `gh_cli.log`.
-- Download `gh_cli.log` and `audit.md` from the run's **Artifacts** section to
-  inspect GitHub CLI output and the log audit summary.
+  - The workflow logs `gh auth status` before creating the failure issue so you can
+    verify the token scopes in `logs/gh_cli.log`.
+  - Download `logs/gh_cli.log` and `logs/audit.md` from the run's **Artifacts** section to
+    inspect GitHub CLI output and the log audit summary.
 - Downloading workflow run logs with `curl` or `gh run download` requires a
   token granted the `actions: read` scope. The built-in `GITHUB_TOKEN` only
   works inside GitHub Actions.

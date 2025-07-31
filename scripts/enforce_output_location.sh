@@ -56,6 +56,15 @@ check_root_pollution() {
         violations=$((violations + 1))
     fi
 
+    # Check for CI logs in root (should be in logs/)
+    for logfile in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
+        if [[ -f "$logfile" ]]; then
+            log_message "$RED" "❌ VIOLATION: $logfile in root (should be logs/$logfile)"
+            violation_files+=("$logfile")
+            violations=$((violations + 1))
+        fi
+    done
+
     # Check for temporary database files in root
     if find . -maxdepth 1 -name "test.db" -o -name "*.db-journal" -type f 2>/dev/null | grep -q .; then
         log_message "$RED" "❌ VIOLATION: Temporary database files in root"
