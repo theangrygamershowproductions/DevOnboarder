@@ -739,4 +739,3 @@ jobs:
             - name: Root Artifact Guard
               if: always()
               run: bash scripts/enforce_output_location.sh
-
