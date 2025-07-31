@@ -24,14 +24,14 @@ checklist_file="docs/checklists/continuous-improvement.md"
 checklist_content=$(cat "$checklist_file")
 
 comment_body=$(cat <<EOF
-\xE2\x9A\xA0\xEF\xB8\x8F **Continuous Improvement Checklist is missing or incomplete**
+⚠️ **Continuous Improvement Checklist is missing or incomplete**
 
 Please review and complete the following checklist before merging:
 
 ---
 
 <details>
-<summary>\xF0\x9F\x93\x8B Continuous Improvement Checklist</summary>
+<summary>📋 Continuous Improvement Checklist</summary>
 
 \`\`\`markdown
 $checklist_content
@@ -44,13 +44,10 @@ EOF
 )
 
 if command -v gh >/dev/null 2>&1; then
-  pr_id=$(gh pr view "$pr_number" --json id -q '.id' 2>/dev/null || echo "")
-  if [ -n "$pr_id" ]; then
-    # shellcheck disable=SC2016
-    gh api graphql -F subjectId="$pr_id" -F body="$comment_body" \
-      -f query='mutation($subjectId: ID!, $body: String!) { addComment(input:{subjectId:$subjectId, body:$body}) { commentEdge { node { url } } } }' \
-      >/dev/null || echo "warning: unable to comment on PR" >&2
-  fi
+  tmpfile=$(mktemp)
+  printf '%s\n' "$comment_body" > "$tmpfile"
+  gh pr comment "$pr_number" --body-file "$tmpfile" >/dev/null \
+    || echo "warning: unable to comment on PR" >&2
 fi
 
 exit 1
