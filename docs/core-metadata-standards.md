@@ -150,7 +150,7 @@ pip install -e .[test]
 
 ```bash
 # Validate agent metadata (DevOnboarder pattern)
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 
 # Check Codex agent index consistency
 python scripts/validate-bot-permissions.sh
@@ -184,7 +184,7 @@ jobs:
             - name: Validate Agent Files
               run: |
                   source .venv/bin/activate
-                  python scripts/validate_agent_files.py
+                  python scripts/validate_agents.py
 
             - name: Check Markdown Compliance
               run: |
@@ -238,7 +238,7 @@ repos:
       hooks:
           - id: validate-metadata
             name: Validate YAML Frontmatter
-            entry: python scripts/validate_agent_files.py
+            entry: python scripts/validate_agents.py
             language: system
             pass_filenames: false
             always_run: true
@@ -314,7 +314,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
     # ✅ Solution
     source .venv/bin/activate
     pip install -e .[test]
-    python scripts/validate_agent_files.py
+    python scripts/validate_agents.py
     ```
 
 2. **Markdown Compliance Failures**:
@@ -339,7 +339,7 @@ source .venv/bin/activate
 python .codex/scripts/ci-monitor.py --health-check
 
 # Validate all agent files
-python scripts/validate_agent_files.py
+python scripts/validate_agents.py
 
 # Generate integration status report
 python .codex/scripts/ci-monitor.py --integration-status
