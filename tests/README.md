@@ -8,10 +8,22 @@ so Python can resolve all imports. **These commands must run before invoking
 pip install -e .[test]
 ```
 
-Then run `pytest` from the repository root with coverage enabled:
+Then run `pytest` from the repository root with coverage enabled.
+Artifacts should stay inside the `logs/` directory:
 
 ```bash
-pytest --cov=src --cov-fail-under=95
+COVERAGE_FILE=logs/.coverage pytest \
+    --cache-dir=logs/.pytest_cache \
+    --cov=src \
+    --cov-report=xml:logs/coverage.xml \
+    --cov-fail-under=95 \
+    --junitxml=test-results/pytest-results.xml
+```
+
+After tests, clean up residual files to avoid root pollution:
+
+```bash
+bash scripts/clean_pytest_artifacts.sh
 ```
 
 Use `make test` to run the linter and all test suites at once.

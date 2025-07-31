@@ -90,7 +90,7 @@ bash scripts/check_docs.sh
 This script runs `markdownlint-cli2` and Vale to lint all Markdown files. It
 invokes `npx -y markdownlint-cli2` so the command never prompts for input. When
 you cache the dependency as described above you can run it offline with
-`npx --offline -y markdownlint-cli2`. The script generates `vale-results.json`
+`npx --offline -y markdownlint-cli2`. The script generates `logs/vale-results.json`
 for machine-readable output, which CI stores as an
 artifact.
 Markdownlint enforces a 120-character maximum line length via MD013 in `.markdownlint.json`.
