@@ -338,7 +338,13 @@ jobs:
             - name: Run tests with coverage
               run: |
                   source .venv/bin/activate
-                  pytest --cov=src --cov-fail-under=95 --junitxml=test-results/pytest-results.xml 2>&1 | tee logs/pytest.log
+                  COVERAGE_FILE=logs/.coverage pytest \
+                      --cache-dir=logs/.pytest_cache \
+                      --cov=src \
+                      --cov-report=xml:logs/coverage.xml \
+                      --cov-fail-under=95 \
+                      --junitxml=test-results/pytest-results.xml \
+                      2>&1 | tee logs/pytest.log
             - name: Upload pytest results
               if: always() && hashFiles('test-results/pytest-results.xml') != ''
               uses: actions/upload-artifact@v4
@@ -464,7 +470,7 @@ jobs:
                   path: |
                       bot/coverage
                       frontend/coverage
-                      .coverage
+                      logs/.coverage
                   retention-days: 7
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
@@ -528,6 +534,9 @@ jobs:
                   name: coverage-badge-fallback
                   path: coverage.svg
                   retention-days: 30
+            - name: Clean test artifacts
+              if: always()
+              run: bash scripts/clean_pytest_artifacts.sh
 
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth

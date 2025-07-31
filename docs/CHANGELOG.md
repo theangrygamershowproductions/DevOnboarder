@@ -903,3 +903,4 @@ dev`.
 - fix(ci): use dedicated token for PR checklist comments in `validate-permissions.yml`
 - docs(ci): link CI resilience hardening steps in failure issue guide and README
 - chore(ci): use `gh pr comment` in `validate_pr_checklist.sh` for posting checklists
+- fix(ci): redirect pytest artifacts to logs and clean after tests
