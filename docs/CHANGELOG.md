@@ -6,6 +6,7 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+- docs(node): update setup and troubleshooting guides for Node.js 22
 - fix(ci): markdownlint workflow configuration to exclude dependency directories
 - feat(docs): comprehensive ROADMAP.md and ROADMAP_SUMMARY.md for DevSecOps Manager review
 - fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
@@ -825,6 +826,8 @@ dev`.
 - docs(ci): expand automation tasks with 12-section outline referencing bot permissions and notify workflow
 - docs: fix markdownlint warnings in about-potato, offline setup, and invite emails
 - docs(changelog): note commit `8270ca8` used non-conforming message "Applying previous commit."; future commits must use the uppercase `<TYPE>(<scope>): <SUBJECT>` format
+- chore(ci): sync check_commit_messages.sh with commit-msg hook (optional scope)
+- docs(git): document optional commit scope and update allowed types
 
 ## [0.1.0] - 2025-06-14
 
@@ -903,3 +906,4 @@ dev`.
 - docs(templates): add header to EnvVar Misalignment issue template
 - fix(ci): use dedicated token for PR checklist comments in `validate-permissions.yml`
 - docs(ci): link CI resilience hardening steps in failure issue guide and README
+- chore(ci): use `gh pr comment` in `validate_pr_checklist.sh` for posting checklists

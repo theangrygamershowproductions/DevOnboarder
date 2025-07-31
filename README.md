@@ -21,6 +21,23 @@ _Designed to automate onboarding, reduce friction, and support developers buildi
 The short version: everything broke, then got rebuilt.
 The full recovery story lives in [docs/origin.md](docs/origin.md).
 
+## 🧪 Quickstart for Devs
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/theangrygamershowproductions/DevOnboarder.git && cd DevOnboarder
+   ```
+2. Run locally:
+   ```bash
+   docker compose up -d
+   ```
+3. Run tests:
+   ```bash
+   ./scripts/run_tests.sh
+   ```
+4. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+
+
 ## Trunk-Based Workflow
 
 <!-- markdownlint-disable MD030 -->

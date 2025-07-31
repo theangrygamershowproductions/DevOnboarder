@@ -7,7 +7,7 @@ Each entry references where the domain appears in the documentation or scripts.
   The `sersoft-gmbh/setup-gh-cli-action` action downloads the CLI from
   `cli.github.com`. See `docs/git-guidelines.md` line 80.
 - `download.docker.com` – Docker packages are pulled from this repository. See `docs/ubuntu-setup.md` lines 8‑13.
-- `deb.nodesource.com` – Node.js 20 installer script comes from this domain. See `docs/ubuntu-setup.md` lines 18‑19.
+- `deb.nodesource.com` – Node.js 22 installer script comes from this domain. See `docs/ubuntu-setup.md` lines 18‑19.
 - `nodejs.org` – pre‑commit downloads Node.js here if it is missing. See `docs/network-troubleshooting.md` lines 26‑35.
 - `vale.sh` – Vale installation instructions link to this domain. See `docs/doc-quality-onboarding.md` line 26.
 - `api.languagetool.org` and `languagetool.org` – used by LanguageTool. See
