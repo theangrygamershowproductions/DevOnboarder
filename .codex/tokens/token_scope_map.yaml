@@ -22,7 +22,7 @@ ci_automation:
       - "scripts/ci_log_audit.py"
       - "scripts/automate_pr_process.sh"
     purpose: "Main CI automation, issue creation, PR management"
-    
+
   diagnostics_bot:
     token: "DIAGNOSTICS_BOT_KEY"
     role: "CI Root Artifact Monitor / Log Parser"
@@ -56,7 +56,7 @@ pr_automation:
       - "scripts/validate_pr_checklist.sh"
       - "scripts/standards_enforcement_assessment.sh"
     purpose: "PR quality validation, checklist enforcement"
-    
+
   aar_bot:
     token: "AAR_BOT_TOKEN"
     role: "Post-Merge Reporter / AAR Bot"
@@ -88,7 +88,7 @@ ci_monitoring:
       - "scripts/monitor_ci_health.sh"
       - "scripts/update_ci_dashboard.sh"
     purpose: "CI pipeline health monitoring, stability metrics"
-    
+
   ci_failure_cleaner:
     token: "CLEANUP_CI_FAILURE_KEY"
     role: "CI Failure Auto-closer"
@@ -101,7 +101,7 @@ ci_monitoring:
       - "scripts/close_resolved_issues.sh"
       - "scripts/batch_close_ci_noise.sh"
     purpose: "Automated CI failure issue cleanup"
-    
+
   ci_issue_creator:
     token: "CI_ISSUE_TOKEN"
     role: "Creates CI Issues on Failure"
@@ -131,7 +131,7 @@ analysis:
       - "scripts/ci_log_audit.py"
       - "scripts/analyze_ci_patterns.sh"
     purpose: "Pattern recognition for recurring issues"
-    
+
   ci_helper_agent:
     token: "CI_HELPER_AGENT_KEY"
     role: "CI Dashboard Builder & Assistant"
@@ -160,7 +160,7 @@ orchestration:
       - ".github/workflows/prod-orchestrator.yml"
     purpose: "Production environment orchestration"
     restricted: true
-    
+
   dev_orchestration:
     token: "DEV_ORCHESTRATION_BOT_KEY"
     role: "Dev Environment Orchestration"
@@ -190,7 +190,7 @@ security_quality:
       - "scripts/check_potato_ignore.sh"
       - "scripts/generate_potato_report.sh"
     purpose: "Enhanced Potato Policy enforcement"
-    
+
   permissions_validator:
     token: "VALIDATE_PERMISSIONS_TOKEN"
     role: "Bot Permissions Validator"
@@ -213,9 +213,9 @@ deprecated:
     reason: "Was shared across workflows; now replaced with scoped tokens"
     replacement: "CI_ISSUE_AUTOMATION_TOKEN or specific bot tokens"
     deprecation_date: "2025-07-30"
-    
+
   bot_pr_write_token:
-    token: "BOT_PR_WRITE_TOKEN" 
+    token: "BOT_PR_WRITE_TOKEN"
     status: "DEPRECATED"
     reason: "Replaced by checklist_bot and aar_bot for scoped PR commenting"
     replacement: "CHECKLIST_BOT_TOKEN or AAR_BOT_TOKEN"
@@ -228,7 +228,7 @@ prohibited:
     status: "PROHIBITED"
     reason: "Violates No Default Token Policy - lacks proper scoping"
     alternative: "Use CI_ISSUE_AUTOMATION_TOKEN or appropriate scoped token"
-    
+
 # === TOKEN HIERARCHY ===
 hierarchy:
   github_automation:
@@ -243,7 +243,7 @@ compliance:
   security_framework: "Enhanced Potato Policy"
   validation_required: true
   audit_frequency: "monthly"
-  
+
 metadata:
   version: "2.0"
   last_updated: "2025-07-30"
