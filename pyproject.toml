@@ -35,7 +35,7 @@ dependencies = [
     "uvicorn",
     "SQLAlchemy<3.0",
     "passlib[bcrypt]",
-    "python-jose",
+    "PyJWT",
     "python-dotenv",
     "alembic",
     "psycopg2-binary",

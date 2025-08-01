@@ -23,7 +23,8 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from passlib.context import CryptContext
-from jose import jwt, JWTError
+import jwt
+from jwt.exceptions import InvalidTokenError
 import os
 import time
 from dotenv import load_dotenv
@@ -127,7 +128,7 @@ def get_current_user(
             options={"verify_exp": True},
         )
         user_id = int(payload["sub"])
-    except (JWTError, KeyError, ValueError):
+    except (InvalidTokenError, KeyError, ValueError):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
