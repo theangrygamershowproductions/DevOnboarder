@@ -4,11 +4,14 @@ set -euo pipefail
 
 # Establish PROJECT_ROOT for reliable operation
 if [ -z "${PROJECT_ROOT:-}" ]; then
-    source "$(dirname "$0")/set_project_root.sh"
+    export PROJECT_ROOT="${PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 fi
 
 # Validate PROJECT_ROOT and change to it
-source "$(dirname "$0")/check_project_root.sh"
+if [ -z "${PROJECT_ROOT:-}" ] || [ ! -d "$PROJECT_ROOT" ]; then
+    echo "ERROR: PROJECT_ROOT not set or invalid: ${PROJECT_ROOT:-<unset>}"
+    exit 1
+fi
 cd "$PROJECT_ROOT"
 
 # Create logs directory if it doesn't exist
@@ -59,11 +62,15 @@ fi
 
 log_and_display "Running Python tests with centralized cache configuration..."
 set +e
-pytest --cov=src --cov-fail-under=95 \
-    --junitxml=test-results/pytest-results.xml \
-    -v 2>&1 | tee -a "$TEST_LOG"
+pytest --junitxml=test-results/pytest-results.xml -v 2>&1 | tee -a "$TEST_LOG"
 pytest_exit=${PIPESTATUS[0]}
 set -e
+
+# Verify coverage report was generated
+if [ ! -d "logs/htmlcov" ]; then
+    log_and_display "WARNING: Coverage HTML report not found in logs/htmlcov"
+    log_and_display "Coverage configuration in pyproject.toml may need verification"
+fi
 
 # Clean up any root pollution that might have been created
 if [ -d ".pytest_cache" ]; then
