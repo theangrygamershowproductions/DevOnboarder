@@ -249,6 +249,12 @@ make deps
 # Start all services
 make up
 
+# Set up AAR (After Action Report) system
+make aar-env-template  # Create .env template with AAR variables
+# Edit .env to set your GitHub tokens for AAR functionality
+make aar-setup         # Complete AAR system setup
+make aar-check         # Validate AAR configuration
+
 # Verify service health
 curl http://localhost:8001/health  # Backend
 curl http://localhost:8002/health  # Auth
