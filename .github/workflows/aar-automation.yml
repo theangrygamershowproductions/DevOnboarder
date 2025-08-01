@@ -216,6 +216,74 @@ jobs:
               labels: ['aar-follow-up', 'process-improvement', 'pr-learnings']
             });
 
+      - name: Comment on PR with AAR link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+            const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
+            const year = new Date().getFullYear();
+            const aarPath = `.aar/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
+
+            const comment = `## 📋 After Action Report Generated
+
+            An AAR has been automatically generated for this PR to capture development insights and learnings.
+
+            **📁 AAR Location**: \`${aarPath}\`
+            **🎯 Follow-up Issue**: Will be created with action items from the AAR
+            **💡 Purpose**: Preserve institutional knowledge and improve development processes
+
+            ### What's Included:
+            - 🏗️ Technical decisions and architectural choices
+            - 📊 Development process analysis
+            - 🧠 Lessons learned and best practices
+            - ✅ Action items for future improvements
+
+            This helps maintain DevOnboarder's "quiet reliability" philosophy by capturing valuable insights from every significant change.`;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+      - name: Comment on Issue with AAR link
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const issueTitle = context.payload.issue.title;
+            const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
+            const year = new Date().getFullYear();
+            const aarPath = `.aar/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
+
+            const comment = `## 📋 After Action Report Generated
+
+            An AAR has been automatically generated for this issue to capture resolution insights and process learnings.
+
+            **📁 AAR Location**: \`${aarPath}\`
+            **🎯 Follow-up Issue**: Will be created with action items from the AAR
+            **💡 Purpose**: Document lessons learned and prevent similar issues
+
+            ### What's Included:
+            - 🔍 Root cause analysis
+            - ⏱️ Resolution timeline and process
+            - ✅ What worked well and areas for improvement
+            - 🛡️ Preventive measures and action items
+
+            This systematic approach helps DevOnboarder continuously improve its reliability and processes.`;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
+
       - name: Upload AAR artifacts
         uses: actions/upload-artifact@v4
         with:
