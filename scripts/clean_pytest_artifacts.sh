@@ -6,18 +6,18 @@ echo "🧪 Comprehensive pytest sandbox artifact cleanup..."
 
 # Enhanced pytest directory cleanup - more aggressive patterns
 echo "   🗑️  Removing pytest temporary directories..."
-find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" | while read -r dir; do
+find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" | while read -r dir; do
     echo "     Removing: $dir"
     rm -rf "$dir"
 done
 
 # AGGRESSIVE coverage cleanup (addressing the 31 coverage artifacts issue)
 echo "   📊 Cleaning ALL coverage artifacts..."
-find . -name ".coverage*" -type f -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "coverage.xml" -type f -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "coverage.json" -type f -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "coverage-final.json" -type f -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name ".nyc_output" -type d -not -path "./.venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "coverage-final.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name ".nyc_output" -type d -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 # Clean coverage artifacts in logs/
@@ -44,18 +44,18 @@ rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 # Clean pytest cache directories more thoroughly
 echo "   📦 Cleaning pytest cache..."
-find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 
 # Clean ALL Python cache (following DevOnboarder virtual environment standards)
 echo "   🐍 Cleaning ALL Python cache..."
-find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -exec rm -rf {} + 2>/dev/null || true
-find . -name "*.pyc" -not -path "./.git/*" -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "*.pyo" -not -path "./.git/*" -not -path "./.venv/*" -delete 2>/dev/null || true
+find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -name "*.pyc" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "*.pyo" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
 # Clean any generated test database files
 echo "   💾 Cleaning test databases..."
-find . -name "test.db" -not -path "./.git/*" -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -delete 2>/dev/null || true
+find . -name "test.db" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
 # Remove ALL configuration backups (we're committing changes, so backups are unnecessary)
 echo "   🗂️  Removing configuration backups..."
@@ -68,8 +68,8 @@ fi
 
 # Remove Vale result artifacts (should not be committed)
 echo "   📝 Cleaning Vale validation artifacts..."
-find . -name "vale-results.json" -not -path "./.venv/*" -delete 2>/dev/null || true
-find . -name "vale-*.json" -not -path "./.venv/*" -delete 2>/dev/null || true
+find . -name "vale-results.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name "vale-*.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 rm -f vale-results.json vale-*.json 2>/dev/null || true
 
 # Clean tox artifacts
@@ -96,9 +96,9 @@ find . -type f \( -name "*.log" -o -name "*.yaml" -o -name "*.yml" -o -name "*.t
     done
 
 # Enhanced verification with detailed counts - exclude legitimate files
-remaining_pytest=$(find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
-remaining_coverage=$(find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
-remaining_cache=$(find . -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" 2>/dev/null | wc -l)
+remaining_pytest=$(find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
+remaining_coverage=$(find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
+remaining_cache=$(find . -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" 2>/dev/null | wc -l)
 
 echo "   ✅ Enhanced cleanup summary:"
 echo "     - $remaining_pytest pytest artifacts remaining (target: 0)"
@@ -113,18 +113,19 @@ fi
 # Debug: Show what files are being counted if any remain
 if [[ "$remaining_pytest" -gt 0 ]]; then
     echo "   🔍 DEBUG: Remaining pytest files:"
-    find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
+    find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
 fi
 
 if [[ "$remaining_coverage" -gt 0 ]]; then
     echo "   🔍 DEBUG: Remaining coverage files:"
-    find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
+    find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
 fi
 
 # Critical verification: Check for 'foo' references in non-test files
 foo_refs=$(grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
     --exclude-dir=.git \
     --exclude-dir=.venv \
+    --exclude-dir=venv \
     --exclude-dir=node_modules \
     --exclude-dir=tests \
     --exclude-dir=frontend/src \
@@ -141,6 +142,7 @@ if [[ "$foo_refs" -gt 0 ]]; then
     grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
         --exclude-dir=.git \
         --exclude-dir=.venv \
+        --exclude-dir=venv \
         --exclude-dir=node_modules \
         --exclude-dir=tests \
         --exclude-dir=frontend/src \
