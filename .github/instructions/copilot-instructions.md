@@ -819,6 +819,108 @@ git status --short  # Should show only intended changes
 - Successful runs automatically close resolved issues
 - Comprehensive logging preserves diagnostic information
 
+## DevOnboarder GitHub CLI Shortcuts
+
+### Available Shell Functions (for developers with .zshrc integration)
+
+**Environment Management:**
+
+- `devonboarder-env` - Detect DevOnboarder repository and show status
+- `devonboarder-activate` - Auto-activate virtual environment and show available commands
+- `devonboarder-health-full` - Run comprehensive health checks using existing scripts
+
+**GitHub CLI Aliases:**
+
+- `ghissue-ci` - List CI failure issues
+- `ghissue-auto` - List automated issues
+- `ghissue-triage` - List issues needing triage
+- `ghpr-ready` - List non-draft pull requests
+- `ghworkflow` - List all workflows
+- `ghci` - Show recent CI workflow runs
+
+**Monitoring & Dashboards:**
+
+- `gh-ci-health` - Quick CI status report
+- `gh-dashboard` - Comprehensive status dashboard
+- `gh-watch` - Auto-refreshing dashboard (Ctrl+C to stop)
+- `gh-branch-status` - Branch and PR overview
+
+**Workflow Management:**
+
+- `gh-auto-fix` - Trigger auto-fix workflow
+- `gh-trigger-workflow <workflow-name> [ref]` - Trigger any workflow with monitoring
+- `gh-triage [label]` - Triage issues by label
+
+**Utilities:**
+
+- `devonboarder-create-issue <title> [label]` - Create issues with templates
+- `gh-config-devonboarder` - Configure GitHub CLI for DevOnboarder
+
+### Usage Examples
+
+```bash
+# Quick health check
+devonboarder-activate
+gh-ci-health
+
+# Monitor CI in real-time
+gh-watch
+
+# Trigger auto-fix for failing tests
+gh-auto-fix
+
+# Create issue for CI problem
+devonboarder-create-issue "FIX(ci): resolve test timeout issues" "ci-failure"
+
+# Check all triage issues
+gh-triage
+
+# Trigger specific workflow
+gh-trigger-workflow "security-audit.yml" "main"
+```
+
+### 🔧 Agent CLI Integration Guidelines
+
+**When suggesting DevOnboarder workflows, agents should:**
+
+1. **Check for CLI shortcuts availability**:
+
+   ```bash
+   # Suggest checking for DevOnboarder integration
+   # If user has .zshrc integration, recommend shortcuts:
+   devonboarder-activate  # Instead of manual venv activation
+   gh-ci-health          # Instead of manual gh commands
+   ```
+
+2. **Provide fallback commands**:
+
+   ```bash
+   # Always provide standard alternatives
+   # Shortcut: gh-ci-health
+   # Fallback: gh run list --limit 5 && gh issue list --label "ci-failure"
+   ```
+
+3. **Reference documentation**:
+    - Point users to `docs/cli-shortcuts.md` for full integration guide
+    - Mention .zshrc integration benefits for DevOnboarder workflows
+
+4. **Suggest appropriate shortcuts**:
+    - Use `gh-dashboard` for comprehensive status checks
+    - Use `gh-auto-fix` for triggering automated fixes
+    - Use `devonboarder-health-full` for complete health assessment
+
+**Agent Recommendations Pattern**:
+
+```bash
+# For CI troubleshooting:
+"If you have DevOnboarder CLI shortcuts installed, try: gh-ci-health"
+"Otherwise, use: gh run list --limit 5 --json conclusion,status,workflowName"
+
+# For environment setup:
+"With DevOnboarder integration: devonboarder-activate"
+"Standard approach: source .venv/bin/activate && pip install -e .[test]"
+```
+
 ## Agent-Specific Guidelines
 
 ### 🔒 Agent Role Enforcement

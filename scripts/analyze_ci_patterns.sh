@@ -4,10 +4,25 @@
 
 set -euo pipefail
 
-PR_NUMBER="$1"
+# Use provided PR number or determine from current context
+if [ $# -eq 1 ]; then
+    PR_NUMBER="$1"
+elif [ -n "${GITHUB_REF_NAME:-}" ] && [[ "${GITHUB_REF_NAME}" =~ ^feature/ ]]; then
+    # In CI context, try to get PR number from GitHub context
+    PR_NUMBER=$(gh pr list --head "${GITHUB_REF_NAME}" --json number --jq '.[0].number' 2>/dev/null || echo "")
+else
+    # Try to determine current PR from git branch
+    current_branch=$(git branch --show-current 2>/dev/null || echo "")
+    if [ -n "$current_branch" ] && [[ "$current_branch" =~ ^feature/ ]]; then
+        PR_NUMBER=$(gh pr list --head "$current_branch" --json number --jq '.[0].number' 2>/dev/null || echo "")
+    else
+        PR_NUMBER=""
+    fi
+fi
 
-if [ $# -ne 1 ]; then
+if [ -z "$PR_NUMBER" ]; then
     echo "Usage: $0 <pr-number>" >&2
+    echo "Or run from a feature branch with an open PR" >&2
     exit 1
 fi
 
