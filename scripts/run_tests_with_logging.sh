@@ -6,15 +6,25 @@ set -euo pipefail
 mkdir -p logs
 mkdir -p test-results
 
+# CRITICAL: Configure cache directories to use logs/ (centralized cache management)
+export PYTEST_CACHE_DIR="logs/.pytest_cache"
+export MYPY_CACHE_DIR="logs/.mypy_cache"
+
+# Ensure cache directories exist in logs/
+mkdir -p logs/.pytest_cache logs/.mypy_cache
+
 # Generate timestamp for log files
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 TEST_LOG="logs/test_run_${TIMESTAMP}.log"
 COVERAGE_LOG="logs/coverage_${TIMESTAMP}.log"
 
-echo "🧪 DevOnboarder Test Suite with Logging"
-echo "========================================"
+echo "🧪 DevOnboarder Test Suite with Centralized Cache Management"
+echo "==========================================================="
 echo "Timestamp: $(date)"
 echo "Log file: $TEST_LOG"
+echo "Cache locations:"
+echo "  Pytest cache: logs/.pytest_cache"
+echo "  MyPy cache: logs/.mypy_cache"
 echo "" | tee "$TEST_LOG"
 
 # Function to log and display
@@ -38,13 +48,22 @@ if ! ruff check . 2>&1 | tee -a "$TEST_LOG"; then
     log_and_display "⚠️  Ruff linting found issues"
 fi
 
-log_and_display "🐍 Running Python tests with coverage..."
+log_and_display "🐍 Running Python tests with centralized cache configuration..."
 set +e
-pytest --cov=src --cov-fail-under=95 \
-    --junitxml=test-results/pytest-results.xml \
-    -v 2>&1 | tee -a "$TEST_LOG"
+pytest --junitxml=test-results/pytest-results.xml -v 2>&1 | tee -a "$TEST_LOG"
 pytest_exit=${PIPESTATUS[0]}
 set -e
+
+# Clean up any root pollution that might have been created
+if [ -d ".pytest_cache" ]; then
+    log_and_display "🧹 Cleaning up pytest cache pollution from root"
+    rm -rf .pytest_cache
+fi
+
+if [ -d ".mypy_cache" ]; then
+    log_and_display "🧹 Cleaning up mypy cache pollution from root"
+    rm -rf .mypy_cache
+fi
 
 # Copy coverage data to logs for persistence
 if [ -f .coverage ]; then

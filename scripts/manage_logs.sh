@@ -16,6 +16,13 @@ Commands:
     purge       Remove ALL log files (use with caution)
     list        List all log files with sizes
     archive     Create timestamped archive of current logs
+    cache       Manage cache directories in logs/
+
+Cache subcommands:
+    cache list      List all cache directories with sizes
+    cache clean     Clean cache directories older than $DAYS_TO_KEEP days
+    cache size      Show cache size analysis
+    cache purge     Remove all cache directories
 
 Options:
     -d, --days DAYS     Number of days to keep logs (default: $DAYS_TO_KEEP)
@@ -29,6 +36,8 @@ Examples:
     $0 --dry-run purge         # Show what would be purged
     $0 list                    # List all log files
     $0 archive                 # Create archive of current logs
+    $0 cache list              # List cache directories
+    $0 cache clean             # Clean old cache directories
 
 EOF
 }
@@ -48,7 +57,7 @@ while [[ $# -gt 0 ]]; do
             usage
             exit 0
             ;;
-        clean|pre-run|purge|list|archive)
+        clean|pre-run|purge|list|archive|cache)
             COMMAND="$1"
             shift
             ;;
@@ -214,6 +223,99 @@ archive_logs() {
     fi
 }
 
+manage_cache_logs() {
+    local action="${1:-list}"
+
+    case "$action" in
+        "list")
+            echo "📂 Cache directories in logs:"
+            if [ ! -d "$LOGS_DIR" ]; then
+                echo "   No logs directory found"
+                return 0
+            fi
+
+            cache_dirs=$(find "$LOGS_DIR" -name "*cache*" -type d 2>/dev/null || true)
+            if [ -n "$cache_dirs" ]; then
+                echo "$cache_dirs" | while read -r dir; do
+                    size=$(du -sh "$dir" 2>/dev/null | cut -f1 || echo "Unknown")
+                    echo "   - $dir ($size)"
+                done
+            else
+                echo "   No cache directories found"
+            fi
+            ;;
+        "clean")
+            echo "🧹 Cleaning cache directories older than $DAYS_TO_KEEP days..."
+            if [ ! -d "$LOGS_DIR" ]; then
+                echo "   No logs directory found"
+                return 0
+            fi
+
+            old_caches=$(find "$LOGS_DIR" -name "*cache*" -type d -mtime +"$DAYS_TO_KEEP" 2>/dev/null || true)
+            if [ -n "$old_caches" ]; then
+                echo "   Found $(echo "$old_caches" | wc -l) old cache directories:"
+                echo "$old_caches" | while read -r dir; do
+                    size=$(du -sh "$dir" 2>/dev/null | cut -f1 || echo "Unknown")
+                    echo "     - $dir ($size)"
+                done
+
+                if [ "$DRY_RUN" = "false" ]; then
+                    echo "$old_caches" | xargs rm -rf
+                    echo "   ✅ Cleaned $(echo "$old_caches" | wc -l) cache directories"
+                else
+                    echo "   🔍 DRY RUN: Would remove $(echo "$old_caches" | wc -l) cache directories"
+                fi
+            else
+                echo "   ✅ No old cache directories found"
+            fi
+            ;;
+        "size")
+            echo "📊 Cache size analysis:"
+            if [ ! -d "$LOGS_DIR" ]; then
+                echo "   No logs directory found"
+                return 0
+            fi
+
+            for cache_dir in "$LOGS_DIR/.pytest_cache" "$LOGS_DIR/.mypy_cache"; do
+                if [ -d "$cache_dir" ]; then
+                    size=$(du -sh "$cache_dir" 2>/dev/null | cut -f1 || echo "Unknown")
+                    echo "   $(basename "$cache_dir"): $size"
+                else
+                    echo "   $(basename "$cache_dir"): Not found"
+                fi
+            done
+
+            total_cache_size=$(du -sh "$LOGS_DIR" 2>/dev/null | cut -f1 || echo "Unknown")
+            echo "   Total logs directory: $total_cache_size"
+            ;;
+        "purge")
+            echo "🗑️  Purging all cache directories..."
+            if [ ! -d "$LOGS_DIR" ]; then
+                echo "   No logs directory found"
+                return 0
+            fi
+
+            cache_dirs=$(find "$LOGS_DIR" -name "*cache*" -type d 2>/dev/null || true)
+            if [ -n "$cache_dirs" ]; then
+                echo "   Found $(echo "$cache_dirs" | wc -l) cache directories to remove"
+                if [ "$DRY_RUN" = "false" ]; then
+                    echo "$cache_dirs" | xargs rm -rf
+                    echo "   ✅ Purged all cache directories"
+                else
+                    echo "   🔍 DRY RUN: Would purge all cache directories"
+                fi
+            else
+                echo "   ✅ No cache directories found"
+            fi
+            ;;
+        *)
+            echo "Unknown cache action: $action" >&2
+            echo "Available actions: list, clean, size, purge" >&2
+            exit 1
+            ;;
+    esac
+}
+
 # Execute the command
 case "$COMMAND" in
     list)
@@ -240,6 +342,10 @@ case "$COMMAND" in
         ;;
     archive)
         archive_logs
+        ;;
+    cache)
+        cache_action="${1:-list}"
+        manage_cache_logs "$cache_action"
         ;;
     *)
         echo "Unknown command: $COMMAND" >&2
