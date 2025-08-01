@@ -99,3 +99,27 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "logs/htmlcov"
+
+[tool.pytest.ini_options]
+cache_dir = "logs/.pytest_cache"
+addopts = [
+    "--cov=src",
+    "--cov-report=html:logs/htmlcov",
+    "--cov-report=term",
+    "--cov-fail-under=95",
+    "--cache-dir=logs/.pytest_cache"
+]
+testpaths = ["tests"]
+
+[tool.mypy]
+cache_dir = "logs/.mypy_cache"
+show_error_codes = true
+warn_unused_ignores = true
+python_version = "3.12"
+files = ["src/**/*.py"]
+exclude = [
+    "build/",
+    "dist/",
+    ".venv/",
+    "__pycache__/"
+]
