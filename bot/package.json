@@ -43,7 +43,8 @@
         "collectCoverage": true,
         "coverageReporters": [
             "text",
-            "lcov"
+            "lcov",
+            "json-summary"
         ],
         "coveragePathIgnorePatterns": [
             "<rootDir>/src/commands",
