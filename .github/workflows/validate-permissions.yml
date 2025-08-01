@@ -55,7 +55,7 @@ jobs:
             - name: Ensure continuous improvement checklist is complete
               if: github.event_name == 'pull_request'
               run: |
-                  if grep -q "- \[ \]" docs/checklists/continuous-improvement.md; then
+                  if grep -q "- \\\[ \\\]" docs/checklists/continuous-improvement.md; then
                     echo "Unchecked items in continuous-improvement.md" >&2
                     exit 1
                   fi
