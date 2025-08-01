@@ -1,0 +1,59 @@
+{
+  "comment": "DevOnboarder AAR System Configuration with Token Management",
+  "version_tracking_enabled": true,
+  "codex_integration": true,
+  "markdown_compliance": true,
+  "centralized_logging": true,
+  "semantic_versioning": true,
+  "security": {
+    "token_hierarchy": [
+      "CI_ISSUE_AUTOMATION_TOKEN",
+      "CI_BOT_TOKEN",
+      "GITHUB_TOKEN"
+    ],
+    "require_virtual_environment": true,
+    "enforce_potato_policy": true,
+    "github_cli_timeout": 30,
+    "offline_mode_fallback": true
+  },
+  "file_patterns": [
+    ".codex/agents/*.md",
+    "core-instructions/*.md",
+    ".github/workflows/*.yml",
+    ".github/workflows/*.yaml",
+    "scripts/*.py",
+    "scripts/*.sh",
+    "pyproject.toml",
+    "package.json",
+    "config/*.yml",
+    "config/*.yaml",
+    "docs/*.md"
+  ],
+  "excluded_patterns": [
+    ".venv/*",
+    "node_modules/*",
+    "logs/*",
+    "*.env",
+    "Potato.md",
+    "*.key",
+    "*.pem",
+    ".git/*",
+    "*.pyc",
+    "__pycache__/*",
+    "*.egg-info/*"
+  ],
+  "retention_days": 30,
+  "stale_file_threshold_days": 90,
+  "markdown_config": {
+    "max_line_length": 120,
+    "enforce_blank_lines": true,
+    "require_headers": true
+  },
+  "reporting": {
+    "include_commit_history": true,
+    "include_stale_analysis": true,
+    "include_coverage_metrics": true,
+    "max_commits_in_report": 20,
+    "max_stale_files_in_report": 10
+  }
+}
