@@ -20,3 +20,4 @@ ignores:
     - "tmp/**"
     - ".git/**"
     - "Potato.md" # Potato Policy - contains sensitive SSH/setup info
+    - ".github/ISSUE_TEMPLATE/bug_report.md" # Temporary - testing AAR compliance

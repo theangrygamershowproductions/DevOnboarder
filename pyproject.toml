@@ -105,6 +105,7 @@ cache_dir = "logs/.pytest_cache"
 addopts = [
     "--cov=src",
     "--cov-report=html:logs/htmlcov",
+    "--cov-report=xml:logs/coverage.xml",
     "--cov-report=term",
     "--cov-fail-under=95"
 ]

@@ -29,19 +29,39 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    git clone https://github.com/theangrygamershowproductions/DevOnboarder.git && cd DevOnboarder
    ```
 
-2. Run locally:
+2. Set up environment:
+
+   ```bash
+   # Install DevOnboarder .zshrc integration for CLI shortcuts
+   # See docs/cli-shortcuts.md for full shell integration guide
+
+   # Activate environment
+   source .venv/bin/activate
+   pip install -e .[test]
+   ```
+
+3. Run locally:
 
    ```bash
    docker compose up -d
    ```
 
-3. Run tests:
+4. **Optional**: Enable CLI shortcuts:
+
+   ```bash
+   # If you have DevOnboarder .zshrc integration:
+   devonboarder-activate  # Auto-setup environment
+   gh-dashboard          # View comprehensive status
+   gh-ci-health         # Quick CI check
+   ```
+
+5. Run tests:
 
    ```bash
    ./scripts/run_tests.sh
    ```
 
-4. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
 ## Trunk-Based Workflow
 
