@@ -646,6 +646,72 @@ python -m pytest plugins/example_plugin/
 
 ## Troubleshooting
 
+### ⚠️ MANDATORY: Standard Operating Procedure for ALL Issues
+
+**BEFORE attempting any custom solutions, ALWAYS follow this SOP:**
+
+```bash
+# STEP 1: Use DevOnboarder log management system
+bash scripts/manage_logs.sh list | grep -E "(precommit|test|ci)" | tail -10
+
+# STEP 2: Use CI diagnostic framework
+bash scripts/monitor_ci_health.sh
+
+# STEP 3: Use enhanced test runner with logging
+bash scripts/run_tests_with_logging.sh
+
+# STEP 4: Check for repository pollution
+bash scripts/enforce_output_location.sh
+
+# STEP 5: Use comprehensive cleanup if needed
+bash scripts/final_cleanup.sh
+```
+
+### DevOnboarder Diagnostic Tools - USE THESE FIRST
+
+**Log Management System**:
+
+```bash
+bash scripts/manage_logs.sh list      # List all log files
+bash scripts/manage_logs.sh clean     # Clean logs older than 7 days
+bash scripts/manage_logs.sh archive   # Archive current logs
+bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
+```
+
+**CI Health Monitoring**:
+
+```bash
+bash scripts/monitor_ci_health.sh     # Check CI health status
+bash scripts/analyze_ci_patterns.sh   # Analyze recurring failure patterns
+python scripts/ci_failure_diagnoser.py # Generate comprehensive CI diagnostic report
+```
+
+**Test Execution Framework**:
+
+```bash
+bash scripts/run_tests_with_logging.sh # Enhanced test runner with persistent logging
+bash scripts/run_tests.sh             # Standard test runner (CI compatible)
+bash scripts/clean_pytest_artifacts.sh # Clean pytest artifacts
+```
+
+**Artifact Management**:
+
+```bash
+bash scripts/enforce_output_location.sh # Check for repository pollution
+bash scripts/final_cleanup.sh          # Clean all artifacts comprehensively
+```
+
+**GitHub CLI Toolkit**:
+
+```bash
+bash scripts/check_github_status.sh    # Use GitHub workflow analysis tools
+gh issue list --label "ci-failure" --state open # Check for CI-related issues
+```
+
+### ⚠️ CRITICAL: Always Use Existing Tools Before Custom Solutions
+
+**DO NOT create custom debugging solutions when DevOnboarder has 100+ automation scripts specifically designed for troubleshooting. This is a core principle of the "quiet reliability" philosophy.**
+
 ### Common Issues
 
 1. **ModuleNotFoundError**:
@@ -661,6 +727,10 @@ python -m pytest plugins/example_plugin/
 4. **Discord connection issues**: Verify token and guild permissions
 
 5. **CI failures**: Check GitHub CLI availability and error handling
+
+6. **Pre-commit failures**: Use `bash scripts/manage_logs.sh list` to check logs first
+
+7. **Test isolation issues**: Use `bash scripts/run_tests_with_logging.sh` for analysis
 
 ### Debugging Tools (Virtual Environment Context)
 
@@ -751,6 +821,77 @@ git status --short  # Should show only intended changes
 
 ## Agent-Specific Guidelines
 
+### 🔒 Agent Role Enforcement
+
+### 🚫 Agents May NOT
+
+- Commit code using raw `git` or `subprocess.run(["git", ...])`
+- Launch Codex orchestration (`codex_type: mcp_server`) without human-issued metadata
+- Modify `.github/workflows/` or `.copilot-instructions.md` without approval
+- Trigger MCP Server tasks without `.codex/agents/<role>.md` registration
+- Execute infrastructure-affecting commands without explicit prompt context
+
+### ✅ Agents MUST
+
+- Route all GitHub interactions through the GitHub CLI (`gh`)
+- Use registered Codex agent files with appropriate `codex_type`
+- Validate Codex permissions via `.codex/bot-permissions.yaml`
+- Respect Codex governance runtime constraints (`codex_runtime: true`)
+- Log all automated actions through `scripts/log_agent_action.sh`
+
+**Explicit restriction:**
+
+> Claude and other Codex agents are prohibited from assuming orchestration roles (e.g., MCP Server behavior) unless registered in `.codex/agents/index.json` and activated via CI.
+
+### 📌 GitHub CLI Enforcement
+
+All repository interactions (issue creation, PRs, commenting, closing, etc.) **must** use the GitHub CLI (`gh`) or approved GitHub API scripts.
+
+**Agents and humans must NEVER:**
+
+- Use `git commit`, `git push`, or `curl -X POST` for GitHub API access
+- Write to `.git/` via scripts or subprocess
+- Circumvent `scripts/commit_with_checklist.sh`
+
+Violations will trigger Root Artifact Guard and CI failure.
+
+✅ Approved command examples:
+
+- `gh pr create --title ...`
+- `gh issue comment 123 --body ...`
+- `bash scripts/commit_with_checklist.sh`
+
+### 🚦 Codex MCP Server Activation Rules
+
+**Codex orchestration must be explicitly registered and verified.**
+
+Only tasks registered in `.codex/agents/index.json` and approved by `.codex/automation-tasks.md` may trigger MCP Server activation.
+
+Unregistered use of:
+
+- `codex_type: mcp_server`
+- `pylanceRunCodeSnippet` labeled as server-level
+- MCP triggers without approval
+
+…will be rejected by `scripts/enforce_codex_permissions.sh`
+
+### 🧩 Integration Instructions for Claude and Codex
+
+Claude and all other Codex-linked agents must comply with the following runtime assumptions:
+
+- You are operating inside a **restricted DevSecOps pipeline**.
+- You are **not permitted to classify tasks**, elevate privileges, or spawn orchestration roles unless clearly instructed.
+- **Default runtime** should always assume `codex_type: none`, `codex_role: assistant`, unless explicitly upgraded.
+
+If any of the following conditions are met, escalate to human:
+
+- Agent attempts orchestration spin-up without `.codex/agents/*` mapping
+- Task includes raw Git access from Python, Bash, or pseudo-terminal subprocesses
+- Any variation of `curl | sh` or `git commit` is proposed without checklist validation
+- Claude attempts to re-route test automation via MCP Server logic
+
+You must operate within GitHub CLI boundaries or registered agent triggers. All other routes are to be rejected, audited, and logged by `codex_runtime_guard.sh`.
+
 ### For Code Generation
 
 - **ALWAYS assume virtual environment context** in examples
@@ -783,9 +924,30 @@ git status --short  # Should show only intended changes
 3. **ALWAYS verify virtual environment activation** in examples
 4. **ALWAYS include virtual environment setup** in instructions
 5. **NEVER modify linting configuration files** without explicit human request
-6. **REMEMBER**: This project runs in containers/venvs, not host systems
-7. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
-8. **FOLLOW**: Node modules hygiene standards and placement requirements
+6. **ALWAYS use DevOnboarder diagnostic tools FIRST** before custom solutions
+7. **ALWAYS follow the Standard Operating Procedure** for troubleshooting
+8. **NEVER create ad-hoc debugging solutions** when comprehensive tooling exists
+9. **NEVER use raw git commands** - use GitHub CLI (`gh`) or approved scripts
+10. **NEVER assume orchestration roles** without `.codex/agents/` registration
+11. **NEVER trigger MCP Server behavior** without explicit human metadata
+12. **ALWAYS operate as `codex_type: none, codex_role: assistant`** by default
+13. **REMEMBER**: This project runs in containers/venvs, not host systems
+14. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
+15. **FOLLOW**: Node modules hygiene standards and placement requirements
+16. **USE**: The 100+ automation scripts built specifically for troubleshooting
+17. **ESCALATE**: To human if orchestration or infrastructure changes are requested
+
+### ⚠️ CRITICAL: Tool Usage Priority
+
+**ALWAYS use these tools in this order for ANY troubleshooting:**
+
+1. **Check logs**: `bash scripts/manage_logs.sh list`
+2. **CI health**: `bash scripts/monitor_ci_health.sh`
+3. **Enhanced testing**: `bash scripts/run_tests_with_logging.sh`
+4. **Artifact cleanup**: `bash scripts/enforce_output_location.sh`
+5. **GitHub CLI**: `bash scripts/check_github_status.sh`
+
+**Only after using ALL existing tools should you consider custom solutions.**
 
 ## Agent Documentation Standards
 
@@ -826,11 +988,12 @@ bash scripts/check_env_docs.py
 
 ---
 
-**Last Updated**: 2025-07-28 (Enhanced with CI Hygiene & Automation Framework)
+**Last Updated**: 2025-08-01 (Enhanced with Agent Role Enforcement & GitHub CLI Framework)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
-**Security**: Enhanced Potato Policy + Root Artifact Guard active
+**Security**: Enhanced Potato Policy + Root Artifact Guard + Agent Role Enforcement active
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution
+**Agent Enforcement**: Codex MCP Server restrictions and GitHub CLI requirements enforced

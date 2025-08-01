@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 from devonboarder import auth_service
 from fastapi.middleware.cors import CORSMiddleware
 from utils import roles as roles_utils
-from jose import jwt
+import jwt
 import pytest
 import time
 import sqlalchemy
