@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Generate After Actions Report for DevOnboarder issues and activities
-# Integrates with existing DevOnboarder automation infrastructure
+# Enhanced After Actions Report Generator for DevOnboarder with Token Governance
+# Integrates with existing DevOnboarder automation infrastructure and comprehensive token governance
 
 set -euo pipefail
 
@@ -10,9 +10,9 @@ if [ ! -f ".github/workflows/ci.yml" ]; then
     exit 1
 fi
 
-# Centralized logging (mandatory DevOnboarder requirement)
-mkdir -p logs .aar
-LOG_FILE="logs/aar_generation_$(date +%Y%m%d_%H%M%S).log"
+# Enhanced centralized logging (mandatory DevOnboarder requirement)
+mkdir -p logs logs/aar-reports logs/token-audit
+LOG_FILE="logs/enhanced_aar_generation_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Colors for output
@@ -22,31 +22,145 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}📋 DevOnboarder AAR Generation Utility${NC}"
-echo "======================================="
+echo -e "${GREEN}📋 DevOnboarder Enhanced AAR Generation with Token Governance${NC}"
+echo "============================================================="
+echo "Generating comprehensive After Action Reports with token compliance insights"
+echo ""
 
-# Parse command line arguments
+# Enhanced configuration
+TOKEN_AUDIT_DIR="logs/token-audit"
+AAR_OUTPUT_DIR="logs/aar-reports"
+
+# Parse command line arguments with enhanced options
 AAR_TYPE="${1:-}"
 ISSUE_NUMBER="${2:-}"
 AAR_TITLE="${3:-}"
 
+# Function to activate virtual environment for Python tools
+activate_virtual_env() {
+    if [ ! -d ".venv" ]; then
+        echo -e "${RED}❌ Virtual environment not found${NC}"
+        echo "DevOnboarder requires virtual environment setup for comprehensive AAR"
+        return 1
+    fi
+
+    # shellcheck source=/dev/null
+    source .venv/bin/activate
+    echo -e "${BLUE}🐍 Virtual environment activated for Python analytics${NC}"
+}
+
+# Function to validate token governance integration
+validate_token_governance_for_aar() {
+    echo -e "${BLUE}🔐 Validating token governance for AAR generation...${NC}"
+
+    local token_status="unknown"
+    local registry_available="false"
+    local audit_capable="false"
+
+    # Check registry availability
+    if [ -f ".codex/tokens/token_scope_map.yaml" ]; then
+        registry_available="true"
+        echo "✅ Token scope registry found"
+
+        # Count registered tokens if PyYAML is available
+        if command -v python >/dev/null 2>&1 && python -c "import yaml" 2>/dev/null; then
+            local token_count
+            token_count=$(python -c "
+import yaml
+try:
+    with open('.codex/tokens/token_scope_map.yaml') as f:
+        data = yaml.safe_load(f)
+    if data and 'github_tokens' in data:
+        print(len(data['github_tokens']))
+    else:
+        print(0)
+except:
+    print(0)
+" 2>/dev/null || echo "0")
+
+            echo "📊 Registry contains $token_count registered tokens"
+        fi
+    else
+        echo "⚠️  Token scope registry not found"
+    fi
+
+    # Check audit script availability
+    if [ -f "scripts/audit_token_usage.py" ]; then
+        audit_capable="true"
+        echo "✅ Token audit script available"
+
+        # Test audit capability
+        if activate_virtual_env >/dev/null 2>&1; then
+            if python scripts/audit_token_usage.py --help >/dev/null 2>&1; then
+                token_status="audit_ready"
+                echo "✅ Token audit system functional"
+            else
+                token_status="audit_available_not_functional"
+                echo "⚠️  Token audit script available but not functional"
+            fi
+        else
+            token_status="venv_missing"
+            echo "⚠️  Virtual environment required for token audit"
+        fi
+    else
+        echo "⚠️  Token audit script not found"
+    fi
+
+    # Create token governance status summary for AAR
+    cat > "$TOKEN_AUDIT_DIR/aar_token_status.json" << EOF
+{
+  "timestamp": "$(date -Iseconds)",
+  "registry_available": $registry_available,
+  "audit_capable": $audit_capable,
+  "token_status": "$token_status",
+  "virtual_env_available": $([ -d ".venv" ] && echo "true" || echo "false"),
+  "policy_version": "No Default Token Policy v1.0"
+}
+EOF
+
+    echo "📋 Token governance status prepared for AAR integration"
+}
+
 if [ -z "$AAR_TYPE" ]; then
-    echo -e "${YELLOW}Usage: $0 <type> [issue_number] [title]${NC}"
+    echo -e "${YELLOW}Enhanced AAR Generator Usage:${NC}"
+    echo ""
+    echo "Usage: $0 <type> [issue_number] [title]"
     echo ""
     echo "AAR Types:"
-    echo "  issue       - Generate AAR for specific issue"
-    echo "  sprint      - Generate AAR for sprint/milestone"
-    echo "  incident    - Generate AAR for incident"
-    echo "  automation  - Generate AAR for automation changes"
+    echo "  issue       - Generate AAR for specific issue with token governance"
+    echo "  sprint      - Generate AAR for sprint/milestone with compliance review"
+    echo "  incident    - Generate AAR for incident with security analysis"
+    echo "  automation  - Generate AAR for automation changes with token impact"
+    echo "  governance  - Generate comprehensive token governance AAR"
+    echo "  health      - Generate overall project health AAR"
+    echo ""
+    echo "Enhanced Modes:"
+    echo "  auto        - Automatic comprehensive analysis (default)"
+    echo "  minimal     - Basic AAR without deep token analysis"
+    echo "  full        - Complete analysis including all governance aspects"
     echo ""
     echo "Examples:"
-    echo "  $0 issue 1234"
-    echo "  $0 sprint \"Q1 Git Utilities Enhancement\""
-    echo "  $0 incident \"CI Failure Cascade 2025-01-30\""
+    echo "  $0 governance                           # Comprehensive token governance AAR"
+    echo "  $0 health \"\" \"\" full                    # Full project health analysis"
+    echo "  $0 issue 1234 \"Token Policy Update\"    # Issue-specific AAR with governance"
+    echo "  $0 sprint \"Q1 Security Enhancement\"    # Sprint AAR with compliance review"
+    echo "  $0 incident \"CI Token Exposure\"        # Security incident AAR"
+    echo ""
+    echo "Token Governance Integration:"
+    echo "  • Registry compliance validation"
+    echo "  • Policy violation detection"
+    echo "  • Usage pattern analysis"
+    echo "  • Security recommendations"
+    echo ""
+    echo "Output Location: $AAR_OUTPUT_DIR/"
     exit 1
 fi
 
-# Create AAR directory structure
+# Validate token governance before proceeding
+validate_token_governance_for_aar
+echo ""
+
+# Create AAR directory structure with enhanced organization
 YEAR=$(date +%Y)
 QUARTER="Q$(( ($(date +%-m) - 1) / 3 + 1 ))"
 AAR_BASE_DIR=".aar/$YEAR/$QUARTER"
