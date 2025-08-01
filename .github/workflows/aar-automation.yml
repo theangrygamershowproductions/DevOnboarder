@@ -284,6 +284,20 @@ jobs:
               body: comment
             });
 
+      - name: Enhanced Issue Comment with AAR Summary
+        if: github.event_name == 'issues' || github.event_name == 'pull_request'
+        run: |
+          source .venv/bin/activate
+          chmod +x scripts/comment_on_issue.py
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 scripts/comment_on_issue.py --type aar --ref "pr-${{ github.event.pull_request.number }}"
+          else
+            python3 scripts/comment_on_issue.py --type aar --ref "${{ github.event.issue.number }}"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload AAR artifacts
         uses: actions/upload-artifact@v4
         with:
