@@ -63,9 +63,12 @@ activate_env() {
 run_tests() {
     setup_session
     SESSION_DIR="$TEMP_DIR/$CURRENT_SESSION"
-    activate_env || return 1
-    python -m pytest --cache-dir="$SESSION_DIR/pytest/.pytest_cache" \
-        --cov=src --cov-report=term --junitxml="$SESSION_DIR/artifacts/pytest.xml" tests/ | tee "$SESSION_DIR/logs/pytest.log"
+    if activate_env; then
+        python -m pytest --cache-dir="$SESSION_DIR/pytest/.pytest_cache" \
+            --cov=src --cov-report=term --junitxml="$SESSION_DIR/artifacts/pytest.xml" tests/ | tee "$SESSION_DIR/logs/pytest.log"
+    else
+        return 1
+    fi
 }
 
 cleanup_session() {
