@@ -1,5 +1,5 @@
 ---
-name: Root Artifact Monitor - Phase 3
+name: Root Artifact Monitor
 
 on:
     push:
@@ -18,8 +18,7 @@ on:
                 type: choice
                 options:
                     - "check"
-                    - "auto-clean"
-                    - "wizard"
+                    - "clean"
 
 permissions:
     contents: read
@@ -30,118 +29,76 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
+env:
+    CODEX_TRIGGER: "ci:artifact-guard"
+
 jobs:
-    root-artifact-monitor:
-        name: "🧼 Root Artifact Guard - Enhanced Detection"
+    artifact-monitor:
+        name: "Root Artifact Guard"
         runs-on: ubuntu-latest
 
         steps:
-            - name: "📥 Checkout repository"
+            - name: Checkout repository
               uses: actions/checkout@v4
               with:
                   fetch-depth: 1
 
-            - name: "🔍 Enhanced Root Artifact Detection"
-              id: artifact_check
+            - name: Check root artifacts
+              id: check
               run: |
-                  echo "::group::🧼 Phase 3.1 Enhanced Detection Engine"
+                  source .venv/bin/activate
 
-                  # Make scripts executable
-                  chmod +x scripts/enhanced_root_artifact_guard.sh
-                  chmod +x scripts/enforce_output_location.sh
-
-                  # Run enhanced detection
-                  if bash scripts/enhanced_root_artifact_guard.sh --check; then
+                  if bash scripts/check_root_artifacts.sh; then
                       echo "status=clean" >> $GITHUB_OUTPUT
                       echo "violations=0" >> $GITHUB_OUTPUT
                   else
-                      exit_code=$?
                       echo "status=violations" >> $GITHUB_OUTPUT
-                      echo "violations=$exit_code" >> $GITHUB_OUTPUT
-
-                      # Capture violation details
-                      bash scripts/enhanced_root_artifact_guard.sh --patterns > artifact_patterns.log
+                      echo "violations=1" >> $GITHUB_OUTPUT
                   fi
 
-                  echo "::endgroup::"
-
-            - name: "📊 Artifact Pollution Metrics"
-              if: always()
+            - name: Generate report
+              if: steps.check.outputs.status == 'violations'
               run: |
-                  echo "::group::📊 Phase 3 Metrics Collection"
+                  source .venv/bin/activate
+                  mkdir -p logs/ci
 
-                  # Collect detailed metrics
-                  echo "## 🔍 Root Artifact Monitor Report" > artifact_report.md
-                  echo "" >> artifact_report.md
-                  echo "**Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> artifact_report.md
-                  echo "**Branch**: ${GITHUB_REF_NAME}" >> artifact_report.md
-                  echo "**Commit**: ${GITHUB_SHA:0:7}" >> artifact_report.md
-                  echo "**Workflow**: ${GITHUB_WORKFLOW}" >> artifact_report.md
-                  echo "" >> artifact_report.md
+                  cat > logs/ci/artifact_report.md << EOF
+                  ## Root Artifact Violations
 
-                  if [[ "${{ steps.artifact_check.outputs.status }}" == "clean" ]]; then
-                      echo "✅ **Status**: Repository root is clean" >> artifact_report.md
-                      echo "🎉 No artifact pollution detected" >> artifact_report.md
-                  else
-                      echo "❌ **Status**: Artifact violations detected" >> artifact_report.md
-                      echo "🔢 **Violations**: ${{ steps.artifact_check.outputs.violations }}" >> artifact_report.md
-                      echo "" >> artifact_report.md
-                      echo "### 🛠️ Cleanup Recommendations" >> artifact_report.md
-                      echo "" >> artifact_report.md
-                      echo '```bash' >> artifact_report.md
-                      echo "# Run enhanced cleanup" >> artifact_report.md
-                      echo "bash scripts/enhanced_root_artifact_guard.sh --auto-clean" >> artifact_report.md
-                      echo "" >> artifact_report.md
-                      echo "# Or interactive wizard" >> artifact_report.md
-                      echo "bash scripts/enhanced_root_artifact_guard.sh --wizard" >> artifact_report.md
-                      echo '```' >> artifact_report.md
-                  fi
+                  **Branch**: ${GITHUB_REF_NAME}
+                  **Commit**: ${GITHUB_SHA:0:7}
+                  **Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+                  **Trigger**: ${CODEX_TRIGGER}
 
-                  echo "" >> artifact_report.md
-                  echo "### 🔧 Enhanced Detection Patterns" >> artifact_report.md
-                  echo "" >> artifact_report.md
-                  echo "Phase 3.1 Enhanced Root Artifact Guard includes:" >> artifact_report.md
-                  echo "- 🐍 Python artifacts (cache, testing, packaging)" >> artifact_report.md
-                  echo "- 📦 Node.js artifacts (packages, cache)" >> artifact_report.md
-                  echo "- 🗄️ Database artifacts (test databases, journals)" >> artifact_report.md
-                  echo "- 📚 Documentation artifacts (Vale results)" >> artifact_report.md
-                  echo "- 🏗️ Build artifacts (compiled files, targets)" >> artifact_report.md
-                  echo "- 💻 IDE artifacts (VS Code, IntelliJ)" >> artifact_report.md
-                  echo "- 🖥️ OS artifacts (Thumbs.db, .DS_Store)" >> artifact_report.md
-                  echo "- ⚙️ CI artifacts (test results, coverage)" >> artifact_report.md
-                  echo "- 💾 Backup artifacts (config backups)" >> artifact_report.md
+                  ### Violations Found
 
-                  echo "::endgroup::"
+                  $(bash scripts/list_root_violations.sh)
 
-            - name: "🤖 Automated Cleanup (if requested)"
+                  ### Resolution
+
+                  Run cleanup script:
+                  \`\`\`bash
+                  bash scripts/clean_root_artifacts.sh
+                  \`\`\`
+                  EOF
+
+            - name: Auto-cleanup
               if: |
-                  github.event.inputs.cleanup_mode == 'auto-clean' &&
-                  steps.artifact_check.outputs.status == 'violations'
+                  github.event.inputs.cleanup_mode == 'clean' &&
+                  steps.check.outputs.status == 'violations'
               run: |
-                  echo "::group::🤖 Phase 3.2 Automated Cleanup"
+                  source .venv/bin/activate
+                  bash scripts/clean_root_artifacts.sh
 
-                  # Run automated cleanup with backup
-                  bash scripts/enhanced_root_artifact_guard.sh --auto-clean
-
-                  # Verify cleanup success
-                  if bash scripts/enhanced_root_artifact_guard.sh --check; then
-                      echo "✅ Automated cleanup successful"
-                  else
-                      echo "❌ Cleanup failed - manual intervention required"
-                      exit 1
-                  fi
-
-                  echo "::endgroup::"
-
-            - name: "📝 Update Pull Request Comment"
+            - name: Update pull request comment
               if: |
                   github.event_name == 'pull_request' &&
-                  steps.artifact_check.outputs.status == 'violations'
+                  steps.check.outputs.status == 'violations'
               uses: actions/github-script@v7
               with:
                   script: |
                       const fs = require('fs');
-                      const report = fs.readFileSync('artifact_report.md', 'utf8');
+                      const report = fs.readFileSync('logs/ci/artifact_report.md', 'utf8');
 
                       const { data: comments } = await github.rest.issues.listComments({
                           owner: context.repo.owner,
@@ -151,15 +108,15 @@ jobs:
 
                       const botComment = comments.find(comment =>
                           comment.user.type === 'Bot' &&
-                          comment.body.includes('Root Artifact Monitor Report')
+                          comment.body.includes('Root Artifact Violations')
                       );
 
-                      const commentBody = `## 🧼 Root Artifact Monitor Report
+                      const commentBody = `## Root Artifact Monitor Report
 
                       ${report}
 
                       ---
-                      *This comment is automatically updated by the Enhanced Root Artifact Guard (Phase 3)*`;
+                      *This comment is automatically updated by the Root Artifact Guard*`;
 
                       if (botComment) {
                           await github.rest.issues.updateComment({
@@ -177,37 +134,32 @@ jobs:
                           });
                       }
 
-            - name: "🚨 Create Issue for Persistent Violations"
+            - name: Create issue for scheduled violations
               if: |
                   github.event_name == 'schedule' &&
-                  steps.artifact_check.outputs.status == 'violations'
+                  steps.check.outputs.status == 'violations'
               uses: actions/github-script@v7
               with:
                   script: |
                       const fs = require('fs');
-                      const report = fs.readFileSync('artifact_report.md', 'utf8');
+                      const report = fs.readFileSync('logs/ci/artifact_report.md', 'utf8');
 
-                      const title = `🧼 Root Artifact Pollution Detected - ${new Date().toISOString().split('T')[0]}`;
+                      const title = `Root artifact violations detected - ${new Date().toISOString().split('T')[0]}`;
 
-                      const body = `## 🚨 Persistent Root Artifact Pollution
+                      const body = `## Persistent Root Artifact Pollution
 
-                      The Enhanced Root Artifact Guard (Phase 3) has detected persistent artifact pollution in the repository root.
+                      The Root Artifact Guard has detected persistent artifact pollution in the repository root.
 
                       ${report}
 
-                      ## 🔧 Required Actions
+                      ## Required Actions
 
                       1. **Review violations** listed above
                       2. **Run cleanup** using the suggested commands
                       3. **Update processes** to prevent future pollution
-                      4. **Verify compliance** with \`bash scripts/enhanced_root_artifact_guard.sh --check\`
+                      4. **Verify compliance** with \`bash scripts/check_root_artifacts.sh\`
 
-                      ## 📋 Enhanced Potato Policy
-
-                      This issue is part of the DevOnboarder Enhanced Potato Policy Phase 3 implementation.
-                      Artifact pollution violates repository hygiene standards and can cause CI instability.
-
-                      **Auto-generated by**: Enhanced Root Artifact Guard v3.1
+                      **Auto-generated by**: Root Artifact Guard
                       **Detection Context**: Scheduled monitoring
                       **Priority**: High (CI hygiene violation)
                       `;
@@ -217,37 +169,13 @@ jobs:
                           repo: context.repo.repo,
                           title: title,
                           body: body,
-                          labels: ['ci-hygiene', 'artifact-pollution', 'phase-3', 'automated']
+                          labels: ['ci-hygiene', 'automated']
                       });
 
-            - name: "📊 Phase 3 Metrics Summary"
-              if: always()
-              run: |
-                  echo "::group::📊 Phase 3 Implementation Metrics"
-
-                  echo "🧼 Enhanced Root Artifact Guard v3.1"
-                  echo "📅 Phase 3 Implementation: $(date -u '+%Y-%m-%d')"
-                  echo "🔍 Detection Status: ${{ steps.artifact_check.outputs.status }}"
-                  echo "🔢 Violations Found: ${{ steps.artifact_check.outputs.violations }}"
-                  echo "🌟 Context Mode: CI/GitHub Actions"
-                  echo "⚙️ Cleanup Mode: ${{ github.event.inputs.cleanup_mode || 'check' }}"
-
-                  if [[ "${{ steps.artifact_check.outputs.status }}" == "clean" ]]; then
-                      echo "✅ Repository hygiene: EXCELLENT"
-                      echo "🎯 Phase 3 Status: OPERATIONAL"
-                  else
-                      echo "⚠️ Repository hygiene: NEEDS ATTENTION"
-                      echo "🔧 Phase 3 Status: VIOLATION DETECTED"
-                  fi
-
-                  echo "::endgroup::"
-
-            - name: "📁 Upload Artifact Reports"
-              if: always()
+            - name: Upload reports
+              if: steps.check.outputs.status == 'violations'
               uses: actions/upload-artifact@v4
               with:
-                  name: "root-artifact-monitor-report-${{ github.run_number }}"
-                  path: |
-                      artifact_report.md
-                      artifact_patterns.log
-                  retention-days: 30
+                  name: "artifact-report-${{ github.run_number }}"
+                  path: logs/ci/
+                  retention-days: 7
