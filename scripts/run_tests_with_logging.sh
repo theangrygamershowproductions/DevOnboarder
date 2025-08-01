@@ -44,20 +44,35 @@ log_and_display() {
     echo "$1" | tee -a "$TEST_LOG"
 }
 
-log_and_display "Installing development requirements..."
-if ! pip install -e ".[test]" 2>&1 | tee -a "$TEST_LOG"; then
-    log_and_display "FAILED to install development requirements"
-    exit 1
+# Check if we're in CI or if dependencies are already installed
+if [ "${CI:-false}" = "true" ] || [ -n "${VIRTUAL_ENV:-}" ]; then
+    log_and_display "Running in CI or virtual environment - skipping dependency installation"
+    log_and_display "Virtual environment: ${VIRTUAL_ENV:-<not set>}"
+    log_and_display "CI environment: ${CI:-false}"
+else
+    log_and_display "Installing development requirements..."
+    if ! pip install -e ".[test]" 2>&1 | tee -a "$TEST_LOG"; then
+        log_and_display "FAILED to install development requirements"
+        exit 1
+    fi
 fi
 
 log_and_display "Checking pip dependencies..."
-if ! pip check 2>&1 | tee -a "$TEST_LOG"; then
-    log_and_display "WARNING: Pip dependency check failed"
+if command -v pip >/dev/null 2>&1; then
+    if ! pip check 2>&1 | tee -a "$TEST_LOG"; then
+        log_and_display "WARNING: Pip dependency check failed"
+    fi
+else
+    log_and_display "WARNING: pip not found, skipping dependency check"
 fi
 
 log_and_display "Running ruff linting..."
-if ! ruff check . 2>&1 | tee -a "$TEST_LOG"; then
-    log_and_display "WARNING: Ruff linting found issues"
+if command -v ruff >/dev/null 2>&1; then
+    if ! ruff check . 2>&1 | tee -a "$TEST_LOG"; then
+        log_and_display "WARNING: Ruff linting found issues"
+    fi
+else
+    log_and_display "WARNING: ruff not found, skipping linting"
 fi
 
 log_and_display "Running Python tests with centralized cache configuration..."
