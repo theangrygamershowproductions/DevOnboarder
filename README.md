@@ -105,6 +105,7 @@ This acts as a **"canary in the repository"** - any attempt to expose sensitive 
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
+  See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance tools reference.
 - `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,
   forwards port `3000`, and runs `scripts/setup-env.sh`.
 - `archive/docker-compose.dev.yaml` – Archived compose file for local development using `.env.dev`.
@@ -268,6 +269,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     steps and feature flag usage.
 
 28. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
+29. See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance, cleanup, and diagnostic tools reference.
 
 These files expand on the steps listed in the Quickstart section.
 
