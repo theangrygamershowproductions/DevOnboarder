@@ -8,10 +8,21 @@ fi
 pr_number="$1"
 
 # Get PR title and check if it's process-related
-pr_title=$(gh pr view "$pr_number" --json title -q '.title' 2>/dev/null || echo "")
+# Use multiple fallback methods for robustness
+pr_title=""
+if command -v gh >/dev/null 2>&1; then
+    pr_title=$(gh pr view "$pr_number" --json title -q '.title' 2>/dev/null || echo "")
+fi
+
+# If GitHub CLI failed or unavailable, treat as feature PR (safe default)
+if [ -z "$pr_title" ]; then
+    # No title available - default to feature PR behavior (skip checklist)
+    exit 0
+fi
 
 # Only require continuous improvement checklist for process/retrospective PRs
-if echo "$pr_title" | grep -iE "(retro|retrospective|process|ci|automation|workflow|checklist|improvement)" >/dev/null; then
+# Avoid false positives from conventional commit prefixes like "FEAT(ci):"
+if echo "$pr_title" | grep -iE "(retro|retrospective|process|workflow|checklist|improvement|ci.*workflow|automation.*workflow)" >/dev/null; then
     # Process-related PR detected, validate continuous improvement checklist
 
     pr_body=$(gh pr view "$pr_number" --json body -q '.body' 2>/dev/null || echo "")
