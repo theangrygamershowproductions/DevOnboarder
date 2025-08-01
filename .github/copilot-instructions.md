@@ -6,6 +6,10 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
 
+## CRITICAL TERMINAL OUTPUT WARNING
+
+**ZERO TOLERANCE POLICY: Never use emojis, Unicode characters, or special formatting in terminal output commands. This WILL cause immediate terminal hanging in DevOnboarder environment. Use only plain ASCII text with individual echo commands.**
+
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
 ### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
@@ -211,68 +215,81 @@ command 2>&1 | tee logs/step-name.log
 
 ### 3. Terminal Output Best Practices - MANDATORY
 
-**CRITICAL: For terminal output, ALWAYS use simple echo commands to prevent hanging:**
+#### CRITICAL PRIORITY: Terminal output rules are ENFORCED with ZERO TOLERANCE for violations
+
+**ABSOLUTE REQUIREMENTS for terminal output to prevent hanging:**
 
 ```bash
-# ✅ CORRECT - Use individual echo commands (MANDATORY)
-echo "✅ Multi-line output here"
-echo "📋 Works with emojis and unicode"
-echo "🎯 No escaping issues"
-echo "🚀 Clean terminal behavior"
+# ✅ CORRECT - Simple text only (MANDATORY)
+echo "Task completed successfully"
+echo "Files processed: 5"
+echo "Next steps: Review and commit"
 
-# ❌ WRONG - These approaches cause terminal hanging (FORBIDDEN)
+# ✅ CORRECT - Plain ASCII characters only
+echo "Status: Implementation complete"
+echo "Result: All tests passing"
+echo "Action: Ready for deployment"
+
+# ❌ FORBIDDEN - These WILL cause terminal hanging
+echo "✅ Multi-line output here"        # Emojis cause hanging
+echo "📋 Works with emojis"             # Unicode causes hanging
+echo "🎯 No escaping issues"            # Special chars cause hanging
 echo "Multi-line
 output that
-hangs terminal"
+hangs terminal"                         # Multi-line causes hanging
 
-cat << 'EOF'
+cat << 'EOF'                            # Here-doc causes hanging
 This also hangs terminals
 EOF
 
-echo -e "Line1\nLine2\nLine3"  # Also problematic
+echo -e "Line1\nLine2\nLine3"          # Escape sequences cause hanging
 ```
 
-**Enforcement Policy**:
+**ZERO TOLERANCE ENFORCEMENT POLICY**:
 
+- **NEVER use emojis or Unicode characters** - CAUSES IMMEDIATE TERMINAL HANGING
 - **NEVER use multi-line echo** - Causes terminal hanging in DevOnboarder environment
 - **NEVER use here-doc syntax** - Also causes terminal hanging issues
 - **NEVER use echo -e with \n** - Unreliable and can hang
+- **NEVER use special characters** - Stick to plain ASCII text only
 - **ALWAYS use individual echo commands** - Only reliable method tested
+- **ALWAYS use plain text only** - No formatting, emojis, or Unicode
 
-**Key Advantages**:
+**CRITICAL CHARACTER RESTRICTIONS**:
 
-- **No terminal hanging** - Commands complete cleanly every time
-- **Simple syntax** - No complex escaping required
-- **Reliable execution** - Works consistently across all environments
-- **Easy maintenance** - Clear, readable syntax
-- **Proven approach** - Tested extensively in DevOnboarder workflows
+- ❌ **NO EMOJIS**: ✅, ❌, 🎯, 🚀, 📋, 🔍, 📝, 💡, ⚠️, etc.
+- ❌ **NO UNICODE**: Special symbols, arrows, bullets, etc.
+- ❌ **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
+- ✅ **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
 
-**Standard Usage Patterns**:
+**Safe Usage Patterns**:
 
 ```bash
-# Status summaries (use this pattern)
-echo "✅ Task completed successfully"
-echo "📋 Files processed: 5"
-echo "🎯 Next steps: Review and commit"
+# Status summaries (SAFE - plain text only)
+echo "Task completed successfully"
+echo "Files processed: 5"
+echo "Next steps: Review and commit"
 
-# Error reporting (use this pattern)
-echo "❌ Operation failed"
-echo "🔍 Check logs in: logs/error.log"
-echo "📝 Resolution: Fix configuration"
+# Error reporting (SAFE - plain text only)
+echo "Operation failed"
+echo "Check logs in: logs/error.log"
+echo "Resolution: Fix configuration"
 
-# Multi-step progress (use this pattern)
-echo "🚀 Starting deployment process"
-echo "📦 Building application"
-echo "🔍 Running tests"
-echo "✅ Deployment complete"
+# Multi-step progress (SAFE - plain text only)
+echo "Starting deployment process"
+echo "Building application"
+echo "Running tests"
+echo "Deployment complete"
 ```
 
-**Agent Requirements**:
+**MANDATORY Agent Requirements**:
 
-- All AI agents MUST use individual echo commands for terminal output
-- Any multi-line output MUST be broken into separate echo statements
-- Terminal hanging is considered a critical failure in DevOnboarder
-- This policy is enforced to maintain system reliability
+- All AI agents MUST use individual echo commands with plain text only
+- Any multi-line output MUST be broken into separate plain text echo statements
+- NO emojis, Unicode, or special characters allowed in terminal output
+- Terminal hanging is considered a CRITICAL FAILURE in DevOnboarder
+- This policy is enforced with ZERO TOLERANCE to maintain system reliability
+- Violations will cause immediate cancellation of commands
 
 ### 4. Workflow Standards
 
@@ -994,11 +1011,13 @@ git status --short  # Should show only intended changes
 3. **ALWAYS verify virtual environment activation** in examples
 4. **ALWAYS include virtual environment setup** in instructions
 5. **NEVER modify linting configuration files** without explicit human request
-6. **NEVER use multi-line echo or here-doc syntax** - Use individual echo commands only
-7. **ALWAYS use simple echo commands** for terminal output to prevent hanging
-8. **REMEMBER**: This project runs in containers/venvs, not host systems
-9. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
-10. **FOLLOW**: Node modules hygiene standards and placement requirements
+6. **NEVER use emojis or Unicode characters in terminal output** - CAUSES IMMEDIATE HANGING
+7. **NEVER use multi-line echo or here-doc syntax** - Use individual echo commands only
+8. **ALWAYS use plain ASCII text only** in echo commands to prevent terminal hanging
+9. **REMEMBER**: This project runs in containers/venvs, not host systems
+10. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
+11. **FOLLOW**: Node modules hygiene standards and placement requirements
+12. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
 ## Agent Documentation Standards
 
