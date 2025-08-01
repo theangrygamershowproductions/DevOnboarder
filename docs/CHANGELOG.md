@@ -11,6 +11,7 @@ All notable changes to this project will be recorded in this file.
 - feat(docs): comprehensive ROADMAP.md and ROADMAP_SUMMARY.md for DevSecOps Manager review
 - fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
 - docs(retro): add retrospective for roadmap documentation project
+- fix(ci): declare CI environment for issue automation token
 
 - docs(agents): remove duplicate Agent Maintenance documentation entry
 
