@@ -2,7 +2,9 @@
 name: Engineer Assessment
 about: Checklist for evaluating DevOnboarder contributions
 title: "[Assessment]"
-labels: ["onboarding"]
+labels: ''
+assignees: ''
+
 ---
 
 Use this issue to track an engineer assessment. Check off items as they are completed.
