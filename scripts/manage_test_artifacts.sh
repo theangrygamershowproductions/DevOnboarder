@@ -27,9 +27,15 @@ validate_token_environment() {
         echo "# Token scope registry - please configure" > .codex/tokens/token_scope_map.yaml
         echo "⚠️  Token scope registry not found" >&2
     fi
-    if [ -f "scripts/audit_token_usage.py" ] && [ -d ".venv" ]; then
+    if [ ! -f "scripts/audit_token_usage.py" ]; then
+        echo "⚠️  Warning: scripts/audit_token_usage.py not found. Skipping token audit." >&2
+        return
+    fi
+    if [ -d ".venv" ]; then
         source .venv/bin/activate
-        python scripts/audit_token_usage.py --project-root . --json-output "$TOKEN_AUDIT_DIR/session-token-audit.json" || true
+        python scripts/audit_token_usage.py --project-root . --json-output "$TOKEN_AUDIT_DIR/session-token-audit.json"
+    else
+        echo "❌ Virtual environment not found. Unable to run token audit." >&2
     fi
 }
 
