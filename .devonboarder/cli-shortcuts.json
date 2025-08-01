@@ -1,0 +1,235 @@
+{
+  "devonboarder_cli_shortcuts": {
+    "description": "DevOnboarder GitHub CLI integration functions available in .zshrc",
+    "version": "1.0.0",
+    "last_updated": "2025-08-01",
+    "documentation": "docs/cli-shortcuts.md",
+    "environment_functions": [
+      {
+        "name": "devonboarder-env",
+        "description": "Detect DevOnboarder repository and show environment status",
+        "usage": "devonboarder-env",
+        "returns": "Environment status and repository information"
+      },
+      {
+        "name": "devonboarder-activate",
+        "description": "Auto-activate virtual environment and show available commands",
+        "usage": "devonboarder-activate",
+        "requirements": ["DevOnboarder repository", ".venv directory"]
+      },
+      {
+        "name": "devonboarder-health-full",
+        "description": "Run comprehensive health checks using existing scripts",
+        "usage": "devonboarder-health-full",
+        "integrates_with": [
+          "scripts/monitor_ci_health.sh",
+          "scripts/enforce_output_location.sh",
+          "scripts/manage_logs.sh"
+        ]
+      }
+    ],
+    "github_aliases": [
+      {
+        "name": "ghissue-ci",
+        "description": "List CI failure issues",
+        "equivalent": "gh issue list --label 'ci-failure' --state open",
+        "category": "issue_management"
+      },
+      {
+        "name": "ghissue-auto",
+        "description": "List automated issues",
+        "equivalent": "gh issue list --label 'automated' --state open",
+        "category": "issue_management"
+      },
+      {
+        "name": "ghissue-triage",
+        "description": "List issues needing triage",
+        "equivalent": "gh issue list --label 'triage' --state open",
+        "category": "issue_management"
+      },
+      {
+        "name": "ghpr-ready",
+        "description": "List non-draft pull requests",
+        "equivalent": "gh pr list --state open --json number,title,isDraft | jq \".[] | select(.isDraft == false)\"",
+        "category": "pr_management"
+      },
+      {
+        "name": "ghworkflow",
+        "description": "List all workflows",
+        "equivalent": "gh workflow list --all",
+        "category": "workflow_management"
+      },
+      {
+        "name": "ghci",
+        "description": "Show recent CI workflow runs",
+        "equivalent": "gh run list --workflow=\"ci.yml\" --limit 5",
+        "category": "ci_monitoring"
+      }
+    ],
+    "monitoring_functions": [
+      {
+        "name": "gh-ci-health",
+        "description": "Show comprehensive CI health report",
+        "usage": "gh-ci-health",
+        "output": "Recent workflow runs and open CI issues",
+        "category": "ci_monitoring"
+      },
+      {
+        "name": "gh-dashboard",
+        "description": "Full DevOnboarder status dashboard",
+        "usage": "gh-dashboard",
+        "features": [
+          "Last 10 workflow runs",
+          "Issue counts by label",
+          "Active pull requests",
+          "Repository health metrics"
+        ],
+        "category": "comprehensive_monitoring"
+      },
+      {
+        "name": "gh-watch",
+        "description": "Auto-refreshing dashboard",
+        "usage": "gh-watch",
+        "refresh_interval": "30 seconds",
+        "stop_command": "Ctrl+C",
+        "category": "real_time_monitoring"
+      },
+      {
+        "name": "gh-branch-status",
+        "description": "Branch and PR overview",
+        "usage": "gh-branch-status",
+        "shows": ["Active branches", "Open pull requests"],
+        "category": "repository_status"
+      }
+    ],
+    "workflow_management": [
+      {
+        "name": "gh-auto-fix",
+        "description": "Trigger auto-fix workflow",
+        "usage": "gh-auto-fix",
+        "triggers": "auto-fix.yml",
+        "includes_monitoring": true
+      },
+      {
+        "name": "gh-trigger-workflow",
+        "description": "Trigger any workflow with monitoring",
+        "usage": "gh-trigger-workflow <workflow-name> [ref]",
+        "parameters": {
+          "workflow-name": "Required - name of workflow to trigger",
+          "ref": "Optional - git ref to run on (default: main)"
+        },
+        "examples": [
+          "gh-trigger-workflow \"security-audit.yml\" \"main\"",
+          "gh-trigger-workflow \"ci.yml\""
+        ]
+      },
+      {
+        "name": "gh-triage",
+        "description": "Triage issues by label",
+        "usage": "gh-triage [label]",
+        "default_label": "triage",
+        "examples": [
+          "gh-triage",
+          "gh-triage \"ci-failure\"",
+          "gh-triage \"priority-high\""
+        ]
+      }
+    ],
+    "utilities": [
+      {
+        "name": "devonboarder-create-issue",
+        "description": "Create issues using DevOnboarder templates",
+        "usage": "devonboarder-create-issue <title> [label]",
+        "parameters": {
+          "title": "Required - issue title",
+          "label": "Optional - issue label (default: triage)"
+        },
+        "template_support": true,
+        "fallback": "Creates simple issue if template not found"
+      },
+      {
+        "name": "gh-config-devonboarder",
+        "description": "Configure GitHub CLI for DevOnboarder workflows",
+        "usage": "gh-config-devonboarder",
+        "sets": [
+          "Default editor to VS Code",
+          "HTTPS protocol for git",
+          "Pager configuration",
+          "Prompt confirmations"
+        ]
+      },
+      {
+        "name": "devonboarder-help",
+        "description": "Show quick reference for all shortcuts",
+        "usage": "devonboarder-help",
+        "aliases": ["devhelp"],
+        "output": "Complete list of available functions"
+      }
+    ],
+    "agent_integration": {
+      "availability_check": {
+        "command": "command -v devonboarder-env >/dev/null 2>&1",
+        "description": "Check if DevOnboarder shortcuts are available"
+      },
+      "fallback_commands": {
+        "gh-ci-health": [
+          "gh run list --limit 5 --json conclusion,status,workflowName",
+          "gh issue list --label \"ci-failure\" --state open"
+        ],
+        "gh-dashboard": [
+          "gh run list --limit 10",
+          "gh issue list --state open",
+          "gh pr list --state open"
+        ],
+        "gh-auto-fix": [
+          "gh workflow run auto-fix.yml"
+        ],
+        "devonboarder-activate": [
+          "source .venv/bin/activate",
+          "pip install -e .[test]"
+        ]
+      },
+      "recommendation_pattern": {
+        "check_availability": "Always check if shortcuts are available first",
+        "provide_fallbacks": "Include standard gh commands as alternatives",
+        "reference_docs": "Point to docs/cli-shortcuts.md for full guide",
+        "suggest_integration": "Recommend .zshrc integration benefits"
+      },
+      "usage_contexts": {
+        "ci_troubleshooting": [
+          "gh-ci-health",
+          "gh-dashboard",
+          "gh-auto-fix",
+          "ghissue-ci"
+        ],
+        "daily_development": [
+          "devonboarder-activate",
+          "gh-watch",
+          "gh-ci-health"
+        ],
+        "issue_management": [
+          "gh-triage",
+          "ghissue-ci",
+          "ghissue-auto",
+          "devonboarder-create-issue"
+        ],
+        "workflow_monitoring": [
+          "gh-trigger-workflow",
+          "gh-watch",
+          "gh-branch-status"
+        ]
+      }
+    },
+    "requirements": {
+      "shell": ["bash", "zsh"],
+      "tools": ["gh", "jq", "git"],
+      "environment": "DevOnboarder repository with .zshrc integration"
+    },
+    "error_handling": {
+      "graceful_fallbacks": true,
+      "missing_tools": "Clear error messages with installation hints",
+      "api_limits": "Handles GitHub API rate limits appropriately",
+      "wrong_repository": "Detects non-DevOnboarder repositories"
+    }
+  }
+}
