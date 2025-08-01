@@ -182,6 +182,7 @@ platforms. Please report any issues you encounter on your operating system.
 - [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
 - [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
 - [Service status dashboard](service-status.md) &ndash; checkbox view of core service health.
+- [Tools dashboard](tools-dashboard.md) &ndash; comprehensive maintenance, cleanup, and diagnostic tools reference.
 - [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
 - [Dependency update policy](dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
 - [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
