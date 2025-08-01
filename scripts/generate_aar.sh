@@ -285,6 +285,123 @@ This AAR documents the resolution process and lessons learned. Please review and
     fi
 }
 
+# Function to generate pull request AAR
+generate_pull_request_aar() {
+    local pr_num="$1"
+
+    echo "Generating Pull Request AAR for #$pr_num"
+
+    # Create pull-requests directory
+    mkdir -p "$AAR_BASE_DIR/pull-requests"
+
+    # Get PR details if GitHub CLI is available
+    local pr_title=""
+    local pr_author=""
+    local files_changed=""
+    local additions=""
+    local deletions=""
+
+    if command -v gh >/dev/null 2>&1; then
+        pr_title=$(gh pr view "$pr_num" --json title --jq '.title' 2>/dev/null || echo "pr-$pr_num")
+        pr_author=$(gh pr view "$pr_num" --json author --jq '.author.login' 2>/dev/null || echo "unknown")
+        files_changed=$(gh pr view "$pr_num" --json changedFiles --jq '.changedFiles' 2>/dev/null || echo "0")
+        additions=$(gh pr view "$pr_num" --json additions --jq '.additions' 2>/dev/null || echo "0")
+        deletions=$(gh pr view "$pr_num" --json deletions --jq '.deletions' 2>/dev/null || echo "0")
+
+        pr_title_clean=$(echo "$pr_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+    else
+        pr_title="pr-$pr_num"
+        pr_title_clean="pr-$pr_num"
+        pr_author="unknown"
+        files_changed="0"
+        additions="0"
+        deletions="0"
+    fi
+
+    local aar_file="$AAR_BASE_DIR/pull-requests/pr-$pr_num-$pr_title_clean.md"
+
+    # Generate AAR content from PR template
+    if [ -f ".aar/templates/pr-aar-template.md" ]; then
+        # Use template and substitute placeholders
+        sed -e "s/\[PR Title\]/$pr_title/g" \
+            -e "s/\[PR Number\]/$pr_num/g" \
+            -e "s/\[Author\]/$pr_author/g" \
+            -e "s/\[Files Changed Count\]/$files_changed/g" \
+            -e "s/\[Added\]/$additions/g" \
+            -e "s/\[Removed\]/$deletions/g" \
+            -e "s/\[Timestamp\]/$(date)/g" \
+            .aar/templates/pr-aar-template.md > "$aar_file"
+    else
+        # Fallback template
+        cat > "$aar_file" << EOF
+# After Actions Report: $pr_title (#$pr_num)
+
+## Executive Summary
+
+This AAR documents the development and integration of PR #$pr_num.
+
+## Context
+
+- **PR Number**: #$pr_num
+- **PR Type**: <!-- Feature/Bug Fix/Enhancement/Refactor/Infrastructure -->
+- **Files Changed**: $files_changed
+- **Lines Added/Removed**: +$additions -$deletions
+- **Author**: @$pr_author
+- **Merge Date**: $(date)
+
+## Technical Changes
+
+### Key Components Modified
+
+- **Backend Changes**: <!-- API endpoints, database changes, etc. -->
+- **Frontend Changes**: <!-- UI updates, component changes, etc. -->
+- **Infrastructure Changes**: <!-- CI/CD, deployment, configuration -->
+
+## What Worked Well
+
+- Effective code review process
+- Good test coverage
+- Clear documentation
+
+## Areas for Improvement
+
+- Earlier design feedback
+- More comprehensive testing
+- Better communication of changes
+
+## Action Items
+
+- [ ] Update documentation (@$pr_author, due: $(date -d '+1 week' '+%Y-%m-%d'))
+- [ ] Share learnings with team (@$pr_author, due: $(date -d '+3 days' '+%Y-%m-%d'))
+
+## Lessons Learned
+
+Technical and process insights from this PR development.
+
+---
+
+**AAR Generated**: $(date)
+EOF
+    fi
+
+    echo "PR AAR generated: $aar_file"
+
+    # Add GitHub comment if CLI is available
+    if command -v gh >/dev/null 2>&1; then
+        gh pr comment "$pr_num" --body "
+📋 **After Actions Report Generated**
+
+An AAR has been created for this PR to capture lessons learned and action items.
+
+**AAR Location**: \`$aar_file\`
+
+This AAR documents the development process, technical decisions, and lessons learned. Please review and update with specific details.
+
+**Next Steps**: A follow-up issue will be created to track action items.
+" 2>/dev/null || echo "Could not add GitHub comment (may need authentication)"
+    fi
+}
+
 # Function to generate sprint AAR
 generate_sprint_aar() {
     local sprint_title="${1:-Sprint-$(date +%Y-%m-%d)}"
@@ -683,6 +800,10 @@ After Actions Reports (AARs) are systematic reviews that capture lessons learned
 
 ISSUE_AARS
 
+#### Pull Requests
+
+PR_AARS
+
 #### Sprints
 
 SPRINT_AARS
@@ -740,6 +861,8 @@ EOF
     # Get recent AARs by type
     local issue_aars
     issue_aars=$(find ".aar/$YEAR/$QUARTER/issues" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No issue AARs yet")
+    local pr_aars
+    pr_aars=$(find ".aar/$YEAR/$QUARTER/pull-requests" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No PR AARs yet")
     local sprint_aars
     sprint_aars=$(find ".aar/$YEAR/$QUARTER/sprints" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No sprint AARs yet")
     local incident_aars
@@ -750,6 +873,9 @@ EOF
     # Use multi-line replacement for AAR lists
     sed -i "/ISSUE_AARS/r"<(echo "$issue_aars") "$index_file"
     sed -i "/ISSUE_AARS/d" "$index_file"
+
+    sed -i "/PR_AARS/r"<(echo "$pr_aars") "$index_file"
+    sed -i "/PR_AARS/d" "$index_file"
 
     sed -i "/SPRINT_AARS/r"<(echo "$sprint_aars") "$index_file"
     sed -i "/SPRINT_AARS/d" "$index_file"
@@ -773,6 +899,14 @@ case "$AAR_TYPE" in
         fi
         generate_issue_aar "$ISSUE_NUMBER"
         ;;
+    "pull_request")
+        if [ -z "$ISSUE_NUMBER" ]; then
+            echo "PR number required for pull request AAR"
+            echo "Usage: $0 pull_request <pr_number>"
+            exit 1
+        fi
+        generate_pull_request_aar "$ISSUE_NUMBER"
+        ;;
     "sprint")
         generate_sprint_aar "$AAR_TITLE"
         ;;
@@ -784,7 +918,7 @@ case "$AAR_TYPE" in
         ;;
     *)
         echo "Unknown AAR type: $AAR_TYPE"
-        echo "Valid types: issue, sprint, incident, automation"
+        echo "Valid types: issue, pull_request, sprint, incident, automation"
         exit 1
         ;;
 esac
