@@ -26,6 +26,10 @@ permissions:
     issues: write
     pull-requests: write
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     root-artifact-monitor:
         name: "🧼 Root Artifact Guard - Enhanced Detection"
