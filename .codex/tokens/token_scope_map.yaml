@@ -1,0 +1,252 @@
+# DevOnboarder Token Scope Registry - Complete Implementation
+# Enforces No Default Token Policy with comprehensive bot identity mapping
+
+# === PRIMARY CI AUTOMATION TOKENS ===
+ci_automation:
+  primary_bot:
+    token: "CI_ISSUE_AUTOMATION_TOKEN"
+    role: "Primary CI Automation & Issue Management"
+    bot_identity: "devonboarder-ci"
+    permissions:
+      - "issues:write"
+      - "pull_requests:write"
+      - "contents:read"
+      - "metadata:read"
+    authorized_workflows:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/ci-health.yml"
+      - ".github/workflows/codex.ci.yml"
+      - ".github/workflows/pr-automation.yml"
+    authorized_scripts:
+      - "scripts/generate_aar.sh"
+      - "scripts/ci_log_audit.py"
+      - "scripts/automate_pr_process.sh"
+    purpose: "Main CI automation, issue creation, PR management"
+    
+  diagnostics_bot:
+    token: "DIAGNOSTICS_BOT_KEY"
+    role: "CI Root Artifact Monitor / Log Parser"
+    bot_identity: "devonboarder-diagnostics"
+    permissions:
+      - "issues:write"
+      - "contents:read"
+      - "actions:read"
+    authorized_workflows:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/diagnostics-post.yml"
+      - ".github/workflows/enforce-output-location.yml"
+    authorized_scripts:
+      - "scripts/ci_log_audit.py"
+      - "scripts/enforce_output_location.sh"
+      - "scripts/manage_test_artifacts.sh"
+    purpose: "Root Artifact Guard enforcement, CI health monitoring"
+
+# === SPECIALIZED PR AND REVIEW AUTOMATION ===
+pr_automation:
+  checklist_bot:
+    token: "CHECKLIST_BOT_TOKEN"
+    role: "PR Checklist Enforcer"
+    bot_identity: "devonboarder-checklist"
+    permissions:
+      - "pull_requests:write"
+      - "contents:read"
+    authorized_workflows:
+      - ".github/workflows/pr-automation.yml"
+    authorized_scripts:
+      - "scripts/validate_pr_checklist.sh"
+      - "scripts/standards_enforcement_assessment.sh"
+    purpose: "PR quality validation, checklist enforcement"
+    
+  aar_bot:
+    token: "AAR_BOT_TOKEN"
+    role: "Post-Merge Reporter / AAR Bot"
+    bot_identity: "devonboarder-aar"
+    permissions:
+      - "issues:write"
+      - "pull_requests:read"
+      - "contents:read"
+    authorized_workflows:
+      - ".github/workflows/post-merge-report.yml"
+    authorized_scripts:
+      - "scripts/generate_aar.sh"
+      - "scripts/audit_retro_actions.sh"
+    purpose: "AAR generation, post-merge reporting"
+
+# === CI MONITORING AND HEALTH TOKENS ===
+ci_monitoring:
+  ci_health_agent:
+    token: "CI_HEALTH_KEY"
+    role: "CI Stability Monitor"
+    bot_identity: "devonboarder-health"
+    permissions:
+      - "actions:read"
+      - "issues:write"
+    authorized_workflows:
+      - ".github/workflows/ci-health.yml"
+      - ".github/workflows/ci-monitor.yml"
+    authorized_scripts:
+      - "scripts/monitor_ci_health.sh"
+      - "scripts/update_ci_dashboard.sh"
+    purpose: "CI pipeline health monitoring, stability metrics"
+    
+  ci_failure_cleaner:
+    token: "CLEANUP_CI_FAILURE_KEY"
+    role: "CI Failure Auto-closer"
+    bot_identity: "devonboarder-cleanup"
+    permissions:
+      - "issues:write"
+    authorized_workflows:
+      - ".github/workflows/cleanup-ci-failure.yml"
+    authorized_scripts:
+      - "scripts/close_resolved_issues.sh"
+      - "scripts/batch_close_ci_noise.sh"
+    purpose: "Automated CI failure issue cleanup"
+    
+  ci_issue_creator:
+    token: "CI_ISSUE_TOKEN"
+    role: "Creates CI Issues on Failure"
+    bot_identity: "devonboarder-issue-creator"
+    permissions:
+      - "issues:write"
+      - "pull_requests:read"
+    authorized_workflows:
+      - ".github/workflows/codex.ci.yml"
+    authorized_scripts:
+      - "scripts/ci_log_audit.py"
+      - "scripts/analyze_ci_patterns.sh"
+    purpose: "Automated issue creation for CI failures"
+
+# === PATTERN RECOGNITION AND ANALYSIS ===
+analysis:
+  review_known_errors:
+    token: "REVIEW_KNOWN_ERRORS_KEY"
+    role: "Codex Error Runbook Reviewer"
+    bot_identity: "devonboarder-reviewer"
+    permissions:
+      - "contents:read"
+      - "issues:write"
+    authorized_workflows:
+      - ".github/workflows/review-known-errors.yml"
+    authorized_scripts:
+      - "scripts/ci_log_audit.py"
+      - "scripts/analyze_ci_patterns.sh"
+    purpose: "Pattern recognition for recurring issues"
+    
+  ci_helper_agent:
+    token: "CI_HELPER_AGENT_KEY"
+    role: "CI Dashboard Builder & Assistant"
+    bot_identity: "devonboarder-helper"
+    permissions:
+      - "contents:write"
+      - "actions:read"
+    authorized_workflows:
+      - ".github/workflows/ci-monitor.yml"
+    authorized_scripts:
+      - "scripts/update_ci_dashboard.sh"
+      - "scripts/assess_pr_health.sh"
+    purpose: "Dashboard updates, CI assistance"
+
+# === ORCHESTRATION TOKENS ===
+orchestration:
+  prod_orchestration:
+    token: "PROD_ORCHESTRATION_BOT_KEY"
+    role: "Primary Codex Orchestrator"
+    bot_identity: "devonboarder-prod-orch"
+    permissions:
+      - "actions:write"
+      - "contents:read"
+    environment: "production"
+    authorized_workflows:
+      - ".github/workflows/prod-orchestrator.yml"
+    purpose: "Production environment orchestration"
+    restricted: true
+    
+  dev_orchestration:
+    token: "DEV_ORCHESTRATION_BOT_KEY"
+    role: "Dev Environment Orchestration"
+    bot_identity: "devonboarder-dev-orch"
+    permissions:
+      - "actions:write"
+      - "contents:read"
+    environment: "development"
+    authorized_workflows:
+      - ".github/workflows/dev-orchestrator.yml"
+    purpose: "Development workflow coordination"
+
+# === SECURITY AND QUALITY TOKENS ===
+security_quality:
+  security_audit:
+    token: "SECURITY_AUDIT_TOKEN"
+    role: "Security Policy Enforcement"
+    bot_identity: "devonboarder-security"
+    permissions:
+      - "security_events:read"
+      - "issues:write"
+      - "contents:read"
+    authorized_workflows:
+      - ".github/workflows/security-audit.yml"
+      - ".github/workflows/potato-policy-focused.yml"
+    authorized_scripts:
+      - "scripts/check_potato_ignore.sh"
+      - "scripts/generate_potato_report.sh"
+    purpose: "Enhanced Potato Policy enforcement"
+    
+  permissions_validator:
+    token: "VALIDATE_PERMISSIONS_TOKEN"
+    role: "Bot Permissions Validator"
+    bot_identity: "devonboarder-permissions"
+    permissions:
+      - "administration:read"
+      - "issues:write"
+    authorized_workflows:
+      - ".github/workflows/validate-permissions.yml"
+    authorized_scripts:
+      - "scripts/validate-bot-permissions.sh"
+      - "scripts/list-bots.py"
+    purpose: "Bot permission auditing and validation"
+
+# === DEPRECATED TOKENS ===
+deprecated:
+  ci_bot_token:
+    token: "CI_BOT_TOKEN"
+    status: "DEPRECATED"
+    reason: "Was shared across workflows; now replaced with scoped tokens"
+    replacement: "CI_ISSUE_AUTOMATION_TOKEN or specific bot tokens"
+    deprecation_date: "2025-07-30"
+    
+  bot_pr_write_token:
+    token: "BOT_PR_WRITE_TOKEN" 
+    status: "DEPRECATED"
+    reason: "Replaced by checklist_bot and aar_bot for scoped PR commenting"
+    replacement: "CHECKLIST_BOT_TOKEN or AAR_BOT_TOKEN"
+    deprecation_date: "2025-07-30"
+
+# === PROHIBITED TOKENS ===
+prohibited:
+  github_default:
+    token: "GITHUB_TOKEN"
+    status: "PROHIBITED"
+    reason: "Violates No Default Token Policy - lacks proper scoping"
+    alternative: "Use CI_ISSUE_AUTOMATION_TOKEN or appropriate scoped token"
+    
+# === TOKEN HIERARCHY ===
+hierarchy:
+  github_automation:
+    primary: "CI_ISSUE_AUTOMATION_TOKEN"
+    diagnostics: "DIAGNOSTICS_BOT_KEY"
+    health: "CI_HEALTH_KEY"
+    prohibited: "GITHUB_TOKEN"
+
+# === COMPLIANCE METADATA ===
+compliance:
+  policy: "No Default Token Policy v1.0"
+  security_framework: "Enhanced Potato Policy"
+  validation_required: true
+  audit_frequency: "monthly"
+  
+metadata:
+  version: "2.0"
+  last_updated: "2025-07-30"
+  maintained_by: "DevOnboarder Security Team"
+  total_registered_tokens: 12
+  deprecated_tokens: 2

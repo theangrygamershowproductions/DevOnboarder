@@ -12,6 +12,7 @@ All notable changes to this project will be recorded in this file.
 - fix(ci): added .markdownlintignore to prevent scanning of node_modules and dependencies
 - docs(retro): add retrospective for roadmap documentation project
 - fix(ci): declare CI environment for issue automation token
+- feat(security): add token scope registry and governance documentation
 
 - docs(agents): remove duplicate Agent Maintenance documentation entry
 
