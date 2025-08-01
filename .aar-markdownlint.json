@@ -1,0 +1,23 @@
+{
+  "comment": "DevOnboarder AAR Markdownlint Configuration with Security Standards",
+  "extends": ".markdownlint.json",
+  "MD013": {
+    "line_length": 120,
+    "heading_line_length": 120,
+    "code_block_line_length": 120,
+    "tables": false
+  },
+  "MD033": false,
+  "MD041": false,
+  "MD022": true,
+  "MD032": true,
+  "MD031": true,
+  "MD007": {
+    "indent": 4
+  },
+  "security_requirements": {
+    "no_secrets_in_content": true,
+    "potato_policy_compliant": true,
+    "token_references_forbidden": true
+  }
+}
