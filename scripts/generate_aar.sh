@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Ensure we're in the right directory (DevOnboarder pattern)
 if [ ! -f ".github/workflows/ci.yml" ]; then
-    echo "❌ Please run this script from the DevOnboarder root directory"
+    echo "Please run this script from the DevOnboarder root directory"
     exit 1
 fi
 
@@ -15,14 +15,7 @@ mkdir -p logs logs/aar-reports logs/token-audit
 LOG_FILE="logs/enhanced_aar_generation_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-echo -e "${GREEN}📋 DevOnboarder Enhanced AAR Generation with Token Governance${NC}"
+echo "DevOnboarder Enhanced AAR Generation with Token Governance"
 echo "============================================================="
 echo "Generating comprehensive After Action Reports with token compliance insights"
 echo ""
@@ -39,19 +32,19 @@ AAR_TITLE="${3:-}"
 # Function to activate virtual environment for Python tools
 activate_virtual_env() {
     if [ ! -d ".venv" ]; then
-        echo -e "${RED}❌ Virtual environment not found${NC}"
+        echo "Virtual environment not found"
         echo "DevOnboarder requires virtual environment setup for comprehensive AAR"
         return 1
     fi
 
     # shellcheck source=/dev/null
     source .venv/bin/activate
-    echo -e "${BLUE}🐍 Virtual environment activated for Python analytics${NC}"
+    echo "Virtual environment activated for Python analytics"
 }
 
 # Function to validate token governance integration
 validate_token_governance_for_aar() {
-    echo -e "${BLUE}🔐 Validating token governance for AAR generation...${NC}"
+    echo "Validating token governance for AAR generation..."
 
     local token_status="unknown"
     local registry_available="false"
@@ -60,7 +53,7 @@ validate_token_governance_for_aar() {
     # Check registry availability
     if [ -f ".codex/tokens/token_scope_map.yaml" ]; then
         registry_available="true"
-        echo "✅ Token scope registry found"
+        echo "Token scope registry found"
 
         # Count registered tokens if PyYAML is available
         if command -v python >/dev/null 2>&1 && python -c "import yaml" 2>/dev/null; then
@@ -78,32 +71,32 @@ except:
     print(0)
 " 2>/dev/null || echo "0")
 
-            echo "📊 Registry contains $token_count registered tokens"
+            echo "Registry contains $token_count registered tokens"
         fi
     else
-        echo "⚠️  Token scope registry not found"
+        echo "Token scope registry not found"
     fi
 
     # Check audit script availability
     if [ -f "scripts/audit_token_usage.py" ]; then
         audit_capable="true"
-        echo "✅ Token audit script available"
+        echo "Token audit script available"
 
         # Test audit capability
         if activate_virtual_env >/dev/null 2>&1; then
             if python scripts/audit_token_usage.py --help >/dev/null 2>&1; then
                 token_status="audit_ready"
-                echo "✅ Token audit system functional"
+                echo "Token audit system functional"
             else
                 token_status="audit_available_not_functional"
-                echo "⚠️  Token audit script available but not functional"
+                echo "Token audit script available but not functional"
             fi
         else
             token_status="venv_missing"
-            echo "⚠️  Virtual environment required for token audit"
+            echo "Virtual environment required for token audit"
         fi
     else
-        echo "⚠️  Token audit script not found"
+        echo "Token audit script not found"
     fi
 
     # Create token governance status summary for AAR
@@ -122,7 +115,7 @@ EOF
 }
 
 if [ -z "$AAR_TYPE" ]; then
-    echo -e "${YELLOW}Enhanced AAR Generator Usage:${NC}"
+    echo "Enhanced AAR Generator Usage:"
     echo ""
     echo "Usage: $0 <type> [issue_number] [title]"
     echo ""
@@ -175,7 +168,7 @@ mkdir -p ".aar/templates"
 generate_issue_aar() {
     local issue_num="$1"
 
-    echo -e "${BLUE}🔍 Generating Issue AAR for #$issue_num${NC}"
+    echo "Generating Issue AAR for #$issue_num"
 
     # Create filename
     local issue_title=""
@@ -276,7 +269,7 @@ EOF
     sed -i "s/DUE_DATE_2/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
     sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
 
-    echo "✅ Issue AAR created: $aar_file"
+    echo "Issue AAR created: $aar_file"
 
     # If GitHub CLI is available, add comment to issue
     if command -v gh >/dev/null 2>&1; then
@@ -288,7 +281,7 @@ EOF
 This AAR documents the resolution process and lessons learned. Please review and update with specific details.
 
 **Action Items Tracking**: Review the AAR file and ensure action items are assigned and tracked.
-" 2>/dev/null || echo "⚠️  Could not add GitHub comment (may need authentication)"
+" 2>/dev/null || echo "Could not add GitHub comment (may need authentication)"
     fi
 }
 
@@ -299,7 +292,7 @@ generate_sprint_aar() {
     safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/sprints/$safe_title.md"
 
-    echo -e "${BLUE}🚀 Generating Sprint AAR: $sprint_title${NC}"
+    echo "Generating Sprint AAR: $sprint_title"
 
     cat > "$aar_file" << 'EOF'
 # After Actions Report: SPRINT_TITLE
@@ -379,7 +372,7 @@ EOF
     sed -i "s/DUE_DATE_2/$(date -d '+21 days' +%Y-%m-%d)/g" "$aar_file"
     sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
 
-    echo "✅ Sprint AAR created: $aar_file"
+    echo "Sprint AAR created: $aar_file"
 }
 
 # Function to generate incident AAR
@@ -389,7 +382,7 @@ generate_incident_aar() {
     safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/incidents/$safe_title.md"
 
-    echo -e "${BLUE}🚨 Generating Incident AAR: $incident_title${NC}"
+    echo "Generating Incident AAR: $incident_title"
 
     cat > "$aar_file" << 'EOF'
 # Incident After Actions Report: INCIDENT_TITLE
@@ -481,7 +474,7 @@ EOF
     sed -i "s/DUE_DATE_3/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
     sed -i "s/DUE_DATE_4/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
 
-    echo "✅ Incident AAR created: $aar_file"
+    echo "Incident AAR created: $aar_file"
 }
 
 # Function to generate automation AAR
@@ -491,7 +484,7 @@ generate_automation_aar() {
     safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/automation/$safe_title.md"
 
-    echo -e "${BLUE}🤖 Generating Automation AAR: $automation_title${NC}"
+    echo "Generating Automation AAR: $automation_title"
 
     cat > "$aar_file" << 'EOF'
 # Automation Enhancement AAR: AUTOMATION_TITLE
@@ -578,85 +571,102 @@ EOF
     sed -i "s/DUE_DATE_2/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
     sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
 
-    echo "✅ Automation AAR created: $aar_file"
+    echo "Automation AAR created: $aar_file"
 }
 
 # Function to create AAR templates
 create_aar_templates() {
-    echo -e "${BLUE}📝 Creating AAR Templates${NC}"
+    echo "Creating AAR Templates"
 
     # Issue AAR Template
     cat > ".aar/templates/issue-aar-template.md" << 'EOF'
 # After Actions Report: [Issue Title] (#[Issue Number])
 
 ## Executive Summary
+
 <!-- Brief description of what was accomplished -->
 
 ## Context
-- **Issue Number**: #[Issue Number]
-- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->
-- **Priority**: <!-- Critical/High/Medium/Low -->
-- **Duration**: <!-- Start Date to End Date -->
-- **Participants**: <!-- @username1, @username2 -->
+
+-   **Issue Number**: #[Issue Number]
+-   **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->
+-   **Priority**: <!-- Critical/High/Medium/Low -->
+-   **Duration**: <!-- Start Date to End Date -->
+-   **Participants**: <!-- @username1, @username2 -->
 
 ## Timeline
+
 <!-- Key milestones and activities -->
-- **Discovery**: Issue identified and initial triage
-- **Investigation**: Root cause analysis and research
-- **Implementation**: Solution development and testing
-- **Resolution**: Final implementation and verification
+
+-   **Discovery**: Issue identified and initial triage
+-   **Investigation**: Root cause analysis and research
+-   **Implementation**: Solution development and testing
+-   **Resolution**: Final implementation and verification
 
 ## What Worked Well
+
 <!-- Successful patterns and effective processes -->
-- Effective use of DevOnboarder automation tools
-- Good collaboration and communication
-- Successful application of existing patterns
+
+-   Effective use of DevOnboarder automation tools
+-   Good collaboration and communication
+-   Successful application of existing patterns
 
 ## Areas for Improvement
+
 <!-- Process bottlenecks and improvement opportunities -->
-- Earlier detection and prevention strategies
-- Documentation gaps that caused delays
-- Testing or validation improvements needed
+
+-   Earlier detection and prevention strategies
+-   Documentation gaps that caused delays
+-   Testing or validation improvements needed
 
 ## Action Items
+
 <!-- Specific improvements to implement -->
-- [ ] Update documentation in [specific location] (@owner, due: YYYY-MM-DD)
-- [ ] Enhance automation or monitoring (@owner, due: YYYY-MM-DD)
-- [ ] Add regression tests or validation (@owner, due: YYYY-MM-DD)
+
+-   [ ] Update documentation in [specific location] (@owner, due: YYYY-MM-DD)
+-   [ ] Enhance automation or monitoring (@owner, due: YYYY-MM-DD)
+-   [ ] Add regression tests or validation (@owner, due: YYYY-MM-DD)
 
 ## Lessons Learned
+
 <!-- Key insights and knowledge gained -->
-- Technical insights discovered during resolution
-- Process improvements identified
-- Best practices reinforced or established
+
+-   Technical insights discovered during resolution
+-   Process improvements identified
+-   Best practices reinforced or established
 
 ## DevOnboarder Integration Impact
+
 <!-- How this relates to project standards -->
-- **Virtual Environment**: <!-- Any dependency or setup impacts -->
-- **CI/CD Pipeline**: <!-- Automation or workflow effects -->
-- **Code Quality**: <!-- Impact on coverage or standards -->
-- **Security**: <!-- Enhanced Potato Policy or security considerations -->
+
+-   **Virtual Environment**: <!-- Any dependency or setup impacts -->
+-   **CI/CD Pipeline**: <!-- Automation or workflow effects -->
+-   **Code Quality**: <!-- Impact on coverage or standards -->
+-   **Security**: <!-- Enhanced Potato Policy or security considerations -->
 
 ## Related Issues/PRs
+
 <!-- Cross-references to related work -->
-- Resolves #[Issue Number]
-- Related to: <!-- #other-issues -->
-- Follow-up needed: <!-- #future-issues -->
+
+-   Resolves #[Issue Number]
+-   Related to: <!-- #other-issues -->
+-   Follow-up needed: <!-- #future-issues -->
 
 ---
+
 **AAR Created**: YYYY-MM-DD
 **Next Review**: YYYY-MM-DD (quarterly cycle)
 **Generated by**: DevOnboarder AAR Automation
 EOF
 
-    echo "✅ AAR templates created in .aar/templates/"
+    echo "AAR templates created in .aar/templates/"
 }
 
 # Function to create AAR index
 update_aar_index() {
     local index_file=".aar/index.md"
 
-    echo -e "${BLUE}📚 Updating AAR Index${NC}"
+    echo "Updating AAR Index"
 
     cat > "$index_file" << 'EOF'
 # DevOnboarder After Actions Reports Index
@@ -670,15 +680,19 @@ After Actions Reports (AARs) are systematic reviews that capture lessons learned
 ### CURRENT_YEAR CURRENT_QUARTER
 
 #### Issues
+
 ISSUE_AARS
 
 #### Sprints
+
 SPRINT_AARS
 
 #### Incidents
+
 INCIDENT_AARS
 
 #### Automation
+
 AUTOMATION_AARS
 
 ## AAR Statistics
@@ -704,6 +718,7 @@ Generate AARs using the automation script:
 See `docs/standards/after-actions-report-process.md` for the complete AAR process documentation.
 
 ---
+
 **Index Updated**: LAST_UPDATED
 **Generated by**: DevOnboarder AAR Automation
 EOF
@@ -745,14 +760,14 @@ EOF
     sed -i "/AUTOMATION_AARS/r"<(echo "$automation_aars") "$index_file"
     sed -i "/AUTOMATION_AARS/d" "$index_file"
 
-    echo "✅ AAR index updated: $index_file"
+    echo "AAR index updated: $index_file"
 }
 
 # Main execution
 case "$AAR_TYPE" in
     "issue")
         if [ -z "$ISSUE_NUMBER" ]; then
-            echo -e "${RED}❌ Issue number required for issue AAR${NC}"
+            echo "Issue number required for issue AAR"
             echo "Usage: $0 issue <issue_number>"
             exit 1
         fi
@@ -768,7 +783,7 @@ case "$AAR_TYPE" in
         generate_automation_aar "$AAR_TITLE"
         ;;
     *)
-        echo -e "${RED}❌ Unknown AAR type: $AAR_TYPE${NC}"
+        echo "Unknown AAR type: $AAR_TYPE"
         echo "Valid types: issue, sprint, incident, automation"
         exit 1
         ;;
@@ -783,10 +798,10 @@ fi
 update_aar_index
 
 echo ""
-echo -e "${GREEN}✅ AAR Generation Complete${NC}"
+echo "AAR Generation Complete"
 echo "📁 AAR Location: $AAR_BASE_DIR"
 echo "📋 Index: .aar/index.md"
-echo "📝 Log: $LOG_FILE"
+echo "Log: $LOG_FILE"
 echo ""
 echo "Next steps:"
 echo "1. Review and complete the generated AAR"
