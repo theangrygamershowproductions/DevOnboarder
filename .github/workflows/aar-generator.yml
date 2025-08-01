@@ -216,6 +216,10 @@ jobs:
           source .venv/bin/activate
           pip install -e .[test]
 
+      - name: "Create logs directory"
+        run: |
+          mkdir -p logs logs/aar logs/aar-reports logs/token-audit logs/compliance-reports
+
       - name: "Download AAR artifacts"
         uses: actions/download-artifact@v4
         with:
