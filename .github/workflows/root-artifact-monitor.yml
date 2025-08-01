@@ -46,8 +46,6 @@ jobs:
             - name: Check root artifacts
               id: check
               run: |
-                  source .venv/bin/activate
-
                   if bash scripts/check_root_artifacts.sh; then
                       echo "status=clean" >> $GITHUB_OUTPUT
                       echo "violations=0" >> $GITHUB_OUTPUT
@@ -59,7 +57,6 @@ jobs:
             - name: Generate report
               if: steps.check.outputs.status == 'violations'
               run: |
-                  source .venv/bin/activate
                   mkdir -p logs/ci
 
                   cat > logs/ci/artifact_report.md << EOF
@@ -87,7 +84,6 @@ jobs:
                   github.event.inputs.cleanup_mode == 'clean' &&
                   steps.check.outputs.status == 'violations'
               run: |
-                  source .venv/bin/activate
                   bash scripts/clean_root_artifacts.sh
 
             - name: Update pull request comment
