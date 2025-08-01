@@ -11,7 +11,7 @@ import re
 def validate_md007_compliance(file_path):
     """Validate MD007 (list indentation) compliance."""
     if not os.path.exists(file_path):
-        print(f"❌ File not found: {file_path}")
+        print(f"ERROR: File not found: {file_path}")
         return False
 
     with open(file_path, "r", encoding="utf-8") as f:
@@ -50,12 +50,12 @@ def validate_md007_compliance(file_path):
                 expected_base_indent = 0
 
     if violations:
-        print(f"❌ MD007 violations in {file_path}:")
+        print(f"FAIL: MD007 violations in {file_path}:")
         for violation in violations:
             print(f"  {violation}")
         return False
     else:
-        print(f"✅ {file_path}: MD007 compliant")
+        print(f"PASS: {file_path}: MD007 compliant")
         return True
 
 
@@ -79,12 +79,12 @@ def validate_basic_markdown(file_path):
                 issues.append(msg)
 
     if issues:
-        print(f"❌ Basic markdown issues in {file_path}:")
+        print(f"FAIL: Basic markdown issues in {file_path}:")
         for issue in issues:
             print(f"  {issue}")
         return False
     else:
-        print(f"✅ {file_path}: Basic markdown compliant")
+        print(f"PASS: {file_path}: Basic markdown compliant")
         return True
 
 
@@ -103,15 +103,15 @@ def main():
             basic_valid = validate_basic_markdown(template)
             all_valid = all_valid and md007_valid and basic_valid
         else:
-            print(f"❌ Template not found: {template}")
+            print(f"ERROR: Template not found: {template}")
             all_valid = False
 
     print("\n" + "=" * 30)
     if all_valid:
-        print("✅ All AAR templates are valid")
+        print("SUCCESS: All AAR templates are valid")
         exit(0)
     else:
-        print("❌ AAR template validation failed")
+        print("FAILED: AAR template validation failed")
         exit(1)
 
 
