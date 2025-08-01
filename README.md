@@ -29,19 +29,39 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    git clone https://github.com/theangrygamershowproductions/DevOnboarder.git && cd DevOnboarder
    ```
 
-2. Run locally:
+2. Set up environment:
+
+   ```bash
+   # Install DevOnboarder .zshrc integration for CLI shortcuts
+   # See docs/cli-shortcuts.md for full shell integration guide
+
+   # Activate environment
+   source .venv/bin/activate
+   pip install -e .[test]
+   ```
+
+3. Run locally:
 
    ```bash
    docker compose up -d
    ```
 
-3. Run tests:
+4. **Optional**: Enable CLI shortcuts:
+
+   ```bash
+   # If you have DevOnboarder .zshrc integration:
+   devonboarder-activate  # Auto-setup environment
+   gh-dashboard          # View comprehensive status
+   gh-ci-health         # Quick CI check
+   ```
+
+5. Run tests:
 
    ```bash
    ./scripts/run_tests.sh
    ```
 
-4. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
 ## Trunk-Based Workflow
 
@@ -120,6 +140,38 @@ When Docker isn't available, the script installs Python 3.12 using `mise` or `as
 | Swift    | 6.1     |
 
 Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
+
+## Available Make Targets
+
+DevOnboarder includes several Makefile targets for common development tasks:
+
+### Core Development
+
+- `make deps` - Build Docker containers for all services
+- `make up` - Start all services with Docker Compose
+- `make test` - Run comprehensive test suite with coverage validation
+- `make openapi` - Generate OpenAPI specification
+
+### AAR (After Action Report) System
+
+- `make aar-env-template` - Create/update .env file with AAR environment variables
+- `make aar-setup` - Complete AAR system setup with token validation
+- `make aar-check` - Validate AAR system status and configuration
+- `make aar-validate` - Check AAR templates for markdown compliance
+- `make aar-generate WORKFLOW_ID=12345` - Generate AAR for specific workflow run
+- `make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true` - Generate AAR and create GitHub issue
+
+### AAR System Features
+
+The AAR system provides automated CI failure analysis and reporting:
+
+- **Token Management**: Follows DevOnboarder No Default Token Policy v1.0
+- **Environment Loading**: Automatically loads `.env` variables
+- **Compliance Validation**: Ensures markdown standards (MD007, MD009, MD022, MD032)
+- **GitHub Integration**: Creates issues for CI failures when tokens are configured
+- **Offline Mode**: Generates reports without tokens for local analysis
+
+For complete AAR documentation, see [`docs/AAR_MAKEFILE_INTEGRATION.md`](docs/AAR_MAKEFILE_INTEGRATION.md).
 
 ## Discord Bot Integration
 
@@ -312,10 +364,19 @@ docker compose -f archive/docker-compose.prod.yaml --env-file .env.prod up -d
 3. Run `bash scripts/generate-secrets.sh` so `.env.dev` matches the secrets CI uses.
 4. Copy each `*.env.example` to `.env` inside its service directory.
 5. Build the containers with `make deps` and start them with `make up`.
-6. Apply database migrations using `bash scripts/run_migrations.sh`.
-7. Run `python -m diagnostics` to verify required packages load, services are
+6. Set up AAR (After Action Report) system for CI failure analysis:
+
+   ```bash
+   make aar-env-template  # Create/update .env with AAR tokens
+   # Edit .env to set your GitHub tokens
+   make aar-setup         # Complete AAR system setup
+   make aar-check         # Validate AAR system status
+   ```
+
+7. Apply database migrations using `bash scripts/run_migrations.sh`.
+8. Run `python -m diagnostics` to verify required packages load, services are
    healthy, and environment variables match the examples.
-8. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package.
+9. Install the project **before** running tests. Use editable mode so `pytest` can import the `devonboarder` package.
    Install Node.js packages with `npm ci` in each subdirectory:
 
     ```bash

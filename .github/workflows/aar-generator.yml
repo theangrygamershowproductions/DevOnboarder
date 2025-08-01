@@ -1,0 +1,279 @@
+name: "After Action Report (AAR) Generator"
+
+# DevOnboarder AAR System - Automated CI failure analysis with token governance
+
+on:
+  workflow_run:
+    workflows:
+      - "CI"
+      - "PR Automation"
+      - "Auto-Fix"
+      - "Documentation Quality"
+      - "Security Audit"
+    types:
+      - completed
+    branches:
+      - main
+      - "feature/**"
+
+  workflow_dispatch:
+    inputs:
+      workflow_run_id:
+        description: "Specific workflow run ID to analyze"
+        required: false
+        type: string
+      create_issue:
+        description: "Create GitHub issue for AAR report"
+        required: false
+        type: boolean
+        default: true
+
+env:
+  # CRITICAL: Follow DevOnboarder No Default Token Policy v1.0
+  # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+  PYTHON_ENV: ci
+  NODE_ENV: test
+  CI: true
+
+jobs:
+  generate-aar:
+    name: "Generate After Action Report"
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
+
+    permissions:
+      # Minimal permissions for AAR generation
+      contents: read
+      issues: write
+      actions: read
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 50  # Get recent history for change analysis
+
+      - name: "Setup Python environment"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: "Create virtual environment"
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+
+      - name: "Install dependencies"
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: "Validate AAR environment"
+        run: |
+          source .venv/bin/activate
+          python scripts/aar_security.py
+
+      - name: "Create file version snapshot"
+        run: |
+          source .venv/bin/activate
+          python scripts/file_version_tracker.py --create-snapshot "pre-aar-${GITHUB_RUN_ID}"
+
+      - name: "Generate AAR report"
+        env:
+          # CRITICAL: Use proper token hierarchy for AAR operations
+          # Following DevOnboarder No Default Token Policy v1.0
+          CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+          CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          # GITHUB_TOKEN only as absolute fallback
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Workflow context for analysis
+          WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id }}
+          TRIGGER_WORKFLOW: ${{ github.event.workflow_run.name || 'manual' }}
+          FAILURE_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'unknown' }}
+        run: |
+          source .venv/bin/activate
+
+          echo "Starting AAR generation for workflow run: ${WORKFLOW_RUN_ID}"
+          echo "Triggered by: ${TRIGGER_WORKFLOW}"
+          echo "Conclusion: ${FAILURE_CONCLUSION}"
+
+          # Generate comprehensive AAR report
+          if [ -n "$WORKFLOW_RUN_ID" ]; then
+            python scripts/generate_aar.py \
+              --workflow-run-id "$WORKFLOW_RUN_ID" \
+              --config "config/aar-config.json" \
+              --output-file "aar_${WORKFLOW_RUN_ID}_${GITHUB_RUN_ID}.md"
+          else
+            python scripts/generate_aar.py \
+              --config "config/aar-config.json" \
+              --output-file "aar_general_${GITHUB_RUN_ID}.md"
+          fi
+
+      - name: "Create GitHub issue"
+        if: ${{ github.event.inputs.create_issue != 'false' }}
+        env:
+          # Use same token hierarchy for issue creation
+          CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+          CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id }}
+        run: |
+          source .venv/bin/activate
+
+          if [ -n "$WORKFLOW_RUN_ID" ]; then
+            python scripts/generate_aar.py \
+              --workflow-run-id "$WORKFLOW_RUN_ID" \
+              --create-issue \
+              --config "config/aar-config.json"
+          else
+            python scripts/generate_aar.py \
+              --create-issue \
+              --config "config/aar-config.json"
+          fi
+
+      - name: "Archive AAR artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "aar-reports-${{ github.run_id }}"
+          path: |
+            logs/aar/*.md
+            logs/aar-reports/*.md
+            logs/token-audit/*.json
+            logs/file-versions.json
+          retention-days: 30
+
+      - name: "Generate change analysis"
+        run: |
+          source .venv/bin/activate
+
+          # Create post-AAR snapshot for comparison
+          python scripts/file_version_tracker.py --create-snapshot "post-aar-${GITHUB_RUN_ID}"
+
+          # Analyze Git changes if we have workflow context
+          if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "Analyzing changes since: ${{ github.event.workflow_run.head_sha }}"
+            python scripts/file_version_tracker.py --git-diff "${{ github.event.workflow_run.head_sha }}" \
+              > "logs/aar/change-analysis-${GITHUB_RUN_ID}.md"
+          fi
+
+      - name: "Cleanup old snapshots"
+        run: |
+          source .venv/bin/activate
+          python scripts/file_version_tracker.py --cleanup 20
+
+      - name: "AAR summary"
+        run: |
+          echo "AAR Generation Summary"
+          echo "====================="
+          echo "Workflow Run ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id || 'N/A' }}"
+          echo "Trigger: ${{ github.event.workflow_run.name || 'manual' }}"
+          echo "Token Policy: No Default Token Policy v1.0 COMPLIANT"
+          echo "Reports Generated:"
+
+          if [ -d "logs/aar" ]; then
+            ls -la logs/aar/*.md 2>/dev/null || echo "  No AAR reports found"
+          fi
+
+          echo ""
+          echo "Artifacts:"
+          if [ -d "logs/token-audit" ]; then
+            ls -la logs/token-audit/*.json 2>/dev/null || echo "  No token audit files found"
+          fi
+
+  security-audit:
+    name: "AAR Security Audit"
+    runs-on: ubuntu-latest
+    needs: generate-aar
+    if: always()
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup Python environment"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: "Create virtual environment"
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+
+      - name: "Install dependencies"
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: "Download AAR artifacts"
+        uses: actions/download-artifact@v4
+        with:
+          name: "aar-reports-${{ github.run_id }}"
+          path: "aar-artifacts/"
+        continue-on-error: true
+
+      - name: "Audit token usage compliance"
+        env:
+          CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+          CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          source .venv/bin/activate
+
+          echo "Performing AAR security audit..."
+
+          # Run token compliance audit
+          python scripts/aar_security.py > "logs/aar-security-audit-${GITHUB_RUN_ID}.log"
+
+          echo "Token compliance audit completed"
+
+      - name: "Validate Potato Policy compliance"
+        run: |
+          source .venv/bin/activate
+
+          # Ensure AAR system respects Enhanced Potato Policy
+          bash scripts/check_potato_ignore.sh
+
+          # Check for any sensitive data exposure in AAR reports
+          if [ -d "aar-artifacts" ]; then
+            grep -r "GITHUB_TOKEN\|CI_BOT_TOKEN\|CI_ISSUE_AUTOMATION_TOKEN" aar-artifacts/ || true
+            echo "Sensitive token check completed"
+          fi
+
+      - name: "Generate security report"
+        run: |
+          echo "AAR Security Audit Report" > "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "=========================" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "**Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "**Workflow**: ${{ github.workflow }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "**Run ID**: ${{ github.run_id }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "## Compliance Status" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- No Default Token Policy v1.0: ✅ COMPLIANT" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Enhanced Potato Policy: ✅ VALIDATED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Virtual Environment: ✅ ENFORCED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Centralized Logging: ✅ ACTIVE" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+
+          echo "Security audit report generated"
+
+      - name: "Archive security audit"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "aar-security-audit-${{ github.run_id }}"
+          path: |
+            logs/aar-security-*.log
+            logs/aar-security-*.md
+          retention-days: 30

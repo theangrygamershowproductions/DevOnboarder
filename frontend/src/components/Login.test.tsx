@@ -23,9 +23,25 @@ describe("Login", () => {
 
     it("exchanges OAuth code and stores token", async () => {
         window.history.replaceState({}, "", "/login/discord/callback?code=abc");
-        const fetchMock = vi.fn().mockResolvedValue({
-            json: () => Promise.resolve({ token: "tok" }),
-        });
+        const fetchMock = vi
+            .fn()
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ token: "tok" }),
+            })
+            .mockResolvedValueOnce({
+                json: () =>
+                    Promise.resolve({
+                        id: "1",
+                        username: "dev",
+                        avatar: "img",
+                    }),
+            })
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ level: 3 }),
+            })
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ status: "intro" }),
+            });
         vi.stubGlobal("fetch", fetchMock);
 
         render(<Login />);
