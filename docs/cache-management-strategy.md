@@ -26,10 +26,9 @@ The centralized cache configuration is defined in `pyproject.toml`:
 cache_dir = "logs/.pytest_cache"
 addopts = [
     "--cov=src",
-    "--cov-report=html:logs/coverage_html",
+    "--cov-report=html:logs/htmlcov",
     "--cov-report=term",
-    "--cov-fail-under=95",
-    "--cache-dir=logs/.pytest_cache"
+    "--cov-fail-under=95"
 ]
 
 [tool.mypy]
@@ -38,10 +37,7 @@ show_error_codes = true
 warn_unused_ignores = true
 
 [tool.coverage.html]
-directory = "logs/coverage_html"
-
-[tool.coverage.xml]
-output = "logs/coverage.xml"
+directory = "logs/htmlcov"
 ```
 
 ### Environment Variables
