@@ -2,7 +2,9 @@
 name: EnvVar Misalignment
 about: Report missing or extra environment variables
 title: "[EnvVar]"
-labels: ["ops"]
+labels: ''
+assignees: ''
+
 ---
 
 ## Missing variables
