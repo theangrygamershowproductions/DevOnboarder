@@ -1,0 +1,148 @@
+{
+  "aar_data": {
+    "quarters": {
+      "2025": {
+        "Q3": {
+          "pull_requests": [],
+          "issues": [
+            {
+              "title": "After Actions Report: Issue #Discord Bot Authentication Enhancement",
+              "file_path": "2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md",
+              "absolute_path": ".aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md",
+              "ref_number": "Discord",
+              "type": "issues",
+              "date_created": "2025-08-01T08:16:05.732042",
+              "files_changed": 0,
+              "agents_updated": 0,
+              "action_items": 3,
+              "codex_alignment": "Unknown",
+              "labels": [
+                "critical",
+                "infrastructure",
+                "security",
+                "feature",
+                "bug",
+                "enhancement",
+                "documentation"
+              ],
+              "word_count": 306,
+              "line_count": 76,
+              "content_preview": "# After Actions Report: Issue #Discord Bot Authentication Enhancement\n\n## Executive Summary\n\n<!-- Brief description of what was accomplished -->\n\n## Context\n\n- **Issue Number**: #Discord Bot Authentication Enhancement\n- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->\n- **Priority**: <!-- Critical/High/Medium/Low -->\n- **Duration**: <!-- Start Date to End Date -->\n- **Participants**: <!-- @username1, @username2 -->\n\n## Timeline\n\n<!-- Key milestones and activities -->\n\n- **Discover..."
+            }
+          ],
+          "sprints": [
+            {
+              "title": "After Actions Report: Sprint-2025-07-30",
+              "file_path": "2025/Q3/sprints/sprint-2025-07-30.md",
+              "absolute_path": ".aar/2025/Q3/sprints/sprint-2025-07-30.md",
+              "ref_number": "2025",
+              "type": "sprints",
+              "date_created": "2025-08-01T08:15:24.374742",
+              "files_changed": 0,
+              "agents_updated": 0,
+              "action_items": 3,
+              "codex_alignment": "Unknown",
+              "labels": [
+                "infrastructure",
+                "security",
+                "feature",
+                "enhancement",
+                "documentation"
+              ],
+              "word_count": 317,
+              "line_count": 69,
+              "content_preview": "# After Actions Report: Sprint-2025-07-30\n\n## Executive Summary\n\n<!-- High-level summary of sprint accomplishments and impact -->\n\n## Sprint Context\n\n- **Sprint Name**: Sprint-2025-07-30\n- **Duration**: <!-- Start Date to End Date -->\n- **Goals**: <!-- Primary objectives -->\n- **Team**: <!-- Participants -->\n\n## Accomplishments\n<!-- What was delivered -->\n- Major features or enhancements completed\n- Infrastructure improvements\n- Process optimizations\n\n## Metrics\n<!-- Quantitative assessment -->\n..."
+            }
+          ],
+          "incidents": [
+            {
+              "title": "Incident After Actions Report: Incident-2025-07-30",
+              "file_path": "2025/Q3/incidents/incident-2025-07-30.md",
+              "absolute_path": ".aar/2025/Q3/incidents/incident-2025-07-30.md",
+              "ref_number": "2025",
+              "type": "incidents",
+              "date_created": "2025-08-01T08:15:24.384940",
+              "files_changed": 0,
+              "agents_updated": 0,
+              "action_items": 4,
+              "codex_alignment": "Unknown",
+              "labels": [
+                "infrastructure",
+                "security",
+                "enhancement",
+                "documentation"
+              ],
+              "word_count": 401,
+              "line_count": 79,
+              "content_preview": "# Incident After Actions Report: Incident-2025-07-30\n\n## Incident Summary\n<!-- Brief description of what happened -->\n\n## Timeline\n<!-- Detailed chronological breakdown -->\n- **Detection**: <!-- When/how incident was discovered -->\n- **Response**: <!-- Initial response actions -->\n- **Investigation**: <!-- Root cause analysis process -->\n- **Resolution**: <!-- How the incident was resolved -->\n- **Recovery**: <!-- Return to normal operations -->\n\n## Impact Assessment\n<!-- What was affected -->\n-..."
+            }
+          ],
+          "automation": [
+            {
+              "title": "Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review",
+              "file_path": "2025/Q3/automation/automation-enhancement-2025-07-30.md",
+              "absolute_path": ".aar/2025/Q3/automation/automation-enhancement-2025-07-30.md",
+              "ref_number": "enhancement",
+              "type": "automation",
+              "date_created": "2025-08-01T08:17:03.469218",
+              "files_changed": 0,
+              "agents_updated": 0,
+              "action_items": 4,
+              "codex_alignment": "Unknown",
+              "labels": [
+                "feature",
+                "bug",
+                "enhancement",
+                "documentation",
+                "performance"
+              ],
+              "word_count": 898,
+              "line_count": 120,
+              "content_preview": "# Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review\n\n## Enhancement Summary\n\nImplemented comprehensive git workflow automation system with intelligent commit message generation, pre-commit log review, and enhanced branch management strategies to resolve developer uncertainty around commit failures and improve code quality enforcement.\n\n## Context\n\n- **Problem Statement**: Developers experienced mysterious commit failures due to pre-commit hooks without clear guidanc..."
+            }
+          ]
+        }
+      }
+    },
+    "total_aars": 4,
+    "types": {
+      "pull_requests": 0,
+      "issues": 1,
+      "sprints": 1,
+      "incidents": 1,
+      "automation": 1
+    },
+    "metrics": {
+      "total_files_changed": 0,
+      "total_agents_updated": 0,
+      "total_action_items": 14
+    }
+  },
+  "trends": {
+    "quarterly_counts": [
+      {
+        "period": "Q3 2025",
+        "total_aars": 4,
+        "files_changed": 0,
+        "agents_updated": 0,
+        "action_items": 14
+      }
+    ],
+    "type_distribution": {
+      "pull_requests": 0,
+      "issues": 1,
+      "sprints": 1,
+      "incidents": 1,
+      "automation": 1
+    },
+    "files_changed_trend": [],
+    "agents_updated_trend": [],
+    "action_items_trend": [],
+    "avg_metrics": {
+      "avg_files_per_aar": 0.0,
+      "avg_agents_per_aar": 0.0,
+      "avg_actions_per_aar": 3.5
+    }
+  },
+  "generated": "2025-08-01T17:30:15.785202"
+}

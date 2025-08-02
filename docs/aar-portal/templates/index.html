@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}AAR Browser - DevOnboarder{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Filters Sidebar -->
+    <div class="col-md-3 filter-sidebar p-4">
+        <div class="search-box">
+            <h5><i class="bi bi-funnel"></i> Filters</h5>
+
+            <div class="mb-3">
+                <label for="quarterFilter" class="form-label">Quarter</label>
+                <select class="form-select" id="quarterFilter">
+                    <option value="">All Quarters</option>
+                    {% for year, quarters in aar_data.quarters.items() %}
+                        {% for quarter in quarters.keys() %}
+                            <option value="{{ quarter }}-{{ year }}">{{ quarter }} {{ year }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="typeFilter" class="form-label">Type</label>
+                <select class="form-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="pull_requests">Pull Requests</option>
+                    <option value="issues">Issues</option>
+                    <option value="sprints">Sprints</option>
+                    <option value="incidents">Incidents</option>
+                    <option value="automation">Automation</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="searchQuery" class="form-label">Search</label>
+                <input type="text" class="form-control" id="searchQuery" placeholder="Search AAR content...">
+            </div>
+
+            <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="mt-4">
+            <h6>Summary</h6>
+            <ul class="list-unstyled">
+                <li><strong>{{ aar_data.total_aars }}</strong> Total AARs</li>
+                <li><strong>{{ aar_data.metrics.total_files_changed }}</strong> Files Changed</li>
+                <li><strong>{{ aar_data.metrics.total_agents_updated }}</strong> Agents Updated</li>
+                <li><strong>{{ aar_data.metrics.total_action_items }}</strong> Action Items</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- AAR Grid -->
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-grid"></i> After Action Reports</h2>
+            <span class="badge bg-primary" id="resultCount">{{ aar_data.total_aars }} AARs</span>
+        </div>
+
+        <div class="row" id="aarGrid">
+            {% for year, quarters in aar_data.quarters.items() %}
+                {% for quarter, types in quarters.items() %}
+                    {% for type_name, aars in types.items() %}
+                        {% for aar in aars %}
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="{{ quarter }}-{{ year }}"
+                                 data-type="{{ type_name }}"
+                                 data-title="{{ aar.title.lower() }}"
+                                 data-content="{{ aar.content_preview.lower() }}">
+                                <div class="card aar-card h-100 type-{{ type_name }}">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-{{ 'git-pull-request' if type_name == 'pull_requests' else 'exclamation-circle' if type_name == 'issues' else 'clock' if type_name == 'sprints' else 'bug' if type_name == 'incidents' else 'gear' }}"></i>
+                                            {{ type_name.replace('_', ' ').title() }} #{{ aar.ref_number }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ aar.title }}</h6>
+                                        <p class="card-text small">{{ aar.content_preview[:150] }}...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">{{ aar.files_changed }} files</span>
+                                            <span class="badge bg-info metric-badge">{{ aar.agents_updated }} agents</span>
+                                            <span class="badge bg-warning metric-badge">{{ aar.action_items }} items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+                                            {% for label in aar.labels %}
+                                                <span class="badge bg-light text-dark">{{ label }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">{{ quarter }} {{ year }}</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/{{ aar.absolute_path }}" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../{{ aar.file_path }}" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div id="noResults" class="text-center mt-5" style="display: none;">
+            <i class="bi bi-search display-1 text-muted"></i>
+            <h4 class="text-muted">No AARs found</h4>
+            <p class="text-muted">Try adjusting your filters or search terms.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function filterAARs() {
+        const quarterFilter = document.getElementById('quarterFilter').value;
+        const typeFilter = document.getElementById('typeFilter').value;
+        const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+
+        const aarItems = document.querySelectorAll('.aar-item');
+        let visibleCount = 0;
+
+        aarItems.forEach(item => {
+            const quarter = item.dataset.quarter;
+            const type = item.dataset.type;
+            const title = item.dataset.title;
+            const content = item.dataset.content;
+
+            let show = true;
+
+            if (quarterFilter && quarter !== quarterFilter) show = false;
+            if (typeFilter && type !== typeFilter) show = false;
+            if (searchQuery && !title.includes(searchQuery) && !content.includes(searchQuery)) show = false;
+
+            item.style.display = show ? 'block' : 'none';
+            if (show) visibleCount++;
+        });
+
+        document.getElementById('resultCount').textContent = `${visibleCount} AARs`;
+        document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    function clearFilters() {
+        document.getElementById('quarterFilter').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('searchQuery').value = '';
+        filterAARs();
+    }
+
+    // Add event listeners
+    document.getElementById('quarterFilter').addEventListener('change', filterAARs);
+    document.getElementById('typeFilter').addEventListener('change', filterAARs);
+    document.getElementById('searchQuery').addEventListener('input', filterAARs);
+</script>
+{% endblock %}
