@@ -132,12 +132,12 @@ repos:
             args:
                 [
                     "-c",
-                    "mkdir -p logs && source .venv/bin/activate && TMPDIR=logs python -m pytest --cov=src --cov-fail-under=95 --cov-report=term --cov-report=html:logs/htmlcov --cov-report=xml:logs/coverage.xml --cov-config=.coveragerc --tb=short 2>&1 | tee logs/pytest_$(date +%Y%m%d_%H%M%S).log; exit ${PIPESTATUS[0]}",
+                    "mkdir -p logs && source .venv/bin/activate && TMPDIR=logs python -m pytest --cov=src --cov-fail-under=95 --cov-report=term --cov-report=html:logs/htmlcov --cov-report=xml:logs/coverage.xml --tb=short 2>&1 | tee logs/pytest_$(date +%Y%m%d_%H%M%S).log; exit ${PIPESTATUS[0]}",
                 ]
             language: system
             pass_filenames: false
             always_run: false
-            files: ^(src/|tests/|\.coveragerc|pytest\.ini|pyproject\.toml).*$
+            files: ^(src/|tests/|pytest\.ini|pyproject\.toml).*$
           - id: validate
             name: Full validation suite
             entry: bash
