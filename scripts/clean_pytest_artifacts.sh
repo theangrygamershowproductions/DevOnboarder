@@ -28,11 +28,18 @@ rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
         find logs/ -name "coverage.json" -delete 2>/dev/null || true
         rm -rf logs/htmlcov/ 2>/dev/null || true
 
-        echo "   📝 Cleaning timestamped log files..."
+        echo "   � Cleaning dashboard execution logs..."
+        find logs/ -name "dashboard_execution_*.log" -delete 2>/dev/null || true
+
+        echo "   �📝 Cleaning timestamped log files..."
         find logs/ -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
 
         echo "   🔍 Cleaning validation artifacts..."
         find logs/ -name "validation_*.log" -delete 2>/dev/null || true
+
+        echo "   💾 Cleaning temporary database files..."
+        find logs/ -name "tmp*.db" -delete 2>/dev/null || true
+        find logs/ -name "*.db" -delete 2>/dev/null || true
 
         echo "   📝 Moving stray root logs into logs/ ..."
         for lf in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do

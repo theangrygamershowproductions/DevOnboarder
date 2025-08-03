@@ -1,0 +1,108 @@
+name: CI Dashboard Report Generator
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      force_generate:
+        description: 'Force generate dashboard report'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  generate-dashboard:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git curl
+
+      - name: Install GitHub CLI
+        uses: sersoft-gmbh/setup-gh-cli-action@v2
+        with:
+          version: stable
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Generate CI Dashboard Report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          source .venv/bin/activate
+          python scripts/generate_ci_dashboard_report.py
+
+      - name: Create artifact summary
+        run: |
+          echo "## 🛠️ CI Dashboard Report Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "A comprehensive CI troubleshooting dashboard has been generated with:" >> $GITHUB_STEP_SUMMARY
+          echo "- **CI Pattern Analysis**: Automated failure pattern detection" >> $GITHUB_STEP_SUMMARY
+          echo "- **Health Monitoring**: Infrastructure health assessment" >> $GITHUB_STEP_SUMMARY
+          echo "- **Failure Analysis**: Detailed breakdown of recent failures" >> $GITHUB_STEP_SUMMARY
+          echo "- **Available Scripts**: Complete automation script inventory" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Scripts Found**: $(find scripts -name "*.py" -o -name "*.sh" | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "📈 **Report Size**: $(du -h logs/ci_dashboard_report.html | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the \`ci-dashboard-report\` artifact to view the interactive HTML dashboard." >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Dashboard Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-dashboard-report
+          path: |
+            logs/ci_dashboard_report.html
+            logs/ci_dashboard_data.json
+          retention-days: 30
+
+      - name: Comment on PR with Dashboard Link
+        if: github.event.workflow_run.event == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          PR_NUMBER=$(gh pr list --state open --json number,headRefName | jq -r ".[] | select(.headRefName == \"$HEAD_BRANCH\") | .number")
+          if [ "$PR_NUMBER" != "null" ] && [ "$PR_NUMBER" != "" ]; then
+            gh pr comment $PR_NUMBER --body "🛠️ **CI Dashboard Report Generated**
+
+            A comprehensive troubleshooting dashboard has been generated for this PR's CI failures.
+
+            📊 **What's included:**
+            - CI pattern analysis and failure categorization
+            - Health monitoring and infrastructure assessment
+            - Detailed failure analysis with actionable insights
+            - Complete inventory of available automation scripts
+
+            📥 **To access:** Download the \`ci-dashboard-report\` artifact from this workflow run and open \`ci_dashboard_report.html\` in your browser.
+
+            🔗 **Workflow run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
