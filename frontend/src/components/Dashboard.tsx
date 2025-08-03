@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ScriptInfo {
   name: string;
@@ -41,15 +41,15 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [wsConnected, setWsConnected] = useState<boolean>(false);
 
-  const dashboardUrl = 'http://localhost:8003';
+  const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL || 'http://localhost:8003';
+  const dashboardWsUrl = process.env.REACT_APP_DASHBOARD_WS_URL || 'ws://localhost:8003/ws';
 
   // WebSocket connection for real-time updates
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8003/ws');
+    const ws = new WebSocket(dashboardWsUrl);
 
     ws.onopen = () => {
       setWsConnected(true);
-      console.log('WebSocket connected');
     };
 
     ws.onmessage = (event) => {
@@ -68,11 +68,9 @@ const Dashboard: React.FC = () => {
 
     ws.onclose = () => {
       setWsConnected(false);
-      console.log('WebSocket disconnected');
     };
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+    ws.onerror = () => {
       setWsConnected(false);
     };
 
@@ -106,8 +104,8 @@ const Dashboard: React.FC = () => {
       if (!response.ok) throw new Error('Failed to load executions');
       const data = await response.json();
       setExecutions(data);
-    } catch (err) {
-      console.error('Failed to load executions:', err);
+    } catch {
+      // Failed to load executions - will be handled by empty state
     }
   };
 

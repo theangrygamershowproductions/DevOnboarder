@@ -8,7 +8,6 @@ import asyncio
 import json
 import logging
 import os
-import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -21,10 +20,6 @@ from pydantic import BaseModel
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Add the project root to the Python path for imports
-project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root))
 
 try:
     from src.utils.cors import get_cors_origins
@@ -84,14 +79,22 @@ class DashboardService:
         base_dir : Path, optional
             Base directory for script discovery. Defaults to project root.
         """
-        self.base_dir = base_dir or Path("/home/potato/DevOnboarder")
+        if base_dir is not None:
+            self.base_dir = base_dir
+        else:
+            env_base_dir = os.environ.get("DEVONBOARDER_BASE_DIR")
+            if env_base_dir:
+                self.base_dir = Path(env_base_dir)
+            else:
+                self.base_dir = Path("/home/potato/DevOnboarder")
+
         self.scripts_dir = self.base_dir / "scripts"
         self.logs_dir = self.base_dir / "logs"
         self.active_executions: Dict[str, ExecutionResult] = {}
         self.websocket_connections: List[WebSocket] = []
 
         # Ensure logs directory exists
-        self.logs_dir.mkdir(exist_ok=True)
+        self.logs_dir.mkdir(parents=True, exist_ok=True)
 
     def discover_scripts(self) -> List[ScriptInfo]:
         """Discover all executable scripts in the scripts directory.
@@ -186,6 +189,12 @@ class DashboardService:
                 else "No description available"
             )
 
+        except FileNotFoundError:
+            logger.warning(f"Script file not found: {script_path}")
+            return "Description unavailable (file not found)"
+        except PermissionError:
+            logger.warning(f"Permission denied when reading script: {script_path}")
+            return "Description unavailable (permission denied)"
         except Exception as e:
             logger.warning(f"Failed to extract description from {script_path}: {e}")
             return "Description unavailable"
@@ -504,4 +513,5 @@ if __name__ == "__main__":
 
     app = create_dashboard_app()
     # Use localhost for development security
-    uvicorn.run(app, host="127.0.0.1", port=8003)
+    port = int(os.getenv("DASHBOARD_PORT", "8003"))
+    uvicorn.run(app, host="127.0.0.1", port=port)
