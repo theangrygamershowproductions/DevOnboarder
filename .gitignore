@@ -32,7 +32,6 @@
 .codex/private/
 .codex/private/*
 .coverage
-.coveragerc
 .env
 .env.*
 .env.local
