@@ -43,11 +43,16 @@ jobs:
         if: always()
         run: |
           echo "Terminal Output Policy Enforcement Report" > logs/enforcement_report.txt
-          echo "Date: $(date)" >> logs/enforcement_report.txt
-          echo "Repository: ${{ github.repository }}" >> logs/enforcement_report.txt
-          echo "Branch: ${{ github.ref_name }}" >> logs/enforcement_report.txt
-          echo "Commit: ${{ github.sha }}" >> logs/enforcement_report.txt
-          echo "Status: ${{ job.status }}" >> logs/enforcement_report.txt
+          CURRENT_DATE=$(date)
+          echo "Date: ${CURRENT_DATE}" >> logs/enforcement_report.txt
+          REPO_NAME="${{ github.repository }}"
+          echo "Repository: ${REPO_NAME}" >> logs/enforcement_report.txt
+          BRANCH_NAME="${{ github.ref_name }}"
+          echo "Branch: ${BRANCH_NAME}" >> logs/enforcement_report.txt
+          COMMIT_SHA="${{ github.sha }}"
+          echo "Commit: ${COMMIT_SHA}" >> logs/enforcement_report.txt
+          JOB_STATUS="${{ job.status }}"
+          echo "Status: ${JOB_STATUS}" >> logs/enforcement_report.txt
 
       - name: Upload enforcement report
         if: always()

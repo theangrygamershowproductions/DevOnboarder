@@ -60,7 +60,8 @@ jobs:
               run: |
                   DATE=$(date -I)
                   bash scripts/security_audit.sh
-                  echo "report=docs/security-audit-${DATE}.md" >> "$GITHUB_OUTPUT"
+                  REPORT_PATH="docs/security-audit-${DATE}.md"
+                  echo "report=${REPORT_PATH}" >> "$GITHUB_OUTPUT"
             - name: Upload audit report
               if: always()
               uses: actions/upload-artifact@v4

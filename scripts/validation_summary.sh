@@ -43,7 +43,7 @@ else
 fi
 echo
 
-# 2. Terminal Output Policy Summary  
+# 2. Terminal Output Policy Summary
 echo "🚫 TERMINAL OUTPUT POLICY"
 echo "-------------------------"
 if [ -f "$REPO_ROOT/scripts/validate_terminal_output.sh" ]; then
@@ -84,9 +84,9 @@ echo
 
 # 4. Summary Report
 echo "📊 VALIDATION SUMMARY"
-echo "=====================" 
+echo "====================="
 echo "Markdown violations: $MARKDOWN_ERRORS"
-echo "Terminal violations: $TERMINAL_ERRORS"  
+echo "Terminal violations: $TERMINAL_ERRORS"
 echo "Agent cert issues:   $AGENT_ERRORS"
 echo "                   --------"
 echo "Total errors:        $TOTAL_ERRORS"
