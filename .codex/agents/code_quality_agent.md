@@ -187,33 +187,33 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.pull_request.title, '[skip-autofix]')"
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Node.js
+    - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Setup Python
+    - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Install tools
+    - name: Install tools
         run: |
           npm install -g markdownlint-cli
           pip install black isort autoflake
           sudo apt-get install -y shellcheck yq
 
-      - name: Run auto-fix
+    - name: Run auto-fix
         run: |
           chmod +x .codex/scripts/auto_fix_quality.sh
           ./.codex/scripts/auto_fix_quality.sh
 
-      - name: Push changes
+    - name: Push changes
         run: |
           if ! git diff --quiet; then
             git config --local user.email "action@github.com"

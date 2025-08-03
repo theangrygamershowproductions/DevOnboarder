@@ -344,10 +344,10 @@ echo "Deployment complete"
 
 Paragraph text with proper spacing.
 
--   List item with blank line above
--   Second list item
-    -   Nested item with 4-space indentation
-    -   Another nested item
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
 
 Another paragraph after blank line.
 
@@ -378,10 +378,10 @@ More content following the same pattern.
 
 Paragraph text with proper spacing.
 
--   List item with blank line above
--   Second list item
-    -   Nested item with 4-space indentation
-    -   Another nested item
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
 
 Another paragraph after blank line.
 
