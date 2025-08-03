@@ -162,3 +162,9 @@ audit_retro_actions:
     permissions:
         - contents: read
         - issues: write
+
+post_merge_cleanup:
+    secret: CI_BOT_TOKEN
+    permissions:
+        - contents: read
+        - actions: read
