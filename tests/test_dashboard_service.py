@@ -897,38 +897,15 @@ def test_app_creation():
     assert hasattr(app, "routes")
 
 
-@pytest.mark.asyncio
-async def test_cors_fallback_import_error():
-    """Test CORS fallback when utils.cors import fails."""
-    import sys
-    import importlib
-    from src.devonboarder import dashboard_service
+def test_cors_configuration():
+    """Test CORS configuration function."""
+    from src.devonboarder.dashboard_service import get_cors_origins
 
-    # Save original module
-    original_cors = sys.modules.get("src.utils.cors")
-
-    try:
-        # Remove the module to trigger ImportError
-        if "src.utils.cors" in sys.modules:
-            del sys.modules["src.utils.cors"]
-
-        # Mock the import to raise ImportError
-        with patch.dict("sys.modules", {"src.utils.cors": None}):
-            # Force reimport of dashboard_service to trigger fallback
-            importlib.reload(dashboard_service)
-
-            # Test that fallback CORS function works
-            from src.devonboarder.dashboard_service import get_cors_origins
-
-            origins = get_cors_origins()
-            assert "http://localhost:8081" in origins
-            assert "http://localhost:3000" in origins
-            assert "http://127.0.0.1:8081" in origins
-
-    finally:
-        # Restore original module
-        if original_cors is not None:
-            sys.modules["src.utils.cors"] = original_cors
+    origins = get_cors_origins()
+    assert isinstance(origins, list)
+    assert "http://localhost:8081" in origins
+    assert "http://localhost:3000" in origins
+    assert "http://127.0.0.1:8081" in origins
 
 
 def test_script_discovery_executable_check():

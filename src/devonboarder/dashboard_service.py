@@ -21,17 +21,14 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-try:
-    from src.utils.cors import get_cors_origins
-except ImportError:
-    # Fallback CORS configuration for testing
-    def get_cors_origins() -> List[str]:
-        """Get CORS origins for testing."""
-        return [
-            "http://localhost:8081",
-            "http://localhost:3000",
-            "http://127.0.0.1:8081",
-        ]
+
+def get_cors_origins() -> List[str]:
+    """Get CORS origins for the dashboard service."""
+    return [
+        "http://localhost:8081",
+        "http://localhost:3000",
+        "http://127.0.0.1:8081",
+    ]
 
 
 class ScriptInfo(BaseModel):
@@ -436,10 +433,6 @@ class DashboardService:
         return list(self.active_executions.values())
 
 
-# Global service instance
-dashboard_service = DashboardService()
-
-
 def create_dashboard_app() -> FastAPI:
     """Create the FastAPI dashboard application.
 
@@ -463,6 +456,9 @@ def create_dashboard_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Create service instance within app scope
+    dashboard_service = DashboardService()
 
     @app.get("/health")
     def health() -> Dict[str, str]:
