@@ -19,6 +19,7 @@ select = ["E", "F"]
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/generate_aar_portal.py" = ["E501"]  # HTML templates have long lines
+"scripts/generate_ci_dashboard_report.py" = ["E501"]  # HTML templates have long lines
 
 [tool.flake8]
 max-line-length = 88
@@ -48,6 +49,7 @@ dependencies = [
 test = [
     "pytest",
     "pytest-cov",
+    "pytest-asyncio",
     "requests",
     "pyyaml",
     "jsonschema",
@@ -113,6 +115,7 @@ addopts = [
     "--cov-fail-under=95"
 ]
 testpaths = ["tests"]
+asyncio_mode = "auto"
 
 [tool.mypy]
 cache_dir = "logs/.mypy_cache"
