@@ -7,7 +7,7 @@ codex-agent:
   output: ".codex/logs/agents-documentation.log"
   environment: "any"
 permissions:
-  - "repo:read"
+    - "repo:read"
 ---
 
 # Codex Integration Infrastructure
