@@ -687,7 +687,7 @@ def test_extract_description_file_error(dashboard_service):
     nonexistent_path = Path("/nonexistent/file.sh")
     description = dashboard_service._extract_description(nonexistent_path)
 
-    assert description == "Description unavailable"
+    assert description == "Description unavailable (file not found)"
 
 
 def test_websocket_connections_init(dashboard_service):
