@@ -1,6 +1,6 @@
 # ---
 # codex-agent:
-#   name: Agent.PostMergeCleanup
+#   name: post_merge_cleanup
 #   role: Cleans up logs and artifacts after successful merges to main
 #   scope: .github/workflows/post-merge-cleanup.yml
 #   triggers: Push to main branch

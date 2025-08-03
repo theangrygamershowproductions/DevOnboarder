@@ -118,7 +118,20 @@ def run_ci_analysis():
 
 
 def safe_html_escape(text):
-    """Safely escape text for HTML while preserving emojis."""
+    """
+    Escape text for safe inclusion in HTML, preserving emojis and Unicode.
+
+    Parameters:
+        text (str or any): Input text to be escaped. Converted to string if needed.
+
+    Returns:
+        str: HTML-escaped version of input text, safe for embedding in HTML.
+
+    Why:
+        Prevents HTML injection and XSS vulnerabilities when displaying dynamic
+        content in HTML. Uses Python's html.escape to escape special HTML
+        characters (&, <, >, ", '). Emojis and Unicode characters are preserved.
+    """
     if not text:
         return ""
     # First escape HTML special characters
@@ -139,6 +152,34 @@ def generate_html_report(scripts, analyses):
         analyses.get("failures", {}).get("output", "Failure analysis not available")
     )
 
+    # Create CSS class expressions for readability
+    patterns_status = (
+        "good" if analyses.get("patterns", {}).get("exit_code") == 0 else "warn"
+    )
+    health_status = (
+        "good" if analyses.get("health", {}).get("exit_code") == 0 else "warn"
+    )
+    failures_status = (
+        "good" if analyses.get("failures", {}).get("exit_code") == 0 else "warn"
+    )
+
+    # Create status text expressions
+    patterns_text = (
+        "✅ Success"
+        if analyses.get("patterns", {}).get("exit_code") == 0
+        else "❌ Issues Found"
+    )
+    health_text = (
+        "✅ Healthy"
+        if analyses.get("health", {}).get("exit_code") == 0
+        else "❌ Needs Attention"
+    )
+    failures_text = (
+        "✅ Clean"
+        if analyses.get("failures", {}).get("exit_code") == 0
+        else "❌ Failures Detected"
+    )
+
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,19 +187,47 @@ def generate_html_report(scripts, analyses):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevOnboarder CI Dashboard Report</title>
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f6f8fa; }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial,
+            sans-serif; margin: 20px; background: #f6f8fa;
+        }}
         .container {{ max-width: 1200px; margin: 0 auto; }}
-        .header {{ background: #24292f; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }}
-        .section {{ background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #d1d9e0; }}
-        .scripts-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }}
-        .script-card {{ border: 1px solid #d1d9e0; padding: 15px; border-radius: 6px; background: #f6f8fa; }}
-        .analysis-output {{ background: #f6f8fa; padding: 15px; border-radius: 6px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }}
+        .header {{
+            background: #24292f; color: white; padding: 20px;
+            border-radius: 8px; margin-bottom: 20px;
+        }}
+        .section {{
+            background: white; padding: 20px; border-radius: 8px;
+            margin-bottom: 20px; border: 1px solid #d1d9e0;
+        }}
+        .scripts-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }}
+        .script-card {{
+            border: 1px solid #d1d9e0; padding: 15px;
+            border-radius: 6px; background: #f6f8fa;
+        }}
+        .analysis-output {{
+            background: #f6f8fa; padding: 15px; border-radius: 6px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 12px; white-space: pre-wrap; max-height: 400px;
+            overflow-y: auto;
+        }}
         .status-good {{ color: #1a7f37; }}
         .status-warn {{ color: #d1242f; }}
         .timestamp {{ color: #656d76; font-size: 14px; }}
         h1, h2, h3 {{ margin-top: 0; }}
-        .summary {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }}
-        .summary-card {{ background: #dbeafe; padding: 15px; border-radius: 6px; text-align: center; }}
+        .summary {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }}
+        .summary-card {{
+            background: #dbeafe; padding: 15px; border-radius: 6px;
+            text-align: center;
+        }}
         .summary-card.warn {{ background: #fee2e2; }}
         .summary-card.good {{ background: #d1fae5; }}
     </style>
@@ -173,17 +242,17 @@ def generate_html_report(scripts, analyses):
         <div class="section">
             <h2>📊 CI Analysis Summary</h2>
             <div class="summary">
-                <div class="summary-card {'good' if analyses.get('patterns', {}).get('exit_code') == 0 else 'warn'}">
+                <div class="summary-card {patterns_status}">
                     <h3>Pattern Analysis</h3>
-                    <p>Status: {'✅ Success' if analyses.get('patterns', {}).get('exit_code') == 0 else '❌ Issues Found'}</p>
+                    <p>Status: {patterns_text}</p>
                 </div>
-                <div class="summary-card {'good' if analyses.get('health', {}).get('exit_code') == 0 else 'warn'}">
+                <div class="summary-card {health_status}">
                     <h3>Health Monitoring</h3>
-                    <p>Status: {'✅ Healthy' if analyses.get('health', {}).get('exit_code') == 0 else '❌ Needs Attention'}</p>
+                    <p>Status: {health_text}</p>
                 </div>
-                <div class="summary-card {'good' if analyses.get('failures', {}).get('exit_code') == 0 else 'warn'}">
+                <div class="summary-card {failures_status}">
                     <h3>Failure Analysis</h3>
-                    <p>Status: {'✅ Clean' if analyses.get('failures', {}).get('exit_code') == 0 else '❌ Failures Detected'}</p>
+                    <p>Status: {failures_text}</p>
                 </div>
                 <div class="summary-card good">
                     <h3>Available Scripts</h3>
@@ -216,7 +285,8 @@ def generate_html_report(scripts, analyses):
                 <div class="script-card">
                     <h3>{safe_html_escape(script['name'])}</h3>
                     <p><strong>Type:</strong> {safe_html_escape(script['type'])}</p>
-                    <p><strong>Path:</strong> <code>{safe_html_escape(script['path'])}</code></p>
+                    <p><strong>Path:</strong>
+                       <code>{safe_html_escape(script['path'])}</code></p>
                     <p><strong>Size:</strong> {script['size']} bytes</p>
                     <p><strong>Modified:</strong> {script['modified'][:19]}</p>
                 </div>"""
@@ -236,7 +306,9 @@ def generate_html_report(scripts, analyses):
             <h2>📋 Raw Analysis Data</h2>
             <details>
                 <summary>Click to view JSON data</summary>
-                <div class="analysis-output">{safe_html_escape(json.dumps(analyses, indent=2))}</div>
+                <div class="analysis-output">{safe_html_escape(
+                    json.dumps(analyses, indent=2)
+                )}</div>
             </details>
         </div>
     </div>

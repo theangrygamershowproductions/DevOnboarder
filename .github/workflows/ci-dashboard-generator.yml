@@ -11,6 +11,11 @@ on:
         required: false
         default: 'false'
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   generate-dashboard:
     runs-on: ubuntu-latest
@@ -84,7 +89,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER=$(gh pr list --state open --json number,headRefName | jq -r '.[] | select(.headRefName == "${{ github.head_ref }}") | .number')
+          PR_NUMBER=$(gh pr list --state open --json number,headRefName | jq -r '.[] | select(.headRefName == "${{ github.event.workflow_run.head_branch }}") | .number')
           if [ "$PR_NUMBER" != "null" ] && [ "$PR_NUMBER" != "" ]; then
             gh pr comment $PR_NUMBER --body "🛠️ **CI Dashboard Report Generated**
 

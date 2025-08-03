@@ -147,6 +147,10 @@ clean_pytest_artifacts() {
     fi
 }
 
+# Clean up build-specific artifacts before CI runs.
+# Removes dashboard execution logs and coverage artifacts from the logs directory.
+# This function is typically used in CI pipelines to ensure a clean build environment.
+# Respects the DRY_RUN flag to show actions without performing them.
 clean_build_artifacts() {
     echo "🏗️ Cleaning build-specific artifacts for CI..."
 
@@ -212,6 +216,11 @@ clean_build_artifacts() {
     fi
 }
 
+# Perform a "smart" cleanup of the logs directory.
+# This removes temporary and non-essential artifacts (such as coverage files, test databases, and transient logs)
+# while preserving important logs that may be needed for debugging, auditing, or compliance.
+# Unlike regular cleanup, which may remove all logs older than a certain age, smart cleanup is selective:
+# it targets only files that are safe to delete and keeps logs that are likely to be important.
 smart_clean_logs() {
     echo "🧠 Smart cleanup: Removing temporary artifacts, preserving important logs..."
 
