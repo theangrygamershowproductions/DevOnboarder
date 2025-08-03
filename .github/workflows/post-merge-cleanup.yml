@@ -1,0 +1,83 @@
+# ---
+# codex-agent:
+#   name: Agent.PostMergeCleanup
+#   role: Cleans up logs and artifacts after successful merges to main
+#   scope: .github/workflows/post-merge-cleanup.yml
+#   triggers: Push to main branch
+#   output: Cleaned workspace ready for next development cycle
+# ---
+name: Post-Merge Cleanup
+
+on:
+    push:
+        branches:
+            - main
+
+permissions:
+    contents: read
+
+jobs:
+    cleanup:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.12"
+
+            - name: Create virtual environment
+              run: |
+                  python -m venv .venv
+                  source .venv/bin/activate
+                  echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+                  echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+
+            - name: Install minimal dependencies
+              run: |
+                  source .venv/bin/activate
+                  pip install --no-cache-dir wheel
+
+            - name: Clean accumulated logs after successful merge
+              run: |
+                  echo "🧹 Post-merge cleanup: Smart cleanup of accumulated artifacts"
+
+                  # Show current log status
+                  if [ -d logs ]; then
+                      log_count=$(find logs -type f | wc -l)
+                      log_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
+                      echo "Current logs: $log_count files ($log_size)"
+                  fi
+
+                  # Smart cleanup - removes temporary artifacts but preserves important logs
+                  bash scripts/manage_logs.sh smart-clean
+
+                  # Final status
+                  if [ -d logs ]; then
+                      remaining_count=$(find logs -type f | wc -l)
+                      remaining_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
+                      echo "✅ Smart cleanup complete: $remaining_count files remaining ($remaining_size)"
+                  else
+                      echo "✅ No logs directory found"
+                  fi
+
+            - name: Archive important logs before cleanup
+              if: always()
+              run: |
+                  if [ -d logs ] && [ "$(find logs -type f | wc -l)" -gt 0 ]; then
+                      # Archive any remaining logs before final cleanup
+                      bash scripts/manage_logs.sh archive
+                      echo "📦 Important logs archived"
+                  fi
+
+            - name: Upload cleanup summary
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: post-merge-cleanup-summary
+                  path: |
+                      logs_archive_*.tar.gz
+                  retention-days: 7

@@ -541,6 +541,12 @@ jobs:
             - name: Clean test artifacts
               if: always()
               run: bash scripts/clean_pytest_artifacts.sh
+            - name: Post-success log cleanup
+              if: success()
+              run: |
+                  echo "🎉 CI completed successfully - smart cleaning temporary artifacts"
+                  bash scripts/manage_logs.sh smart-clean
+                  echo "✅ Temporary artifacts cleaned, important logs preserved for next run"
 
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
