@@ -345,20 +345,20 @@ All scripts include comprehensive error handling:
    ❌ Not in a git repository
    ```
 
-2. **Uncommitted changes during sync**:
+1. **Uncommitted changes during sync**:
 
    ```text
    ❌ You have uncommitted changes. Please commit or stash them first.
    ```
 
-3. **Merge conflicts**:
+1. **Merge conflicts**:
 
    ```text
    ❌ Pull failed - there may be conflicts
    Please resolve conflicts manually and try again.
    ```
 
-4. **Push failures**:
+1. **Push failures**:
 
    ```text
    ❌ Push failed
@@ -375,19 +375,22 @@ All scripts include comprehensive error handling:
 ### When to Use Each Script
 
 1. **`commit_changes.sh`**:
-   - ✅ You have unstaged changes to commit
-   - ✅ You want intelligent commit message generation
-   - ✅ You need interactive confirmation
 
-2. **`sync_with_remote.sh`**:
-   - ✅ You encountered push rejections
-   - ✅ You need comprehensive conflict handling
-   - ✅ You want detailed sync status information
+- You have unstaged changes to commit
+- You want intelligent commit message generation
+- You need interactive confirmation
 
-3. **`simple_sync.sh`**:
-   - ✅ Quick updates with no expected conflicts
-   - ✅ Automated scripts that need basic sync
-   - ✅ When speed is more important than safety checks
+1. **`sync_with_remote.sh`**:
+
+- You encountered push rejections
+- You need comprehensive conflict handling
+- You want detailed sync status information
+
+1. **`simple_sync.sh`**:
+
+- Quick updates with no expected conflicts
+- Automated scripts that need basic sync
+- When speed is more important than safety checks
 
 ### Development Workflow Best Practices
 
