@@ -555,7 +555,9 @@ class AARPortalGenerator:
                                             <a href="vscode://file/{{ aar.absolute_path }}" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
                                                 <i class="bi bi-code"></i>
                                             </a>
-                                            <a href="../{{ aar.file_path }}" class="btn btn-outline-secondary btn-sm" title="View File">
+                                            <a href="../../.aar/{{ aar.file_path }}"
+                                               class="btn btn-outline-secondary btn-sm"
+                                               title="View File">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                         </div>
