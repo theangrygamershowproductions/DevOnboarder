@@ -90,7 +90,16 @@ class DashboardService:
                 elif (cwd.parent / "pyproject.toml").exists():
                     self.base_dir = cwd.parent
                 else:
-                    self.base_dir = Path("/home/potato/DevOnboarder")
+                    # Search up the directory tree for project root
+                    current = cwd
+                    while current != current.parent:
+                        if (current / "pyproject.toml").exists():
+                            self.base_dir = current
+                            break
+                        current = current.parent
+                    else:
+                        # Fallback to current directory if no project root found
+                        self.base_dir = cwd
 
         self.scripts_dir = self.base_dir / "scripts"
         self.logs_dir = self.base_dir / "logs"
