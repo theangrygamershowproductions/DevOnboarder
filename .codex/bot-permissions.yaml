@@ -162,3 +162,9 @@ audit_retro_actions:
     permissions:
         - contents: read
         - issues: write
+
+Agent.PostMergeCleanup:
+    secret: CI_BOT_TOKEN
+    permissions:
+        - contents: read
+        - actions: read
