@@ -5,12 +5,12 @@ on:
     paths:
       - '.aar/**'
       - 'scripts/generate_aar_portal.py'
-    branches: [ main ]
+    branches: [main]
   pull_request:
     paths:
       - '.aar/**'
       - 'scripts/generate_aar_portal.py'
-    branches: [ main ]
+    branches: [main]
   schedule:
     # Regenerate daily at 06:00 UTC
     - cron: '0 6 * * *'
@@ -30,58 +30,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-        cache: 'pip'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install jinja2
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jinja2
 
-    - name: Generate AAR Portal
-      run: |
-        python scripts/generate_aar_portal.py \
-          --aar-dir .aar \
-          --output-dir docs/aar-portal
+      - name: Generate AAR Portal
+        run: |
+          python scripts/generate_aar_portal.py \
+            --aar-dir .aar \
+            --output-dir docs/aar-portal
 
-    - name: Commit portal updates
-      if: github.event_name != 'pull_request'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add docs/aar-portal/
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-        else
-          git commit -m "docs: update AAR portal
+      - name: Commit portal updates
+        if: github.event_name != 'pull_request'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/aar-portal/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "docs: update AAR portal
 
-          - Regenerated HTML portal from AAR data
-          - Updated trend analysis and metrics
-          - Automated via GitHub Actions
+            - Regenerated HTML portal from AAR data
+            - Updated trend analysis and metrics
+            - Automated via GitHub Actions
 
-          [skip ci]"
-          git push
-        fi
+            [skip ci]"
+            git push
+          fi
 
-    - name: Setup Pages
-      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-      uses: actions/configure-pages@v4
+      - name: Setup Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v4
 
-    - name: Upload to GitHub Pages
-      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: docs/aar-portal
+      - name: Upload to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/aar-portal
 
-    - name: Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        id: deployment
+        uses: actions/deploy-pages@v4

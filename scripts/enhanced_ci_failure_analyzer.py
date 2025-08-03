@@ -69,10 +69,20 @@ class CIFailureAnalyzer:
                     r"black --check.*failed",
                     r"ruff.*syntax error",
                     r"mypy.*error",
+                    # YAML/workflow syntax patterns
+                    r"yamllint.*error.*wrong indentation",
+                    r"yamllint.*error.*syntax error",
+                    r"yamllint.*error.*expected.*but found",
+                    r"could not find expected ':'",
+                    r"expected <block end>, but found",
+                    r"too many spaces inside brackets",
+                    r"wrong indentation: expected \d+ but found \d+",
+                    r"ParserError.*while parsing",
+                    r"did not find expected key",
                 ],
                 "severity": "high",
-                "auto_fixable": False,
-                "resolution": "manual_code_review",
+                "auto_fixable": True,  # Many YAML issues can be auto-fixed
+                "resolution": "fix_yaml_formatting",
             },
             "network": {
                 "patterns": [
@@ -169,6 +179,24 @@ class CIFailureAnalyzer:
                 "command": "gh auth status && gh auth refresh",
                 "description": "Check and refresh GitHub CLI authentication",
                 "success_rate": 0.90,
+            },
+            "fix_yaml_formatting": {
+                "command": (
+                    "yamllint -c .github/.yamllint-config "
+                    ".github/workflows/**/*.yml && "
+                    "yq --yaml-output '.' .github/workflows/*.yml "
+                    "> /tmp/formatted.yml && "
+                    "mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml"
+                ),
+                "description": "Fix YAML formatting and indentation issues",
+                "success_rate": 0.90,
+                "next_steps": [
+                    "Check yamllint output for specific issues",
+                    "Fix indentation (use 2 spaces for YAML)",
+                    "Ensure consistent spacing in lists and mappings",
+                    "Validate with: yamllint -c .github/.yamllint-config file.yml",
+                    "Test with: yq '.' file.yml to verify syntax",
+                ],
             },
             "fix_pre_commit_issues": {
                 "command": (
