@@ -4,18 +4,80 @@
     "framework": "Phase 4: CI Triage Guard Enhancement",
     "virtual_env": "/home/potato/DevOnboarder/.venv",
     "analysis": {
-      "timestamp": "2025-07-29T06:09:28.639373",
-      "log_size": 456,
-      "detected_failures": [],
-      "primary_failure": null,
-      "recommended_resolution": null,
-      "auto_fixable": false,
-      "confidence_score": 0.0
+      "timestamp": "2025-08-03T01:04:26.714956",
+      "log_size": 162,
+      "detected_failures": [
+        {
+          "type": "syntax",
+          "severity": "high",
+          "auto_fixable": true,
+          "resolution": "fix_yaml_formatting",
+          "matches": [
+            {
+              "pattern": "wrong indentation: expected \\d+ but found \\d+",
+              "match": "wrong indentation: expected 6 but found 4",
+              "line_context": [
+                "--- logs/realistic-yaml-failure.log ---",
+                ".github/workflows/ci-failure-analyzer.yml",
+                "  39:5      error    wrong indentation: expected 6 but found 4  (indentation)",
+                "",
+                ""
+              ]
+            }
+          ],
+          "match_count": 1
+        }
+      ],
+      "primary_failure": {
+        "type": "syntax",
+        "severity": "high",
+        "auto_fixable": true,
+        "resolution": "fix_yaml_formatting",
+        "matches": [
+          {
+            "pattern": "wrong indentation: expected \\d+ but found \\d+",
+            "match": "wrong indentation: expected 6 but found 4",
+            "line_context": [
+              "--- logs/realistic-yaml-failure.log ---",
+              ".github/workflows/ci-failure-analyzer.yml",
+              "  39:5      error    wrong indentation: expected 6 but found 4  (indentation)",
+              "",
+              ""
+            ]
+          }
+        ],
+        "match_count": 1
+      },
+      "recommended_resolution": {
+        "command": "yamllint -c .github/.yamllint-config .github/workflows/**/*.yml && yq --yaml-output '.' .github/workflows/*.yml > /tmp/formatted.yml && mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml",
+        "description": "Fix YAML formatting and indentation issues",
+        "success_rate": 0.9,
+        "next_steps": [
+          "Check yamllint output for specific issues",
+          "Fix indentation (use 2 spaces for YAML)",
+          "Ensure consistent spacing in lists and mappings",
+          "Validate with: yamllint -c .github/.yamllint-config file.yml",
+          "Test with: yq '.' file.yml to verify syntax"
+        ]
+      },
+      "auto_fixable": true,
+      "confidence_score": 0.4
     },
     "resolution_plan": {
-      "status": "no_failures_detected",
-      "message": "No recognized failure patterns found",
-      "recommended_action": "manual_investigation"
+      "failure_type": "syntax",
+      "severity": "high",
+      "auto_fixable": true,
+      "confidence": 0.4,
+      "resolution_strategy": "fix_yaml_formatting",
+      "estimated_success_rate": 0.9,
+      "description": "Fix YAML formatting and indentation issues",
+      "command": "yamllint -c .github/.yamllint-config .github/workflows/**/*.yml && yq --yaml-output '.' .github/workflows/*.yml > /tmp/formatted.yml && mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml",
+      "next_steps": [
+        "Manual intervention required",
+        "Create GitHub issue with failure analysis",
+        "Assign to appropriate team member",
+        "Track resolution progress"
+      ]
     }
   }
 }

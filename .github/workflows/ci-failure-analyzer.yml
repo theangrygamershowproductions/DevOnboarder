@@ -101,10 +101,13 @@ jobs:
         id: analysis
         run: |
           source .venv/bin/activate
-          echo "Running Enhanced CI Failure Analyzer v1.0"
+          echo "Running Enhanced CI Failure Analyzer v1.0 with AAR integration"
 
           # Prepare analysis parameters
           AUTO_RESOLVE_FLAG=""
+          AAR_INTEGRATION_FLAG="--generate-aar"
+          WORKFLOW_RUN_FLAG="--workflow-run-id ${{ steps.workflow-info.outputs.run_id }}"
+
           if [ "${{ github.event.inputs.auto_resolve }}" = "true" ]; then
           AUTO_RESOLVE_FLAG="--auto-resolve"
           echo "Auto-resolution enabled for high-confidence failures"
@@ -120,14 +123,18 @@ jobs:
           python scripts/enhanced_ci_failure_analyzer.py \
           "$log_file" \
           --output "$ANALYSIS_OUTPUT" \
-          $AUTO_RESOLVE_FLAG
+          $AUTO_RESOLVE_FLAG \
+          $AAR_INTEGRATION_FLAG \
+          $WORKFLOW_RUN_FLAG
           fi
           done
           else
           echo "No logs to analyze, creating empty analysis"
           python scripts/enhanced_ci_failure_analyzer.py \
           logs/ci-analysis/no-logs.txt \
-          --output "$ANALYSIS_OUTPUT"
+          --output "$ANALYSIS_OUTPUT" \
+          $AAR_INTEGRATION_FLAG \
+          $WORKFLOW_RUN_FLAG
           fi
 
           echo "analysis_file=$ANALYSIS_OUTPUT" >> $GITHUB_OUTPUT
