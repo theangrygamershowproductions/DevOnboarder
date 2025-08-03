@@ -83,7 +83,14 @@ class DashboardService:
             if env_base_dir:
                 self.base_dir = Path(env_base_dir)
             else:
-                self.base_dir = Path("/home/potato/DevOnboarder")
+                # Use current working directory or detect project root
+                cwd = Path.cwd()
+                if (cwd / "pyproject.toml").exists():
+                    self.base_dir = cwd
+                elif (cwd.parent / "pyproject.toml").exists():
+                    self.base_dir = cwd.parent
+                else:
+                    self.base_dir = Path("/home/potato/DevOnboarder")
 
         self.scripts_dir = self.base_dir / "scripts"
         self.logs_dir = self.base_dir / "logs"
