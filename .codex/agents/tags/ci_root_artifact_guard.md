@@ -116,7 +116,7 @@ pre-commit run root-artifact-guard        # Must pass
 # .pre-commit-config.yaml
 - repo: local
   hooks:
-      - id: root-artifact-guard
+    - id: root-artifact-guard
         name: Root Artifact Guard
         entry: bash scripts/enforce_output_location.sh
         language: script

@@ -69,10 +69,20 @@ class CIFailureAnalyzer:
                     r"black --check.*failed",
                     r"ruff.*syntax error",
                     r"mypy.*error",
+                    # YAML/workflow syntax patterns
+                    r"yamllint.*error.*wrong indentation",
+                    r"yamllint.*error.*syntax error",
+                    r"yamllint.*error.*expected.*but found",
+                    r"could not find expected ':'",
+                    r"expected <block end>, but found",
+                    r"too many spaces inside brackets",
+                    r"wrong indentation: expected \d+ but found \d+",
+                    r"ParserError.*while parsing",
+                    r"did not find expected key",
                 ],
                 "severity": "high",
-                "auto_fixable": False,
-                "resolution": "manual_code_review",
+                "auto_fixable": True,  # Many YAML issues can be auto-fixed
+                "resolution": "fix_yaml_formatting",
             },
             "network": {
                 "patterns": [
@@ -169,6 +179,24 @@ class CIFailureAnalyzer:
                 "command": "gh auth status && gh auth refresh",
                 "description": "Check and refresh GitHub CLI authentication",
                 "success_rate": 0.90,
+            },
+            "fix_yaml_formatting": {
+                "command": (
+                    "yamllint -c .github/.yamllint-config "
+                    ".github/workflows/**/*.yml && "
+                    "yq --yaml-output '.' .github/workflows/*.yml "
+                    "> /tmp/formatted.yml && "
+                    "mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml"
+                ),
+                "description": "Fix YAML formatting and indentation issues",
+                "success_rate": 0.90,
+                "next_steps": [
+                    "Check yamllint output for specific issues",
+                    "Fix indentation (use 2 spaces for YAML)",
+                    "Ensure consistent spacing in lists and mappings",
+                    "Validate with: yamllint -c .github/.yamllint-config file.yml",
+                    "Test with: yq '.' file.yml to verify syntax",
+                ],
             },
             "fix_pre_commit_issues": {
                 "command": (
@@ -329,6 +357,93 @@ class CIFailureAnalyzer:
 
         print(f"📊 Analysis report saved: {output_path}")
 
+    def generate_aar_integration(
+        self,
+        analysis: Dict[str, Any],
+        resolution_plan: Dict[str, Any],
+        workflow_run_id: Optional[str] = None,
+    ) -> bool:
+        """Generate AAR report for significant CI failures.
+
+        Parameters
+        ----------
+        analysis : Dict[str, Any]
+            CI failure analysis results
+        resolution_plan : Dict[str, Any]
+            Automated resolution plan (used for context)
+        workflow_run_id : Optional[str]
+            GitHub workflow run ID for context
+
+        Returns
+        -------
+        bool
+            True if AAR generation successful, False otherwise
+        """
+        try:
+            import subprocess  # noqa: S404
+
+            # Check if AAR generator is available
+            aar_script = Path("scripts/generate_aar.py")
+            if not aar_script.exists():
+                print("   ⚠️ AAR generator script not found")
+                return False
+
+            # Prepare AAR data
+            primary_failure = analysis.get("primary_failure", {})
+            failure_type = primary_failure.get("type", "Unknown")
+            aar_title = f"CI Failure Analysis - {failure_type}"
+
+            # Use Python AAR generator with proper arguments
+            aar_script = Path("scripts/generate_aar.py")
+            if not aar_script.exists():
+                print("   ⚠️ AAR generator script not found")
+                return False
+
+            # Create AAR command
+            cmd = [sys.executable, str(aar_script)]
+            if workflow_run_id:
+                cmd.extend(["--workflow-run-id", workflow_run_id])
+
+            # Add create-issue flag for automatic GitHub integration
+            cmd.append("--create-issue")
+
+            # Add analysis context as environment variables
+            env = os.environ.copy()
+            confidence = analysis.get("confidence_score", 0)
+            env["CI_ANALYSIS_CONFIDENCE"] = str(confidence)
+            auto_fixable = analysis.get("auto_fixable", False)
+            env["CI_ANALYSIS_AUTO_FIXABLE"] = str(auto_fixable)
+            failure_count = len(analysis.get("detected_failures", []))
+            env["CI_ANALYSIS_FAILURE_COUNT"] = str(failure_count)
+
+            # Execute AAR generation with security-aware subprocess
+            result = subprocess.run(  # noqa: S603
+                cmd,
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=60,
+                cwd=Path.cwd(),
+                check=False,  # Don't raise on non-zero exit
+            )
+
+            if result.returncode == 0:
+                print(f"   📋 AAR generated: {aar_title}")
+                # Use resolution_plan context for logging
+                strategy = resolution_plan.get("resolution_strategy", "unknown")
+                print(f"   🔧 Resolution strategy: {strategy}")
+                return True
+            else:
+                print(f"   ❌ AAR generation failed: {result.stderr}")
+                return False
+
+        except (subprocess.TimeoutExpired, subprocess.SubprocessError) as e:
+            print(f"   ❌ AAR subprocess error: {e}")
+            return False
+        except OSError as e:
+            print(f"   ❌ AAR file system error: {e}")
+            return False
+
 
 def main():
     """Main execution function with virtual environment compliance."""
@@ -345,6 +460,15 @@ def main():
         "--auto-resolve",
         action="store_true",
         help="Attempt automatic resolution for high-confidence failures",
+    )
+    parser.add_argument(
+        "--generate-aar",
+        action="store_true",
+        help="Generate After Action Report for significant failures",
+    )
+    parser.add_argument(
+        "--workflow-run-id",
+        help="GitHub workflow run ID for AAR generation",
     )
 
     args = parser.parse_args()
@@ -410,6 +534,22 @@ def main():
         print(f"   Command: {resolution_plan.get('command', 'N/A')}")
         # Note: Actual auto-resolution would be implemented here
         print("   Auto-resolution framework ready for implementation")
+
+    # AAR Integration: Generate AAR for significant failures
+    aar_conditions = (
+        args.generate_aar
+        or (analysis["confidence_score"] > 0.7 and not analysis["auto_fixable"])
+        or len(analysis["detected_failures"]) > 2
+    )
+    if aar_conditions:
+        print("\n📋 Generating After Action Report...")
+        aar_success = analyzer.generate_aar_integration(
+            analysis, resolution_plan, args.workflow_run_id
+        )
+        if aar_success:
+            print("   ✅ AAR generated successfully")
+        else:
+            print("   ⚠️ AAR generation encountered issues")
 
     print("\n✅ Enhanced CI failure analysis complete")
 

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAR Browser - DevOnboarder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+          rel="stylesheet">
+    <style>
+        .aar-card {
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        .aar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .metric-badge {
+            font-size: 0.8em;
+        }
+        .search-box {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        .filter-sidebar {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        .trend-chart {
+            height: 300px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        .type-pull_requests { border-left: 4px solid #0d6efd; }
+        .type-issues { border-left: 4px solid #198754; }
+        .type-sprints { border-left: 4px solid #ffc107; }
+        .type-incidents { border-left: 4px solid #dc3545; }
+        .type-automation { border-left: 4px solid #6f42c1; }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-journal-text"></i> DevOnboarder AAR Portal
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Browse</a>
+                <a class="nav-link" href="trends.html">Trends</a>
+                <a class="nav-link" href="search.html">Search</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid mt-4">
+
+<div class="row">
+    <!-- Filters Sidebar -->
+    <div class="col-md-3 filter-sidebar p-4">
+        <div class="search-box">
+            <h5><i class="bi bi-funnel"></i> Filters</h5>
+
+            <div class="mb-3">
+                <label for="quarterFilter" class="form-label">Quarter</label>
+                <select class="form-select" id="quarterFilter">
+                    <option value="">All Quarters</option>
+
+
+                            <option value="Q3-2025">Q3 2025</option>
+
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="typeFilter" class="form-label">Type</label>
+                <select class="form-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="pull_requests">Pull Requests</option>
+                    <option value="issues">Issues</option>
+                    <option value="sprints">Sprints</option>
+                    <option value="incidents">Incidents</option>
+                    <option value="automation">Automation</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="searchQuery" class="form-label">Search</label>
+                <input type="text" class="form-control" id="searchQuery" placeholder="Search AAR content...">
+            </div>
+
+            <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="mt-4">
+            <h6>Summary</h6>
+            <ul class="list-unstyled">
+                <li><strong>5</strong> Total AARs</li>
+                <li><strong>0</strong> Files Changed</li>
+                <li><strong>0</strong> Agents Updated</li>
+                <li><strong>26</strong> Action Items</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- AAR Grid -->
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-grid"></i> After Action Reports</h2>
+            <span class="badge bg-primary" id="resultCount">5 AARs</span>
+        </div>
+
+        <div class="row" id="aarGrid">
+
+
+
+
+
+
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="Q3-2025"
+                                 data-type="issues"
+                                 data-title="after actions report: issue #discord bot authentication enhancement"
+                                 data-content="# after actions report: issue #discord bot authentication enhancement
+
+## executive summary
+
+&lt;!-- brief description of what was accomplished --&gt;
+
+## context
+
+- **issue number**: #discord bot authentication enhancement
+- **issue type**: &lt;!-- bug/feature/enhancement/infrastructure --&gt;
+- **priority**: &lt;!-- critical/high/medium/low --&gt;
+- **duration**: &lt;!-- start date to end date --&gt;
+- **participants**: &lt;!-- @username1, @username2 --&gt;
+
+## timeline
+
+&lt;!-- key milestones and activities --&gt;
+
+- **discover...">
+                                <div class="card aar-card h-100 type-issues">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-exclamation-circle"></i>
+                                            Issues #Discord
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">After Actions Report: Issue #Discord Bot Authentication Enhancement</h6>
+                                        <p class="card-text small"># After Actions Report: Issue #Discord Bot Authentication Enhancement
+
+## Executive Summary
+
+&lt;!-- Brief description of what was accomplished --&gt;
+
+## C...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">0 files</span>
+                                            <span class="badge bg-info metric-badge">0 agents</span>
+                                            <span class="badge bg-warning metric-badge">3 items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+
+                                                <span class="badge bg-light text-dark">critical</span>
+
+                                                <span class="badge bg-light text-dark">infrastructure</span>
+
+                                                <span class="badge bg-light text-dark">security</span>
+
+                                                <span class="badge bg-light text-dark">feature</span>
+
+                                                <span class="badge bg-light text-dark">bug</span>
+
+                                                <span class="badge bg-light text-dark">enhancement</span>
+
+                                                <span class="badge bg-light text-dark">documentation</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Q3 2025</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/.aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="Q3-2025"
+                                 data-type="sprints"
+                                 data-title="after actions report: sprint-2025-07-30"
+                                 data-content="# after actions report: sprint-2025-07-30
+
+## executive summary
+
+&lt;!-- high-level summary of sprint accomplishments and impact --&gt;
+
+## sprint context
+
+- **sprint name**: sprint-2025-07-30
+- **duration**: &lt;!-- start date to end date --&gt;
+- **goals**: &lt;!-- primary objectives --&gt;
+- **team**: &lt;!-- participants --&gt;
+
+## accomplishments
+&lt;!-- what was delivered --&gt;
+- major features or enhancements completed
+- infrastructure improvements
+- process optimizations
+
+## metrics
+&lt;!-- quantitative assessment --&gt;
+...">
+                                <div class="card aar-card h-100 type-sprints">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-clock"></i>
+                                            Sprints #2025
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">After Actions Report: Sprint-2025-07-30</h6>
+                                        <p class="card-text small"># After Actions Report: Sprint-2025-07-30
+
+## Executive Summary
+
+&lt;!-- High-level summary of sprint accomplishments and impact --&gt;
+
+## Sprint Context
+
+...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">0 files</span>
+                                            <span class="badge bg-info metric-badge">0 agents</span>
+                                            <span class="badge bg-warning metric-badge">3 items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+
+                                                <span class="badge bg-light text-dark">infrastructure</span>
+
+                                                <span class="badge bg-light text-dark">security</span>
+
+                                                <span class="badge bg-light text-dark">feature</span>
+
+                                                <span class="badge bg-light text-dark">enhancement</span>
+
+                                                <span class="badge bg-light text-dark">documentation</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Q3 2025</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/.aar/2025/Q3/sprints/sprint-2025-07-30.md" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../2025/Q3/sprints/sprint-2025-07-30.md" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="Q3-2025"
+                                 data-type="incidents"
+                                 data-title="incident after actions report: incident-2025-07-30"
+                                 data-content="# incident after actions report: incident-2025-07-30
+
+## incident summary
+&lt;!-- brief description of what happened --&gt;
+
+## timeline
+&lt;!-- detailed chronological breakdown --&gt;
+- **detection**: &lt;!-- when/how incident was discovered --&gt;
+- **response**: &lt;!-- initial response actions --&gt;
+- **investigation**: &lt;!-- root cause analysis process --&gt;
+- **resolution**: &lt;!-- how the incident was resolved --&gt;
+- **recovery**: &lt;!-- return to normal operations --&gt;
+
+## impact assessment
+&lt;!-- what was affected --&gt;
+-...">
+                                <div class="card aar-card h-100 type-incidents">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-bug"></i>
+                                            Incidents #2025
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">Incident After Actions Report: Incident-2025-07-30</h6>
+                                        <p class="card-text small"># Incident After Actions Report: Incident-2025-07-30
+
+## Incident Summary
+&lt;!-- Brief description of what happened --&gt;
+
+## Timeline
+&lt;!-- Detailed chron...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">0 files</span>
+                                            <span class="badge bg-info metric-badge">0 agents</span>
+                                            <span class="badge bg-warning metric-badge">4 items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+
+                                                <span class="badge bg-light text-dark">infrastructure</span>
+
+                                                <span class="badge bg-light text-dark">security</span>
+
+                                                <span class="badge bg-light text-dark">enhancement</span>
+
+                                                <span class="badge bg-light text-dark">documentation</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Q3 2025</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/.aar/2025/Q3/incidents/incident-2025-07-30.md" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../2025/Q3/incidents/incident-2025-07-30.md" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="Q3-2025"
+                                 data-type="automation"
+                                 data-title="after actions report: ci failure analyzer integration"
+                                 data-content="# after actions report: ci failure analyzer integration
+
+## executive summary
+
+successfully integrated enhanced ci failure analyzer v1.0 with github actions, completing phase 4: ci triage guard enhancement. delivered production-ready automation for ci failure analysis with intelligent resolution recommendations.
+
+## context
+
+- **implementation type**: github actions integration
+- **priority**: high
+- **duration**: august 2, 2025
+- **framework**: devonboarder phase 4: ci triage guard enhancement
+...">
+                                <div class="card aar-card h-100 type-automation">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-gear"></i>
+                                            Automation #unknown
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">After Actions Report: CI Failure Analyzer Integration</h6>
+                                        <p class="card-text small"># After Actions Report: CI Failure Analyzer Integration
+
+## Executive Summary
+
+Successfully integrated Enhanced CI Failure Analyzer v1.0 with GitHub A...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">0 files</span>
+                                            <span class="badge bg-info metric-badge">0 agents</span>
+                                            <span class="badge bg-warning metric-badge">12 items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+
+                                                <span class="badge bg-light text-dark">infrastructure</span>
+
+                                                <span class="badge bg-light text-dark">security</span>
+
+                                                <span class="badge bg-light text-dark">feature</span>
+
+                                                <span class="badge bg-light text-dark">enhancement</span>
+
+                                                <span class="badge bg-light text-dark">documentation</span>
+
+                                                <span class="badge bg-light text-dark">performance</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Q3 2025</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/.aar/2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 mb-4 aar-item"
+                                 data-quarter="Q3-2025"
+                                 data-type="automation"
+                                 data-title="automation enhancement aar: git workflow enhancement with pre-commit log review"
+                                 data-content="# automation enhancement aar: git workflow enhancement with pre-commit log review
+
+## enhancement summary
+
+implemented comprehensive git workflow automation system with intelligent commit message generation, pre-commit log review, and enhanced branch management strategies to resolve developer uncertainty around commit failures and improve code quality enforcement.
+
+## context
+
+- **problem statement**: developers experienced mysterious commit failures due to pre-commit hooks without clear guidanc...">
+                                <div class="card aar-card h-100 type-automation">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="bi bi-gear"></i>
+                                            Automation #enhancement
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review</h6>
+                                        <p class="card-text small"># Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review
+
+## Enhancement Summary
+
+Implemented comprehensive git workflow auto...</p>
+
+                                        <!-- Metrics -->
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-secondary metric-badge">0 files</span>
+                                            <span class="badge bg-info metric-badge">0 agents</span>
+                                            <span class="badge bg-warning metric-badge">4 items</span>
+                                        </div>
+
+                                        <!-- Labels -->
+                                        <div class="mb-2">
+
+                                                <span class="badge bg-light text-dark">feature</span>
+
+                                                <span class="badge bg-light text-dark">bug</span>
+
+                                                <span class="badge bg-light text-dark">enhancement</span>
+
+                                                <span class="badge bg-light text-dark">documentation</span>
+
+                                                <span class="badge bg-light text-dark">performance</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Q3 2025</small>
+                                        <div class="btn-group float-end" role="group">
+                                            <a href="vscode://file/.aar/2025/Q3/automation/automation-enhancement-2025-07-30.md" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
+                                                <i class="bi bi-code"></i>
+                                            </a>
+                                            <a href="../2025/Q3/automation/automation-enhancement-2025-07-30.md" class="btn btn-outline-secondary btn-sm" title="View File">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+        </div>
+
+        <div id="noResults" class="text-center mt-5" style="display: none;">
+            <i class="bi bi-search display-1 text-muted"></i>
+            <h4 class="text-muted">No AARs found</h4>
+            <p class="text-muted">Try adjusting your filters or search terms.</p>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2025 DevOnboarder AAR Portal - Generated on
+               2025-08-02 23:54:10</p>
+            <p><small>Total AARs: 5 | Last Updated:
+               2025-08-02T23:54:10.180288</small></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    function filterAARs() {
+        const quarterFilter = document.getElementById('quarterFilter').value;
+        const typeFilter = document.getElementById('typeFilter').value;
+        const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+
+        const aarItems = document.querySelectorAll('.aar-item');
+        let visibleCount = 0;
+
+        aarItems.forEach(item => {
+            const quarter = item.dataset.quarter;
+            const type = item.dataset.type;
+            const title = item.dataset.title;
+            const content = item.dataset.content;
+
+            let show = true;
+
+            if (quarterFilter && quarter !== quarterFilter) show = false;
+            if (typeFilter && type !== typeFilter) show = false;
+            if (searchQuery && !title.includes(searchQuery) && !content.includes(searchQuery)) show = false;
+
+            item.style.display = show ? 'block' : 'none';
+            if (show) visibleCount++;
+        });
+
+        document.getElementById('resultCount').textContent = `${visibleCount} AARs`;
+        document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    function clearFilters() {
+        document.getElementById('quarterFilter').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('searchQuery').value = '';
+        filterAARs();
+    }
+
+    // Add event listeners
+    document.getElementById('quarterFilter').addEventListener('change', filterAARs);
+    document.getElementById('typeFilter').addEventListener('change', filterAARs);
+    document.getElementById('searchQuery').addEventListener('input', filterAARs);
+</script>
+
+</body>
+</html>
