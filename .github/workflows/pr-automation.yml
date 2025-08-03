@@ -107,6 +107,6 @@ jobs:
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
                   if [[ -f "reports/automation_summary_${PR_NUMBER}.md" ]]; then
-                    echo "📋 Posting automation summary to PR #${PR_NUMBER}"
+                    echo "Posting automation summary to PR #${PR_NUMBER}"
                     gh pr comment "${PR_NUMBER}" --body-file "reports/automation_summary_${PR_NUMBER}.md"
                   fi

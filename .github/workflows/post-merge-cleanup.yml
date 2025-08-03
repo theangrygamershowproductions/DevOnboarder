@@ -15,6 +15,7 @@ on:
 
 permissions:
     contents: read
+    issues: write
 
 jobs:
     cleanup:
@@ -43,13 +44,13 @@ jobs:
 
             - name: Clean accumulated logs after successful merge
               run: |
-                  echo "🧹 Post-merge cleanup: Smart cleanup of accumulated artifacts"
+                  echo "Post-merge cleanup: Smart cleanup of accumulated artifacts"
 
                   # Show current log status
                   if [ -d logs ]; then
                       log_count=$(find logs -type f | wc -l)
                       log_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
-                      echo "Current logs: $log_count files ($log_size)"
+                      echo "Current logs: ${log_count} files (${log_size})"
                   fi
 
                   # Smart cleanup - removes temporary artifacts but preserves important logs
@@ -59,9 +60,9 @@ jobs:
                   if [ -d logs ]; then
                       remaining_count=$(find logs -type f | wc -l)
                       remaining_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
-                      echo "✅ Smart cleanup complete: $remaining_count files remaining ($remaining_size)"
+                      echo "Smart cleanup complete: ${remaining_count} files remaining (${remaining_size})"
                   else
-                      echo "✅ No logs directory found"
+                      echo "No logs directory found"
                   fi
 
             - name: Archive important logs before cleanup
@@ -72,6 +73,72 @@ jobs:
                       bash scripts/manage_logs.sh archive
                       echo "📦 Important logs archived"
                   fi
+
+            - name: Close resolved CI failure issues
+              run: |
+                  echo "Checking for CI failure issues to close after successful merge"
+
+                  # Install GitHub CLI if not available
+                  if ! command -v gh &> /dev/null; then
+                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      sudo apt update && sudo apt install gh -y
+                  fi
+
+                  # Get the commit message to extract PR number
+                  COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+                  echo "Commit message: $COMMIT_MESSAGE"
+
+                  # Extract PR number from commit message (format: "PR #123" or "#123")
+                  PR_NUMBER=$(echo "$COMMIT_MESSAGE" | grep -oE '#[0-9]+' | head -1 | sed 's/#//')
+
+                  if [ -n "$PR_NUMBER" ]; then
+                      echo "Found PR number: $PR_NUMBER"
+
+                      # Search for open CI failure issues related to this PR
+                      ISSUE_TITLE="CI Failure: PR #$PR_NUMBER"
+                      echo "Searching for issues with title pattern: $ISSUE_TITLE"
+
+                      # Find and close related CI failure issues
+                      if ISSUES=$(gh issue list --label ci-failure --state open --search "$ISSUE_TITLE" --json number,title); then
+                          echo "Found issues: $ISSUES"
+
+                          echo "$ISSUES" | jq -r '.[] | @base64' | while IFS= read -r encoded_issue; do
+                              issue_data=$(echo "$encoded_issue" | base64 -d)
+                              issue_number=$(echo "$issue_data" | jq -r '.number')
+                              issue_title=$(echo "$issue_data" | jq -r '.title')
+
+                              echo "Closing issue #$issue_number: $issue_title"
+
+                              # Close the issue with a resolution comment using file
+                              cat > resolution_comment.md << 'EOF'
+                              **CI Issue Resolved**
+
+                              This CI failure has been resolved by the successful merge of PR #$PR_NUMBER to main.
+
+                              **Resolution Details:**
+                              - PR successfully merged: ${{ github.event.head_commit.url }}
+                              - All CI checks passed before merge
+                              - Post-merge cleanup completed successfully
+
+                              **Commit:** ${{ github.event.head_commit.id }}
+                              **Author:** ${{ github.event.head_commit.author.name }}
+
+                              Automatically closed by post-merge cleanup workflow.
+                              EOF
+
+                              gh issue comment "$issue_number" --body-file resolution_comment.md
+                              gh issue close "$issue_number" --reason completed
+                              echo "Closed issue #$issue_number"
+                          done
+                      else
+                          echo "No CI failure issues found for PR #$PR_NUMBER"
+                      fi
+                  else
+                      echo "No PR number found in commit message"
+                  fi
+              env:
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
             - name: Upload cleanup summary
               if: always()

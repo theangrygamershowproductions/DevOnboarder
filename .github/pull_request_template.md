@@ -17,6 +17,8 @@ Refer to [doc-quality-onboarding.md](../docs/doc-quality-onboarding.md) for setu
 ## Code Checklist
 
 - [ ] All code passes automated lint, type, test, and security checks
+- [ ] **Terminal Output Policy**: No emojis, command substitution, or multi-line echo in workflows
+- [ ] **Markdown Standards**: All documentation follows MD022 and MD032 linting rules
 - [ ] OpenAPI, contract, and migration checks pass
 - [ ] All FastAPI endpoints include docstrings and documentation
 - [ ] CORS and security headers validated

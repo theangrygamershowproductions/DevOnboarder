@@ -227,19 +227,19 @@ jobs:
             const year = new Date().getFullYear();
             const aarPath = `.aar/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
 
-            const comment = `## 📋 After Action Report Generated
+            const comment = `## After Action Report Generated
 
             An AAR has been automatically generated for this PR to capture development insights and learnings.
 
-            **📁 AAR Location**: \`${aarPath}\`
-            **🎯 Follow-up Issue**: Will be created with action items from the AAR
-            **💡 Purpose**: Preserve institutional knowledge and improve development processes
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Preserve institutional knowledge and improve development processes
 
             ### What's Included:
-            - 🏗️ Technical decisions and architectural choices
-            - 📊 Development process analysis
-            - 🧠 Lessons learned and best practices
-            - ✅ Action items for future improvements
+            - Technical decisions and architectural choices
+            - Development process analysis
+            - Lessons learned and best practices
+            - Action items for future improvements
 
             This helps maintain DevOnboarder's "quiet reliability" philosophy by capturing valuable insights from every significant change.`;
 
@@ -261,19 +261,19 @@ jobs:
             const year = new Date().getFullYear();
             const aarPath = `.aar/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
 
-            const comment = `## 📋 After Action Report Generated
+            const comment = `## After Action Report Generated
 
             An AAR has been automatically generated for this issue to capture resolution insights and process learnings.
 
-            **📁 AAR Location**: \`${aarPath}\`
-            **🎯 Follow-up Issue**: Will be created with action items from the AAR
-            **💡 Purpose**: Document lessons learned and prevent similar issues
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Document lessons learned and prevent similar issues
 
             ### What's Included:
-            - 🔍 Root cause analysis
-            - ⏱️ Resolution timeline and process
-            - ✅ What worked well and areas for improvement
-            - 🛡️ Preventive measures and action items
+            - Root cause analysis
+            - Resolution timeline and process
+            - What worked well and areas for improvement
+            - Preventive measures and action items
 
             This systematic approach helps DevOnboarder continuously improve its reliability and processes.`;
 

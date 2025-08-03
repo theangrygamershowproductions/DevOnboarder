@@ -3,6 +3,7 @@ agent: management-ingest
 purpose: Processes executive commands and routes them to appropriate Discord servers based on environment
 trigger: executive commands
 environment: development
+permissions: ["discord:write", "routing:read"]
 output: .codex/logs/management-ingest.log
 codex_runtime: false
 codex_dry_run: true

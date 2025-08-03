@@ -115,7 +115,8 @@ jobs:
             - id: summarize
               run: |
                   failures=$(grep -h "" results/result-*/result.txt | awk -F': ' '$2=="failure"{print $1}')
-                  echo "failures=$(printf '%s ' $failures | sed 's/ *$//')" >> "$GITHUB_OUTPUT"
+                  failures_cleaned=$(printf '%s ' $failures | sed 's/ *$//')
+                  echo "failures=${failures_cleaned}" >> "$GITHUB_OUTPUT"
             - name: Install PyYAML
               run: pip install PyYAML
             - name: Verify bot permission

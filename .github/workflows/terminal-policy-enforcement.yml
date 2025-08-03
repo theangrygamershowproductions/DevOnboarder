@@ -1,0 +1,108 @@
+name: Terminal Output Policy Enforcement
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  terminal-policy-enforcement:
+    runs-on: ubuntu-latest
+    name: Enforce Terminal Output Policy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up logging
+        run: |
+          mkdir -p logs
+          echo "Terminal Output Policy Enforcement started"
+          echo "Target: GitHub Actions workflows"
+          echo "Policy: ZERO TOLERANCE for violations"
+
+      - name: Validate Terminal Output Policy
+        run: |
+          echo "Running terminal output policy validation"
+          bash scripts/validate_terminal_output.sh
+          echo "Validation complete"
+
+      - name: Create enforcement report
+        if: always()
+        run: |
+          echo "Terminal Output Policy Enforcement Report" > logs/enforcement_report.txt
+          echo "Date: $(date)" >> logs/enforcement_report.txt
+          echo "Repository: ${{ github.repository }}" >> logs/enforcement_report.txt
+          echo "Branch: ${{ github.ref_name }}" >> logs/enforcement_report.txt
+          echo "Commit: ${{ github.sha }}" >> logs/enforcement_report.txt
+          echo "Status: ${{ job.status }}" >> logs/enforcement_report.txt
+
+      - name: Upload enforcement report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminal-output-enforcement-report
+          path: logs/enforcement_report.txt
+          retention-days: 30
+
+      - name: Comment on PR if violations found
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating violation report for PR"
+          cat > violation_comment.md << 'EOF'
+          **CRITICAL: Terminal Output Policy Violations Detected**
+
+          This PR contains terminal output patterns that WILL cause immediate system hanging in DevOnboarder.
+
+          **Required Actions:**
+          1. Fix ALL violations before merge
+          2. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md
+          3. Use only individual echo commands with plain ASCII text
+          4. No emojis, command substitution, or variable expansion in echo
+
+          **Zero Tolerance Policy:** These violations cause real system failures.
+
+          Download the enforcement report artifact for detailed violation locations.
+          EOF
+
+          gh pr comment ${{ github.event.pull_request.number }} --body-file violation_comment.md
+
+      - name: Create enforcement issue
+        if: failure() && github.event_name == 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating enforcement issue for main branch violation"
+          cat > issue_body.md << 'EOF'
+          **CRITICAL: Terminal Output Policy Violations in Main Branch**
+
+          Terminal output policy violations have been detected in main branch workflows.
+          These violations WILL cause system hanging and must be fixed immediately.
+
+          **Commit:** ${{ github.sha }}
+          **Author:** ${{ github.event.head_commit.author.name }}
+
+          **Required Actions:**
+          1. Identify and fix ALL violations
+          2. Follow patterns in docs/TERMINAL_OUTPUT_VIOLATIONS.md
+          3. Run validation: `bash scripts/validate_terminal_output.sh`
+          4. Verify fixes with clean testing
+
+          **Download the enforcement report artifact for violation details.**
+          EOF
+
+          gh issue create --title "CRITICAL: Terminal Output Policy Violations - ${{ github.sha }}" --body-file issue_body.md --label "terminal-policy-violation,critical"

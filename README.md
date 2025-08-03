@@ -217,16 +217,17 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 3. Use [.github/pull_request_template.md](.github/pull_request_template.md) when opening a pull request.
 4. Run `bash scripts/install_commit_msg_hook.sh`
    or see [CONTRIBUTING.md](CONTRIBUTING.md) to install the commit-msg hook.
-5. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
-6. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
-7. Update all relevant READMEs when new roles are added to the GitHub organization.
-8. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
-9. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
-10. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
-11. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
-12. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
-13. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
-14. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
+5. **CRITICAL**: Review [docs/TERMINAL_OUTPUT_VIOLATIONS.md](docs/TERMINAL_OUTPUT_VIOLATIONS.md) for terminal output policy (ZERO TOLERANCE for emojis in workflows).
+6. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
+7. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
+8. Update all relevant READMEs when new roles are added to the GitHub organization.
+9. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
+10. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
+11. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
+12. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
+13. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+14. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
+15. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
 15. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
     - The script automatically downloads Vale if it isn’t installed and
       prints a warning if the download fails. See
