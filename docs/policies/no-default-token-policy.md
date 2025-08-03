@@ -140,7 +140,7 @@ Security measures for all tokens:
 ```yaml
 # ✅ CORRECT: Using specialized token with defined scope
 steps:
-  - name: Automated Issue Management
+    - name: Automated Issue Management
     uses: actions/github-script@v7
     with:
       github-token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
@@ -153,7 +153,7 @@ steps:
 ```yaml
 # ❌ PROHIBITED: Using default GITHUB_TOKEN for API operations
 steps:
-  - name: Issue Management
+    - name: Issue Management
     uses: actions/github-script@v7
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -166,7 +166,7 @@ steps:
 ```yaml
 # ✅ ACCEPTABLE: Fallback to specialized token (not GITHUB_TOKEN)
 steps:
-  - name: CI Operations
+    - name: CI Operations
     uses: actions/github-script@v7
     with:
       github-token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}

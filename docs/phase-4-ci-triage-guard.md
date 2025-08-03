@@ -63,24 +63,28 @@ Building on the infrastructure established in Phases 1-3, Phase 4 implements int
 ### Core Components
 
 1. **Failure Analyzer** (`scripts/enhanced_ci_failure_analyzer.py`)
-   - Pattern recognition engine
-   - Historical data analysis
-   - Failure classification logic
 
-2. **Auto-Resolution Engine** (`scripts/ci_auto_resolver.sh`)
-   - Resolution strategy implementation
-   - Retry logic with backoff
-   - Environment repair automation
+- Pattern recognition engine
+- Historical data analysis
+- Failure classification logic
 
-3. **Prediction Engine** (`scripts/ci_failure_predictor.py`)
-   - Trend analysis and forecasting
-   - Early warning triggers
-   - Resource monitoring
+1. **Auto-Resolution Engine** (`scripts/ci_auto_resolver.sh`)
 
-4. **Enhanced Issue Manager** (`scripts/enhanced_ci_issue_manager.sh`)
-   - Smart issue lifecycle management
-   - Deduplication and classification
-   - Metrics collection and reporting
+- Resolution strategy implementation
+- Retry logic with backoff
+- Environment repair automation
+
+1. **Prediction Engine** (`scripts/ci_failure_predictor.py`)
+
+- Trend analysis and forecasting
+- Early warning triggers
+- Resource monitoring
+
+1. **Enhanced Issue Manager** (`scripts/enhanced_ci_issue_manager.sh`)
+
+- Smart issue lifecycle management
+- Deduplication and classification
+- Metrics collection and reporting
 
 ### Integration Points
 
