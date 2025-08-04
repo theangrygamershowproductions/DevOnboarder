@@ -36,7 +36,7 @@ jobs:
       - name: Validate Terminal Output Policy
         run: |
           echo "Running terminal output policy validation"
-          bash scripts/validate_terminal_output.sh
+          bash scripts/validate_terminal_output_simple.sh
           echo "Validation complete"
 
       - name: Create enforcement report
@@ -105,7 +105,7 @@ jobs:
           echo "**Required Actions:**" >> issue_body.md
           echo "1. Identify and fix ALL violations" >> issue_body.md
           echo "2. Follow patterns in docs/TERMINAL_OUTPUT_VIOLATIONS.md" >> issue_body.md
-          echo "3. Run validation: bash scripts/validate_terminal_output.sh" >> issue_body.md
+          echo "3. Run validation: bash scripts/validate_terminal_output_simple.sh" >> issue_body.md
           echo "4. Verify fixes with clean testing" >> issue_body.md
           echo "" >> issue_body.md
           echo "**Download the enforcement report artifact for violation details.**" >> issue_body.md
