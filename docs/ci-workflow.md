@@ -4,6 +4,16 @@ The `ci.yml` workflow runs on every push and pull request. It sets up Python
 3.12 and Node.js 22 before building the containers and executing the test
 suites.
 
+## Quality Enforcement
+
+DevOnboarder enforces strict quality standards through automated checks:
+
+- **Terminal Output Policy**: ZERO TOLERANCE for emojis and command substitution (`validate_terminal_output.sh`)
+- **Markdown Linting**: Enforces MD022 (heading spacing) and MD032 (list spacing) standards
+- **Pre-commit Validation**: Comprehensive policy enforcement before code enters CI
+
+For details see: [Terminal Output Violations](TERMINAL_OUTPUT_VIOLATIONS.md) and [AI Agent Override Instructions](AI_AGENT_TERMINAL_OVERRIDE.md)
+
 ## Concurrency
 
 A concurrency group of `${{ github.workflow }}-${{ github.ref }}` cancels

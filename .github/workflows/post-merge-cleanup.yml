@@ -15,6 +15,7 @@ on:
 
 permissions:
     contents: read
+    issues: write
 
 jobs:
     cleanup:
@@ -33,8 +34,8 @@ jobs:
               run: |
                   python -m venv .venv
                   source .venv/bin/activate
-                  echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-                  echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
+                  printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
 
             - name: Install minimal dependencies
               run: |
@@ -43,13 +44,13 @@ jobs:
 
             - name: Clean accumulated logs after successful merge
               run: |
-                  echo "🧹 Post-merge cleanup: Smart cleanup of accumulated artifacts"
+                  echo "Post-merge cleanup: Smart cleanup of accumulated artifacts"
 
                   # Show current log status
                   if [ -d logs ]; then
                       log_count=$(find logs -type f | wc -l)
                       log_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
-                      echo "Current logs: $log_count files ($log_size)"
+                      printf "Current logs: %s files (%s)\n" "$log_count" "$log_size"
                   fi
 
                   # Smart cleanup - removes temporary artifacts but preserves important logs
@@ -59,9 +60,9 @@ jobs:
                   if [ -d logs ]; then
                       remaining_count=$(find logs -type f | wc -l)
                       remaining_size=$(du -sh logs 2>/dev/null | cut -f1 || echo "Unknown")
-                      echo "✅ Smart cleanup complete: $remaining_count files remaining ($remaining_size)"
+                      printf "Smart cleanup complete: %s files remaining (%s)\n" "$remaining_count" "$remaining_size"
                   else
-                      echo "✅ No logs directory found"
+                      echo "No logs directory found"
                   fi
 
             - name: Archive important logs before cleanup
@@ -70,8 +71,28 @@ jobs:
                   if [ -d logs ] && [ "$(find logs -type f | wc -l)" -gt 0 ]; then
                       # Archive any remaining logs before final cleanup
                       bash scripts/manage_logs.sh archive
-                      echo "📦 Important logs archived"
+                      echo "Important logs archived"
                   fi
+
+            - name: Close resolved CI failure issues
+              run: |
+                  echo "Checking for CI failure issues to close after successful merge"
+
+                  # Get the commit message to extract PR number
+                  COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+                  printf "Commit message: %s\n" "$COMMIT_MESSAGE"
+
+                  # Extract PR number from commit message (format: "PR #123" or "#123")
+                  PR_NUMBER=$(printf "%s" "$COMMIT_MESSAGE" | grep -oE '#[0-9]+' | head -1 | sed 's/#//')
+
+                  if [ -n "$PR_NUMBER" ]; then
+                      printf "Found PR number: %s\n" "$PR_NUMBER"
+                      bash scripts/manage_ci_failure_issues.sh close "$PR_NUMBER"
+                  else
+                      echo "No PR number found in commit message"
+                  fi
+              env:
+                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
 
             - name: Upload cleanup summary
               if: always()
