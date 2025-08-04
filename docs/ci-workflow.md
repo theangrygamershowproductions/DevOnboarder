@@ -4,6 +4,14 @@ The `ci.yml` workflow runs on every push and pull request. It sets up Python
 3.12 and Node.js 22 before building the containers and executing the test
 suites.
 
+## Automated Issue Management
+
+DevOnboarder includes comprehensive automated issue management:
+
+- **PR Tracking**: Automatic issue creation and linking when PRs are opened ([pr-issue-automation.md](pr-issue-automation.md))
+- **CI Failures**: Automatic issue creation for persistent CI failures
+- **Issue Closure**: Automatic closure of resolved issues when PRs are merged
+
 ## Quality Enforcement
 
 DevOnboarder enforces strict quality standards through automated checks:
