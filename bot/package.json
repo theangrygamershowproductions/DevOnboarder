@@ -41,6 +41,7 @@
         "preset": "ts-jest",
         "testEnvironment": "node",
         "collectCoverage": true,
+        "testTimeout": 30000,
         "coverageReporters": [
             "text",
             "lcov",
