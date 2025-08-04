@@ -135,6 +135,8 @@ platforms. Please report any issues you encounter on your operating system.
 - [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
 - [CI failure issue management](ci-failure-issues.md)
   &ndash; how automatic cleanup works and how to close old issues.
+- [PR-to-issue automation](pr-issue-automation.md)
+  &ndash; automatic tracking issue creation and lifecycle management for all pull requests.
 - [CI workflow](ci-workflow.md)
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
 - [CI environment variables](ci-env-vars.md)

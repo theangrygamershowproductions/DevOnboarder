@@ -63,6 +63,20 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
+## 🔄 PR-to-Issue Automation
+
+DevOnboarder includes **automatic issue creation and linking** when Pull Requests are opened, providing comprehensive tracking throughout the development lifecycle.
+
+**How it works:**
+
+- **Automatic Creation**: When PRs are opened, tracking issues are automatically created
+- **Cross-Linking**: Issues and PRs are linked with comments for easy navigation
+- **Progress Tracking**: Issues include development checklists and acceptance criteria
+- **Automatic Closure**: Issues are automatically closed when PRs are merged
+- **Comprehensive Labeling**: Automatic type detection and label application
+
+See [docs/pr-issue-automation.md](docs/pr-issue-automation.md) for complete documentation.
+
 ## Trunk-Based Workflow
 
 <!-- markdownlint-disable MD030 -->
@@ -218,58 +232,59 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 4. Run `bash scripts/install_commit_msg_hook.sh`
    or see [CONTRIBUTING.md](CONTRIBUTING.md) to install the commit-msg hook.
 5. **CRITICAL**: Review [docs/TERMINAL_OUTPUT_VIOLATIONS.md](docs/TERMINAL_OUTPUT_VIOLATIONS.md) for terminal output policy (ZERO TOLERANCE for emojis in workflows).
-6. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
-7. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
-8. Update all relevant READMEs when new roles are added to the GitHub organization.
-9. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
-10. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
-11. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
-12. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
-13. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
-14. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
-15. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
-16. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
+6. Review [docs/pr-issue-automation.md](docs/pr-issue-automation.md) for automatic PR tracking and issue lifecycle management.
+7. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
+8. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
+9. Update all relevant READMEs when new roles are added to the GitHub organization.
+10. Review [docs/alpha/README.md](docs/alpha/README.md) if you are an early tester.
+11. See [docs/founders/README.md](docs/founders/README.md) for Founder's Circle guidelines.
+12. Follow our [emails/style-guide.md](emails/style-guide.md) when crafting invitations.
+13. Review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) to learn our community expectations.
+14. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
+15. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
+16. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
+17. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
     - The script automatically downloads Vale if it isn't installed and
       prints a warning if the download fails. See
       [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
       for more details.
     - LanguageTool checks are optional; start a local server and set
       `LANGUAGETOOL_URL` to enable them.
-17. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
+18. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
     If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
     and install the optional test dependencies with `pip install .[test]` so the
     documentation checks work locally.
-18. Browse the [agents overview](agents/index.md) for individual service specs.
+19. Browse the [agents overview](agents/index.md) for individual service specs.
     Codex reads the machine‑readable list in `.codex/agents/index.json` to
     coordinate automation across these agents.
-19. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
-20. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
-21. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
+20. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
+21. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
+22. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
     For the security philosophy and origin story, see [docs/potato-policy-aar.md](docs/potato-policy-aar.md).
-22. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
+23. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
     outlining contributor ethics and a simple template.
-23. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+24. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
-24. See [docs/network-exception-list.md](docs/network-exception-list.md)
+25. See [docs/network-exception-list.md](docs/network-exception-list.md)
     for required firewall domains. Run
     `scripts/show_network_exceptions.sh` to print them.
-25. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
+26. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
     if CI automation fails to create or close `ci-failure` issues.
-26. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
+27. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
     and open an issue with the
     [Engineer Assessment template](.github/ISSUE_TEMPLATE/assessment.md)
     during onboarding reviews to ensure new features meet the checklist.
-27. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
+28. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
     services interact inside the TAGS stack.
-28. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
+29. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
     steps and feature flag usage.
-29. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
-30. See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance, cleanup, and diagnostic tools reference.
+30. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
+31. See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance, cleanup, and diagnostic tools reference.
 
 These files expand on the steps listed in the Quickstart section.
 
