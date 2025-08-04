@@ -347,7 +347,7 @@ def create_app() -> FastAPI:
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
         """Add basic security headers to all responses."""
 
-        async def dispatch(self, request, call_next):  # type: ignore[override]
+        async def dispatch(self, request, call_next):
             resp = await call_next(request)
             resp.headers.setdefault("X-Content-Type-Options", "nosniff")
             resp.headers.setdefault(
