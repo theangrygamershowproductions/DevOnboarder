@@ -92,22 +92,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Creating enforcement issue for main branch violation"
-
-          # Create issue body using safe file approach
-          echo "**CRITICAL: Terminal Output Policy Violations in Main Branch**" > issue_body.md
-          echo "" >> issue_body.md
-          echo "Terminal output policy violations have been detected in main branch workflows." >> issue_body.md
-          echo "These violations WILL cause system hanging and must be fixed immediately." >> issue_body.md
-          echo "" >> issue_body.md
-          printf "**Commit:** %s\n" "${{ github.sha }}" >> issue_body.md
-          printf "**Author:** %s\n" "${{ github.event.head_commit.author.name }}" >> issue_body.md
-          echo "" >> issue_body.md
-          echo "**Required Actions:**" >> issue_body.md
-          echo "1. Identify and fix ALL violations" >> issue_body.md
-          echo "2. Follow patterns in docs/TERMINAL_OUTPUT_VIOLATIONS.md" >> issue_body.md
-          echo "3. Run validation: bash scripts/validate_terminal_output_simple.sh" >> issue_body.md
-          echo "4. Verify fixes with clean testing" >> issue_body.md
-          echo "" >> issue_body.md
-          echo "**Download the enforcement report artifact for violation details.**" >> issue_body.md
-
-          gh issue create --title "CRITICAL: Terminal Output Policy Violations - ${{ github.sha }}" --body-file issue_body.md --label "terminal-policy-violation,critical"
+          bash scripts/create_terminal_policy_issue.sh "${{ github.sha }}"

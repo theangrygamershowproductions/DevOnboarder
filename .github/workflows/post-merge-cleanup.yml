@@ -78,14 +78,6 @@ jobs:
               run: |
                   echo "Checking for CI failure issues to close after successful merge"
 
-                  # Install GitHub CLI if not available
-                  if ! command -v gh &> /dev/null; then
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      ARCH=$(dpkg --print-architecture)
-                      printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt update && sudo apt install gh -y
-                  fi
-
                   # Get the commit message to extract PR number
                   COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
                   printf "Commit message: %s\n" "$COMMIT_MESSAGE"
@@ -95,47 +87,7 @@ jobs:
 
                   if [ -n "$PR_NUMBER" ]; then
                       printf "Found PR number: %s\n" "$PR_NUMBER"
-
-                      # Search for open CI failure issues related to this PR
-                      echo "Searching for issues with title pattern:"
-                      echo "Title:"
-                      printf "CI Failure: PR #%s\n" "$PR_NUMBER"
-
-                      # Find and close related CI failure issues - using safe approach
-                      gh issue list --label ci-failure --state open --search "CI Failure: PR #$PR_NUMBER" --json number,title > temp_issues.json || true
-
-                      if [ -s temp_issues.json ]; then
-                          echo "Found issues to close"
-                          cat temp_issues.json
-
-                          cat temp_issues.json | jq -r '.[] | @base64' | while IFS= read -r encoded_issue; do
-                              issue_data=$(echo "$encoded_issue" | base64 -d)
-                              issue_number=$(echo "$issue_data" | jq -r '.number')
-                              issue_title=$(echo "$issue_data" | jq -r '.title')
-
-                              echo "Closing issue number:"
-                              printf "%s\n" "$issue_number"
-                              echo "Issue title:"
-                              printf "%s\n" "$issue_title"
-
-                              # Close the issue with a resolution comment using file
-                              echo "**CI Issue Resolved**" > resolution_comment.md
-                              echo "" >> resolution_comment.md
-                              echo "This CI failure has been resolved by the successful merge to main." >> resolution_comment.md
-                              echo "" >> resolution_comment.md
-                              echo "**Resolution Details:**" >> resolution_comment.md
-                              echo "- PR successfully merged and all CI checks passed" >> resolution_comment.md
-                              echo "- Post-merge cleanup completed successfully" >> resolution_comment.md
-                              echo "" >> resolution_comment.md
-                              echo "Automatically closed by post-merge cleanup workflow." >> resolution_comment.md
-
-                              gh issue comment "$issue_number" --body-file resolution_comment.md
-                              gh issue close "$issue_number" --reason completed
-                              printf "Closed issue #%s\n" "$issue_number"
-                          done
-                      else
-                          printf "No CI failure issues found for PR #%s\n" "$PR_NUMBER"
-                      fi
+                      bash scripts/manage_ci_failure_issues.sh close "$PR_NUMBER"
                   else
                       echo "No PR number found in commit message"
                   fi
