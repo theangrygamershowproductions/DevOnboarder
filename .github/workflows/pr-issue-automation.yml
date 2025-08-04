@@ -1,0 +1,97 @@
+name: PR Issue Automation
+
+on:
+    pull_request:
+        types: [opened, reopened]
+        branches: [main, master]
+
+    # Allow manual triggering
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: "PR number to create issue for"
+                required: true
+                type: string
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    create-pr-tracking-issue:
+        runs-on: ubuntu-latest
+        if: ${{ !github.event.pull_request.draft }}
+
+        permissions:
+            contents: read
+            pull-requests: write
+            issues: write
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup GitHub CLI
+              run: |
+                  gh --version
+
+            - name: Authenticate with GitHub
+              run: |
+                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+            - name: Create PR tracking issue
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+              run: |
+                  # Determine PR number
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                      PR_NUMBER="${{ github.event.inputs.pr_number }}"
+                      PR_DETAILS=$(gh pr view "$PR_NUMBER" --json title,author,headRefName)
+                      PR_TITLE=$(echo "$PR_DETAILS" | jq -r '.title')
+                      PR_AUTHOR=$(echo "$PR_DETAILS" | jq -r '.author.login')
+                      PR_BRANCH=$(echo "$PR_DETAILS" | jq -r '.headRefName')
+                  else
+                      PR_NUMBER="${{ github.event.pull_request.number }}"
+                      PR_TITLE="${{ github.event.pull_request.title }}"
+                      PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+                      PR_BRANCH="${{ github.event.pull_request.head.ref }}"
+                  fi
+
+                  echo "Creating tracking issue for PR"
+                  echo "Title extracted"
+                  echo "Author extracted"
+                  echo "Branch extracted"
+
+                  # Run PR issue creation script
+                  bash scripts/create_pr_tracking_issue.sh "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BRANCH"
+
+            - name: Link issue to PR
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
+
+                  # Get the created issue number from log file
+                  if [[ -f "logs/pr_issue_creation_${PR_NUMBER}.log" ]]; then
+                      ISSUE_NUMBER=$(grep -o "Issue #[0-9]\+" "logs/pr_issue_creation_${PR_NUMBER}.log" | head -1 | sed 's/Issue #//')
+
+                      if [[ -n "$ISSUE_NUMBER" ]]; then
+                          echo "Linking Issue to PR"
+
+                          # Simple comments with basic content
+                          gh pr comment "$PR_NUMBER" --body "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
+                          gh issue comment "$ISSUE_NUMBER" --body "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
+                      fi
+                  fi
+
+            - name: Update project labels
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
+
+                  # Add tracking labels
+                  echo "Adding tracking labels to PR"
+                  gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || echo "Could not add labels"
