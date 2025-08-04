@@ -19,7 +19,7 @@ def is_founder() -> bool:
 class GreetingHandler(BaseHTTPRequestHandler):
     """HTTP request handler that greets the requested name."""
 
-    def do_GET(self) -> None:  # type: ignore[override]
+    def do_GET(self) -> None:
         path = self.path.lstrip("/") or "World"
         status = 200
         if path == "alpha":
