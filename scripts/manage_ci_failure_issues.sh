@@ -13,10 +13,10 @@ readonly YELLOW='\033[1;33m'
 readonly NC='\033[0m' # No Color
 
 # Configuration
-readonly SCRIPT_NAME
 SCRIPT_NAME=$(basename "$0")
-readonly LOG_FILE
+readonly SCRIPT_NAME
 LOG_FILE="logs/${SCRIPT_NAME%.*}_$(date +%Y%m%d_%H%M%S).log"
+readonly LOG_FILE
 
 # Create logs directory and setup logging
 mkdir -p logs
