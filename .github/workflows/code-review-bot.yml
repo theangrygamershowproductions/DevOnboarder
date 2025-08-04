@@ -36,20 +36,20 @@ jobs:
             while IFS= read -r file; do
               printf "Checking file: %s\n" "$file"
 
-              # Check for emojis
-              if git diff origin/main...HEAD -- "$file" | grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|\x{2705}|\x{274C}|\x{1F6E0}|\x{1F4CA}|\x{1F4C8}|\x{1F4E5}|\x{1F517}|\x{1F41B}|\x{26A0}|\x{1F4A1}|\x{1F3AF}|\x{1F680}|\x{1F4CB}|\x{1F50D}|\x{1F4DD}' 2>/dev/null; then
+              # Check for emojis in ADDED lines only (lines starting with +)
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|\x{2705}|\x{274C}|\x{1F6E0}|\x{1F4CA}|\x{1F4C8}|\x{1F4E5}|\x{1F517}|\x{1F41B}|\x{26A0}|\x{1F4A1}|\x{1F3AF}|\x{1F680}|\x{1F4CB}|\x{1F50D}|\x{1F4DD}' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file" >> violation_details.txt
               fi
 
-              # Check for command substitution in echo
-              if git diff origin/main...HEAD -- "$file" | grep -E 'echo.*\$\(' 2>/dev/null; then
+              # Check for command substitution in echo in ADDED lines only
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 echo "- Command substitution in echo in $file (causes terminal hanging)" >> violation_details.txt
               fi
 
-              # Check for variable expansion in echo
-              if git diff origin/main...HEAD -- "$file" | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
+              # Check for variable expansion in echo in ADDED lines only
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 echo "- Variable expansion in echo in $file (can cause terminal hanging)" >> violation_details.txt
               fi
