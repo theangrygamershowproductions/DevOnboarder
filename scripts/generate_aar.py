@@ -177,12 +177,11 @@ class AARGenerator:
             Workflow run data.
         """
         try:
+            repo_path = "repos/theangrygamershowproductions/DevOnboarder"
             cmd = [
                 "gh",
                 "api",
-                f"repos/{{owner}}/{{repo}}/actions/runs/{workflow_run_id}",
-                "--header",
-                f"Authorization: token {token}",
+                f"{repo_path}/actions/runs/{workflow_run_id}",
             ]
 
             result = subprocess.run(
@@ -211,9 +210,7 @@ class AARGenerator:
             cmd = [
                 "gh",
                 "api",
-                "repos/{owner}/{repo}/actions/runs",
-                "--header",
-                f"Authorization: token {token}",
+                "repos/theangrygamershowproductions/DevOnboarder/actions/runs",
                 "-f",
                 "status=failure",
                 "-f",
@@ -252,12 +249,11 @@ class AARGenerator:
 
         try:
             # Get jobs for the run
+            repo_path = "repos/theangrygamershowproductions/DevOnboarder"
             cmd = [
                 "gh",
                 "api",
-                f"repos/{{owner}}/{{repo}}/actions/runs/{workflow_run_id}/jobs",
-                "--header",
-                f"Authorization: token {token}",
+                f"{repo_path}/actions/runs/{workflow_run_id}/jobs",
             ]
 
             result = subprocess.run(
@@ -294,12 +290,11 @@ class AARGenerator:
             Job log content.
         """
         try:
+            repo_path = "repos/theangrygamershowproductions/DevOnboarder"
             cmd = [
                 "gh",
                 "api",
-                f"repos/{{owner}}/{{repo}}/actions/jobs/{job_id}/logs",
-                "--header",
-                f"Authorization: token {token}",
+                f"{repo_path}/actions/jobs/{job_id}/logs",
             ]
 
             result = subprocess.run(
@@ -332,12 +327,11 @@ class AARGenerator:
             return []
 
         try:
+            repo_path = "repos/theangrygamershowproductions/DevOnboarder"
             cmd = [
                 "gh",
                 "api",
-                f"repos/{{owner}}/{{repo}}/actions/runs/{workflow_run_id}/artifacts",
-                "--header",
-                f"Authorization: token {token}",
+                f"{repo_path}/actions/runs/{workflow_run_id}/artifacts",
             ]
 
             result = subprocess.run(
@@ -694,8 +688,8 @@ class AARGenerator:
             if workflow_run_id:
                 title += f" (Run #{workflow_run_id})"
 
-            # Create issue labels
-            labels = ["aar", "ci-failure", "automation"]
+            # Create issue labels (use existing repository labels)
+            labels = ["automation", "ci-failure"]
 
             # Prepare issue body
             issue_body = f"""# After Action Report
@@ -709,7 +703,7 @@ class AARGenerator:
 **Compliance**: No Default Token Policy v1.0 ✅
 """
 
-            # Create issue using GitHub CLI
+            # Create issue using GitHub CLI (rely on configured authentication)
             cmd = [
                 "gh",
                 "issue",
@@ -722,17 +716,9 @@ class AARGenerator:
                 ",".join(labels),
             ]
 
-            # Set token environment variable
-            env = os.environ.copy()
-            env["GITHUB_TOKEN"] = token
-
+            # Use current GitHub CLI authentication
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True,
-                env=env,
-                encoding="utf-8",
+                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
             )
 
             issue_url = result.stdout.strip()

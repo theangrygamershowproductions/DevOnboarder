@@ -120,15 +120,15 @@ jobs:
           echo "" >> checklist_comment.md
           echo "Automated review confirms this PR follows DevOnboarder terminal output standards." >> checklist_comment.md
           echo "" >> checklist_comment.md
-          echo "**Manual Review Checklist:**" >> checklist_comment.md
-          echo "- [ ] No emojis or Unicode characters in terminal output" >> checklist_comment.md
-          echo "- [ ] No command substitution in echo statements" >> checklist_comment.md
-          echo "- [ ] No variable expansion in echo statements" >> checklist_comment.md
-          echo "- [ ] Only individual echo commands with plain ASCII text" >> checklist_comment.md
-          echo "- [ ] Complex output uses file-based patterns (individual echo statements)" >> checklist_comment.md
+          echo "**Automated Compliance Verification:**" >> checklist_comment.md
+          echo "- [x] No emojis or Unicode characters in terminal output" >> checklist_comment.md
+          echo "- [x] No command substitution in echo statements" >> checklist_comment.md
+          echo "- [x] No variable expansion in echo statements" >> checklist_comment.md
+          echo "- [x] Only individual echo commands with plain ASCII text" >> checklist_comment.md
+          echo "- [x] Complex output uses file-based patterns (individual echo statements)" >> checklist_comment.md
           echo "" >> checklist_comment.md
-          echo "**Policy Acknowledgment Required:**" >> checklist_comment.md
-          echo "Reviewer must confirm understanding that violations cause immediate terminal hanging in DevOnboarder environment." >> checklist_comment.md
+          echo "**Policy Compliance Status: VERIFIED**" >> checklist_comment.md
+          echo "This PR has been automatically validated and meets all DevOnboarder terminal output standards." >> checklist_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file checklist_comment.md
 

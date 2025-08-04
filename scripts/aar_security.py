@@ -37,7 +37,14 @@ class AARTokenManager:
             if registry_path.exists():
                 with open(registry_path, "r") as f:
                     registry = yaml.safe_load(f)
-                    token_count = len(registry.get("tokens", {}))
+                    # Count tokens across all categories (ci_automation, etc.)
+                    token_count = 0
+                    for category, data in registry.items():
+                        if isinstance(data, dict):
+                            # Count tokens in each category
+                            for item in data.values():
+                                if isinstance(item, dict) and "token" in item:
+                                    token_count += 1
                     print(f"Token registry loaded: {token_count} tokens")
                     return registry
             else:
@@ -71,7 +78,17 @@ class AARTokenManager:
             print(f"WARNING: Cannot validate {token_name} - registry unavailable")
             return True
 
-        token_info = self.token_registry.get("tokens", {}).get(token_name)
+        # Search for token across all categories in the registry
+        token_info = None
+        for category, data in self.token_registry.items():
+            if isinstance(data, dict):
+                for item in data.values():
+                    if isinstance(item, dict) and item.get("token") == token_name:
+                        token_info = item
+                        break
+                if token_info:
+                    break
+
         if not token_info:
             print(f"WARNING: Token {token_name} not found in registry")
             return True  # Allow for development scenarios
