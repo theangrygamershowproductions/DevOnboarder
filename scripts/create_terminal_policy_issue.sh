@@ -119,8 +119,8 @@ if issue_url=$(gh issue create \
     --label "terminal-policy-violation,critical,zero-tolerance" \
     --assignee "@me" 2>&1); then
 
-    echo -e "${GREEN}✅ GitHub issue created successfully${NC}"
-    echo -e "${BLUE}🔗 Issue URL: $issue_url${NC}"
+    echo -e "${GREEN}GitHub issue created successfully${NC}"
+    echo -e "${BLUE}Issue URL: $issue_url${NC}"
 
     # Log success
     echo "ISSUE_CREATED: $(date -Iseconds)"
@@ -130,7 +130,7 @@ if issue_url=$(gh issue create \
 
     exit 0
 else
-    echo -e "${RED}❌ Failed to create GitHub issue${NC}"
+    echo -e "${RED}Failed to create GitHub issue${NC}"
     echo "Error output: $issue_url"
     exit 1
 fi

@@ -77,23 +77,23 @@ list_issues() {
         --search "CI Failure: PR #$PR_NUMBER" \
         --json number,title > temp_issues.json; then
 
-        echo -e "${GREEN}✅ Issue search completed${NC}"
+        echo -e "${GREEN}Issue search completed${NC}"
 
         # Check if any issues were found
         local issue_count
         issue_count=$(jq length temp_issues.json)
 
         if [[ "$issue_count" -eq 0 ]]; then
-            echo -e "${YELLOW}ℹ️  No open CI failure issues found for PR #$PR_NUMBER${NC}"
+            echo -e "${YELLOW}  No open CI failure issues found for PR #$PR_NUMBER${NC}"
         else
-            echo -e "${BLUE}📋 Found $issue_count CI failure issue(s) for PR #$PR_NUMBER:${NC}"
+            echo -e "${BLUE} Found $issue_count CI failure issue(s) for PR #$PR_NUMBER:${NC}"
             jq -r '.[] | "Issue #\(.number): \(.title)"' temp_issues.json
         fi
 
         rm -f temp_issues.json
         return 0
     else
-        echo -e "${RED}❌ Failed to search for issues${NC}"
+        echo -e "${RED} Failed to search for issues${NC}"
         rm -f temp_issues.json
         return 1
     fi
@@ -123,7 +123,7 @@ close_issues() {
     issue_count=$(jq length temp_issues.json 2>/dev/null || echo "0")
 
     if [[ "$issue_count" -eq 0 ]]; then
-        echo -e "${YELLOW}ℹ️  No issues to close for PR #$PR_NUMBER${NC}"
+        echo -e "${YELLOW}  No issues to close for PR #$PR_NUMBER${NC}"
         rm -f temp_issues.json
         return 0
     fi
@@ -142,7 +142,7 @@ This CI failure issue has been resolved by the successful merge of PR #$PR_NUMBE
 
 ## Resolution Details
 
-- **Status:** Resolved ✅
+- **Status:** Resolved
 - **Action:** PR successfully merged
 - **Resolution Time:** $(date -Iseconds)
 - **CI Triage:** Automatic cleanup via post-merge workflow
@@ -158,24 +158,24 @@ EOF
 
             # Comment on issue
             if gh issue comment "$issue_number" --body-file resolution_comment.md; then
-                echo -e "${GREEN}✅ Added resolution comment to issue #$issue_number${NC}"
+                echo -e "${GREEN} Added resolution comment to issue #$issue_number${NC}"
             else
-                echo -e "${RED}❌ Failed to comment on issue #$issue_number${NC}"
+                echo -e "${RED} Failed to comment on issue #$issue_number${NC}"
             fi
 
             # Close the issue
             if gh issue close "$issue_number" --reason completed; then
-                echo -e "${GREEN}✅ Closed issue #$issue_number${NC}"
+                echo -e "${GREEN} Closed issue #$issue_number${NC}"
                 ((closed_count++))
             else
-                echo -e "${RED}❌ Failed to close issue #$issue_number${NC}"
+                echo -e "${RED} Failed to close issue #$issue_number${NC}"
             fi
 
             rm -f resolution_comment.md
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo -e "${BLUE}📊 Summary: Closed $closed_count of $issue_count issues${NC}"
+    echo -e "${BLUE} Summary: Closed $closed_count of $issue_count issues${NC}"
     rm -f temp_issues.json
     return 0
 }
@@ -191,7 +191,7 @@ comment_issues() {
     issue_count=$(jq length temp_issues.json 2>/dev/null || echo "0")
 
     if [[ "$issue_count" -eq 0 ]]; then
-        echo -e "${YELLOW}ℹ️  No issues to comment on for PR #$PR_NUMBER${NC}"
+        echo -e "${YELLOW}  No issues to comment on for PR #$PR_NUMBER${NC}"
         rm -f temp_issues.json
         return 0
     fi
@@ -220,17 +220,17 @@ This CI failure is being tracked as part of PR #$PR_NUMBER processing.
 EOF
 
             if gh issue comment "$issue_number" --body-file resolution_comment.md; then
-                echo -e "${GREEN}✅ Added comment to issue #$issue_number${NC}"
+                echo -e "${GREEN} Added comment to issue #$issue_number${NC}"
                 ((commented_count++))
             else
-                echo -e "${RED}❌ Failed to comment on issue #$issue_number${NC}"
+                echo -e "${RED} Failed to comment on issue #$issue_number${NC}"
             fi
 
             rm -f resolution_comment.md
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo -e "${BLUE}📊 Summary: Commented on $commented_count of $issue_count issues${NC}"
+    echo -e "${BLUE} Summary: Commented on $commented_count of $issue_count issues${NC}"
     rm -f temp_issues.json
     return 0
 }

@@ -115,7 +115,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .aar/
-          git add logs/
           if git diff --staged --quiet; then
             echo "No AAR files to commit"
           else
