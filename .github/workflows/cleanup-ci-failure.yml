@@ -108,23 +108,24 @@ jobs:
                         done
                     fi
                   else
-                    echo "Daily scheduled cleanup - closing all stale CI failure issues"
-                    # Original daily cleanup logic but smarter
-                    issues=$(gh issue list --label ci-failure --state open --json number,title)
-                    echo "$issues" | jq -r '.[] | .number' | while read -r issue_num; do
-                      if [[ -n "$issue_num" ]]; then
-                        # Check if issue is for a merged PR or old failure
-                        issue_title=$(echo "$issues" | jq -r ".[] | select(.number==$issue_num) | .title")
-                        if [[ "$issue_title" =~ PR\ #([0-9]+) ]]; then
+                    echo "Daily scheduled cleanup - using script for stale CI failure issues"
+                    # Use the approved script for all issue management
+                    bash scripts/manage_ci_failure_issues.sh list | while read -r line; do
+                      if [[ "$line" =~ ^Issue\ #([0-9]+): ]]; then
+                        issue_num="${BASH_REMATCH[1]}"
+                        echo "Processing CI failure issue #$issue_num"
+                        # Check if this is for a merged PR via issue title
+                        if [[ "$line" =~ PR\ #([0-9]+) ]]; then
                           pr_num="${BASH_REMATCH[1]}"
-                          pr_state=$(gh pr view "$pr_num" --json state,merged | jq -r '.state + ":" + (.merged|tostring)')
+                          pr_state=$(gh pr view "$pr_num" --json state,merged | jq -r '.state + ":" + (.merged|tostring)' 2>/dev/null || echo "UNKNOWN:false")
                           if [[ "$pr_state" == "MERGED:true" ]]; then
                             echo "Closing CI failure issue #$issue_num for merged PR #$pr_num"
                             bash scripts/manage_ci_failure_issues.sh close "$pr_num" || true
                           fi
                         else
-                          echo "Closing stale CI failure issue #$issue_num (no PR reference)"
-                          gh issue close "$issue_num" --reason "not_planned" --comment "Closing stale CI failure issue during daily cleanup." || true
+                          echo "Found stale CI failure issue #$issue_num without PR reference"
+                          # Note: Cannot close issues without PR reference using current script
+                          # This would require script enhancement or manual cleanup
                         fi
                       fi
                     done
