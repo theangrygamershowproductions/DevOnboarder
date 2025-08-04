@@ -51,10 +51,10 @@ jobs:
                   active=$(git for-each-ref --format='%(refname:strip=3) %(committerdate:unix)' refs/remotes/origin |
                     awk -v cutoff=$cutoff '$1 != "HEAD" && $1 != "main" && $2 >= cutoff {print $1}')
                   if [ -z "$active" ]; then
-                    echo "list=[]" >> "$GITHUB_OUTPUT"
+                    printf "list=[]\n" >> "$GITHUB_OUTPUT"
                   else
                     json=$(printf '%s\n' $active | jq -R . | jq -s .)
-                    echo "list=$json" >> "$GITHUB_OUTPUT"
+                    printf "list=%s\n" "$json" >> "$GITHUB_OUTPUT"
                   fi
 
     test:
@@ -115,7 +115,8 @@ jobs:
             - id: summarize
               run: |
                   failures=$(grep -h "" results/result-*/result.txt | awk -F': ' '$2=="failure"{print $1}')
-                  echo "failures=$(printf '%s ' $failures | sed 's/ *$//')" >> "$GITHUB_OUTPUT"
+                  failures_cleaned=$(printf '%s ' $failures | sed 's/ *$//')
+                  printf "failures=%s\n" "$failures_cleaned" >> "$GITHUB_OUTPUT"
             - name: Install PyYAML
               run: pip install PyYAML
             - name: Verify bot permission
@@ -131,7 +132,7 @@ jobs:
               run: |
                   echo "CI checks failed for the following branches:" > body.md
                   for b in $FAILED; do
-                    echo "- $b" >> body.md
+                    printf "- %s\n" "$b" >> body.md
                   done
                   jq -Rs --arg title "CI health failures $(date -I)" '{title:$title,body:.}' body.md > notify.json
                   gh workflow run notify.yml -f data="$(cat notify.json)"

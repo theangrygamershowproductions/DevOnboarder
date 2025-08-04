@@ -24,13 +24,20 @@ It assumes you have already set up Docker, Node.js and Python as described in th
     pre-commit install
     ```
 
-4. **Create a branch** from `main` for your change.
+4. **Understand DevOnboarder Quality Standards**:
+    - **Terminal Output Policy**: No emojis or command substitution in workflows (causes system hanging)
+    - **Markdown Linting**: Follow MD022 (heading spacing) and MD032 (list spacing) rules
+    - **Pre-commit Enforcement**: All policies validated before code reaches CI
+
+    Review [docs/TERMINAL_OUTPUT_VIOLATIONS.md](TERMINAL_OUTPUT_VIOLATIONS.md) for details.
+
+5. **Create a branch** from `main` for your change.
 
     ```bash
     git checkout -b feature/my-first-change
     ```
 
-5. **Run the checks**. The helper script installs requirements and runs the linters and tests with coverage.
+6. **Run the checks**. The helper script installs requirements and runs the linters and tests with coverage.
 
     ```bash
     bash scripts/run_tests.sh
@@ -38,14 +45,14 @@ It assumes you have already set up Docker, Node.js and Python as described in th
 
     If any step fails, fix the issues and re-run the script until everything passes.
 
-6. **Commit and push** your work.
+7. **Commit and push** your work.
 
     ```bash
-    git add <files>
-    git commit -m "DOCS(first-pr): Add walkthrough"
+    git add .
+    git commit -m "FEAT: add my first contribution"
     git push origin feature/my-first-change
     ```
 
-7. **Open a pull request** on GitHub and fill out the template. CI must pass before the PR can be merged.
+8. **Open a pull request** on GitHub and fill out the template. CI must pass before the PR can be merged.
 
 Refer to `docs/sample-pr.md` for a minimal example and `docs/git-guidelines.md` for commit message conventions.

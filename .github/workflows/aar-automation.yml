@@ -71,9 +71,8 @@ jobs:
           type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
           sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] \
-            https://cli.github.com/packages stable main" |
-            sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          ARCH=$(dpkg --print-architecture)
+          printf 'deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           sudo apt update
           sudo apt install gh -y
 
@@ -122,13 +121,13 @@ jobs:
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              AAR_REF="${{ github.event.issue.number }}"
+              echo "DOCS(aar): add after actions report for ${{ github.event.issue.number }}" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              AAR_REF="PR#${{ github.event.pull_request.number }}"
+              echo "DOCS(aar): add after actions report for PR#${{ github.event.pull_request.number }}" > commit_msg.txt
             else
-              AAR_REF="${{ github.event.inputs.aar_type }}"
+              echo "DOCS(aar): add after actions report for ${{ github.event.inputs.aar_type }}" > commit_msg.txt
             fi
-            git commit -m "DOCS(aar): add after actions report for ${AAR_REF}"
+            git commit -F commit_msg.txt
             git push
           fi
 
@@ -227,19 +226,19 @@ jobs:
             const year = new Date().getFullYear();
             const aarPath = `.aar/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
 
-            const comment = `## 📋 After Action Report Generated
+            const comment = `## After Action Report Generated
 
             An AAR has been automatically generated for this PR to capture development insights and learnings.
 
-            **📁 AAR Location**: \`${aarPath}\`
-            **🎯 Follow-up Issue**: Will be created with action items from the AAR
-            **💡 Purpose**: Preserve institutional knowledge and improve development processes
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Preserve institutional knowledge and improve development processes
 
             ### What's Included:
-            - 🏗️ Technical decisions and architectural choices
-            - 📊 Development process analysis
-            - 🧠 Lessons learned and best practices
-            - ✅ Action items for future improvements
+            - Technical decisions and architectural choices
+            - Development process analysis
+            - Lessons learned and best practices
+            - Action items for future improvements
 
             This helps maintain DevOnboarder's "quiet reliability" philosophy by capturing valuable insights from every significant change.`;
 
@@ -261,19 +260,19 @@ jobs:
             const year = new Date().getFullYear();
             const aarPath = `.aar/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
 
-            const comment = `## 📋 After Action Report Generated
+            const comment = `## After Action Report Generated
 
             An AAR has been automatically generated for this issue to capture resolution insights and process learnings.
 
-            **📁 AAR Location**: \`${aarPath}\`
-            **🎯 Follow-up Issue**: Will be created with action items from the AAR
-            **💡 Purpose**: Document lessons learned and prevent similar issues
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Document lessons learned and prevent similar issues
 
             ### What's Included:
-            - 🔍 Root cause analysis
-            - ⏱️ Resolution timeline and process
-            - ✅ What worked well and areas for improvement
-            - 🛡️ Preventive measures and action items
+            - Root cause analysis
+            - Resolution timeline and process
+            - What worked well and areas for improvement
+            - Preventive measures and action items
 
             This systematic approach helps DevOnboarder continuously improve its reliability and processes.`;
 

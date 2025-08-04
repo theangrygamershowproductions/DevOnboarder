@@ -39,7 +39,11 @@ jobs:
                   if outdated:
                       Path('outdated.json').write_text(json.dumps(outdated, indent=2))
                   PY
-                  if [ -f outdated.json ]; then echo "has_outdated=true" >> "$GITHUB_OUTPUT"; else echo "has_outdated=false" >> "$GITHUB_OUTPUT"; fi
+                  if [ -f "outdated_dependencies.txt" ] && [ -s "outdated_dependencies.txt" ]; then
+                      printf "has_outdated=true\n" >> "$GITHUB_OUTPUT"
+                  else
+                      printf "has_outdated=false\n" >> "$GITHUB_OUTPUT"
+                  fi
             - name: Escalate outdated entries
               if: steps.check.outputs.has_outdated == 'true'
               env:

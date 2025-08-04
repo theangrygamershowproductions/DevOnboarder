@@ -1,4 +1,9 @@
 ---
+agent: ci-root-artifact-guard
+purpose: Prevents repository pollution by enforcing clean root directory hygiene in CI/CD pipeline
+trigger: pre-commit run, CI hygiene scan, file detected in repo root matching artifact patterns
+environment: CI
+permissions: ["repo:read", "repo:write", "workflows:write"]
 codex_scope: tags
 codex_role: ci_root_artifact_guard
 codex_type: agent

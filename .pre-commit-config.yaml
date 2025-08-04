@@ -35,6 +35,14 @@ repos:
           - id: markdownlint-cli2
     - repo: local
       hooks:
+          - id: terminal-output-policy
+            name: Terminal Output Policy Enforcement
+            entry: scripts/validate_terminal_output_simple.sh
+            language: script
+            files: \.github/workflows/.*\.ya?ml$
+            stages: [pre-commit]
+            always_run: false
+            pass_filenames: false
           - id: enforce-no-root-artifacts
             name: Root Artifact Guard
             entry: scripts/enforce_output_location.sh

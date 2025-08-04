@@ -145,8 +145,8 @@ jobs:
               run: |
                   python -m venv .venv
                   source .venv/bin/activate
-                  echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-                  echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
+                  printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
             - name: Install dev dependencies
               run: |
                   source .venv/bin/activate
@@ -204,8 +204,8 @@ jobs:
               run: |
                   if [ ! -f "PR_SUMMARY.md" ]; then
                       echo "::error::PR_SUMMARY.md is required for all pull requests"
-                      echo "💡 Use the template: .github/PR_SUMMARY_TEMPLATE.md"
-                      echo "📋 Copy: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
+                      echo "TIP: Use the template: .github/PR_SUMMARY_TEMPLATE.md"
+                      echo "COPY: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
                       exit 1
                   fi
 
@@ -216,10 +216,10 @@ jobs:
               run: |
                   # Run comprehensive 95% QC validation
                   if [[ -x "./scripts/qc_pre_push.sh" ]]; then
-                      echo "🔍 Running 95% Quality Control validation..."
+                      echo "RUNNING: 95% Quality Control validation..."
                       ./scripts/qc_pre_push.sh
                   else
-                      echo "⚠️  QC script not found, skipping comprehensive validation"
+                      echo "WARNING: QC script not found, skipping comprehensive validation"
                   fi
             - name: Generate OpenAPI spec
               run: |
@@ -244,9 +244,9 @@ jobs:
 
                   try:
                       validate_spec(spec)
-                      print('✅ OpenAPI spec is valid')
+                      print('PASS: OpenAPI spec is valid')
                   except Exception as e:
-                      print(f'❌ OpenAPI spec validation failed: {e}')
+                      print(f'FAIL: OpenAPI spec validation failed: {e}')
                       exit(1)
                   "
             - name: Alembic migration lint
@@ -514,14 +514,14 @@ jobs:
                               git push https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
                                   echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
                                   git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
-                                      echo "❌ All git push attempts failed - coverage badge will be uploaded as artifact"
+                                      echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
                                       exit 1  # Trigger failure condition for artifact upload
                                   }
                               }
                           else
                               echo "Using GITHUB_TOKEN for push..."
                               git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
-                                  echo "❌ GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
+                                  echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
                                   exit 1  # Trigger failure condition for artifact upload
                               }
                           fi
@@ -544,9 +544,9 @@ jobs:
             - name: Post-success log cleanup
               if: success()
               run: |
-                  echo "🎉 CI completed successfully - smart cleaning temporary artifacts"
+                  echo "CI completed successfully - smart cleaning temporary artifacts"
                   bash scripts/manage_logs.sh smart-clean
-                  echo "✅ Temporary artifacts cleaned, important logs preserved for next run"
+                  echo "SUCCESS: Temporary artifacts cleaned, important logs preserved for next run"
 
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
@@ -580,7 +580,7 @@ jobs:
                       echo "::warning::GitHub CLI authentication failed. Skipping PR labeling."
                       exit 0
                   fi
-                  if ! "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "🚧 Codex"; then
+                  if ! "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "Codex"; then
                       echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
                   fi
               env:
@@ -656,7 +656,8 @@ jobs:
                   # Check if we have sufficient permissions
                   if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
                       echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
-                      echo "Auth check output: $gh_bin_check" | tee -a gh_cli.log
+                      echo "Auth check output:" | tee -a gh_cli.log
+                      printf "%s\n" "$gh_bin_check" | tee -a gh_cli.log
                       exit 0
                   fi
 
@@ -664,9 +665,11 @@ jobs:
                   ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
                   if [ -f "$ISSUE_FILE" ]; then
                       ISSUE=$(cat "$ISSUE_FILE")
-                      echo "Using saved issue number $ISSUE" | tee -a gh_cli.log
+                      echo "Using saved issue number:" | tee -a gh_cli.log
+                      printf "%s\n" "$ISSUE" | tee -a gh_cli.log
                       if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
-                          echo "::warning::Failed to comment on issue $ISSUE. Continuing without issue update."
+                          echo "Failed to comment on issue. Continuing without issue update." | tee -a gh_cli.log
+                          echo "::warning::Failed to comment on issue ${ISSUE}. Continuing without issue update."
                       fi
                   else
                       echo "Searching for existing issue" | tee -a gh_cli.log
@@ -674,7 +677,8 @@ jobs:
                           ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
                           if [ -n "$ISSUE" ]; then
                               if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
-                                  echo "::warning::Failed to comment on existing issue $ISSUE"
+                                  echo "Failed to comment on existing issue" | tee -a gh_cli.log
+                                  echo "::warning::Failed to comment on existing issue ${ISSUE}"
                               fi
                           else
                               if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
@@ -717,10 +721,12 @@ jobs:
                       for ISSUE in $ISSUES; do
                         if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
                             if ! "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log; then
-                                echo "::warning::Failed to comment on issue $ISSUE during closure"
+                                echo "Failed to comment on issue during closure" | tee -a gh_cli.log
+                                echo "::warning::Failed to comment on issue ${ISSUE} during closure"
                             fi
                             if ! "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log; then
-                                echo "::warning::Failed to close issue $ISSUE"
+                                echo "Failed to close issue" | tee -a gh_cli.log
+                                echo "::warning::Failed to close issue ${ISSUE}"
                             fi
                         fi
                       done
