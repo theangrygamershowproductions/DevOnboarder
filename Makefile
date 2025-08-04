@@ -37,12 +37,12 @@ aar-generate:
 		echo "Usage: make aar-generate WORKFLOW_ID=12345"; \
 		echo "Alternative: make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true"; \
 	else \
-		if [ -f .env ]; then set -a; source .env; set +a; fi && source .venv/bin/activate && python scripts/generate_aar.py --workflow-run-id $(WORKFLOW_ID) $(if $(CREATE_ISSUE),--create-issue); \
+		bash -c 'if [ -f .env ]; then set -a; source .env; set +a; fi && source .venv/bin/activate && python scripts/generate_aar.py --workflow-run-id $(WORKFLOW_ID) $(if $(CREATE_ISSUE),--create-issue)'; \
 	fi
 
 aar-validate:
 	@echo "Validating AAR templates for markdown compliance..."
-	@if [ -f .env ]; then set -a; source .env; set +a; fi && source .venv/bin/activate && python scripts/validate_templates.py
+	@bash -c 'if [ -f .env ]; then set -a; source .env; set +a; fi && source .venv/bin/activate && python scripts/validate_templates.py'
 	@echo "AAR validation complete"
 
 aar-env-template:

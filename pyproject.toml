@@ -129,3 +129,14 @@ exclude = [
     ".venv/",
     "__pycache__/"
 ]
+# Configuration from legacy mypy.ini to maintain compatibility
+ignore_missing_imports = true
+pretty = true
+disable_error_code = ["misc", "valid-type", "str-bytes-safe"]
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true

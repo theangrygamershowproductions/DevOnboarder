@@ -13,7 +13,7 @@ if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
         # shellcheck source=/dev/null
         source .venv/bin/activate
     else
-        echo "❌ Virtual environment not found. Run: python -m venv .venv && source .venv/bin/activate"
+        echo "FAILED: Virtual environment not found. Run: python -m venv .venv && source .venv/bin/activate"
         exit 1
     fi
 fi
@@ -25,36 +25,38 @@ declare -a FAILURES=()
 # 1. YAML Linting
 echo "📋 Checking YAML files..."
 if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
-    CHECKS+=("✅ YAML lint")
+    CHECKS+=("SUCCESS: YAML lint")
 else
-    CHECKS+=("❌ YAML lint")
+    CHECKS+=("FAILED: YAML lint")
     FAILURES+=("YAML files have linting errors")
 fi
 
 # 2. Python Code Quality
 echo "🐍 Checking Python code quality..."
 if python -m ruff check . --quiet 2>/dev/null; then
-    CHECKS+=("✅ Ruff lint")
+    CHECKS+=("SUCCESS: Ruff lint")
 else
-    CHECKS+=("❌ Ruff lint")
+    CHECKS+=("FAILED: Ruff lint")
     FAILURES+=("Python code has linting errors")
 fi
 
 # 3. Python Formatting
 echo "🖤 Checking Python formatting..."
 if python -m black --check . --quiet 2>/dev/null; then
-    CHECKS+=("✅ Black format")
+    CHECKS+=("SUCCESS: Black format")
 else
-    CHECKS+=("❌ Black format")
+    CHECKS+=("FAILED: Black format")
     FAILURES+=("Python code formatting issues")
 fi
 
 # 4. Type Checking
-echo "🔤 Checking type hints..."
+echo "Type checking with MyPy..."
+export MYPY_CACHE_DIR="logs/.mypy_cache"
+mkdir -p logs/.mypy_cache
 if python -m mypy src/devonboarder 2>/dev/null; then
-    CHECKS+=("✅ MyPy types")
+    CHECKS+=("SUCCESS: MyPy types")
 else
-    CHECKS+=("❌ MyPy types")
+    CHECKS+=("FAILED: MyPy types")
     FAILURES+=("Type checking errors")
 fi
 
@@ -62,9 +64,9 @@ fi
 if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     echo "🧪 Checking test coverage..."
     if python -m pytest --cov=src --cov-fail-under=95 --quiet 2>/dev/null; then
-        CHECKS+=("✅ Test coverage ≥95%")
+        CHECKS+=("SUCCESS: Test coverage ≥95%")
     else
-        CHECKS+=("❌ Test coverage <95%")
+        CHECKS+=("FAILED: Test coverage <95%")
         FAILURES+=("Test coverage below 95%")
     fi
 fi
@@ -73,40 +75,40 @@ fi
 echo "📚 Checking documentation..."
 if [[ -x "scripts/check_docs.sh" ]]; then
     if bash scripts/check_docs.sh >/dev/null 2>&1; then
-        CHECKS+=("✅ Documentation")
+        CHECKS+=("SUCCESS: Documentation")
     else
-        CHECKS+=("❌ Documentation")
+        CHECKS+=("FAILED: Documentation")
         FAILURES+=("Documentation quality issues")
     fi
 else
-    CHECKS+=("⚠️  Documentation check skipped")
+    CHECKS+=("WARNING:  Documentation check skipped")
 fi
 
 # 7. Commit Message Quality
 echo "📝 Checking commit messages..."
 if bash scripts/check_commit_messages.sh >/dev/null 2>&1; then
-    CHECKS+=("✅ Commit messages")
+    CHECKS+=("SUCCESS: Commit messages")
 else
-    CHECKS+=("❌ Commit messages")
+    CHECKS+=("FAILED: Commit messages")
     FAILURES+=("Commit message format issues")
 fi
 
 # 8. Security Scan
 echo "🔒 Running security scan..."
 if python -m bandit -r src -ll --quiet 2>/dev/null; then
-    CHECKS+=("✅ Security scan")
+    CHECKS+=("SUCCESS: Security scan")
 else
-    CHECKS+=("❌ Security scan")
+    CHECKS+=("FAILED: Security scan")
     FAILURES+=("Security vulnerabilities detected")
 fi
 
 # Calculate success rate
 TOTAL_CHECKS=${#CHECKS[@]}
-SUCCESS_COUNT=$(printf '%s\n' "${CHECKS[@]}" | grep -c "✅" || echo "0")
+SUCCESS_COUNT=$(printf '%s\n' "${CHECKS[@]}" | grep -c "SUCCESS:" || echo "0")
 PERCENTAGE=$((SUCCESS_COUNT * 100 / TOTAL_CHECKS))
 
 echo ""
-echo "📊 QC Results Summary:"
+echo "SUMMARY: QC Results Summary:"
 echo "======================"
 for check in "${CHECKS[@]}"; do
     echo "$check"
@@ -117,11 +119,11 @@ echo "📈 Quality Score: $SUCCESS_COUNT/$TOTAL_CHECKS ($PERCENTAGE%)"
 
 # Check if we meet 95% threshold
 if [[ $PERCENTAGE -ge 95 ]]; then
-    echo "✅ PASS: Quality score meets 95% threshold"
+    echo "SUCCESS: PASS: Quality score meets 95% threshold"
     echo "🚀 Ready to push!"
     exit 0
 else
-    echo "❌ FAIL: Quality score below 95% threshold"
+    echo "FAILED: FAIL: Quality score below 95% threshold"
     echo ""
     echo "🔧 Issues to fix:"
     for failure in "${FAILURES[@]}"; do
