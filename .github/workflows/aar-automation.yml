@@ -121,13 +121,13 @@ jobs:
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              AAR_REF="${{ github.event.issue.number }}"
+              echo "DOCS(aar): add after actions report for ${{ github.event.issue.number }}" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              AAR_REF="PR#${{ github.event.pull_request.number }}"
+              echo "DOCS(aar): add after actions report for PR#${{ github.event.pull_request.number }}" > commit_msg.txt
             else
-              AAR_REF="${{ github.event.inputs.aar_type }}"
+              echo "DOCS(aar): add after actions report for ${{ github.event.inputs.aar_type }}" > commit_msg.txt
             fi
-            git commit -m "DOCS(aar): add after actions report for ${AAR_REF}"
+            git commit -F commit_msg.txt
             git push
           fi
 

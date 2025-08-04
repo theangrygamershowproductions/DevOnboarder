@@ -43,16 +43,16 @@ jobs:
         if: always()
         run: |
           echo "Terminal Output Policy Enforcement Report" > logs/enforcement_report.txt
-          CURRENT_DATE=$(date)
-          echo "Date: ${CURRENT_DATE}" >> logs/enforcement_report.txt
-          REPO_NAME="${{ github.repository }}"
-          echo "Repository: ${REPO_NAME}" >> logs/enforcement_report.txt
-          BRANCH_NAME="${{ github.ref_name }}"
-          echo "Branch: ${BRANCH_NAME}" >> logs/enforcement_report.txt
-          COMMIT_SHA="${{ github.sha }}"
-          echo "Commit: ${COMMIT_SHA}" >> logs/enforcement_report.txt
-          JOB_STATUS="${{ job.status }}"
-          echo "Status: ${JOB_STATUS}" >> logs/enforcement_report.txt
+          echo "Date:" >> logs/enforcement_report.txt
+          date >> logs/enforcement_report.txt
+          echo "Repository:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.repository }}" >> logs/enforcement_report.txt
+          echo "Branch:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.ref_name }}" >> logs/enforcement_report.txt
+          echo "Commit:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.sha }}" >> logs/enforcement_report.txt
+          echo "Status:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ job.status }}" >> logs/enforcement_report.txt
 
       - name: Upload enforcement report
         if: always()
@@ -68,21 +68,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Creating violation report for PR"
-          cat > violation_comment.md << 'EOF'
-          **CRITICAL: Terminal Output Policy Violations Detected**
 
-          This PR contains terminal output patterns that WILL cause immediate system hanging in DevOnboarder.
-
-          **Required Actions:**
-          1. Fix ALL violations before merge
-          2. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md
-          3. Use only individual echo commands with plain ASCII text
-          4. No emojis, command substitution, or variable expansion in echo
-
-          **Zero Tolerance Policy:** These violations cause real system failures.
-
-          Download the enforcement report artifact for detailed violation locations.
-          EOF
+          # Create violation comment using safe file approach
+          echo "**CRITICAL: Terminal Output Policy Violations Detected**" > violation_comment.md
+          echo "" >> violation_comment.md
+          echo "This PR contains terminal output patterns that WILL cause immediate system hanging in DevOnboarder." >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "**Required Actions:**" >> violation_comment.md
+          echo "1. Fix ALL violations before merge" >> violation_comment.md
+          echo "2. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md" >> violation_comment.md
+          echo "3. Use only individual echo commands with plain ASCII text" >> violation_comment.md
+          echo "4. No emojis, command substitution, or variable expansion in echo" >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "**Zero Tolerance Policy:** These violations cause real system failures." >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "Download the enforcement report artifact for detailed violation locations." >> violation_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file violation_comment.md
 
@@ -92,22 +92,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Creating enforcement issue for main branch violation"
-          cat > issue_body.md << 'EOF'
-          **CRITICAL: Terminal Output Policy Violations in Main Branch**
 
-          Terminal output policy violations have been detected in main branch workflows.
-          These violations WILL cause system hanging and must be fixed immediately.
-
-          **Commit:** ${{ github.sha }}
-          **Author:** ${{ github.event.head_commit.author.name }}
-
-          **Required Actions:**
-          1. Identify and fix ALL violations
-          2. Follow patterns in docs/TERMINAL_OUTPUT_VIOLATIONS.md
-          3. Run validation: `bash scripts/validate_terminal_output.sh`
-          4. Verify fixes with clean testing
-
-          **Download the enforcement report artifact for violation details.**
-          EOF
+          # Create issue body using safe file approach
+          echo "**CRITICAL: Terminal Output Policy Violations in Main Branch**" > issue_body.md
+          echo "" >> issue_body.md
+          echo "Terminal output policy violations have been detected in main branch workflows." >> issue_body.md
+          echo "These violations WILL cause system hanging and must be fixed immediately." >> issue_body.md
+          echo "" >> issue_body.md
+          printf "**Commit:** %s\n" "${{ github.sha }}" >> issue_body.md
+          printf "**Author:** %s\n" "${{ github.event.head_commit.author.name }}" >> issue_body.md
+          echo "" >> issue_body.md
+          echo "**Required Actions:**" >> issue_body.md
+          echo "1. Identify and fix ALL violations" >> issue_body.md
+          echo "2. Follow patterns in docs/TERMINAL_OUTPUT_VIOLATIONS.md" >> issue_body.md
+          echo "3. Run validation: bash scripts/validate_terminal_output.sh" >> issue_body.md
+          echo "4. Verify fixes with clean testing" >> issue_body.md
+          echo "" >> issue_body.md
+          echo "**Download the enforcement report artifact for violation details.**" >> issue_body.md
 
           gh issue create --title "CRITICAL: Terminal Output Policy Violations - ${{ github.sha }}" --body-file issue_body.md --label "terminal-policy-violation,critical"

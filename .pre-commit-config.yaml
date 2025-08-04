@@ -37,7 +37,7 @@ repos:
       hooks:
           - id: terminal-output-policy
             name: Terminal Output Policy Enforcement
-            entry: scripts/validate_terminal_output.sh
+            entry: scripts/validate_terminal_output_simple.sh
             language: script
             files: \.github/workflows/.*\.ya?ml$
             stages: [pre-commit]

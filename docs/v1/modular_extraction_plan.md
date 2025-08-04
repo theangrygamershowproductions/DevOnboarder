@@ -159,9 +159,28 @@ If extraction causes issues:
 
 ---
 
+## 🔗 GitHub Issue Tracking
+
+**Phase 2 DevOnboarder Readiness Issues**:
+
+- **Security Token Rotation**: [#1062](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1062)
+    - Comprehensive security token rotation infrastructure
+    - GitHub, Discord, Database, and JWT credential management
+    - Complete validation framework ready for execution
+
+- **Modular Repository Extraction**: [#1063](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1063)
+    - Discord bot and frontend component separation
+    - Repository creation and standalone deployment
+    - Cross-service integration testing
+
+- **Agent Certification System**: [#1064](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1064)
+    - Codex agent validation and reindexing
+    - Bot permissions verification
+    - Automation system certification
+
 **Next Actions**:
 
-1. Create target repositories
-2. Begin bot extraction process
-3. Update Docker configurations
-4. Test standalone builds
+1. Execute token rotation (Issue #1062) - **PRIORITY: Complete first**
+2. Create target repositories and begin extraction (Issue #1063)
+3. Complete agent certification (Issue #1064) - **Can run in parallel**
+4. Validate full system integration across all repositories

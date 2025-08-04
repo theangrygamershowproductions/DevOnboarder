@@ -51,9 +51,10 @@ jobs:
                   RUN_EVENT: ${{ github.event.workflow_run.event }}
               run: |
                   # Safely get PR information without checking out untrusted code
-                  echo "head_sha=${HEAD_SHA}" >> $GITHUB_OUTPUT
-                  echo "head_branch=${HEAD_BRANCH}" >> $GITHUB_OUTPUT
-                  echo "Run triggered by: ${RUN_EVENT}"
+                  printf "head_sha=%s\n" "$HEAD_SHA" >> $GITHUB_OUTPUT
+                  printf "head_branch=%s\n" "$HEAD_BRANCH" >> $GITHUB_OUTPUT
+                  echo "Run triggered by:"
+                  printf "%s\n" "$RUN_EVENT"
             - name: Run yamllint
               run: |
                   pip install yamllint

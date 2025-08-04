@@ -228,49 +228,48 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 13. Check [docs/sample-pr.md](docs/sample-pr.md) for a small example update.
 14. Review [docs/first-pr-guide.md](docs/first-pr-guide.md) for a full pull request walkthrough.
 15. View the [docs/architecture.svg](docs/architecture.svg) diagram for an overview of our services.
-15. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
-    - The script automatically downloads Vale if it isn’t installed and
+16. Run `./scripts/check_docs.sh` to lint documentation with **Vale**.
+    - The script automatically downloads Vale if it isn't installed and
       prints a warning if the download fails. See
       [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
       for more details.
     - LanguageTool checks are optional; start a local server and set
       `LANGUAGETOOL_URL` to enable them.
-16. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
+17. Install the Vale CLI (version 3.12.0+) with `brew install vale` on macOS or
     `choco install vale` on Windows. You can also download it from the
     [Vale releases page](https://github.com/errata-ai/vale/releases).
     If the binary isn't in your `PATH`, set the `VALE_BINARY` environment variable
     and install the optional test dependencies with `pip install .[test]` so the
     documentation checks work locally.
-17. Browse the [agents overview](agents/index.md) for individual service specs.
+18. Browse the [agents overview](agents/index.md) for individual service specs.
     Codex reads the machine‑readable list in `.codex/agents/index.json` to
     coordinate automation across these agents.
-18. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
-19. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
-20. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
+19. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
+20. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
+21. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
     `.dockerignore`, and `.codespell-ignore`.
     See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
     For the security philosophy and origin story, see [docs/potato-policy-aar.md](docs/potato-policy-aar.md).
-21. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
+22. Review the [builder ethics dossier](docs/builder_ethics_dossier.md)
     outlining contributor ethics and a simple template.
-22. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
+23. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
     [AGENTS.md](AGENTS.md) for details.
-23. See [docs/network-exception-list.md](docs/network-exception-list.md)
+24. See [docs/network-exception-list.md](docs/network-exception-list.md)
     for required firewall domains. Run
     `scripts/show_network_exceptions.sh` to print them.
-24. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
+25. See [docs/ci-failure-issues.md](docs/ci-failure-issues.md)
     if CI automation fails to create or close `ci-failure` issues.
-25. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
+26. Review [docs/assessments/engineer_assessment_work_items.md](docs/assessments/engineer_assessment_work_items.md)
     and open an issue with the
     [Engineer Assessment template](.github/ISSUE_TEMPLATE/assessment.md)
     during onboarding reviews to ensure new features meet the checklist.
-26. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
+27. Read [docs/ecosystem.md](docs/ecosystem.md) for an overview of how the
     services interact inside the TAGS stack.
-27. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
+28. See [docs/tags_integration.md](docs/tags_integration.md) for TAGS setup
     steps and feature flag usage.
-
-28. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
-29. See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance, cleanup, and diagnostic tools reference.
+29. Review [docs/checklists/continuous-improvement.md](docs/checklists/continuous-improvement.md) for periodic retrospective tasks.
+30. See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance, cleanup, and diagnostic tools reference.
 
 These files expand on the steps listed in the Quickstart section.
 

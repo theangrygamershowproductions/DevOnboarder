@@ -83,7 +83,7 @@ jobs:
           # Find log files
           LOG_FILES=$(find logs/ci-analysis -name "*.txt" -o -name "*.log" | head -10)
           echo "Found log files:"
-          echo "$LOG_FILES"
+          printf "%s\n" "$LOG_FILES"
 
           if [ -z "$LOG_FILES" ]; then
           echo "No log files found, creating minimal analysis"
@@ -92,7 +92,7 @@ jobs:
           fi
 
           echo "log_files<<EOF" >> $GITHUB_OUTPUT
-          echo "$LOG_FILES" >> $GITHUB_OUTPUT
+          printf "%s\n" "$LOG_FILES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,7 +119,8 @@ jobs:
           if [ -n "${{ steps.download-logs.outputs.log_files }}" ]; then
           echo "${{ steps.download-logs.outputs.log_files }}" | while read -r log_file; do
           if [ -f "$log_file" ]; then
-          echo "Analyzing: $log_file"
+          echo "Analyzing:"
+          printf "%s\n" "$log_file"
           python scripts/enhanced_ci_failure_analyzer.py \
           "$log_file" \
           --output "$ANALYSIS_OUTPUT" \
@@ -180,7 +181,7 @@ jobs:
 
             const issueTitle = `CI Failure: ${primaryFailure?.type || 'Unknown'} in ${{ steps.workflow-info.outputs.workflow_name }}`;
             const issueBody = `
-            ## 🚨 CI Failure Analysis Report
+            ## CI Failure Analysis Report
 
             **Workflow**: ${{ steps.workflow-info.outputs.workflow_name }}
             **Run ID**: ${{ steps.workflow-info.outputs.run_id }}
@@ -188,7 +189,7 @@ jobs:
             **Commit**: ${{ github.sha }}
             **Analysis Date**: ${ciAnalysis.analysis.timestamp}
 
-            ### 📊 Failure Summary
+            ### Failure Summary
 
             - **Primary Failure Type**: ${primaryFailure?.type || 'Unknown'}
             - **Severity**: ${primaryFailure?.severity || 'Unknown'}
@@ -196,18 +197,18 @@ jobs:
             - **Confidence Score**: ${(ciAnalysis.analysis.confidence_score * 100).toFixed(1)}%
             - **Auto-fixable**: ${ciAnalysis.analysis.auto_fixable ? 'Yes' : 'No'}
 
-            ### 🔧 Recommended Resolution
+            ### Recommended Resolution
 
             ${ciAnalysis.resolution_plan?.description || 'Manual investigation required'}
 
             ${ciAnalysis.resolution_plan?.command ?
               \`**Command**: \\\`${ciAnalysis.resolution_plan.command}\\\`\` : ''}
 
-            ### 📝 Next Steps
+            ### Next Steps
 
             ${ciAnalysis.resolution_plan?.next_steps?.map(step => \`- ${step}\`).join('\\n') || '- Manual investigation required'}
 
-            ### 🔗 Links
+            ### Links
 
             - [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ steps.workflow-info.outputs.run_id }})
             - [Analysis Artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
@@ -257,10 +258,10 @@ jobs:
             }
 
             const prNumber = pulls.data[0].number;
-            const autoFixStatus = ciAnalysis.analysis.auto_fixable ? '🔧 Auto-fixable' : '⚠️ Manual intervention required';
+            const autoFixStatus = ciAnalysis.analysis.auto_fixable ? 'Auto-fixable' : 'Manual intervention required';
 
             const commentBody = \`
-            ## 🤖 CI Failure Analysis
+            ## CI Failure Analysis
 
             **Status**: ${autoFixStatus}
             **Failure Type**: ${primaryFailure?.type || 'Unknown'}
@@ -270,7 +271,7 @@ jobs:
               \`**Suggested Fix**: \\\`${ciAnalysis.resolution_plan?.command || 'See analysis for details'}\\\`\` :
               '**Action Required**: Manual investigation needed - see analysis report for details'}
 
-            [📊 View detailed analysis](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [View detailed analysis](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             *Analysis by Enhanced CI Failure Analyzer v1.0*
             \`;

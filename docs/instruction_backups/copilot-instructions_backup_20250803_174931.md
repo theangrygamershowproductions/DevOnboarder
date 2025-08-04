@@ -6,92 +6,9 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
 
-## ⚠️ CRITICAL: Terminal Output Policy - ZERO TOLERANCE
+## CRITICAL TERMINAL OUTPUT WARNING
 
-**TERMINAL HANGING PREVENTION - ABSOLUTE REQUIREMENTS:**
-
-DevOnboarder has a **ZERO TOLERANCE POLICY** for terminal output violations that cause immediate system hanging. This policy is enforced with comprehensive validation and blocking mechanisms.
-
-### CRITICAL VIOLATIONS THAT CAUSE HANGING
-
-```bash
-# ❌ FORBIDDEN - WILL CAUSE IMMEDIATE HANGING
-echo "✅ Task completed"              # Emojis cause hanging
-echo "🚀 Deployment successful"       # Unicode causes hanging
-echo "📋 Checklist: $(get_items)"    # Command substitution in echo
-echo -e "Line1\nLine2\nLine3"        # Multi-line escape sequences
-cat << 'EOF'                         # Here-doc patterns
-Multi-line content
-EOF
-
-# ❌ FORBIDDEN - Variable expansion in echo
-echo "Status: $STATUS_VAR"           # Variable expansion causes hanging
-echo "Files: ${FILE_COUNT}"          # Variable expansion causes hanging
-echo "Result: $(command_output)"     # Command substitution causes hanging
-```
-
-### SAFE PATTERNS - MANDATORY USAGE
-
-```bash
-# ✅ REQUIRED - Individual echo commands with plain ASCII only
-echo "Task completed successfully"
-echo "Deployment finished"
-echo "Processing file"
-echo "Operation complete"
-
-# ✅ REQUIRED - Variable handling with printf
-printf "Status: %s\n" "$STATUS_VAR"
-printf "Files processed: %d\n" "$FILE_COUNT"
-
-# ✅ REQUIRED - Store command output first, then echo
-RESULT=$(command_here)
-echo "Command completed"
-printf "Result: %s\n" "$RESULT"
-```
-
-### ENFORCEMENT INFRASTRUCTURE
-
-**Validation Framework:**
-
-- **Script**: `scripts/validate_terminal_output.sh` - Detects all violations
-- **Summary**: `scripts/validation_summary.sh` - Clean reporting format
-- **Pre-commit**: Blocks commits with terminal violations
-- **CI Enforcement**: Multiple workflows validate terminal output
-
-**Phased Cleanup System:**
-
-- **Task Plan**: `codex/tasks/terminal-output-cleanup-phases.md`
-- **Phase 1**: Critical Infrastructure (≤20 violations target)
-- **Phase 2**: Build & Deployment (≤12 violations target)
-- **Phase 3**: Monitoring & Automation (≤6 violations target)
-- **Phase 4**: Documentation & Policy (0 violations target)
-
-**Progress Tracking:**
-
-- Started: 32 violations (August 2025)
-- Current: 22 violations (31% reduction achieved)
-- Target: 0 violations
-- **Current Phase**: Phase 2 (Terminal Output Compliance & Deployment Visibility) - targeting ≤10 violations
-- **Active Plan**: `codex/tasks/phase2_terminal_output_compliance.md` (Canonical Phase 2)
-- **Branch Context**: `phase2/devonboarder-readiness`
-
-### AGENT REQUIREMENTS - MANDATORY COMPLIANCE
-
-**For ALL AI agents working on DevOnboarder:**
-
-1. **NEVER use emojis or Unicode** in any terminal output commands
-2. **NEVER use variable expansion** in echo statements (`echo "$VAR"`)
-3. **NEVER use command substitution** in echo statements (`echo "$(cmd)"`)
-4. **NEVER use multi-line echo** or here-doc syntax
-5. **ALWAYS use individual echo commands** with plain ASCII text only
-6. **ALWAYS use printf for variables**: `printf "text: %s\n" "$VAR"`
-7. **REMEMBER**: Terminal hanging is a CRITICAL FAILURE in DevOnboarder
-
-**Policy Documentation:**
-
-- **Comprehensive Guide**: `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
-- **AI Override Instructions**: `docs/AI_AGENT_TERMINAL_OVERRIDE.md`
-- **Troubleshooting**: `docs/MARKDOWN_LINTING_TROUBLESHOOTING.md`
+**ZERO TOLERANCE POLICY: Never use emojis, Unicode characters, or special formatting in terminal output commands. This WILL cause immediate terminal hanging in DevOnboarder environment. Use only plain ASCII text with individual echo commands.**
 
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
@@ -191,20 +108,6 @@ pip install -e .[test]
 
 ## Architecture & Technology Stack
 
-### TAGS Stack Integration
-
-DevOnboarder is part of the TAGS platform with orchestrated microservices:
-
-| Service             | Description                               | Port |
-| ------------------- | ----------------------------------------- | ---- |
-| Auth Server         | Provides Discord OAuth and JWT issuance   | 8002 |
-| XP API              | Tracks onboarding progress and experience | 8001 |
-| Integration Service | Handles Discord role syncing              | 8081 |
-| Dashboard Service   | CI troubleshooting and script execution   | 8003 |
-| DevOnboarder Server | Greeting and status endpoints             | 8000 |
-
-All services depend on shared PostgreSQL database (port 5432) and use consistent patterns.
-
 ### Core Services
 
 - **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
@@ -212,15 +115,7 @@ All services depend on shared PostgreSQL database (port 5432) and use consistent
 - **Frontend**: React + Vite + TypeScript (Port 8081)
 - **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
 - **XP System**: Gamification API with user levels and contributions tracking
-- **Dashboard Service**: FastAPI script execution and CI troubleshooting (Port 8003)
-- **Discord Integration**: OAuth linking and role management (Port 8081)
-- **Feedback Service**: User feedback collection and analytics
 - **Database**: PostgreSQL (production), SQLite (development)
-
-### Multi-Environment Setup
-
-- **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
-- **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
 
 ### Service Discovery Pattern
 
@@ -246,16 +141,33 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 ```
 
-### Language Version Requirements
+### Multi-Environment Setup
 
-DevOnboarder enforces specific language versions via `.tool-versions`:
+- **Development**: `TAGS: DevOnboarder` (Guild ID: 1386935663139749998)
+- **Production**: `TAGS: C2C` (Guild ID: 1065367728992571444)
 
-- **Python**: 3.12 (MANDATORY - tests only run on 3.12)
-- **Node.js**: 22
-- **Ruby**: 3.2.3, **Rust**: 1.88.0, **Go**: 1.24.4
-- **Bun**: 1.2.14, **Java**: 21, **Swift**: 6.1
+### Service Integration Pattern
 
-Install with `mise install` or `asdf install` to match exactly.
+All services follow the same FastAPI pattern:
+
+- **Health checks**: `/health` endpoint returning `{"status": "ok"}`
+- **CORS middleware**: Configured via `get_cors_origins()` utility
+- **Security headers**: Custom middleware adds `X-Content-Type-Options: nosniff`
+- **JWT authentication**: Shared auth service for user sessions
+
+```python
+# Standard service creation pattern
+def create_app() -> FastAPI:
+    app = FastAPI()
+    cors_origins = get_cors_origins()
+
+    app.add_middleware(CORSMiddleware, allow_origins=cors_origins, ...)
+    app.add_middleware(_SecurityHeadersMiddleware)
+
+    @app.get("/health")
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+```
 
 ## Development Guidelines
 
@@ -264,58 +176,17 @@ Install with `mise install` or `asdf install` to match exactly.
 **Before ANY development work:**
 
 ```bash
-# 1. Create feature branch from main
-git checkout main
-git pull origin main
-git checkout -b feat/descriptive-feature-name
-
-# 2. Activate virtual environment
+# 1. Activate virtual environment
 source .venv/bin/activate
 
-# 3. Verify you're in venv
+# 2. Verify you're in venv
 which python  # Should show .venv path
 which pip     # Should show .venv path
 
-# 4. Install dependencies
+# 3. Install dependencies
 pip install -e .[test]
 npm ci --prefix bot
 npm ci --prefix frontend
-
-# 5. CRITICAL: Run QC validation before any work
-./scripts/qc_pre_push.sh  # 95% quality threshold
-```
-
-**Branch Naming Conventions:**
-
-- `feat/feature-description` - New features
-- `fix/bug-description` - Bug fixes
-- `docs/update-description` - Documentation changes
-- `refactor/component-name` - Code refactoring
-- `test/test-description` - Test improvements
-- `chore/maintenance-task` - Maintenance tasks
-
-**Essential Development Commands**:
-
-```bash
-# Development workflow
-make deps && make up              # Build and start all services
-make test                         # Run comprehensive test suite
-make aar-setup                    # Set up CI failure analysis
-./scripts/run_tests.sh           # Alternative test runner with hints
-
-# Quality control (MANDATORY before push)
-./scripts/qc_pre_push.sh         # Validates 8 quality metrics
-source .venv/bin/activate        # Always activate venv first
-
-# Service APIs (individual service testing)
-devonboarder-api         # Start main API (port 8001)
-devonboarder-auth        # Start auth service (port 8002)
-devonboarder-integration # Start Discord integration (port 8081)
-
-# Optional CLI shortcuts (if .zshrc integration enabled)
-devonboarder-activate            # Auto-setup environment
-gh-dashboard                     # View comprehensive status
-gh-ci-health                     # Quick CI check
 ```
 
 ### 2. Centralized Logging Policy - MANDATORY
@@ -605,32 +476,6 @@ def greet(name: str) -> str:
 
 ### 4. Testing Requirements
 
-#### ⚠️ CRITICAL: 95% Quality Control Rule
-
-**ALL changes must pass comprehensive QC validation before merging**:
-
-```bash
-# MANDATORY: Activate virtual environment first
-source .venv/bin/activate
-
-# Run comprehensive QC checks
-./scripts/qc_pre_push.sh
-
-# Only push if 95% threshold is met
-git push
-```
-
-**QC Validation Checklist (8 Critical Metrics)**:
-
-1. **YAML Linting** - Configuration file validation
-2. **Python Linting** - Code quality with Ruff
-3. **Python Formatting** - Black code formatting
-4. **Type Checking** - MyPy static analysis
-5. **Test Coverage** - Minimum 95% coverage requirement
-6. **Documentation Quality** - Vale documentation linting
-7. **Commit Messages** - Conventional commit format
-8. **Security Scanning** - Bandit security analysis
-
 #### Coverage Thresholds
 
 - **Python backend**: 96%+ (enforced in CI)
@@ -650,12 +495,6 @@ npm ci --prefix frontend   # Install frontend deps
 python -m pytest --cov=src --cov-fail-under=95
 npm run coverage --prefix bot
 npm run coverage --prefix frontend
-
-# Alternative: Use project test runner with hints
-./scripts/run_tests.sh
-
-# Quality Control: MANDATORY before push (95% threshold)
-./scripts/qc_pre_push.sh
 ```
 
 **Test Pattern**: The `scripts/run_tests.sh` automatically detects `ModuleNotFoundError` and provides installation hints if dependencies are missing.
@@ -714,21 +553,14 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ```text
 ├── .venv/                     # Python virtual environment (NEVER commit)
 ├── src/devonboarder/          # Python backend application
-├── src/xp/                    # XP/gamification service
-├── src/discord_integration/   # Discord OAuth and role management service
-├── src/feedback_service/      # User feedback collection service
-├── src/llama2_agile_helper/   # LLM integration service
-├── src/routes/                # Additional API routes
-├── src/utils/                 # Shared utilities (CORS, Discord, roles)
 ├── bot/                       # Discord bot (TypeScript)
 ├── frontend/                  # React application
 ├── auth/                      # Authentication service
 ├── tests/                     # Test suites
 ├── docs/                      # Documentation
-├── scripts/                   # Automation scripts (100+ scripts)
+├── scripts/                   # Automation scripts
 ├── .github/workflows/         # GitHub Actions (22+ workflows)
 ├── config/                    # Configuration files
-├── codex/                     # Agent documentation and tasks
 └── plugins/                   # Optional Python extensions
 ```
 
@@ -738,10 +570,9 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 - `package.json`: Node.js dependencies (bot & frontend)
 - `docker-compose.ci.yaml`: CI pipeline configuration
 - `config/devonboarder.config.yml`: Application configuration
-- `.tool-versions`: Environment version requirements (Python 3.12, Node.js 22)
+- `.tool-versions`: Environment version requirements
 - `.env.ci`: CI-specific environment variables (auto-generated)
 - `schema/agent-schema.json`: JSON schema for agent validation
-- `Makefile`: Development targets (deps, up, test, openapi, AAR system)
 
 **CI Environment Pattern**:
 The project uses `.env.ci` for CI-specific settings that differ from development:
@@ -754,12 +585,6 @@ CI=true
 NODE_ENV=test
 PYTHON_ENV=test
 ```
-
-**Essential Development Tools**:
-
-- **AAR (After Action Report) System**: Automated CI failure analysis with `make aar-*` commands
-- **QC Pre-Push Script**: `./scripts/qc_pre_push.sh` validates 8 quality metrics (95% threshold)
-- **CLI Shortcuts**: Optional `.zshrc` integration with `devonboarder-activate`, `gh-dashboard`
 
 ## Service Integration Patterns
 
@@ -830,31 +655,6 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/manage_logs.sh`: Advanced log management system
 - `scripts/validate_agents.py`: Agent validation with JSON schema
 - `scripts/validate-bot-permissions.sh`: Bot permission verification
-- `scripts/qc_pre_push.sh`: 95% quality threshold validation (8 metrics)
-
-### AAR (After Action Report) System
-
-DevOnboarder includes a comprehensive AAR system for automated CI failure analysis:
-
-**Make Targets**:
-
-```bash
-make aar-env-template     # Create/update .env with AAR tokens
-make aar-setup           # Complete AAR system setup with validation
-make aar-check           # Validate AAR system status and configuration
-make aar-validate        # Check AAR templates for markdown compliance
-make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
-make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
-```
-
-**AAR Features**:
-
-- **Token Management**: Follows DevOnboarder No Default Token Policy v1.0
-- **Environment Loading**: Automatically loads `.env` variables
-- **Compliance Validation**: Ensures markdown standards (MD007, MD009, MD022, MD032)
-- **GitHub Integration**: Creates issues for CI failures when tokens configured
-- **Offline Mode**: Generates reports without tokens for local analysis
-- **Workflow Analysis**: Detailed failure analysis with logs and context
 
 ### Automation Ecosystem
 
@@ -929,25 +729,6 @@ All CI commands use proper virtual environment context:
 6. Test in development environment
 7. Submit PR with template checklist
 8. Ensure CI passes before merge
-
-### Key CLI Commands
-
-```bash
-# Service APIs (individual service testing)
-devonboarder-api         # Start main API (port 8001)
-devonboarder-auth        # Start auth service (port 8002)
-devonboarder-integration # Start Discord integration (port 8081)
-
-# Development workflow
-./scripts/run_tests.sh           # Test runner with dependency hints
-./scripts/qc_pre_push.sh         # 95% quality validation
-python -m diagnostics           # Verify environment and services
-
-# Optional CLI shortcuts (if enabled)
-devonboarder-activate   # Auto-setup environment
-gh-dashboard           # View comprehensive status
-gh-ci-health          # Quick CI check
-```
 
 ### 2. Bot Command Development
 
@@ -1029,15 +810,6 @@ def user_level(username: str, db: Session = Depends(auth_service.get_db)):
 def contribute(data: dict, current_user = Depends(auth_service.get_current_user)):
     # Award XP for contributions
 ```
-
-**Service Port Assignments**:
-
-- **Auth Service**: Port 8002 (`src/devonboarder/auth_service.py`)
-- **XP Service**: Port 8001 (`src/xp/api/__init__.py`)
-- **Discord Integration**: Port 8081 (`src/discord_integration/api.py`)
-- **Dashboard Service**: Port 8003 (`src/devonboarder/dashboard_service.py`)
-- **Frontend**: Port 8081 (React dev server)
-- **Bot**: No HTTP server (Discord client only)
 
 ## Quality Assurance Checklist
 
@@ -1326,7 +1098,7 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-03 (Terminal Policy Cleanup Progress - 22 violations remaining)
+**Last Updated**: 2025-07-28 (Enhanced with Agent Validation & Infrastructure Repair)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation

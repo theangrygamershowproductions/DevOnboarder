@@ -25,7 +25,6 @@ jobs:
           echo "Scanning PR for terminal output policy violations"
 
           VIOLATIONS=0
-          VIOLATION_DETAILS=""
 
           # Get changed workflow files
           git diff --name-only origin/main...HEAD | grep -E '\.github/workflows/.*\.ya?ml$' > changed_workflows.txt || true
@@ -35,31 +34,40 @@ jobs:
             cat changed_workflows.txt
 
             while IFS= read -r file; do
-              echo "Checking file: $file"
+              printf "Checking file: %s\n" "$file"
 
               # Check for emojis
-              if git diff origin/main...HEAD -- "$file" | grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' 2>/dev/null; then
+              if git diff origin/main...HEAD -- "$file" | grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|\x{2705}|\x{274C}|\x{1F6E0}|\x{1F4CA}|\x{1F4C8}|\x{1F4E5}|\x{1F517}|\x{1F41B}|\x{26A0}|\x{1F4A1}|\x{1F3AF}|\x{1F680}|\x{1F4CB}|\x{1F50D}|\x{1F4DD}' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
-                VIOLATION_DETAILS="$VIOLATION_DETAILS\n- Emoji/Unicode in $file (causes terminal hanging)"
+                printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file" >> violation_details.txt
               fi
 
               # Check for command substitution in echo
               if git diff origin/main...HEAD -- "$file" | grep -E 'echo.*\$\(' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
-                VIOLATION_DETAILS="$VIOLATION_DETAILS\n- Command substitution in echo in $file (causes terminal hanging)"
+                echo "- Command substitution in echo in $file (causes terminal hanging)" >> violation_details.txt
               fi
 
               # Check for variable expansion in echo
               if git diff origin/main...HEAD -- "$file" | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
-                VIOLATION_DETAILS="$VIOLATION_DETAILS\n- Variable expansion in echo in $file (can cause terminal hanging)"
+                echo "- Variable expansion in echo in $file (can cause terminal hanging)" >> violation_details.txt
               fi
 
             done < changed_workflows.txt
           fi
 
-          echo "violations=$VIOLATIONS" >> "$GITHUB_OUTPUT"
-          echo "details=$VIOLATION_DETAILS" >> "$GITHUB_OUTPUT"
+          # Output results to GitHub Actions
+          printf "violations=%s\n" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
+
+          # Output details to GitHub Actions
+          if [ -f violation_details.txt ]; then
+            printf "details=" >> "$GITHUB_OUTPUT"
+            cat violation_details.txt >> "$GITHUB_OUTPUT"
+            printf "\n" >> "$GITHUB_OUTPUT"
+          else
+            printf "details=\n" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Auto-reject PR for violations
         if: steps.violation-check.outputs.violations != '0'
@@ -68,28 +76,32 @@ jobs:
         run: |
           echo "BLOCKING PR: Terminal output policy violations detected"
 
-          cat > rejection_comment.md << 'EOF'
-          **🚫 AUTOMATED REJECTION: Terminal Output Policy Violations**
+          # Create rejection comment using safe file approach
+          echo "**AUTOMATED REJECTION: Terminal Output Policy Violations**" > rejection_comment.md
+          echo "" >> rejection_comment.md
+          echo "This PR has been automatically rejected due to critical terminal output violations that WILL cause system hanging." >> rejection_comment.md
+          echo "" >> rejection_comment.md
+          echo "**Violations Detected:**" >> rejection_comment.md
 
-          This PR has been automatically rejected due to critical terminal output violations that WILL cause system hanging.
+          # Safe violation details output - avoid multi-line expansion
+          if [ -f violation_details.txt ]; then
+            cat violation_details.txt >> rejection_comment.md
+          fi
 
-          **Violations Detected:**
-          ${{ steps.violation-check.outputs.details }}
-
-          **Required Before Re-submission:**
-          1. Remove ALL emojis from workflow files
-          2. Replace command substitution in echo with separate commands
-          3. Use individual echo statements with plain ASCII text only
-          4. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md for approved patterns
-          5. Run local validation: `bash scripts/validate_terminal_output.sh`
-
-          **Policy Reminder:** DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.
-
-          **Next Steps:**
-          - Fix all violations
-          - Validate locally with the enforcement script
-          - Push updates to trigger re-review
-          EOF
+          echo "" >> rejection_comment.md
+          echo "**Required Before Re-submission:**" >> rejection_comment.md
+          echo "1. Remove ALL emojis from workflow files" >> rejection_comment.md
+          echo "2. Replace command substitution in echo with separate commands" >> rejection_comment.md
+          echo "3. Use individual echo statements with plain ASCII text only" >> rejection_comment.md
+          echo "4. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md for approved patterns" >> rejection_comment.md
+          echo "5. Run local validation: bash scripts/validate_terminal_output.sh" >> rejection_comment.md
+          echo "" >> rejection_comment.md
+          echo "**Policy Reminder:** DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures." >> rejection_comment.md
+          echo "" >> rejection_comment.md
+          echo "**Next Steps:**" >> rejection_comment.md
+          echo "- Fix all violations" >> rejection_comment.md
+          echo "- Validate locally with the enforcement script" >> rejection_comment.md
+          echo "- Push updates to trigger re-review" >> rejection_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file rejection_comment.md
 
@@ -103,29 +115,34 @@ jobs:
         run: |
           echo "Adding enforcement checklist to compliant PR"
 
-          cat > checklist_comment.md << 'EOF'
-          **Terminal Output Policy Compliance Verified**
-
-          Automated review confirms this PR follows DevOnboarder terminal output standards.
-
-          **Manual Review Checklist:**
-          - [ ] No emojis or Unicode characters in terminal output
-          - [ ] No command substitution in echo statements
-          - [ ] No variable expansion in echo statements
-          - [ ] Only individual echo commands with plain ASCII text
-          - [ ] Complex output uses file-based patterns (cat > file << 'EOF')
-
-          **Policy Acknowledgment Required:**
-          Reviewer must confirm understanding that violations cause immediate terminal hanging in DevOnboarder environment.
-          EOF
+          # Create checklist comment using safe file approach
+          echo "**Terminal Output Policy Compliance Verified**" > checklist_comment.md
+          echo "" >> checklist_comment.md
+          echo "Automated review confirms this PR follows DevOnboarder terminal output standards." >> checklist_comment.md
+          echo "" >> checklist_comment.md
+          echo "**Manual Review Checklist:**" >> checklist_comment.md
+          echo "- [ ] No emojis or Unicode characters in terminal output" >> checklist_comment.md
+          echo "- [ ] No command substitution in echo statements" >> checklist_comment.md
+          echo "- [ ] No variable expansion in echo statements" >> checklist_comment.md
+          echo "- [ ] Only individual echo commands with plain ASCII text" >> checklist_comment.md
+          echo "- [ ] Complex output uses file-based patterns (individual echo statements)" >> checklist_comment.md
+          echo "" >> checklist_comment.md
+          echo "**Policy Acknowledgment Required:**" >> checklist_comment.md
+          echo "Reviewer must confirm understanding that violations cause immediate terminal hanging in DevOnboarder environment." >> checklist_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file checklist_comment.md
 
       - name: Log review results
         run: |
           echo "Code review bot results:"
-          VIOLATIONS_COUNT="${{ steps.violation-check.outputs.violations }}"
-          PR_ACTION="${{ steps.violation-check.outputs.violations != '0' && 'REJECTED' || 'APPROVED' }}"
-          echo "Violations found: ${VIOLATIONS_COUNT}"
-          echo "PR action: ${PR_ACTION}"
+          echo "Violations found:"
+          echo "Count:"
+          printf "%s\n" "${{ steps.violation-check.outputs.violations }}"
+          echo "PR action determined:"
+          echo "Action:"
+          if [ "${{ steps.violation-check.outputs.violations }}" != '0' ]; then
+            echo "REJECTED"
+          else
+            echo "APPROVED"
+          fi
           echo "Enforcement level: ZERO TOLERANCE"

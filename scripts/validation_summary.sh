@@ -46,9 +46,9 @@ echo
 # 2. Terminal Output Policy Summary
 echo "🚫 TERMINAL OUTPUT POLICY"
 echo "-------------------------"
-if [ -f "$REPO_ROOT/scripts/validate_terminal_output.sh" ]; then
-    TERMINAL_OUTPUT=$(bash "$REPO_ROOT/scripts/validate_terminal_output.sh" 2>&1 || true)
-    TERMINAL_ERRORS=$(echo "$TERMINAL_OUTPUT" | grep -c "CRITICAL VIOLATION" || echo "0")
+if [ -f "$REPO_ROOT/scripts/validate_terminal_output_simple.sh" ]; then
+    TERMINAL_OUTPUT=$(bash "$REPO_ROOT/scripts/validate_terminal_output_simple.sh" 2>&1 || true)
+    TERMINAL_ERRORS=$(echo "$TERMINAL_OUTPUT" | grep "Total critical violations:" | sed 's/Total critical violations: //' || echo "0")
     if [ "$TERMINAL_ERRORS" -gt 0 ]; then
         echo "❌ Found $TERMINAL_ERRORS terminal policy violations:"
         echo "$TERMINAL_OUTPUT" | grep "CRITICAL VIOLATION" | head -5

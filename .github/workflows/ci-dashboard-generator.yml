@@ -70,10 +70,10 @@ jobs:
 
       - name: Create artifact summary
         run: |
-          echo "CI Dashboard Report Generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "A comprehensive CI troubleshooting dashboard has been generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "Download the ci-dashboard-report artifact to view the interactive HTML dashboard" >> "$GITHUB_STEP_SUMMARY"
+          printf "CI Dashboard Report Generated\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "A comprehensive CI troubleshooting dashboard has been generated\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "Download the ci-dashboard-report artifact to view the interactive HTML dashboard\n" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
