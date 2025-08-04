@@ -1,9 +1,4 @@
 ---
-agent: metadata-standards
-purpose: Standardized YAML frontmatter structure for all prompt files and documentation
-trigger: on_file_changed
-environment: CI
-permissions: ["repo:read", "repo:write"]
 codex-agent:
     name: Agent.MetadataStandards
     role: Standardized YAML frontmatter structure for all prompt files and documentation
@@ -11,6 +6,7 @@ codex-agent:
     triggers: on_file_changed
     output: .codex/logs/metadata-standards.log
     environment: CI
+    permissions: ["repo:read", "repo:write"]
 ---
 
 # Core Instructions Metadata Standards
