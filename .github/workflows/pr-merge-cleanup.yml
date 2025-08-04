@@ -1,0 +1,84 @@
+name: PR Merge Cleanup
+
+on:
+    pull_request:
+        types: [closed]
+        branches: [main, master]
+
+    # Allow manual triggering
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: "PR number to clean up tracking for"
+                required: true
+                type: string
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    close-tracking-issue:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch' }}
+
+        permissions:
+            contents: read
+            pull-requests: read
+            issues: write
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup GitHub CLI
+              run: |
+                  gh --version
+
+            - name: Authenticate with GitHub
+              run: |
+                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+            - name: Close PR tracking issue
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+              run: |
+                  # Determine PR number
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                      PR_NUMBER="${{ github.event.inputs.pr_number }}"
+                  else
+                      PR_NUMBER="${{ github.event.pull_request.number }}"
+                  fi
+
+                  echo "Looking for tracking issue for PR"
+
+                  # Search for tracking issue with PR number in title
+                  ISSUE_SEARCH=$(gh issue list --search "Track PR #$PR_NUMBER" --state open --json number,title,labels)
+
+                  if [[ "$ISSUE_SEARCH" != "[]" ]]; then
+                      ISSUE_NUMBER=$(echo "$ISSUE_SEARCH" | jq -r '.[0].number')
+                      ISSUE_TITLE=$(echo "$ISSUE_SEARCH" | jq -r '.[0].title')
+
+                      echo "Found tracking issue"
+
+                      # Add completion comment before closing
+                      gh issue comment "$ISSUE_NUMBER" --body "PR Merged Successfully - Pull Request #$PR_NUMBER has been successfully merged and this tracking issue is being automatically closed."
+
+                      # Close the tracking issue
+                      gh issue close "$ISSUE_NUMBER" --comment "Automatically closed: PR #$PR_NUMBER merged successfully"
+
+                      echo "Closed tracking issue for merged PR"
+                  else
+                      echo "No tracking issue found for PR"
+                  fi
+
+            - name: Update PR with completion status
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
+
+                  # Add final comment to PR
+                  gh pr comment "$PR_NUMBER" --body "**PR Merge Complete**: Associated tracking issue has been automatically closed. Thank you for your contribution to DevOnboarder!"
