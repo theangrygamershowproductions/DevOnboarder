@@ -10,7 +10,12 @@ name: Cleanup CI Failure
 
 on:
     schedule:
-        - cron: "0 0 * * *"
+        - cron: "0 0 * * *"  # Daily cleanup as before
+    pull_request:
+        types: [closed]      # Trigger when PRs are closed (merged or not)
+    workflow_run:
+        workflows: ["CI"]    # Trigger after CI workflow completes
+        types: [completed]
 
 jobs:
     validate-yaml:
@@ -72,26 +77,55 @@ jobs:
                   gh api rate_limit
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
-            - name: Close ci-failure issues
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Smart CI failure cleanup
               run: |
-                  gh_bin=$(which gh)
-                  failed=0
-                  closed=0
-                  issues=$($gh_bin issue list --label ci-failure --state open | awk '{print $1}') || failed=1
-                  for n in $issues; do
-                    if "$gh_bin" issue close "$n" --reason completed; then
-                      echo "::debug::Closed issue #$n"
-                      closed=$((closed+1))
+                  mkdir -p logs
+
+                  # Determine trigger type and handle appropriately
+                  if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                    echo "Triggered by PR #${{ github.event.number }} closure"
+                    if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+                      echo "PR was merged - closing related CI failure issues"
+                      bash scripts/manage_ci_failure_issues.sh close ${{ github.event.number }}
                     else
-                      echo "::warning::Failed to close issue #$n"
-                      failed=1
+                      echo "PR was closed without merge - leaving CI failure issues open"
                     fi
-                  done
-                  if [ "$failed" -ne 0 ]; then
-                    echo "::error::Cleanup failed"
-                    printf '%s\n' "Automatic cleanup could not close one or more ci-failure issues." > body.md
-                    jq -Rs --arg title "Cleanup CI failure issues failed" '{title:$title,body:.}' body.md > notify.json
-                    gh workflow run notify.yml -f data="$(cat notify.json)" || true
-                    exit 1
+                  elif [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+                    echo "Triggered by CI workflow completion"
+                    if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+                      echo "CI workflow succeeded - checking for outdated failure issues"
+                      # Get recent PR numbers from successful runs and clean their issues
+                      gh run list --workflow=ci.yml --status=success --limit=5 --json number,headBranch | \
+                        jq -r '.[] | select(.headBranch != "main") | .number' | \
+                        while read -r run_id; do
+                          pr_num=$(gh run view "$run_id" --json headBranch | jq -r '.headBranch' | sed 's/.*pr-//' | sed 's/-.*//')
+                          if [[ "$pr_num" =~ ^[0-9]+$ ]]; then
+                            echo "Cleaning issues for PR #$pr_num after successful CI"
+                            bash scripts/manage_ci_failure_issues.sh close "$pr_num" || true
+                          fi
+                        done
+                    fi
+                  else
+                    echo "Daily scheduled cleanup - closing all stale CI failure issues"
+                    # Original daily cleanup logic but smarter
+                    issues=$(gh issue list --label ci-failure --state open --json number,title)
+                    echo "$issues" | jq -r '.[] | .number' | while read -r issue_num; do
+                      if [[ -n "$issue_num" ]]; then
+                        # Check if issue is for a merged PR or old failure
+                        issue_title=$(echo "$issues" | jq -r ".[] | select(.number==$issue_num) | .title")
+                        if [[ "$issue_title" =~ PR\ #([0-9]+) ]]; then
+                          pr_num="${BASH_REMATCH[1]}"
+                          pr_state=$(gh pr view "$pr_num" --json state,merged | jq -r '.state + ":" + (.merged|tostring)')
+                          if [[ "$pr_state" == "MERGED:true" ]]; then
+                            echo "Closing CI failure issue #$issue_num for merged PR #$pr_num"
+                            bash scripts/manage_ci_failure_issues.sh close "$pr_num" || true
+                          fi
+                        else
+                          echo "Closing stale CI failure issue #$issue_num (no PR reference)"
+                          gh issue close "$issue_num" --reason "not_planned" --comment "Closing stale CI failure issue during daily cleanup." || true
+                        fi
+                      fi
+                    done
                   fi
-                  echo "Closed $closed ci-failure issues"
