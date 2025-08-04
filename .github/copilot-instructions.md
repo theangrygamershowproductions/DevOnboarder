@@ -1118,6 +1118,31 @@ python -m pytest plugins/example_plugin/
 
 5. **CI failures**: Check GitHub CLI availability and error handling
 
+6. **Cache pollution in repository root**:
+
+    - ✅ **Detection**: Run `bash scripts/validate_cache_centralization.sh`
+    - ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
+    - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
+
+### Validation-Driven Resolution Pattern
+
+DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
+
+```bash
+# Step 1: Run validation to identify issues
+bash scripts/validate_cache_centralization.sh
+# Output: "Solution: Run cache cleanup with: bash scripts/manage_logs.sh cache clean"
+
+# Step 2: Follow the provided solution exactly
+bash scripts/manage_logs.sh cache clean
+
+# Step 3: Re-validate to confirm resolution
+bash scripts/validate_cache_centralization.sh
+# Output: "SUCCESS: No cache pollution found in repository root"
+```
+
+**Key Principle**: When validation scripts suggest specific commands, use those commands rather than manual fixes. This ensures compliance with DevOnboarder's automated quality gates.
+
 ### Debugging Tools (Virtual Environment Context)
 
 - `python -m diagnostics`: Verify packages and environment
@@ -1243,9 +1268,11 @@ git status --short  # Should show only intended changes
 7. **NEVER use multi-line echo or here-doc syntax** - Use individual echo commands only
 8. **ALWAYS use plain ASCII text only** in echo commands to prevent terminal hanging
 9. **REMEMBER**: This project runs in containers/venvs, not host systems
-10. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
-11. **FOLLOW**: Node modules hygiene standards and placement requirements
-12. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
+10. **ALWAYS follow validation-driven resolution**: When validation scripts provide specific commands, use those exact commands rather than manual fixes
+11. **RESPECT**: DevOnboarder automation patterns - scripts provide actionable guidance for consistent compliance
+12. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
+13. **FOLLOW**: Node modules hygiene standards and placement requirements
+14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
 ## Agent Documentation Standards
 
