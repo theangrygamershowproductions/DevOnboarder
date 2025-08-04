@@ -1,6 +1,7 @@
 #!/bin/sh
 # Prevent commits if the message does not match <TYPE>(<scope>): <subject>
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY)(\([^)]+\))?: .+'
+# BUILD/Build types added for Dependabot compatibility (Build(deps-dev), Build(deps), etc.)
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build)(\([^)]+\))?: .+'
 message=$(cat "$1")
 
 if ! printf '%s' "$message" | grep -Eq "$regex"; then

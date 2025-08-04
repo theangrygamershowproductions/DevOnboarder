@@ -3,9 +3,10 @@ set -euo pipefail
 
 # Enforce strict conventional commit format per project standards
 # Format: <TYPE>(<scope>): <subject>
-# Types must be uppercase: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY
+# Types must be uppercase: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+# Exception: Build (title case) allowed for Dependabot compatibility
 # The <scope> section is optional, matching the commit-msg hook
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY)(\([^)]+\))?: .+'
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build)(\([^)]+\))?: .+'
 
 messages=$(git log --format=%s origin/main..HEAD)
 if [ -z "$messages" ]; then
@@ -30,7 +31,7 @@ while IFS= read -r msg || [ -n "$msg" ]; do
 
   if ! echo "$msg" | grep -E "$regex" >/dev/null; then
     echo "::error ::Commit message '$msg' does not follow <TYPE>(<scope>): <subject> format"
-    echo "::error ::Expected format: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY(scope): subject"
+    echo "::error ::Expected format: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD(scope): subject or Build(deps): subject for Dependabot"
     errors=$((errors+1))
   fi
 done < "$temp_file"
