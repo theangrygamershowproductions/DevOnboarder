@@ -119,6 +119,9 @@ npm install -g markdownlint-cli
 
 # Verify markdown standards (including MD032 list spacing)
 npx markdownlint --version
+
+# Validate terminal output policy compliance
+bash scripts/validate_terminal_output.sh
 ```
 
 ## 🧹 Phase 3: Root Artifact Guard
@@ -404,17 +407,33 @@ npm ci --prefix frontend
 ### Markdown Linting Issues
 
 ```bash
+### Markdown Linting Issues
+
+```bash
 # Check markdown formatting compliance
 npx markdownlint *.md
 
 # Auto-fix markdown issues (when possible)
 npx markdownlint --fix *.md
-
-# Common MD032 violations to fix manually:
-# - Lists must have blank lines before and after
-# - Nested lists must follow parent list spacing
-# - Code blocks in lists need proper indentation
 ```
+
+### Terminal Output Policy Violations
+
+```bash
+# Check for terminal output policy violations
+bash scripts/validate_terminal_output.sh
+
+# Review policy documentation
+cat docs/TERMINAL_OUTPUT_VIOLATIONS.md
+```
+
+#### Common MD032 Violations to Fix Manually
+
+The following patterns require manual fixes:
+
+- Lists must have blank lines before and after
+- Nested lists must follow parent list spacing
+- Code blocks in lists need proper indentation
 
 **Critical MD032 Rule**: All lists MUST be surrounded by blank lines before and after:
 

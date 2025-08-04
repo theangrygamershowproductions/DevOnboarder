@@ -36,6 +36,17 @@ pre-commit install
 
 Violations block all commits and CI runs. No exceptions.
 
+## Terminal Output Policy
+
+**ZERO TOLERANCE**: GitHub Actions workflows must use only plain ASCII text in echo statements:
+
+- **FORBIDDEN**: Emojis, Unicode characters, command substitution, variable expansion
+- **REQUIRED**: Individual echo commands with static text only
+- **VALIDATION**: `bash scripts/validate_terminal_output.sh`
+- **DOCUMENTATION**: `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
+
+Violations cause immediate terminal hanging and are blocked by pre-commit hooks.
+
 **Markdown Standards**: All documentation must follow markdownlint rules including MD032 (lists surrounded by blank lines).
 Check compliance with: `npx markdownlint *.md docs/**/*.md`
 

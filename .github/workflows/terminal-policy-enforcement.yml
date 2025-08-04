@@ -1,0 +1,95 @@
+name: Terminal Output Policy Enforcement
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  terminal-policy-enforcement:
+    runs-on: ubuntu-latest
+    name: Enforce Terminal Output Policy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up logging
+        run: |
+          mkdir -p logs
+          echo "Terminal Output Policy Enforcement started"
+          echo "Target: GitHub Actions workflows"
+          echo "Policy: ZERO TOLERANCE for violations"
+
+      - name: Validate Terminal Output Policy
+        run: |
+          echo "Running terminal output policy validation"
+          bash scripts/validate_terminal_output_simple.sh
+          echo "Validation complete"
+
+      - name: Create enforcement report
+        if: always()
+        run: |
+          echo "Terminal Output Policy Enforcement Report" > logs/enforcement_report.txt
+          echo "Date:" >> logs/enforcement_report.txt
+          date >> logs/enforcement_report.txt
+          echo "Repository:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.repository }}" >> logs/enforcement_report.txt
+          echo "Branch:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.ref_name }}" >> logs/enforcement_report.txt
+          echo "Commit:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ github.sha }}" >> logs/enforcement_report.txt
+          echo "Status:" >> logs/enforcement_report.txt
+          printf "%s\n" "${{ job.status }}" >> logs/enforcement_report.txt
+
+      - name: Upload enforcement report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminal-output-enforcement-report
+          path: logs/enforcement_report.txt
+          retention-days: 30
+
+      - name: Comment on PR if violations found
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating violation report for PR"
+
+          # Create violation comment using safe file approach
+          echo "**CRITICAL: Terminal Output Policy Violations Detected**" > violation_comment.md
+          echo "" >> violation_comment.md
+          echo "This PR contains terminal output patterns that WILL cause immediate system hanging in DevOnboarder." >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "**Required Actions:**" >> violation_comment.md
+          echo "1. Fix ALL violations before merge" >> violation_comment.md
+          echo "2. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md" >> violation_comment.md
+          echo "3. Use only individual echo commands with plain ASCII text" >> violation_comment.md
+          echo "4. No emojis, command substitution, or variable expansion in echo" >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "**Zero Tolerance Policy:** These violations cause real system failures." >> violation_comment.md
+          echo "" >> violation_comment.md
+          echo "Download the enforcement report artifact for detailed violation locations." >> violation_comment.md
+
+          gh pr comment ${{ github.event.pull_request.number }} --body-file violation_comment.md
+
+      - name: Create enforcement issue
+        if: failure() && github.event_name == 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating enforcement issue for main branch violation"
+          bash scripts/create_terminal_policy_issue.sh "${{ github.sha }}"

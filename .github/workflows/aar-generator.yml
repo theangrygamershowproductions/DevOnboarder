@@ -63,8 +63,8 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
+          printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
 
       - name: "Install dependencies"
         run: |
@@ -208,8 +208,8 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
+          printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
 
       - name: "Install dependencies"
         run: |
@@ -260,16 +260,17 @@ jobs:
           echo "AAR Security Audit Report" > "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "=========================" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "**Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          printf "**Generated**: %s\n" "$TIMESTAMP" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "**Workflow**: ${{ github.workflow }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "**Run ID**: ${{ github.run_id }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "## Compliance Status" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
           echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- No Default Token Policy v1.0: ✅ COMPLIANT" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Enhanced Potato Policy: ✅ VALIDATED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Virtual Environment: ✅ ENFORCED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Centralized Logging: ✅ ACTIVE" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- No Default Token Policy v1.0: COMPLIANT" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Enhanced Potato Policy: VALIDATED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Virtual Environment: ENFORCED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          echo "- Centralized Logging: ACTIVE" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
 
           echo "Security audit report generated"
 

@@ -6,9 +6,7 @@ codex-agent:
     triggers: on_pr_created, on_pr_updated, on_file_changed
     output: .codex/logs/code-quality.log
     environment: CI
-permissions:
-    - repo:write
-    - workflows:write
+    permissions: ["repo:write", "workflows:write"]
 ---
 
 # Code Quality Auto-Fix Agent

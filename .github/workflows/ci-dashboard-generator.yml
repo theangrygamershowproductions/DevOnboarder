@@ -60,20 +60,20 @@ jobs:
           source .venv/bin/activate
           python scripts/generate_ci_dashboard_report.py
 
+      - name: Download CI failure issue artifact
+        if: github.event.workflow_run.event == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-failure-issue
+          path: ./ci-failure-data
+        continue-on-error: true
+
       - name: Create artifact summary
         run: |
-          echo "## 🛠️ CI Dashboard Report Generated" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "A comprehensive CI troubleshooting dashboard has been generated with:" >> $GITHUB_STEP_SUMMARY
-          echo "- **CI Pattern Analysis**: Automated failure pattern detection" >> $GITHUB_STEP_SUMMARY
-          echo "- **Health Monitoring**: Infrastructure health assessment" >> $GITHUB_STEP_SUMMARY
-          echo "- **Failure Analysis**: Detailed breakdown of recent failures" >> $GITHUB_STEP_SUMMARY
-          echo "- **Available Scripts**: Complete automation script inventory" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📊 **Scripts Found**: $(find scripts -name "*.py" -o -name "*.sh" | wc -l)" >> $GITHUB_STEP_SUMMARY
-          echo "📈 **Report Size**: $(du -h logs/ci_dashboard_report.html | cut -f1)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download the \`ci-dashboard-report\` artifact to view the interactive HTML dashboard." >> $GITHUB_STEP_SUMMARY
+          printf "CI Dashboard Report Generated\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "A comprehensive CI troubleshooting dashboard has been generated\n" >> "$GITHUB_STEP_SUMMARY"
+          printf "Download the ci-dashboard-report artifact to view the interactive HTML dashboard\n" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4
@@ -90,19 +90,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          PR_NUMBER=$(gh pr list --state open --json number,headRefName | jq -r ".[] | select(.headRefName == \"$HEAD_BRANCH\") | .number")
-          if [ "$PR_NUMBER" != "null" ] && [ "$PR_NUMBER" != "" ]; then
-            gh pr comment $PR_NUMBER --body "🛠️ **CI Dashboard Report Generated**
+          echo "Processing PR comment for dashboard"
+          gh pr list --state open --json number,headRefName > pr_list.json
+          echo "PR list retrieved"
 
-            A comprehensive troubleshooting dashboard has been generated for this PR's CI failures.
+          cat > dashboard_comment.md << 'EOF'
+          **CI Dashboard Report Generated**
 
-            📊 **What's included:**
-            - CI pattern analysis and failure categorization
-            - Health monitoring and infrastructure assessment
-            - Detailed failure analysis with actionable insights
-            - Complete inventory of available automation scripts
+          A comprehensive troubleshooting dashboard has been generated for this PR.
 
-            📥 **To access:** Download the \`ci-dashboard-report\` artifact from this workflow run and open \`ci_dashboard_report.html\` in your browser.
+          **To access:** Download the ci-dashboard-report artifact from this workflow run.
 
-            🔗 **Workflow run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          **Features:** Pattern analysis, health monitoring, failure analysis, script inventory.
+          EOF
+
+          echo "Dashboard comment file created"
+
+          if [ -f "./ci-failure-data/ci_failure_issue.txt" ]; then
+            echo "CI failure issue found"
+            cat >> dashboard_comment.md << 'EOF'
+
+          **Related CI Issue:** See linked issue for additional failure details.
+          EOF
           fi
+
+          echo "Comment processing complete"
