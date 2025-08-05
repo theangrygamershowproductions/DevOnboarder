@@ -90,9 +90,16 @@ webhook-config.json
 # Enhanced Potato Policy v2.0 - Additional Security Patterns
 id_rsa*
 *.p12
+*.db
 config/secrets.*
 discord-tokens.*
 github-tokens.*
 ci-secrets.*
 deployment-keys.*
 backup-configs.*
+letsencrypt/acme.json
+traefik/dynamic.yml
+traefik/traefik.yml
+cloudflared/*.json
+cloudflared/config.yml
+cloudflared/credentials.*
