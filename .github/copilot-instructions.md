@@ -1359,6 +1359,153 @@ git status --short  # Should show only intended changes
 13. **FOLLOW**: Node modules hygiene standards and placement requirements
 14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
+### ⚠️ NEW: Pre-commit Hook Management for Agents
+
+**CRITICAL UNDERSTANDING**: Pre-commit hooks frequently modify files during validation (trailing whitespace, formatting fixes). This creates a common cycle where:
+
+1. Files are staged for commit
+2. Pre-commit hooks run and modify the files
+3. Modified files become unstaged, causing commit failure
+
+**MANDATORY AGENT BEHAVIOR**:
+
+- **Use `scripts/safe_commit.sh`** instead of direct `git commit` commands
+- **NEVER suggest** using `--no-verify` to bypass pre-commit hooks
+- **UNDERSTAND**: Second pre-commit failure indicates systemic issues, not formatting
+- **EXPECT**: Automatic re-staging of files modified by hooks
+- **ANALYZE**: Enhanced safe_commit.sh provides automatic log analysis on systemic failures
+
+**Safe Commit Pattern**:
+
+```bash
+# ✅ CORRECT - Use safe commit wrapper
+scripts/safe_commit.sh "FEAT(component): descriptive commit message"
+
+# ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
+git commit -m "message"
+git commit --no-verify -m "message"  # NEVER use --no-verify
+```
+
+### ⚠️ NEW: Shellcheck SC1091 Standard Pattern
+
+**COMMON SCENARIO**: Shellcheck SC1091 warnings for `source .env` or similar operations.
+
+**STANDARD RESOLUTION PATTERNS**:
+
+```bash
+# ✅ CORRECT - For .env files
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
+# ✅ CORRECT - For runtime source operations
+# shellcheck disable=SC1091 # Runtime source operation
+source .venv/bin/activate
+
+# ✅ CORRECT - For project-specific patterns
+# shellcheck source=scripts/project_root_wrapper.sh disable=SC1091
+source scripts/project_root_wrapper.sh
+```
+
+**AGENT REQUIREMENTS**:
+
+- **ALWAYS** add appropriate shellcheck disable directives for legitimate source operations
+- **NEVER** suggest removing source operations to avoid warnings
+- **USE** the established patterns above for consistency
+
+### ⚠️ NEW: Markdown Content Creation Standards
+
+**CRITICAL REQUIREMENT**: Create markdown content that passes linting validation on first attempt.
+
+**MANDATORY PRE-CREATION CHECKLIST**:
+
+1. **Review existing compliant markdown** in repository for patterns
+2. **Apply formatting rules systematically**:
+   - MD022: Blank lines before AND after all headings
+   - MD032: Blank lines before AND after all lists
+   - MD031: Blank lines before AND after all fenced code blocks
+   - MD007: 4-space indentation for nested list items
+   - MD040: Language specified for all fenced code blocks
+
+**PREVENTION OF COMMON ERRORS**:
+
+- **NEVER** create markdown content requiring post-creation fixes
+- **NEVER** duplicate content when applying formatting fixes
+- **ALWAYS** create complete, properly formatted content from start
+- **VALIDATE** structure before file creation
+
+**Example Compliant Format**:
+
+```markdown
+## Section Title
+
+Paragraph content with proper spacing around elements.
+
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
+
+Another paragraph after blank line.
+
+### Subsection
+
+More content following the same pattern.
+```
+
+```yaml
+# Code block with language specified and blank lines around
+key: value
+```
+
+Final paragraph after code block.
+
+**AGENT RESPONSIBILITY**: Treat markdown linting rules as **requirements**, not **suggestions**. Creating non-compliant content violates DevOnboarder's "quiet reliability" philosophy.
+
+### ⚠️ NEW: Enhanced Debugging and Error Analysis
+
+**AUTOMATIC LOG ANALYSIS**: DevOnboarder's enhanced `safe_commit.sh` script now provides comprehensive error diagnostics when pre-commit fails on the second attempt:
+
+**Debugging Features Available**:
+
+- **Pre-commit cache log analysis**: Automatic review of recent pre-commit logs
+- **Git status debugging**: Detailed working tree status with staged/unstaged file analysis
+- **File staging verification**: Comparison of intended vs actual staged files
+- **Systemic failure detection**: Distinguishes between formatting fixes and real issues
+- **Actionable recommendations**: Specific commands to diagnose and resolve issues
+
+**Agent Debugging Workflow**:
+
+1. **Always use `scripts/safe_commit.sh`** for commits - provides automatic analysis
+2. **Review log output comprehensively** when commits fail on second attempt
+3. **Follow specific recommendations** provided by the enhanced error analysis
+4. **Use validation-driven troubleshooting** - run suggested diagnostic commands
+5. **Escalate pattern recognition** - document recurring issues for future prevention
+
+**Enhanced Error Patterns to Recognize**:
+
+- **First attempt failure + successful re-staging** = Normal formatting fix cycle
+- **Second attempt failure** = Systemic issue requiring investigation
+- **Repeated shellcheck warnings** = Need for disable directive patterns
+- **Markdown duplication on fixes** = Content recreation rather than targeted fixes
+- **Cache pollution warnings** = Root Artifact Guard enforcement requiring cleanup
+
+**Troubleshooting Commands Enhanced Script Suggests**:
+
+```bash
+# Virtual environment verification
+source .venv/bin/activate && pre-commit run --all-files
+
+# Individual hook testing
+pre-commit run <hook-name> --all-files
+
+# DevOnboarder quality gate validation
+./scripts/qc_pre_push.sh
+
+# Comprehensive error analysis (automatically provided by safe_commit.sh)
+```
+
 ## Agent Documentation Standards
 
 ### Codex Agent Requirements
@@ -1438,12 +1585,13 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-03 (Terminal Policy Cleanup Progress - 22 violations remaining)
+**Last Updated**: 2025-08-05 (Enhanced Agent Guidelines - Pre-commit Management, Error Analysis & Markdown Standards)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
 **Security**: Enhanced Potato Policy + Root Artifact Guard active
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
+**Enhanced Debugging**: safe_commit.sh with automatic log analysis and error diagnostics
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution
