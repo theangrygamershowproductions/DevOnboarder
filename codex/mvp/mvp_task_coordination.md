@@ -13,7 +13,10 @@ dependencies: [
 related_files: [
   "scripts/mvp_readiness_check.sh",
   "scripts/mvp_health_monitor.sh",
-  "codex/tasks/strategic_split_readiness_diagnostic_COMPLETE.md"
+  "scripts/terminal_zero_tolerance_validator.sh",
+  "scripts/assess_staged_task_readiness.sh",
+  "codex/tasks/staged/terminal_zero_tolerance_validator.md",
+  "codex/tasks/staged/assess_staged_task_readiness.md"
 ]
 ---
 
@@ -105,6 +108,10 @@ bash scripts/scan_terminal_output_violations.sh
 - [x] Post-MVP Strategic Plan (`codex/mvp/post_mvp_strategic_plan.md`)
 - [x] Health Monitor (`scripts/mvp_health_monitor.sh`)
 - [x] Readiness Check (`scripts/mvp_readiness_check.sh`)
+- [STAGED] Terminal Zero Tolerance Validator (`scripts/terminal_zero_tolerance_validator.sh`)
+- [STAGED] Staged Task Readiness Assessment (`scripts/assess_staged_task_readiness.sh`)
+- [STAGED] Terminal Validator Documentation (`codex/tasks/staged/terminal_zero_tolerance_validator.md`)
+- [STAGED] Task Assessment Documentation (`codex/tasks/staged/assess_staged_task_readiness.md`)
 
 **Integration with MVP**:
 
