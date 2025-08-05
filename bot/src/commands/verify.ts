@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
-import { getOnboardingStatus } from "../api.js";
+import { getOnboardingStatus } from "../api";
 
 export const data = new SlashCommandBuilder()
     .setName("verify")
