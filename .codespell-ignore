@@ -8,6 +8,9 @@
 *.p12
 *.pem
 .codex/
+cloudflared/
+*.tunnel.json
+tunnel-credentials.json
 .codex/cache/
 .codex/cache/*
 .codex/private/

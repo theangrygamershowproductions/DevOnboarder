@@ -78,6 +78,9 @@ This automated security mechanism protects sensitive files from accidental expos
 - "github-tokens.*" # GitHub API tokens
 - "ci-secrets.*" # CI/CD secrets
 - "deployment-keys.*" # Deployment authentication
+- "cloudflared/*" # Cloudflare tunnel configurations
+- "*.tunnel.json" # Cloudflare tunnel credentials
+- "tunnel-credentials.json" # Cloudflare tunnel authentication
 - "backup-configs.*" # Backup configurations
 ```
 
