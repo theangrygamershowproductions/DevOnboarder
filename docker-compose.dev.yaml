@@ -1,0 +1,345 @@
+# docker-compose.dev.yaml — DevOnboarder Development v1.0.0
+# Production-ready development environment with Traefik reverse proxy
+version: "3.9"
+
+services:
+  # Traefik Reverse Proxy
+  traefik:
+    image: traefik:v3.3.6
+    container_name: devonboarder-traefik-dev
+    hostname: devonboarder-traefik-dev
+    restart: always
+    command:
+      - "--config=/etc/traefik/traefik.yml"
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN:-}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8090:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro
+      - ./letsencrypt:/letsencrypt
+    expose:
+      - 8443
+      - 80
+      - 443
+    networks:
+      - devonboarder_network
+    labels:
+      - "traefik.enable=false"
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: devonboarder-db-dev
+    restart: always
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devonboarder_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - devonboarder_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d devonboarder_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Auth Service (Port 8002)
+  auth-server:
+    container_name: devonboarder-auth-dev
+    hostname: devonboarder-auth-dev
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      traefik:
+        condition: service_started
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: ["devonboarder-auth"]
+    expose:
+      - 8002
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-dev.rule=PathPrefix(`/auth`)"
+      - "traefik.http.routers.auth-dev.entrypoints=web"
+      - "traefik.http.services.auth-dev.loadbalancer.server.port=8002"
+      - "traefik.http.routers.auth-dev.middlewares=stripprefix-auth@file,cors-header@file"
+      - "traefik.http.routers.auth-dev.priority=100"
+
+  # XP API Service (Port 8001)
+  xp-api:
+    container_name: devonboarder-xp-dev
+    hostname: devonboarder-xp-dev
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: ["devonboarder-api"]
+    expose:
+      - 8001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.xp-dev.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.xp-dev.entrypoints=web"
+      - "traefik.http.services.xp-dev.loadbalancer.server.port=8001"
+      - "traefik.http.routers.xp-dev.middlewares=stripprefix-api@file,cors-header@file"
+      - "traefik.http.routers.xp-dev.priority=100"
+
+  # Discord Integration Service (Port 8081)
+  discord-integration:
+    container_name: devonboarder-discord-dev
+    hostname: devonboarder-discord-dev
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: ["devonboarder-integration"]
+    expose:
+      - 8081
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.discord-dev.rule=PathPrefix(`/discord`)"
+      - "traefik.http.routers.discord-dev.entrypoints=web"
+      - "traefik.http.services.discord-dev.loadbalancer.server.port=8081"
+      - "traefik.http.routers.discord-dev.middlewares=stripprefix-discord@file,cors-header@file"
+      - "traefik.http.routers.discord-dev.priority=100"
+
+  # Discord Bot Service
+  bot:
+    container_name: devonboarder-bot-dev
+    hostname: devonboarder-bot-dev
+    restart: always
+    depends_on:
+      auth-server:
+        condition: service_healthy
+      xp-api:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: bot/Dockerfile.dev
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./bot/src:/app/src
+      - ./bot/package.json:/app/package.json
+      - ./bot/tsconfig.json:/app/tsconfig.json
+      - ./docs:/docs
+      - ./logs:/app/logs
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: npm run dev
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=false"  # Bot doesn't need web access
+
+  # Frontend Service (Port 3000)
+  frontend:
+    container_name: devonboarder-frontend-dev
+    hostname: devonboarder-frontend-dev
+    restart: always
+    depends_on:
+      auth-server:
+        condition: service_healthy
+      xp-api:
+        condition: service_healthy
+      discord-integration:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: npm run dev -- --host 0.0.0.0
+    expose:
+      - 3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-dev.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend-dev.entrypoints=web"
+      - "traefik.http.services.frontend-dev.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend-dev.middlewares=cors-header@file"
+      - "traefik.http.routers.frontend-dev.priority=1"
+
+  # Dashboard Service (Port 8003)
+  dashboard:
+    container_name: devonboarder-dashboard-dev
+    hostname: devonboarder-dashboard-dev
+    restart: always
+    depends_on:
+      auth-server:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    working_dir: /app
+    env_file:
+      - .env.dev
+    volumes:
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./logs:/app/logs
+      - ./.env.dev:/app/.env.dev:ro
+    networks:
+      - devonboarder_network
+    command: ["python", "-m", "devonboarder.dashboard_service"]
+    expose:
+      - 8003
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard-dev.rule=PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard-dev.entrypoints=web"
+      - "traefik.http.services.dashboard-dev.loadbalancer.server.port=8003"
+      - "traefik.http.routers.dashboard-dev.middlewares=stripprefix-dashboard@file,cors-header@file"
+      - "traefik.http.routers.dashboard-dev.priority=100"
+
+  # Optional: Cloudflare Tunnel (if needed)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: devonboarder-cloudflared-dev
+    restart: unless-stopped
+    command: tunnel run --token ${TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      - TUNNEL_ID=${TUNNEL_ID}
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - devonboarder_network
+    profiles:
+      - tunnel  # Only start with --profile tunnel
+    healthcheck:
+      test: ["CMD-SHELL", "cloudflared tunnel info ${TUNNEL_ID} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Debug Tools
+  debug-tools:
+    image: nicolaka/netshoot:latest
+    container_name: devonboarder-debug-tools
+    command: sleep infinity
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - devonboarder_network
+    profiles:
+      - debug  # Only start with --profile debug
+
+volumes:
+  postgres_data:
+    name: devonboarder_postgres_data
+
+networks:
+  devonboarder_network:
+    name: devonboarder_network
+    driver: bridge
