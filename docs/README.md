@@ -310,7 +310,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
 9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
 10. CODEOWNERS automatically requests reviews from the maintainer team.
-11. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
+11. The `auto-fix.yml` workflow runs when CI fails. It downloads the `logs` artifact,
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
     Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)

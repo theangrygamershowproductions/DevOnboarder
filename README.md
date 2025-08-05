@@ -5,6 +5,40 @@
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
 [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 
+## 🎯 **Project Management Framework**
+
+DevOnboarder uses a comprehensive three-project structure for optimal organization and tracking:
+
+### **[📋 Team Planning](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1)** - MVP Execution
+
+6-week MVP delivery with detailed task management
+
+| Phase | Timeline | Milestone | Status |
+|-------|----------|-----------|---------|
+| **Phase 1** | Weeks 1-2 | [Foundation Stabilization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1088) | 🔄 Active |
+| **Phase 2** | Weeks 3-4 | [Feature Completion](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1089) | ⏳ Planned |
+| **Phase 3** | Weeks 5-6 | [MVP Finalization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1090) | ⏳ Planned |
+
+### **[🚀 Feature Release](https://github.com/orgs/theangrygamershowproductions/projects/5/views/1)** - Service Coordination
+
+Multi-service integration and release management
+
+- Cross-service integration testing and deployment
+- [Staged Task Framework](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1091) implementation
+- Quality gate enforcement and service health monitoring
+
+### **[🗺️ Roadmap](https://github.com/orgs/theangrygamershowproductions/projects/6/views/1)** - Strategic Planning
+
+Long-term platform evolution and strategic initiatives
+
+- [Strategic Repository Splitting](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1092) (Post-MVP)
+- [Platform Evolution & Scaling](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1093) (12-month vision)
+- Technology roadmap and architectural evolution
+
+**Quick Links**: [Current Sprint](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1) • [Strategic Split Plan](codex/mvp/strategic_repository_splitting_plan.md) • [MVP Documentation](codex/mvp/)
+
+---
+
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
 See [docs/README.md](docs/README.md) for full setup instructions and workflow guidelines.

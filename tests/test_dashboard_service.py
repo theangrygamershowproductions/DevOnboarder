@@ -3,6 +3,7 @@
 import pytest
 import tempfile
 import os
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch, AsyncMock
@@ -60,7 +61,7 @@ def test_health_endpoint(client):
 
 def test_list_scripts_endpoint(client):
     """Test script discovery endpoint."""
-    response = client.get("/api/scripts")
+    response = client.get("/scripts")
     assert response.status_code == 200
     scripts = response.json()
     assert isinstance(scripts, list)
@@ -68,15 +69,15 @@ def test_list_scripts_endpoint(client):
 
 def test_list_executions_endpoint(client):
     """Test list executions endpoint."""
-    response = client.get("/api/executions")
+    response = client.get("/executions")
     assert response.status_code == 200
     executions = response.json()
     assert isinstance(executions, list)
 
 
-def test_nonexistent_execution(client):
-    """Test getting nonexistent execution."""
-    response = client.get("/api/execution/nonexistent")
+def test_get_execution_status_endpoint(client):
+    """Test get execution status endpoint."""
+    response = client.get("/execution/nonexistent")
     assert response.status_code == 404
 
 
@@ -208,7 +209,7 @@ def test_execution_result_model():
 
 def test_invalid_execution_request(client):
     """Test execution with invalid request data."""
-    response = client.post("/api/execute", json={"invalid": "data"})
+    response = client.post("/execute", json={"invalid": "data"})
     assert response.status_code == 422  # Pydantic validation error
 
 
@@ -721,7 +722,7 @@ def test_execution_endpoint_via_client(client, temp_script_file):
     """Test execution endpoint via HTTP client."""
     # This will fail with 404 since the script isn't in the dashboard's base_dir
     response = client.post(
-        "/api/execute",
+        "/execute",
         json={"script_path": "nonexistent.sh", "args": [], "background": False},
     )
     assert response.status_code == 404
@@ -870,7 +871,7 @@ def test_cors_fallback():
 
 def test_executions_api_coverage(client):
     """Test the executions list API endpoint."""
-    response = client.get("/api/executions")
+    response = client.get("/executions")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
@@ -983,7 +984,7 @@ async def test_get_execution_status_api_endpoint():
 
     with TestClient(app) as client:
         # Test getting status for non-existent execution
-        response = client.get("/api/execution/nonexistent-id")
+        response = client.get("/execution/nonexistent-id")
         assert response.status_code == 404
         assert response.json()["detail"] == "Execution not found"
 
@@ -999,7 +1000,7 @@ async def test_get_execution_status_api_endpoint():
 
             # Execute script to create an execution record
             execute_response = client.post(
-                "/api/execute",
+                "/execute",
                 json={"script_path": script_path, "args": [], "background": False},
             )
 
@@ -1008,7 +1009,7 @@ async def test_get_execution_status_api_endpoint():
                 execution_id = execution_data.get("execution_id")
 
                 # Now test getting the status for this execution
-                status_response = client.get(f"/api/execution/{execution_id}")
+                status_response = client.get(f"/execution/{execution_id}")
                 # Should return 200 and the execution result
                 assert status_response.status_code == 200
 
@@ -1066,3 +1067,54 @@ async def test_websocket_disconnect_handling():
     assert len(service.websocket_connections) == 1
     service.websocket_connections.remove(mock_websocket)
     assert len(service.websocket_connections) == 0
+
+
+def test_no_verify_policy_endpoint(client):
+    """Test the --no-verify policy status endpoint."""
+    response = client.get("/policy/no-verify")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert "policy_name" in data
+    assert "enforcement_level" in data
+    assert "status" in data
+    assert "last_check" in data
+    assert "violations" in data
+    assert "emergency_approvals" in data
+    assert "compliance_score" in data
+
+    # Verify expected values
+    assert data["policy_name"] == "No-Verify Zero Tolerance Policy"
+    assert data["enforcement_level"] == "CRITICAL"
+    assert data["status"] in ["COMPLIANT", "VIOLATION", "ERROR", "unknown"]
+    assert isinstance(data["violations"], str)
+    assert isinstance(data["emergency_approvals"], str)
+    assert isinstance(data["compliance_score"], str)
+
+
+def test_no_verify_policy_endpoint_error_handling(client):
+    """Test the --no-verify policy endpoint error handling scenarios."""
+    with patch("pathlib.Path.exists") as mock_exists:
+        # Test missing validation script
+        mock_exists.return_value = False
+        response = client.get("/policy/no-verify")
+        assert response.status_code == 200
+        data = response.json()
+        assert "validation_script" in data
+
+    with patch("subprocess.run") as mock_run:
+        # Test subprocess timeout
+        mock_run.side_effect = subprocess.TimeoutExpired("test", 30)
+        response = client.get("/policy/no-verify")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ERROR"
+        assert "timeout" in data["error"]
+
+        # Test general exception
+        mock_run.side_effect = Exception("Test error")
+        response = client.get("/policy/no-verify")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ERROR"
+        assert "Test error" in data["error"]

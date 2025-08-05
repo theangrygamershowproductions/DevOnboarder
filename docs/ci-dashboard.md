@@ -33,6 +33,7 @@ integration_points:
 | Network Access Check     | Infrastructure   | ✅ Pass  | Critical | 2025-07-29    | ✅ Stable | All 11 domains reachable |
 | markdownlint-cli2         | Docs Linting     | ✅ Pass  | High     | 2025-07-29    | ✅ Stable | 190 files, 0 errors |
 | Vale Documentation        | Writing Quality  | ✅ Pass  | Medium   | 2025-07-29    | ✅ Stable | Working, LanguageTool archived |
+| **No-Verify Policy**     | **Quality Gates**| **✅ Pass** | **Critical** | **2025-08-05** | **✅ Stable** | **Zero Tolerance Policy enforced** |
 | Centralized Logging       | Policy Compliance| ✅ Pass  | Critical | 2025-07-29    | ✅ Stable | 0 violations, fully compliant |
 | Environment Documentation | Config Sync      | ✅ Pass  | Medium   | 2025-07-29    | ✅ Stable | All docs match examples |
 | API Docstrings           | Code Quality     | ✅ Pass  | High     | 2025-07-29    | ✅ Stable | All endpoints documented |
@@ -83,6 +84,7 @@ integration_points:
 
 | Issue Pattern | Last Seen | Resolution | Auto-Fix Available | Codex Agent |
 |---------------|-----------|------------|-------------------|-------------|
+| **--no-verify unauthorized usage** | **Blocked** | **Pre-commit + CI enforcement** | **✅ Yes** | **No-Verify Policy Agent** |
 | MD030 spacing errors | 2025-07-29 | Automated markdownlint | ✅ Yes | CI-Dashboard-Monitor |
 | YAML comment spacing | 2025-07-29 | .prettierignore update | ✅ Yes | Auto-fix workflow |
 | Frontmatter validation | 2025-07-29 | Schema exclusions | ✅ Yes | Agent validation |
@@ -110,7 +112,7 @@ integration_points:
 
 - **Jest**: Run `npm install` in bot/ directory for testing
 - **Vitest**: Run `npm install` in frontend/ directory for testing
-- **Legacy doc refs**: 4 files contain old "ci-logs" references (documentation only)
+- **Documentation**: All logging references updated to use centralized `logs/` directory
 
 ## 🔧 **Known Issues & Patterns**
 

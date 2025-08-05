@@ -269,7 +269,7 @@ compose.codex.yml`.
 - CI now checks compose service status early and prints logs on failure.
 - Added `docs/fips-golang.md` summarizing FIPS compliance rules for Go projects.
 - `wait_for_service.sh` prints `docker compose ps` when a service fails.
-- CI workflow uploads the full job log as the `ci-logs` artifact.
+- CI workflow uploads the full job log as the `logs` artifact.
 - Documented offline header check in `tests/test_check_headers.py`.
 - Reminded contributors to run `pip install -r requirements-dev.txt` and
   `pip install -e .` before running `pytest`. `scripts/check_dependencies.sh`

@@ -1,4 +1,4 @@
-.PHONY: deps gen-secrets up test openapi aar-setup aar-check aar-generate aar-validate aar-env-template
+.PHONY: deps gen-secrets up test openapi aar-setup aar-check aar-generate aar-validate aar-env-template down clean
 
 deps:
 	docker compose -f docker-compose.dev.yaml build
@@ -8,6 +8,13 @@ gen-secrets:
 
 up: gen-secrets deps
 	docker compose -f docker-compose.dev.yaml up
+
+down:
+	docker compose -f docker-compose.dev.yaml down
+
+clean:
+	docker compose -f docker-compose.dev.yaml down -v --remove-orphans
+	docker system prune -f
 
 test:
 	        bash scripts/run_tests.sh

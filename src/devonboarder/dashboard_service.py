@@ -481,17 +481,131 @@ def create_dashboard_app() -> FastAPI:
         """Health check endpoint."""
         return {"status": "ok"}
 
-    @app.get("/api/scripts", response_model=List[ScriptInfo])
+    @app.get("/policy/no-verify")
+    def no_verify_policy_status() -> Dict[str, str]:
+        """Get --no-verify policy enforcement status."""
+        # Import only what we need for security
+        import os
+        import re
+        import subprocess  # noqa: B404
+        from pathlib import Path
+
+        status: Dict[str, str] = {
+            "policy_name": "No-Verify Zero Tolerance Policy",
+            "enforcement_level": "CRITICAL",
+            "status": "unknown",
+            "last_check": datetime.now().isoformat(),
+            "violations": "0",
+            "emergency_approvals": "0",
+            "compliance_score": "0.0",
+        }
+
+        components: Dict[str, str] = {}
+
+        try:
+            # Check if validation script exists and is executable
+            validation_script = Path("scripts/validate_no_verify_usage.sh")
+            if validation_script.exists() and os.access(validation_script, os.X_OK):
+                components["validation_script"] = "✅ Available"
+
+                # Run the validation with trusted script path
+                result = subprocess.run(  # noqa: B603
+                    [str(validation_script.resolve())],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    cwd=Path.cwd(),
+                )
+
+                if result.returncode == 0:
+                    status["status"] = "COMPLIANT"
+                    status["compliance_score"] = "100.0"
+
+                    # Parse output for emergency approvals
+                    output = result.stdout
+                    if "Emergency approved usages:" in output:
+                        match = re.search(r"Emergency approved usages: (\d+)", output)
+                        if match:
+                            status["emergency_approvals"] = match.group(1)
+
+                    if "Unauthorized violations:" in output:
+                        match = re.search(r"Unauthorized violations: (\d+)", output)
+                        if match:
+                            violations = match.group(1)
+                            status["violations"] = violations
+                            if int(violations) > 0:
+                                status["status"] = "VIOLATION"
+                                status["compliance_score"] = "0.0"
+                else:
+                    status["status"] = "VIOLATION"
+                    status["compliance_score"] = "0.0"
+                    status["error"] = result.stderr
+            else:
+                components["validation_script"] = "❌ Missing"
+
+            # Check safety wrapper
+            safety_wrapper = Path("scripts/git_safety_wrapper.sh")
+            if safety_wrapper.exists() and os.access(safety_wrapper, os.X_OK):
+                components["safety_wrapper"] = "✅ Available"
+            else:
+                components["safety_wrapper"] = "❌ Missing"
+
+            # Check pre-commit hook
+            precommit_config = Path(".pre-commit-config.yaml")
+            if precommit_config.exists():
+                with open(precommit_config, "r", encoding="utf-8") as f:
+                    config_content = f.read()
+                    if "validate-no-verify" in config_content:
+                        components["precommit_hook"] = "✅ Configured"
+                    else:
+                        components["precommit_hook"] = "❌ Not configured"
+            else:
+                components["precommit_hook"] = "❌ Missing"
+
+            # Check CI workflow
+            ci_workflow = Path(".github/workflows/no-verify-policy.yml")
+            if ci_workflow.exists():
+                components["ci_workflow"] = "✅ Active"
+            else:
+                components["ci_workflow"] = "❌ Missing"
+
+            # Check policy documentation
+            policy_doc = Path("docs/NO_VERIFY_POLICY.md")
+            quick_ref = Path("docs/NO_VERIFY_QUICK_REFERENCE.md")
+
+            docs_status = []
+            if policy_doc.exists():
+                docs_status.append("Policy")
+            if quick_ref.exists():
+                docs_status.append("Quick Reference")
+
+            if docs_status:
+                components["documentation"] = f"✅ {', '.join(docs_status)}"
+            else:
+                components["documentation"] = "❌ Missing"
+
+        except subprocess.TimeoutExpired:
+            status["status"] = "ERROR"
+            status["error"] = "Validation script timeout"
+        except Exception as e:
+            status["status"] = "ERROR"
+            status["error"] = str(e)
+
+        # Add components to status
+        status.update(components)
+        return status
+
+    @app.get("/scripts", response_model=List[ScriptInfo])
     def list_scripts() -> List[ScriptInfo]:
         """List all discovered scripts."""
         return dashboard_service.discover_scripts()
 
-    @app.post("/api/execute", response_model=ExecutionResult)
+    @app.post("/execute", response_model=ExecutionResult)
     async def execute_script(request: ExecutionRequest) -> ExecutionResult:
         """Execute a script."""
         return await dashboard_service.execute_script(request)
 
-    @app.get("/api/execution/{execution_id}", response_model=ExecutionResult)
+    @app.get("/execution/{execution_id}", response_model=ExecutionResult)
     def get_execution_status(execution_id: str) -> ExecutionResult:
         """Get execution status."""
         result = dashboard_service.get_execution_status(execution_id)
@@ -499,7 +613,7 @@ def create_dashboard_app() -> FastAPI:
             raise HTTPException(status_code=404, detail="Execution not found")
         return result
 
-    @app.get("/api/executions", response_model=List[ExecutionResult])
+    @app.get("/executions", response_model=List[ExecutionResult])
     def list_executions() -> List[ExecutionResult]:
         """List all active executions."""
         return dashboard_service.list_active_executions()
