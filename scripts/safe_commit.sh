@@ -32,18 +32,30 @@ if git commit -m "$COMMIT_MSG"; then
     echo "Commit successful!"
     exit 0
 else
-    echo "Pre-commit hooks modified files. Re-staging and committing..."
+    COMMIT_EXIT_CODE=$?
+    echo "Pre-commit hooks failed (exit code: $COMMIT_EXIT_CODE)"
 
-    # Re-add any files that were modified by pre-commit hooks
-    echo "$STAGED_FILES" | while read -r file; do
-        if [[ -f "$file" ]]; then
-            echo "Re-staging: $file"
-            git add "$file"
-        fi
-    done
+    # Check if files were modified by hooks (like trailing whitespace fixes)
+    MODIFIED_FILES=$(git diff --name-only)
+    if [[ -n "$MODIFIED_FILES" ]]; then
+        echo "Files were modified by pre-commit hooks:"
+        echo "$MODIFIED_FILES"
 
-    # Try commit again
-    echo "Attempting commit again with re-staged files..."
-    git commit -m "$COMMIT_MSG"
-    echo "Commit successful after re-staging!"
+        # Re-add the modified files that were originally staged
+        echo "Re-staging modified files..."
+        echo "$STAGED_FILES" | while read -r file; do
+            if [[ -f "$file" ]] && echo "$MODIFIED_FILES" | grep -q "^$file$"; then
+                echo "  Re-staging: $file"
+                git add "$file"
+            fi
+        done
+
+        # Commit again - should pass since hooks already fixed the issues
+        echo "Committing re-staged files (hooks already validated and fixed content)..."
+        git commit -m "$COMMIT_MSG"
+        echo "Commit successful after re-staging!"
+    else
+        echo "Pre-commit hooks failed but no files were modified. Check the errors above."
+        exit $COMMIT_EXIT_CODE
+    fi
 fi
