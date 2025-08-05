@@ -54,6 +54,12 @@
 /test.db
 /vale-*.json
 /vale-results.json
+# Cloudflare Tunnel Secrets - NEVER COMMIT
+cloudflared/
+*.tunnel.json
+tunnel-credentials.json
+
+# Potato Policy Protected Files
 Potato
 Potato.md
 Thumbs.db

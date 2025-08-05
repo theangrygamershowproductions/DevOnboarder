@@ -157,15 +157,7 @@ except Exception as e:
     sys.exit(1)
 EOF
 
-    if python3 -c "
-try:
-    with open('$file', 'r') as f:
-        content = f.read()
-    print('Python script executed successfully')
-except Exception as e:
-    print(f'Error: {e}')
-    exit(1)
-" >/dev/null 2>&1; then
+    if [[ $? -eq 0 ]]; then
         echo "Fixed: $file"
     else
         echo "Failed to fix: $file"
