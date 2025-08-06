@@ -1,7 +1,10 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
 import path from "path";
-import { loadCommands, loadEvents } from "./utils/loadFiles";
+import { fileURLToPath } from "url";
+import { loadCommands, loadEvents } from "./utils/loadFiles.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
 

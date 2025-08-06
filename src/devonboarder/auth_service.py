@@ -230,7 +230,7 @@ def discord_login() -> RedirectResponse:
 
 
 @router.get("/login/discord/callback")
-def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
+def discord_callback(code: str, db: Session = Depends(get_db)) -> RedirectResponse:
     """Exchange the OAuth code for a token and return a JWT."""
     try:
         token_resp = httpx.post(
@@ -268,7 +268,11 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
     else:
         user.discord_token = access_token
         db.commit()
-    return {"token": create_token(user)}
+
+    # Redirect to frontend with token
+    token = create_token(user)
+    frontend_url = os.getenv("FRONTEND_URL", "https://dev.theangrygamershow.com")
+    return RedirectResponse(f"{frontend_url}/?token={token}")
 
 
 @router.get("/api/user/onboarding-status")

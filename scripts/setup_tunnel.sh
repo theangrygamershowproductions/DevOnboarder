@@ -21,6 +21,19 @@ TUNNEL_ID="ac65c0eb-6e16-4444-b340-feb89e45d991"
 CONFIG_DIR="config/cloudflare"
 CREDENTIALS_DIR="cloudflared"
 
+# Detect available Docker Compose command
+if docker compose version &> /dev/null; then
+    COMPOSE_CMD="docker compose"
+elif command -v docker-compose &> /dev/null && docker-compose version &> /dev/null; then
+    COMPOSE_CMD="docker-compose"
+else
+    echo "Error: No working Docker Compose command found"
+    echo "Please ensure Docker Desktop is running with proper WSL integration"
+    exit 1
+fi
+
+echo "Using Docker Compose command: $COMPOSE_CMD"
+
 # Validate configuration files exist
 validate_config() {
     echo "Validating tunnel configuration"
@@ -83,7 +96,7 @@ start_tunnel() {
 
     # Start services with tunnel profile
     echo "Starting Docker services with tunnel profile"
-    docker-compose -f docker-compose.dev.yaml --profile tunnel up -d
+    $COMPOSE_CMD -f docker-compose.dev.yaml --profile tunnel up -d
 
     echo "Services started. Checking health status"
 
@@ -92,7 +105,7 @@ start_tunnel() {
     local wait_time=0
 
     while [ $wait_time -lt $max_wait ]; do
-        if docker-compose -f docker-compose.dev.yaml ps --filter "health=healthy" | grep -q "healthy"; then
+        if $COMPOSE_CMD -f docker-compose.dev.yaml ps --filter "health=healthy" | grep -q "healthy"; then
             echo "Services are becoming healthy"
             break
         fi
@@ -103,7 +116,7 @@ start_tunnel() {
 
     # Show final status
     echo "Final service status:"
-    docker-compose -f docker-compose.dev.yaml ps
+    $COMPOSE_CMD -f docker-compose.dev.yaml ps
 
     echo "Tunnel setup complete"
     echo "Access URLs:"
@@ -120,7 +133,7 @@ start_tunnel() {
 stop_tunnel() {
     echo "Stopping Cloudflare tunnel services"
 
-    docker-compose -f docker-compose.dev.yaml --profile tunnel down
+    $COMPOSE_CMD -f docker-compose.dev.yaml --profile tunnel down
 
     echo "Tunnel services stopped"
     return 0

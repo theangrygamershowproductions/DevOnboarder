@@ -1,39 +1,38 @@
 tunnel: ac65c0eb-6e16-4444-b340-feb89e45d991
 credentials-file: /etc/cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
 
+# Force local configuration only - ignore remote config
+no-autoupdate: true
+
 ingress:
-  # Auth Service
-  - hostname: auth.dev.theangrygamershow.com
-    service: http://auth-service:8002
+  # Clean single-level subdomains (Universal SSL compatible)
+  - hostname: dev.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+
+  - hostname: auth.theangrygamershow.com
+    service: http://traefik:80
     originRequest:
       connectTimeout: 30s
       tlsTimeout: 10s
       tcpKeepAlive: 30s
 
-  # XP API Service
-  - hostname: api.dev.theangrygamershow.com
-    service: http://backend:8001
+  - hostname: api.theangrygamershow.com
+    service: http://traefik:80
     originRequest:
       connectTimeout: 30s
       tlsTimeout: 10s
 
-  # Discord Integration
-  - hostname: discord.dev.theangrygamershow.com
-    service: http://discord-integration:8081
+  - hostname: discord.theangrygamershow.com
+    service: http://traefik:80
     originRequest:
       connectTimeout: 30s
       tlsTimeout: 10s
 
-  # Dashboard Service
-  - hostname: dashboard.dev.theangrygamershow.com
-    service: http://dashboard-service:8003
-    originRequest:
-      connectTimeout: 30s
-      tlsTimeout: 10s
-
-  # Frontend (Main App)
-  - hostname: dev.theangrygamershow.com
-    service: http://frontend:3000
+  - hostname: dashboard.theangrygamershow.com
+    service: http://traefik:80
     originRequest:
       connectTimeout: 30s
       tlsTimeout: 10s

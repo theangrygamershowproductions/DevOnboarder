@@ -1,16 +1,21 @@
-import Login from "./components/Login";
-import FeedbackForm from "./components/FeedbackForm";
-import FeedbackStatusBoard from "./components/FeedbackStatusBoard";
-import FeedbackAnalytics from "./components/FeedbackAnalytics";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import PublicLandingPage from "./components/PublicLandingPage";
+import ProtectedDashboard from "./components/ProtectedDashboard";
 
 export default function App() {
     return (
-        <main>
-            <h1>DevOnboarder</h1>
-            <Login />
-            <FeedbackForm />
-            <FeedbackStatusBoard />
-            <FeedbackAnalytics />
-        </main>
+        <Router>
+            <div className="min-h-screen">
+                <Header />
+                <Routes>
+                    <Route path="/" element={<PublicLandingPage />} />
+                    <Route path="/dashboard" element={<ProtectedDashboard />} />
+                    {/* Redirect legacy routes */}
+                    <Route path="/admin" element={<ProtectedDashboard />} />
+                    <Route path="/staff" element={<ProtectedDashboard />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
