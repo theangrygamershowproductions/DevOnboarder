@@ -89,6 +89,13 @@ services:
       start_period: 30s
     labels:
       - "traefik.enable=true"
+      # Host-based routing for subdomain architecture
+      - "traefik.http.routers.auth-host.rule=Host(`auth.theangrygamershow.com`)"
+      - "traefik.http.routers.auth-host.entrypoints=web"
+      - "traefik.http.routers.auth-host.service=auth-dev"
+      - "traefik.http.routers.auth-host.middlewares=cors-header@file"
+      - "traefik.http.routers.auth-host.priority=200"
+      # Path-based routing (legacy)
       - "traefik.http.routers.auth-dev.rule=PathPrefix(`/auth`)"
       - "traefik.http.routers.auth-dev.entrypoints=web"
       - "traefik.http.services.auth-dev.loadbalancer.server.port=8002"
@@ -129,6 +136,13 @@ services:
       start_period: 30s
     labels:
       - "traefik.enable=true"
+      # Host-based routing for subdomain architecture
+      - "traefik.http.routers.api-host.rule=Host(`api.theangrygamershow.com`)"
+      - "traefik.http.routers.api-host.entrypoints=web"
+      - "traefik.http.routers.api-host.service=xp-dev"
+      - "traefik.http.routers.api-host.middlewares=cors-header@file"
+      - "traefik.http.routers.api-host.priority=200"
+      # Path-based routing (legacy)
       - "traefik.http.routers.xp-dev.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.xp-dev.entrypoints=web"
       - "traefik.http.services.xp-dev.loadbalancer.server.port=8001"
@@ -169,6 +183,13 @@ services:
       start_period: 30s
     labels:
       - "traefik.enable=true"
+      # Host-based routing for subdomain architecture
+      - "traefik.http.routers.discord-host.rule=Host(`discord.theangrygamershow.com`)"
+      - "traefik.http.routers.discord-host.entrypoints=web"
+      - "traefik.http.routers.discord-host.service=discord-dev"
+      - "traefik.http.routers.discord-host.middlewares=cors-header@file"
+      - "traefik.http.routers.discord-host.priority=200"
+      # Path-based routing (legacy)
       - "traefik.http.routers.discord-dev.rule=PathPrefix(`/discord`)"
       - "traefik.http.routers.discord-dev.entrypoints=web"
       - "traefik.http.services.discord-dev.loadbalancer.server.port=8081"
@@ -249,6 +270,13 @@ services:
       start_period: 60s
     labels:
       - "traefik.enable=true"
+      # Host-based routing for subdomain architecture
+      - "traefik.http.routers.frontend-host.rule=Host(`dev.theangrygamershow.com`)"
+      - "traefik.http.routers.frontend-host.entrypoints=web"
+      - "traefik.http.routers.frontend-host.service=frontend-dev"
+      - "traefik.http.routers.frontend-host.middlewares=cors-header@file"
+      - "traefik.http.routers.frontend-host.priority=200"
+      # Path-based routing (legacy/local)
       - "traefik.http.routers.frontend-dev.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend-dev.entrypoints=web"
       - "traefik.http.services.frontend-dev.loadbalancer.server.port=3000"
@@ -288,6 +316,13 @@ services:
       start_period: 30s
     labels:
       - "traefik.enable=true"
+      # Host-based routing for subdomain architecture
+      - "traefik.http.routers.dashboard-host.rule=Host(`dashboard.theangrygamershow.com`)"
+      - "traefik.http.routers.dashboard-host.entrypoints=web"
+      - "traefik.http.routers.dashboard-host.service=dashboard-dev"
+      - "traefik.http.routers.dashboard-host.middlewares=cors-header@file"
+      - "traefik.http.routers.dashboard-host.priority=200"
+      # Path-based routing (legacy)
       - "traefik.http.routers.dashboard-dev.rule=PathPrefix(`/dashboard`)"
       - "traefik.http.routers.dashboard-dev.entrypoints=web"
       - "traefik.http.services.dashboard-dev.loadbalancer.server.port=8003"

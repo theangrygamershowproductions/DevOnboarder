@@ -18,13 +18,13 @@ def test_dev_compose_has_expected_services():
     compose = load_compose("docker-compose.dev.yaml")
     services = compose.get("services", {})
     expected = {
-        "auth-server",
+        "auth-service",
         "bot",
-        "xp-api",
+        "backend",
         "frontend",
         "db",
         "traefik",
-        "dashboard",
+        "dashboard-service",
     }
     actual_services = set(services.keys())
     missing = expected - actual_services

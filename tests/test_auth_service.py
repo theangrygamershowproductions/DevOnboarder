@@ -374,6 +374,9 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
+    # Set test mode to return JSON instead of redirect
+    monkeypatch.setenv("TEST_MODE", "true")
+
     def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         assert url.endswith("/token")
         assert data["code"] == "abc"
@@ -412,6 +415,9 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
 def test_oauth_callback_updates_existing_user(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
+
+    # Set test mode to return JSON instead of redirect
+    monkeypatch.setenv("TEST_MODE", "true")
 
     def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         return StubResponse(200, {"access_token": data["code"]})

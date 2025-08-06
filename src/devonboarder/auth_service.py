@@ -229,22 +229,28 @@ def discord_login() -> RedirectResponse:
     return RedirectResponse(url)
 
 
-@router.get("/login/discord/callback")
-def discord_callback(code: str, db: Session = Depends(get_db)) -> RedirectResponse:
+@router.get("/login/discord/callback", response_model=None)
+def discord_callback(
+    code: str, db: Session = Depends(get_db)
+) -> RedirectResponse | dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
+    # Debug logging to see what redirect_uri is being used
+    redirect_uri = os.getenv(
+        "DISCORD_REDIRECT_URI",
+        "http://localhost:8002/login/discord/callback",
+    )
     try:
+        token_data = {
+            "client_id": os.getenv("DISCORD_CLIENT_ID"),
+            "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": redirect_uri,
+        }
+
         token_resp = httpx.post(
             "https://discord.com/api/oauth2/token",
-            data={
-                "client_id": os.getenv("DISCORD_CLIENT_ID"),
-                "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
-                "grant_type": "authorization_code",
-                "code": code,
-                "redirect_uri": os.getenv(
-                    "DISCORD_REDIRECT_URI",
-                    "http://localhost:8002/login/discord/callback",
-                ),
-            },
+            data=token_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=API_TIMEOUT,
         )
@@ -271,6 +277,11 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> RedirectRespon
 
     # Redirect to frontend with token
     token = create_token(user)
+
+    # For testing, return JSON instead of redirect
+    if os.getenv("TEST_MODE"):
+        return {"token": token}
+
     frontend_url = os.getenv("FRONTEND_URL", "https://dev.theangrygamershow.com")
     return RedirectResponse(f"{frontend_url}/?token={token}")
 
