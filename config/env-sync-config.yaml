@@ -39,6 +39,9 @@ sync_config:
     # CORS configuration
     - "CORS_ALLOW_ORIGINS"
 
+    # Authentication configuration
+    - "TOKEN_EXPIRE_SECONDS"
+
     # Tunnel configuration
     - "TUNNEL_ID"
     - "TUNNEL_TOKEN"
