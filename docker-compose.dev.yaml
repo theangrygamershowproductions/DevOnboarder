@@ -197,7 +197,7 @@ services:
       - ./bot/tsconfig.json:/app/tsconfig.json
       - ./docs:/docs
       - ./logs:/app/logs
-      - ./.env.dev:/app/.env.dev:ro
+      - ./.env.dev:/app/.env:ro
     networks:
       - devonboarder_network
     command: npm run dev

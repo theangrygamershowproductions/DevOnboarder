@@ -1,0 +1,303 @@
+# docker-compose.prod.yaml — DevOnboarder Production v1.0.0
+# Production environment with Traefik reverse proxy
+version: "3.9"
+
+services:
+  # Traefik Reverse Proxy
+  traefik:
+    image: traefik:v3.3.6
+    container_name: devonboarder-traefik-prod
+    hostname: devonboarder-traefik-prod
+    restart: always
+    command:
+      - "--config=/etc/traefik/traefik.yml"
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN:-}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8090:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro
+      - ./letsencrypt:/letsencrypt
+    expose:
+      - 8443
+      - 80
+      - 443
+    networks:
+      - devonboarder_network
+    labels:
+      - "traefik.enable=false"
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: devonboarder-db-prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-produser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-prodpass}
+      POSTGRES_DB: ${POSTGRES_DB:-devonboarder_prod}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - devonboarder_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-produser}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Authentication Service
+  auth-service:
+    image: devonboarder-auth-service
+    container_name: devonboarder-auth-prod
+    hostname: devonboarder-auth-prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env.prod:ro
+    networks:
+      - devonboarder_network
+    expose:
+      - 8002
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-prod.rule=Host(`auth.theangrygamershow.com`)"
+      - "traefik.http.routers.auth-prod.tls=true"
+      - "traefik.http.routers.auth-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.auth-prod.loadbalancer.server.port=8002"
+
+  # XP/Backend Service
+  backend:
+    image: devonboarder-backend
+    container_name: devonboarder-xp-prod
+    hostname: devonboarder-xp-prod
+    restart: always
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env.prod:ro
+    networks:
+      - devonboarder_network
+    expose:
+      - 8001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-prod.rule=Host(`api.theangrygamershow.com`)"
+      - "traefik.http.routers.api-prod.tls=true"
+      - "traefik.http.routers.api-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.api-prod.loadbalancer.server.port=8001"
+
+  # Discord Integration Service
+  discord-integration:
+    image: devonboarder-discord-integration
+    container_name: devonboarder-discord-prod
+    hostname: devonboarder-discord-prod
+    restart: always
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env.prod:ro
+    networks:
+      - devonboarder_network
+    expose:
+      - 8081
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.discord-prod.rule=Host(`discord.theangrygamershow.com`)"
+      - "traefik.http.routers.discord-prod.tls=true"
+      - "traefik.http.routers.discord-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.discord-prod.loadbalancer.server.port=8081"
+
+  # Discord Bot
+  bot:
+    image: devonboarder-bot
+    container_name: devonboarder-bot-prod
+    hostname: devonboarder-bot-prod
+    restart: always
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: bot/Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./bot/src:/app/src
+      - ./bot/package.json:/app/package.json
+      - ./bot/tsconfig.json:/app/tsconfig.json
+      - ./docs:/docs
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env:ro
+    networks:
+      - devonboarder_network
+    command: npm start
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Frontend Application
+  frontend:
+    image: devonboarder-frontend
+    container_name: devonboarder-frontend-prod
+    hostname: devonboarder-frontend-prod
+    restart: always
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env.prod:ro
+    networks:
+      - devonboarder_network
+    expose:
+      - 3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app-prod.rule=Host(`theangrygamershow.com`) || Host(`www.theangrygamershow.com`)"
+      - "traefik.http.routers.app-prod.tls=true"
+      - "traefik.http.routers.app-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.app-prod.loadbalancer.server.port=3000"
+
+  # Dashboard Service
+  dashboard-service:
+    image: devonboarder-dashboard-service
+    container_name: devonboarder-dashboard-prod
+    hostname: devonboarder-dashboard-prod
+    restart: always
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    working_dir: /app
+    env_file:
+      - .env.prod
+    volumes:
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./logs:/app/logs
+      - ./.env.prod:/app/.env.prod:ro
+    networks:
+      - devonboarder_network
+    expose:
+      - 8003
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard-prod.rule=Host(`dashboard.theangrygamershow.com`)"
+      - "traefik.http.routers.dashboard-prod.tls=true"
+      - "traefik.http.routers.dashboard-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dashboard-prod.loadbalancer.server.port=8003"
+
+  # Cloudflare Tunnel
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: devonboarder-tunnel-prod
+    restart: always
+    command: cloudflared --no-autoupdate tunnel run --token ${TUNNEL_TOKEN}
+    networks:
+      - devonboarder_network
+    healthcheck:
+      test: ["CMD", "cloudflared", "--help"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  devonboarder_network:
+    driver: bridge
+    name: devonboarder_network
