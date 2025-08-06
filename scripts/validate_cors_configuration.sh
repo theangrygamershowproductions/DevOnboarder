@@ -59,10 +59,10 @@ validate_env_cors() {
     # Check for required domains
     local required_domains=(
         "dev.theangrygamershow.com"
-        "auth.dev.theangrygamershow.com"
-        "api.dev.theangrygamershow.com"
-        "discord.dev.theangrygamershow.com"
-        "dashboard.dev.theangrygamershow.com"
+        "auth.theangrygamershow.com"
+        "api.theangrygamershow.com"
+        "discord.theangrygamershow.com"
+        "dashboard.theangrygamershow.com"
     )
 
     local missing_domains=()
@@ -91,8 +91,8 @@ validate_frontend_env() {
     echo "=== Frontend Environment Variables ==="
 
     local required_frontend_vars=(
-        "VITE_AUTH_URL=https://auth.dev.theangrygamershow.com"
-        "VITE_API_URL=https://api.dev.theangrygamershow.com"
+        "VITE_AUTH_URL=https://auth.theangrygamershow.com"
+        "VITE_API_URL=https://api.theangrygamershow.com"
     )
 
     for var in "${required_frontend_vars[@]}"; do
@@ -104,7 +104,7 @@ validate_frontend_env() {
     done
 
     # Check OAuth redirect URL
-    if grep -q "DISCORD_REDIRECT_URI=https://auth.dev.theangrygamershow.com" .env.dev; then
+    if grep -q "DISCORD_REDIRECT_URI=https://auth.theangrygamershow.com" .env.dev; then
         log_success "OAuth redirect URL configured for tunnel"
     else
         log_error "OAuth redirect URL not configured for tunnel"
@@ -167,9 +167,9 @@ test_live_cors_headers() {
     echo "Run 'bash scripts/setup_tunnel.sh --start' first if needed"
 
     local test_urls=(
-        "https://auth.dev.theangrygamershow.com/health"
-        "https://api.dev.theangrygamershow.com/health"
-        "https://discord.dev.theangrygamershow.com/health"
+        "https://auth.theangrygamershow.com/health"
+        "https://api.theangrygamershow.com/health"
+        "https://discord.theangrygamershow.com/health"
     )
 
     for url in "${test_urls[@]}"; do
@@ -227,7 +227,7 @@ generate_cors_recommendations() {
         echo "Critical CORS configuration issues found:"
         echo ""
         echo "1. Update .env.dev CORS_ALLOW_ORIGINS:"
-        echo "   CORS_ALLOW_ORIGINS=https://dev.theangrygamershow.com,https://auth.dev.theangrygamershow.com,https://api.dev.theangrygamershow.com,https://discord.dev.theangrygamershow.com,https://dashboard.dev.theangrygamershow.com"
+        echo "   CORS_ALLOW_ORIGINS=https://dev.theangrygamershow.com,https://auth.theangrygamershow.com,https://api.theangrygamershow.com,https://discord.theangrygamershow.com,https://dashboard.theangrygamershow.com"
         echo ""
         echo "2. Ensure all FastAPI services use:"
         echo "   from src.utils.cors import get_cors_origins"

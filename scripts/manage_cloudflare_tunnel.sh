@@ -182,11 +182,11 @@ test_connectivity() {
 
     if [ "$env" = "prod" ]; then
         local domains=(
-            "auth.dev.theangrygamershow.com"
-            "api.dev.theangrygamershow.com"
+            "auth.theangrygamershow.com"
+            "api.theangrygamershow.com"
             "dev.theangrygamershow.com"
-            "discord.dev.theangrygamershow.com"
-            "dashboard.dev.theangrygamershow.com"
+            "discord.theangrygamershow.com"
+            "dashboard.theangrygamershow.com"
         )
 
         for domain in "${domains[@]}"; do

@@ -21,7 +21,7 @@ TUNNEL_ID="ac65c0eb-6e16-4444-b340-feb89e45d991"
 CONFIG_FILE="config/cloudflare/tunnel-config.yml"
 CREDENTIALS_FILE="cloudflared/$TUNNEL_ID.json"
 DOCKER_COMPOSE_FILE="docker-compose.dev.yaml"
-ENV_FILE=".env.dev"
+ENV_FILE=".env"  # Check main .env file which has the correct variables
 
 # Track validation results
 VALIDATION_ERRORS=0
@@ -94,10 +94,10 @@ validate_tunnel_config() {
 
     # Check required hostnames
     local required_hostnames=(
-        "auth.dev.theangrygamershow.com"
-        "api.dev.theangrygamershow.com"
-        "discord.dev.theangrygamershow.com"
-        "dashboard.dev.theangrygamershow.com"
+        "auth.theangrygamershow.com"
+        "api.theangrygamershow.com"
+        "discord.theangrygamershow.com"
+        "dashboard.theangrygamershow.com"
         "dev.theangrygamershow.com"
     )
 
@@ -109,22 +109,17 @@ validate_tunnel_config() {
         fi
     done
 
-    # Check service mappings
-    local required_services=(
-        "http://auth-service:8002"
-        "http://backend:8001"
-        "http://discord-integration:8081"
-        "http://dashboard-service:8003"
-        "http://frontend:3000"
-    )
+    # Check service mappings (using Traefik reverse proxy)
+    local traefik_services
+    traefik_services=$(grep -c "service: http://traefik:80" "$CONFIG_FILE" 2>/dev/null || echo "0")
 
-    for service in "${required_services[@]}"; do
-        if grep -q "service: $service" "$CONFIG_FILE"; then
-            log_success "Service mapping $service configured"
-        else
-            log_error "Service mapping $service not found"
-        fi
-    done
+    if [ "$traefik_services" -ge 5 ]; then
+        log_success "Traefik reverse proxy routing configured ($traefik_services services)"
+        log_success "Service mapping http://traefik:80 configured for all subdomains"
+    else
+        log_error "Traefik reverse proxy routing incomplete (found $traefik_services/5 services)"
+        log_error "All subdomains should route through http://traefik:80"
+    fi
 
     # Check catch-all rule
     if grep -q "service: http_status:404" "$CONFIG_FILE"; then
@@ -201,13 +196,13 @@ validate_environment() {
 
     # Check tunnel URLs
     local required_env_vars=(
-        "DEV_TUNNEL_AUTH_URL=https://auth.dev.theangrygamershow.com"
-        "DEV_TUNNEL_API_URL=https://api.dev.theangrygamershow.com"
-        "DEV_TUNNEL_DISCORD_URL=https://discord.dev.theangrygamershow.com"
-        "DEV_TUNNEL_DASHBOARD_URL=https://dashboard.dev.theangrygamershow.com"
+        "DEV_TUNNEL_AUTH_URL=https://auth.theangrygamershow.com"
+        "DEV_TUNNEL_API_URL=https://api.theangrygamershow.com"
+        "DEV_TUNNEL_DISCORD_URL=https://discord.theangrygamershow.com"
+        "DEV_TUNNEL_DASHBOARD_URL=https://dashboard.theangrygamershow.com"
         "DEV_TUNNEL_FRONTEND_URL=https://dev.theangrygamershow.com"
-        "VITE_AUTH_URL=https://auth.dev.theangrygamershow.com"
-        "VITE_API_URL=https://api.dev.theangrygamershow.com"
+        "VITE_AUTH_URL=https://auth.theangrygamershow.com"
+        "VITE_API_URL=https://api.theangrygamershow.com"
     )
 
     for env_var in "${required_env_vars[@]}"; do

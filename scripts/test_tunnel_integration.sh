@@ -18,10 +18,10 @@ echo "Starting Phase 2: Service Integration & CORS Testing"
 
 # Configuration
 TUNNEL_URLS=(
-    "https://auth.dev.theangrygamershow.com"
-    "https://api.dev.theangrygamershow.com"
-    "https://discord.dev.theangrygamershow.com"
-    "https://dashboard.dev.theangrygamershow.com"
+    "https://auth.theangrygamershow.com"
+    "https://api.theangrygamershow.com"
+    "https://discord.theangrygamershow.com"
+    "https://dashboard.theangrygamershow.com"
     "https://dev.theangrygamershow.com"
 )
 
@@ -126,10 +126,10 @@ test_health_endpoints() {
     log_test_start "Service Health Endpoints Test"
 
     local health_endpoints=(
-        "https://auth.dev.theangrygamershow.com/health"
-        "https://api.dev.theangrygamershow.com/health"
-        "https://discord.dev.theangrygamershow.com/health"
-        "https://dashboard.dev.theangrygamershow.com/health"
+        "https://auth.theangrygamershow.com/health"
+        "https://api.theangrygamershow.com/health"
+        "https://discord.theangrygamershow.com/health"
+        "https://dashboard.theangrygamershow.com/health"
     )
 
     local healthy_services=0
@@ -164,8 +164,8 @@ test_cors_headers() {
 
     local cors_test_urls=(
         "https://dev.theangrygamershow.com"
-        "https://auth.dev.theangrygamershow.com/health"
-        "https://api.dev.theangrygamershow.com/health"
+        "https://auth.theangrygamershow.com/health"
+        "https://api.theangrygamershow.com/health"
     )
 
     local cors_compliant=0
@@ -214,7 +214,7 @@ test_cross_service_communication() {
     # Test if auth service can reach API service
     local auth_to_api_test
     auth_to_api_test=$(curl -s --max-time 10 \
-        "https://auth.dev.theangrygamershow.com/health" 2>/dev/null)
+        "https://auth.theangrygamershow.com/health" 2>/dev/null)
 
     if echo "$auth_to_api_test" | grep -q '"status".*"ok"'; then
         log_test_pass "Auth service is responding"
@@ -222,7 +222,7 @@ test_cross_service_communication() {
         # Test API service independently
         local api_test
         api_test=$(curl -s --max-time 10 \
-            "https://api.dev.theangrygamershow.com/health" 2>/dev/null)
+            "https://api.theangrygamershow.com/health" 2>/dev/null)
 
         if echo "$api_test" | grep -q '"status".*"ok"'; then
             log_test_pass "API service is responding"
@@ -271,8 +271,8 @@ test_response_times() {
     log_test_start "Response Time Performance Test"
 
     local performance_urls=(
-        "https://auth.dev.theangrygamershow.com/health"
-        "https://api.dev.theangrygamershow.com/health"
+        "https://auth.theangrygamershow.com/health"
+        "https://api.theangrygamershow.com/health"
         "https://dev.theangrygamershow.com"
     )
 

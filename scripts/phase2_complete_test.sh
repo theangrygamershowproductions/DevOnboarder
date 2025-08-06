@@ -112,10 +112,10 @@ main() {
         echo ""
         echo "Access your services at:"
         echo "  - Main App: https://dev.theangrygamershow.com"
-        echo "  - Auth Service: https://auth.dev.theangrygamershow.com"
-        echo "  - API Service: https://api.dev.theangrygamershow.com"
-        echo "  - Discord Integration: https://discord.dev.theangrygamershow.com"
-        echo "  - Dashboard: https://dashboard.dev.theangrygamershow.com"
+        echo "  - Auth Service: https://auth.theangrygamershow.com"
+        echo "  - API Service: https://api.theangrygamershow.com"
+        echo "  - Discord Integration: https://discord.theangrygamershow.com"
+        echo "  - Dashboard: https://dashboard.theangrygamershow.com"
         return 0
     else
         echo "Phase 2 testing FAILED with $failures failed test phases"
