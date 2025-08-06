@@ -910,6 +910,30 @@ All CI commands use proper virtual environment context:
 - **HTTPS enforcement**: All production endpoints
 - **Input validation**: Sanitize all user inputs
 
+### Environment Variable Security Model
+
+**CRITICAL**: DevOnboarder implements centralized environment variable management with security boundaries:
+
+- **Source of Truth**: `.env` file contains all configuration (GITIGNORED)
+- **Synchronization**: Use `bash scripts/smart_env_sync.sh --sync-all` to propagate changes
+- **Security Boundaries**: Production secrets NEVER in committed files
+- **CI Protection**: `.env.ci` uses test/mock values only
+- **Audit System**: `bash scripts/env_security_audit.sh` for continuous validation
+
+**Security Model**:
+
+- `.env` - Source of truth (GITIGNORED)
+- `.env.dev` - Development config (GITIGNORED)
+- `.env.prod` - Production config (GITIGNORED)
+- `.env.ci` - CI test config (COMMITTED with test values)
+
+**Agent Requirements**:
+
+- NEVER suggest manual editing of multiple environment files
+- ALWAYS use centralized synchronization system
+- ALWAYS validate security boundaries before file modifications
+- REMEMBER: Production secrets in CI files is CRITICAL security violation
+
 ### Documentation Standards
 
 - **Vale linting**: `python -m vale docs/` (in virtual environment)
@@ -1202,6 +1226,29 @@ python -m pytest plugins/example_plugin/
 - ⚠️ Framework core updates (TypeScript, Jest major versions)
 - ⚠️ Any PR with failing CI checks
 
+### Environment Variable Management Issues
+
+**Critical Issues Requiring Immediate Action**:
+
+- **Environment File Inconsistencies**:
+
+    - ✅ **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
+    - ✅ **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
+    - ❌ **NOT**: Manually edit individual environment files
+
+- **Security Audit Failures**:
+
+    - ✅ **Detection**: Run `bash scripts/env_security_audit.sh`
+    - ✅ **Pattern**: Production secrets in CI files (CRITICAL violation)
+    - ✅ **Solution**: Move production secrets to gitignored files only
+    - ⚠️ **Emergency**: Never commit production secrets to CI environment
+
+- **Tunnel Hostname Validation Failures**:
+
+    - ✅ **Pattern**: "ERROR: uses old multi-subdomain format"
+    - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
+    - ❌ **NOT**: Disable validation to avoid errors
+
 ### Validation-Driven Resolution Pattern
 
 DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
@@ -1384,6 +1431,28 @@ scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 # ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
 git commit -m "message"
 git commit --no-verify -m "message"  # NEVER use --no-verify
+```
+
+### ⚠️ NEW: Environment Variable Management for Agents
+
+**CRITICAL UNDERSTANDING**: DevOnboarder uses centralized environment variable management with security boundaries.
+
+**MANDATORY AGENT BEHAVIOR**:
+
+- **Use centralized system**: Run `bash scripts/smart_env_sync.sh --sync-all` instead of manual file edits
+- **Validate security**: Run `bash scripts/env_security_audit.sh` after environment changes
+- **Respect boundaries**: Never suggest moving production secrets to CI files
+- **Single source**: Edit `.env` only, synchronize to other files via scripts
+
+**Security Violation Prevention**:
+
+```bash
+# ✅ CORRECT - Centralized management
+echo "NEW_VARIABLE=value" >> .env
+bash scripts/smart_env_sync.sh --sync-all
+
+# ❌ WRONG - Manual multi-file editing
+echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 ```
 
 ### ⚠️ NEW: Shellcheck SC1091 Standard Pattern
