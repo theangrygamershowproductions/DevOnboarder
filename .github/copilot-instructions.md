@@ -1249,6 +1249,25 @@ python -m pytest plugins/example_plugin/
     - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
     - ❌ **NOT**: Disable validation to avoid errors
 
+- **Discord Bot Authentication Failures in Docker**:
+
+    - ✅ **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
+    - ✅ **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
+    - ✅ **Solution**: Ensure compose file env_file matches volume mount (.env.dev → /app/.env:ro)
+    - ✅ **Verification**: Check container logs with `docker compose logs bot`
+
+- **Missing Bot Environment Variables**:
+
+    - ✅ **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
+    - ✅ **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
+    - ❌ **NOT**: Manually edit .env.dev or docker-specific files directly
+
+- **Multi-Service Container Failures**:
+
+    - ✅ **Diagnostic Pattern**: Check `docker compose ps` → logs → environment sync → security audit
+    - ✅ **Service Order**: Database fails → Auth fails → Backend fails → Bot fails
+    - ✅ **Environment Consistency**: All services should reference same environment file in compose
+
 ### Validation-Driven Resolution Pattern
 
 DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
@@ -1575,6 +1594,91 @@ pre-commit run <hook-name> --all-files
 # Comprehensive error analysis (automatically provided by safe_commit.sh)
 ```
 
+### ⚠️ NEW: Multi-Service Docker Architecture Troubleshooting
+
+**CRITICAL UNDERSTANDING**: Multi-service Docker Compose environments require systematic debugging following service dependency chains.
+
+**MANDATORY TROUBLESHOOTING WORKFLOW**:
+
+1. **Check service health first**: `docker compose ps` - identify which services are failing
+2. **Follow dependency chain**: Services fail in order of dependencies (db → auth → backend → bot)
+3. **Verify environment consistency**: All services in compose file should use same environment file
+4. **Check container logs**: `docker compose logs <service>` for missing environment variables
+5. **Validate file synchronization**: Ensure environment files match container expectations
+
+**Common Multi-Service Patterns**:
+
+```bash
+# ✅ CORRECT - Systematic debugging approach
+docker compose -f docker-compose.dev.yaml ps                    # Check service status
+docker compose -f docker-compose.dev.yaml logs bot              # Check specific service logs
+bash scripts/smart_env_sync.sh --validate-only                  # Verify env sync
+bash scripts/env_security_audit.sh                              # Check security boundaries
+
+# ❌ WRONG - Random service restart without diagnosis
+docker compose restart bot  # Doesn't address root cause
+```
+
+**Environment File Consistency Requirements**:
+
+```yaml
+# ✅ CORRECT - Consistent environment file usage across all services
+services:
+  auth-service:
+    env_file: [.env.dev]
+  backend:
+    env_file: [.env.dev]
+  bot:
+    env_file: [.env.dev]          # Same file as other services
+    volumes:
+      - ./.env.dev:/app/.env:ro   # Mount as expected filename
+
+# ❌ WRONG - Mixed environment file references
+services:
+  bot:
+    env_file: [.env.dev]                # Compose uses .env.dev
+    volumes:
+      - ./bot/.env:/app/.env:ro         # But mounts different file
+```
+
+### ⚠️ NEW: ES Module Requirements for TypeScript Discord Bots
+
+**CRITICAL UNDERSTANDING**: Discord.js v14+ requires ES modules with explicit .js extensions in TypeScript imports.
+
+**MANDATORY IMPORT PATTERNS**:
+
+```typescript
+// ✅ CORRECT - ES module imports in TypeScript (mandatory .js extensions)
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { command as verifyCommand } from './verify.js';        // .js required even for .ts files
+import { command as profileCommand } from './profile.js';      // .js required even for .ts files
+
+// ❌ WRONG - Missing .js extension causes runtime MODULE_NOT_FOUND errors
+import { command as verifyCommand } from './verify';           // Missing .js
+import { command as profileCommand } from './profile';         // Missing .js
+```
+
+**TypeScript Configuration Requirements**:
+
+```json
+// tsconfig.json must include ES module settings
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2022"
+  },
+  "type": "module"
+}
+```
+
+**Agent Requirements for Discord Bot Development**:
+
+- **ALWAYS** add `.js` extensions to relative imports, even when importing TypeScript files
+- **NEVER** suggest removing ES module configuration to fix import errors
+- **UNDERSTAND**: TypeScript compilation preserves import paths exactly as written
+- **REMEMBER**: Runtime errors occur if .js extensions are missing, even if TypeScript compiles
+
 ## Agent Documentation Standards
 
 ### Codex Agent Requirements
@@ -1654,7 +1758,7 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-05 (Enhanced Agent Guidelines - Pre-commit Management, Error Analysis & Markdown Standards)
+**Last Updated**: 2025-08-06 (Multi-Service Docker Architecture, ES Modules & Environment Management Troubleshooting)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
