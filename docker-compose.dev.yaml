@@ -56,9 +56,9 @@ services:
       start_period: 30s
 
   # Auth Service (Port 8002)
-  auth-server:
+  auth-service:
     container_name: devonboarder-auth-dev
-    hostname: devonboarder-auth-dev
+    hostname: auth-service
     restart: always
     depends_on:
       db:
@@ -96,14 +96,14 @@ services:
       - "traefik.http.routers.auth-dev.priority=100"
 
   # XP API Service (Port 8001)
-  xp-api:
+  backend:
     container_name: devonboarder-xp-dev
-    hostname: devonboarder-xp-dev
+    hostname: backend
     restart: always
     depends_on:
       db:
         condition: service_healthy
-      auth-server:
+      auth-service:
         condition: service_healthy
     build:
       context: .
@@ -138,12 +138,12 @@ services:
   # Discord Integration Service (Port 8081)
   discord-integration:
     container_name: devonboarder-discord-dev
-    hostname: devonboarder-discord-dev
+    hostname: discord-integration
     restart: always
     depends_on:
       db:
         condition: service_healthy
-      auth-server:
+      auth-service:
         condition: service_healthy
     build:
       context: .
@@ -181,9 +181,9 @@ services:
     hostname: devonboarder-bot-dev
     restart: always
     depends_on:
-      auth-server:
+      auth-service:
         condition: service_healthy
-      xp-api:
+      backend:
         condition: service_healthy
     build:
       context: .
@@ -215,12 +215,12 @@ services:
   # Frontend Service (Port 3000)
   frontend:
     container_name: devonboarder-frontend-dev
-    hostname: devonboarder-frontend-dev
+    hostname: frontend
     restart: always
     depends_on:
-      auth-server:
+      auth-service:
         condition: service_healthy
-      xp-api:
+      backend:
         condition: service_healthy
       discord-integration:
         condition: service_healthy
@@ -256,12 +256,12 @@ services:
       - "traefik.http.routers.frontend-dev.priority=1"
 
   # Dashboard Service (Port 8003)
-  dashboard:
+  dashboard-service:
     container_name: devonboarder-dashboard-dev
-    hostname: devonboarder-dashboard-dev
+    hostname: dashboard-service
     restart: always
     depends_on:
-      auth-server:
+      auth-service:
         condition: service_healthy
     build:
       context: .
@@ -294,20 +294,29 @@ services:
       - "traefik.http.routers.dashboard-dev.middlewares=stripprefix-dashboard@file,cors-header@file"
       - "traefik.http.routers.dashboard-dev.priority=100"
 
-  # Optional: Cloudflare Tunnel (if needed)
-  cloudflared:
+  # Cloudflare Tunnel - Multi-Subdomain Configuration
+  cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: devonboarder-cloudflared-dev
+    container_name: devonboarder-tunnel-dev
+    hostname: devonboarder-tunnel-dev
     restart: unless-stopped
-    command: tunnel run --token ${TUNNEL_TOKEN}
+    command: tunnel --config /etc/cloudflared/config.yml run
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-      - TUNNEL_ID=${TUNNEL_ID}
+      - TUNNEL_ID=ac65c0eb-6e16-4444-b340-feb89e45d991
     volumes:
-      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - ./cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+      - ./config/cloudflare/tunnel-config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json:/etc/cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json:ro
     depends_on:
-      - traefik
+      auth-service:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+      discord-integration:
+        condition: service_healthy
+      dashboard-service:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
     labels:
       - "traefik.enable=false"
     networks:
@@ -315,11 +324,11 @@ services:
     profiles:
       - tunnel  # Only start with --profile tunnel
     healthcheck:
-      test: ["CMD-SHELL", "cloudflared tunnel info ${TUNNEL_ID} || exit 1"]
+      test: ["CMD-SHELL", "cloudflared tunnel info ac65c0eb-6e16-4444-b340-feb89e45d991 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 30s
 
   # Debug Tools
   debug-tools:
