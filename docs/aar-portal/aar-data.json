@@ -11,7 +11,7 @@
               "absolute_path": ".aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md",
               "ref_number": "Discord",
               "type": "issues",
-              "date_created": "2025-08-04T06:40:54.966710",
+              "date_created": "2025-08-07T06:36:48.143308",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -37,7 +37,7 @@
               "absolute_path": ".aar/2025/Q3/sprints/sprint-2025-07-30.md",
               "ref_number": "2025",
               "type": "sprints",
-              "date_created": "2025-08-04T06:40:54.966710",
+              "date_created": "2025-08-07T06:36:48.143308",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -61,7 +61,7 @@
               "absolute_path": ".aar/2025/Q3/incidents/incident-2025-07-30.md",
               "ref_number": "2025",
               "type": "incidents",
-              "date_created": "2025-08-04T06:40:54.966710",
+              "date_created": "2025-08-07T06:36:48.143308",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 4,
@@ -84,7 +84,7 @@
               "absolute_path": ".aar/2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md",
               "ref_number": "unknown",
               "type": "automation",
-              "date_created": "2025-08-04T06:40:54.966710",
+              "date_created": "2025-08-07T06:36:48.143308",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 12,
@@ -107,7 +107,7 @@
               "absolute_path": ".aar/2025/Q3/automation/automation-enhancement-2025-07-30.md",
               "ref_number": "enhancement",
               "type": "automation",
-              "date_created": "2025-08-04T06:40:54.966710",
+              "date_created": "2025-08-07T06:36:48.142308",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 4,
@@ -167,5 +167,5 @@
       "avg_actions_per_aar": 5.2
     }
   },
-  "generated": "2025-08-04T06:41:04.069800"
+  "generated": "2025-08-07T06:36:56.108785"
 }
