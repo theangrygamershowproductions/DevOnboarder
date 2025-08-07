@@ -1455,7 +1455,7 @@ scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 
 # ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
 git commit -m "message"
-# POTATO APPROVAL: documentation-example-violation-20250807
+# POTATO: EMERGENCY APPROVED - documentation-example-violation-20250807
 git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypasses quality gates
 ```
 

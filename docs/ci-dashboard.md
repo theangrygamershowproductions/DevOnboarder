@@ -82,6 +82,7 @@ integration_points:
 
 ### **4. Known Issues Runbook**
 
+<!-- POTATO: EMERGENCY APPROVED - documentation-table-reference-20250807 -->
 | Issue Pattern | Last Seen | Resolution | Auto-Fix Available | Codex Agent |
 |---------------|-----------|------------|-------------------|-------------|
 | **--no-verify unauthorized usage** | **Blocked** | **Pre-commit + CI enforcement** | **✅ Yes** | **No-Verify Policy Agent** |
