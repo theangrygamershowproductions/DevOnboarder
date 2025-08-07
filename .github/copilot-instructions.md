@@ -1449,7 +1449,7 @@ scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 
 # ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
 git commit -m "message"
-git commit --no-verify -m "message"  # NEVER use --no-verify
+git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypasses quality gates
 ```
 
 ### ⚠️ NEW: Environment Variable Management for Agents
