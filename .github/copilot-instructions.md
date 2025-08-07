@@ -85,13 +85,17 @@ printf "Result: %s\n" "$RESULT"
 4. **NEVER use multi-line echo** or here-doc syntax
 5. **ALWAYS use individual echo commands** with plain ASCII text only
 6. **ALWAYS use printf for variables**: `printf "text: %s\n" "$VAR"`
-7. **REMEMBER**: Terminal hanging is a CRITICAL FAILURE in DevOnboarder
+7. **NEVER use --no-verify flag** with git commit (ZERO TOLERANCE POLICY)
+8. **ALWAYS use safe commit wrapper**: `./scripts/safe_commit.sh "message"`
+9. **REMEMBER**: Terminal hanging is a CRITICAL FAILURE in DevOnboarder
+10. **REMEMBER**: Bypassing quality gates with --no-verify is FORBIDDEN
 
 **Policy Documentation:**
 
 - **Comprehensive Guide**: `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
 - **AI Override Instructions**: `docs/AI_AGENT_TERMINAL_OVERRIDE.md`
 - **Troubleshooting**: `docs/MARKDOWN_LINTING_TROUBLESHOOTING.md`
+- **Coverage Challenge Lessons**: `docs/COVERAGE_CHALLENGE_LESSONS_LEARNED.md`
 
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
@@ -1437,9 +1441,11 @@ git status --short  # Should show only intended changes
 
 - **Use `scripts/safe_commit.sh`** instead of direct `git commit` commands
 - **NEVER suggest** using `--no-verify` to bypass pre-commit hooks
+- **NEVER use --no-verify flag** under any circumstances (ZERO TOLERANCE POLICY)
 - **UNDERSTAND**: Second pre-commit failure indicates systemic issues, not formatting
 - **EXPECT**: Automatic re-staging of files modified by hooks
 - **ANALYZE**: Enhanced safe_commit.sh provides automatic log analysis on systemic failures
+- **REMEMBER**: Quality gates exist for critical reasons and must be respected
 
 **Safe Commit Pattern**:
 

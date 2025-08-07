@@ -651,7 +651,11 @@ def test_discord_oauth_redirect_fallback_logic(monkeypatch):
 
 
 def test_contribute_endpoint_user_not_found_error():
-    """Test contribute endpoint 404 error when target user doesn't exist."""
+    """Test contribute endpoint 404 error when target user doesn't exist.
+
+    COVERAGE TARGET: Line 347 in auth_service.py - user lookup failure path.
+    LESSON LEARNED: Every error code path needs dedicated test coverage.
+    """
     app = auth_service.create_app()
     client = TestClient(app)
 
