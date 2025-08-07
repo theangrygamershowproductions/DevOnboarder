@@ -684,6 +684,7 @@ if __name__ == "__main__":
     import uvicorn
 
     app = create_dashboard_app()
-    # Use 0.0.0.0 for container accessibility
+    # Use environment-configurable host for security
+    host = os.getenv("DASHBOARD_HOST", "127.0.0.1")  # Default to localhost for security
     port = int(os.getenv("DASHBOARD_PORT", "8003"))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host=host, port=port)
