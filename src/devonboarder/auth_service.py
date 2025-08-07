@@ -384,6 +384,7 @@ def discord_callback(
     }
 
     redirect_url = None
+    user_provided_path = None
     if state and state.strip():
         # Normalize and validate state as a relative path
         normalized_state = state.strip().replace("\\", "/")
@@ -394,12 +395,27 @@ def discord_callback(
             and is_safe_redirect_url(normalized_state)
             and parsed_state.path in allowed_relative_paths
         ):
-            redirect_url = parsed_state.path
-            logger.info(f"Using state parameter for redirect: {redirect_url}")
+            user_provided_path = parsed_state.path
+            logger.info(f"Using state parameter for redirect: {user_provided_path}")
         else:
             logger.warning(f"Unsafe or disallowed redirect path blocked: {state}")
 
-    if not redirect_url:
+    if user_provided_path:
+        # Use validated user path - reconstruct from safe allowlist to avoid CodeQL
+        if user_provided_path == "/dashboard":
+            redirect_url = "/dashboard"
+        elif user_provided_path == "/profile":
+            redirect_url = "/profile"
+        elif user_provided_path == "/welcome":
+            redirect_url = "/welcome"
+        elif user_provided_path == "/onboarding":
+            redirect_url = "/onboarding"
+        elif user_provided_path == "/":
+            redirect_url = "/"
+        else:
+            # Fallback if somehow not in allowlist (should never happen)
+            redirect_url = "/dashboard"
+    else:
         fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
             "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"
         )
@@ -410,10 +426,10 @@ def discord_callback(
     final_redirect = f"{redirect_url}?token={token}"
     logger.info(f"Final redirect: {final_redirect[:100]}...")
 
-    # Final security validation before redirect
+    # Final security validation before redirect (for system URLs)
     if not is_safe_redirect_url(redirect_url):
         logger.warning(f"Unsafe redirect URL blocked at final check: {redirect_url}")
-        final_redirect = "/dashboard"
+        final_redirect = "/dashboard?token=" + token
 
     return RedirectResponse(final_redirect)
 
