@@ -1,10 +1,11 @@
 ---
 name: Work Item
 about: Template for tracking work items
-
 labels: work-item
 assignees:
 ---
+
+# Work Item
 
 ## Summary Description
 <!-- Briefly summarize the work item. -->
