@@ -29,6 +29,12 @@ while IFS= read -r msg || [ -n "$msg" ]; do
     continue
   fi
 
+  # Legacy commit exceptions - allow these specific patterns during transition
+  if [[ $msg =~ ^(RESOLVE:|Revert) ]]; then
+    echo "Skipping legacy commit format: $msg"
+    continue
+  fi
+
   if ! echo "$msg" | grep -E "$regex" >/dev/null; then
     echo "::error ::Commit message '$msg' does not follow <TYPE>(<scope>): <subject> format"
     echo "::error ::Expected format: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD(scope): subject or Build(deps): subject for Dependabot"
