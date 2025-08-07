@@ -76,6 +76,9 @@ jobs:
     needs: validate-docs
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: read
+      actions: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
