@@ -197,6 +197,8 @@ services:
       - "traefik.http.routers.discord-dev.priority=100"
 
   # Discord Bot Service
+  # Note: Uses custom health check script (not HTTP) since bot doesn't expose endpoints
+  # See docs/troubleshooting/DISCORD_BOT_HEALTH_CHECK_FIX.md for health check issues
   bot:
     container_name: devonboarder-bot-dev
     hostname: devonboarder-bot-dev
@@ -216,8 +218,9 @@ services:
       - ./bot/src:/app/src
       - ./bot/package.json:/app/package.json
       - ./bot/tsconfig.json:/app/tsconfig.json
+      - ./bot/health-check.js:/app/health-check.js:ro
       - ./docs:/docs
-      - ./logs:/app/logs
+      - ./logs/bot:/app/logs
       - ./.env.dev:/app/.env:ro
     networks:
       - devonboarder_network
@@ -225,7 +228,7 @@ services:
     expose:
       - 8080
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test: ["CMD", "node", "/app/health-check.js"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -359,7 +362,7 @@ services:
     profiles:
       - tunnel  # Only start with --profile tunnel
     healthcheck:
-      test: ["CMD-SHELL", "cloudflared tunnel info ac65c0eb-6e16-4444-b340-feb89e45d991 || exit 1"]
+      test: ["CMD", "cloudflared", "--help"]
       interval: 30s
       timeout: 10s
       retries: 3

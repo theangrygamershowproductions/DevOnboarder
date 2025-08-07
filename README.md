@@ -97,6 +97,12 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
+### Common Issues
+
+- **Bot container shows "unhealthy"**: See [Discord Bot Health Check Fix](docs/troubleshooting/DISCORD_BOT_HEALTH_CHECK_FIX.md)
+- **Permission denied errors**: Check [Docker Container Health Troubleshooting](docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md)
+- **General setup issues**: Review [docs/README.md](docs/README.md) troubleshooting section
+
 ## 🔄 PR-to-Issue Automation
 
 DevOnboarder includes **automatic issue creation and linking** when Pull Requests are opened, providing comprehensive tracking throughout the development lifecycle.

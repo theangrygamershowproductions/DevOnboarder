@@ -553,3 +553,25 @@ def test_health_endpoint():
     resp = client.get("/health")
     assert resp.status_code == 200
     assert resp.json() == {"status": "ok"}
+
+
+def test_get_current_user_user_not_found():
+    """Test get_current_user raises 401 when user is deleted after token creation."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create user and get token
+    client.post("/api/register", json={"username": "testuser", "password": "pw"})
+    token = _get_token(client, "testuser", "pw")
+
+    # Delete the user from the database while keeping the valid token
+    with auth_service.SessionLocal() as db:
+        user = db.query(auth_service.User).filter_by(username="testuser").first()
+        if user:
+            db.delete(user)
+            db.commit()
+
+    # Try to use the token - should fail with 401 User not found
+    resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
+    assert resp.status_code == 401
+    assert resp.json()["detail"] == "User not found"

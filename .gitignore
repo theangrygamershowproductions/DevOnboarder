@@ -19,6 +19,7 @@
 *.egg-info/
 *.env
 *.key
+*.log
 *.p12
 *.pem
 *.potato

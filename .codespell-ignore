@@ -24,6 +24,7 @@ deployment-keys.*
 discord-tokens.*
 github-tokens.*
 id_rsa*
+logs/
 webhook-config.json
 #
 # Technical terms and project-specific words
