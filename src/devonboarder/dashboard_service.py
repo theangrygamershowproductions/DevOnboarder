@@ -15,6 +15,7 @@ from typing import Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 # Configure logging
@@ -480,6 +481,51 @@ def create_dashboard_app() -> FastAPI:
     def health() -> Dict[str, str]:
         """Health check endpoint."""
         return {"status": "ok"}
+
+    @app.get("/")
+    def dashboard_info():
+        """Dashboard service information and available endpoints."""
+        return {
+            "service": "DevOnboarder Dashboard Service",
+            "description": "CI Troubleshooting and Script Execution API",
+            "version": "1.0",
+            "endpoints": {
+                "health": "GET /health - Service health check",
+                "scripts": "GET /scripts - List available automation scripts",
+                "execute": "POST /execute - Execute a script",
+                "executions": "GET /executions - List script executions",
+                "execution_detail": "GET /execution/{id} - Get execution details",
+                "policy": "GET /policy/no-verify - Check no-verify policy status",
+            },
+            "documentation": "https://dashboard.theangrygamershow.com/docs",
+        }
+
+    @app.get("/login/discord")
+    def discord_login() -> RedirectResponse:
+        """Redirect to Discord OAuth with dashboard return URL."""
+        dashboard_url = os.getenv(
+            "VITE_DASHBOARD_URL", "https://dashboard.theangrygamershow.com"
+        )
+        auth_url = "https://auth.theangrygamershow.com"
+
+        # Redirect to auth service with dashboard as the redirect destination
+        from urllib.parse import urlencode
+
+        params = {"redirect_to": dashboard_url}
+        return RedirectResponse(f"{auth_url}/login/discord?{urlencode(params)}")
+
+    @app.get("/auth/callback")
+    def auth_callback(token: Optional[str] = None) -> dict[str, str]:
+        """Handle authentication callback from Discord OAuth."""
+        if token:
+            return {
+                "status": "success",
+                "message": "Authentication successful",
+                "token": token,
+                "redirect": "Set token in localStorage and refresh page",
+            }
+        else:
+            return {"status": "error", "message": "No authentication token received"}
 
     @app.get("/policy/no-verify")
     def no_verify_policy_status() -> Dict[str, str]:

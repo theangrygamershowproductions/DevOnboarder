@@ -13,8 +13,8 @@ write_env() {
   fi
 }
 
-# Ensure we have a fresh file
-cp .env.example "$ENV_FILE"
+# Ensure we have a fresh file from source of truth
+cp .env "$ENV_FILE"
 
 # Generate secrets
 write_env "JWT_SECRET_KEY" "$(openssl rand -hex 32)"

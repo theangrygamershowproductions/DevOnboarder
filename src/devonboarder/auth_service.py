@@ -1,6 +1,7 @@
 """Authentication service with Discord integration and JWT utilities."""
 
 from __future__ import annotations
+from typing import Optional
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,8 +28,13 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 import os
 import time
+import logging
 from dotenv import load_dotenv
 from pathlib import Path
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load environment variables from the auth service's .env file when present
 load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
@@ -214,8 +220,10 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
 
 
 @router.get("/login/discord")
-def discord_login() -> RedirectResponse:
+def discord_login(redirect_to: Optional[str] = None) -> RedirectResponse:
     """Redirect the user to Discord's OAuth consent screen."""
+    # Store redirect_to in state parameter for callback
+    state = redirect_to if redirect_to else ""
     params = {
         "client_id": os.getenv("DISCORD_CLIENT_ID"),
         "response_type": "code",
@@ -224,6 +232,7 @@ def discord_login() -> RedirectResponse:
             "http://localhost:8002/login/discord/callback",
         ),
         "scope": "identify guilds guilds.members.read",
+        "state": state,
     }
     url = "https://discord.com/oauth2/authorize?" + urlencode(params)
     return RedirectResponse(url)
@@ -231,9 +240,12 @@ def discord_login() -> RedirectResponse:
 
 @router.get("/login/discord/callback", response_model=None)
 def discord_callback(
-    code: str, db: Session = Depends(get_db)
+    code: str, state: Optional[str] = None, db: Session = Depends(get_db)
 ) -> RedirectResponse | dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
+    # Debug logging to see what we receive
+    logger.info(f"Discord callback - code: {code[:10]}..., state: {state}")
+
     # Debug logging to see what redirect_uri is being used
     redirect_uri = os.getenv(
         "DISCORD_REDIRECT_URI",
@@ -282,8 +294,19 @@ def discord_callback(
     if os.getenv("TEST_MODE"):
         return {"token": token}
 
-    frontend_url = os.getenv("FRONTEND_URL", "https://dev.theangrygamershow.com")
-    return RedirectResponse(f"{frontend_url}/?token={token}")
+    # Use state parameter for redirect destination, otherwise default to frontend
+    if state and state.strip():
+        redirect_url = state
+        logger.info(f"Using state parameter for redirect: {redirect_url}")
+    else:
+        fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
+            "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"
+        )
+        redirect_url = fallback_url or "https://dev.theangrygamershow.com"
+        logger.info(f"Using fallback redirect: {redirect_url}")
+
+    logger.info(f"Final redirect: {redirect_url}?token={token[:10]}...")
+    return RedirectResponse(f"{redirect_url}?token={token}")
 
 
 @router.get("/api/user/onboarding-status")

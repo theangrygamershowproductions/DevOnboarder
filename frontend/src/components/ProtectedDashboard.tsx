@@ -116,7 +116,7 @@ export default function ProtectedDashboard() {
                 )}
 
                 {/* Main Dashboard Widgets */}
-                <div className="grid lg:grid-cols-2 gap-8">
+                <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-8">
                     {/* Feedback Management */}
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-4">Feedback Management</h2>
@@ -145,12 +145,46 @@ export default function ProtectedDashboard() {
                             </div>
                         )}
                     </div>
+
+                    {/* CI Dashboard */}
+                    {hasPermission(["OWNER"]) && (
+                        <div className="bg-white rounded-lg shadow-lg p-6 xl:col-span-1 lg:col-span-2">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">CI Dashboard</h2>
+                            <p className="text-sm text-gray-600 mb-4">
+                                Access the comprehensive CI troubleshooting dashboard with script execution and real-time monitoring.
+                            </p>
+                            <div className="space-y-3">
+                                <a
+                                    href="https://dashboard.theangrygamershow.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-center transition duration-200"
+                                >
+                                    Open CI Dashboard (External)
+                                </a>
+                                <p className="text-xs text-gray-500 text-center">
+                                    Provides script execution, CI health monitoring, and real-time automation tools
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Quick Actions */}
                 <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-4 gap-4">
+                        {hasPermission(["OWNER"]) && (
+                            <a
+                                href="https://dashboard.theangrygamershow.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block p-4 border-2 border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition duration-200"
+                            >
+                                <h3 className="font-medium text-blue-900">CI Dashboard</h3>
+                                <p className="text-sm text-blue-700">CI troubleshooting & automation</p>
+                            </a>
+                        )}
                         <a
                             href="http://api.dev.theangrygamershow.com/docs"
                             target="_blank"

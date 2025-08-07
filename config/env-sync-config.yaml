@@ -98,6 +98,16 @@ sync_config:
     - "INIT_DB_ON_STARTUP"
     - "OFFLINE_BADGE"
 
+  # CI-specific exclusions (variables that CI should keep as localhost)
+  ci_specific_exclusions:
+    - "DEV_TUNNEL_AUTH_URL"      # CI uses localhost:8002
+    - "DEV_TUNNEL_API_URL"       # CI uses localhost:8001
+    - "DEV_TUNNEL_APP_URL"       # CI uses localhost:8081
+    - "DEV_TUNNEL_DISCORD_URL"   # CI uses localhost:8081
+    - "DEV_TUNNEL_DASHBOARD_URL" # CI uses localhost:8003
+    - "AUTH_URL"                 # CI uses localhost:8002
+    - "API_BASE_URL"             # CI uses localhost:8001
+
   # Validation rules
   validation:
     # Variables that must exist in source

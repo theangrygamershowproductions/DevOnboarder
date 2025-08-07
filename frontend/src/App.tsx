@@ -11,6 +11,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<PublicLandingPage />} />
                     <Route path="/dashboard" element={<ProtectedDashboard />} />
+                    <Route path="/login/discord/callback" element={<ProtectedDashboard />} />
                     {/* Redirect legacy routes */}
                     <Route path="/admin" element={<ProtectedDashboard />} />
                     <Route path="/staff" element={<ProtectedDashboard />} />

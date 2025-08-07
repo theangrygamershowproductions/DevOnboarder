@@ -150,12 +150,6 @@ export default function Header({ className = "" }: HeaderProps) {
                                 <div className="flex items-center space-x-2">
                                     <a
                                         href="/dashboard"
-                                        className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
-                                    >
-                                        Sign In
-                                    </a>
-                                    <a
-                                        href="/dashboard"
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
                                     >
                                         Staff Login
