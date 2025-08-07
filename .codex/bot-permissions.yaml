@@ -168,3 +168,9 @@ post_merge_cleanup:
     permissions:
         - contents: read
         - actions: read
+
+documentation_quality:
+    secret: DOCUMENTATION_QUALITY_KEY
+    permissions:
+        - repo: read
+        - repo: write
