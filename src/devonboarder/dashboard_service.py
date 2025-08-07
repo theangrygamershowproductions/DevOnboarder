@@ -121,7 +121,7 @@ class DashboardService:
         scripts: List[ScriptInfo] = []
 
         if not self.scripts_dir.exists():
-            logger.warning(f"Scripts directory not found: {self.scripts_dir}")
+            logger.warning("Scripts directory not found: %s", self.scripts_dir)
             return scripts
 
         for script_path in self.scripts_dir.rglob("*"):
@@ -204,13 +204,13 @@ class DashboardService:
             )
 
         except FileNotFoundError:
-            logger.warning(f"Script file not found: {script_path}")
+            logger.warning("Script file not found: %s", script_path)
             return "Description unavailable (file not found)"
         except PermissionError:
-            logger.warning(f"Permission denied when reading script: {script_path}")
+            logger.warning("Permission denied when reading script: %s", script_path)
             return "Description unavailable (permission denied)"
         except Exception as e:
-            logger.warning(f"Failed to extract description from {script_path}: {e}")
+            logger.warning("Failed to extract description from %s: %s", script_path, e)
             return "Description unavailable"
 
     def _categorize_script(self, script_path: Path) -> str:
@@ -340,12 +340,12 @@ class DashboardService:
                 return result
 
         except Exception as e:
-            logger.error(f"Script execution failed: {e}")
+            logger.error("Script execution failed: %s", e)
             result.status = "failed"
             result.error = str(e)
             result.end_time = datetime.now().isoformat()
             await self._broadcast_execution_update(result)
-            raise HTTPException(status_code=500, detail=f"Execution failed: {e}")
+            raise HTTPException(status_code=500, detail=f"Execution failed: {e}") from e
 
     async def _monitor_background_execution(
         self, process, result: ExecutionResult, log_file: Path
@@ -391,7 +391,7 @@ class DashboardService:
             await self._broadcast_execution_update(result)
 
         except Exception as e:
-            logger.error(f"Background execution monitoring failed: {e}")
+            logger.error("Background execution monitoring failed: %s", e)
             result.status = "failed"
             result.error = str(e)
             result.end_time = datetime.now().isoformat()
@@ -531,10 +531,8 @@ def create_dashboard_app() -> FastAPI:
     def no_verify_policy_status() -> Dict[str, str]:
         """Get --no-verify policy enforcement status."""
         # Import only what we need for security
-        import os
         import re
         import subprocess  # noqa: B404
-        from pathlib import Path
 
         status: Dict[str, str] = {
             "policy_name": "No-Verify Zero Tolerance Policy",
@@ -561,6 +559,7 @@ def create_dashboard_app() -> FastAPI:
                     text=True,
                     timeout=30,
                     cwd=Path.cwd(),
+                    check=False,  # Handle return codes manually
                 )
 
                 if result.returncode == 0:
