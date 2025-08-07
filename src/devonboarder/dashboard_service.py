@@ -8,6 +8,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -260,13 +261,40 @@ class DashboardService:
             Execution result with status and output.
         """
         execution_id = str(uuid.uuid4())
-        script_path = self.base_dir / request.script_path
+
+        # Security: Validate and sanitize script path to prevent path traversal
+        try:
+            # Resolve path and ensure it's within the base directory
+            script_path = (self.base_dir / request.script_path).resolve()
+            if not str(script_path).startswith(str(self.base_dir.resolve())):
+                raise HTTPException(
+                    status_code=403, detail="Access denied: Invalid script path"
+                )
+        except (ValueError, OSError) as e:
+            raise HTTPException(
+                status_code=400, detail=f"Invalid script path: {e}"
+            ) from e
 
         if not script_path.exists():
             raise HTTPException(status_code=404, detail="Script not found")
 
         if not os.access(script_path, os.R_OK):
             raise HTTPException(status_code=403, detail="Script not readable")
+
+        # Security: Ensure script is within allowed directories
+        # Allow scripts directory or base directory (for testing)
+        try:
+            # Try to find the script relative to scripts directory first
+            try:
+                script_path.relative_to(self.scripts_dir)
+            except ValueError:
+                # If not in scripts dir, check if it's in base dir (for testing)
+                script_path.relative_to(self.base_dir)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=403,
+                detail="Access denied: Script must be in scripts or base directory",
+            ) from e
 
         start_time = datetime.now()
         result = ExecutionResult(
@@ -281,13 +309,27 @@ class DashboardService:
         self.active_executions[execution_id] = result
 
         try:
-            # Prepare command
+            # Security: Sanitize and validate arguments
+            safe_args = []
+            if request.args:
+                for arg in request.args:
+                    # Basic sanitization - allow alphanumeric, hyphens, dots
+                    if not re.match(r"^[a-zA-Z0-9._-]+$", str(arg)):
+                        raise HTTPException(
+                            status_code=400,
+                            detail=f"Invalid argument format: {arg}. "
+                            "Only alphanumeric characters, dots, hyphens, "
+                            "and underscores allowed.",
+                        )
+                    safe_args.append(str(arg))
+
+            # Prepare command with validated script path and sanitized arguments
             if script_path.suffix == ".py":
-                cmd = ["python", str(script_path)] + (request.args or [])
+                cmd = ["python", str(script_path)] + safe_args
             elif script_path.suffix in {".sh", ".bash"}:
-                cmd = ["bash", str(script_path)] + (request.args or [])
+                cmd = ["bash", str(script_path)] + safe_args
             else:
-                cmd = [str(script_path)] + (request.args or [])
+                cmd = [str(script_path)] + safe_args
 
             # Create log file
             log_file = self.logs_dir / f"dashboard_execution_{execution_id}.log"
@@ -531,7 +573,6 @@ def create_dashboard_app() -> FastAPI:
     def no_verify_policy_status() -> Dict[str, str]:
         """Get --no-verify policy enforcement status."""
         # Import only what we need for security
-        import re
         import subprocess  # noqa: B404
 
         status: Dict[str, str] = {
@@ -552,7 +593,7 @@ def create_dashboard_app() -> FastAPI:
             if validation_script.exists() and os.access(validation_script, os.X_OK):
                 components["validation_script"] = "✅ Available"
 
-                # Run the validation with trusted script path
+                # Run the validation with trusted script path - security validated
                 result = subprocess.run(  # noqa: B603
                     [str(validation_script.resolve())],
                     capture_output=True,
@@ -569,11 +610,15 @@ def create_dashboard_app() -> FastAPI:
                     # Parse output for emergency approvals
                     output = result.stdout
                     if "Emergency approved usages:" in output:
+                        import re
+
                         match = re.search(r"Emergency approved usages: (\d+)", output)
                         if match:
                             status["emergency_approvals"] = match.group(1)
 
                     if "Unauthorized violations:" in output:
+                        import re
+
                         match = re.search(r"Unauthorized violations: (\d+)", output)
                         if match:
                             violations = match.group(1)
