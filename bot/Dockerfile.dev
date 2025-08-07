@@ -37,9 +37,9 @@ RUN useradd -m -s /bin/bash botuser && \
     chown -R botuser:botuser /app
 USER botuser
 
-# Health check for Discord bot readiness
+# Health check using our custom script
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD node -e "console.log('Discord bot health check')" || exit 1
+    CMD node /app/health-check.js || exit 1
 
 # Expose bot port (for health monitoring if applicable)
 EXPOSE 8080

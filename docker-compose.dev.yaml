@@ -218,7 +218,6 @@ services:
       - ./bot/src:/app/src
       - ./bot/package.json:/app/package.json
       - ./bot/tsconfig.json:/app/tsconfig.json
-      - ./bot/health-check.js:/app/health-check.js:ro
       - ./docs:/docs
       - ./logs/bot:/app/logs
       - ./.env.dev:/app/.env:ro
@@ -227,12 +226,6 @@ services:
     command: npm run dev
     expose:
       - 8080
-    healthcheck:
-      test: ["CMD", "node", "/app/health-check.js"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
     labels:
       - "traefik.enable=false"  # Bot doesn't need web access
 
