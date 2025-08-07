@@ -575,3 +575,190 @@ def test_get_current_user_user_not_found():
     resp = client.get("/api/user", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 401
     assert resp.json()["detail"] == "User not found"
+
+
+def test_discord_oauth_redirect_with_state_parameter(monkeypatch):
+    """Test OAuth callback redirect logic with state parameter."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Mock Discord OAuth flow
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
+        return StubResponse(200, {"access_token": "test_token"})
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda tok: {})
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None},
+    )
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {"id": "123", "username": "testuser", "avatar": None},
+    )
+
+    # Test with state parameter (covers lines 298-309)
+    custom_redirect = "https://custom.example.com/dashboard"
+    resp = client.get(
+        f"/login/discord/callback?code=testcode&state={custom_redirect}",
+        follow_redirects=False,
+    )
+
+    # Should redirect to custom URL
+    assert resp.status_code == 307
+    location = resp.headers["location"]
+    assert location.startswith(custom_redirect)
+    assert "token=" in location
+
+
+def test_discord_oauth_redirect_fallback_logic(monkeypatch):
+    """Test OAuth callback fallback redirect logic when no state provided."""
+
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Set environment variables for fallback testing
+    monkeypatch.setenv("FRONTEND_URL", "https://frontend.test.com")
+
+    # Mock Discord OAuth flow
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
+        return StubResponse(200, {"access_token": "test_token"})
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda tok: {})
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None},
+    )
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {"id": "123", "username": "testuser", "avatar": None},
+    )
+
+    # Test without state parameter - should use FRONTEND_URL fallback
+    # (covers lines 302-306)
+    resp = client.get("/login/discord/callback?code=testcode", follow_redirects=False)
+
+    # Should redirect to fallback URL
+    assert resp.status_code == 307
+    location = resp.headers["location"]
+    assert location.startswith("https://frontend.test.com")
+    assert "token=" in location
+
+
+def test_contribute_endpoint_user_not_found_error():
+    """Test contribute endpoint 404 error when target user doesn't exist."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create admin user
+    client.post("/api/register", json={"username": "admin", "password": "adminpass"})
+    admin_token = _get_token(client, "admin", "adminpass")
+
+    # Make user admin
+    with auth_service.SessionLocal() as db:
+        admin_user = db.query(auth_service.User).filter_by(username="admin").first()
+        if admin_user:
+            admin_user.is_admin = True
+            db.commit()
+
+    # Try to contribute for non-existent user (covers line 347)
+    resp = client.post(
+        "/api/contribute",
+        json={"username": "nonexistent", "activity": "test"},
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "User not found"
+
+
+def test_contribute_endpoint_forbidden_error():
+    """Test contribute endpoint 403 error when non-admin tries to contribute for another user."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create two regular users
+    client.post("/api/register", json={"username": "user1", "password": "pass1"})
+    client.post("/api/register", json={"username": "user2", "password": "pass2"})
+
+    user1_token = _get_token(client, "user1", "pass1")
+
+    # User1 tries to contribute for User2 without admin privileges (covers line 350)
+    resp = client.post(
+        "/api/user/contribute",
+        json={"username": "user2", "description": "test contribution"},
+        headers={"Authorization": f"Bearer {user1_token}"},
+    )
+
+    assert resp.status_code == 403
+    assert resp.json()["detail"] == "Forbidden"
+
+
+def test_promote_endpoint_admin_required_error():
+    """Test promote endpoint 403 error when non-admin tries to promote."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create regular user
+    client.post("/api/register", json={"username": "regular", "password": "pass"})
+    user_token = _get_token(client, "regular", "pass")
+
+    # Try to promote without admin privileges (covers line 366)
+    resp = client.post(
+        "/api/user/promote",
+        json={"username": "someone"},
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
+
+    assert resp.status_code == 403
+    assert resp.json()["detail"] == "Admin required"
+
+
+def test_promote_endpoint_target_user_not_found_error():
+    """Test promote endpoint 404 error when target user doesn't exist."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create admin user
+    client.post("/api/register", json={"username": "admin", "password": "adminpass"})
+    admin_token = _get_token(client, "admin", "adminpass")
+
+    # Make user admin
+    with auth_service.SessionLocal() as db:
+        admin_user = db.query(auth_service.User).filter_by(username="admin").first()
+        admin_user.is_admin = True
+        db.commit()
+
+    # Try to promote non-existent user (covers line 369)
+    resp = client.post(
+        "/api/user/promote",
+        json={"username": "nonexistent"},
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "User not found"
+
+
+def test_auth_service_main_function_execution():
+    """Test the main function executes uvicorn properly."""
+    import unittest.mock
+
+    # Mock uvicorn to prevent actual server startup (covers lines 412-414)
+    with unittest.mock.patch("devonboarder.auth_service.uvicorn") as mock_uvicorn:
+        auth_service.main()
+
+        # Verify uvicorn.run was called with correct parameters
+        mock_uvicorn.run.assert_called_once()
+        call_args = mock_uvicorn.run.call_args
+
+        # Check the app parameter
+        assert call_args[0][0] is not None  # App object should be passed
+        # Check host and port parameters
+        assert call_args[1]["host"] == "0.0.0.0"
+        assert call_args[1]["port"] == 8002
