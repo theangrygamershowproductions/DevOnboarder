@@ -123,12 +123,40 @@
                 "summary": "Discord Login",
                 "description": "Redirect the user to Discord's OAuth consent screen.",
                 "operationId": "discord_login_login_discord_get",
+                "parameters": [
+                    {
+                        "name": "redirect_to",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Redirect To"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful Response",
                         "content": {
                             "application/json": {
                                 "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
                             }
                         }
                     }
@@ -149,6 +177,22 @@
                             "type": "string",
                             "title": "Code"
                         }
+                    },
+                    {
+                        "name": "state",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "State"
+                        }
                     }
                 ],
                 "responses": {
@@ -156,13 +200,7 @@
                         "description": "Successful Response",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "type": "string"
-                                    },
-                                    "title": "Response Discord Callback Login Discord Callback Get"
-                                }
+                                "schema": {}
                             }
                         }
                     },
