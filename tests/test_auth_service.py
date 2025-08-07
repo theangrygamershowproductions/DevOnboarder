@@ -668,8 +668,8 @@ def test_contribute_endpoint_user_not_found_error():
 
     # Try to contribute for non-existent user (covers line 347)
     resp = client.post(
-        "/api/contribute",
-        json={"username": "nonexistent", "activity": "test"},
+        "/api/user/contributions",
+        json={"username": "nonexistent", "description": "test"},
         headers={"Authorization": f"Bearer {admin_token}"},
     )
 
@@ -678,7 +678,10 @@ def test_contribute_endpoint_user_not_found_error():
 
 
 def test_contribute_endpoint_forbidden_error():
-    """Test contribute endpoint 403 error when non-admin tries to contribute for another user."""
+    """Test contribute endpoint 403 error when non-admin tries to contribute.
+
+    Covers line 350 - forbidden access scenarios.
+    """
     app = auth_service.create_app()
     client = TestClient(app)
 
@@ -690,7 +693,7 @@ def test_contribute_endpoint_forbidden_error():
 
     # User1 tries to contribute for User2 without admin privileges (covers line 350)
     resp = client.post(
-        "/api/user/contribute",
+        "/api/user/contributions",
         json={"username": "user2", "description": "test contribution"},
         headers={"Authorization": f"Bearer {user1_token}"},
     )
@@ -749,13 +752,13 @@ def test_auth_service_main_function_execution():
     """Test the main function executes uvicorn properly."""
     import unittest.mock
 
-    # Mock uvicorn to prevent actual server startup (covers lines 412-414)
-    with unittest.mock.patch("devonboarder.auth_service.uvicorn") as mock_uvicorn:
+    # Mock uvicorn.run to prevent actual server startup (covers lines 412-414)
+    with unittest.mock.patch("uvicorn.run") as mock_uvicorn_run:
         auth_service.main()
 
         # Verify uvicorn.run was called with correct parameters
-        mock_uvicorn.run.assert_called_once()
-        call_args = mock_uvicorn.run.call_args
+        mock_uvicorn_run.assert_called_once()
+        call_args = mock_uvicorn_run.call_args
 
         # Check the app parameter
         assert call_args[0][0] is not None  # App object should be passed
