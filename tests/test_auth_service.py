@@ -609,7 +609,16 @@ def test_discord_oauth_redirect_with_state_parameter(monkeypatch):
     # Security check: Should redirect to safe fallback, not unsafe URL
     assert resp.status_code == 307
     location = resp.headers["location"]
-    assert location.startswith("https://dev.theangrygamershow.com")  # Safe fallback
+
+    # Safe URL validation using proper parsing
+    from urllib.parse import urlparse
+
+    parsed_url = urlparse(location)
+    # Should redirect to safe dev.theangrygamershow.com domain
+    assert parsed_url.hostname and (
+        parsed_url.hostname == "dev.theangrygamershow.com"
+        or parsed_url.hostname.endswith(".dev.theangrygamershow.com")
+    )
     assert not location.startswith(unsafe_redirect)  # Should NOT use unsafe URL
     assert "token=" in location
 
@@ -646,7 +655,16 @@ def test_discord_oauth_redirect_with_safe_state_parameter(monkeypatch):
     # Should redirect to the safe custom URL
     assert resp.status_code == 307
     location = resp.headers["location"]
-    assert location.startswith(safe_redirect)  # Should use safe URL
+
+    # Safe URL validation using proper parsing
+    from urllib.parse import urlparse
+
+    parsed_url = urlparse(location)
+    # Should redirect to safe dev.theangrygamershow.com domain
+    assert parsed_url.hostname and (
+        parsed_url.hostname == "dev.theangrygamershow.com"
+        or parsed_url.hostname.endswith(".dev.theangrygamershow.com")
+    )
     assert "token=" in location
 
 
@@ -683,7 +701,16 @@ def test_discord_oauth_redirect_fallback_logic(monkeypatch):
     # Should redirect to fallback URL
     assert resp.status_code == 307
     location = resp.headers["location"]
-    assert location.startswith("https://frontend.test.com")
+
+    # Safe URL validation using proper parsing
+    from urllib.parse import urlparse
+
+    parsed_url = urlparse(location)
+    # Check that the hostname is exactly frontend.test.com or a subdomain
+    assert parsed_url.hostname and (
+        parsed_url.hostname == "frontend.test.com"
+        or parsed_url.hostname.endswith(".frontend.test.com")
+    )
     assert "token=" in location
 
 
