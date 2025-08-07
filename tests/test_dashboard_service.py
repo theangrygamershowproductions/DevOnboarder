@@ -1224,10 +1224,19 @@ def test_dashboard_info_endpoint(client):
 
 def test_discord_login_endpoint(client):
     """Test Discord login endpoint."""
+    from urllib.parse import urlparse
+
     response = client.get("/login/discord", follow_redirects=False)
     assert response.status_code in [302, 307]
     location = response.headers["location"]
-    assert "auth.theangrygamershow.com" in location
+
+    # Safe URL validation using proper parsing
+    parsed_url = urlparse(location)
+    # Check that the hostname is exactly auth.theangrygamershow.com or a subdomain
+    assert parsed_url.hostname and (
+        parsed_url.hostname == "auth.theangrygamershow.com"
+        or parsed_url.hostname.endswith(".auth.theangrygamershow.com")
+    )
     assert "redirect_to=" in location
 
 
