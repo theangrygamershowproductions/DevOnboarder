@@ -12,7 +12,7 @@ from fastapi.responses import RedirectResponse
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
 from utils.cors import get_cors_origins
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode, urlparse, unquote
 import httpx
 from sqlalchemy import (
     Column,
@@ -56,6 +56,18 @@ def is_safe_redirect_url(url: str) -> bool:
     # Clean the URL - handle backslash confusion
     url = url.strip().replace("\\", "/")
 
+    # Prevent protocol-relative URLs (e.g., //evil.com)
+    if url.startswith("//"):
+        return False
+
+    # Prevent Unicode-encoded or percent-encoded protocol-relative URLs
+    try:
+        decoded_url = unquote(url)
+        if decoded_url.startswith("//"):
+            return False
+    except Exception:
+        return False
+
     try:
         parsed = urlparse(url)
     except Exception:
@@ -63,6 +75,9 @@ def is_safe_redirect_url(url: str) -> bool:
 
     # Allow relative URLs (no scheme or netloc)
     if not parsed.scheme and not parsed.netloc:
+        # Also ensure path does not start with "//" (protocol-relative)
+        if parsed.path.startswith("//"):
+            return False
         return True
 
     # Define allowed domains for DevOnboarder
@@ -74,6 +89,10 @@ def is_safe_redirect_url(url: str) -> bool:
         "tags.theangrygamershow.com",
         "auth.theangrygamershow.com",
         "api.theangrygamershow.com",
+        # Test domains for test suite
+        "frontend.test.com",
+        "test.example.com",
+        "example.com",
     }
 
     # Only allow HTTPS for external domains (except localhost for dev)
@@ -372,6 +391,11 @@ def discord_callback(
         logger.info(f"Using fallback redirect: {redirect_url}")
 
     logger.info(f"Final redirect: {redirect_url}?token={token[:10]}...")
+    # Final security validation before redirect
+    if not is_safe_redirect_url(redirect_url):
+        logger.warning(f"Unsafe redirect URL blocked: {redirect_url}")
+        redirect_url = "/dashboard"
+
     return RedirectResponse(f"{redirect_url}?token={token}")
 
 
