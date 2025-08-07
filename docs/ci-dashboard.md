@@ -1,7 +1,7 @@
 ---
 title: "DevOnboarder CI Failure Dashboard"
 description: "AI-ready track and triage dashboard for all CI test results with priority, stability, and fix status"
-codex_scope: "devonboarder"
+codex_scope: "DevOnboarder"
 codex_type: "ci_dashboard"
 codex_role: "ci_observer"
 codex_agent: true

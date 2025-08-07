@@ -4,6 +4,7 @@
 [![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
 [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+[![📚 Documentation Quality](https://img.shields.io/badge/docs-certified-brightgreen?style=flat&logo=markdown)](docs/public/documentation-quality-certification.md)
 
 ## 🎯 **Project Management Framework**
 
@@ -66,12 +67,15 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 2. Set up environment:
 
    ```bash
-   # Install DevOnboarder .zshrc integration for CLI shortcuts
-   # See docs/cli-shortcuts.md for full shell integration guide
-
-   # Activate environment
+   # Create and activate virtual environment
+   python -m venv .venv
    source .venv/bin/activate
+
+   # Install dependencies
    pip install -e .[test]
+
+   # Optional: Install DevOnboarder .zshrc integration for CLI shortcuts
+   # See docs/cli-shortcuts.md for full shell integration guide
    ```
 
 3. Run locally:
@@ -180,21 +184,16 @@ This acts as a **"canary in the repository"** - any attempt to expose sensitive 
 
 ## Language Versions
 
-`scripts/setup-env.sh` pulls the `ghcr.io/openai/codex-universal` image to provide a unified runtime.
-When Docker isn't available, the script installs Python 3.12 using `mise` or `asdf` before creating a virtual environment.
+DevOnboarder requires specific language versions for development consistency:
 
-| Language | Version |
-| -------- | ------- |
-| Python   | 3.12    |
-| Node.js  | 22      |
-| Ruby     | 3.2.3   |
-| Rust     | 1.88.0  |
-| Go       | 1.24.4  |
-| Bun      | 1.2.14  |
-| Java     | 21      |
-| Swift    | 6.1     |
+| Language | Version | Required For |
+| -------- | ------- | ------------ |
+| Python   | 3.12    | Backend services, testing, CI/CD |
+| Node.js  | 22      | Discord bot, frontend development |
 
 Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
+
+**Note**: While DevOnboarder can run in broader containerized environments that include additional languages, core development requires only Python 3.12 and Node.js 22 as specified in `.tool-versions`.
 
 ## Available Make Targets
 

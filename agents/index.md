@@ -28,6 +28,7 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 - [AI Mentor](ai-mentor.md)
 - [Llama2 Agile Helper](llama2-agile-helper.md)
 - [Prod Orchestrator](prod-orchestrator.md)
+- [Documentation Quality Enforcer](documentation-quality-enforcer.md)
 - [Dev Orchestrator](dev-orchestrator.md)
 - [Staging Orchestrator](staging-orchestrator.md)
 - [Onboarding Agent](onboarding-agent.md)
