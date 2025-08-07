@@ -12,7 +12,7 @@ from fastapi.responses import RedirectResponse
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
 from utils.cors import get_cors_origins
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 import httpx
 from sqlalchemy import (
     Column,
@@ -35,6 +35,66 @@ from pathlib import Path
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def is_safe_redirect_url(url: str) -> bool:
+    """Validate that a redirect URL is safe to prevent phishing attacks.
+
+    Parameters
+    ----------
+    url : str
+        The URL to validate.
+
+    Returns
+    -------
+    bool
+        True if the URL is safe for redirection.
+    """
+    if not url or not url.strip():
+        return False
+
+    # Clean the URL - handle backslash confusion
+    url = url.strip().replace("\\", "/")
+
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+
+    # Allow relative URLs (no scheme or netloc)
+    if not parsed.scheme and not parsed.netloc:
+        return True
+
+    # Define allowed domains for DevOnboarder
+    allowed_domains = {
+        "localhost",
+        "127.0.0.1",
+        "dev.theangrygamershow.com",
+        "theangrygamershow.com",
+        "tags.theangrygamershow.com",
+        "auth.theangrygamershow.com",
+        "api.theangrygamershow.com",
+    }
+
+    # Only allow HTTPS for external domains (except localhost for dev)
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    if parsed.scheme == "http" and not (
+        parsed.netloc.startswith("localhost") or parsed.netloc.startswith("127.0.0.1")
+    ):
+        # Only allow HTTP for localhost (with any port)
+        return False
+
+    # Check if domain is in allowed list
+    netloc = parsed.netloc.lower()
+
+    # Handle port numbers in netloc
+    if ":" in netloc:
+        netloc = netloc.split(":")[0]
+
+    return netloc in allowed_domains
+
 
 # Load environment variables from the auth service's .env file when present
 load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
@@ -296,8 +356,14 @@ def discord_callback(
 
     # Use state parameter for redirect destination, otherwise default to frontend
     if state and state.strip():
-        redirect_url = state
-        logger.info(f"Using state parameter for redirect: {redirect_url}")
+        if is_safe_redirect_url(state):
+            redirect_url = state
+            logger.info(f"Using state parameter for redirect: {redirect_url}")
+        else:
+            logger.warning(f"Unsafe redirect URL blocked: {state}")
+            # Fall back to safe default instead of using untrusted URL
+            redirect_url = "https://dev.theangrygamershow.com"
+            logger.info(f"Using safe fallback redirect: {redirect_url}")
     else:
         fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
             "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"

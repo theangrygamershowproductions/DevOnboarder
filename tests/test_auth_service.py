@@ -599,17 +599,54 @@ def test_discord_oauth_redirect_with_state_parameter(monkeypatch):
         lambda tok: {"id": "123", "username": "testuser", "avatar": None},
     )
 
-    # Test with state parameter (covers lines 298-309)
-    custom_redirect = "https://custom.example.com/dashboard"
+    # Test with UNSAFE state parameter - should block and fallback to safe default
+    unsafe_redirect = "https://custom.example.com/dashboard"
     resp = client.get(
-        f"/login/discord/callback?code=testcode&state={custom_redirect}",
+        f"/login/discord/callback?code=testcode&state={unsafe_redirect}",
         follow_redirects=False,
     )
 
-    # Should redirect to custom URL
+    # Security check: Should redirect to safe fallback, not unsafe URL
     assert resp.status_code == 307
     location = resp.headers["location"]
-    assert location.startswith(custom_redirect)
+    assert location.startswith("https://dev.theangrygamershow.com")  # Safe fallback
+    assert not location.startswith(unsafe_redirect)  # Should NOT use unsafe URL
+    assert "token=" in location
+
+
+def test_discord_oauth_redirect_with_safe_state_parameter(monkeypatch):
+    """Test OAuth callback redirect logic with SAFE state parameter."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Mock Discord OAuth flow
+    def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
+        return StubResponse(200, {"access_token": "test_token"})
+
+    monkeypatch.setattr(httpx, "post", fake_post)
+    monkeypatch.setattr(auth_service, "get_user_roles", lambda tok: {})
+    monkeypatch.setattr(
+        auth_service,
+        "resolve_user_flags",
+        lambda roles: {"isAdmin": False, "isVerified": False, "verificationType": None},
+    )
+    monkeypatch.setattr(
+        auth_service,
+        "get_user_profile",
+        lambda tok: {"id": "123", "username": "testuser", "avatar": None},
+    )
+
+    # Test with SAFE state parameter - should use the safe URL
+    safe_redirect = "https://dev.theangrygamershow.com/dashboard"
+    resp = client.get(
+        f"/login/discord/callback?code=testcode&state={safe_redirect}",
+        follow_redirects=False,
+    )
+
+    # Should redirect to the safe custom URL
+    assert resp.status_code == 307
+    location = resp.headers["location"]
+    assert location.startswith(safe_redirect)  # Should use safe URL
     assert "token=" in location
 
 
