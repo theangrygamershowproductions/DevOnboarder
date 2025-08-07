@@ -374,29 +374,37 @@ def discord_callback(
         return {"token": token}
 
     # Use state parameter for redirect destination, otherwise default to frontend
+    redirect_url = None
     if state and state.strip():
-        if is_safe_redirect_url(state):
+        # Only allow relative URLs for user-provided redirects (defense-in-depth)
+        parsed_state = urlparse(state.strip().replace("\\", "/"))
+        if (
+            not parsed_state.scheme
+            and not parsed_state.netloc
+            and is_safe_redirect_url(state)
+        ):
             redirect_url = state
             logger.info(f"Using state parameter for redirect: {redirect_url}")
         else:
-            logger.warning(f"Unsafe redirect URL blocked: {state}")
-            # Fall back to safe default instead of using untrusted URL
-            redirect_url = "https://dev.theangrygamershow.com"
-            logger.info(f"Using safe fallback redirect: {redirect_url}")
-    else:
+            logger.warning(f"Unsafe or absolute redirect URL blocked: {state}")
+
+    if not redirect_url:
         fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
             "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"
         )
         redirect_url = fallback_url or "https://dev.theangrygamershow.com"
         logger.info(f"Using fallback redirect: {redirect_url}")
 
-    logger.info(f"Final redirect: {redirect_url}?token={token[:10]}...")
+    # Compose the final redirect URL with the token
+    final_redirect = f"{redirect_url}?token={token}"
+    logger.info(f"Final redirect: {final_redirect[:100]}...")
+
     # Final security validation before redirect
     if not is_safe_redirect_url(redirect_url):
-        logger.warning(f"Unsafe redirect URL blocked: {redirect_url}")
-        redirect_url = "/dashboard"
+        logger.warning(f"Unsafe redirect URL blocked at final check: {redirect_url}")
+        final_redirect = "/dashboard"
 
-    return RedirectResponse(f"{redirect_url}?token={token}")
+    return RedirectResponse(final_redirect)
 
 
 @router.get("/api/user/onboarding-status")
