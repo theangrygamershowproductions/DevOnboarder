@@ -374,19 +374,30 @@ def discord_callback(
         return {"token": token}
 
     # Use state parameter for redirect destination, otherwise default to frontend
+    # Define allowed relative redirect paths (defense-in-depth allowlist)
+    allowed_relative_paths = {
+        "/dashboard",
+        "/profile",
+        "/welcome",
+        "/onboarding",
+        "/",  # home
+    }
+
     redirect_url = None
     if state and state.strip():
-        # Only allow relative URLs for user-provided redirects (defense-in-depth)
-        parsed_state = urlparse(state.strip().replace("\\", "/"))
+        # Normalize and validate state as a relative path
+        normalized_state = state.strip().replace("\\", "/")
+        parsed_state = urlparse(normalized_state)
         if (
             not parsed_state.scheme
             and not parsed_state.netloc
-            and is_safe_redirect_url(state)
+            and is_safe_redirect_url(normalized_state)
+            and parsed_state.path in allowed_relative_paths
         ):
-            redirect_url = state
+            redirect_url = parsed_state.path
             logger.info(f"Using state parameter for redirect: {redirect_url}")
         else:
-            logger.warning(f"Unsafe or absolute redirect URL blocked: {state}")
+            logger.warning(f"Unsafe or disallowed redirect path blocked: {state}")
 
     if not redirect_url:
         fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
