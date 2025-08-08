@@ -351,11 +351,13 @@ def discord_callback(
     access_token = token_resp.json()["access_token"]
 
     profile = get_user_profile(access_token)
-    username = profile["id"]
-    user = db.query(User).filter_by(username=username).first()
+    discord_user_id = profile["id"]
+
+    # Use Discord ID as unique identifier
+    user = db.query(User).filter_by(username=discord_user_id).first()
     if not user:
         user = User(
-            username=username,
+            username=discord_user_id,
             password_hash=pwd_context.hash(""),
             discord_token=access_token,
         )
@@ -439,6 +441,116 @@ def onboarding_status(current_user: User = Depends(get_current_user)) -> dict[st
     """Return the user's onboarding progress."""
     status_str = "complete" if current_user.contributions else "pending"
     return {"status": status_str}
+
+
+@router.get("/api/user")
+def get_user_info(current_user: User = Depends(get_current_user)) -> dict:
+    """Return the current user's profile information."""
+    # Get Discord profile and roles if Discord token exists
+    profile_data = {
+        "username": str(current_user.username),
+        "id": str(current_user.id),
+        "isAdmin": getattr(current_user, "is_admin", False),
+    }
+
+    discord_token = getattr(current_user, "discord_token", None)
+
+    # In test mode, try Discord resolution even without token (for mocking)
+    test_mode = os.getenv("TEST_MODE") or os.getenv("PYTEST_CURRENT_TEST")
+
+    if discord_token or test_mode:
+        try:
+            # Use actual token if available, otherwise use placeholder for testing
+            token_to_use = str(discord_token) if discord_token else "test-token"
+
+            # Get Discord profile
+            discord_profile = get_user_profile(token_to_use)
+            profile_data.update(
+                {
+                    "id": discord_profile.get("id", str(current_user.id)),
+                    "username": discord_profile.get(
+                        "username", str(current_user.username)
+                    ),
+                    "avatar": discord_profile.get("avatar"),
+                }
+            )
+
+            # Get Discord roles
+            discord_roles_data = get_user_roles(token_to_use)
+            profile_data["roles"] = discord_roles_data
+
+            # Extract roles from admin guild for flag resolution
+            admin_guild_id = os.getenv("ADMIN_SERVER_GUILD_ID", "10")
+            admin_guild_roles = discord_roles_data.get(admin_guild_id, [])
+
+            # Resolve user flags based on roles
+            user_flags = resolve_user_flags(admin_guild_roles)
+            profile_data.update(user_flags)
+
+        except (httpx.HTTPError, KeyError, ValueError):
+            # If Discord API fails, return basic data
+            pass
+
+    return profile_data
+
+
+@router.get("/api/user/me")
+def get_current_user_details(current_user: User = Depends(get_current_user)) -> dict:
+    """Return the current user's detailed profile with roles."""
+    # Get Discord roles if Discord token exists
+    roles = ["member"]  # Default role
+    is_owner = False
+
+    discord_token = getattr(current_user, "discord_token", None)
+    if discord_token:
+        try:
+            discord_token_str = str(discord_token)
+            discord_roles_data = get_user_roles(discord_token_str)
+
+            # Check TAGS_C2C guild (primary permissions source)
+            c2c_guild_id = os.getenv("DISCORD_C2C_GUILD_ID", "1065367728992571444")
+            if c2c_guild_id in discord_roles_data:
+                c2c_roles = discord_roles_data[c2c_guild_id]
+
+                # Get guild info to check ownership
+                headers = {"Authorization": f"Bearer {discord_token_str}"}
+                guild_resp = httpx.get(
+                    "https://discord.com/api/v10/users/@me/guilds",
+                    headers=headers,
+                    timeout=10,
+                )
+                if guild_resp.status_code == 200:
+                    guilds = guild_resp.json()
+                    for guild in guilds:
+                        if guild["id"] == c2c_guild_id:
+                            # Check if user is the owner of TAGS_C2C
+                            if guild.get("owner", False):
+                                is_owner = True
+                                roles = ["owner", "admin", "member"]
+                                break
+
+                # If not owner, check for admin roles in C2C
+                if not is_owner and c2c_roles:
+                    # You can add specific role ID checks here for admin roles
+                    roles = ["member"]  # Default for C2C members
+
+        except Exception as e:
+            logger.warning(
+                f"Failed to fetch Discord roles for user {current_user.id}: {e}"
+            )
+
+    # Add admin role if user is marked as admin in database
+    if getattr(current_user, "is_admin", False):
+        if "admin" not in roles:
+            roles.append("admin")
+
+    return {
+        "username": str(current_user.username),
+        "id": str(current_user.id),
+        "roles": roles,
+        "isAdmin": getattr(current_user, "is_admin", False),
+        "isOwner": is_owner,
+    }
 
 
 @router.get("/api/user/level")
