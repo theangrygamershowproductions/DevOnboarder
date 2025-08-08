@@ -38,9 +38,13 @@ Automatically enforces DevOnboarder's documentation quality standards on all pul
 3. **Cross-Reference Integrity**
    - Validate internal links in changed documentation
    - Verify external link accessibility
-   - Check for broken references
 
-4. **Technical Accuracy Verification**
+4. **Terminal Output Policy Compliance**
+   - Scan documentation for terminal output violations
+   - Respect suppression system for reviewed-safe patterns
+   - Flag new violations requiring review or suppression
+
+5. **Technical Accuracy Verification**
    - Validate code examples against current codebase
    - Check version numbers and configuration references
    - Ensure setup instructions remain current

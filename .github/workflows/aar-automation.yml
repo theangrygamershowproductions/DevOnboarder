@@ -121,7 +121,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .aar/
+          git add docs/AAR/
           git add logs/
           if git diff --staged --quiet; then
             echo "No AAR files to commit"
@@ -151,7 +151,7 @@ jobs:
             This issue tracks the action items identified in the After Actions Report for #${issueNumber}.
 
             **Original Issue**: #${issueNumber} - ${issueTitle}
-            **AAR Location**: \`.aar/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
 
             ## Action Items
             <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
@@ -194,7 +194,7 @@ jobs:
 
             **Original PR**: #${prNumber} - ${prTitle}
             **PR Author**: @${prAuthor}
-            **AAR Location**: \`.aar/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/pull-requests/pr-${prNumber}-*.md\`
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/pull-requests/pr-${prNumber}-*.md\`
 
             ## Action Items
             <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
@@ -231,7 +231,7 @@ jobs:
             const prTitle = context.payload.pull_request.title;
             const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
             const year = new Date().getFullYear();
-            const aarPath = `.aar/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
 
             const comment = `## After Action Report Generated
 
@@ -265,7 +265,7 @@ jobs:
             const issueTitle = context.payload.issue.title;
             const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
             const year = new Date().getFullYear();
-            const aarPath = `.aar/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
 
             const comment = `## After Action Report Generated
 
@@ -309,6 +309,6 @@ jobs:
         with:
           name: aar-files-${{ github.run_number }}
           path: |
-            .aar/
+            docs/AAR/
             logs/aar_generation_*.log
           retention-days: 30

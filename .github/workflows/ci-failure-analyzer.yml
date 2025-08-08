@@ -91,9 +91,11 @@ jobs:
           LOG_FILES="logs/ci-analysis/no-logs.txt"
           fi
 
-          echo "log_files<<EOF" >> $GITHUB_OUTPUT
-          printf "%s\n" "$LOG_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "log_files<<EOF"
+            printf "%s\n" "$LOG_FILES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
           env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

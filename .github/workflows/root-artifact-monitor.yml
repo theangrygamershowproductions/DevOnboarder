@@ -59,15 +59,19 @@ jobs:
               run: |
                   mkdir -p logs/ci
 
-                  cat > logs/ci/artifact_report.md << EOF
-                  ## Root Artifact Violations
+                  mkdir -p logs/ci
 
-                  **Branch**: ${GITHUB_REF_NAME}
-                  **Commit**: ${GITHUB_SHA:0:7}
-                  **Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-                  **Trigger**: ${CODEX_TRIGGER}
-
-                  ### Violations Found
+                  TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+                  {
+                    echo "## Root Artifact Violations"
+                    echo ""
+                    echo "**Branch**: ${GITHUB_REF_NAME}"
+                    echo "**Commit**: ${GITHUB_SHA:0:7}"
+                    printf "**Generated**: %s\n" "$TIMESTAMP"
+                    echo "**Trigger**: ${CODEX_TRIGGER}"
+                    echo ""
+                    echo "### Violations Found"
+                  } > logs/ci/artifact_report.md
 
                   $(bash scripts/list_root_violations.sh)
 

@@ -1,0 +1,205 @@
+# Codex Agent Guardrails Configuration
+# Defines behavioral boundaries for all AI agents operating on DevOnboarder
+
+enforcement_mode: active
+last_updated: "2025-08-08"
+version: "1.0.0"
+
+# Global guardrails for all AI agents
+global_guardrails:
+
+  # Quality gate enforcement
+  quality_gates:
+    markdown_linting:
+      enforced: true
+      auto_fix: true
+      tool: "markdownlint-cli2"
+      config: ".markdownlint-cli2.jsonc"
+
+    documentation_quality:
+      enforced: true
+      auto_fix: false
+      tool: "vale"
+      config: ".vale.ini"
+
+    shell_script_quality:
+      enforced: true
+      auto_fix: false
+      tool: "shellcheck"
+      patterns: ["scripts/**/*.sh"]
+
+    agent_schema_validation:
+      enforced: true
+      auto_fix: false
+      tool: "validate_agents.py"
+      schema: "schema/agent-schema.json"
+
+    terminal_output_policy:
+      enforced: true
+      auto_fix: false
+      tool: "validate_terminal_output_simple.sh"
+      suppression_system: true
+
+  # Forbidden patterns
+  forbidden_patterns:
+    bypass_attempts:
+      patterns:
+        - "--no-verify"
+        - "skip ci"
+        - "bypass"
+      action: "block_immediately"
+
+    unsafe_shell_patterns:
+      patterns:
+        - "echo $VAR"  # Must use printf
+        - "<<EOF"      # Must use <<'EOF'
+      action: "block_with_suggestion"
+
+    markdown_violations:
+      patterns:
+        - "**Bold Heading**"  # Must use ### Heading
+        - "https://raw.url"   # Must use [text](url)
+      action: "auto_fix_preferred"
+
+  # Required behaviors
+  required_behaviors:
+    virtual_environment:
+      description: "All Python commands must use virtual environment context"
+      pattern: "source .venv/bin/activate"
+
+    proper_shell_syntax:
+      description: "Use printf for variables, quoted here-docs"
+      patterns:
+        - 'printf "%s\n" "$VAR"'
+        - "<<'EOF'"
+
+    conventional_commits:
+      description: "All commit messages must follow TYPE(scope): description"
+      pattern: "^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|CI)\\([^)]+\\): .+$"
+
+# Agent-specific guardrails
+agent_specific:
+
+  # Claude/Anthropic AI
+  claude:
+    additional_restrictions:
+      - "Never suggest manual editing of linting configuration files"
+      - "Always include 3-5 lines of context in replace_string_in_file"
+      - "Respect suppression systems - only add for genuinely safe patterns"
+
+  # GitHub Copilot
+  copilot:
+    additional_restrictions:
+      - "Follow established patterns in existing codebase"
+      - "Maintain virtual environment requirements in suggestions"
+      - "Include proper error handling in generated scripts"
+
+  # General LLM assistants
+  llm_general:
+    additional_restrictions:
+      - "Assume all linting rules are intentional and must be followed"
+      - "Use project tooling instead of suggesting workarounds"
+      - "Generate content that passes validation on first attempt"
+
+# Enforcement actions
+enforcement_actions:
+
+  violation_detected:
+    immediate:
+      - "block_contribution"
+      - "log_violation"
+      - "provide_fix_guidance"
+
+    escalation:
+      - "pattern_analysis"
+      - "agent_education"
+      - "policy_update_consideration"
+
+  bypass_attempted:
+    immediate:
+      - "block_immediately"
+      - "require_triage_documentation"
+      - "escalate_to_human_review"
+
+  repeated_violations:
+    immediate:
+      - "enhanced_monitoring"
+      - "mandatory_training"
+      - "restricted_permissions"
+
+# Auto-fix preferences
+auto_fix:
+  priority_order:
+    1: "markdownlint-cli2 --fix"
+    2: "black (Python formatting)"
+    3: "ruff --fix (Python linting)"
+    4: "trailing whitespace removal"
+    5: "end-of-file normalization"
+
+  manual_review_required:
+    - "Content restructuring"
+    - "Security pattern changes"
+    - "Breaking schema modifications"
+    - "Policy bypass justifications"
+
+# Success metrics
+success_metrics:
+  target_values:
+    ai_generated_violations: 0
+    auto_fix_success_rate: "> 90%"
+    quality_gate_bypass_attempts: 0
+    ci_failure_reduction: "> 80%"
+
+  monitoring_frequency:
+    violation_tracking: "daily"
+    pattern_analysis: "weekly"
+    policy_effectiveness: "monthly"
+
+# Integration points
+integration:
+
+  pre_commit_hooks:
+    - "no-shortcuts-policy-enforcer"
+    - "markdown-lint-enforcement"
+    - "agent-schema-validation"
+    - "terminal-output-policy"
+
+  github_actions:
+    - "ci-enforcement-guard"
+    - "doc-lint-enforcer"
+    - "no-shortcuts-policy-enforcer"
+
+  monitoring_tools:
+    - "tech-debt-attribution-tracker"
+    - "enforcement-success-metrics"
+    - "ai-compliance-monitor"
+
+# Emergency procedures
+emergency:
+
+  bypass_criteria:
+    - "Critical production outage"
+    - "Security vulnerability fix"
+    - "Infrastructure bootstrap requirement"
+
+  bypass_process:
+    1: "Create triage branch (triage/description)"
+    2: "Document in .codex/enforcement/triage_log.md"
+    3: "Include specific remediation plan with timeline"
+    4: "Assign immediate fix responsibility"
+    5: "Monitor for proper resolution"
+
+  never_acceptable:
+    - "Convenience bypasses"
+    - "Avoiding legitimate quality work"
+    - "Cumulative shortcut accumulation"
+    - "AI agent suggestion to bypass"
+
+# Policy reference
+policy_document: ".codex/enforcement/policy.md"
+no_shortcuts_policy: "docs/policies/NO_SHORTCUTS_POLICY.md"
+suppression_guide: "docs/standards/terminal-output-policy-suppression.md"
+
+# Contact for policy questions
+enforcement_lead: "@potato"
+escalation_path: "TAGS Engineering CTO"

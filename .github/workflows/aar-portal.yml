@@ -3,12 +3,12 @@ name: Generate AAR Portal
 on:
   push:
     paths:
-      - '.aar/**'
+      - 'docs/AAR/**'
       - 'scripts/generate_aar_portal.py'
     branches: [main]
   pull_request:
     paths:
-      - '.aar/**'
+      - 'docs/AAR/**'
       - 'scripts/generate_aar_portal.py'
     branches: [main]
   schedule:
@@ -49,7 +49,7 @@ jobs:
       - name: Generate AAR Portal
         run: |
           python scripts/generate_aar_portal.py \
-            --aar-dir .aar \
+            --aar-dir docs/AAR/reports \
             --output-dir docs/aar-portal
 
       - name: Commit portal updates

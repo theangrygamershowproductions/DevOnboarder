@@ -100,3 +100,16 @@ aar-env-template:
 	fi
 	@echo "📋 Remember: Uncomment and set your actual tokens"
 	@echo "🔒 .env is gitignored for security"
+
+# Smart Markdown Fixing
+markdown-fix:
+	@echo "Running smart markdown fixer with intelligent pattern recognition..."
+	@./scripts/smart_markdown_fix.sh "**/*.md"
+
+markdown-fix-single:
+	@if [ -z "$(FILE)" ]; then \
+		echo "Usage: make markdown-fix-single FILE=path/to/file.md"; \
+	else \
+		echo "Running smart markdown fixer on $(FILE)..."; \
+		./scripts/smart_markdown_fix.sh "$(FILE)"; \
+	fi
