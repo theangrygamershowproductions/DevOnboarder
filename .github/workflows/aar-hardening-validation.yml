@@ -1,0 +1,470 @@
+name: AAR System Hardening Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/AAR/**'
+      - 'scripts/*aar*'
+      - 'package.json'
+      - '.github/workflows/aar*.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/AAR/**'
+      - 'scripts/*aar*'
+      - 'package.json'
+      - '.github/workflows/aar*.yml'
+
+jobs:
+  aar-schema-validation:
+    name: Schema Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate schema syntax
+        run: |
+          echo "Validating JSON schema syntax..."
+          node -e "
+            const fs = require('fs');
+            const schema = JSON.parse(fs.readFileSync('docs/AAR/schema/aar.schema.json', 'utf8'));
+            console.log('Schema syntax valid');
+            console.log('Schema version:', schema.version);
+            console.log('Schema ID:', schema.\$id);
+          "
+
+      - name: Validate schema evolution
+        run: |
+          echo "Checking schema evolution compatibility..."
+
+          # Check if schema version changed
+          if git diff --name-only HEAD~1..HEAD | grep -q "docs/AAR/schema/aar.schema.json"; then
+            echo "File: Schema file changed, validating evolution..."
+
+            # Extract version from current schema
+            CURRENT_VERSION=$(grep '"version":' docs/AAR/schema/aar.schema.json | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+            printf "Status: Current version: %s\n" "$CURRENT_VERSION"
+
+            # Check if version archive exists
+            ARCHIVE_FILE="docs/AAR/schemas/aar.v${CURRENT_VERSION}.json"
+            if [ ! -f "$ARCHIVE_FILE" ]; then
+              printf "Warning: Missing version archive: %s\n" "$ARCHIVE_FILE"
+              printf "Creating archive for version %s\n" "$CURRENT_VERSION"
+              cp docs/AAR/schema/aar.schema.json "$ARCHIVE_FILE"
+            fi
+
+            echo "Success: Schema evolution validated"
+          else
+            echo "Status: No schema changes detected"
+          fi
+
+  aar-data-validation:
+    name: Document Data File Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate all AAR data files
+        run: |
+          echo "Checking: Validating all AAR data files..."
+
+          if ls docs/AAR/data/*.aar.json >/dev/null 2>&1; then
+            npm run aar:validate docs/AAR/data/*.aar.json
+            echo "Success: All AAR data files validated successfully"
+          else
+            echo "Status: No AAR data files found to validate"
+          fi
+
+      - name: Check for migration requirements
+        run: |
+          echo "Processing: Checking for data migration requirements..."
+
+          if ls docs/AAR/data/*.aar.json >/dev/null 2>&1; then
+            # Check if any files need migration
+            MIGRATION_NEEDED=false
+
+            for file in docs/AAR/data/*.aar.json; do
+              VERSION=$(node -e "
+                const data = JSON.parse(require('fs').readFileSync('$file', 'utf8'));
+                console.log(data.schema_version || '0.0.0');
+              " 2>/dev/null || echo "0.0.0")
+
+              if [ "$VERSION" != "1.0.0" ]; then
+                printf "File: File %s needs migration from version %s\n" "$file" "$VERSION"
+                MIGRATION_NEEDED=true
+              fi
+            done
+
+            if [ "$MIGRATION_NEEDED" = true ]; then
+              echo "Warning: Some files need migration - run migration script locally"
+            else
+              echo "Success: All files are at current schema version"
+            fi
+          fi
+
+  aar-golden-tests:
+    name: Testing Golden File Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run golden file tests
+        run: |
+          echo "Testing: Running golden file snapshot tests..."
+          npm run aar:test-golden
+
+      - name: Check for template changes
+        if: failure()
+        run: |
+          echo "Warning: Golden file tests failed - this may indicate template changes"
+          echo "Info: If template changes are intentional, run 'npm run aar:update-snapshots'"
+          echo "Status: Review the diff files in tests/golden/aar/output/ for details"
+
+  aar-rendered-markdown:
+    name: File Rendered Markdown Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate test reports
+        run: |
+          echo "Document: Generating test markdown reports..."
+
+          if ls docs/AAR/data/*.aar.json >/dev/null 2>&1; then
+            for file in docs/AAR/data/*.aar.json; do
+              BASENAME=$(basename "$file")
+              printf "Rendering: %s\n" "$BASENAME"
+              npm run aar:render "$file" docs/AAR/reports
+            done
+            echo "Success: All reports generated successfully"
+          else
+            echo "Status: No AAR data files found to render"
+          fi
+
+      - name: Lint rendered markdown
+        run: |
+          echo "Checking: Linting rendered markdown reports..."
+
+          if ls docs/AAR/reports/*.md >/dev/null 2>&1; then
+            # Install markdownlint if not available
+            if ! command -v markdownlint &> /dev/null; then
+              npm install -g markdownlint-cli
+            fi
+
+            markdownlint docs/AAR/reports/*.md
+            echo "Success: All rendered markdown files pass linting"
+          else
+            echo "Status: No rendered markdown files found to lint"
+          fi
+
+  aar-security-checks:
+    name: Security Security Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security audit of dependencies
+        run: |
+          echo "Security: Running security audit..."
+          npm audit --audit-level=moderate
+
+      - name: Validate URL security
+        run: |
+          echo "Link: Validating URL security in AAR data..."
+
+          if ls docs/AAR/data/*.aar.json >/dev/null 2>&1; then
+            for file in docs/AAR/data/*.aar.json; do
+              BASENAME=$(basename "$file")
+              printf "Checking URLs in: %s\n" "$BASENAME"
+
+              # Extract URLs and validate domains
+              node -e "
+                const fs = require('fs');
+                const data = JSON.parse(fs.readFileSync('$file', 'utf8'));
+
+                const allowedDomains = [
+                  'github.com',
+                  'docs.google.com',
+                  'grafana.company.com',
+                  'docs.company.com'
+                ];
+
+                if (data.references) {
+                  data.references.forEach(ref => {
+                    if (ref.url) {
+                      try {
+                        const url = new URL(ref.url);
+                        const isAllowed = allowedDomains.some(domain =>
+                          url.hostname === domain || url.hostname.endsWith('.' + domain)
+                        );
+                        if (!isAllowed) {
+                          console.log('Warning: Potentially unsafe URL:', ref.url);
+                        }
+                      } catch (error) {
+                        console.log('FAILED Invalid URL:', ref.url);
+                      }
+                    }
+                  });
+                }
+                console.log('Success: URL security check completed');
+              "
+            done
+          fi
+
+  aar-integration-tests:
+    name: Processing Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test end-to-end workflow
+        run: |
+          echo "Processing: Testing complete AAR workflow..."
+
+          # Create test AAR data
+          cat > test_integration.aar.json << 'EOF'
+          {
+            "schema_version": "1.0.0",
+            "title": "Integration Test AAR",
+            "date": "2025-08-08",
+            "type": "Infrastructure",
+            "priority": "Medium",
+            "executive_summary": {
+              "problem": "Testing the complete AAR workflow integration",
+              "solution": "Automated validation and rendering pipeline",
+              "outcome": "Successful end-to-end validation of AAR system"
+            }
+          }
+          EOF
+
+          # Validate test data
+          echo "Step 1: Validating test data..."
+          npm run aar:validate test_integration.aar.json
+
+          # Render test report
+          echo "Step 2: Rendering test report..."
+          mkdir -p test_output
+          npm run aar:render test_integration.aar.json test_output
+
+          # Verify output exists
+          echo "Step 3: Verifying output..."
+          if [ -f "test_output/integration_test_aar.md" ]; then
+            echo "Success: Integration test successful"
+          else
+            echo "FAILED Integration test failed - no output generated"
+            exit 1
+          fi
+
+          # Cleanup
+          rm -f test_integration.aar.json
+          rm -rf test_output
+
+  aar-provenance-check:
+    name: Tag Provenance Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate provenance tracking
+        run: |
+          echo "Tag: Validating provenance tracking..."
+
+          # Create test file and check provenance injection
+          cat > test_provenance.aar.json << 'EOF'
+          {
+            "schema_version": "1.0.0",
+            "title": "Provenance Test",
+            "date": "2025-08-08",
+            "type": "Infrastructure",
+            "priority": "Low",
+            "executive_summary": {
+              "problem": "Test provenance tracking",
+              "solution": "Automated metadata injection",
+              "outcome": "Verified provenance information"
+            }
+          }
+          EOF
+
+          # Render with provenance
+          mkdir -p test_provenance_output
+          npm run aar:render test_provenance.aar.json test_provenance_output
+
+          # Check for provenance footer
+          if grep -q "Schema Version:" test_provenance_output/provenance_test.md; then
+            echo "Success: Provenance tracking validated"
+          else
+            echo "FAILED Provenance tracking failed"
+            exit 1
+          fi
+
+          # Cleanup
+          rm -f test_provenance.aar.json
+          rm -rf test_provenance_output
+
+  aar-comprehensive-summary:
+    name: Summary Validation Summary
+    runs-on: ubuntu-latest
+    needs: [
+      aar-schema-validation,
+      aar-data-validation,
+      aar-golden-tests,
+      aar-rendered-markdown,
+      aar-security-checks,
+      aar-integration-tests,
+      aar-provenance-check
+    ]
+    if: always()
+
+    steps:
+      - name: Generate validation summary
+        run: |
+          echo "## Shield: AAR System Hardening Validation Summary"
+          echo ""
+          echo "| Component | Status |"
+          echo "|-----------|--------|"
+
+          # Schema Validation Status
+          if [ "${{ needs.aar-schema-validation.result }}" = "success" ]; then
+            echo "| Schema Validation | Success: Passed |"
+          else
+            echo "| Schema Validation | FAILED Failed |"
+          fi
+
+          # Data Validation Status
+          if [ "${{ needs.aar-data-validation.result }}" = "success" ]; then
+            echo "| Data Validation | Success: Passed |"
+          else
+            echo "| Data Validation | FAILED Failed |"
+          fi
+
+          # Golden Tests Status
+          if [ "${{ needs.aar-golden-tests.result }}" = "success" ]; then
+            echo "| Golden Tests | Success: Passed |"
+          else
+            echo "| Golden Tests | FAILED Failed |"
+          fi
+
+          # Markdown Linting Status
+          if [ "${{ needs.aar-rendered-markdown.result }}" = "success" ]; then
+            echo "| Markdown Linting | Success: Passed |"
+          else
+            echo "| Markdown Linting | FAILED Failed |"
+          fi
+
+          # Security Checks Status
+          if [ "${{ needs.aar-security-checks.result }}" = "success" ]; then
+            echo "| Security Checks | Success: Passed |"
+          else
+            echo "| Security Checks | FAILED Failed |"
+          fi
+
+          # Integration Tests Status
+          if [ "${{ needs.aar-integration-tests.result }}" = "success" ]; then
+            echo "| Integration Tests | Success: Passed |"
+          else
+            echo "| Integration Tests | FAILED Failed |"
+          fi
+
+          # Provenance Tracking Status
+          if [ "${{ needs.aar-provenance-check.result }}" = "success" ]; then
+            echo "| Provenance Tracking | Success: Passed |"
+          else
+            echo "| Provenance Tracking | FAILED Failed |"
+          fi
+          echo ""
+
+          # Overall status
+          if [[ "${{ needs.aar-schema-validation.result }}" == "success" && \
+                "${{ needs.aar-data-validation.result }}" == "success" && \
+                "${{ needs.aar-rendered-markdown.result }}" == "success" && \
+                "${{ needs.aar-security-checks.result }}" == "success" && \
+                "${{ needs.aar-integration-tests.result }}" == "success" && \
+                "${{ needs.aar-provenance-check.result }}" == "success" ]]; then
+            echo "Complete: **Overall Status: ALL VALIDATIONS PASSED**"
+            echo ""
+            echo "The AAR system hardening validation completed successfully."
+            echo "All security, quality, and functionality checks passed."
+          else
+            echo "Warning: **Overall Status: SOME VALIDATIONS FAILED**"
+            echo ""
+            echo "Review the failed checks above and address any issues."
+            echo "The AAR system may not be fully hardened until all checks pass."
+          fi

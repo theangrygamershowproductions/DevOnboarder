@@ -39,45 +39,62 @@ After Actions Reports (AARs) are systematic reviews of project activities, issue
 
 ## AAR Storage Strategy
 
-### Primary Storage: `.aar/` Directory Structure
+### Primary Storage: `docs/AAR/` Directory Structure
 
 ```text
-.aar/
-├── 2025/
-│   ├── Q1/
-│   │   ├── issues/
-│   │   │   ├── issue-1234-git-workflow-enhancement.md
-│   │   │   └── issue-5678-pre-commit-failures.md
-│   │   ├── sprints/
-│   │   │   └── 2025-Q1-git-utilities-enhancement.md
-│   │   └── incidents/
-│   │       └── 2025-01-30-ci-failure-cascade.md
+docs/AAR/
+├── data/
+│   ├── project_name.aar.json          # JSON schema data files
+│   └── another_project.aar.json
+├── reports/
+│   ├── 2025/
+│   │   ├── Q1/
+│   │   │   ├── Infrastructure/
+│   │   │   │   ├── 2025-01-30_ci_failure_cascade.md
+│   │   │   │   └── 2025-02-15_git_workflow_enhancement.md
+│   │   │   ├── CI/
+│   │   │   │   └── 2025-03-10_pre_commit_failures.md
+│   │   │   └── Feature/
+│   │   │       └── 2025-Q1_git_utilities_enhancement.md
+│   │   └── Q2/
+│   │       └── Documentation/
+│   │           └── 2025-04-01_aar_system_migration.md
 │   └── archive/
 ├── templates/
-│   ├── issue-aar-template.md
-│   ├── sprint-aar-template.md
-│   └── incident-aar-template.md
-└── index.md
+│   └── aar.hbs                        # Handlebars template for markdown generation
+├── schema/
+│   └── aar.schema.json                # JSON Schema validation
+└── portal/
+    └── index.html                     # Auto-generated AAR portal
 ```
+
+### Schema-Driven AAR System
+
+**Modern AAR Workflow**:
+
+1. **Create JSON Data**: Use helper script or manual creation with schema validation
+2. **Generate Markdown**: Automated rendering via Node.js with Handlebars templates
+3. **Structured Storage**: Quarterly organization by type (Infrastructure, CI, Feature, etc.)
+4. **Portal Integration**: Automatic HTML portal generation for easy navigation
 
 ### Integration Points
 
-**1. Issue AARs (Attached to Issues):**
+**1. Issue AARs (Schema-Driven):**
 
-- Created when closing issues via automation
-- Attached as final comment before closure
-- Cross-referenced in `.aar/` directory
+- Created using `./scripts/create_aar_json.sh` with structured data
+- Generated markdown stored in `docs/AAR/reports/YYYY/QX/type/`
+- Cross-referenced in portal and automated navigation
 
-**2. Sprint AARs (Standalone Documents):**
+**2. Sprint AARs (Comprehensive Documentation):**
 
-- Stored in `.aar/YYYY/QX/sprints/`
-- Referenced in relevant PRs and issues
-- Linked in quarterly review cycles
+- JSON data in `docs/AAR/data/` with full phase tracking
+- Rendered reports in `docs/AAR/reports/YYYY/QX/Feature/`
+- Linked in quarterly portal views with action item tracking
 
-**3. Incident AARs (Both Locations):**
+**3. Incident AARs (Dual Integration):**
 
-- Immediate: Attached to incident issue
-- Permanent: Stored in `.aar/YYYY/incidents/`
+- Immediate: JSON schema validation ensures complete data capture
+- Permanent: Structured storage in `docs/AAR/reports/YYYY/QX/CI/` or `Infrastructure/`
 - Cross-referenced in troubleshooting docs
 
 ## AAR Automation Integration
@@ -92,11 +109,20 @@ The AAR automation runs automatically when:
 ### Script Integration
 
 ```bash
-# Generate different types of AARs
-./scripts/generate_aar.sh issue 1234
-./scripts/generate_aar.sh sprint "Q1 Git Utilities Enhancement"
-./scripts/generate_aar.sh incident "CI Failure Cascade"
-./scripts/generate_aar.sh automation "Enhanced Git Workflow"
+# Schema-driven AAR creation workflow
+./scripts/create_aar_json.sh "Project Title" "Infrastructure" "High"
+
+# Generate markdown from JSON data
+node scripts/render_aar.js docs/AAR/data/project-title.aar.json docs/AAR/reports
+
+# Generate AAR portal with all reports
+python scripts/generate_aar_portal.py
+
+# Validate AAR against schema
+npm run aar:validate docs/AAR/data/project-title.aar.json
+
+# Legacy shell generators (for existing workflows)
+./scripts/enhanced_aar_generator.sh automation --title "Enhanced Git Workflow"
 ```
 
 ## AAR Content Standards
@@ -198,7 +224,7 @@ When closing qualifying issues, automation adds:
 **Key Learnings**: [What we learned]
 **Process Improvements**: [What we'll do differently]
 
-**Full AAR**: See `.aar/2025/Q1/issues/issue-1234-description.md`
+**Full AAR**: See `docs/AAR/reports/2025/Q1/Infrastructure/issue-1234-description.md`
 
 **Action Items**:
 
@@ -244,7 +270,7 @@ When closing qualifying issues, automation adds:
 
 ### Phase 1: Infrastructure Setup (Week 1)
 
-- [x] Create `.aar/` directory structure
+- [x] Create `docs/AAR/` directory structure
 - [x] Implement AAR generation scripts
 - [x] Create GitHub Actions workflow
 - [x] Establish templates
@@ -302,9 +328,9 @@ The AAR system operates "quietly" in the background while building a comprehensi
 
 ### Viewing AARs
 
-- **Index**: `.aar/index.md` - Overview of all AARs
-- **Current Quarter**: `.aar/2025/Q1/` - Current quarter's AARs
-- **Templates**: `.aar/templates/` - AAR templates for manual creation
+- **Portal**: `docs/AAR/portal/index.html` - Auto-generated navigation portal
+- **Current Quarter**: `docs/AAR/reports/2025/Q1/` - Current quarter's AARs by type
+- **Templates**: `docs/AAR/templates/aar.hbs` - Handlebars template for markdown generation
 
 ### Follow-up Process
 

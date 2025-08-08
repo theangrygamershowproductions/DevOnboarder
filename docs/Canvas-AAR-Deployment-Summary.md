@@ -82,7 +82,7 @@ The structured AAR comments can trigger **lightweight Codex reactions**:
 1. **GitHub Issues/PRs Panel** - Structured summaries appear directly in IDE
 2. **No Context Switching** - AAR insights visible without leaving current work
 3. **Quick Metrics Scanning** - Table format for rapid information consumption
-4. **Direct File Access** - Links to `.aar/` directory within workspace
+4. **Direct File Access** - Links to `docs/AAR/reports/` directory within workspace
 
 ### **Enhanced Developer Experience**
 
@@ -102,7 +102,7 @@ The structured AAR comments can trigger **lightweight Codex reactions**:
 
 This AAR is immediately accessible in VSCode via:
 - GitHub Issues/PRs panel
-- Direct file access in `.aar/` directory
+- Direct file access in `docs/AAR/reports/` directory
 - Follow-up issue tracking for action items
 ```
 
@@ -140,7 +140,7 @@ This AAR is immediately accessible in VSCode via:
 | **Metric** | **Before** | **After** | **Improvement** |
 |------------|------------|-----------|------------------|
 | Context Switching | Required to view AAR files | Direct GitHub comment visibility | **100% reduction** |
-| Information Access Time | Manual .aar/ navigation | Immediate summary table | **~80% faster** |
+| Information Access Time | Manual docs/AAR/ navigation | Immediate summary table | **~80% faster** |
 | Action Item Awareness | Post-AAR discovery | Real-time notification | **Immediate** |
 | Codex Integration | Manual correlation | Automated observability | **Systematic** |
 
@@ -172,10 +172,10 @@ The structured comment system creates foundation for:
 
 ### **Builds Upon Established Foundation**
 
-- **Comprehensive AAR System**: Leverages existing `scripts/generate_aar.sh` infrastructure
-- **GitHub Actions Integration**: Extends proven `aar-automation.yml` workflow
-- **Template System**: Uses established `.aar/templates/` for consistency
-- **Storage Structure**: Maintains `.aar/YYYY/QX/` quarterly organization
+- **Comprehensive AAR System**: Leverages schema-driven `scripts/render_aar.js` infrastructure
+- **GitHub Actions Integration**: Extends proven `aar-portal.yml` workflow
+- **Template System**: Uses established `docs/AAR/templates/aar.hbs` for consistency
+- **Storage Structure**: Maintains `docs/AAR/reports/YYYY/QX/type/` quarterly organization
 
 ### **Enhanced Without Disruption**
 
