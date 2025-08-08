@@ -68,7 +68,10 @@ COPY src ./src
 # Install Python dependencies (production only)
 RUN pip install --no-cache-dir -e .
 
-# Create production user (non-root)
+# Copy remaining project files
+COPY . ./
+
+# Create production user (non-root) and fix ownership
 RUN useradd -m -s /bin/bash appuser && \
     chown -R appuser:appuser /app
 USER appuser
@@ -76,12 +79,6 @@ USER appuser
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8001/health || curl -f http://localhost:8002/health || exit 1
-
-# Default production command
-CMD ["python", "-m", "devonboarder.server"]
-
-# Copy remaining project files
-COPY . ./
 
 # Install frontend dependencies if package.json exists
 RUN if [ -f "frontend/package.json" ]; then \
