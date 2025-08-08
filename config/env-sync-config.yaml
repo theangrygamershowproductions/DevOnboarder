@@ -62,8 +62,6 @@ sync_config:
     - "AUTH_PORT"
     - "BACKEND_PORT"
     - "FRONTEND_PORT"
-    - "DASHBOARD_HOST"
-    - "DASHBOARD_PORT"
 
   # Variables that should remain environment-specific (never synchronized)
   environment_specific_variables:

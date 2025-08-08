@@ -295,8 +295,9 @@ services:
     env_file:
       - .env.dev
     environment:
+      # Docker networking: bind to all interfaces within container network
+      # This is secure because the port is only exposed within Docker network
       DASHBOARD_HOST: "0.0.0.0"
-      DASHBOARD_PORT: "8003"
     volumes:
       - ./src:/app/src
       - ./scripts:/app/scripts
@@ -325,6 +326,7 @@ services:
       - "traefik.http.routers.dashboard-dev.rule=PathPrefix(`/dashboard`)"
       - "traefik.http.routers.dashboard-dev.entrypoints=web"
       - "traefik.http.services.dashboard-dev.loadbalancer.server.port=8003"
+      - "traefik.http.services.dashboard-dev.loadbalancer.server.url=http://dashboard-service:8003"
       - "traefik.http.routers.dashboard-dev.middlewares=stripprefix-dashboard@file,cors-header@file"
       - "traefik.http.routers.dashboard-dev.priority=100"
 
