@@ -85,13 +85,17 @@ printf "Result: %s\n" "$RESULT"
 4. **NEVER use multi-line echo** or here-doc syntax
 5. **ALWAYS use individual echo commands** with plain ASCII text only
 6. **ALWAYS use printf for variables**: `printf "text: %s\n" "$VAR"`
-7. **REMEMBER**: Terminal hanging is a CRITICAL FAILURE in DevOnboarder
+7. **NEVER use --no-verify flag** with git commit (ZERO TOLERANCE POLICY)
+8. **ALWAYS use safe commit wrapper**: `./scripts/safe_commit.sh "message"`
+9. **REMEMBER**: Terminal hanging is a CRITICAL FAILURE in DevOnboarder
+10. **REMEMBER**: Bypassing quality gates with --no-verify is FORBIDDEN
 
 **Policy Documentation:**
 
 - **Comprehensive Guide**: `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
 - **AI Override Instructions**: `docs/AI_AGENT_TERMINAL_OVERRIDE.md`
 - **Troubleshooting**: `docs/MARKDOWN_LINTING_TROUBLESHOOTING.md`
+- **Coverage Challenge Lessons**: `docs/COVERAGE_CHALLENGE_LESSONS_LEARNED.md`
 
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
@@ -683,7 +687,30 @@ bash scripts/manage_logs.sh archive   # Archive current logs
 bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ```
 
-### 5. Commit Message Standards
+### 5. Pre-Commit Requirements - MANDATORY PROCESS
+
+**CRITICAL**: ALL commits MUST follow this process to prevent CI failures and maintain "quiet reliability":
+
+**MANDATORY PRE-COMMIT CHECKLIST**:
+
+1. **Check commit message format FIRST** - Reference approved types before writing message
+2. **ALWAYS use `scripts/safe_commit.sh`** - NEVER use `git commit` directly
+3. **Verify format**: `<TYPE>(<scope>): <subject>` with approved TYPE
+4. **Validate before staging** - Run relevant checks for changed files
+
+**Approved Commit Types** (memorize these):
+
+- **Standard**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+- **Extended**: PERF, CI, OPS, REVERT, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
+
+**FORBIDDEN Practices**:
+
+- ❌ Using `git commit` directly (bypasses validation)
+- ❌ Using unapproved types like `MERGE`, `UPDATE`, `MISC`
+- ❌ Missing scope in commit messages
+- ❌ Using `--no-verify` without explicit Potato Approval
+
+### 6. Commit Message Standards
 
 **MANDATORY**: Use conventional commit format: `<TYPE>(<scope>): <subject>`
 
@@ -910,6 +937,30 @@ All CI commands use proper virtual environment context:
 - **HTTPS enforcement**: All production endpoints
 - **Input validation**: Sanitize all user inputs
 
+### Environment Variable Security Model
+
+**CRITICAL**: DevOnboarder implements centralized environment variable management with security boundaries:
+
+- **Source of Truth**: `.env` file contains all configuration (GITIGNORED)
+- **Synchronization**: Use `bash scripts/smart_env_sync.sh --sync-all` to propagate changes
+- **Security Boundaries**: Production secrets NEVER in committed files
+- **CI Protection**: `.env.ci` uses test/mock values only
+- **Audit System**: `bash scripts/env_security_audit.sh` for continuous validation
+
+**Security Model**:
+
+- `.env` - Source of truth (GITIGNORED)
+- `.env.dev` - Development config (GITIGNORED)
+- `.env.prod` - Production config (GITIGNORED)
+- `.env.ci` - CI test config (COMMITTED with test values)
+
+**Agent Requirements**:
+
+- NEVER suggest manual editing of multiple environment files
+- ALWAYS use centralized synchronization system
+- ALWAYS validate security boundaries before file modifications
+- REMEMBER: Production secrets in CI files is CRITICAL security violation
+
 ### Documentation Standards
 
 - **Vale linting**: `python -m vale docs/` (in virtual environment)
@@ -962,6 +1013,19 @@ console.log("🤖 DevOnboarder Discord Bot Starting...");
 console.log(`   Environment: ${ENVIRONMENT}`);
 console.log(`   Guild ID: ${process.env.DISCORD_GUILD_ID}`);
 console.log(`   Bot Ready: ${DISCORD_BOT_READY}`);
+```
+
+**Jest Configuration Pattern**:
+
+```typescript
+// Jest configuration pattern for all tests
+// In bot/package.json, always include:
+"jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testTimeout": 30000,  // CRITICAL: Prevents CI hangs
+    "collectCoverage": true
+}
 ```
 
 ### 3. Frontend Integration Patterns
@@ -1045,7 +1109,9 @@ def contribute(data: dict, current_user = Depends(auth_service.get_current_user)
 
 - [ ] **Virtual environment activated** and dependencies installed
 - [ ] All tests pass with required coverage
+- [ ] **Jest timeout configured in bot/package.json** (if working with bot)
 - [ ] Linting passes (`python -m ruff`, ESLint for TypeScript)
+- [ ] **Dependency PRs: Review breaking changes** (if dependency update)
 - [ ] Documentation updated and passes Vale
 - [ ] No secrets or sensitive data in commits
 - [ ] Commit message follows imperative mood standard
@@ -1124,6 +1190,111 @@ python -m pytest plugins/example_plugin/
     - ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
     - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
+7. **Jest Test Timeouts in CI**:
+
+    - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
+    - ✅ **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
+    - ✅ **Location**: `bot/package.json` Jest configuration block
+    - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
+
+8. **Dependency Update Failures**:
+
+    - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
+    - ✅ **Pattern**: "TypeScript compilation errors after upgrade" → Breaking changes in major versions
+    - ✅ **Pattern**: "Dependabot PR fails immediately" → Lock file conflicts or incompatible versions
+    - ✅ **Emergency Rollback**: `git revert <commit-hash> && git push origin main`
+
+### Dependency Crisis Management
+
+**When All Dependency PRs Fail**:
+
+1. **Immediate Assessment**:
+
+   ```bash
+   # Check current CI status
+   gh pr list --state=open --label=dependencies
+
+   # Identify common failure patterns
+   gh pr checks <pr-number> --watch
+   ```
+
+1. **Test Timeout Quick Fix**:
+
+   ```bash
+   # Emergency Jest timeout fix
+   cd bot
+   npm test -- --testTimeout=30000
+   ```
+
+1. **Incremental Recovery**:
+
+   - Merge patch updates first (1.2.3 → 1.2.4)
+   - Then minor updates (1.2.x → 1.3.0)
+   - Major updates last with manual testing
+
+### Dependabot PR Quick Assessment
+
+**Before Merging Any Dependency PR**:
+
+1. **Check CI Status**: All checks must be green
+2. **Test Timeout Check**: Verify Jest testTimeout is configured
+3. **Major Version Upgrades**: Review breaking changes documentation
+4. **TypeScript Upgrades**: Run local type checking before merge
+
+**Fast Track Criteria (Safe to Auto-Merge)**:
+
+- ✅ Patch version updates (1.2.3 → 1.2.4)
+- ✅ Minor version updates with green CI
+- ✅ Test framework maintenance updates (@types/*, ts-jest)
+
+**Requires Investigation**:
+
+- ⚠️ Major version jumps (5.8.x → 5.9.x)
+- ⚠️ Framework core updates (TypeScript, Jest major versions)
+- ⚠️ Any PR with failing CI checks
+
+### Environment Variable Management Issues
+
+**Critical Issues Requiring Immediate Action**:
+
+- **Environment File Inconsistencies**:
+
+    - ✅ **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
+    - ✅ **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
+    - ❌ **NOT**: Manually edit individual environment files
+
+- **Security Audit Failures**:
+
+    - ✅ **Detection**: Run `bash scripts/env_security_audit.sh`
+    - ✅ **Pattern**: Production secrets in CI files (CRITICAL violation)
+    - ✅ **Solution**: Move production secrets to gitignored files only
+    - ⚠️ **Emergency**: Never commit production secrets to CI environment
+
+- **Tunnel Hostname Validation Failures**:
+
+    - ✅ **Pattern**: "ERROR: uses old multi-subdomain format"
+    - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
+    - ❌ **NOT**: Disable validation to avoid errors
+
+- **Discord Bot Authentication Failures in Docker**:
+
+    - ✅ **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
+    - ✅ **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
+    - ✅ **Solution**: Ensure compose file env_file matches volume mount (.env.dev → /app/.env:ro)
+    - ✅ **Verification**: Check container logs with `docker compose logs bot`
+
+- **Missing Bot Environment Variables**:
+
+    - ✅ **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
+    - ✅ **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
+    - ❌ **NOT**: Manually edit .env.dev or docker-specific files directly
+
+- **Multi-Service Container Failures**:
+
+    - ✅ **Diagnostic Pattern**: Check `docker compose ps` → logs → environment sync → security audit
+    - ✅ **Service Order**: Database fails → Auth fails → Backend fails → Bot fails
+    - ✅ **Environment Consistency**: All services should reference same environment file in compose
+
 ### Validation-Driven Resolution Pattern
 
 DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
@@ -1149,6 +1320,13 @@ bash scripts/validate_cache_centralization.sh
 - `npm run status --prefix bot`: Check bot connectivity
 - `python -m vale docs/`: Validate documentation
 - Coverage reports: Generated by test commands
+
+**Dependency-Specific Diagnostics**:
+
+- `bash scripts/check_jest_config.sh`: Verify Jest timeout configuration
+- `npm run test --prefix bot`: Test bot directly for dependency issues
+- `python -m pytest tests/`: Test backend directly for module errors
+- `gh pr list --state=open --label=dependencies`: Check pending dependency PRs
 
 ### Enhanced Logging and CI Troubleshooting
 
@@ -1274,6 +1452,263 @@ git status --short  # Should show only intended changes
 13. **FOLLOW**: Node modules hygiene standards and placement requirements
 14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
+### ⚠️ NEW: Pre-commit Hook Management for Agents
+
+**CRITICAL UNDERSTANDING**: Pre-commit hooks frequently modify files during validation (trailing whitespace, formatting fixes). This creates a common cycle where:
+
+1. Files are staged for commit
+2. Pre-commit hooks run and modify the files
+3. Modified files become unstaged, causing commit failure
+
+**MANDATORY AGENT BEHAVIOR**:
+
+- **Use `scripts/safe_commit.sh`** instead of direct `git commit` commands
+- **NEVER suggest** using `--no-verify` to bypass pre-commit hooks
+- **NEVER use --no-verify flag** under any circumstances (ZERO TOLERANCE POLICY)
+- **UNDERSTAND**: Second pre-commit failure indicates systemic issues, not formatting
+- **EXPECT**: Automatic re-staging of files modified by hooks
+- **ANALYZE**: Enhanced safe_commit.sh provides automatic log analysis on systemic failures
+- **REMEMBER**: Quality gates exist for critical reasons and must be respected
+
+**Safe Commit Pattern**:
+
+```bash
+# ✅ CORRECT - Use safe commit wrapper
+scripts/safe_commit.sh "FEAT(component): descriptive commit message"
+
+# ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
+git commit -m "message"
+# POTATO: EMERGENCY APPROVED - documentation-example-violation-20250807
+git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypasses quality gates
+```
+
+### ⚠️ NEW: Environment Variable Management for Agents
+
+**CRITICAL UNDERSTANDING**: DevOnboarder uses centralized environment variable management with security boundaries.
+
+**MANDATORY AGENT BEHAVIOR**:
+
+- **Use centralized system**: Run `bash scripts/smart_env_sync.sh --sync-all` instead of manual file edits
+- **Validate security**: Run `bash scripts/env_security_audit.sh` after environment changes
+- **Respect boundaries**: Never suggest moving production secrets to CI files
+- **Single source**: Edit `.env` only, synchronize to other files via scripts
+
+**Security Violation Prevention**:
+
+```bash
+# ✅ CORRECT - Centralized management
+echo "NEW_VARIABLE=value" >> .env
+bash scripts/smart_env_sync.sh --sync-all
+
+# ❌ WRONG - Manual multi-file editing
+echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
+```
+
+### ⚠️ NEW: Shellcheck SC1091 Standard Pattern
+
+**COMMON SCENARIO**: Shellcheck SC1091 warnings for `source .env` or similar operations.
+
+**STANDARD RESOLUTION PATTERNS**:
+
+```bash
+# ✅ CORRECT - For .env files
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
+# ✅ CORRECT - For runtime source operations
+# shellcheck disable=SC1091 # Runtime source operation
+source .venv/bin/activate
+
+# ✅ CORRECT - For project-specific patterns
+# shellcheck source=scripts/project_root_wrapper.sh disable=SC1091
+source scripts/project_root_wrapper.sh
+```
+
+**AGENT REQUIREMENTS**:
+
+- **ALWAYS** add appropriate shellcheck disable directives for legitimate source operations
+- **NEVER** suggest removing source operations to avoid warnings
+- **USE** the established patterns above for consistency
+
+### ⚠️ NEW: Markdown Content Creation Standards
+
+**CRITICAL REQUIREMENT**: Create markdown content that passes linting validation on first attempt.
+
+**MANDATORY PRE-CREATION CHECKLIST**:
+
+1. **Review existing compliant markdown** in repository for patterns
+2. **Apply formatting rules systematically**:
+   - MD022: Blank lines before AND after all headings
+   - MD032: Blank lines before AND after all lists
+   - MD031: Blank lines before AND after all fenced code blocks
+   - MD007: 4-space indentation for nested list items
+   - MD040: Language specified for all fenced code blocks
+
+**PREVENTION OF COMMON ERRORS**:
+
+- **NEVER** create markdown content requiring post-creation fixes
+- **NEVER** duplicate content when applying formatting fixes
+- **ALWAYS** create complete, properly formatted content from start
+- **VALIDATE** structure before file creation
+
+**Example Compliant Format**:
+
+```markdown
+## Section Title
+
+Paragraph content with proper spacing around elements.
+
+- List item with blank line above
+- Second list item
+    - Nested item with 4-space indentation
+    - Another nested item
+
+Another paragraph after blank line.
+
+### Subsection
+
+More content following the same pattern.
+```
+
+```yaml
+# Code block with language specified and blank lines around
+key: value
+```
+
+Final paragraph after code block.
+
+**AGENT RESPONSIBILITY**: Treat markdown linting rules as **requirements**, not **suggestions**. Creating non-compliant content violates DevOnboarder's "quiet reliability" philosophy.
+
+### ⚠️ NEW: Enhanced Debugging and Error Analysis
+
+**AUTOMATIC LOG ANALYSIS**: DevOnboarder's enhanced `safe_commit.sh` script now provides comprehensive error diagnostics when pre-commit fails on the second attempt:
+
+**Debugging Features Available**:
+
+- **Pre-commit cache log analysis**: Automatic review of recent pre-commit logs
+- **Git status debugging**: Detailed working tree status with staged/unstaged file analysis
+- **File staging verification**: Comparison of intended vs actual staged files
+- **Systemic failure detection**: Distinguishes between formatting fixes and real issues
+- **Actionable recommendations**: Specific commands to diagnose and resolve issues
+
+**Agent Debugging Workflow**:
+
+1. **Always use `scripts/safe_commit.sh`** for commits - provides automatic analysis
+2. **Review log output comprehensively** when commits fail on second attempt
+3. **Follow specific recommendations** provided by the enhanced error analysis
+4. **Use validation-driven troubleshooting** - run suggested diagnostic commands
+5. **Escalate pattern recognition** - document recurring issues for future prevention
+
+**Enhanced Error Patterns to Recognize**:
+
+- **First attempt failure + successful re-staging** = Normal formatting fix cycle
+- **Second attempt failure** = Systemic issue requiring investigation
+- **Repeated shellcheck warnings** = Need for disable directive patterns
+- **Markdown duplication on fixes** = Content recreation rather than targeted fixes
+- **Cache pollution warnings** = Root Artifact Guard enforcement requiring cleanup
+
+**Troubleshooting Commands Enhanced Script Suggests**:
+
+```bash
+# Virtual environment verification
+source .venv/bin/activate && pre-commit run --all-files
+
+# Individual hook testing
+pre-commit run <hook-name> --all-files
+
+# DevOnboarder quality gate validation
+./scripts/qc_pre_push.sh
+
+# Comprehensive error analysis (automatically provided by safe_commit.sh)
+```
+
+### ⚠️ NEW: Multi-Service Docker Architecture Troubleshooting
+
+**CRITICAL UNDERSTANDING**: Multi-service Docker Compose environments require systematic debugging following service dependency chains.
+
+**MANDATORY TROUBLESHOOTING WORKFLOW**:
+
+1. **Check service health first**: `docker compose ps` - identify which services are failing
+2. **Follow dependency chain**: Services fail in order of dependencies (db → auth → backend → bot)
+3. **Verify environment consistency**: All services in compose file should use same environment file
+4. **Check container logs**: `docker compose logs <service>` for missing environment variables
+5. **Validate file synchronization**: Ensure environment files match container expectations
+
+**Common Multi-Service Patterns**:
+
+```bash
+# ✅ CORRECT - Systematic debugging approach
+docker compose -f docker-compose.dev.yaml ps                    # Check service status
+docker compose -f docker-compose.dev.yaml logs bot              # Check specific service logs
+bash scripts/smart_env_sync.sh --validate-only                  # Verify env sync
+bash scripts/env_security_audit.sh                              # Check security boundaries
+
+# ❌ WRONG - Random service restart without diagnosis
+docker compose restart bot  # Doesn't address root cause
+```
+
+**Environment File Consistency Requirements**:
+
+```yaml
+# ✅ CORRECT - Consistent environment file usage across all services
+services:
+  auth-service:
+    env_file: [.env.dev]
+  backend:
+    env_file: [.env.dev]
+  bot:
+    env_file: [.env.dev]          # Same file as other services
+    volumes:
+      - ./.env.dev:/app/.env:ro   # Mount as expected filename
+
+# ❌ WRONG - Mixed environment file references
+services:
+  bot:
+    env_file: [.env.dev]                # Compose uses .env.dev
+    volumes:
+      - ./bot/.env:/app/.env:ro         # But mounts different file
+```
+
+### ⚠️ NEW: ES Module Requirements for TypeScript Discord Bots
+
+**CRITICAL UNDERSTANDING**: Discord.js v14+ requires ES modules with explicit .js extensions in TypeScript imports.
+
+**MANDATORY IMPORT PATTERNS**:
+
+```typescript
+// ✅ CORRECT - ES module imports in TypeScript (mandatory .js extensions)
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { command as verifyCommand } from './verify.js';        // .js required even for .ts files
+import { command as profileCommand } from './profile.js';      // .js required even for .ts files
+
+// ❌ WRONG - Missing .js extension causes runtime MODULE_NOT_FOUND errors
+import { command as verifyCommand } from './verify';           // Missing .js
+import { command as profileCommand } from './profile';         // Missing .js
+```
+
+**TypeScript Configuration Requirements**:
+
+```json
+// tsconfig.json must include ES module settings
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2022"
+  },
+  "type": "module"
+}
+```
+
+**Agent Requirements for Discord Bot Development**:
+
+- **ALWAYS** add `.js` extensions to relative imports, even when importing TypeScript files
+- **NEVER** suggest removing ES module configuration to fix import errors
+- **UNDERSTAND**: TypeScript compilation preserves import paths exactly as written
+- **REMEMBER**: Runtime errors occur if .js extensions are missing, even if TypeScript compiles
+
 ## Agent Documentation Standards
 
 ### Codex Agent Requirements
@@ -1353,12 +1788,13 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-03 (Terminal Policy Cleanup Progress - 22 violations remaining)
+**Last Updated**: 2025-08-06 (Multi-Service Docker Architecture, ES Modules & Environment Management Troubleshooting)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
 **Active Environments**: Development + Production Discord integration
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
 **Security**: Enhanced Potato Policy + Root Artifact Guard active
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
+**Enhanced Debugging**: safe_commit.sh with automatic log analysis and error diagnostics
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution

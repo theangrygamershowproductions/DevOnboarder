@@ -69,5 +69,33 @@ services:
     db:
         <<: [*db-base, *env-prod]
 
+    # Cloudflare Tunnel for secure external access
+    cloudflared:
+        image: cloudflare/cloudflared:latest
+        container_name: devonboarder-cloudflared-prod
+        restart: always
+        command: tunnel run --token ${TUNNEL_TOKEN}
+        environment:
+            - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+            - TUNNEL_ID=${TUNNEL_ID}
+        volumes:
+            - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+            - ./cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+        depends_on:
+            - auth
+            - frontend
+        networks:
+            - default
+        healthcheck:
+            test: ["CMD-SHELL", "cloudflared tunnel info ${TUNNEL_ID} || exit 1"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 10s
+
 volumes:
     db_data:
+
+networks:
+    default:
+        name: devonboarder_prod_network

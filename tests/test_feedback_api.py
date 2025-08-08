@@ -58,3 +58,49 @@ def test_submit_and_analytics():
     assert resp.json()["total"] >= 1  # At least our item
     # At least our closed item
     assert resp.json()["breakdown"]["bug"]["closed"] >= 1
+
+
+def test_update_nonexistent_feedback():
+    """Test updating feedback item that doesn't exist."""
+    app = create_app()
+    client = TestClient(app)
+
+    # Try to update a non-existent item
+    resp = client.patch("/feedback/99999", json={"status": "closed"})
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "Item not found"
+
+
+def test_health_endpoint():
+    """Test the health endpoint."""
+    app = create_app()
+    client = TestClient(app)
+
+    resp = client.get("/health")
+    assert resp.status_code == 200
+    assert resp.json() == {"status": "ok"}
+
+
+def test_create_app_with_init_db(monkeypatch):
+    """Test app creation with INIT_DB_ON_STARTUP enabled."""
+    monkeypatch.setenv("INIT_DB_ON_STARTUP", "true")
+
+    # Mock the init_db and create_all methods to track calls
+    init_db_called = []
+    create_all_called = []
+
+    def mock_init_db():
+        init_db_called.append(True)
+
+    def mock_create_all(*args, **kwargs):
+        create_all_called.append(True)
+
+    monkeypatch.setattr(auth_service, "init_db", mock_init_db)
+    monkeypatch.setattr(auth_service.Base.metadata, "create_all", mock_create_all)
+
+    app = create_app()
+
+    # Verify that init_db and create_all were called
+    assert len(init_db_called) == 1
+    assert len(create_all_called) == 1
+    assert app is not None

@@ -4,6 +4,41 @@
 [![CI](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/ci.yml)
 [![Auto Fix](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/auto-fix.yml)
 [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+[![📚 Documentation Quality](https://img.shields.io/badge/docs-certified-brightgreen?style=flat&logo=markdown)](docs/public/documentation-quality-certification.md)
+
+## 🎯 **Project Management Framework**
+
+DevOnboarder uses a comprehensive three-project structure for optimal organization and tracking:
+
+### **[📋 Team Planning](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1)** - MVP Execution
+
+6-week MVP delivery with detailed task management
+
+| Phase | Timeline | Milestone | Status |
+|-------|----------|-----------|---------|
+| **Phase 1** | Weeks 1-2 | [Foundation Stabilization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1088) | 🔄 Active |
+| **Phase 2** | Weeks 3-4 | [Feature Completion](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1089) | ⏳ Planned |
+| **Phase 3** | Weeks 5-6 | [MVP Finalization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1090) | ⏳ Planned |
+
+### **[🚀 Feature Release](https://github.com/orgs/theangrygamershowproductions/projects/5/views/1)** - Service Coordination
+
+Multi-service integration and release management
+
+- Cross-service integration testing and deployment
+- [Staged Task Framework](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1091) implementation
+- Quality gate enforcement and service health monitoring
+
+### **[🗺️ Roadmap](https://github.com/orgs/theangrygamershowproductions/projects/6/views/1)** - Strategic Planning
+
+Long-term platform evolution and strategic initiatives
+
+- [Strategic Repository Splitting](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1092) (Post-MVP)
+- [Platform Evolution & Scaling](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1093) (12-month vision)
+- Technology roadmap and architectural evolution
+
+**Quick Links**: [Current Sprint](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1) • [Strategic Split Plan](codex/mvp/strategic_repository_splitting_plan.md) • [MVP Documentation](codex/mvp/)
+
+---
 
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
@@ -32,12 +67,15 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 2. Set up environment:
 
    ```bash
-   # Install DevOnboarder .zshrc integration for CLI shortcuts
-   # See docs/cli-shortcuts.md for full shell integration guide
-
-   # Activate environment
+   # Create and activate virtual environment
+   python -m venv .venv
    source .venv/bin/activate
+
+   # Install dependencies
    pip install -e .[test]
+
+   # Optional: Install DevOnboarder .zshrc integration for CLI shortcuts
+   # See docs/cli-shortcuts.md for full shell integration guide
    ```
 
 3. Run locally:
@@ -62,6 +100,12 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    ```
 
 6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+
+### Common Issues
+
+- **Bot container shows "unhealthy"**: See [Discord Bot Health Check Fix](docs/troubleshooting/DISCORD_BOT_HEALTH_CHECK_FIX.md)
+- **Permission denied errors**: Check [Docker Container Health Troubleshooting](docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md)
+- **General setup issues**: Review [docs/README.md](docs/README.md) troubleshooting section
 
 ## 🔄 PR-to-Issue Automation
 
@@ -140,21 +184,16 @@ This acts as a **"canary in the repository"** - any attempt to expose sensitive 
 
 ## Language Versions
 
-`scripts/setup-env.sh` pulls the `ghcr.io/openai/codex-universal` image to provide a unified runtime.
-When Docker isn't available, the script installs Python 3.12 using `mise` or `asdf` before creating a virtual environment.
+DevOnboarder requires specific language versions for development consistency:
 
-| Language | Version |
-| -------- | ------- |
-| Python   | 3.12    |
-| Node.js  | 22      |
-| Ruby     | 3.2.3   |
-| Rust     | 1.88.0  |
-| Go       | 1.24.4  |
-| Bun      | 1.2.14  |
-| Java     | 21      |
-| Swift    | 6.1     |
+| Language | Version | Required For |
+| -------- | ------- | ------------ |
+| Python   | 3.12    | Backend services, testing, CI/CD |
+| Node.js  | 22      | Discord bot, frontend development |
 
 Install the required runtimes with `mise install` (or `asdf install`) to match the versions defined in `.tool-versions`.
+
+**Note**: While DevOnboarder can run in broader containerized environments that include additional languages, core development requires only Python 3.12 and Node.js 22 as specified in `.tool-versions`.
 
 ## Available Make Targets
 

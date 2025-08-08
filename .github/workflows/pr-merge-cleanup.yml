@@ -54,8 +54,8 @@ jobs:
 
                   echo "Looking for tracking issue for PR"
 
-                  # Search for tracking issue with PR number in title
-                  ISSUE_SEARCH=$(gh issue list --search "Track PR #$PR_NUMBER" --state open --json number,title,labels)
+                  # Search for tracking issue with PR number in title using wrapper script
+                  ISSUE_SEARCH=$(bash scripts/ci_gh_issue_wrapper.sh list "Track PR #$PR_NUMBER" "open" "number,title,labels")
 
                   if [[ "$ISSUE_SEARCH" != "[]" ]]; then
                       ISSUE_NUMBER=$(echo "$ISSUE_SEARCH" | jq -r '.[0].number')
@@ -63,11 +63,13 @@ jobs:
 
                       echo "Found tracking issue"
 
-                      # Add completion comment before closing
-                      gh issue comment "$ISSUE_NUMBER" --body "PR Merged Successfully - Pull Request #$PR_NUMBER has been successfully merged and this tracking issue is being automatically closed."
+                      # Add completion comment before closing using wrapper script
+                      bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \
+                        "PR Merged Successfully - Pull Request #$PR_NUMBER has been successfully merged and this tracking issue is being automatically closed."
 
-                      # Close the tracking issue
-                      gh issue close "$ISSUE_NUMBER" --comment "Automatically closed: PR #$PR_NUMBER merged successfully"
+                      # Close the tracking issue using wrapper script
+                      bash scripts/ci_gh_issue_wrapper.sh close "$ISSUE_NUMBER" \
+                        "Automatically closed: PR #$PR_NUMBER merged successfully"
 
                       echo "Closed tracking issue for merged PR"
                   else
@@ -80,5 +82,6 @@ jobs:
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
-                  # Add final comment to PR
-                  gh pr comment "$PR_NUMBER" --body "**PR Merge Complete**: Associated tracking issue has been automatically closed. Thank you for your contribution to DevOnboarder!"
+                  # Add final comment to PR using wrapper script
+                  bash scripts/ci_gh_issue_wrapper.sh pr-comment "$PR_NUMBER" \
+                    "**PR Merge Complete**: Associated tracking issue has been automatically closed. Thank you for your contribution to DevOnboarder!"

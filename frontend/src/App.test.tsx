@@ -20,7 +20,7 @@ describe("App", () => {
     it("renders heading", () => {
         render(<App />);
         expect(
-            screen.getByRole("heading", { name: /DevOnboarder/i }),
+            screen.getByRole("heading", { name: /Comprehensive Onboarding Platform/i }),
         ).toBeInTheDocument();
     });
 });

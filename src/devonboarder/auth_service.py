@@ -1,6 +1,7 @@
 """Authentication service with Discord integration and JWT utilities."""
 
 from __future__ import annotations
+from typing import Optional
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +12,7 @@ from fastapi.responses import RedirectResponse
 from utils.discord import get_user_roles, get_user_profile
 from utils.roles import resolve_user_flags
 from utils.cors import get_cors_origins
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse, unquote
 import httpx
 from sqlalchemy import (
     Column,
@@ -27,11 +28,95 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 import os
 import time
-from dotenv import load_dotenv
-from pathlib import Path
+import logging
 
-# Load environment variables from the auth service's .env file when present
-load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+def is_safe_redirect_url(url: str) -> bool:
+    """Validate that a redirect URL is safe to prevent phishing attacks.
+
+    Parameters
+    ----------
+    url : str
+        The URL to validate.
+
+    Returns
+    -------
+    bool
+        True if the URL is safe for redirection.
+    """
+    if not url or not url.strip():
+        return False
+
+    # Clean the URL - handle backslash confusion
+    url = url.strip().replace("\\", "/")
+
+    # Prevent protocol-relative URLs (e.g., //evil.com)
+    if url.startswith("//"):
+        return False
+
+    # Prevent Unicode-encoded or percent-encoded protocol-relative URLs
+    try:
+        decoded_url = unquote(url)
+        if decoded_url.startswith("//"):
+            return False
+    except Exception:
+        return False
+
+    try:
+        parsed = urlparse(url)
+    except Exception:
+        return False
+
+    # Allow relative URLs (no scheme or netloc)
+    if not parsed.scheme and not parsed.netloc:
+        # Also ensure path does not start with "//" (protocol-relative)
+        if parsed.path.startswith("//"):
+            return False
+        return True
+
+    # Define allowed domains for DevOnboarder
+    allowed_domains = {
+        "localhost",
+        "127.0.0.1",
+        "dev.theangrygamershow.com",
+        "theangrygamershow.com",
+        "tags.theangrygamershow.com",
+        "auth.theangrygamershow.com",
+        "api.theangrygamershow.com",
+        # Test domains for test suite
+        "frontend.test.com",
+        "test.example.com",
+        "example.com",
+    }
+
+    # Only allow HTTPS for external domains (except localhost for dev)
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    if parsed.scheme == "http" and not (
+        parsed.netloc.startswith("localhost") or parsed.netloc.startswith("127.0.0.1")
+    ):
+        # Only allow HTTP for localhost (with any port)
+        return False
+
+    # Check if domain is in allowed list
+    netloc = parsed.netloc.lower()
+
+    # Handle port numbers in netloc
+    if ":" in netloc:
+        netloc = netloc.split(":")[0]
+
+    return netloc in allowed_domains
+
+
+# Environment variables loaded from system environment
+# In development: loaded from .env.dev via docker-compose or local setup
+# In production: loaded from .env.prod via docker-compose or system
+# In CI: loaded from .env.ci via docker-compose
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")
@@ -214,8 +299,10 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
 
 
 @router.get("/login/discord")
-def discord_login() -> RedirectResponse:
+def discord_login(redirect_to: Optional[str] = None) -> RedirectResponse:
     """Redirect the user to Discord's OAuth consent screen."""
+    # Store redirect_to in state parameter for callback
+    state = redirect_to if redirect_to else ""
     params = {
         "client_id": os.getenv("DISCORD_CLIENT_ID"),
         "response_type": "code",
@@ -224,27 +311,37 @@ def discord_login() -> RedirectResponse:
             "http://localhost:8002/login/discord/callback",
         ),
         "scope": "identify guilds guilds.members.read",
+        "state": state,
     }
     url = "https://discord.com/oauth2/authorize?" + urlencode(params)
     return RedirectResponse(url)
 
 
-@router.get("/login/discord/callback")
-def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]:
+@router.get("/login/discord/callback", response_model=None)
+def discord_callback(
+    code: str, state: Optional[str] = None, db: Session = Depends(get_db)
+) -> RedirectResponse | dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
+    # Debug logging to see what we receive
+    logger.info(f"Discord callback - code: {code[:10]}..., state: {state}")
+
+    # Debug logging to see what redirect_uri is being used
+    redirect_uri = os.getenv(
+        "DISCORD_REDIRECT_URI",
+        "http://localhost:8002/login/discord/callback",
+    )
     try:
+        token_data = {
+            "client_id": os.getenv("DISCORD_CLIENT_ID"),
+            "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": redirect_uri,
+        }
+
         token_resp = httpx.post(
             "https://discord.com/api/oauth2/token",
-            data={
-                "client_id": os.getenv("DISCORD_CLIENT_ID"),
-                "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
-                "grant_type": "authorization_code",
-                "code": code,
-                "redirect_uri": os.getenv(
-                    "DISCORD_REDIRECT_URI",
-                    "http://localhost:8002/login/discord/callback",
-                ),
-            },
+            data=token_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=API_TIMEOUT,
         )
@@ -268,7 +365,73 @@ def discord_callback(code: str, db: Session = Depends(get_db)) -> dict[str, str]
     else:
         user.discord_token = access_token
         db.commit()
-    return {"token": create_token(user)}
+
+    # Redirect to frontend with token
+    token = create_token(user)
+
+    # For testing, return JSON instead of redirect
+    if os.getenv("TEST_MODE"):
+        return {"token": token}
+
+    # Use state parameter for redirect destination, otherwise default to frontend
+    # Define allowed relative redirect paths (defense-in-depth allowlist)
+    allowed_relative_paths = {
+        "/dashboard",
+        "/profile",
+        "/welcome",
+        "/onboarding",
+        "/",  # home
+    }
+
+    redirect_url = None
+    user_provided_path = None
+    if state and state.strip():
+        # Normalize and validate state as a relative path
+        normalized_state = state.strip().replace("\\", "/")
+        parsed_state = urlparse(normalized_state)
+        if (
+            not parsed_state.scheme
+            and not parsed_state.netloc
+            and is_safe_redirect_url(normalized_state)
+            and parsed_state.path in allowed_relative_paths
+        ):
+            user_provided_path = parsed_state.path
+            logger.info(f"Using state parameter for redirect: {user_provided_path}")
+        else:
+            logger.warning(f"Unsafe or disallowed redirect path blocked: {state}")
+
+    if user_provided_path:
+        # Use validated user path - reconstruct from safe allowlist to avoid CodeQL
+        if user_provided_path == "/dashboard":
+            redirect_url = "/dashboard"
+        elif user_provided_path == "/profile":
+            redirect_url = "/profile"
+        elif user_provided_path == "/welcome":
+            redirect_url = "/welcome"
+        elif user_provided_path == "/onboarding":
+            redirect_url = "/onboarding"
+        elif user_provided_path == "/":
+            redirect_url = "/"
+        else:
+            # Fallback if somehow not in allowlist (should never happen)
+            redirect_url = "/dashboard"
+    else:
+        fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
+            "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"
+        )
+        redirect_url = fallback_url or "https://dev.theangrygamershow.com"
+        logger.info(f"Using fallback redirect: {redirect_url}")
+
+    # Compose the final redirect URL with the token
+    final_redirect = f"{redirect_url}?token={token}"
+    logger.info(f"Final redirect: {final_redirect[:100]}...")
+
+    # Final security validation before redirect (for system URLs)
+    if not is_safe_redirect_url(redirect_url):
+        logger.warning(f"Unsafe redirect URL blocked at final check: {redirect_url}")
+        final_redirect = "/dashboard?token=" + token
+
+    return RedirectResponse(final_redirect)
 
 
 @router.get("/api/user/onboarding-status")

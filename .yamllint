@@ -1,0 +1,20 @@
+extends: default
+
+rules:
+  # Fix the truthy issue - allow 'on' as a key
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: false
+
+  # More reasonable line length for GitHub Actions
+  line-length:
+    max: 160
+    level: warning
+
+  # Don't require document start markers for workflows
+  document-start: disable
+
+  # Allow both 2-space and 4-space indentation (mixed styles in repo)
+  indentation:
+    spaces: consistent
+    indent-sequences: true

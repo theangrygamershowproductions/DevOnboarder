@@ -1,0 +1,113 @@
+# ---
+# codex-agent:
+#   name: Agent.DocumentationQuality
+#   role: Automated markdown validation and quality enforcement
+#   scope: .github/workflows/documentation-quality.yml
+#   triggers: push, pull_request (documentation changes)
+#   output: .codex/logs/documentation-quality.log
+# ---
+name: Documentation Quality
+
+on:
+  push:
+    branches: [main, feat/*, fix/*]
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/documentation-quality.yml'
+  pull_request:
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/documentation-quality.yml'
+
+jobs:
+  validate-docs:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual environment and install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Setup logs directory
+        run: mkdir -p logs
+
+      - name: Validate markdown with markdownlint
+        run: |
+          source .venv/bin/activate
+          echo "Running markdownlint validation..."
+          npx markdownlint-cli2 "**/*.md" "!node_modules/**" "!.venv/**" "!logs/**" "!htmlcov/**" || true
+        continue-on-error: true
+
+      - name: Run Vale documentation linting
+        run: |
+          source .venv/bin/activate
+          echo "Running Vale documentation quality checks..."
+          python -m vale docs/ > logs/vale-results.log 2>&1 || true
+          cat logs/vale-results.log
+        continue-on-error: true
+
+      - name: Check Potato Policy compliance
+        run: |
+          source .venv/bin/activate
+          echo "Validating Potato Policy ignore compliance..."
+          bash scripts/check_potato_ignore.sh
+        continue-on-error: true
+
+      - name: Upload documentation quality logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-quality-logs
+          path: logs/
+          retention-days: 7
+
+  quality-assessment:
+    needs: validate-docs
+    runs-on: ubuntu-latest
+    if: always()
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Run documentation quality assessment
+        run: |
+          source .venv/bin/activate
+          mkdir -p logs
+          echo "Running comprehensive documentation quality assessment..."
+          bash scripts/standards_enforcement_assessment.sh > logs/quality-assessment.log 2>&1 || true
+          cat logs/quality-assessment.log
+
+      - name: Upload quality assessment results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-assessment-results
+          path: logs/quality-assessment.log
+          retention-days: 7

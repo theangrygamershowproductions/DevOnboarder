@@ -18,7 +18,9 @@
         "invite": "npm run generate-invite",
         "guild-check": "node guild-check.js",
         "test-guilds": "node scripts/test-guild-connections.js",
-        "status": "bash scripts/deployment-status.sh"
+        "status": "bash scripts/deployment-status.sh",
+        "deploy-commands": "node scripts/deploy-commands.js",
+        "deploy": "bash deploy.sh"
     },
     "dependencies": {
         "discord.js": "^14.21.0",
@@ -38,10 +40,19 @@
         "typescript": "^5.8.3"
     },
     "jest": {
-        "preset": "ts-jest",
+        "preset": "ts-jest/presets/default-esm",
+        "extensionsToTreatAsEsm": [".ts"],
         "testEnvironment": "node",
         "collectCoverage": true,
         "testTimeout": 30000,
+        "globals": {
+            "ts-jest": {
+                "useESM": true
+            }
+        },
+        "moduleNameMapping": {
+            "^(\\.{1,2}/.*)\\.js$": "$1"
+        },
         "coverageReporters": [
             "text",
             "lcov",

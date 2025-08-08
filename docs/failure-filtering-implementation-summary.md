@@ -28,7 +28,7 @@ fi
 ```bash
 # Updated command:
 run_id=$(gh run list -w CI --json databaseId,headSha,conclusion -L 10 --conclusion FAILURE \
-    --jq 'map(select(.headSha=="'"$GITHUB_SHA"'" && .databaseId != '"$GITHUB_RUN_ID"')) | .[0].databaseId' || true)
+    --jq 'map(select(.headSha=="'"$GITHUB_SHA"'" and .databaseId != '"$GITHUB_RUN_ID"')) | .[0].databaseId' || true)
 ```
 
 #### Enhanced `.codex/scripts/ci-monitor.py`
