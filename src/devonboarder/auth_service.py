@@ -29,8 +29,6 @@ from jwt.exceptions import InvalidTokenError
 import os
 import time
 import logging
-from dotenv import load_dotenv
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -115,8 +113,10 @@ def is_safe_redirect_url(url: str) -> bool:
     return netloc in allowed_domains
 
 
-# Load environment variables from the auth service's .env file when present
-load_dotenv(Path(__file__).resolve().parents[1] / ".." / "auth" / ".env")
+# Environment variables loaded from system environment
+# In development: loaded from .env.dev via docker-compose or local setup
+# In production: loaded from .env.prod via docker-compose or system
+# In CI: loaded from .env.ci via docker-compose
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")

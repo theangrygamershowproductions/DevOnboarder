@@ -37,17 +37,12 @@ CI_EXCLUSIONS=(
 # Configuration
 SOURCE_ENV=".env"
 CONFIG_FILE="config/env-sync-config.yaml"
-TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci")
+TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci" "auth/.env.dev" "auth/.env.prod" "auth/.env.ci")
 
 # Initialize logging
 mkdir -p logs
 LOG_FILE="logs/smart_env_sync_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
-
-# Configuration
-SOURCE_ENV=".env"
-CONFIG_FILE="config/env-sync-config.yaml"
-TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci")
 
 # Command line options
 SYNC_ALL=false
