@@ -4,8 +4,10 @@
  * Verifies bot can connect to both invited Discord servers
  */
 
-require("dotenv").config();
-const { Client, GatewayIntentBits } = require("discord.js");
+import dotenv from "dotenv";
+import { Client, GatewayIntentBits } from "discord.js";
+
+dotenv.config();
 
 // Configuration
 const TARGET_GUILDS = {

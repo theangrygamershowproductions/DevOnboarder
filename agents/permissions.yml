@@ -2,3 +2,10 @@
 ci_bot:
     permissions:
         - issues: write
+
+orchestration_bot:
+    permissions:
+        - issues: write
+        - pull_requests: read
+    description: "Orchestrates CI cleanup and failure management"
+    token: "CLEANUP_CI_FAILURE_KEY"

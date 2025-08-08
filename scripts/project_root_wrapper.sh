@@ -10,10 +10,12 @@ set -euo pipefail
 
 # Establish PROJECT_ROOT if not already set
 if [ -z "${PROJECT_ROOT:-}" ]; then
+    # shellcheck disable=SC1091
     source "$(dirname "$0")/set_project_root.sh"
 fi
 
 # Validate PROJECT_ROOT
+# shellcheck disable=SC1091
 source "$(dirname "$0")/check_project_root.sh"
 
 # Change to PROJECT_ROOT for reliable execution

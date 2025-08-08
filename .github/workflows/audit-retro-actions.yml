@@ -42,11 +42,8 @@ jobs:
               if: steps.check.outputs.unresolved_actions != 'None'
               run: pip install PyYAML
 
-            - name: Verify bot permission
-              if: steps.check.outputs.unresolved_actions != 'None'
-              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
-              env:
-                  BOT_KEY: ${{ secrets.ORCHESTRATION_BOT_KEY }}
+            - name: Validate orchestration bot permissions
+              run: 'bash scripts/validate-bot-permissions.sh'
 
             - name: Notify unresolved actions
               if: steps.check.outputs.unresolved_actions != 'None'

@@ -30,6 +30,13 @@ After Actions Reports (AARs) are systematic reviews of project activities, issue
 - **Focus**: Process improvements and tool effectiveness
 - **Integration**: Update automation documentation
 
+### 5. **Framework Integration AARs**
+
+- **Trigger**: Implementation of new development frameworks or tool integrations
+- **Examples**: VS Code/CI integration, testing framework updates, workflow standardization
+- **Documentation**: Update standard practice documents in `docs/standards/`
+- **Follow-up**: Team training and adoption verification
+
 ## AAR Storage Strategy
 
 ### Primary Storage: `.aar/` Directory Structure

@@ -119,8 +119,8 @@ jobs:
                   printf "failures=%s\n" "$failures_cleaned" >> "$GITHUB_OUTPUT"
             - name: Install PyYAML
               run: pip install PyYAML
-            - name: Verify bot permission
-              run: 'bash scripts/check-bot-permissions.sh ci_bot "issues: write"'
+            - name: Validate ci_bot permissions
+              run: 'bash scripts/validate-bot-permissions.sh'
               env:
                   BOT_KEY: ${{ secrets.CI_BOT_TOKEN }}
             - name: Create issue for failures

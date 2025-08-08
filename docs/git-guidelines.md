@@ -31,13 +31,20 @@ Add login form UI
 Includes basic username and password fields.
 ```
 
-Commit types must be uppercase. Valid options are `FEAT`, `FIX`, `DOCS`, `STYLE`,
-`REFACTOR`, `TEST`, and `CHORE`. Use `CHORE` for routine maintenance or CI
-changes. The parenthesized `<scope>` is optional but helps clarify the affected
-area. Example:
+Commit types must be uppercase. Standard types include `FEAT`, `FIX`, `DOCS`, `STYLE`,
+`REFACTOR`, `TEST`, `CHORE`, `SECURITY`, `BUILD`, and `REVERT`. Extended types for
+DevOnboarder workflow include `PERF`, `CI`, `OPS`, `WIP`, `INIT`, `TAG`, `POLICY`,
+`HOTFIX`, and `CLEANUP`. Use `CHORE` for routine maintenance, `CI` for workflow
+changes, `PERF` for performance improvements, and `CLEANUP` for code cleanup tasks.
+The parenthesized `<scope>` is optional but helps clarify the affected area.
+
+Examples:
 
 ```text
 CHORE(ci): update Node version in workflow
+PERF(auth): optimize JWT token validation
+CI(actions): add automated dependency updates
+CLEANUP(deps): remove unused dependencies
 ```
 
 See the **commit-message policy** in [../AGENTS.md](../AGENTS.md) for a detailed

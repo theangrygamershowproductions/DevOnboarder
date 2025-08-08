@@ -1,4 +1,4 @@
-# ---
+---
 # codex-agent:
 #   name: Agent.ValidatePermissions
 #   role: Lints workflow files and bot permissions
@@ -9,8 +9,8 @@
 name: Validate Permissions
 
 on:
-    push:
-    pull_request:
+    push: null
+    pull_request: null
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -44,27 +44,33 @@ jobs:
                   test -f agents/templates/Agent.md
             - name: Check for disallowed commands
               run: |
-                  if grep -R "gh issue" .github/workflows | grep -v validate-permissions.yml; then
+                  if grep -R "gh issue" .github/workflows | \
+                      grep -v validate-permissions.yml; then
                     echo "Direct gh issue command found" >&2
                     exit 1
                   fi
-                  if grep -R "notify-humans.sh" .github/workflows | grep -v validate-permissions.yml; then
+                  if grep -R "notify-humans.sh" .github/workflows | \
+                      grep -v validate-permissions.yml; then
                     echo "External notification script used" >&2
                     exit 1
                   fi
-                  if grep -R "hooks.slack.com" .github/workflows | grep -v validate-permissions.yml; then
+                  if grep -R "hooks.slack.com" .github/workflows | \
+                      grep -v validate-permissions.yml; then
                     echo "Direct Slack notification found" >&2
                     exit 1
                   fi
             - name: Ensure continuous improvement checklist is complete
               if: github.event_name == 'pull_request'
               run: |
-                  if grep -q "- \\\[ \\\]" docs/checklists/continuous-improvement.md; then
+                  if grep -q "- \\\[ \\\]" \
+                      docs/checklists/continuous-improvement.md; then
                     echo "Unchecked items in continuous-improvement.md" >&2
                     exit 1
                   fi
             - name: Validate PR checklist
               if: github.event_name == 'pull_request'
-              run: bash scripts/validate_pr_checklist.sh "${{ github.event.pull_request.number }}"
+              run: >
+                  bash scripts/validate_pr_checklist.sh
+                  "${{ github.event.pull_request.number }}"
               env:
                   GH_TOKEN: ${{ secrets.BOT_PR_WRITE_TOKEN }}

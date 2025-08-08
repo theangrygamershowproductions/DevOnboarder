@@ -18,9 +18,9 @@ fi
 # Copy dev environment to main .env
 cp .env.dev .env
 
-# Install dependencies if needed
+# Install bot dependencies if needed
 if [[ ! -d "node_modules" ]]; then
-    echo "📦 Installing dependencies..."
+    echo "📦 Installing bot dependencies..."
     npm install
 fi
 

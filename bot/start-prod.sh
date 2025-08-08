@@ -18,7 +18,7 @@ fi
 # Copy prod environment to main .env
 cp .env.prod .env
 
-# Ensure dependencies are installed
+# Ensure bot dependencies are installed
 npm ci --only=production
 
 # Build for production

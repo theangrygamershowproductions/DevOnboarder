@@ -37,7 +37,13 @@ jobs:
               printf "Checking file: %s\n" "$file"
 
               # Check for emojis in ADDED lines only (lines starting with +)
-              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|\x{2705}|\x{274C}|\x{1F6E0}|\x{1F4CA}|\x{1F4C8}|\x{1F4E5}|\x{1F517}|\x{1F41B}|\x{26A0}|\x{1F4A1}|\x{1F3AF}|\x{1F680}|\x{1F4CB}|\x{1F50D}|\x{1F4DD}' 2>/dev/null; then
+              EMOJI_PATTERN='[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]'
+              EMOJI_PATTERN="${EMOJI_PATTERN}|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|\x{2705}"
+              EMOJI_PATTERN="${EMOJI_PATTERN}|\x{274C}|\x{1F6E0}|\x{1F4CA}|\x{1F4C8}|\x{1F4E5}"
+              EMOJI_PATTERN="${EMOJI_PATTERN}|\x{1F517}|\x{1F41B}|\x{26A0}|\x{1F4A1}|\x{1F3AF}"
+              EMOJI_PATTERN="${EMOJI_PATTERN}|\x{1F680}|\x{1F4CB}|\x{1F50D}|\x{1F4DD}"
+
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P "$EMOJI_PATTERN" 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file" >> violation_details.txt
               fi

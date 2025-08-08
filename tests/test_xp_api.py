@@ -121,3 +121,25 @@ def test_status_and_level_user_not_found():
     assert resp.status_code == 404
     resp = client.get("/api/user/level", params={"username": "x"})
     assert resp.status_code == 404
+
+
+def test_main_function(monkeypatch):
+    """Test that main function can be imported and called."""
+    # Mock uvicorn.run to avoid actually starting the server
+    run_called = []
+
+    def mock_run(*args, **kwargs):
+        run_called.append((args, kwargs))
+
+    monkeypatch.setattr("uvicorn.run", mock_run)
+
+    from xp.api import main
+
+    # Call main function
+    main()
+
+    # Verify uvicorn.run was called
+    assert len(run_called) == 1
+    args, kwargs = run_called[0]
+    assert kwargs["host"] == "0.0.0.0"
+    assert kwargs["port"] == 8001

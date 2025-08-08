@@ -15,14 +15,16 @@
 # images, and environment variables to match your deployment.
 
 x-app-base: &app-base
-    build: .
+    build:
+        context: .
+        dockerfile: Dockerfile
 
 x-node-base: &node-base
-    image: node:20
+    image: node:22-slim
     command: ["npm", "start"]
 
 x-db-base: &db-base
-    image: postgres:15
+    image: postgres:15-alpine
     environment:
         POSTGRES_USER: devuser
         POSTGRES_PASSWORD: devpass
@@ -35,46 +37,94 @@ x-env-dev: &env-dev
         - .env.dev
 
 services:
-    auth:
-        <<: [*app-base, *env-dev]
-        command: ["devonboarder-auth"]
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
-            interval: 5s
-            timeout: 2s
-            retries: 10
-
-    bot:
-        build:
-            context: .
-            dockerfile: bot/Dockerfile.dev
-        env_file:
-            - .env.dev
-        volumes:
-            - ./docs:/docs
-
-    xp:
-        <<: [*app-base, *env-dev]
-        command: ["devonboarder-api"]
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-            interval: 5s
-            timeout: 2s
-            retries: 10
-
-    frontend:
-        build:
-            context: .
-            dockerfile: frontend/Dockerfile.dev
-        env_file:
-            - .env.dev
-        ports:
-            - "3000:3000"
-
+    # PostgreSQL Database
     db:
         <<: [*db-base, *env-dev]
         ports:
             - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+    # Auth Service (Port 8002)
+    auth:
+        <<: [*app-base, *env-dev]
+        command: ["devonboarder-auth"]
+        ports:
+            - "8002:8002"
+        depends_on:
+            db:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
+
+    # XP API Service (Port 8001)
+    xp:
+        <<: [*app-base, *env-dev]
+        command: ["devonboarder-api"]
+        ports:
+            - "8001:8001"
+        depends_on:
+            db:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
+
+    # Discord Bot Service
+    bot:
+        build:
+            context: .
+            dockerfile: bot/Dockerfile.dev
+        <<: *env-dev
+        depends_on:
+            auth:
+                condition: service_healthy
+            xp:
+                condition: service_healthy
+        volumes:
+            - ./bot:/app
+            - ./docs:/docs
+            - /app/node_modules
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 60s
+
+    # Frontend Service (Port 3000)
+    frontend:
+        build:
+            context: .
+            dockerfile: frontend/Dockerfile.dev
+        <<: *env-dev
+        ports:
+            - "3000:3000"
+        depends_on:
+            auth:
+                condition: service_healthy
+            xp:
+                condition: service_healthy
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3000"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 60s
 
 volumes:
     db_data:

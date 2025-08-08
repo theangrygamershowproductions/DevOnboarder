@@ -45,8 +45,8 @@ jobs:
                   fi
             - name: Install PyYAML
               run: pip install PyYAML
-            - name: Verify bot permission
-              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Validate orchestration bot permissions
+              run: 'bash scripts/validate-bot-permissions.sh'
             - name: Close referenced Codex issues
               run: |
                   echo "${{ github.event.pull_request.body }}" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true

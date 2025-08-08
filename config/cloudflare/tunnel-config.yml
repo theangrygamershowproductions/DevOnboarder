@@ -1,0 +1,41 @@
+tunnel: ac65c0eb-6e16-4444-b340-feb89e45d991
+credentials-file: /etc/cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
+
+# Force local configuration only - ignore remote config
+no-autoupdate: true
+
+ingress:
+  # Clean single-level subdomains (Universal SSL compatible)
+  - hostname: dev.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+
+  - hostname: auth.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+      tcpKeepAlive: 30s
+
+  - hostname: api.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+
+  - hostname: discord.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+
+  - hostname: dashboard.theangrygamershow.com
+    service: http://traefik:80
+    originRequest:
+      connectTimeout: 30s
+      tlsTimeout: 10s
+
+  # Catch-all rule (required)
+  - service: http_status:404

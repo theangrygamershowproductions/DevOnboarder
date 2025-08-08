@@ -138,6 +138,7 @@ foo_refs=$(grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
     --exclude-dir=frontend/src \
     --exclude-dir=bot/src \
     --exclude-dir=docs \
+    --exclude-dir=.codex \
     --exclude="*clean_pytest_artifacts.sh" \
     --exclude="README.md" 2>/dev/null | wc -l || echo "0")
 foo_refs=$(echo "$foo_refs" | tr -d '\n')
@@ -155,6 +156,7 @@ if [[ "$foo_refs" -gt 0 ]]; then
         --exclude-dir=frontend/src \
         --exclude-dir=bot/src \
         --exclude-dir=docs \
+        --exclude-dir=.codex \
         --exclude="*clean_pytest_artifacts.sh" \
         --exclude="README.md" 2>/dev/null | head -3
     echo "   These may be blocking pre-commit validation"
