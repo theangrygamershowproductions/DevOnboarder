@@ -40,10 +40,19 @@
         "typescript": "^5.8.3"
     },
     "jest": {
-        "preset": "ts-jest",
+        "preset": "ts-jest/presets/default-esm",
+        "extensionsToTreatAsEsm": [".ts"],
         "testEnvironment": "node",
         "collectCoverage": true,
         "testTimeout": 30000,
+        "globals": {
+            "ts-jest": {
+                "useESM": true
+            }
+        },
+        "moduleNameMapping": {
+            "^(\\.{1,2}/.*)\\.js$": "$1"
+        },
         "coverageReporters": [
             "text",
             "lcov",
