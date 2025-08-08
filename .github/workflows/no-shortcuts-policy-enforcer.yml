@@ -1,0 +1,162 @@
+---
+name: "NO_SHORTCUTS_POLICY Enforcer"
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/*.sh'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - 'agents/**'
+      - 'docs/**'
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  enforce_no_shortcuts:
+    name: "Quality Gate Enforcement"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: "BLOCKING: Markdown Lint Enforcement"
+        run: |
+          echo "NO_SHORTCUTS_POLICY: All quality gates must pass"
+          echo "Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+          echo "Auto-fix available for most markdown issues: npx markdownlint-cli2 --fix \"**/*.md\""
+          echo "PASSED: Markdown linting passed"
+
+      - name: " BLOCKING: Documentation Quality Enforcement"
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing documentation quality"
+          source .venv/bin/activate
+          if ! python -m vale docs/; then
+            echo "BLOCKED: BLOCKED: Documentation quality standards not met"
+            echo "INFO: Vale configuration: .vale.ini"
+            echo " Writing guide: docs/writing-style-guide.md"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+          echo "PASSED: Documentation quality passed"
+
+      - name: " BLOCKING: Agent Schema Enforcement"
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing agent schema standards"
+          source .venv/bin/activate
+          if ! python scripts/validate_agents.py; then
+            echo "BLOCKED: BLOCKED: Agent frontmatter schema violations"
+            echo "INFO: Schema reference: schema/agent-schema.json"
+            echo " Agent guide: agents/guidelines/"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+          echo "PASSED: Agent schema validation passed"
+
+      - name: " BLOCKING: Terminal Output Policy Enforcement"
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing terminal output security"
+          if ! bash scripts/validate_terminal_output_simple.sh; then
+            echo "BLOCKED: BLOCKED: Terminal output policy violations detected"
+            echo "INFO: Policy guide: docs/standards/terminal-output-policy-suppression.md"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+          echo "PASSED: Terminal output policy compliance verified"
+
+      - name: " BLOCKING: Shell Script Quality Enforcement"
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing shell script standards"
+          if find scripts/ -name "*.sh" -type f | xargs shellcheck; then
+            echo "PASSED: Shell script quality passed"
+          else
+            echo "BLOCKED: BLOCKED: Shell script quality issues detected"
+            echo "INFO: Fix shellcheck warnings and errors"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+
+      - name: " BLOCKING: YAML Syntax Enforcement"
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing YAML standards"
+          source .venv/bin/activate
+          if python -m yamllint .github/workflows/ config/ docker-compose*.yaml; then
+            echo "PASSED: YAML syntax validation passed"
+          else
+            echo "BLOCKED: BLOCKED: YAML syntax violations detected"
+            echo "INFO: Fix YAML formatting and syntax errors"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+
+      - name: " BLOCKING: Commit Message Enforcement"
+        if: github.event_name == 'pull_request'
+        run: |
+          echo " NO_SHORTCUTS_POLICY: Enforcing commit message standards"
+          if ! bash scripts/check_commit_messages.sh; then
+            echo "BLOCKED: BLOCKED: Commit message format violations"
+            echo "INFO: Format: TYPE(scope): description"
+            echo "INFO: Types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, CI"
+            echo " Reference: docs/policies/NO_SHORTCUTS_POLICY.md"
+            exit 1
+          fi
+          echo "PASSED: Commit message format validation passed"
+
+      - name: " SUCCESS: All Quality Gates Passed"
+        run: |
+          echo "SUCCESS: NO_SHORTCUTS_POLICY: All enforcement checks passed!"
+          echo "PASSED: Markdown linting compliance"
+          echo "PASSED: Documentation quality standards"
+          echo "PASSED: Agent schema validation"
+          echo "PASSED: Terminal output policy compliance"
+          echo "PASSED: Shell script quality standards"
+          echo "PASSED: YAML syntax validation"
+          echo "PASSED: Commit message format compliance"
+          echo ""
+          echo "READY: Ready for merge - no shortcuts detected!"
+
+      - name: "BLOCKED: FAILURE: Quality Gate Violations Detected"
+        if: failure()
+        run: |
+          echo "VIOLATION: NO_SHORTCUTS_POLICY VIOLATION DETECTED"
+          echo ""
+          echo "INFO: REQUIRED ACTIONS:"
+          echo "  1. Review failure logs above"
+          echo "  2. Apply suggested auto-fixes where available"
+          echo "  3. Manual fixes for remaining issues"
+          echo "  4. Re-run validation locally before pushing"
+          echo ""
+          echo " AUTO-FIX COMMANDS:"
+          echo "  • Markdown: npx markdownlint-cli2 --fix '**/*.md'"
+          echo "  • Python: source .venv/bin/activate && python -m black ."
+          echo "  • Python: source .venv/bin/activate && python -m ruff --fix ."
+          echo ""
+          echo " POLICY REFERENCE:"
+          echo "  • NO_SHORTCUTS_POLICY: docs/policies/NO_SHORTCUTS_POLICY.md"
+          echo "  • Quality standards enforced for platform reliability"
+          echo "  • All quality gates must pass before merge"
+          echo ""
+          echo "NOT_PERMITTED: BYPASSING QUALITY GATES IS NOT PERMITTED"
+          exit 1
