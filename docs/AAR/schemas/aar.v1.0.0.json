@@ -1,0 +1,157 @@
+{
+  "$id": "https://devonboarder.io/schemas/aar/1.0.0",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DevOnboarder After Action Report",
+  "description": "Schema for DevOnboarder AAR generation system",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "title",
+    "date",
+    "type",
+    "priority",
+    "executive_summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "AAR schema version for validation and migration"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Clear, descriptive AAR title"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "AAR completion date (YYYY-MM-DD)"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["Infrastructure", "CI", "Monitoring", "Documentation", "Feature", "Security"],
+      "description": "AAR category type"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["Critical", "High", "Medium", "Low"],
+      "description": "Initiative priority level"
+    },
+    "participants": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "All team members involved"
+    },
+    "executive_summary": {
+      "type": "object",
+      "required": ["problem", "solution", "outcome"],
+      "properties": {
+        "problem": {
+          "type": "string",
+          "description": "Problem statement being addressed"
+        },
+        "solution": {
+          "type": "string",
+          "description": "Solution approach taken"
+        },
+        "outcome": {
+          "type": "string",
+          "description": "Final result achieved"
+        }
+      },
+      "description": "Executive summary with problem, solution, and outcome"
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {"type": "string"},
+          "duration": {"type": "string"},
+          "description": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["Not Started", "In Progress", "Completed", "Blocked", "Cancelled"]
+          }
+        }
+      },
+      "description": "Implementation phases"
+    },
+    "outcomes": {
+      "type": "object",
+      "properties": {
+        "success_metrics": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Measurable improvements achieved"
+        },
+        "challenges_overcome": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Challenges that were successfully resolved"
+        }
+      },
+      "description": "Project outcomes and achievements"
+    },
+    "follow_up": {
+      "type": "object",
+      "properties": {
+        "action_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["task", "owner"],
+            "properties": {
+              "task": {"type": "string"},
+              "owner": {"type": "string"},
+              "due_date": {"type": "string", "format": "date"},
+              "status": {
+                "type": "string",
+                "enum": ["Not Started", "In Progress", "Completed", "Blocked"]
+              }
+            }
+          },
+          "description": "Follow-up tasks and action items"
+        },
+        "monitoring": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Ongoing monitoring requirements"
+        }
+      },
+      "description": "Follow-up activities and monitoring"
+    },
+    "lessons_learned": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Key insights and lessons learned"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "url"],
+        "properties": {
+          "title": {"type": "string"},
+          "url": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["documentation", "external", "issue", "pr"]
+          }
+        }
+      },
+      "description": "Related documentation and resources"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string"},
+        "generated_by": {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"}
+      },
+      "description": "System metadata"
+    }
+  }
+}

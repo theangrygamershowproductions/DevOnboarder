@@ -96,6 +96,47 @@ printf "Result: %s\n" "$RESULT"
 - **AI Override Instructions**: `docs/AI_AGENT_TERMINAL_OVERRIDE.md`
 - **Troubleshooting**: `docs/MARKDOWN_LINTING_TROUBLESHOOTING.md`
 - **Coverage Challenge Lessons**: `docs/COVERAGE_CHALLENGE_LESSONS_LEARNED.md`
+- **Suppression System**: `docs/standards/terminal-output-policy-suppression.md`
+
+### SUPPRESSION SYSTEM FOR REVIEWED CODE
+
+**CRITICAL: Suppression Comment Format** for manually reviewed safe patterns:
+
+```bash
+# terminal-output-policy: reviewed-safe - [reason]
+```
+
+**When to Use Suppression (APPROVED PATTERNS ONLY)**:
+
+- ✅ **Python here-docs with quoted delimiters**: `python - <<'PY'`
+- ✅ **GitHub Actions multiline output**: `echo "files<<EOF" >> $GITHUB_OUTPUT`
+- ✅ **Static content with quoted here-docs**: `cat > file <<'EOF'`
+
+**NEVER Suppress These (DANGEROUS PATTERNS)**:
+
+- ❌ **Unquoted here-docs**: `cat << EOF` (variable expansion risk)
+- ❌ **Privileged operations**: `sudo tee /etc/config << EOF`
+- ❌ **Dynamic user input**: `echo "Hello $USER_INPUT"`
+
+**Agent Requirements for Suppression**:
+
+1. **RESPECT existing suppressions** - Never remove suppression comments
+2. **ADD suppressions appropriately** - Only for manually reviewed safe patterns
+3. **DOCUMENT reasoning** - Include clear explanation in suppression comment
+4. **FOLLOW review process** - Complete security assessment before suppressing
+5. **VALIDATE safety** - Ensure quoted delimiters and no variable expansion
+6. **NEVER suppress to avoid fixing** - Only suppress genuinely safe patterns
+
+**Example Proper Suppression**:
+
+```yaml
+# terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter for JSON processing
+result=$(python - <<'PY'
+import json
+print(json.dumps({"status": "processed"}))
+PY
+)
+```
 
 ## ⚠️ CRITICAL: Virtual Environment Requirements
 
@@ -149,6 +190,44 @@ bash scripts/potato_policy_enforce.sh
 - **CI/CD**: `potato-policy-focused.yml` workflow enforces compliance
 - **Docker builds**: `.dockerignore` prevents sensitive files in images
 - **Spell checking**: `.codespell-ignore` prevents exposure via docs
+
+## ⚠️ CRITICAL: Documentation Backup Policy
+
+**NEVER modify critical documentation without timestamped backups.**
+
+### Copilot Instructions Backup Requirements
+
+**MANDATORY**: Always create timestamped backups before modifying copilot instructions:
+
+```bash
+# Create timestamped backup in proper location
+cp .github/copilot-instructions.md ~/backups/copilot-instructions/copilot-instructions.backup.$(date +%Y%m%d_%H%M%S).md
+
+# Verify backup location
+ls -la ~/backups/copilot-instructions/
+```
+
+### Critical Documentation Files Requiring Backup
+
+- `.github/copilot-instructions.md` - Agent guidance and project standards
+- `docs/AAR/schema/aar.schema.json` - AAR validation schema
+- `pyproject.toml` - Python configuration and dependencies
+- `package.json` - Node.js configuration and scripts
+- `docker-compose.*.yaml` - Service orchestration configuration
+
+### Backup Verification
+
+**ALWAYS verify backup success before proceeding**:
+
+```bash
+# Verify file exists and has content
+test -s ~/backups/copilot-instructions/copilot-instructions.backup.$(date +%Y%m%d_*)*.md && echo "✅ Backup verified" || echo "❌ Backup failed"
+
+# Check backup file size matches original
+wc -c .github/copilot-instructions.md ~/backups/copilot-instructions/copilot-instructions.backup.*.md
+```
+
+**Policy Enforcement**: Any agent modifying critical documentation without proper backup violates DevOnboarder's "quiet reliability" philosophy and introduces unnecessary risk.
 
 ### Mandatory Environment Usage
 
@@ -310,6 +389,10 @@ make aar-setup                    # Set up CI failure analysis
 # Quality control (MANDATORY before push)
 ./scripts/qc_pre_push.sh         # Validates 8 quality metrics
 source .venv/bin/activate        # Always activate venv first
+
+# Infrastructure Initiative Automation
+./scripts/create_infrastructure_initiative.sh # Create complete infrastructure initiatives
+                                               # with automatic GitHub Projects integration
 
 # Service APIs (individual service testing)
 devonboarder-api         # Start main API (port 8001)
@@ -821,6 +904,147 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - **Models**: SQLAlchemy with proper relationships
 - **Connection**: Environment-specific (SQLite dev, PostgreSQL prod)
 
+### 4. Discord OAuth Integration Patterns - CRITICAL SUCCESS PATTERN
+
+DevOnboarder implements a comprehensive Discord OAuth flow with multi-environment support that maintains environment isolation while enabling real OAuth testing.
+
+#### Environment-Specific URL Configuration
+
+**MANDATORY PATTERN**: Use environment-specific URL variants for all services to prevent configuration switching:
+
+```bash
+# Environment-specific API Base URLs
+API_BASE_URL_DEV=http://localhost
+API_BASE_URL_PROD=https://api.theangrygamershow.com
+API_BASE_URL_CI=http://localhost:8001
+
+# Current API base URL (set based on APP_ENV)
+API_BASE_URL=http://localhost
+
+# Environment-specific Auth URLs
+AUTH_URL_DEV=http://localhost
+AUTH_URL_PROD=https://auth.theangrygamershow.com
+AUTH_URL_CI=http://localhost:8002
+
+# Current auth URL (set based on APP_ENV)
+AUTH_URL=http://localhost
+
+# Environment-specific Frontend URLs
+VITE_AUTH_URL_DEV=http://localhost
+VITE_AUTH_URL_PROD=https://auth.theangrygamershow.com
+VITE_AUTH_URL_CI=http://localhost:8002
+
+# Current frontend auth URL (set based on APP_ENV)
+VITE_AUTH_URL=http://localhost
+
+# CRITICAL: Frontend redirect destination
+FRONTEND_URL=http://localhost  # Development
+FRONTEND_URL=https://dev.theangrygamershow.com  # Production
+```
+
+#### OAuth Flow Architecture
+
+**Complete OAuth Flow**: Frontend (localhost) → Discord → Auth Service (localhost) → Database → JWT → Frontend (localhost)
+
+```typescript
+// Frontend OAuth initiation (frontend/src/components/Login.tsx)
+const authUrl = import.meta.env.VITE_AUTH_URL; // Uses environment-specific URL
+const loginUrl = `${authUrl}/login/discord?redirect_to=${encodeURIComponent(window.location.href)}`;
+```
+
+```python
+# Auth service OAuth callback (src/devonboarder/auth_service.py)
+@router.get("/login/discord/callback")
+def discord_callback(code: str, state: str = None) -> RedirectResponse:
+    # Process Discord OAuth code
+    # Create/update user in database
+    # Generate JWT token
+    # Redirect to FRONTEND_URL with token
+    redirect_url = os.getenv("FRONTEND_URL", "http://localhost")
+    return RedirectResponse(f"{redirect_url}?token={token}")
+```
+
+#### Database Initialization Requirements
+
+**CRITICAL**: Enable database initialization for development environments:
+
+```bash
+# MANDATORY for development
+INIT_DB_ON_STARTUP=true
+
+# Ensures SQLAlchemy creates all required tables:
+# - users (authentication data)
+# - contributions (user activity)
+# - xp_events (gamification)
+# - user_roles (permissions)
+# - onboarding_progress (workflow state)
+# - feedback (user input)
+```
+
+#### Discord Developer Portal Configuration
+
+**REQUIRED**: Add environment-specific redirect URIs in Discord Developer Portal:
+
+- **Development**: `http://localhost/login/discord/callback`
+- **Production**: `https://auth.theangrygamershow.com/login/discord/callback`
+- **CI**: `http://localhost:8002/login/discord/callback`
+
+#### Container Environment Variable Synchronization
+
+**CRITICAL REQUIREMENT**: Container restarts required for environment variable changes:
+
+```bash
+# MANDATORY after .env changes affecting containers
+docker compose -f docker-compose.dev.yaml down auth-service
+docker compose -f docker-compose.dev.yaml up -d auth-service
+
+# Verify environment variables in container
+docker compose -f docker-compose.dev.yaml exec auth-service printenv | grep FRONTEND_URL
+```
+
+#### JWT Token Structure and Validation
+
+**Standard JWT Configuration**:
+
+```bash
+JWT_SECRET_KEY=<secure-random-key>
+JWT_ALGORITHM=HS256
+TOKEN_EXPIRE_SECONDS=1800  # 30 minutes
+```
+
+**Expected JWT Payload**:
+
+```json
+{
+  "sub": "1",                    # User ID in database
+  "iat": 1754666931,            # Issued at timestamp
+  "exp": 1754668731             # Expiration timestamp (30 min)
+}
+```
+
+#### Troubleshooting Common OAuth Issues
+
+**Issue**: OAuth redirects to wrong subdomain
+**Solution**: Check `FRONTEND_URL` in auth service container environment
+
+**Issue**: "relation 'users' does not exist" database error
+**Solution**: Enable `INIT_DB_ON_STARTUP=true` and restart auth service
+
+**Issue**: Frontend shows stale environment variables
+**Solution**: Rebuild frontend container to pick up new VITE_ variables
+
+**Issue**: "Invalid OAuth2 redirect_uri" from Discord
+**Solution**: Add exact redirect URI to Discord Developer Portal settings
+
+#### Agent Requirements for OAuth Integration
+
+- **ALWAYS use environment-specific URL patterns** instead of hardcoded URLs
+- **NEVER suggest manual configuration switching** between environments
+- **ALWAYS verify container environment variables** after .env changes
+- **REMEMBER**: Database initialization is critical for OAuth callback processing
+- **FOLLOW**: Complete OAuth flow testing from frontend → Discord → callback → database
+- **VALIDATE**: JWT token structure and expiration for authentication verification
+
 ## CI/CD & Automation
 
 ### GitHub Actions Workflows
@@ -858,12 +1082,90 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/validate_agents.py`: Agent validation with JSON schema
 - `scripts/validate-bot-permissions.sh`: Bot permission verification
 - `scripts/qc_pre_push.sh`: 95% quality threshold validation (8 metrics)
+- `scripts/create_infrastructure_initiative.sh`: Infrastructure initiative automation with GitHub Projects integration
 
 ### AAR (After Action Report) System
 
-DevOnboarder includes a comprehensive AAR system for automated CI failure analysis:
+DevOnboarder includes a comprehensive AAR system for automated CI failure analysis and project documentation:
 
-**Make Targets**:
+**Schema-Driven AAR System - VALIDATION-FIRST APPROACH**:
+
+```bash
+# ✅ PREFERRED - Schema-Driven AAR System (ZERO markdown flakiness)
+# 1. Use helper script to create properly structured AAR with schema version
+./scripts/create_aar_json.sh "Project Implementation Success" "Infrastructure" "High"
+
+# 2. Edit the generated JSON file to add your specific content
+# docs/AAR/data/project_implementation_success.aar.json
+
+# 3. Generate validated markdown report
+node scripts/render_aar.js docs/AAR/data/project_implementation_success.aar.json docs/AAR/reports
+
+# ⚠️ MANUAL CREATION - Ensure schema_version is included
+cat > docs/AAR/data/my-project.aar.json << 'EOF'
+{
+  "schema_version": "1.0.0",
+  "title": "Project Implementation Success",
+  "date": "2025-08-08",
+  "type": "Infrastructure",
+  "priority": "High",
+  "executive_summary": {
+    "problem": "Clear problem statement",
+    "solution": "Solution approach taken",
+    "outcome": "Final result achieved"
+  },
+  "phases": [
+    {
+      "name": "Planning",
+      "duration": "1 week",
+      "description": "Project planning and design",
+      "status": "Completed"
+    }
+  ],
+  "outcomes": {
+    "success_metrics": ["Metric 1: Before → After"],
+    "challenges_overcome": ["Challenge overcome"]
+  }
+}
+EOF
+
+# ❌ LEGACY - Enhanced shell generator (use for existing workflows only)
+./scripts/enhanced_aar_generator.sh automation --title "Project Name"
+```
+
+**Schema-Driven AAR Architecture**:
+
+```text
+JSON Data → Schema Validation → Template Rendering → Markdown Output
+     ↓              ↓                    ↓              ↓
+  aar.json    aar.schema.json       aar.hbs        report.md
+```
+
+**Core Components**:
+
+- **JSON Schema**: `docs/AAR/schema/aar.schema.json` - Single source of truth for data structure
+- **Handlebars Template**: `docs/AAR/templates/aar.hbs` - Consistent markdown generation
+- **Node.js Renderer**: `scripts/render_aar.js` - AJV validation + Handlebars compilation
+- **CI Pipeline**: `.github/workflows/aar.yml` - Automated validation and testing
+- **NPM Integration**: `package.json` - Dependencies (handlebars, ajv, ajv-formats)
+
+**NPM Scripts for AAR System**:
+
+```bash
+# Install AAR system dependencies
+npm install
+
+# Validate AAR data against schema
+npm run aar:validate docs/AAR/data/my-project.aar.json
+
+# Test all AAR data files
+npm run aar:test
+
+# Render AAR to markdown
+npm run aar:render docs/AAR/data/my-project.aar.json docs/AAR/reports
+```
+
+**Make Targets (Legacy Support)**:
 
 ```bash
 make aar-env-template     # Create/update .env with AAR tokens
@@ -874,16 +1176,22 @@ make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workfl
 make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
 ```
 
-**AAR Features**:
+**Schema-Driven AAR Features**:
 
-- **Token Management**: Follows DevOnboarder No Default Token Policy v1.0
-- **Environment Loading**: Automatically loads `.env` variables
-- **Compliance Validation**: Ensures markdown standards (MD007, MD009, MD022, MD032)
-- **GitHub Integration**: Creates issues for CI failures when tokens configured
-- **Offline Mode**: Generates reports without tokens for local analysis
-- **Workflow Analysis**: Detailed failure analysis with logs and context
+- **Zero Markdown Flakiness**: JSON Schema validation prevents format errors completely
+- **Consistent Output**: Handlebars templates ensure uniform formatting every time
+- **Comprehensive Validation**: AJV provides detailed error reporting with field-level feedback
+- **CI Integration**: Automated validation prevents broken reports from entering repository
+- **Future-Proof Architecture**: Schema evolution with backward compatibility support
+- **Complete Documentation**: Comprehensive usage guide in `docs/AAR/README.md`
+- **Automatic Summary Generation**: Index files created for report navigation
+- **DevOnboarder Compliance**: Generated output automatically passes all linting rules
 
-### Automation Ecosystem
+**CRITICAL AGENT REQUIREMENT**: Use schema-driven AAR system for all new AARs. JSON Schema validation eliminates manual editing and ensures DevOnboarder compliance. Enhanced shell scripts maintained for legacy workflows only.
+
+**Success Story Reference**: See `docs/AAR/reports/2025-08-08_discord-oauth-multi-environment-integration-success.md` for a complete AAR documenting successful Discord OAuth implementation with environment-specific URL patterns, database initialization, and JWT authentication flow.
+
+**Automation Ecosystem
 
 DevOnboarder includes 100+ automation scripts in `scripts/` covering:
 
@@ -895,6 +1203,7 @@ DevOnboarder includes 100+ automation scripts in `scripts/` covering:
 - **Artifact Management**: `clean_pytest_artifacts.sh`, `enforce_output_location.sh`
 - **Log Management**: `run_tests_with_logging.sh`, `manage_logs.sh`
 - **Agent Validation**: `validate_agents.py`, `validate-bot-permissions.sh`
+- **Infrastructure Initiatives**: `create_infrastructure_initiative.sh` - Complete GitHub Projects workflow automation
 
 ### Virtual Environment in CI
 
@@ -1451,6 +1760,111 @@ git status --short  # Should show only intended changes
 12. **RESPECT**: Root Artifact Guard and CI Triage Guard enforcement
 13. **FOLLOW**: Node modules hygiene standards and placement requirements
 14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
+15. **AAR GENERATION**: ALWAYS use schema-driven AAR system for complete validation - NEVER use templates requiring manual editing
+
+### ⚠️ CRITICAL: Schema-Driven AAR System for Agents
+
+**MANDATORY AAR WORKFLOW**: DevOnboarder requires validation-driven, ready-to-commit AARs without manual editing:
+
+```bash
+# ✅ PREFERRED - Use helper script (ensures schema_version is included automatically)
+./scripts/create_aar_json.sh "Descriptive Project Title" "Infrastructure" "High"
+
+# ✅ ALTERNATIVE - Manual creation (must include schema_version)
+cat > docs/AAR/data/my-project.aar.json << 'EOF'
+{
+  "schema_version": "1.0.0",
+  "title": "Descriptive Project Title",
+  "date": "2025-08-08",
+  "type": "Infrastructure",
+  "priority": "High",
+  "executive_summary": {
+    "problem": "Clear problem statement being addressed",
+    "solution": "Solution approach taken to resolve the problem",
+    "outcome": "Final result achieved and impact delivered"
+  },
+  "phases": [
+    {
+      "name": "Planning",
+      "duration": "1 week",
+      "description": "Project planning and design phase",
+      "status": "Completed"
+    },
+    {
+      "name": "Implementation",
+      "duration": "2 weeks",
+      "description": "Core development and integration work",
+      "status": "Completed"
+    }
+  ],
+  "outcomes": {
+    "success_metrics": [
+      "Performance: 45% improvement in response time",
+      "Reliability: 99.9% uptime achieved"
+    ],
+    "challenges_overcome": [
+      "Legacy system integration complexity resolved",
+      "Team training requirements successfully addressed"
+    ]
+  },
+  "follow_up": {
+    "action_items": [
+      {
+        "task": "Complete documentation updates",
+        "owner": "@platform-team",
+        "due_date": "2025-08-15",
+        "status": "Not Started"
+      }
+    ]
+  },
+  "lessons_learned": [
+    "JSON Schema validation eliminates manual editing workflows",
+    "Template-based generation ensures consistent quality standards"
+  ]
+}
+EOF
+
+# 2. Validate and generate markdown report
+node scripts/render_aar.js docs/AAR/data/my-project.aar.json docs/AAR/reports
+
+# ❌ LEGACY - Enhanced shell generator (use only for existing workflows)
+./scripts/enhanced_aar_generator.sh automation --title "Project Name"
+```
+
+**Schema-Driven Agent Requirements**:
+
+- **NEVER** suggest manual editing of generated AARs - all content in JSON data
+- **ALWAYS** use JSON Schema validation before markdown generation
+- **ENSURE** complete data collection in structured format upfront
+- **VALIDATE** generated AARs are commit-ready without modifications
+- **REMEMBER**: Schema-driven approach eliminates markdown flakiness completely
+
+**JSON Schema Benefits for Agents**:
+
+- **Zero Format Errors**: AJV validation prevents all markdown compliance issues
+- **Field-Level Validation**: Detailed error reporting with specific field guidance
+- **Consistent Structure**: Handlebars templates ensure uniform output every time
+- **CI Integration**: Automated validation in `.github/workflows/aar.yml`
+- **DevOnboarder Compliance**: Generated output automatically passes all linting rules
+
+**Required JSON Fields** (per `docs/AAR/schema/aar.schema.json`):
+
+- `title`: Project name (string, minimum 5 characters)
+- `date`: ISO date format (YYYY-MM-DD)
+- `type`: Enum value (Infrastructure, CI, Monitoring, Documentation, Feature, Security)
+- `priority`: Enum value (Critical, High, Medium, Low)
+- `executive_summary`: Object with required problem, solution, outcome fields
+
+**Optional Sections for Comprehensive AARs**:
+
+- `participants`: Array of team members (@mentions supported)
+- `phases`: Array of project phases with name, duration, description, status
+- `outcomes`: Object with success_metrics and challenges_overcome arrays
+- `follow_up`: Object with action_items array and monitoring requirements
+- `lessons_learned`: Array of key insights for organizational learning
+- `references`: Array of related documentation with title, url, type
+
+**Quality Standards**: All schema-generated AARs automatically meet markdown compliance (MD022, MD032, MD031) and DevOnboarder documentation standards.
 
 ### ⚠️ NEW: Pre-commit Hook Management for Agents
 
@@ -1671,7 +2085,57 @@ services:
       - ./bot/.env:/app/.env:ro         # But mounts different file
 ```
 
-### ⚠️ NEW: ES Module Requirements for TypeScript Discord Bots
+### ⚠️ NEW: Infrastructure Initiative Automation for Agents
+
+**CRITICAL UNDERSTANDING**: DevOnboarder includes comprehensive automation for creating and managing infrastructure initiatives.
+
+**MANDATORY AGENT BEHAVIOR**:
+
+- **Use automation framework**: Run `./scripts/create_infrastructure_initiative.sh` for infrastructure initiatives
+- **Follow three-project structure**: Team Planning (tactical), Feature Release (deliverables), Roadmap (strategic)
+- **Validate GitHub Projects integration**: Ensure proper distribution across all three projects
+- **Document success patterns**: Capture organizational learning in AAR documentation
+
+**Infrastructure Initiative Creation Pattern**:
+
+```bash
+# ✅ CORRECT - Use complete automation framework
+./scripts/create_infrastructure_initiative.sh "Initiative Name" "infrastructure" "4-week" "P1"
+
+# ✅ CORRECT - Validate GitHub Projects integration after creation
+gh project list --owner theangrygamershowproductions
+gh issue list --state=open --label=infrastructure
+
+# ❌ WRONG - Manual GitHub Projects manipulation
+gh issue create --title "..." --body "..."  # Bypasses automation framework
+```
+
+**GitHub Projects Workflow Requirements**:
+
+```bash
+# ✅ CORRECT - Systematic approach following established patterns
+# 1. Use automation script for comprehensive setup
+# 2. Verify three-project distribution (Team Planning, Feature Release, Roadmap)
+# 3. Update documentation to reflect new initiatives
+# 4. Capture success patterns for organizational learning
+
+# ❌ WRONG - Ad-hoc issue creation without framework
+# Creates inconsistent labeling and project distribution
+```
+
+**AAR Integration Requirements**:
+
+- **Document success patterns**: Use `aar/infrastructure_initiative_workflow_success_pattern.md` as template
+- **Capture organizational learning**: Update AAR portal with replicable patterns
+- **Follow automation framework**: Reference `codex/automation/github_projects_workflow_automation.md`
+- **Maintain quality standards**: Ensure markdown compliance and comprehensive documentation
+
+**Agent Requirements for Infrastructure Initiatives**:
+
+- **ALWAYS** use the established automation framework rather than manual processes
+- **NEVER** create infrastructure initiatives without proper GitHub Projects integration
+- **UNDERSTAND**: Three-project distribution serves different stakeholder needs
+- **REMEMBER**: Success patterns should be captured for organizational learning and replication
 
 **CRITICAL UNDERSTANDING**: Discord.js v14+ requires ES modules with explicit .js extensions in TypeScript imports.
 
@@ -1788,13 +2252,15 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-06 (Multi-Service Docker Architecture, ES Modules & Environment Management Troubleshooting)
+**Last Updated**: 2025-08-08 (Discord OAuth Multi-Environment Integration, Environment-Specific URL Patterns, Database Initialization)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
-**Active Environments**: Development + Production Discord integration
+**Active Environments**: Development + Production Discord integration with localhost OAuth flow
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
 **Security**: Enhanced Potato Policy + Root Artifact Guard active
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
 **Enhanced Debugging**: safe_commit.sh with automatic log analysis and error diagnostics
+**Infrastructure Automation**: Complete GitHub Projects workflow with AAR integration
+**OAuth Integration**: Complete Discord OAuth flow with environment-specific URL patterns and database initialization
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution

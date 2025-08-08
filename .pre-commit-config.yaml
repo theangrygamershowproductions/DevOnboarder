@@ -172,7 +172,7 @@ repos:
             args:
                 [
                     "-c",
-                    "echo '🔐 NO_SHORTCUTS_POLICY: All quality gates must pass' && echo '📖 Reference: docs/policies/NO_SHORTCUTS_POLICY.md' && echo '🛠️ Auto-fix available for most markdown issues: npx markdownlint-cli2 --fix \"**/*.md\"'",
+                    "echo '🔐 NO_SHORTCUTS_POLICY: All quality gates must pass' && echo '📖 Reference: docs/policies/NO_SHORTCUTS_POLICY.md' && echo '🛠️ Auto-fix available for most markdown issues: npx markdownlint-cli2 --fix'",
                 ]
             language: system
             files: \.(md|sh|yml|yaml)$

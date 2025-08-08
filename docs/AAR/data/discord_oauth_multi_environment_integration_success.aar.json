@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0.0",
+  "title": "Discord OAuth Multi-Environment Integration Success",
+  "date": "2025-08-08",
+  "type": "Infrastructure",
+  "priority": "High",
+  "executive_summary": {
+    "problem": "Discord OAuth callback was redirecting to wrong subdomain (auth.theangrygamershow.com instead of localhost) during local development, preventing proper testing of authentication flow in development environment.",
+    "solution": "Implemented comprehensive environment-specific URL configuration pattern with AUTH_URL_DEV/PROD/CI variants, reorganized .env file structure for clarity, and fixed database initialization to support complete OAuth flow.",
+    "outcome": "Complete end-to-end Discord OAuth flow now works in local development environment with proper localhost routing, database initialization, and JWT token generation. Development workflow maintains environment isolation while testing real OAuth integration."
+  },
+  "participants": [
+    "@user (Product Owner)",
+    "@github-copilot (Implementation Agent)"
+  ],
+  "phases": [
+    {
+      "name": "Problem Identification",
+      "duration": "15 minutes",
+      "description": "Diagnosed OAuth callback redirecting to production URL instead of localhost",
+      "status": "Completed"
+    },
+    {
+      "name": "Environment Variable Architecture",
+      "duration": "30 minutes",
+      "description": "Designed and implemented environment-specific URL pattern (AUTH_URL_DEV/PROD/CI)",
+      "status": "Completed"
+    },
+    {
+      "name": "Configuration Organization",
+      "duration": "20 minutes",
+      "description": "Reorganized .env file with clear sections and comprehensive documentation",
+      "status": "Completed"
+    },
+    {
+      "name": "Container Environment Sync",
+      "duration": "10 minutes",
+      "description": "Rebuilt frontend container to pick up new environment variables",
+      "status": "Completed"
+    },
+    {
+      "name": "Discord App Configuration",
+      "duration": "5 minutes",
+      "description": "Added localhost redirect URI to Discord Developer Portal settings",
+      "status": "Completed"
+    },
+    {
+      "name": "Database Schema Resolution",
+      "duration": "25 minutes",
+      "description": "Resolved missing database tables by enabling INIT_DB_ON_STARTUP and restarting auth service",
+      "status": "Completed"
+    },
+    {
+      "name": "Frontend URL Configuration",
+      "duration": "10 minutes",
+      "description": "Fixed FRONTEND_URL to use localhost for OAuth redirect destination",
+      "status": "Completed"
+    }
+  ],
+  "outcomes": {
+    "success_metrics": [
+      "OAuth Flow: Complete end-to-end functionality from frontend → Discord → auth service → database → JWT token",
+      "Environment Isolation: Development uses localhost, production uses subdomains, no manual switching required",
+      "Database Integration: All required tables (users, contributions, xp_events, user_roles, onboarding_progress, feedback) created automatically",
+      "JWT Authentication: Valid tokens generated with correct expiration (30 minutes) and user ID assignment",
+      "URL Architecture: Systematic environment-specific URL pattern implemented across all services"
+    ],
+    "challenges_overcome": [
+      "OAuth callback subdomain routing resolved through environment-specific URL configuration",
+      "Database schema missing tables resolved through proper initialization flag configuration",
+      "Frontend container environment variable staleness resolved through proper rebuild procedures",
+      "Discord app configuration required manual addition of localhost redirect URI",
+      "Multi-service environment variable consistency achieved through systematic .env reorganization"
+    ]
+  },
+  "technical_details": {
+    "environment_pattern": "AUTH_URL_DEV/PROD/CI with systematic fallback hierarchy",
+    "database_initialization": "INIT_DB_ON_STARTUP=true enables SQLAlchemy Base.metadata.create_all()",
+    "jwt_configuration": "30-minute expiration, HS256 algorithm, user ID as subject",
+    "oauth_flow": "Frontend (localhost) → Discord → Auth Service (localhost) → Database → JWT → Frontend (localhost)",
+    "container_orchestration": "Docker Compose with Traefik reverse proxy for localhost routing"
+  },
+  "follow_up": {
+    "action_items": [
+      {
+        "task": "Update copilot-instructions.md with Discord OAuth integration patterns",
+        "owner": "@github-copilot",
+        "due_date": "2025-08-08",
+        "status": "In Progress"
+      },
+      {
+        "task": "Document environment-specific URL configuration pattern for future services",
+        "owner": "@platform-team",
+        "due_date": "2025-08-15",
+        "status": "Not Started"
+      },
+      {
+        "task": "Create automated tests for OAuth flow in CI pipeline",
+        "owner": "@testing-team",
+        "due_date": "2025-08-22",
+        "status": "Not Started"
+      }
+    ],
+    "monitoring_requirements": [
+      "OAuth flow success rate in development environment",
+      "Database initialization reliability across container restarts",
+      "JWT token validation and expiration handling"
+    ]
+  },
+  "lessons_learned": [
+    "Environment-specific URL patterns eliminate manual configuration switching between development and production",
+    "Container environment variable changes require explicit restart to take effect",
+    "Discord OAuth requires explicit redirect URI configuration in Developer Portal for each environment",
+    "Database initialization flags are critical for automated schema creation in development environments",
+    "Systematic .env file organization with clear sections improves maintainability and reduces configuration errors",
+    "Frontend container rebuilds are necessary when VITE_ environment variables change",
+    "SQLAlchemy models require proper database table existence before OAuth callback processing",
+    "JWT token structure validation helps verify correct authentication flow completion"
+  ],
+  "references": [
+    {
+      "title": "DevOnboarder Multi-Environment Configuration Guide",
+      "url": "/home/potato/DevOnboarder/.env.dev",
+      "type": "Configuration"
+    },
+    {
+      "title": "Discord OAuth Implementation",
+      "url": "/home/potato/DevOnboarder/src/devonboarder/auth_service.py",
+      "type": "Implementation"
+    },
+    {
+      "title": "Frontend OAuth Integration",
+      "url": "/home/potato/DevOnboarder/frontend/src/components/Login.tsx",
+      "type": "Frontend"
+    },
+    {
+      "title": "Docker Compose Development Stack",
+      "url": "/home/potato/DevOnboarder/docker-compose.dev.yaml",
+      "type": "Infrastructure"
+    }
+  ]
+}
