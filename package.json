@@ -1,0 +1,51 @@
+{
+  "name": "devonboarder-aar-system",
+  "version": "1.0.0",
+  "description": "Schema-driven AAR (After Action Report) system for DevOnboarder",
+  "private": true,
+  "scripts": {
+    "aar:render": "node scripts/render_aar.js",
+    "aar:validate": "node -e \"const {loadAndValidateAAR} = require('./scripts/render_aar.js'); process.argv.slice(2).forEach(file => loadAndValidateAAR(file));\"",
+    "aar:test": "npm run aar:validate docs/AAR/data/*.aar.json 2>/dev/null || echo 'No AAR data files found'",
+    "aar:test-golden": "node scripts/test_aar_golden.js",
+    "aar:update-snapshots": "node scripts/test_aar_golden.js --update",
+    "aar:migrate": "node scripts/migrate_aar.js",
+    "aar:validate-schema": "ajv validate -s docs/AAR/schema/aar.schema.json -d",
+    "aar:lint-rendered": "markdownlint docs/AAR/reports/*.md || echo 'No rendered AAR files found'",
+    "aar:full-test": "npm run aar:test && npm run aar:test-golden && npm run aar:lint-rendered",
+    "aar:install": "npm install handlebars ajv ajv-formats glob",
+    "aar:ui:install": "cd app/aar-ui && npm install",
+    "aar:ui:dev": "cd app/aar-ui && npm run dev",
+    "aar:ui:build": "cd app/aar-ui && npm run build",
+    "aar:ui:serve": "cd app/aar-ui && npm run preview",
+    "aar:stack:up": "docker compose -f docker-compose.dev.yaml up aar-ui -d",
+    "aar:stack:down": "docker compose -f docker-compose.dev.yaml down aar-ui",
+    "aar:stack:logs": "docker compose -f docker-compose.dev.yaml logs -f aar-ui",
+    "aar:stack:build": "docker compose -f docker-compose.dev.yaml build aar-ui",
+    "aar:stack:prod": "docker compose -f docker-compose.dev.yaml -f docker-compose.prod.yaml up aar-ui -d",
+    "test": "npm run aar:full-test"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "glob": "^10.4.5",
+    "handlebars": "^4.7.8"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theangrygamershowproductions/DevOnboarder.git"
+  },
+  "keywords": [
+    "aar",
+    "after-action-report",
+    "devonboarder",
+    "documentation",
+    "json-schema",
+    "handlebars"
+  ],
+  "author": "DevOnboarder Team",
+  "license": "MIT"
+}
