@@ -29,6 +29,7 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 - [Llama2 Agile Helper](llama2-agile-helper.md)
 - [Prod Orchestrator](prod-orchestrator.md)
 - [Documentation Quality Enforcer](documentation-quality-enforcer.md)
+- [Doc Lint Enforcer](doc_lint_enforcer.md) - **🔐 NO_SHORTCUTS_POLICY Enforcement**
 - [Dev Orchestrator](dev-orchestrator.md)
 - [Staging Orchestrator](staging-orchestrator.md)
 - [Onboarding Agent](onboarding-agent.md)
@@ -37,6 +38,11 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 - [Diagnostics Bot](diagnostics-bot.md)
 - [EnvVar Manager](envvar-manager.md)
 - [Branch Cleanup](branch-cleanup.md)
+- [Schema-Driven AAR System](schema-driven-aar-system.md)
+
+## Agent Guidelines
+
+- [Terminal Output Policy Suppression System](guidelines/terminal-output-policy-suppression.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
 

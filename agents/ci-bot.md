@@ -26,3 +26,28 @@ codex-agent:
 **Escalation:** If issue automation fails repeatedly, notify maintainers via `.github/workflows/notify.yml` to review logs and rotate the token.
 
 **Notification:** Route alerts through `.github/workflows/notify.yml`.
+
+## Terminal Output Policy Compliance
+
+**CRITICAL**: CI Bot must respect DevOnboarder's Terminal Output Policy and Suppression System:
+
+### Suppression System Awareness
+
+- **RESPECT existing suppressions**: Never remove `# terminal-output-policy: reviewed-safe` comments
+- **VALIDATE patterns**: Understand difference between safe and dangerous here-doc patterns
+- **MAINTAIN security**: Don't suppress genuinely risky patterns to avoid warnings
+
+### Policy Integration
+
+When CI Bot processes workflow files:
+
+1. **Check for suppression comments** before flagging terminal output violations
+2. **Preserve manual review decisions** captured in suppression comments
+3. **Flag new violations** that don't have suppression comments
+4. **Escalate unsuppressed violations** through normal issue creation process
+
+### Documentation Reference
+
+- **Suppression Guide**: `docs/standards/terminal-output-policy-suppression.md`
+- **Policy Overview**: `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
+- **Agent Guidelines**: `.github/copilot-instructions.md`
