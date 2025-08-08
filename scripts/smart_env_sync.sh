@@ -37,7 +37,7 @@ CI_EXCLUSIONS=(
 # Configuration
 SOURCE_ENV=".env"
 CONFIG_FILE="config/env-sync-config.yaml"
-TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci" "auth/.env.dev" "auth/.env.prod" "auth/.env.ci")
+TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci")
 
 # Initialize logging
 mkdir -p logs
