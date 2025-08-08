@@ -58,6 +58,29 @@ jobs:
               run: |
                   echo "Validating emergency approval documentation format"
 
+                  # Define ignore patterns for legitimate --no-verify usage
+                  is_ignored_file() {
+                      local file="$1"
+                      case "$file" in
+                          # Validation scripts themselves need to search for patterns
+                          "./scripts/validate_no_verify_usage.sh") return 0 ;;
+                          "./scripts/git_safety_wrapper.sh") return 0 ;;
+                          "./scripts/show_no_verify_enforcement.sh") return 0 ;;
+
+                          # Documentation that explains the policy (with examples of what NOT to do)
+                          "./docs/NO_VERIFY_POLICY.md") return 0 ;;
+                          "./docs/NO_VERIFY_QUICK_REFERENCE.md") return 0 ;;
+                          "./docs/standards/vscode-ci-integration-standard.md") return 0 ;;
+                          "./docs/ci-dashboard.md") return 0 ;;
+                          "./.github/copilot-instructions.md") return 0 ;;
+
+                          # CI workflows that enforce the policy
+                          "./.github/workflows/no-verify-policy.yml") return 0 ;;
+
+                          *) return 1 ;;
+                      esac
+                  }
+
                   # Look for any --no-verify usage and validate it has proper approval
                   if grep -r "git.*--no-verify" . --include="*.sh" --include="*.md" --exclude-dir=.git; then
                       echo "Found --no-verify usage - checking for proper approval documentation"
@@ -66,6 +89,12 @@ jobs:
                       found_violations=false
 
                       while IFS= read -r -d '' file; do
+                          # Skip ignored files
+                          if is_ignored_file "$file"; then
+                              echo "INFO: Skipping ignored file: $file"
+                              continue
+                          fi
+
                           if grep -n "git.*--no-verify" "$file" 2>/dev/null; then
                               echo "Checking file: $file"
 

@@ -31,6 +31,36 @@ log_success() {
     echo "SUCCESS: $1" | tee -a "$LOG_FILE"
 }
 
+# Files that legitimately contain --no-verify references (ignore list)
+is_ignored_file() {
+    local file="$1"
+
+    # Ignore patterns for legitimate --no-verify usage
+    case "$file" in
+        # Validation scripts themselves need to search for patterns
+        "./scripts/validate_no_verify_usage.sh") return 0 ;;
+        "./scripts/git_safety_wrapper.sh") return 0 ;;
+
+        # Documentation that explains the policy (with examples of what NOT to do)
+        "./docs/NO_VERIFY_POLICY.md") return 0 ;;
+        "./docs/NO_VERIFY_QUICK_REFERENCE.md") return 0 ;;
+        "./docs/standards/vscode-ci-integration-standard.md") return 0 ;;
+        "./docs/ci-dashboard.md") return 0 ;;
+        "./.github/copilot-instructions.md") return 0 ;;
+
+        # CI workflows that enforce the policy
+        "./.github/workflows/no-verify-policy.yml") return 0 ;;
+
+        # Any file with explicit ignore comment
+        *)
+            if grep -q "# NO-VERIFY-IGNORE:" "$file" 2>/dev/null; then
+                return 0
+            fi
+            return 1
+            ;;
+    esac
+}
+
 # Check for --no-verify usage in scripts and documentation
 check_no_verify_usage() {
     log_info "Scanning for --no-verify usage across DevOnboarder"
@@ -40,6 +70,11 @@ check_no_verify_usage() {
 
     # Search all shell scripts for --no-verify
     while IFS= read -r -d '' file; do
+        # Skip ignored files
+        if is_ignored_file "$file"; then
+            continue
+        fi
+
         if grep -n "git.*--no-verify" "$file" 2>/dev/null; then
             log_warning "Found --no-verify usage in: $file"
 
@@ -56,6 +91,11 @@ check_no_verify_usage() {
 
     # Search documentation for --no-verify references
     while IFS= read -r -d '' file; do
+        # Skip ignored files
+        if is_ignored_file "$file"; then
+            continue
+        fi
+
         if grep -n "\-\-no-verify" "$file" 2>/dev/null; then
             local line_with_context
             line_with_context=$(grep -B2 -A2 "\-\-no-verify" "$file")
