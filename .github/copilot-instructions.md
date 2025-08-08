@@ -687,7 +687,30 @@ bash scripts/manage_logs.sh archive   # Archive current logs
 bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ```
 
-### 5. Commit Message Standards
+### 5. Pre-Commit Requirements - MANDATORY PROCESS
+
+**CRITICAL**: ALL commits MUST follow this process to prevent CI failures and maintain "quiet reliability":
+
+**MANDATORY PRE-COMMIT CHECKLIST**:
+
+1. **Check commit message format FIRST** - Reference approved types before writing message
+2. **ALWAYS use `scripts/safe_commit.sh`** - NEVER use `git commit` directly
+3. **Verify format**: `<TYPE>(<scope>): <subject>` with approved TYPE
+4. **Validate before staging** - Run relevant checks for changed files
+
+**Approved Commit Types** (memorize these):
+
+- **Standard**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+- **Extended**: PERF, CI, OPS, REVERT, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
+
+**FORBIDDEN Practices**:
+
+- ❌ Using `git commit` directly (bypasses validation)
+- ❌ Using unapproved types like `MERGE`, `UPDATE`, `MISC`
+- ❌ Missing scope in commit messages
+- ❌ Using `--no-verify` without explicit Potato Approval
+
+### 6. Commit Message Standards
 
 **MANDATORY**: Use conventional commit format: `<TYPE>(<scope>): <subject>`
 
