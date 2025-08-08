@@ -294,6 +294,9 @@ services:
     working_dir: /app
     env_file:
       - .env.dev
+    environment:
+      DASHBOARD_HOST: "0.0.0.0"
+      DASHBOARD_PORT: "8003"
     volumes:
       - ./src:/app/src
       - ./scripts:/app/scripts
