@@ -1,15 +1,20 @@
-# Developer Onboarding
+# DevOnboarder Documentation
 
-Welcome to **DevOnboarder**. This page explains how to get your environment
-running and where to find documentation about our workflow.
+Welcome to the DevOnboarder documentation! This directory contains all project documentation organized by topic and purpose.
 
-If you're setting up a fresh Ubuntu machine, follow
-[ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker
-Compose, Node.js 22, and Python 3.12. Running tests requires Python **3.12**.
+For immediate setup instructions, see the main [README.md](../README.md) and [SETUP.md](../SETUP.md) in the project root.
 
-After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to
-install a `commit-msg` hook. This ensures your commit messages pass the lint
-check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+## 📁 Directory Structure
+
+### Core Project Files (Root Directory)
+
+- `README.md` - Main project overview and getting started guide
+- `SETUP.md` - Detailed setup and installation instructions
+- `CONTRIBUTING.md` - Contribution guidelines and development workflow
+- `CODE_OF_CONDUCT.md` - Community standards and behavior expectations
+- `LICENSE.md` - Project licensing information
+- `SECURITY.md` - Security policies and vulnerability reporting
+- `QUICKSTART.md` - Quick start guide for immediate setup
 
 ## Local Development
 
@@ -310,7 +315,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
 9. A weekly job (`security-audit.yml`) runs dependency audits and uploads the report as an artifact.
 10. CODEOWNERS automatically requests reviews from the maintainer team.
-11. The `auto-fix.yml` workflow runs when CI fails. It downloads the `ci-logs` artifact,
+11. The `auto-fix.yml` workflow runs when CI fails. It downloads the `logs` artifact,
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
     Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)
@@ -323,7 +328,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
     `truthy` checks and raise the line-length limit to 200 so linting focuses on
     real YAML syntax errors.
 
-## \U0001F6E1\uFE0F Coverage and Security
+## 🛡️ Coverage and Security
 
 We track coverage locally using `pytest --cov=src` and `npm run coverage`. This
 project does **not** use external uploaders like Codecov because remote scripts
@@ -336,6 +341,73 @@ bash scripts/security_audit.sh
 ```
 
 The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high`
+
+## 📚 Documentation Organization
+
+This docs directory has been reorganized for better navigation and maintainability:
+
+### 📊 Implementation Documentation
+
+**Location**: `implementation/`
+
+- Infrastructure implementation reports
+- Feature integration completions
+- System enhancement summaries
+- Security policy enforcements
+
+### 🏗️ Phase Documentation
+
+**Location**: `phases/`
+
+- Cloudflare tunnel implementation phases
+- CI/CD enhancement phases
+- Advanced orchestration phases
+- Infrastructure improvement phases
+
+### 🔧 CI/CD Documentation
+
+**Location**: `ci/`
+
+- CI failure analysis and resolution reports
+- Build system improvements
+- Status monitoring reports
+
+### 📈 Reports & Analysis
+
+**Location**: `reports/`
+
+- Coverage status reports
+- Project cleanup analysis
+- Verification reports
+- Summary reports
+
+### 🤖 Codex & Agent Documentation
+
+**Location**: `codex/`
+
+- Agent definitions and capabilities
+- Codex contributor dashboard
+- Project planning documents
+
+### 📋 AAR (After Action Reports)
+
+**Location**: Root of `docs/` (AAR_*.md files)
+
+After Action Reports documenting major implementations and lessons learned.
+
+### Other Directories
+
+- `roadmap/` - Strategic planning and roadmap documentation
+- `policies/` - Project governance and standards
+- `troubleshooting/` - Troubleshooting guides and solutions
+- `contributing/` - Community guidelines and contributor resources
+
+## 🔍 Quick Navigation
+
+- **New Contributors**: Start with root README.md, then SETUP.md
+- **Developers**: Check `implementation/` and `phases/` for current work
+- **DevOps**: See `ci/` and `policies/` for infrastructure details
+- **Project Managers**: Review `reports/` and `roadmap/` for status
 in both `frontend/` and `bot/`. Each command fails when vulnerabilities are
 detected.
 CI also runs `pip-audit` immediately after installing Python requirements. If this step fails to reach the vulnerability database, see [docs/offline-setup.md](offline-setup.md).

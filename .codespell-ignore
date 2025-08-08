@@ -8,6 +8,9 @@
 *.p12
 *.pem
 .codex/
+cloudflared/
+*.tunnel.json
+tunnel-credentials.json
 .codex/cache/
 .codex/cache/*
 .codex/private/
@@ -21,6 +24,7 @@ deployment-keys.*
 discord-tokens.*
 github-tokens.*
 id_rsa*
+logs/
 webhook-config.json
 #
 # Technical terms and project-specific words

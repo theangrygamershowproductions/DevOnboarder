@@ -56,9 +56,8 @@ jobs:
             - name: Install PyYAML
               if: steps.check.outputs.hit == 'true'
               run: pip install PyYAML
-            - name: Verify bot permission
-              if: steps.check.outputs.hit == 'true'
-              run: 'bash scripts/check-bot-permissions.sh orchestration_bot "issues: write"'
+            - name: Validate orchestration bot permissions
+              run: 'bash scripts/validate-bot-permissions.sh'
             - name: Open issue on rate-limit
               if: steps.check.outputs.hit == 'true'
               env:

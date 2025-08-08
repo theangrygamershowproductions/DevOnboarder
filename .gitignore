@@ -19,6 +19,7 @@
 *.egg-info/
 *.env
 *.key
+*.log
 *.p12
 *.pem
 *.potato
@@ -54,6 +55,12 @@
 /test.db
 /vale-*.json
 /vale-results.json
+# Cloudflare Tunnel Secrets - NEVER COMMIT
+cloudflared/
+*.tunnel.json
+tunnel-credentials.json
+
+# Potato Policy Protected Files
 Potato
 Potato.md
 Thumbs.db
@@ -96,3 +103,9 @@ github-tokens.*
 ci-secrets.*
 deployment-keys.*
 backup-configs.*
+letsencrypt/acme.json
+traefik/traefik.yml
+.gitignore
+traefik/dynamic.yml
+cloudflared/config.yml
+cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json

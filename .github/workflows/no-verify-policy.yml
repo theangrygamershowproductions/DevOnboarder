@@ -1,0 +1,184 @@
+---
+name: No-Verify Policy Enforcement
+
+permissions:
+    contents: read
+    actions: read
+
+on:
+    push:
+        branches: [main, dev]
+    pull_request:
+        branches: [main, dev]
+    workflow_dispatch:
+
+jobs:
+    validate-no-verify-policy:
+        runs-on: ubuntu-latest
+        name: "Validate --no-verify Usage Policy"
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0  # Full history for comprehensive scan
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+
+            - name: Create logs directory
+              run: mkdir -p logs
+
+            - name: Run No-Verify Policy Validation
+              run: |
+                  echo "Validating --no-verify usage policy compliance"
+                  bash scripts/validate_no_verify_usage.sh
+
+            - name: Check for Git Aliases
+              run: |
+                  echo "Checking for problematic git aliases"
+
+                  # Check global aliases
+                  if git config --global --get-regexp alias 2>/dev/null | grep -E "(--no-verify|bypass|skip)"; then
+                      echo "ERROR: Found global git aliases that bypass quality gates"
+                      exit 1
+                  fi
+
+                  # Check local aliases
+                  if git config --local --get-regexp alias 2>/dev/null | grep -E "(--no-verify|bypass|skip)"; then
+                      echo "ERROR: Found local git aliases that bypass quality gates"
+                      exit 1
+                  fi
+
+                  echo "No problematic git aliases found"
+
+            - name: Validate Emergency Approval Format
+              run: |
+                  echo "Validating emergency approval documentation format"
+
+                  # Define ignore patterns for legitimate --no-verify usage
+                  is_ignored_file() {
+                      local file="$1"
+                      case "$file" in
+                          # Validation scripts themselves need to search for patterns
+                          "./scripts/validate_no_verify_usage.sh") return 0 ;;
+                          "./scripts/git_safety_wrapper.sh") return 0 ;;
+                          "./scripts/show_no_verify_enforcement.sh") return 0 ;;
+
+                          # Documentation that explains the policy (with examples of what NOT to do)
+                          "./docs/NO_VERIFY_POLICY.md") return 0 ;;
+                          "./docs/NO_VERIFY_QUICK_REFERENCE.md") return 0 ;;
+                          "./docs/standards/vscode-ci-integration-standard.md") return 0 ;;
+                          "./docs/ci-dashboard.md") return 0 ;;
+                          "./.github/copilot-instructions.md") return 0 ;;
+
+                          # CI workflows that enforce the policy
+                          "./.github/workflows/no-verify-policy.yml") return 0 ;;
+
+                          *) return 1 ;;
+                      esac
+                  }
+
+                  # Look for any --no-verify usage and validate it has proper approval
+                  if grep -r "git.*--no-verify" . --include="*.sh" --include="*.md" --exclude-dir=.git; then
+                      echo "Found --no-verify usage - checking for proper approval documentation"
+
+                      # Check if each usage has proper emergency approval format
+                      found_violations=false
+
+                      while IFS= read -r -d '' file; do
+                          # Skip ignored files
+                          if is_ignored_file "$file"; then
+                              echo "INFO: Skipping ignored file: $file"
+                              continue
+                          fi
+
+                          if grep -n "git.*--no-verify" "$file" 2>/dev/null; then
+                              echo "Checking file: $file"
+
+                              # Check for proper approval format
+                              if ! grep -B5 -A5 "git.*--no-verify" "$file" | grep -E "POTATO.*APPROVED|Emergency.*Potato|CRITICAL.*Potato"; then
+                                  echo "ERROR: Unauthorized --no-verify usage in: $file"
+                                  found_violations=true
+                              fi
+                          fi
+                      done < <(find . -name "*.sh" -o -name "*.md" -type f -print0)
+
+                      if [ "$found_violations" = true ]; then
+                          echo "CRITICAL: Found unauthorized --no-verify usage"
+                          echo "All --no-verify usage must have explicit Potato Approval"
+                          exit 1
+                      fi
+                  fi
+
+                  echo "All --no-verify usage properly authorized"
+
+            - name: Generate Policy Compliance Report
+              if: always()
+              run: |
+                  echo "Generating no-verify policy compliance report"
+
+                  REPORT_DATE=$(date)
+
+                  {
+                      echo "# No-Verify Policy Compliance Report"
+                      printf "Generated: %s\n" "$REPORT_DATE"
+                      echo "Repository: ${{ github.repository }}"
+                      echo "Branch: ${{ github.ref_name }}"
+                      echo "Commit: ${{ github.sha }}"
+                      echo ""
+
+                      echo "## Policy Status"
+                      if bash scripts/validate_no_verify_usage.sh; then
+                          echo "COMPLIANT: All --no-verify usage properly authorized"
+                      else
+                          echo "VIOLATION: Unauthorized --no-verify usage detected"
+                      fi
+                      echo ""
+
+                      echo "## Enforcement Mechanisms Active"
+                      echo "- Pre-commit hooks: validate-no-verify"
+                      echo "- CI pipeline validation"
+                      echo "- Git alias detection"
+                      echo "- Emergency approval format validation"
+                      echo ""
+
+                      echo "## Emergency Procedures"
+                      echo "For true emergencies requiring --no-verify:"
+                      echo "1. Use: ./scripts/git_safety_wrapper.sh commit --no-verify -m 'Emergency'"
+                      echo "2. Complete emergency justification process"
+                      echo "3. Receive 1-hour time-limited approval"
+                      echo "4. Document rollback plan"
+                      echo "5. Fix quality issues in follow-up commit"
+
+                  } > logs/no_verify_policy_report.md
+
+            - name: Upload Policy Report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: no-verify-policy-report
+                  path: logs/no_verify_policy_report.md
+                  retention-days: 30
+
+            - name: Policy Violation Summary
+              if: failure()
+              run: |
+                  echo "NO-VERIFY POLICY VIOLATION DETECTED"
+                  echo ""
+                  echo "DevOnboarder enforces a ZERO TOLERANCE policy for unauthorized --no-verify usage."
+                  echo ""
+                  echo "Required Actions:"
+                  echo "1. Remove all unauthorized --no-verify usage"
+                  echo "2. Fix underlying quality gate issues"
+                  echo "3. For emergencies, use the approved process"
+                  echo ""
+                  echo "Emergency Process:"
+                  echo "- Use: ./scripts/git_safety_wrapper.sh commit --no-verify -m 'Emergency'"
+                  echo "- Complete justification questions"
+                  echo "- Receive time-limited Potato Approval"
+                  echo "- Document proper rollback plan"
+                  echo ""
+                  echo "This maintains DevOnboarder's 'quiet reliability' philosophy."

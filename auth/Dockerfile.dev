@@ -1,0 +1,49 @@
+# =============================================================================
+# File: auth/Dockerfile.dev
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-08-05
+# Purpose: Auth service development container
+# Dependencies: Python 3.12
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# =============================================================================
+
+FROM python:3.12-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Create logs directory (centralized logging policy)
+RUN mkdir -p logs
+
+# Copy Python project configuration
+COPY pyproject.toml ./
+COPY requirements-dev.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e .[test]
+
+# Copy source code
+COPY src ./src
+
+# Create non-root user for security
+RUN useradd -m -s /bin/bash authuser && \
+    chown -R authuser:authuser /app
+USER authuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8002/health || exit 1
+
+# Expose auth service port
+EXPOSE 8002
+
+# Development command
+CMD ["python", "-m", "devonboarder.auth_service"]

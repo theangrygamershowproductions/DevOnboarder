@@ -80,9 +80,9 @@ jobs:
                       if [[ -n "$ISSUE_NUMBER" ]]; then
                           echo "Linking Issue to PR"
 
-                          # Simple comments with basic content
-                          gh pr comment "$PR_NUMBER" --body "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
-                          gh issue comment "$ISSUE_NUMBER" --body "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
+                          # Simple comments with basic content using wrapper script
+                          bash scripts/ci_gh_issue_wrapper.sh pr-comment "$PR_NUMBER" "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
+                          bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
                       fi
                   fi
 

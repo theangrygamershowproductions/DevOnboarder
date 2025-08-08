@@ -8,6 +8,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -15,6 +16,7 @@ from typing import Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 # Configure logging
@@ -120,7 +122,7 @@ class DashboardService:
         scripts: List[ScriptInfo] = []
 
         if not self.scripts_dir.exists():
-            logger.warning(f"Scripts directory not found: {self.scripts_dir}")
+            logger.warning("Scripts directory not found: %s", self.scripts_dir)
             return scripts
 
         for script_path in self.scripts_dir.rglob("*"):
@@ -203,13 +205,13 @@ class DashboardService:
             )
 
         except FileNotFoundError:
-            logger.warning(f"Script file not found: {script_path}")
+            logger.warning("Script file not found: %s", script_path)
             return "Description unavailable (file not found)"
         except PermissionError:
-            logger.warning(f"Permission denied when reading script: {script_path}")
+            logger.warning("Permission denied when reading script: %s", script_path)
             return "Description unavailable (permission denied)"
         except Exception as e:
-            logger.warning(f"Failed to extract description from {script_path}: {e}")
+            logger.warning("Failed to extract description from %s: %s", script_path, e)
             return "Description unavailable"
 
     def _categorize_script(self, script_path: Path) -> str:
@@ -259,13 +261,40 @@ class DashboardService:
             Execution result with status and output.
         """
         execution_id = str(uuid.uuid4())
-        script_path = self.base_dir / request.script_path
+
+        # Security: Validate and sanitize script path to prevent path traversal
+        try:
+            # Resolve path and ensure it's within the base directory
+            script_path = (self.base_dir / request.script_path).resolve()
+            if not str(script_path).startswith(str(self.base_dir.resolve())):
+                raise HTTPException(
+                    status_code=403, detail="Access denied: Invalid script path"
+                )
+        except (ValueError, OSError) as e:
+            raise HTTPException(
+                status_code=400, detail=f"Invalid script path: {e}"
+            ) from e
 
         if not script_path.exists():
             raise HTTPException(status_code=404, detail="Script not found")
 
         if not os.access(script_path, os.R_OK):
             raise HTTPException(status_code=403, detail="Script not readable")
+
+        # Security: Ensure script is within allowed directories
+        # Allow scripts directory or base directory (for testing)
+        try:
+            # Try to find the script relative to scripts directory first
+            try:
+                script_path.relative_to(self.scripts_dir)
+            except ValueError:
+                # If not in scripts dir, check if it's in base dir (for testing)
+                script_path.relative_to(self.base_dir)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=403,
+                detail="Access denied: Script must be in scripts or base directory",
+            ) from e
 
         start_time = datetime.now()
         result = ExecutionResult(
@@ -280,13 +309,27 @@ class DashboardService:
         self.active_executions[execution_id] = result
 
         try:
-            # Prepare command
+            # Security: Sanitize and validate arguments
+            safe_args = []
+            if request.args:
+                for arg in request.args:
+                    # Basic sanitization - allow alphanumeric, hyphens, dots
+                    if not re.match(r"^[a-zA-Z0-9._-]+$", str(arg)):
+                        raise HTTPException(
+                            status_code=400,
+                            detail=f"Invalid argument format: {arg}. "
+                            "Only alphanumeric characters, dots, hyphens, "
+                            "and underscores allowed.",
+                        )
+                    safe_args.append(str(arg))
+
+            # Prepare command with validated script path and sanitized arguments
             if script_path.suffix == ".py":
-                cmd = ["python", str(script_path)] + (request.args or [])
+                cmd = ["python", str(script_path)] + safe_args
             elif script_path.suffix in {".sh", ".bash"}:
-                cmd = ["bash", str(script_path)] + (request.args or [])
+                cmd = ["bash", str(script_path)] + safe_args
             else:
-                cmd = [str(script_path)] + (request.args or [])
+                cmd = [str(script_path)] + safe_args
 
             # Create log file
             log_file = self.logs_dir / f"dashboard_execution_{execution_id}.log"
@@ -339,12 +382,12 @@ class DashboardService:
                 return result
 
         except Exception as e:
-            logger.error(f"Script execution failed: {e}")
+            logger.error("Script execution failed: %s", e)
             result.status = "failed"
             result.error = str(e)
             result.end_time = datetime.now().isoformat()
             await self._broadcast_execution_update(result)
-            raise HTTPException(status_code=500, detail=f"Execution failed: {e}")
+            raise HTTPException(status_code=500, detail=f"Execution failed: {e}") from e
 
     async def _monitor_background_execution(
         self, process, result: ExecutionResult, log_file: Path
@@ -390,7 +433,7 @@ class DashboardService:
             await self._broadcast_execution_update(result)
 
         except Exception as e:
-            logger.error(f"Background execution monitoring failed: {e}")
+            logger.error("Background execution monitoring failed: %s", e)
             result.status = "failed"
             result.error = str(e)
             result.end_time = datetime.now().isoformat()
@@ -481,17 +524,178 @@ def create_dashboard_app() -> FastAPI:
         """Health check endpoint."""
         return {"status": "ok"}
 
-    @app.get("/api/scripts", response_model=List[ScriptInfo])
+    @app.get("/")
+    def dashboard_info():
+        """Dashboard service information and available endpoints."""
+        return {
+            "service": "DevOnboarder Dashboard Service",
+            "description": "CI Troubleshooting and Script Execution API",
+            "version": "1.0",
+            "endpoints": {
+                "health": "GET /health - Service health check",
+                "scripts": "GET /scripts - List available automation scripts",
+                "execute": "POST /execute - Execute a script",
+                "executions": "GET /executions - List script executions",
+                "execution_detail": "GET /execution/{id} - Get execution details",
+                "policy": "GET /policy/no-verify - Check no-verify policy status",
+            },
+            "documentation": "https://dashboard.theangrygamershow.com/docs",
+        }
+
+    @app.get("/login/discord")
+    def discord_login() -> RedirectResponse:
+        """Redirect to Discord OAuth with dashboard return URL."""
+        dashboard_url = os.getenv(
+            "VITE_DASHBOARD_URL", "https://dashboard.theangrygamershow.com"
+        )
+        auth_url = "https://auth.theangrygamershow.com"
+
+        # Redirect to auth service with dashboard as the redirect destination
+        from urllib.parse import urlencode
+
+        params = {"redirect_to": dashboard_url}
+        return RedirectResponse(f"{auth_url}/login/discord?{urlencode(params)}")
+
+    @app.get("/auth/callback")
+    def auth_callback(token: Optional[str] = None) -> dict[str, str]:
+        """Handle authentication callback from Discord OAuth."""
+        if token:
+            return {
+                "status": "success",
+                "message": "Authentication successful",
+                "token": token,
+                "redirect": "Set token in localStorage and refresh page",
+            }
+        else:
+            return {"status": "error", "message": "No authentication token received"}
+
+    @app.get("/policy/no-verify")
+    def no_verify_policy_status() -> Dict[str, str]:
+        """Get --no-verify policy enforcement status."""
+        # Import only what we need for security
+        import subprocess  # noqa: B404
+
+        status: Dict[str, str] = {
+            "policy_name": "No-Verify Zero Tolerance Policy",
+            "enforcement_level": "CRITICAL",
+            "status": "unknown",
+            "last_check": datetime.now().isoformat(),
+            "violations": "0",
+            "emergency_approvals": "0",
+            "compliance_score": "0.0",
+        }
+
+        components: Dict[str, str] = {}
+
+        try:
+            # Check if validation script exists and is executable
+            validation_script = Path("scripts/validate_no_verify_usage.sh")
+            if validation_script.exists() and os.access(validation_script, os.X_OK):
+                components["validation_script"] = "✅ Available"
+
+                # Run the validation with trusted script path - security validated
+                result = subprocess.run(  # noqa: B603
+                    [str(validation_script.resolve())],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    cwd=Path.cwd(),
+                    check=False,  # Handle return codes manually
+                )
+
+                if result.returncode == 0:
+                    status["status"] = "COMPLIANT"
+                    status["compliance_score"] = "100.0"
+
+                    # Parse output for emergency approvals
+                    output = result.stdout
+                    if "Emergency approved usages:" in output:
+                        import re
+
+                        match = re.search(r"Emergency approved usages: (\d+)", output)
+                        if match:
+                            status["emergency_approvals"] = match.group(1)
+
+                    if "Unauthorized violations:" in output:
+                        import re
+
+                        match = re.search(r"Unauthorized violations: (\d+)", output)
+                        if match:
+                            violations = match.group(1)
+                            status["violations"] = violations
+                            if int(violations) > 0:
+                                status["status"] = "VIOLATION"
+                                status["compliance_score"] = "0.0"
+                else:
+                    status["status"] = "VIOLATION"
+                    status["compliance_score"] = "0.0"
+                    status["error"] = result.stderr
+            else:
+                components["validation_script"] = "❌ Missing"
+
+            # Check safety wrapper
+            safety_wrapper = Path("scripts/git_safety_wrapper.sh")
+            if safety_wrapper.exists() and os.access(safety_wrapper, os.X_OK):
+                components["safety_wrapper"] = "✅ Available"
+            else:
+                components["safety_wrapper"] = "❌ Missing"
+
+            # Check pre-commit hook
+            precommit_config = Path(".pre-commit-config.yaml")
+            if precommit_config.exists():
+                with open(precommit_config, "r", encoding="utf-8") as f:
+                    config_content = f.read()
+                    if "validate-no-verify" in config_content:
+                        components["precommit_hook"] = "✅ Configured"
+                    else:
+                        components["precommit_hook"] = "❌ Not configured"
+            else:
+                components["precommit_hook"] = "❌ Missing"
+
+            # Check CI workflow
+            ci_workflow = Path(".github/workflows/no-verify-policy.yml")
+            if ci_workflow.exists():
+                components["ci_workflow"] = "✅ Active"
+            else:
+                components["ci_workflow"] = "❌ Missing"
+
+            # Check policy documentation
+            policy_doc = Path("docs/NO_VERIFY_POLICY.md")
+            quick_ref = Path("docs/NO_VERIFY_QUICK_REFERENCE.md")
+
+            docs_status = []
+            if policy_doc.exists():
+                docs_status.append("Policy")
+            if quick_ref.exists():
+                docs_status.append("Quick Reference")
+
+            if docs_status:
+                components["documentation"] = f"✅ {', '.join(docs_status)}"
+            else:
+                components["documentation"] = "❌ Missing"
+
+        except subprocess.TimeoutExpired:
+            status["status"] = "ERROR"
+            status["error"] = "Validation script timeout"
+        except Exception as e:
+            status["status"] = "ERROR"
+            status["error"] = str(e)
+
+        # Add components to status
+        status.update(components)
+        return status
+
+    @app.get("/scripts", response_model=List[ScriptInfo])
     def list_scripts() -> List[ScriptInfo]:
         """List all discovered scripts."""
         return dashboard_service.discover_scripts()
 
-    @app.post("/api/execute", response_model=ExecutionResult)
+    @app.post("/execute", response_model=ExecutionResult)
     async def execute_script(request: ExecutionRequest) -> ExecutionResult:
         """Execute a script."""
         return await dashboard_service.execute_script(request)
 
-    @app.get("/api/execution/{execution_id}", response_model=ExecutionResult)
+    @app.get("/execution/{execution_id}", response_model=ExecutionResult)
     def get_execution_status(execution_id: str) -> ExecutionResult:
         """Get execution status."""
         result = dashboard_service.get_execution_status(execution_id)
@@ -499,7 +703,7 @@ def create_dashboard_app() -> FastAPI:
             raise HTTPException(status_code=404, detail="Execution not found")
         return result
 
-    @app.get("/api/executions", response_model=List[ExecutionResult])
+    @app.get("/executions", response_model=List[ExecutionResult])
     def list_executions() -> List[ExecutionResult]:
         """List all active executions."""
         return dashboard_service.list_active_executions()
@@ -524,6 +728,7 @@ if __name__ == "__main__":
     import uvicorn
 
     app = create_dashboard_app()
-    # Use localhost for development security
+    # Use environment-configurable host for security
+    host = os.getenv("DASHBOARD_HOST", "127.0.0.1")  # Default to localhost for security
     port = int(os.getenv("DASHBOARD_PORT", "8003"))
-    uvicorn.run(app, host="127.0.0.1", port=port)
+    uvicorn.run(app, host=host, port=port)

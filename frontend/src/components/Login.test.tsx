@@ -18,7 +18,8 @@ describe("Login", () => {
     it("links to the auth service", () => {
         render(<Login />);
         const link = screen.getByRole("link", { name: /log in with discord/i });
-        expect(link).toHaveAttribute("href", `${AUTH_URL}/login/discord`);
+        const expectedUrl = `${AUTH_URL}/login/discord?redirect_to=${encodeURIComponent("http://localhost:3000/login/discord/callback")}`;
+        expect(link).toHaveAttribute("href", expectedUrl);
     });
 
     it("exchanges OAuth code and stores token", async () => {

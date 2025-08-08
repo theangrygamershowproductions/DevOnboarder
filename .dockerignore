@@ -9,6 +9,7 @@
 # Tests and coverage reports
 *.env
 *.key
+*.log
 *.p12
 *.pem
 *.py[cod]
@@ -18,6 +19,9 @@
 .codex/cache/*
 .codex/private/
 .codex/private/*
+cloudflared/
+*.tunnel.json
+tunnel-credentials.json
 .coverage
 .env*
 .env.*

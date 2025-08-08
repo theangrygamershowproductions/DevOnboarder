@@ -1,12 +1,19 @@
 #!/bin/sh
 # Prevent commits if the message does not match <TYPE>(<scope>): <subject>
+# Extended commit types for DevOnboarder development workflow
+# Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+# Extended types: PERF, CI, OPS, REVERT, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 # BUILD/Build types added for Dependabot compatibility (Build(deps-dev), Build(deps), etc.)
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build)(\([^)]+\))?: .+'
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build|PERF|CI|OPS|REVERT|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
 message=$(cat "$1")
 
 if ! printf '%s' "$message" | grep -Eq "$regex"; then
   echo "Invalid commit message format."
   echo "Use: <TYPE>(<scope>): <subject>"
+  echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD"
+  echo "Extended types: PERF, CI, OPS, REVERT, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
   echo "Example: FIX(ci): ensure latest GitHub CLI binary is used"
+  echo "Example: PERF(auth): optimize JWT token validation"
+  echo "Example: CLEANUP(deps): remove unused dependencies"
   exit 1
 fi

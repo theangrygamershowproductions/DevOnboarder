@@ -66,6 +66,8 @@ PROHIBITED_DIRS=$(find "$PROJECT_ROOT" -type d -name "*log*" \
     -not -path "$PROJECT_ROOT/node_modules/*" \
     -not -path "$PROJECT_ROOT/*/node_modules/*" \
     -not -path "$PROJECT_ROOT/.mypy_cache/*" \
+    -not -path "$PROJECT_ROOT/logs/.mypy_cache/*" \
+    -not -path "$PROJECT_ROOT/*/.mypy_cache/*" \
     -not -path "$PROJECT_ROOT/.codex/logs" \
     2>/dev/null || true)
 

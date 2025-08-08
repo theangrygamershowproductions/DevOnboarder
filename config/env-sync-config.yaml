@@ -1,0 +1,152 @@
+# =============================================================================
+# File: config/env-sync-config.yaml
+# Purpose: Configuration for environment variable synchronization
+# =============================================================================
+
+# Environment synchronization configuration
+sync_config:
+  # Source of truth file (all others sync from this)
+  source_file: ".env"
+
+  # Target files to synchronize to
+  target_files:
+    - ".env.dev"
+    - ".env.prod"
+    - ".env.ci"
+
+  # Variables that should be synchronized across ALL environments
+  synchronized_variables:
+    # Tunnel URLs (single domain architecture)
+    - "DEV_TUNNEL_AUTH_URL"
+    - "DEV_TUNNEL_API_URL"
+    - "DEV_TUNNEL_APP_URL"
+    - "DEV_TUNNEL_DISCORD_URL"
+    - "DEV_TUNNEL_DASHBOARD_URL"
+
+    # Frontend configuration
+    - "VITE_AUTH_URL"
+    - "VITE_API_URL"
+    - "VITE_FEEDBACK_URL"
+    - "VITE_DISCORD_INTEGRATION_URL"
+    - "VITE_DASHBOARD_URL"
+    - "VITE_DISCORD_CLIENT_ID"
+
+    # Backend service URLs
+    - "API_BASE_URL"
+    - "AUTH_URL"
+    - "DISCORD_REDIRECT_URI"
+
+    # CORS configuration
+    - "CORS_ALLOW_ORIGINS"
+
+    # Authentication configuration
+    - "TOKEN_EXPIRE_SECONDS"
+
+    # Tunnel configuration
+    - "TUNNEL_ID"
+    - "TUNNEL_TOKEN"
+    - "CF_DNS_API_TOKEN"
+
+    # Vite host configuration
+    - "VITE_ALLOWED_HOST_DEV"
+    - "VITE_ALLOWED_HOST_PROD"
+
+    # Discord configuration that should be consistent
+    - "DISCORD_CLIENT_ID"
+    - "DISCORD_PUBLIC_KEY"
+    - "DISCORD_GUILD_IDS"
+    - "DISCORD_DEV_GUILD_ID"
+    - "DISCORD_PROD_GUILD_ID"
+
+    # Service ports (for consistent development)
+    - "AUTH_PORT"
+    - "BACKEND_PORT"
+    - "FRONTEND_PORT"
+
+  # Variables that should remain environment-specific (never synchronized)
+  environment_specific_variables:
+    # Security tokens (should be different per environment)
+    - "JWT_SECRET_KEY"
+    - "AUTH_SECRET_KEY"
+    - "DISCORD_BOT_TOKEN"
+    - "DISCORD_CLIENT_SECRET"
+    - "BOT_JWT"
+
+    # Environment indicators
+    - "APP_ENV"
+    - "NODE_ENV"
+    - "PYTHON_ENV"
+    - "CI"
+    - "DEBUG"
+
+    # Database URLs (should be environment-specific)
+    - "DATABASE_URL"
+    - "REDIS_URL"
+
+    # Feature flags (may vary by environment)
+    - "IS_ALPHA_USER"
+    - "IS_FOUNDER"
+    - "TAGS_MODE"
+
+    # CI-specific variables
+    - "GH_TOKEN"
+    - "CI_BOT_TOKEN"
+    - "CI_ISSUE_AUTOMATION_TOKEN"
+    - "NPM_TOKEN"
+
+    # Development-specific overrides
+    - "INIT_DB_ON_STARTUP"
+    - "OFFLINE_BADGE"
+
+  # CI-specific exclusions (variables that CI should keep as localhost)
+  ci_specific_exclusions:
+    - "DEV_TUNNEL_AUTH_URL"      # CI uses localhost:8002
+    - "DEV_TUNNEL_API_URL"       # CI uses localhost:8001
+    - "DEV_TUNNEL_APP_URL"       # CI uses localhost:8081
+    - "DEV_TUNNEL_DISCORD_URL"   # CI uses localhost:8081
+    - "DEV_TUNNEL_DASHBOARD_URL" # CI uses localhost:8003
+    - "AUTH_URL"                 # CI uses localhost:8002
+    - "API_BASE_URL"             # CI uses localhost:8001
+
+  # Validation rules
+  validation:
+    # Variables that must exist in source
+    required_variables:
+      - "VITE_AUTH_URL"
+      - "VITE_API_URL"
+      - "CORS_ALLOW_ORIGINS"
+      - "TUNNEL_ID"
+      - "DEV_TUNNEL_AUTH_URL"
+
+    # Variables that must use single domain format (not .dev. subdomains)
+    single_domain_format:
+      - "VITE_AUTH_URL"
+      - "VITE_API_URL"
+      - "DEV_TUNNEL_AUTH_URL"
+      - "DEV_TUNNEL_API_URL"
+      - "DEV_TUNNEL_DISCORD_URL"
+      - "DEV_TUNNEL_DASHBOARD_URL"
+      - "API_BASE_URL"
+      - "AUTH_URL"
+      - "DISCORD_REDIRECT_URI"
+
+    # Expected domain patterns
+    expected_domains:
+      - "theangrygamershow.com"      # Base domain
+      - "dev.theangrygamershow.com"  # Main app
+      - "auth.theangrygamershow.com" # Auth service
+      - "api.theangrygamershow.com"  # API service
+      - "discord.theangrygamershow.com" # Discord integration
+      - "dashboard.theangrygamershow.com" # Dashboard service
+
+# Pre-commit hook integration
+pre_commit:
+  enabled: true
+  validate_on_commit: true
+  auto_sync_on_change: false  # Set to true for automatic sync
+
+# Git integration
+git_integration:
+  track_changes: true
+  backup_before_sync: true
+  commit_message_template: "CHORE(env): sync environment variables from .env source of truth"

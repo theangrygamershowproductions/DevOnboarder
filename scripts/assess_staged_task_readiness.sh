@@ -91,7 +91,7 @@ assess_category() {
             max_score=$((max_score + 1))
 
             # Check active processes
-            active_tasks=$(pgrep -c -E "(npm|python|docker)" || echo "0")
+            active_tasks=$(pgrep -c "(npm|python|docker)" || echo "0")
             if [[ $active_tasks -lt 10 ]]; then
                 echo "  Process Load: LIGHT ($active_tasks processes) (2 points)"
                 score=$((score + 2))

@@ -11,14 +11,25 @@ export default function Login() {
     const [user, setUser] = useState<UserInfo | null>(null);
     const [level, setLevel] = useState<number | null>(null);
     const [status, setStatus] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const authUrl = import.meta.env.VITE_AUTH_URL;
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
+        const tokenParam = params.get("token");
         const stored = localStorage.getItem("jwt");
         const path = window.location.pathname;
 
+        // Handle direct token return from auth service
+        if (!stored && path === "/login/discord/callback" && tokenParam) {
+            localStorage.setItem("jwt", tokenParam);
+            setToken(tokenParam);
+            window.history.replaceState({}, "", "/");
+            return;
+        }
+
+        // Handle Discord OAuth code callback
         if (!stored && path === "/login/discord/callback" && code) {
             fetch(`${authUrl}/login/discord/callback?code=${code}`)
                 .then((r) => r.json())
@@ -27,7 +38,9 @@ export default function Login() {
                     setToken(data.token);
                     window.history.replaceState({}, "", "/");
                 })
-                .catch(console.error);
+                .catch((error) => {
+                    console.error("Failed to fetch user info:", error);
+                });
         } else if (stored) {
             setToken(stored);
         }
@@ -35,26 +48,41 @@ export default function Login() {
 
     useEffect(() => {
         if (!token) return;
+
+        setLoading(true);
         const headers = { Authorization: `Bearer ${token}` };
 
-        fetch(`${authUrl}/api/user`, { headers })
-            .then((r) => r.json())
-            .then(setUser)
-            .catch(console.error);
-
-        fetch(`${authUrl}/api/user/level`, { headers })
-            .then((r) => r.json())
-            .then((d) => setLevel(d.level))
-            .catch(console.error);
-
-        fetch(`${authUrl}/api/user/onboarding-status`, { headers })
-            .then((r) => r.json())
-            .then((d) => setStatus(d.status))
-            .catch(console.error);
+        Promise.all([
+            fetch(`${authUrl}/api/user`, { headers }).then((r) => r.json()),
+            fetch(`${authUrl}/api/user/level`, { headers }).then((r) => r.json()),
+            fetch(`${authUrl}/api/user/onboarding-status`, { headers }).then((r) => r.json())
+        ])
+        .then(([userData, levelData, statusData]) => {
+            setUser(userData);
+            setLevel(levelData.level);
+            setStatus(statusData.status);
+        })
+        .catch(() => {
+            // Clear token if API calls fail (invalid token)
+            localStorage.removeItem("jwt");
+            setToken(null);
+            setUser(null);
+            setLevel(null);
+            setStatus(null);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
     }, [token, authUrl]);
 
     if (!token) {
-        return <a href={`${authUrl}/login/discord`}>Log in with Discord</a>;
+        const callbackUrl = `${window.location.origin}/login/discord/callback`;
+        const loginUrl = `${authUrl}/login/discord?redirect_to=${encodeURIComponent(callbackUrl)}`;
+        return <a href={loginUrl}>Log in with Discord</a>;
+    }
+
+    if (loading) {
+        return <div>Loading dashboard...</div>;
     }
 
     return (
