@@ -21,11 +21,12 @@ export default function Login() {
         const stored = localStorage.getItem("jwt");
         const path = window.location.pathname;
 
-        // Handle direct token return from auth service
-        if (!stored && path === "/login/discord/callback" && tokenParam) {
+        // Handle direct token return from auth service (any path)
+        if (!stored && tokenParam) {
             localStorage.setItem("jwt", tokenParam);
             setToken(tokenParam);
-            window.history.replaceState({}, "", "/");
+            // Clear token from URL and redirect to dashboard
+            window.history.replaceState({}, "", "/dashboard");
             return;
         }
 
@@ -36,9 +37,10 @@ export default function Login() {
                 .then((data) => {
                     localStorage.setItem("jwt", data.token);
                     setToken(data.token);
-                    window.history.replaceState({}, "", "/");
+                    window.history.replaceState({}, "", "/dashboard");
                 })
                 .catch((error) => {
+                    // eslint-disable-next-line no-console
                     console.error("Failed to fetch user info:", error);
                 });
         } else if (stored) {

@@ -17,10 +17,10 @@ export default function PublicLandingPage() {
 
     useEffect(() => {
         const serviceEndpoints = [
-            { name: "Authentication Service", endpoint: "https://auth.theangrygamershow.com/health" },
-            { name: "API Backend", endpoint: "https://api.theangrygamershow.com/health" },
-            { name: "Discord Integration", endpoint: "https://discord.theangrygamershow.com/health" },
-            { name: "Dashboard Service", endpoint: "https://dashboard.theangrygamershow.com/health" }
+            { name: "Authentication Service", endpoint: `${import.meta.env.VITE_AUTH_URL}/health` },
+            { name: "API Backend", endpoint: `${import.meta.env.VITE_API_URL}/health` },
+            { name: "Discord Integration", endpoint: `${import.meta.env.VITE_DISCORD_INTEGRATION_URL}/health` },
+            { name: "Dashboard Service", endpoint: `${import.meta.env.VITE_DASHBOARD_URL}/health` }
         ];
 
         const checkServiceHealth = async () => {

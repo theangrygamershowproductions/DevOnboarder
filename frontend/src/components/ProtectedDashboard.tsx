@@ -3,6 +3,7 @@ import Login from "./Login";
 import FeedbackForm from "./FeedbackForm";
 import FeedbackStatusBoard from "./FeedbackStatusBoard";
 import FeedbackAnalytics from "./FeedbackAnalytics";
+import AARForm from "./AARForm";
 
 interface User {
     username: string;
@@ -13,6 +14,7 @@ interface User {
 export default function ProtectedDashboard() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showAARForm, setShowAARForm] = useState(false);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -146,6 +148,31 @@ export default function ProtectedDashboard() {
                         )}
                     </div>
 
+                    {/* AAR Management */}
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-4">After Action Reports</h2>
+                        {hasPermission(["MODERATOR", "ADMINISTRATOR", "OWNER"]) ? (
+                            <div className="space-y-4">
+                                <p className="text-sm text-gray-600">
+                                    Create comprehensive project documentation and lessons learned reports.
+                                </p>
+                                <button
+                                    onClick={() => setShowAARForm(true)}
+                                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+                                >
+                                    Create New AAR
+                                </button>
+                                <div className="text-xs text-gray-500 mt-2">
+                                    Document project outcomes, track lessons learned, and create follow-up action items
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-center py-8 text-gray-500">
+                                <p>You need Moderator or higher privileges to create AARs.</p>
+                            </div>
+                        )}
+                    </div>
+
                     {/* CI Dashboard */}
                     {hasPermission(["OWNER"]) && (
                         <div className="bg-white rounded-lg shadow-lg p-6 xl:col-span-1 lg:col-span-2">
@@ -213,6 +240,23 @@ export default function ProtectedDashboard() {
                     </div>
                 </div>
             </main>
+
+            {/* AAR Form Modal */}
+            {showAARForm && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div className="relative top-4 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
+                        <AARForm
+                            onSubmit={async (_data) => {
+                                // Handle AAR submission
+                                // TODO: Integrate with DevOnboarder AAR system
+                                // For now, just close the modal
+                                setShowAARForm(false);
+                            }}
+                            onCancel={() => setShowAARForm(false)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
