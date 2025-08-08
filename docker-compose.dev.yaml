@@ -27,7 +27,9 @@ services:
       - 80
       - 443
     networks:
-      - devonboarder_network
+      - edge_tier
+      - api_tier  # Connect to API services for routing
+      - auth_tier # Connect to auth services for routing
     labels:
       - "traefik.enable=false"
 
@@ -47,7 +49,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - devonboarder_network
+      - data_tier
+      - auth_tier  # Allow auth services to access database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U devuser -d devonboarder_dev"]
       interval: 10s
@@ -77,7 +80,8 @@ services:
       - ./logs:/app/logs
       - ./.env.dev:/app/.env.dev:ro
     networks:
-      - devonboarder_network
+      - auth_tier
+      - data_tier  # Access to database
     command: ["devonboarder-auth"]
     expose:
       - 8002
@@ -95,7 +99,19 @@ services:
       - "traefik.http.routers.auth-host.service=auth-dev"
       - "traefik.http.routers.auth-host.middlewares=cors-header@file"
       - "traefik.http.routers.auth-host.priority=200"
-      # Path-based routing (legacy)
+      # Path-based routing for /login routes (OAuth flow) - HIGH PRIORITY
+      - "traefik.http.routers.auth-login.rule=PathPrefix(`/login`)"
+      - "traefik.http.routers.auth-login.entrypoints=web"
+      - "traefik.http.routers.auth-login.service=auth-dev"
+      - "traefik.http.routers.auth-login.middlewares=cors-header@file"
+      - "traefik.http.routers.auth-login.priority=200"
+      # Path-based routing for /api routes (API endpoints) - HIGH PRIORITY
+      - "traefik.http.routers.auth-api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.auth-api.entrypoints=web"
+      - "traefik.http.routers.auth-api.service=auth-dev"
+      - "traefik.http.routers.auth-api.middlewares=cors-header@file"
+      - "traefik.http.routers.auth-api.priority=180"
+      # Path-based routing for /auth routes (legacy) - MEDIUM PRIORITY
       - "traefik.http.routers.auth-dev.rule=PathPrefix(`/auth`)"
       - "traefik.http.routers.auth-dev.entrypoints=web"
       - "traefik.http.services.auth-dev.loadbalancer.server.port=8002"
@@ -124,7 +140,8 @@ services:
       - ./logs:/app/logs
       - ./.env.dev:/app/.env.dev:ro
     networks:
-      - devonboarder_network
+      - api_tier
+      - auth_tier  # Access to auth services
     command: ["devonboarder-api"]
     expose:
       - 8001
@@ -171,7 +188,8 @@ services:
       - ./logs:/app/logs
       - ./.env.dev:/app/.env.dev:ro
     networks:
-      - devonboarder_network
+      - api_tier
+      - auth_tier  # Access to auth services
     command: ["devonboarder-integration"]
     expose:
       - 8081
@@ -222,7 +240,8 @@ services:
       - ./logs/bot:/app/logs
       - ./.env.dev:/app/.env:ro
     networks:
-      - devonboarder_network
+      - api_tier
+      - auth_tier  # Access to auth services
     command: npm run dev
     expose:
       - 8080
@@ -254,7 +273,9 @@ services:
       - ./frontend/vite.config.ts:/app/vite.config.ts
       - ./.env.dev:/app/.env.dev:ro
     networks:
-      - devonboarder_network
+      - edge_tier
+      - api_tier   # Access to API services
+      - auth_tier  # Access to auth services
     command: npm run dev -- --host 0.0.0.0
     expose:
       - 3000
@@ -272,12 +293,12 @@ services:
       - "traefik.http.routers.frontend-host.service=frontend-dev"
       - "traefik.http.routers.frontend-host.middlewares=cors-header@file"
       - "traefik.http.routers.frontend-host.priority=200"
-      # Path-based routing (legacy/local)
+      # Path-based routing (legacy/local) - HIGH priority for SPA routing
       - "traefik.http.routers.frontend-dev.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend-dev.entrypoints=web"
       - "traefik.http.services.frontend-dev.loadbalancer.server.port=3000"
       - "traefik.http.routers.frontend-dev.middlewares=cors-header@file"
-      - "traefik.http.routers.frontend-dev.priority=1"
+      - "traefik.http.routers.frontend-dev.priority=50"
 
   # Dashboard Service (Port 8003)
   dashboard-service:
@@ -304,7 +325,8 @@ services:
       - ./logs:/app/logs
       - ./.env.dev:/app/.env.dev:ro
     networks:
-      - devonboarder_network
+      - api_tier
+      - auth_tier  # Access to auth services
     command: ["python", "-m", "devonboarder.dashboard_service"]
     expose:
       - 8003
@@ -322,13 +344,13 @@ services:
       - "traefik.http.routers.dashboard-host.service=dashboard-dev"
       - "traefik.http.routers.dashboard-host.middlewares=cors-header@file"
       - "traefik.http.routers.dashboard-host.priority=200"
-      # Path-based routing (legacy)
-      - "traefik.http.routers.dashboard-dev.rule=PathPrefix(`/dashboard`)"
-      - "traefik.http.routers.dashboard-dev.entrypoints=web"
+      # Disable path-based routing to avoid conflicts with frontend
+      # - "traefik.http.routers.dashboard-dev.rule=PathPrefix(`/api/dashboard-service`)"
+      # - "traefik.http.routers.dashboard-dev.entrypoints=web"
       - "traefik.http.services.dashboard-dev.loadbalancer.server.port=8003"
       - "traefik.http.services.dashboard-dev.loadbalancer.server.url=http://dashboard-service:8003"
-      - "traefik.http.routers.dashboard-dev.middlewares=stripprefix-dashboard@file,cors-header@file"
-      - "traefik.http.routers.dashboard-dev.priority=100"
+      # - "traefik.http.routers.dashboard-dev.middlewares=stripprefix-dashboard-service@file,cors-header@file"
+      # - "traefik.http.routers.dashboard-dev.priority=150"
 
   # Cloudflare Tunnel - Multi-Subdomain Configuration
   cloudflare-tunnel:
@@ -356,7 +378,9 @@ services:
     labels:
       - "traefik.enable=false"
     networks:
-      - devonboarder_network
+      - edge_tier
+      - api_tier   # Access to API services for tunnel routing
+      - auth_tier  # Access to auth services for tunnel routing
     profiles:
       - tunnel  # Only start with --profile tunnel
     healthcheck:
@@ -365,6 +389,59 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+
+  # AAR UI Service
+  aar-ui:
+    build:
+      context: .
+      dockerfile: app/aar-ui/Dockerfile
+    image: devonboarder/aar-ui:dev
+    container_name: devonboarder-aar-ui-dev
+    hostname: aar-ui.devonboarder.local
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - AAR_UI_PORT=3000
+      - CORS_ORIGINS=https://aar.theangrygamershow.com,http://localhost:5174
+    networks:
+      - edge_tier
+      - api_tier  # Access to other API services if needed
+    volumes:
+      - ./docs/AAR:/app/docs/AAR
+      - ./logs:/app/logs
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=devonboarder_edge_tier"
+
+      # Main AAR UI routing
+      - "traefik.http.routers.aar-ui.rule=Host(`aar.theangrygamershow.com`)"
+      - "traefik.http.routers.aar-ui.entrypoints=websecure"
+      - "traefik.http.routers.aar-ui.tls=true"
+      - "traefik.http.routers.aar-ui.service=aar-ui"
+
+      # Service configuration
+      - "traefik.http.services.aar-ui.loadbalancer.server.port=3000"
+      - "traefik.http.services.aar-ui.loadbalancer.healthcheck.path=/api/health"
+      - "traefik.http.services.aar-ui.loadbalancer.healthcheck.interval=30s"
+
+      # Optional: redirect www to apex
+      - "traefik.http.routers.aar-ui-www.rule=Host(`www.aar.theangrygamershow.com`)"
+      - "traefik.http.routers.aar-ui-www.middlewares=www-to-apex"
+      - "traefik.http.routers.aar-ui-www.entrypoints=websecure"
+      - "traefik.http.routers.aar-ui-www.tls=true"
+
+      # Middleware for www redirect
+      - "traefik.http.middlewares.www-to-apex.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.www-to-apex.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.www-to-apex.redirectregex.permanent=true"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   # Debug Tools
   debug-tools:
@@ -376,7 +453,10 @@ services:
     labels:
       - "traefik.enable=false"
     networks:
-      - devonboarder_network
+      - edge_tier
+      - api_tier
+      - auth_tier
+      - data_tier  # Debug access to all tiers for troubleshooting
     profiles:
       - debug  # Only start with --profile debug
 
@@ -385,6 +465,40 @@ volumes:
     name: devonboarder_postgres_data
 
 networks:
+  # Docker Service Mesh Phase 1: Tiered Network Architecture
+  auth_tier:
+    name: devonboarder_auth_tier
+    driver: bridge
+    labels:
+      - "devonboarder.network.tier=auth"
+      - "devonboarder.network.phase=1"
+      - "devonboarder.network.purpose=authentication-authorization"
+
+  api_tier:
+    name: devonboarder_api_tier
+    driver: bridge
+    labels:
+      - "devonboarder.network.tier=api"
+      - "devonboarder.network.phase=1"
+      - "devonboarder.network.purpose=business-logic-services"
+
+  data_tier:
+    name: devonboarder_data_tier
+    driver: bridge
+    labels:
+      - "devonboarder.network.tier=data"
+      - "devonboarder.network.phase=1"
+      - "devonboarder.network.purpose=data-persistence"
+
+  edge_tier:
+    name: devonboarder_edge_tier
+    driver: bridge
+    labels:
+      - "devonboarder.network.tier=edge"
+      - "devonboarder.network.phase=1"
+      - "devonboarder.network.purpose=external-access"
+
+  # Legacy network for backwards compatibility (Phase 1 transition)
   devonboarder_network:
     name: devonboarder_network
     driver: bridge
