@@ -1,0 +1,287 @@
+name: Bot AAR Issue Form Processor
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-aar-submission:
+    if: contains(github.event.issue.labels.*.name, 'aar')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Parse issue form data
+        id: parse-issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body;
+
+            // Parse GitHub issue form data
+            const parseField = (label) => {
+              const regex = new RegExp(`### ${label}\\s*\\n\\s*([\\s\\S]*?)(?=\\n### |$)`, 'i');
+              const match = body.match(regex);
+              return match ? match[1].trim() : '';
+            };
+
+            const parseList = (text) => {
+              return text.split('\n')
+                .map(line => line.trim())
+                .filter(line => line && !line.startsWith('_No response_'));
+            };
+
+            const parseTable = (text) => {
+              return text.split('\n')
+                .map(line => line.trim())
+                .filter(line => line && !line.startsWith('_No response_'))
+                .map(line => {
+                  const parts = line.split(' | ').map(p => p.trim());
+                  return parts.length >= 3 ? {
+                    name: parts[0],
+                    duration: parts[1],
+                    status: parts[2],
+                    description: parts[3] || parts[0]
+                  } : null;
+                })
+                .filter(item => item);
+            };
+
+            const aarData = {
+              schema_version: "1.0.0",
+              title: parseField("Initiative Title"),
+              date: parseField("Completion Date"),
+              type: parseField("Initiative Type"),
+              priority: parseField("Priority Level"),
+              participants: parseList(parseField("Participants")),
+              executive_summary: {
+                problem: parseField("Problem Statement"),
+                solution: parseField("Solution Approach"),
+                outcome: parseField("Outcome and Impact")
+              }
+            };
+
+            // Parse optional sections
+            const phases = parseTable(parseField("Project Phases"));
+            if (phases.length > 0) {
+              aarData.phases = phases;
+            }
+
+            const successMetrics = parseList(parseField("Success Metrics"));
+            const challengesOvercome = parseList(parseField("Challenges Overcome"));
+            if (successMetrics.length > 0 || challengesOvercome.length > 0) {
+              aarData.outcomes = {
+                success_metrics: successMetrics,
+                challenges_overcome: challengesOvercome
+              };
+            }
+
+            const actionItems = parseTable(parseField("Follow-up Action Items"));
+            if (actionItems.length > 0) {
+              aarData.follow_up = {
+                action_items: actionItems.map(item => ({
+                  task: item.name,
+                  owner: item.duration, // Second column is owner
+                  due_date: item.status, // Third column is due date
+                  status: item.description || "Not Started"
+                }))
+              };
+            }
+
+            const lessonsLearned = parseList(parseField("Lessons Learned"));
+            if (lessonsLearned.length > 0) {
+              aarData.lessons_learned = lessonsLearned;
+            }
+
+            const references = parseTable(parseField("Reference Links"));
+            if (references.length > 0) {
+              aarData.references = references.map(ref => ({
+                title: ref.name,
+                url: ref.duration, // Second column is URL
+                type: ref.status || "external" // Third column is type
+              }));
+            }
+
+            // Generate filename
+            const sanitizedTitle = aarData.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '');
+            const filename = `${aarData.date}_${sanitizedTitle}.aar.json`;
+
+            return {
+              aarData: aarData,
+              filename: filename
+            };
+
+      - name: Validate AAR data
+        id: validate
+        run: |
+          # Create temporary file with parsed data
+          echo '${{ steps.parse-issue.outputs.result }}' > temp_aar.json
+          PARSED_DATA=$(cat temp_aar.json | jq -r '.aarData')
+          printf "%s\n" "$PARSED_DATA" > validation_temp.json
+
+          # Validate against schema
+          if npm run aar:validate validation_temp.json; then
+            echo "validation_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "validation_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+          rm -f temp_aar.json validation_temp.json
+
+      - name: Create AAR files
+        if: steps.validate.outputs.validation_passed == 'true'
+        id: create-files
+        run: |
+          # Parse the result and extract data
+          RESULT='${{ steps.parse-issue.outputs.result }}'
+          FILENAME=$(echo "$RESULT" | jq -r '.filename')
+          AAR_DATA=$(echo "$RESULT" | jq -r '.aarData')
+
+          # Create AAR data file
+          printf "%s\n" "$AAR_DATA" > "docs/AAR/data/$FILENAME"
+
+          # Generate markdown report
+          npm run aar:render "docs/AAR/data/$FILENAME" docs/AAR/reports
+
+          # Set outputs for PR
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+          echo "data_file=docs/AAR/data/$FILENAME" >> $GITHUB_OUTPUT
+          echo "report_file=docs/AAR/reports/${FILENAME%.aar.json}.md" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.validate.outputs.validation_passed == 'true'
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "DOCS(aar): add automated AAR from issue #${{ github.event.issue.number }}"
+          title: "AAR: ${{ fromJson(steps.parse-issue.outputs.result).aarData.title }}"
+          body: |
+            ## After Action Report Generated from Issue
+
+            This AAR was automatically generated from issue #${{ github.event.issue.number }}.
+
+            ### Files Created
+            - **Data**: `${{ steps.create-files.outputs.data_file }}`
+            - **Report**: `${{ steps.create-files.outputs.report_file }}`
+
+            ### Validation Status
+            - Schema validation passed
+            - Markdown generation successful
+            - DevOnboarder compliance verified
+
+            ### Review Checklist
+            - [ ] AAR content is accurate and complete
+            - [ ] Sensitive information has been removed
+            - [ ] Follow-up actions are properly assigned
+            - [ ] Documentation links are accessible
+
+            ---
+            **Source Issue**: #${{ github.event.issue.number }}
+            **Generated by**: DevOnboarder AAR automation
+            **Schema Version**: 1.0.0
+          branch: aar/issue-${{ github.event.issue.number }}
+          delete-branch: true
+
+      - name: Update issue with success
+        if: steps.validate.outputs.validation_passed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.create-pr.outputs.pull-request-number }};
+            const filename = '${{ steps.create-files.outputs.filename }}';
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## Success AAR Successfully Processed
+
+            Your After Action Report has been automatically generated and is ready for review.
+
+            ### Generated Files
+            - **Data File**: \`docs/AAR/data/${filename}\`
+            - **Markdown Report**: \`docs/AAR/reports/${filename.replace('.aar.json', '.md')}\`
+
+            ### Next Steps
+            1. **Review**: Check the generated content in PR #${prNumber}
+            2. **Approve**: Approve the PR if the content is accurate
+            3. **Merge**: The AAR will be added to the documentation
+
+            ### Links
+            - **Pull Request**: #${prNumber}
+            - **AAR Documentation**: [AAR System Guide](../docs/AAR/README.md)
+
+            The issue will be automatically closed when the PR is merged.
+
+            ---
+            *Generated by DevOnboarder AAR automation system*`
+            });
+
+            // Add labels
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['aar-processed', 'automation-success']
+            });
+
+      - name: Handle validation failure
+        if: steps.validate.outputs.validation_passed == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## FAILED AAR Validation Failed
+
+            The submitted AAR data could not be processed due to validation errors.
+
+            ### Common Issues
+            - **Missing required fields**: Ensure all required fields are completed
+            - **Invalid date format**: Use YYYY-MM-DD format for dates
+            - **Invalid field values**: Check that dropdowns match exactly
+
+            ### Next Steps
+            1. **Review**: Check the form data for completeness
+            2. **Edit**: Update the issue description with corrected information
+            3. **Reprocess**: Add the \`aar-reprocess\` label to try again
+
+            ### Getting Help
+            - [AAR Documentation](../docs/AAR/README.md)
+            - Contact @platform-team for assistance
+
+            ---
+            *DevOnboarder AAR automation system*`
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['aar-validation-failed', 'needs-correction']
+            });

@@ -51,12 +51,12 @@ jobs:
                   GH_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
               run: |
                   OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
-                  cat > body.md <<'BODY'
-                  The following action items remain open:
-
-                  ${{ steps.check.outputs.unresolved_actions }}
-
-                  CC: $OWNERS
-                  BODY
+                  {
+                    echo "The following action items remain open:"
+                    echo ""
+                    echo "${{ steps.check.outputs.unresolved_actions }}"
+                    echo ""
+                    printf "CC: %s\n" "$OWNERS"
+                  } > body.md
                   jq -Rs --arg title "Unresolved Retrospective Action Items" '{title:$title,body:.}' body.md > notify.json
                   gh workflow run notify.yml -f data="$(cat notify.json)"

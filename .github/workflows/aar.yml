@@ -1,0 +1,214 @@
+name: AAR System Validation
+
+on:
+  push:
+    paths:
+      - 'docs/AAR/**'
+      - 'scripts/render_aar.js'
+      - '.github/workflows/aar.yml'
+  pull_request:
+    paths:
+      - 'docs/AAR/**'
+      - 'scripts/render_aar.js'
+      - '.github/workflows/aar.yml'
+  workflow_dispatch:
+    inputs:
+      validate_all:
+        description: 'Validate all AAR data files'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  validate-aar-system:
+    name: Validate AAR System
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+            bot/package-lock.json
+
+      - name: Install Node.js dependencies for AAR system
+        run: |
+          echo "Installing AAR system dependencies..."
+          npm install handlebars ajv ajv-formats
+
+      - name: Validate JSON Schema
+        run: |
+          echo "Validating AAR JSON Schema..."
+          node -e "
+            const schema = require('./docs/AAR/schema/aar.schema.json');
+            const Ajv = require('ajv');
+            const ajv = new Ajv();
+            try {
+              ajv.compile(schema);
+              console.log('Success: AAR schema is valid');
+            } catch (error) {
+              console.error('FAILED: AAR schema validation failed:', error.message);
+              process.exit(1);
+            }
+          "
+
+      - name: Validate Handlebars template
+        run: |
+          echo "Validating Handlebars template..."
+          node -e "
+            const fs = require('fs');
+            const Handlebars = require('handlebars');
+            try {
+              const template = fs.readFileSync('docs/AAR/templates/aar.hbs', 'utf8');
+              Handlebars.compile(template);
+              console.log('Success: Handlebars template is valid');
+            } catch (error) {
+              console.error('FAILED: Handlebars template validation failed:', error.message);
+              process.exit(1);
+            }
+          "
+
+      - name: Find AAR data files
+        id: find_data
+        run: |
+          echo "Finding AAR data files..."
+          if [ -d "docs/AAR/data" ]; then
+            FILES=$(find docs/AAR/data -name "*.aar.json" -type f || echo "")
+            if [ -n "$FILES" ]; then
+              echo "Found AAR data files:"
+              printf "%s\n" "$FILES" | while read -r file; do
+                echo "  - $file"
+              done
+              {
+                echo "aar_files<<EOF"
+                printf "%s\n" "$FILES"
+                echo "EOF"
+              } >> $GITHUB_OUTPUT
+              echo "has_files=true" >> $GITHUB_OUTPUT
+            else
+              echo "No AAR data files found"
+              echo "has_files=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "AAR data directory does not exist"
+            echo "has_files=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate AAR data files
+        if: steps.find_data.outputs.has_files == 'true'
+        run: |
+          echo "Validating AAR data files..."
+          echo "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
+            if [ -n "$file" ]; then
+              echo "Validating: $file"
+              node -e "
+                const { loadAndValidateAAR } = require('./scripts/render_aar.js');
+                try {
+                  loadAndValidateAAR('$file');
+                  console.log('Success: $file is valid');
+                } catch (error) {
+                  console.error('FAILED: $file validation failed:', error.message);
+                  process.exit(1);
+                }
+              "
+            fi
+          done
+
+      - name: Test AAR rendering
+        if: steps.find_data.outputs.has_files == 'true'
+        run: |
+          echo "Testing AAR rendering..."
+          mkdir -p test-output
+          echo "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
+            if [ -n "$file" ]; then
+              echo "Rendering: $file"
+              node scripts/render_aar.js "$file" test-output
+            fi
+          done
+
+      - name: Validate generated markdown
+        if: steps.find_data.outputs.has_files == 'true'
+        run: |
+          echo "Validating generated markdown..."
+          if [ -d "test-output" ] && [ "$(ls -A test-output)" ]; then
+            echo "Generated files:"
+            ls -la test-output/
+
+            # Check for markdown compliance using markdownlint
+            if command -v markdownlint >/dev/null 2>&1; then
+              echo "Running markdownlint validation..."
+              markdownlint test-output/*.md || {
+                echo "FAILED: Generated markdown does not pass linting"
+                exit 1
+              }
+              echo "Success: Generated markdown passes linting"
+            else
+              echo "markdownlint not available, skipping lint validation"
+            fi
+          else
+            echo "No markdown files generated to validate"
+          fi
+
+      - name: Upload artifacts
+        if: steps.find_data.outputs.has_files == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-aar-reports
+          path: test-output/
+          retention-days: 7
+
+      - name: AAR System Health Check
+        run: |
+          echo "=== AAR System Health Check ==="
+
+          # Schema check
+          if [ -f docs/AAR/schema/aar.schema.json ]; then
+            echo "Schema: Success: Present"
+          else
+            echo "Schema: Success: Missing"
+          fi
+
+          # Template check
+          if [ -f docs/AAR/templates/aar.hbs ]; then
+            echo "Template: Success: Present"
+          else
+            echo "Template: Success: Missing"
+          fi
+
+          # Renderer check
+          if [ -f scripts/render_aar.js ]; then
+            echo "Renderer: Success: Present"
+          else
+            echo "Renderer: Success: Missing"
+          fi
+
+          # Data directory check
+          if [ -d docs/AAR/data ]; then
+            echo "Data Directory: Success: Present"
+          else
+            echo "Data Directory: Success: Missing"
+          fi
+
+          # Reports directory check
+          if [ -d docs/AAR/reports ]; then
+            echo "Reports Directory: Success: Present"
+          else
+            echo "Reports Directory: Success: Missing"
+          fi
+
+          if [ "${{ steps.find_data.outputs.has_files }}" = "true" ]; then
+            echo "Data Files: Success: Found AAR data files for validation"
+          else
+            echo "Data Files: Info: No AAR data files found (this is OK for initial setup)"
+          fi
+
+          echo ""
+          echo "Complete: AAR System validation complete!"
+          echo "The schema-driven AAR system is ready for use."

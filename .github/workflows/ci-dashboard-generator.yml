@@ -94,24 +94,24 @@ jobs:
           gh pr list --state open --json number,headRefName > pr_list.json
           echo "PR list retrieved"
 
-          cat > dashboard_comment.md << 'EOF'
-          **CI Dashboard Report Generated**
-
-          A comprehensive troubleshooting dashboard has been generated for this PR.
-
-          **To access:** Download the ci-dashboard-report artifact from this workflow run.
-
-          **Features:** Pattern analysis, health monitoring, failure analysis, script inventory.
-          EOF
+          {
+            echo "**CI Dashboard Report Generated**"
+            echo ""
+            echo "A comprehensive troubleshooting dashboard has been generated for this PR."
+            echo ""
+            echo "**To access:** Download the ci-dashboard-report artifact from this workflow run."
+            echo ""
+            echo "**Features:** Pattern analysis, health monitoring, failure analysis, script inventory."
+          } > dashboard_comment.md
 
           echo "Dashboard comment file created"
 
           if [ -f "./ci-failure-data/ci_failure_issue.txt" ]; then
             echo "CI failure issue found"
-            cat >> dashboard_comment.md << 'EOF'
-
-          **Related CI Issue:** See linked issue for additional failure details.
-          EOF
+            {
+              echo ""
+              echo "**Related CI Issue:** See linked issue for additional failure details."
+            } >> dashboard_comment.md
           fi
 
           echo "Comment processing complete"

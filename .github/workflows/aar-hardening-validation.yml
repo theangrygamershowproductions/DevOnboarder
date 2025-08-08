@@ -289,20 +289,18 @@ jobs:
           echo "Processing: Testing complete AAR workflow..."
 
           # Create test AAR data
-          cat > test_integration.aar.json << 'EOF'
-          {
-            "schema_version": "1.0.0",
-            "title": "Integration Test AAR",
-            "date": "2025-08-08",
-            "type": "Infrastructure",
-            "priority": "Medium",
-            "executive_summary": {
-              "problem": "Testing the complete AAR workflow integration",
-              "solution": "Automated validation and rendering pipeline",
-              "outcome": "Successful end-to-end validation of AAR system"
-            }
-          }
-          EOF
+          echo '{' > test_integration.aar.json
+          echo '  "schema_version": "1.0.0",' >> test_integration.aar.json
+          echo '  "title": "Integration Test AAR",' >> test_integration.aar.json
+          echo '  "date": "2025-08-08",' >> test_integration.aar.json
+          echo '  "type": "Infrastructure",' >> test_integration.aar.json
+          echo '  "priority": "Medium",' >> test_integration.aar.json
+          echo '  "executive_summary": {' >> test_integration.aar.json
+          echo '    "problem": "Testing the complete AAR workflow integration",' >> test_integration.aar.json
+          echo '    "solution": "Automated validation and rendering pipeline",' >> test_integration.aar.json
+          echo '    "outcome": "Successful end-to-end validation of AAR system"' >> test_integration.aar.json
+          echo '  }' >> test_integration.aar.json
+          echo '}' >> test_integration.aar.json
 
           # Validate test data
           echo "Step 1: Validating test data..."
@@ -348,20 +346,18 @@ jobs:
           echo "Tag: Validating provenance tracking..."
 
           # Create test file and check provenance injection
-          cat > test_provenance.aar.json << 'EOF'
-          {
-            "schema_version": "1.0.0",
-            "title": "Provenance Test",
-            "date": "2025-08-08",
-            "type": "Infrastructure",
-            "priority": "Low",
-            "executive_summary": {
-              "problem": "Test provenance tracking",
-              "solution": "Automated metadata injection",
-              "outcome": "Verified provenance information"
-            }
-          }
-          EOF
+          echo '{' > test_provenance.aar.json
+          echo '  "schema_version": "1.0.0",' >> test_provenance.aar.json
+          echo '  "title": "Provenance Test",' >> test_provenance.aar.json
+          echo '  "date": "2025-08-08",' >> test_provenance.aar.json
+          echo '  "type": "Infrastructure",' >> test_provenance.aar.json
+          echo '  "priority": "Low",' >> test_provenance.aar.json
+          echo '  "executive_summary": {' >> test_provenance.aar.json
+          echo '    "problem": "Test provenance tracking",' >> test_provenance.aar.json
+          echo '    "solution": "Automated metadata injection",' >> test_provenance.aar.json
+          echo '    "outcome": "Verified provenance information"' >> test_provenance.aar.json
+          echo '  }' >> test_provenance.aar.json
+          echo '}' >> test_provenance.aar.json
 
           # Render with provenance
           mkdir -p test_provenance_output

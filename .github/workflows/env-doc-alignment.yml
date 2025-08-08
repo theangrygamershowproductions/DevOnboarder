@@ -72,12 +72,12 @@ jobs:
             - name: Create issue
               if: steps.check.outputs.success == 'false'
               run: |
-                  cat > body.md <<'BODY'
-                    ## Missing variables
-                    ${{ steps.vars.outputs.missing }}
-
-                    - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)
-                  BODY
+                  {
+                    echo "## Missing variables"
+                    echo "${{ steps.vars.outputs.missing }}"
+                    echo ""
+                    echo "- [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)"
+                  } > body.md
                   jq -Rs --arg title "Secrets misaligned in docs for ${{ steps.workflow-info.outputs.head_sha }}" '{title:$title,body:.}' body.md > notify.json
                   gh workflow run notify.yml -f data="$(cat notify.json)"
               env:
