@@ -4,7 +4,7 @@ FROM node:22-alpine AS build
 # Build React UI
 WORKDIR /app/ui
 COPY app/aar-ui/package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 COPY app/aar-ui/ ./
 RUN npm run build
 
