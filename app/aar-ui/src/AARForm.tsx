@@ -25,24 +25,44 @@ const AARForm: React.FC<AARFormProps> = ({ onSubmit, initialData }) => {
     name: "phases"
   });
 
-  const { fields: successMetrics, append: addSuccessMetric, remove: removeSuccessMetric } = useFieldArray({
-    control: form.control,
-    name: "outcomes.success_metrics"
-  });
+  // For string arrays, we need to manage them differently since useFieldArray expects objects
+  const successMetrics = form.watch("outcomes.success_metrics") || [];
+  const challenges = form.watch("outcomes.challenges_overcome") || [];
+  const lessonsLearned = form.watch("lessons_learned") || [];
 
-  const { fields: challenges, append: addChallenge, remove: removeChallenge } = useFieldArray({
-    control: form.control,
-    name: "outcomes.challenges_overcome"
-  });
+  const addSuccessMetric = () => {
+    const current = form.getValues("outcomes.success_metrics") || [];
+    form.setValue("outcomes.success_metrics", [...current, ""]);
+  };
+
+  const removeSuccessMetric = (index: number) => {
+    const current = form.getValues("outcomes.success_metrics") || [];
+    form.setValue("outcomes.success_metrics", current.filter((_, i) => i !== index));
+  };
+
+  const addChallenge = () => {
+    const current = form.getValues("outcomes.challenges_overcome") || [];
+    form.setValue("outcomes.challenges_overcome", [...current, ""]);
+  };
+
+  const removeChallenge = (index: number) => {
+    const current = form.getValues("outcomes.challenges_overcome") || [];
+    form.setValue("outcomes.challenges_overcome", current.filter((_, i) => i !== index));
+  };
+
+  const addLesson = () => {
+    const current = form.getValues("lessons_learned") || [];
+    form.setValue("lessons_learned", [...current, ""]);
+  };
+
+  const removeLesson = (index: number) => {
+    const current = form.getValues("lessons_learned") || [];
+    form.setValue("lessons_learned", current.filter((_, i) => i !== index));
+  };
 
   const { fields: actionItems, append: addActionItem, remove: removeActionItem } = useFieldArray({
     control: form.control,
     name: "follow_up.action_items"
-  });
-
-  const { fields: lessonsLearned, append: addLesson, remove: removeLesson } = useFieldArray({
-    control: form.control,
-    name: "lessons_learned"
   });
 
   const { fields: references, append: addReference, remove: removeReference } = useFieldArray({
@@ -280,7 +300,7 @@ const AARForm: React.FC<AARFormProps> = ({ onSubmit, initialData }) => {
               <h3 className="font-medium">Success Metrics</h3>
               <button
                 type="button"
-                onClick={() => addSuccessMetric("")}
+                onClick={addSuccessMetric}
                 className={secondaryButtonClasses}
               >
                 Add Metric
@@ -288,7 +308,7 @@ const AARForm: React.FC<AARFormProps> = ({ onSubmit, initialData }) => {
             </div>
 
             {successMetrics.map((metric, index) => (
-              <div key={metric.id} className="flex gap-2 mb-2">
+              <div key={index} className="flex gap-2 mb-2">
                 <input
                   {...form.register(`outcomes.success_metrics.${index}`)}
                   className={inputClasses}
@@ -310,7 +330,7 @@ const AARForm: React.FC<AARFormProps> = ({ onSubmit, initialData }) => {
               <h3 className="font-medium">Challenges Overcome</h3>
               <button
                 type="button"
-                onClick={() => addChallenge("")}
+                onClick={addChallenge}
                 className={secondaryButtonClasses}
               >
                 Add Challenge
@@ -318,7 +338,7 @@ const AARForm: React.FC<AARFormProps> = ({ onSubmit, initialData }) => {
             </div>
 
             {challenges.map((challenge, index) => (
-              <div key={challenge.id} className="flex gap-2 mb-2">
+              <div key={index} className="flex gap-2 mb-2">
                 <input
                   {...form.register(`outcomes.challenges_overcome.${index}`)}
                   className={inputClasses}
