@@ -1,18 +1,16 @@
 ---
-agent: doc_lint_enforcer
-purpose: Enforce documentation quality standards with zero tolerance for shortcuts
-trigger: on_pull_request, on_push_to_main, manual_validation
-environment: CI, pre-commit
-output: .codex/logs/doc_lint_enforcer.log
+codex-agent:
+    name: Agent.DocLintEnforcer
+    role: Enforce documentation quality standards with zero tolerance for shortcuts
+    scope: documentation validation
+    triggers: on_pull_request, on_push_to_main, manual_validation
+    environment: CI
+    output: .codex/logs/doc_lint_enforcer.log
 permissions:
     - repo:read
     - workflows:write
-    - pull_requests:write
+    - pullrequests:write
     - issues:write
-codex-agent: true
-name: "Documentation Lint Enforcer"
-type: "monitoring"
-description: "Enforces NO_SHORTCUTS_POLICY with blocking validation for markdown, vale, and documentation standards"
 ---
 
 # Documentation Lint Enforcer Agent

@@ -1,18 +1,17 @@
 ---
-agent: ci_enforcement_guard
-purpose: Enforce Codex Enforcement Mode policy with blocking validation for all contributions
-trigger: on_pull_request, on_push_to_main, on_commit
-environment: CI, GitHub Actions
-output: .codex/logs/ci_enforcement_guard.log
+codex-agent:
+    name: Agent.CiEnforcementGuard
+    role: Enforce Codex Enforcement Mode policy with blocking validation for all contributions
+    scope: CI pipeline enforcement
+    triggers: on_pull_request, on_push_to_main, on_commit
+    environment: CI
+    output: .codex/logs/ci_enforcement_guard.log
 permissions:
     - repo:read
     - workflows:write
-    - pull_requests:write
+    - pullrequests:write
     - issues:write
     - contents:read
-codex-agent: true
-name: "CI Enforcement Guard"
-type: "monitoring"
 description: "Blocks all contributions that violate Codex Enforcement Mode policy with zero tolerance for shortcuts"
 codex_scope: "global"
 codex_role: "enforcer"

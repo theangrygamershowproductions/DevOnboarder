@@ -1,9 +1,15 @@
 ---
-codex-agent: true
-name: "schema-driven-aar-system"
-type: "documentation"
-permissions: ["read", "write", "validation"]
-description: "Schema-driven AAR system with JSON validation and automated markdown generation"
+codex-agent:
+    name: Agent.SchemaDrivenAarSystem
+    role: Schema-driven AAR system with JSON validation and automated markdown generation
+    scope: documentation automation
+    triggers: manual, aar_creation_request
+    environment: any
+    output: docs/AAR/reports/
+permissions:
+    - repo:read
+    - content:write
+    - schema:validation
 ---
 
 # Schema-Driven AAR System Agent Documentation
