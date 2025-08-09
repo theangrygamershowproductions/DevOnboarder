@@ -30,8 +30,12 @@ jobs:
           # Check docker-compose files
           for file in docker-compose*.yml docker-compose*.yaml; do
             if [ -f "$file" ]; then
-              echo "Checking $file..."
-              docker-compose -f "$file" config --quiet && echo "Valid: $file" || echo "Issues: $file"
+              printf "Checking %s...\n" "$file"
+              if docker-compose -f "$file" config --quiet; then
+                printf "Valid: %s\n" "$file"
+              else
+                printf "Issues: %s\n" "$file"
+              fi
             fi
           done
 
@@ -43,8 +47,12 @@ jobs:
           for workflow in .github/workflows/*.yml .github/workflows/*.yaml; do
             if [ -f "$workflow" ]; then
               workflow_name=$(basename "$workflow")
-              echo "Checking $workflow_name..."
-              python -c "import yaml; yaml.safe_load(open('$workflow'))" && echo "Valid YAML" || echo "Invalid YAML"
+              printf "Checking %s...\n" "$workflow_name"
+              if python -c "import yaml; yaml.safe_load(open('$workflow'))"; then
+                echo "Valid YAML"
+              else
+                echo "Invalid YAML"
+              fi
             fi
           done
 
@@ -54,17 +62,21 @@ jobs:
 
           # Check for executable scripts
           find scripts/ -name "*.sh" -type f | while read script; do
-            echo "Checking $script..."
+            printf "Checking %s...\n" "$script"
 
             # Check if script is executable
             if [ -x "$script" ]; then
-              echo "Script is executable: $script"
+              printf "Script is executable: %s\n" "$script"
             else
-              echo "Script not executable: $script"
+              printf "Script not executable: %s\n" "$script"
             fi
 
             # Basic syntax check
-            bash -n "$script" && echo "Syntax OK" || echo "Syntax error"
+            if bash -n "$script"; then
+              echo "Syntax OK"
+            else
+              echo "Syntax error"
+            fi
           done
 
       - name: Validate Docker configurations
@@ -83,7 +95,7 @@ jobs:
           # Check for environment file examples
           for env_file in .env.example .env.template .env.ci; do
             if [ -f "$env_file" ]; then
-              echo "Found: $env_file"
+              printf "Found: %s\n" "$env_file"
               # Basic check for common required variables
               if grep -q "DATABASE_URL\|DISCORD_TOKEN" "$env_file"; then
                 echo "Contains expected environment variables"

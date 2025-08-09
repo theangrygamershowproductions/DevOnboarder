@@ -54,9 +54,9 @@ jobs:
           required_files=("README.md" "CONTRIBUTING.md" "docs/SETUP.md")
           for file in "${required_files[@]}"; do
             if [ -f "$file" ]; then
-              echo "Found: $file"
+              printf "Found: %s\n" "$file"
             else
-              echo "Missing: $file"
+              printf "Missing: %s\n" "$file"
             fi
           done
 
