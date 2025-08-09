@@ -109,3 +109,6 @@ traefik/traefik.yml
 traefik/dynamic.yml
 cloudflared/config.yml
 cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
+# Backup and temporary directories
+.ci-migration-backup/
+DevOnboarder/
