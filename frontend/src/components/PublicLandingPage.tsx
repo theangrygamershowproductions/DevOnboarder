@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/status.css";
 
 interface ServiceStatus {
     name: string;
@@ -139,16 +140,33 @@ export default function PublicLandingPage() {
                             <div
                                 key={index}
                                 className="border rounded-lg p-4 hover:shadow-md transition duration-200"
+                                data-testid={`service-card-${service.name.toLowerCase().replace(/\s+/g, '-')}`}
                             >
                                 <div className="flex items-center justify-between mb-2">
-                                    <span className="font-medium text-gray-900">{service.name}</span>
-                                    <span className="text-2xl">{getStatusIcon(service.status)}</span>
+                                    <span
+                                        className="font-medium text-gray-900"
+                                        data-testid={`service-name-${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                    >
+                                        {service.name}
+                                    </span>
+                                    <span
+                                        className="text-2xl"
+                                        data-testid={`service-icon-${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                    >
+                                        {getStatusIcon(service.status)}
+                                    </span>
                                 </div>
-                                <div className={`inline-flex px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(service.status)}`}>
+                                <div
+                                    className={`inline-flex px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(service.status)} service-status-${service.status}`}
+                                    data-testid={`service-status-${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                >
                                     {service.status.toUpperCase()}
                                 </div>
                                 {service.responseTime && (
-                                    <div className="text-xs text-gray-500 mt-1">
+                                    <div
+                                        className="text-xs text-gray-500 mt-1"
+                                        data-testid={`service-response-time-${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                    >
                                         Response: {service.responseTime}ms
                                     </div>
                                 )}

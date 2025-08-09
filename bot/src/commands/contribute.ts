@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
-import { submitContribution } from "../api.js";
+import { submitContribution } from "../api";
 
 export const data = new SlashCommandBuilder()
     .setName("contribute")

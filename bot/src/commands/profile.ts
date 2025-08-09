@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
-import { getUserLevel } from "../api.js";
+import { getUserLevel } from "../api";
 
 export const data = new SlashCommandBuilder()
     .setName("profile")

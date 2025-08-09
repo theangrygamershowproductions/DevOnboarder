@@ -1,12 +1,20 @@
-# Phase 3 CI Service Validation Agent
+---
+codex-agent:
+    name: Agent.Phase3CiValidationEnforcer
+    role: Enforces Phase 3 CI service validation loop with automated quality gates and feedback
+    scope: CI validation
+    triggers: on_ci_completion, on_validation_failure, automated_loop
+    environment: CI
+    output: .codex/logs/phase3_ci_validation_enforcer.log
+permissions:
+    - repo:read
+    - content:write
+    - issues:write
+    - workflows:write
+    - status:write
+---
 
-```yaml
-codex-agent: true
-name: "phase3-ci-validation-enforcer"
-type: "automation"
-permissions: ["read", "write", "issues", "workflows", "status"]
-description: "Enforces Phase 3 CI service validation loop with automated quality gates and feedback."
-```
+# Phase 3 CI Service Validation Agent
 
 ## Codex Agent Prompts
 

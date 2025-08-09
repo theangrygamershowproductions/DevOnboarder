@@ -51,7 +51,7 @@ describe("Login", () => {
         expect(fetchMock).toHaveBeenCalledWith(
             `${AUTH_URL}/login/discord/callback?code=abc`,
         );
-        expect(window.location.pathname).toBe("/");
+        expect(window.location.pathname).toBe("/dashboard");
     });
 
     it("fetches user info when token stored", async () => {

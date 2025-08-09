@@ -1,12 +1,19 @@
-# Phase 2 Quality Gate Enforcer Agent
+---
+codex-agent:
+    name: Agent.Phase2QualityGateEnforcer
+    role: Enforces Phase 2 quality gates for coverage, health, network contracts, and artifact hygiene
+    scope: quality assurance
+    triggers: on_pull_request, on_push_to_main, phase_transition
+    environment: CI
+    output: .codex/logs/phase2_quality_gate_enforcer.log
+permissions:
+    - repo:read
+    - content:write
+    - issues:write
+    - workflows:write
+---
 
-```yaml
-codex-agent: true
-name: "phase2-quality-gate-enforcer"
-type: "automation"
-permissions: ["read", "write", "issues", "workflows"]
-description: "Enforces Phase 2 quality gates: coverage, health, network contracts, and artifact hygiene."
-```
+# Phase 2 Quality Gate Enforcer Agent
 
 ## Codex Agent Prompts
 

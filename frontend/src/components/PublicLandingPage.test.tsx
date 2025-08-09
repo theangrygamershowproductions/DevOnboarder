@@ -98,8 +98,13 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to complete
-        await screen.findByText("ONLINE", { exact: false });
+        // Wait for the service health check to complete - use CSS class selector for status
+        const onlineStatuses = await screen.findAllByText("ONLINE");
+        expect(onlineStatuses.length).toBeGreaterThan(0);
+
+        // Verify CSS class is applied
+        const statusElements = document.querySelectorAll('.service-status-online');
+        expect(statusElements.length).toBeGreaterThan(0);
     });
 
     it("displays service health with error status for failed response", async () => {
@@ -111,8 +116,13 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to show error status
-        await screen.findByText("ERROR", { exact: false });
+        // Wait for the service health check to show error status - use CSS class selector
+        const errorStatuses = await screen.findAllByText("ERROR");
+        expect(errorStatuses.length).toBeGreaterThan(0);
+
+        // Verify CSS class is applied
+        const statusElements = document.querySelectorAll('.service-status-error');
+        expect(statusElements.length).toBeGreaterThan(0);
     });
 
     it("displays service health with offline status for network error", async () => {
@@ -121,8 +131,13 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to show offline status
-        await screen.findByText("OFFLINE", { exact: false });
+        // Wait for the service health check to show offline status - use CSS class selector
+        const offlineStatuses = await screen.findAllByText("OFFLINE");
+        expect(offlineStatuses.length).toBeGreaterThan(0);
+
+        // Verify CSS class is applied
+        const statusElements = document.querySelectorAll('.service-status-offline');
+        expect(statusElements.length).toBeGreaterThan(0);
     });
 
     it("shows response time when service is responsive", async () => {
@@ -134,7 +149,12 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for response time to be displayed
-        await screen.findByText(/Response: \d+ms/, { exact: false });
+        // Wait for response time to be displayed - use data-testid selector
+        const responseTimeElements = await screen.findAllByTestId(/^service-response-time-/);
+        expect(responseTimeElements.length).toBeGreaterThan(0);
+
+        // Verify content pattern
+        const responseTimeText = responseTimeElements[0].textContent;
+        expect(responseTimeText).toMatch(/Response: \d+ms/);
     });
 });
