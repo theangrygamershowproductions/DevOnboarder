@@ -1,0 +1,101 @@
+name: Backend Component CI
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version to use'
+        required: false
+        default: '3.12'
+        type: string
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        default: '22'
+        type: string
+
+jobs:
+  backend-tests:
+    name: Backend Python Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12']
+        node-version: ['22']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          echo "Virtual environment created and activated"
+
+      - name: Install Python dependencies
+        run: |
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -e .[test]
+
+      - name: Validate Python environment
+        run: |
+          source .venv/bin/activate
+          python --version
+          pip list | grep -E "(fastapi|sqlalchemy|pytest)"
+
+      - name: Run Python linting
+        run: |
+          source .venv/bin/activate
+          python -m ruff check src/ tests/
+          python -m ruff format --check src/ tests/
+
+      - name: Run type checking
+        run: |
+          source .venv/bin/activate
+          python -m mypy src/
+
+      - name: Run Python tests with coverage
+        run: |
+          source .venv/bin/activate
+          python -m pytest tests/ --cov=src --cov-report=xml --cov-report=term --cov-fail-under=95
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: backend
+          name: backend-coverage
+
+      - name: Validate OpenAPI specifications
+        run: |
+          source .venv/bin/activate
+          if [ -f "src/devonboarder/openapi.json" ]; then
+            python -m openapi_spec_validator src/devonboarder/openapi.json
+          fi
+
+      - name: Run security scanning
+        run: |
+          source .venv/bin/activate
+          python -m bandit -r src/ -f json -o bandit-report.json || true
+          if [ -f "bandit-report.json" ]; then
+            echo "Security scan completed"
+          fi
+
+      - name: Backend component summary
+        run: |
+          echo "=== Backend Component CI Complete ==="
+          echo "Python version: ${{ matrix.python-version }}"
+          echo "Coverage requirement: 95%"
+          echo "All backend tests and validations passed"

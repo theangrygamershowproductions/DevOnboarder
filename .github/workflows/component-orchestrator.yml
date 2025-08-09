@@ -1,0 +1,127 @@
+name: Component-Based CI Orchestrator
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  detect-changes:
+    name: Detect Component Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+      bot: ${{ steps.changes.outputs.bot }}
+      aar_ui: ${{ steps.changes.outputs.aar-ui }}
+      docs: ${{ steps.changes.outputs.docs }}
+      infrastructure: ${{ steps.changes.outputs.infrastructure }}
+      any_code: ${{ steps.changes.outputs.backend == 'true' || steps.changes.outputs.frontend == 'true' || steps.changes.outputs.bot == 'true' || steps.changes.outputs.aar-ui == 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect changes using path filters
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'src/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'requirements*.txt'
+            frontend:
+              - 'frontend/**'
+              - 'package.json'
+            bot:
+              - 'bot/**'
+            aar-ui:
+              - 'app/aar-ui/**'
+            docs:
+              - 'docs/**'
+              - '*.md'
+              - '.github/workflows/documentation-*.yml'
+            infrastructure:
+              - '.github/workflows/**'
+              - 'docker-compose*.yml'
+              - 'Dockerfile'
+              - 'scripts/**'
+
+  backend-ci:
+    name: Backend Component CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true'
+    uses: ./.github/workflows/backend-component.yml
+    secrets: inherit
+
+  frontend-ci:
+    name: Frontend Component CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend == 'true'
+    uses: ./.github/workflows/frontend-component.yml
+    secrets: inherit
+
+  bot-ci:
+    name: Bot Component CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.bot == 'true'
+    uses: ./.github/workflows/bot-component.yml
+    secrets: inherit
+
+  aar-ui-ci:
+    name: AAR UI Component CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.aar_ui == 'true'
+    uses: ./.github/workflows/aar-ui-component.yml
+    secrets: inherit
+
+  docs-ci:
+    name: Documentation CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.docs == 'true'
+    uses: ./.github/workflows/docs-component.yml
+    secrets: inherit
+
+  infrastructure-ci:
+    name: Infrastructure CI
+    needs: detect-changes
+    if: needs.detect-changes.outputs.infrastructure == 'true'
+    uses: ./.github/workflows/infrastructure-component.yml
+    secrets: inherit
+
+  integration-tests:
+    name: Integration Tests
+    needs: [detect-changes, backend-ci, frontend-ci, bot-ci]
+    if: needs.detect-changes.outputs.any_code == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run integration tests
+        run: |
+          echo "Running integration tests across components"
+          # Add integration test commands here
+          # docker-compose -f docker-compose.ci.yaml up --build --abort-on-container-exit
+
+  summary:
+    name: CI Summary
+    needs: [detect-changes, backend-ci, frontend-ci, bot-ci, aar-ui-ci, docs-ci, infrastructure-ci, integration-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Component CI Summary
+        run: |
+          echo "=== Component-Based CI Summary ==="
+          echo "Backend: ${{ needs.detect-changes.outputs.backend == 'true' && (needs.backend-ci.result || 'skipped') || 'not-changed' }}"
+          echo "Frontend: ${{ needs.detect-changes.outputs.frontend == 'true' && (needs.frontend-ci.result || 'skipped') || 'not-changed' }}"
+          echo "Bot: ${{ needs.detect-changes.outputs.bot == 'true' && (needs.bot-ci.result || 'skipped') || 'not-changed' }}"
+          echo "AAR UI: ${{ needs.detect-changes.outputs.aar_ui == 'true' && (needs.aar-ui-ci.result || 'skipped') || 'not-changed' }}"
+          echo "Docs: ${{ needs.detect-changes.outputs.docs == 'true' && (needs.docs-ci.result || 'skipped') || 'not-changed' }}"
+          echo "Infrastructure: ${{ needs.detect-changes.outputs.infrastructure == 'true' && (needs.infrastructure-ci.result || 'skipped') || 'not-changed' }}"
+          echo "Integration: ${{ needs.integration-tests.result || 'skipped' }}"

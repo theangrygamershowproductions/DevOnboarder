@@ -1,0 +1,70 @@
+name: Frontend Component CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        default: '22'
+        type: string
+
+jobs:
+  frontend-tests:
+    name: Frontend React Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Prettier check
+        run: npm run format:check
+
+      - name: Run type checking
+        run: npm run type-check
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run tests with coverage
+        run: npm run coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./frontend/coverage/coverage-final.json
+          flags: frontend
+          name: frontend-coverage
+
+      - name: Run Vitest UI tests (headless)
+        run: npm run test:ui -- --run
+
+      - name: Validate build artifacts
+        run: |
+          echo "Checking build output..."
+          ls -la dist/
+          echo "Build validation complete"
+
+      - name: Frontend component summary
+        run: |
+          echo "=== Frontend Component CI Complete ==="
+          echo "Node.js version: ${{ inputs.node-version }}"
+          echo "Coverage requirement: 100%"
+          echo "All frontend tests and validations passed"
