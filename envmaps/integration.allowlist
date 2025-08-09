@@ -1,0 +1,57 @@
+# Integration Service Environment Variables Allowlist
+#
+# Variables that are safe to synchronize to Discord integration service environments
+# These include Discord API configuration and non-sensitive service settings
+
+# Discord API Configuration
+DISCORD_CLIENT_ID
+DISCORD_GUILD_ID
+DISCORD_API_ENDPOINT
+
+# Service Endpoints
+API_BASE_URL
+AUTH_URL
+INTEGRATION_SERVICE_URL
+
+# Database Configuration
+DATABASE_URL
+
+# CORS Configuration
+CORS_ALLOW_ORIGINS
+
+# Environment Configuration
+ENVIRONMENT
+NODE_ENV
+PYTHON_ENV
+
+# Service Configuration
+INTEGRATION_SERVICE_PORT
+INTEGRATION_SERVICE_HOST
+SERVICE_NAME
+
+# OAuth Configuration
+OAUTH_REDIRECT_BASE_URL
+OAUTH_STATE_TIMEOUT
+
+# Role Management Configuration
+ROLE_SYNC_ENABLED
+ROLE_SYNC_INTERVAL
+DEFAULT_ROLE_PERMISSIONS
+
+# Rate Limiting
+RATE_LIMIT_REQUESTS_PER_MINUTE
+RATE_LIMIT_BURST_SIZE
+
+# Feature Flags
+FEATURE_ROLE_MANAGEMENT
+FEATURE_USER_VERIFICATION
+FEATURE_DISCORD_COMMANDS
+
+# Logging Configuration
+LOG_LEVEL
+LOG_FORMAT
+INTEGRATION_LOG_LEVEL
+
+# Health Check Configuration
+HEALTH_CHECK_ENDPOINT
+HEALTH_CHECK_INTERVAL

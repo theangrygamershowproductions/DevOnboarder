@@ -1,0 +1,52 @@
+# Authentication Service Environment Variables Allowlist
+#
+# Variables that are safe to synchronize to auth service environments
+# These include API endpoints and non-sensitive configuration
+
+# API Configuration
+API_BASE_URL
+AUTH_URL
+FRONTEND_URL
+DISCORD_REDIRECT_URI
+
+# Database Configuration
+DATABASE_URL
+
+# JWT Configuration (Non-sensitive)
+TOKEN_EXPIRE_SECONDS
+JWT_ALGORITHM
+
+# Discord OAuth Configuration (Public)
+DISCORD_CLIENT_ID
+DISCORD_REDIRECT_URI
+
+# Development Tunnel URLs
+DEV_TUNNEL_AUTH_URL
+DEV_TUNNEL_API_URL
+DEV_TUNNEL_FRONTEND_URL
+
+# CORS Configuration
+CORS_ALLOW_ORIGINS
+
+# Environment Configuration
+ENVIRONMENT
+NODE_ENV
+PYTHON_ENV
+
+# Initialization Configuration
+INIT_DB_ON_STARTUP
+AUTO_MIGRATE
+
+# Service Configuration
+SERVICE_PORT
+SERVICE_HOST
+SERVICE_NAME
+
+# Logging Configuration
+LOG_LEVEL
+LOG_FORMAT
+
+# Feature Flags
+FEATURE_USER_REGISTRATION
+FEATURE_DISCORD_OAUTH
+FEATURE_JWT_VALIDATION

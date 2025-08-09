@@ -1,0 +1,24 @@
+# INTERNAL: Orchestrator Configuration Directory
+
+This directory contains private orchestrator configuration and routing rules that should NOT be accessed by automated systems or external agents.
+
+**PROTECTION STATUS**: ACTIVE
+
+**RESTRICTED ACCESS**:
+
+- No automated modifications allowed
+- No external agent access permitted
+- Human oversight required for all changes
+- Private configuration data contained within
+
+**SECURITY MEASURES**:
+
+- Listed in .gitignore for privacy protection
+- Protected paths enforcement in bot permissions
+- Internal-only documentation marking
+- Explicit automation exclusion
+
+**MAINTAINERS**: TAGS Engineering Team Only
+
+**LAST UPDATED**: August 9, 2025
+**PROTECTION LEVEL**: MAXIMUM

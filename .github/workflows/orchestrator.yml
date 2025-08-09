@@ -1,0 +1,58 @@
+name: Orchestrator
+on:
+  workflow_dispatch:
+  schedule: [{cron: '0 */6 * * *'}]
+  pull_request: {types: [labeled, opened, synchronize]}
+permissions: {contents: write, pull-requests: write, issues: write}
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: 'npm'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+      - name: Generate secrets
+        run: |
+          if [ -f ./scripts/generate-secrets.sh ]; then
+            bash ./scripts/generate-secrets.sh
+          else
+            echo "Secrets generation script not found, skipping"
+          fi
+      - name: Sync service envs (allowlist)
+        run: |
+          if [ -f ./scripts/smart_env_sync.sh ]; then
+            bash ./scripts/smart_env_sync.sh --validate-only
+          else
+            echo "Environment sync script not found, skipping"
+          fi
+      - name: Validate env docs
+        run: |
+          source .venv/bin/activate
+          if [ -f scripts/audit_env_docs.py ]; then
+            python3 scripts/audit_env_docs.py
+          else
+            echo "Environment docs audit not found, skipping"
+          fi
+      - name: Orchestrator dry‑run (sanity)
+        env:
+          CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
+        run: |
+          python - << 'PY'
+          import yaml, json, os
+          config_path = '.codex/orchestrator/config.yml'
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  cfg = yaml.safe_load(f)
+              print(json.dumps({
+                'agents': list(cfg.get('agents',{}).keys()),
+                'routing_rules': len(cfg.get('routing', []))
+              }, indent=2))
+          else:
+              print('{"error": "Orchestrator config not found"}')
+          PY

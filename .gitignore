@@ -60,6 +60,18 @@ cloudflared/
 *.tunnel.json
 tunnel-credentials.json
 
+# Orchestrator Private Configuration - INTERNAL ONLY
+.codex/orchestrator/secrets/
+.codex/orchestrator/private/
+.codex/orchestrator/runtime/
+
+# Orchestrator Privacy Protection - Hub-and-Spoke System
+.codex/orchestrator/config.yml.private
+.codex/orchestrator/routing-rules.yml
+.codex/orchestrator/agent-assignments.yml
+.codex/orchestrator/*.token
+.codex/orchestrator/*.key
+
 # Potato Policy Protected Files
 Potato
 Potato.md
@@ -112,3 +124,4 @@ cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
 # Backup and temporary directories
 .ci-migration-backup/
 DevOnboarder/
+scripts/doc_audit_system.py

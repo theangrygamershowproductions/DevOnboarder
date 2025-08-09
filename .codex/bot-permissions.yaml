@@ -174,3 +174,33 @@ documentation_quality:
     permissions:
         - repo: read
         - repo: write
+
+# Protected Paths - RESTRICTED ACCESS
+# These paths are off-limits to automated systems and external agents
+protected_paths:
+    - .codex/orchestrator/
+    - .codex/orchestrator/config.yml
+    - .codex/orchestrator/secrets/
+    - .codex/orchestrator/private/
+    - .codex/orchestrator/runtime/
+    - .codex/orchestrator/.internal
+    - envmaps/*.allowlist
+    - src/routes/orchestrator/
+    - frontend/src/components/orchestrator/
+    - config/secrets/
+    - secrets.yaml
+    - secrets.yml
+
+# Automation Exclusions
+# Explicitly exclude these paths from automated modifications
+automation_exclusions:
+    orchestrator:
+        paths:
+            - .codex/orchestrator/
+            - envmaps/
+            - src/routes/orchestrator/
+            - frontend/src/components/orchestrator/
+        reason: "Private hub-and-spoke system requiring human oversight"
+        access_level: "TAGS Engineering Team Only"
+        last_updated: "2025-08-09"
+        protection_level: "MAXIMUM"
