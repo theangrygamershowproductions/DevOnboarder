@@ -3,7 +3,7 @@ import cors from 'cors';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { validateAAR, formatValidationErrors } from '../app/aar-ui/lib/aar.zod.js';
+import { validateAAR, formatValidationErrors } from './lib/aar.zod.js';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 

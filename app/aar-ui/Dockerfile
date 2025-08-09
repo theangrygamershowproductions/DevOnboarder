@@ -12,6 +12,7 @@ RUN npm run build
 WORKDIR /app/api
 COPY package.json ./
 COPY scripts/aar_api/ ./
+COPY app/aar-ui/lib/ ./lib/
 RUN npm install express cors zod @types/express @types/cors
 RUN npx tsc server.ts --outDir dist --target es2022 --module es2022 --moduleResolution node --esModuleInterop
 
