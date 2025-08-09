@@ -6,19 +6,12 @@ codex-agent:
     triggers: on_pull_request, on_push_to_main, on_commit
     environment: CI
     output: .codex/logs/ci_enforcement_guard.log
-permissions:
-    - repo:read
-    - workflows:write
-    - pullrequests:write
-    - issues:write
-    - contents:read
-description: "Blocks all contributions that violate Codex Enforcement Mode policy with zero tolerance for shortcuts"
-codex_scope: "global"
-codex_role: "enforcer"
-codex_type: "validation"
-status: "active"
-visibility: "internal"
-codex_runtime: true
+    permissions:
+        - repo:read
+        - workflows:write
+        - pullrequests:write
+        - issues:write
+        - contents:read
 ---
 
 # CI Enforcement Guard Agent
