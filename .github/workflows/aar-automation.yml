@@ -67,21 +67,11 @@ jobs:
           source .venv/bin/activate
           pip install --upgrade pip
 
-      - name: Install GitHub CLI
+      - name: Setup environment
         run: |
-          type -p curl >/dev/null || \
-            (sudo apt update && sudo apt install curl -y)
-          curl -fsSL \
-            https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-            sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          sudo chmod go+r \
-            /usr/share/keyrings/githubcli-archive-keyring.gpg
-          ARCH=$(dpkg --print-architecture)
-          printf 'deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' \
-              "$ARCH" | \
-              sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt update
-          sudo apt install gh -y
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
 
       - name: Generate AAR (Issue Closure)
         if: github.event_name == 'issues'
@@ -128,11 +118,14 @@ jobs:
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              echo "DOCS(aar): add after actions report for ${{ github.event.issue.number }}" > commit_msg.txt
+              ISSUE_NUM="${{ github.event.issue.number }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$ISSUE_NUM" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              echo "DOCS(aar): add after actions report for PR#${{ github.event.pull_request.number }}" > commit_msg.txt
+              PR_NUM="${{ github.event.pull_request.number }}"
+              printf "DOCS(aar): add after actions report for PR#%s\n" "$PR_NUM" > commit_msg.txt
             else
-              echo "DOCS(aar): add after actions report for ${{ github.event.inputs.aar_type }}" > commit_msg.txt
+              AAR_TYPE="${{ github.event.inputs.aar_type }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$AAR_TYPE" > commit_msg.txt
             fi
             git commit -F commit_msg.txt
             git push
