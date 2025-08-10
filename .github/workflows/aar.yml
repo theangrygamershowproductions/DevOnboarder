@@ -60,36 +60,13 @@ jobs:
         run: |
           echo "Validating AAR JSON Schema..."
           cd aar
-          node -e "
-            const schema = require('../docs/AAR/schema/aar.schema.json');
-            const Ajv = require('ajv');
-            const addFormats = require('ajv-formats');
-            const ajv = new Ajv();
-            addFormats(ajv);
-            try {
-              ajv.compile(schema);
-              console.log('Success: AAR schema is valid');
-            } catch (error) {
-              console.error('FAILED: AAR schema validation failed:', error.message);
-              process.exit(1);
-            }
-          "
+          npm run aar:validate-schema
 
       - name: Validate Handlebars template
         run: |
           echo "Validating Handlebars template..."
-          node -e "
-            const fs = require('fs');
-            const Handlebars = require('handlebars');
-            try {
-              const template = fs.readFileSync('docs/AAR/templates/aar.hbs', 'utf8');
-              Handlebars.compile(template);
-              console.log('Success: Handlebars template is valid');
-            } catch (error) {
-              console.error('FAILED: Handlebars template validation failed:', error.message);
-              process.exit(1);
-            }
-          "
+          cd aar
+          npm run aar:validate-template
 
       - name: Find AAR data files
         id: find_data
