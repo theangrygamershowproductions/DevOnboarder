@@ -140,7 +140,17 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    git clone https://github.com/theangrygamershowproductions/DevOnboarder.git && cd DevOnboarder
    ```
 
-2. Set up environment:
+2. **Universal Development Experience Setup** (REQUIRED):
+
+   ```bash
+   # One-liner setup: Git config + whitespace elimination
+   bash scripts/setup_git_whitespace_config.sh
+
+   # Install pre-commit for zero-drama formatting
+   pip install pre-commit && pre-commit install
+   ```
+
+3. Set up environment:
 
    ```bash
    # Create and activate virtual environment
@@ -154,13 +164,23 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    # See docs/cli-shortcuts.md for full shell integration guide
    ```
 
-3. Run locally:
+4. **Use safe commit workflow**:
+
+   ```bash
+   # Preferred: Enhanced safe commit (zero whitespace drama)
+   bash scripts/enhanced_safe_commit.sh "feat: your change description"
+
+   # Fallback: Standard safe commit
+   bash scripts/safe_commit.sh "feat: your change description"
+   ```
+
+5. Run locally:
 
    ```bash
    docker compose up -d
    ```
 
-4. **Optional**: Enable CLI shortcuts:
+6. **Optional**: Enable CLI shortcuts:
 
    ```bash
    # If you have DevOnboarder .zshrc integration:
@@ -169,13 +189,13 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    gh-ci-health         # Quick CI check
    ```
 
-5. Run tests:
+7. Run tests:
 
    ```bash
    ./scripts/run_tests.sh
    ```
 
-6. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+8. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
 ### Common Issues
 
