@@ -131,3 +131,4 @@ scripts/doc_audit_system.py
 
 # emoji scrub backups
 *.emoji_backup
+tree-snapshot.txt
