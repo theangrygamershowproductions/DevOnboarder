@@ -62,7 +62,9 @@ jobs:
           node -e "
             const schema = require('../docs/AAR/schema/aar.schema.json');
             const Ajv = require('ajv');
+            const addFormats = require('ajv-formats');
             const ajv = new Ajv();
+            addFormats(ajv);
             try {
               ajv.compile(schema);
               console.log('Success: AAR schema is valid');
