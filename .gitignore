@@ -95,6 +95,7 @@ id_rsa*
 lcov-report/
 logs/
 node_modules/
+aar/node_modules/
 pnpm-lock.yaml
 secrets.yaml
 secrets.yml

@@ -34,20 +34,23 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: |
-            package-lock.json
+            aar/package-lock.json
             frontend/package-lock.json
             bot/package-lock.json
 
       - name: Install Node.js dependencies for AAR system
         run: |
           echo "Installing AAR system dependencies..."
-          npm install handlebars ajv ajv-formats
+          cd aar
+          nvm use 22 || echo "nvm not available, using system Node.js"
+          npm install
 
       - name: Validate JSON Schema
         run: |
           echo "Validating AAR JSON Schema..."
+          cd aar
           node -e "
-            const schema = require('./docs/AAR/schema/aar.schema.json');
+            const schema = require('../docs/AAR/schema/aar.schema.json');
             const Ajv = require('ajv');
             const ajv = new Ajv();
             try {
@@ -129,7 +132,9 @@ jobs:
           echo "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
             if [ -n "$file" ]; then
               echo "Rendering: $file"
-              node scripts/render_aar.js "$file" test-output
+              cd aar
+              node ../scripts/render_aar.js "../$file" ../test-output
+              cd ..
             fi
           done
 
