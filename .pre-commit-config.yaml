@@ -24,7 +24,7 @@ repos:
             name: agent policy enforcer
             entry: python scripts/agent_policy_enforcer.py
             language: system
-            stages: [commit, push]
+            stages: [pre-commit, pre-push]
     - repo: https://github.com/codespell-project/codespell
       rev: v2.4.1
       hooks:

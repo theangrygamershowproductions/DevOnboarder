@@ -4,7 +4,7 @@
 
 This repository contains a **legendary autonomous CI governance fortress** deployed via a single epic commit. Here's how to uncover the complete story from git history alone.
 
-## 🔍 Quick Discovery Commands
+## Quick Discovery Commands
 
 ### Find the Fortress Deployment
 
@@ -26,7 +26,7 @@ git log --author="DevOnboarder-AI-Agent" --oneline
 git log --grep="fortress" -1 --pretty=format:"%B"
 
 # This shows:
-# - 🏰 FORTRESS COMPLETE summary
+# - FORTRESS COMPLETE summary
 # - Complete operator arsenal (numbered 1-6)
 # - 60-second health check commands
 # - Autonomous operation schedule
@@ -51,7 +51,7 @@ git show $FORTRESS_HASH
 # - Complete achievement narrative
 ```
 
-## 📋 What You'll Find in Git History
+## What You'll Find in Git History
 
 ### Condensed Legend (git log)
 
@@ -74,7 +74,7 @@ Full cinematic documentation embedded as commit comments:
 - **Maintenance schedules** - Daily automation + quarterly human audit
 - **Achievement story** - Complete evolution from philosophy to autonomy
 
-## 🏛️ Archaeological Context
+## Archaeological Context
 
 ### The Evolution Story
 
@@ -95,7 +95,7 @@ The fortress provides:
 - **Human approval gates** preserving accountability
 - **Complete documentation** for emergency response
 
-## 🎯 Emergency Procedures from Git History
+## Emergency Procedures from Git History
 
 ### Extract 60-Second Health Check
 
@@ -137,7 +137,7 @@ git log --grep="fortress" -1 --pretty=format:"%B" | grep -A 5 "AUTONOMOUS OPERAT
 # Human Review → Merge PR → System Healed ✨
 ```
 
-## 🔧 Troubleshooting Git Archaeology
+## Troubleshooting Git Archaeology
 
 ### If git log shows no results
 
@@ -166,7 +166,7 @@ git log --grep="fortress" -1 --format="%ad" --date=iso
 git log --grep="fortress\|governance\|autonomous" --oneline --all
 ```
 
-## 🎬 Git History as Documentation
+## Git History as Documentation
 
 This approach represents a new paradigm in infrastructure documentation:
 
@@ -183,7 +183,7 @@ This approach represents a new paradigm in infrastructure documentation:
 - Self-contained knowledge that survives repository changes
 - Future-proof documentation that travels with the code
 
-## 🏆 Why This Matters
+## Why This Matters
 
 In 10 years, when:
 
@@ -200,10 +200,10 @@ Any developer can run two simple commands and get both the emergency procedures 
 
 ---
 
-## 🎤 Final Note
+## Final Note
 
 When you find this document, know that you've discovered the archaeological record of DevOnboarder's greatest infrastructure achievement - the moment "quiet reliability" evolved from philosophy to autonomous reality.
 
 The fortress stands. It self-heals. And its story lives forever in git history.
 
-## 🏰 LEGENDARY COMPLETE 🏰
+## LEGENDARY COMPLETE

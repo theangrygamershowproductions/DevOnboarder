@@ -42,11 +42,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: |
-            aar/package-lock.json
-            frontend/package-lock.json
-            bot/package-lock.json
+          # Remove npm cache to avoid lock file detection issues
+          # cache: 'npm'
+          # cache-dependency-path: |
+          #   aar/package-lock.json
+          #   frontend/package-lock.json
+          #   bot/package-lock.json
 
       - name: Install Node.js dependencies for AAR system
         run: |
