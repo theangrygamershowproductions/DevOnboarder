@@ -4,7 +4,7 @@ This document outlines the automation checks Codex uses to keep the CI workflow 
 
 ## 1. Language Versions
 
-- The main workflow tests Python **3.12** only and validates Node.js **20**.
+- The main workflow tests Python **3.12** only and validates Node.js **22**.
 - `scripts/check_versions.sh` verifies these versions locally and in CI.
 - Results appear in the `Verify language versions` step log.
 

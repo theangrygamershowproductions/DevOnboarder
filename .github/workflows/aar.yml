@@ -3,6 +3,9 @@ name: AAR System Validation
 permissions:
   contents: read
 
+env:
+  CACHE_BUSTER: v-node22-py312
+
 on:
   push:
     paths:

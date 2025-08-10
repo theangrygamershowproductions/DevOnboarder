@@ -1,4 +1,5 @@
 name: Build & Deploy AAR UI
+
 on:
   push:
     paths:
@@ -6,15 +7,22 @@ on:
       - "scripts/aar_api/**"
       - "docs/AAR/schema/**"
       - "docs/AAR/templates/**"
+      - "aar/**"
       - ".github/workflows/aar-ui.yml"
   pull_request:
     paths:
       - "app/aar-ui/**"
       - "scripts/aar_api/**"
+      - "aar/**"
+
+permissions:
+  contents: read
+  packages: write
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: devonboarder-aar-ui
+  CACHE_BUSTER: v-node22-py312
 
 jobs:
   build:
@@ -62,6 +70,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -72,11 +83,13 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: |
-            package-lock.json
+            aar/package-lock.json
             app/aar-ui/package-lock.json
 
-      - name: Install core dependencies
-        run: npm ci
+      - name: Install AAR system dependencies
+        run: |
+          cd aar
+          npm ci
 
       - name: Install AAR UI dependencies
         run: |
@@ -84,7 +97,9 @@ jobs:
           npm ci
 
       - name: Test AAR system
-        run: npm run aar:full-test
+        run: |
+          cd aar
+          npm run aar:full-test
 
       - name: Type check AAR UI
         run: |
@@ -100,7 +115,8 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    environment: development
+    permissions:
+      contents: read
 
     steps:
       - name: Deploy to development
@@ -113,13 +129,14 @@ jobs:
   deploy-prod:
     needs: [build, test]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment: production
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: read
 
     steps:
       - name: Deploy to production
         run: |
           echo "Deploying AAR UI to production environment"
-          echo "Image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest"
+          echo "Image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
           echo "Would trigger deployment via webhook or SSH to production server"
           # Add actual deployment logic here

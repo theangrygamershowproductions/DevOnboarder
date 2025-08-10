@@ -4,6 +4,8 @@ on:
   schedule: [{cron: '0 */6 * * *'}]
   pull_request: {types: [labeled, opened, synchronize]}
 permissions: {contents: write, pull-requests: write, issues: write}
+env:
+  CACHE_BUSTER: v-node22-py312
 jobs:
   orchestrate:
     runs-on: ubuntu-latest

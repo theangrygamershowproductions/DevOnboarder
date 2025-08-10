@@ -67,7 +67,7 @@ app.get('/api/health', (req, res) => {
 // Submit new AAR
 app.post('/api/aar/submit', async (req, res) => {
   try {
-    console.log('📥 Received AAR submission:', req.body.title);
+    console.log('Received AAR submission:', req.body.title);
 
     // Validate AAR data against Zod schema
     const validation = validateAAR(req.body);
@@ -75,7 +75,7 @@ app.post('/api/aar/submit', async (req, res) => {
       // Type assertion for the error case
       const validationError = validation as { success: false; error: z.ZodError };
       const errors = formatValidationErrors(validationError.error);
-      console.log('❌ Validation failed:', errors);
+      console.log('Validation failed:', errors);
       return res.status(400).json({
         success: false,
         error: 'Validation failed',
@@ -97,18 +97,18 @@ app.post('/api/aar/submit', async (req, res) => {
     // Write AAR JSON data
     const aarPath = path.join(dataDir, filename);
     await fs.writeFile(aarPath, JSON.stringify(aar, null, 2));
-    console.log('💾 Saved AAR data:', aarPath);
+    console.log('Saved AAR data:', aarPath);
 
     // Trigger AAR rendering using existing system
     try {
       const { stdout, stderr } = await execFileAsync('npm', ['run', 'aar:render', aarPath, reportsDir], {
         cwd: path.join(__dirname, '..')
       });
-      console.log('✅ AAR rendered successfully');
+      console.log('AAR rendered successfully');
       if (stdout) console.log('Render output:', stdout);
       if (stderr) console.log('Render warnings:', stderr);
     } catch (renderError) {
-      console.error('⚠️ Render failed, but AAR data was saved:', renderError);
+      console.error('Render failed, but AAR data was saved:', renderError);
       // Continue - data is saved even if rendering fails
     }
 
@@ -120,7 +120,7 @@ app.post('/api/aar/submit', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('💥 AAR submission error:', error);
+    console.error('AAR submission error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',
@@ -148,7 +148,7 @@ app.get('/api/aar/list', async (req, res) => {
       aars: aarFiles
     });
   } catch (error) {
-    console.error('📋 List AARs error:', error);
+    console.error('List AARs error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to list AARs'
@@ -176,7 +176,7 @@ app.get('/api/aar/:filename', async (req, res) => {
       data: aar
     });
   } catch (error) {
-    console.error('📄 Get AAR error:', error);
+    console.error('Get AAR error:', error);
     res.status(404).json({
       success: false,
       error: 'AAR not found'
@@ -197,7 +197,7 @@ app.get('/api/aar/:filename/report', async (req, res) => {
       report
     });
   } catch (error) {
-    console.error('📋 Get report error:', error);
+    console.error('Get report error:', error);
     res.status(404).json({
       success: false,
       error: 'Report not found'
@@ -207,11 +207,11 @@ app.get('/api/aar/:filename/report', async (req, res) => {
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 AAR UI Service running on http://0.0.0.0:${PORT}`);
-  console.log(`📊 Health check: http://0.0.0.0:${PORT}/api/health`);
-  console.log(`🎨 React UI: http://0.0.0.0:${PORT}/`);
-  console.log(`📋 Reports: http://0.0.0.0:${PORT}/reports/`);
-  console.log(`🌍 Environment: ${NODE_ENV}`);
+  console.log('AAR UI Service running on http://0.0.0.0:' + PORT);
+  console.log('Health check: http://0.0.0.0:' + PORT + '/api/health');
+  console.log('React UI: http://0.0.0.0:' + PORT + '/');
+  console.log('Reports: http://0.0.0.0:' + PORT + '/reports/');
+  console.log('Environment: ' + NODE_ENV);
 });
 
 // Serve React app for all other routes (SPA fallback)

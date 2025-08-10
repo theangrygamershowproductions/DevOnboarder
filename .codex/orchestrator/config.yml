@@ -4,9 +4,26 @@ project: DevOnboarder
 permissions_matrix: .codex/bot-permissions.yaml
 
 environments:
-  dev: {default_branch: main, triggers: [workflow_dispatch, push, pull_request]}
-  staging: {default_branch: main, triggers: [schedule], schedule: "0 */6 * * *"}
-  prod: {default_branch: main, triggers: [release, manual_approval]}
+  dev:
+    default_branch: main
+    triggers: [workflow_dispatch, push, pull_request]
+    caching:
+      python_deps: .venv
+      node_deps: aar/node_modules
+      version_policy: scripts/enforce_version_policy.sh
+  staging:
+    default_branch: main
+    triggers: [schedule]
+    schedule: "0 */6 * * *"
+    caching:
+      python_deps: .venv
+      node_deps: aar/node_modules
+  prod:
+    default_branch: main
+    triggers: [release, manual_approval]
+    caching:
+      python_deps: .venv
+      node_deps: aar/node_modules
 
 routing:
   - if: event == "pull_request" && label ~ "codex:route"
@@ -17,6 +34,8 @@ routing:
     run: [ci_triage_guard, coverage_orchestrator]
   - if: event == "schedule"
     run: [coverage_orchestrator]
+  - if: event == "push" && file ~ "\.nvmrc|\.python-version|\.tool-versions"
+    run: [version_policy_enforcer]
 
 agents:
   codex_router:
@@ -33,13 +52,37 @@ agents:
   ci_triage_guard:
     ref: ./.codex/agents/tags/ci_triage_guard/agent_tags_ci_triage_guard.md
     permissions: [block_generation]
+  version_policy_enforcer:
+    ref: ./.codex/agents/version-policy-enforcer.md
+    permissions: [validate_versions, block_deployment]
 
 policies:
-  node_version: "20.x"
-  python_version: "3.11"
-  forbid: [curl_pipe_sh, remote_code_exec]
-  require: [lockfile_integrity, gh_version>=2.0.0]
+  node_version: "22.x"
+  python_version: "3.12.x"
+  version_enforcement: strict
+  forbid: [curl_pipe_sh, remote_code_exec, emoji_terminal_output]
+  require: [lockfile_integrity, gh_version>=2.0.0, virtual_env_usage]
+  terminal_output: ascii_only
+  quality_gates:
+    coverage_threshold: 95
+    test_timeout: 30000
+    linting: mandatory
 
 artifacts:
   logs_dir: logs/
   reports_dir: reports/
+  cache_strategy: environment_specific
+
+caching:
+  python:
+    key: "${{ runner.os }}-python-3.12-${{ hashFiles('pyproject.toml') }}"
+    paths:
+      - .venv
+    restore_keys:
+      - "${{ runner.os }}-python-3.12-"
+  node:
+    key: "${{ runner.os }}-node-22-${{ hashFiles('aar/package-lock.json') }}"
+    paths:
+      - aar/node_modules
+    restore_keys:
+      - "${{ runner.os }}-node-22-"

@@ -1,0 +1,81 @@
+name: Version Policy Audit
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-versions:
+    name: Verify Node 22.x + Python 3.12.x Policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Assert Version Policy Compliance
+        run: |
+          echo "Validating DevOnboarder Universal Version Policy..."
+
+          # Check Python version
+          PYTHON_VERSION=$(python3 -V | cut -d' ' -f2)
+          printf "Python version: %s\n" "$PYTHON_VERSION"
+          if [[ ! "$PYTHON_VERSION" =~ ^3\.12\. ]]; then
+            printf "ERROR: Need Python 3.12.x, got %s\n" "$PYTHON_VERSION"
+            exit 1
+          fi
+          echo "PASS: Python 3.12.x policy compliance"
+
+          # Check Node version
+          NODE_VERSION=$(node -v)
+          printf "Node version: %s\n" "$NODE_VERSION"
+          if [[ ! "$NODE_VERSION" =~ ^v22\. ]]; then
+            printf "ERROR: Need Node 22.x, got %s\n" "$NODE_VERSION"
+            exit 1
+          fi
+          echo "PASS: Node 22.x policy compliance"
+
+          # Check npm version
+          NPM_VERSION=$(npm -v)
+          printf "npm version: %s\n" "$NPM_VERSION"
+
+          echo "SUCCESS: All versions meet DevOnboarder policy"
+          echo "Ready for development with:"
+          echo "  - Python 3.12.x for backend services"
+          echo "  - Node.js 22.x for frontend/bot development"
+
+      - name: Validate Tool Version Files
+        run: |
+          echo "Checking version configuration files..."
+
+          # Check .nvmrc
+          if [[ -f .nvmrc ]]; then
+            NVMRC_VERSION=$(cat .nvmrc)
+            printf ".nvmrc specifies: %s\n" "$NVMRC_VERSION"
+            if [[ "$NVMRC_VERSION" != "22" ]]; then
+              echo "ERROR: .nvmrc should specify '22'"
+              exit 1
+            fi
+          fi
+
+          # Check .python-version
+          if [[ -f .python-version ]]; then
+            PYTHON_FILE_VERSION=$(cat .python-version)
+            printf ".python-version specifies: %s\n" "$PYTHON_FILE_VERSION"
+            if [[ ! "$PYTHON_FILE_VERSION" =~ ^3\.12 ]]; then
+              echo "ERROR: .python-version should specify 3.12.x"
+              exit 1
+            fi
+          fi
+
+          echo "PASS: Version files comply with policy"
