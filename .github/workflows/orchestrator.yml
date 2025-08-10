@@ -20,6 +20,8 @@ jobs:
         with: {node-version: '22'}
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
+      - name: Set up Python venv
+        run: python -m venv .venv
       - name: Install dependencies
         run: |
           source .venv/bin/activate
