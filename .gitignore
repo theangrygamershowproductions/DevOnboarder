@@ -45,7 +45,9 @@
 .terraform/
 .venv/
 .vscode-integrations/
-.vscode/
+# .vscode/ - Commented out to support Universal Development Experience Policy
+.vscode/launch.json
+.vscode/*.tmp
 /.coverage*
 /.pytest_cache/
 /.tox/

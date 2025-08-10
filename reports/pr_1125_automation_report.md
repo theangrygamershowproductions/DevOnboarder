@@ -1,8 +1,8 @@
 # PR #1125 Automation Report
 
-**Generated:** 2025-08-10 10:16:22
+**Generated:** 2025-08-10 10:50:12
 
-**Mode:** execute
+**Mode:** full-auto
 
 **Controller:** PR Automation Framework v1.0
 
@@ -22,7 +22,7 @@
 
 - **Fixes Applied:** 0 categories
 - **Commits Created:** 0
-- **Auto-Merge:** Not attempted
+- **Auto-Merge:** Evaluated
 
 ## TARGET Next Steps
 
@@ -30,7 +30,7 @@
 
 ## FOLDER Artifacts
 
-- **Full Log:** `logs/pr_automation_1125_20250810_101622.log`
+- **Full Log:** `logs/pr_automation_1125_20250810_105012.log`
 - **Health Analysis:** Available in automation logs
 - **Pattern Analysis:** Available in automation logs
 

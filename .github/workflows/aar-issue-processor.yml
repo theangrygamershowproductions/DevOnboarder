@@ -28,9 +28,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Parse issue form data
         id: parse-issue
@@ -145,7 +146,7 @@ jobs:
           printf "%s\n" "$PARSED_DATA" > validation_temp.json
 
           # Validate against schema
-          if npm run aar:validate validation_temp.json; then
+          if cd aar && npm run aar:validate ../validation_temp.json; then
             echo "validation_passed=true" >> $GITHUB_OUTPUT
           else
             echo "validation_passed=false" >> $GITHUB_OUTPUT
@@ -166,7 +167,7 @@ jobs:
           printf "%s\n" "$AAR_DATA" > "docs/AAR/data/$FILENAME"
 
           # Generate markdown report
-          npm run aar:render "docs/AAR/data/$FILENAME" docs/AAR/reports
+          cd aar && npm run aar:render "../docs/AAR/data/$FILENAME" ../docs/AAR/reports
 
           # Set outputs for PR
           echo "filename=$FILENAME" >> $GITHUB_OUTPUT

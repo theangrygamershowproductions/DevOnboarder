@@ -89,9 +89,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Checking Test AAR Generation Pipeline
         run: |
@@ -138,9 +139,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Run golden file tests
         run: |
@@ -167,9 +169,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Generate test reports
         run: |
@@ -179,7 +182,7 @@ jobs:
             for file in docs/AAR/data/*.aar.json; do
               BASENAME=$(basename "$file")
               printf "Rendering: %s\n" "$BASENAME"
-              cd aar && npm run aar:render "$file" ../docs/AAR/reports
+              cd aar && npm run aar:render "../$file" ../docs/AAR/reports
             done
             echo "Success: All reports generated successfully"
           else
@@ -215,9 +218,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Security audit of dependencies
         run: |
@@ -280,9 +284,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Test end-to-end workflow
         run: |
@@ -304,12 +309,12 @@ jobs:
 
           # Validate test data
           echo "Step 1: Validating test data..."
-          cd aar && npm run aar:validate test_integration.aar.json
+          cd aar && npm run aar:validate ../test_integration.aar.json
 
           # Render test report
           echo "Step 2: Rendering test report..."
           mkdir -p test_output
-          cd aar && npm run aar:render test_integration.aar.json test_output
+          cd aar && npm run aar:render ../test_integration.aar.json ../test_output
 
           # Verify output exists
           echo "Step 3: Verifying output..."
@@ -337,9 +342,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: 'aar/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: cd aar && npm ci
 
       - name: Validate provenance tracking
         run: |
@@ -361,7 +367,7 @@ jobs:
 
           # Render with provenance
           mkdir -p test_provenance_output
-          cd aar && npm run aar:render test_provenance.aar.json test_provenance_output
+          cd aar && npm run aar:render ../test_provenance.aar.json ../test_provenance_output
 
           # Check for provenance footer
           if grep -q "Schema Version:" test_provenance_output/provenance_test.md; then
