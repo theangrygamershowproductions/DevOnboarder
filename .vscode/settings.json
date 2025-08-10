@@ -1,0 +1,39 @@
+{
+    "postman.settings.dotenv-detection-notification-visibility": false,
+    "editor.indentSize": "tabSize",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length=88", "--target-version=py312"],
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "editor.formatOnSave": false,
+    "[python]": {
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+        }
+    },
+    "yaml.customTags": ["!reference"],
+    "yaml.validate": true,
+    "yaml.completion": true,
+    "yaml.hover": true,
+    "yaml.format.enable": true,
+    "yaml.format.singleQuote": false,
+    "yaml.format.bracketSpacing": true,
+    "yaml.schemaStore.enable": true,
+    "files.associations": {
+        "*.yml": "yaml",
+        "*.yaml": "yaml"
+    },
+    "python.terminal.activateEnvironment": true,
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": ["--cov=src", "--cov-fail-under=95"],
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "jest.autoRun": "off",
+    "vitest.enable": true,
+    "terminal.integrated.env.linux": {
+        "VIRTUAL_ENV": "${workspaceFolder}/.venv",
+        "PATH": "${workspaceFolder}/.venv/bin:${env:PATH}"
+    }
+}
