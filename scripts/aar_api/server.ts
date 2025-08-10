@@ -23,6 +23,38 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
+// Rate limiting middleware for AAR submissions
+const rateLimit = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = 10; // 10 requests per window
+
+const rateLimitMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const clientId = req.ip || 'unknown';
+  const now = Date.now();
+
+  const clientData = rateLimit.get(clientId) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW };
+
+  // Reset if window expired
+  if (now > clientData.resetTime) {
+    clientData.count = 0;
+    clientData.resetTime = now + RATE_LIMIT_WINDOW;
+  }
+
+  clientData.count++;
+  rateLimit.set(clientId, clientData);
+
+  // Check if limit exceeded
+  if (clientData.count > RATE_LIMIT_MAX) {
+    return res.status(429).json({
+      success: false,
+      error: 'Rate limit exceeded',
+      message: `Maximum ${RATE_LIMIT_MAX} requests per ${RATE_LIMIT_WINDOW / 60000} minutes`
+    });
+  }
+
+  next();
+};
+
 // Serve static files (built React app) in production
 if (NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../public')));
@@ -65,7 +97,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Submit new AAR
-app.post('/api/aar/submit', async (req, res) => {
+app.post('/api/aar/submit', rateLimitMiddleware, async (req, res) => {
   try {
     console.log('Received AAR submission:', req.body.title);
 
