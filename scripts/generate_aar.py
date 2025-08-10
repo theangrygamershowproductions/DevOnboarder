@@ -371,25 +371,27 @@ class AARGenerator:
 ## Executive Summary
 
 ### Workflow Information
-- **Run ID**: {failure_data.get('workflow_run_id', 'N/A')}
-- **Token Used**: {failure_data.get('token_used', 'Unknown')}
-- **Collection Status**: {len(failure_data.get('data_collection', {}))} data sources
+- **Run ID**: {failure_data.get("workflow_run_id", "N/A")}
+- **Token Used**: {failure_data.get("token_used", "Unknown")}
+- **Collection Status**: {len(failure_data.get("data_collection", {}))} data sources
 
 ### Security Audit
-{self._format_security_audit(failure_data.get('security_audit', {}))}
+{self._format_security_audit(failure_data.get("security_audit", {}))}
 
 ## Failure Analysis
 
 ### Recent Failures
-{self._format_recent_failures(
-    failure_data.get('data_collection', {}).get('recent_failures', [])
-)}
+{
+            self._format_recent_failures(
+                failure_data.get("data_collection", {}).get("recent_failures", [])
+            )
+        }
 
 ### Job Analysis
-{self._format_job_analysis(failure_data.get('data_collection', {}).get('job_logs', {}))}
+{self._format_job_analysis(failure_data.get("data_collection", {}).get("job_logs", {}))}
 
 ### Artifacts
-{self._format_artifacts(failure_data.get('data_collection', {}).get('artifacts', []))}
+{self._format_artifacts(failure_data.get("data_collection", {}).get("artifacts", []))}
 
 ## Root Cause Analysis
 
@@ -411,8 +413,8 @@ class AARGenerator:
 
 ### Policy Adherence
 - No Default Token Policy v1.0: ✅ COMPLIANT
-- Token Hierarchy Used: {failure_data.get('token_used', 'CI_ISSUE_AUTOMATION_TOKEN')}
-- Security Audit: {len(failure_data.get('security_audit', {}))} checks performed
+- Token Hierarchy Used: {failure_data.get("token_used", "CI_ISSUE_AUTOMATION_TOKEN")}
+- Security Audit: {len(failure_data.get("security_audit", {}))} checks performed
 
 ---
 

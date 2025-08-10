@@ -313,9 +313,9 @@ class CIMonitor:
         if analysis["status"] == "failed":
             report += "## 🔧 Recommended Actions\n\n"
             report += "1. **Review failed checks** above for specific errors\n"
-            report += "2. **Run tests locally**: " "Activate virtual environment\n"
+            report += "2. **Run tests locally**: Activate virtual environment\n"
             report += "3. **Install dependencies**: `pip install -e .[test]`\n"
-            report += "4. **Run quality checks**: " "`python -m pytest --cov=src`\n"
+            report += "4. **Run quality checks**: `python -m pytest --cov=src`\n"
             report += "5. **Check linting**: `python -m ruff check src/`\n\n"
 
             # Add recent failed workflow context if available
@@ -338,16 +338,14 @@ class CIMonitor:
                             time_str = (
                                 f" ({time_ago.days}d ago)"
                                 if time_ago.days > 0
-                                else f" ({time_ago.seconds//3600}h ago)"
+                                else f" ({time_ago.seconds // 3600}h ago)"
                             )
                         except (ValueError, AttributeError):
                             time_str = ""
                     else:
                         time_str = ""
 
-                    report += (
-                        f"- ❌ **{workflow_name}**: " f"{display_title}{time_str}\n"
-                    )
+                    report += f"- ❌ **{workflow_name}**: {display_title}{time_str}\n"
                     if url:
                         report += f"  [View Run]({url})\n"
                 report += "\n"
@@ -480,7 +478,7 @@ def main():
         type=int,
         nargs="?",
         help=(
-            "Pull request number to monitor " "(optional - will prompt if not provided)"
+            "Pull request number to monitor (optional - will prompt if not provided)"
         ),
     )
     parser.add_argument("--output", "-o", help="Output file for report (optional)")

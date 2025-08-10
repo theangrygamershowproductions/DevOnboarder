@@ -59,7 +59,7 @@ def test_unicode_artifact_manager():
                 (temp_path / filename).touch()
             except OSError:
                 # Skip files that can't be created on this filesystem
-                print(f"Skipping creation of {filename} " "(filesystem limitation)")
+                print(f"Skipping creation of {filename} (filesystem limitation)")
 
         # Analyze the test directory
         analysis = manager.analyze_artifact_filenames(temp_path)

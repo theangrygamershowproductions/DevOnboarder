@@ -177,9 +177,7 @@ class UnicodeTerminalValidator:
         violations_count = 0
         files = self.find_files_to_check(directory)
 
-        print(
-            f"Checking {len(files)} files for Unicode terminal output " "violations..."
-        )
+        print(f"Checking {len(files)} files for Unicode terminal output violations...")
 
         for file_path in files:
             violations = self.validate_file(file_path)
@@ -232,7 +230,7 @@ def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description=(
-            "Validate terminal output for Unicode characters that " "cause hanging"
+            "Validate terminal output for Unicode characters that cause hanging"
         )
     )
     parser.add_argument(
@@ -269,11 +267,10 @@ def main():
 
     if violations_count > 0:
         print(
-            f"\nCRITICAL: Found {violations_count} Unicode terminal output "
-            "violations!"
+            f"\nCRITICAL: Found {violations_count} Unicode terminal output violations!"
         )
         print("These WILL cause terminal hanging in DevOnboarder environment.")
-        print("Fix by replacing Unicode characters with plain ASCII " "alternatives.")
+        print("Fix by replacing Unicode characters with plain ASCII alternatives.")
         print("See .github/copilot-instructions.md for requirements.")
         sys.exit(1)
     else:

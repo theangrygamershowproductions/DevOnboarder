@@ -33,6 +33,7 @@ Requirements:
     - Project dependencies installed: pip install -e .[test]
     - Write access to .codespell-ignore file
 """
+
 from __future__ import annotations
 
 import argparse
@@ -351,7 +352,7 @@ def save_dictionary(entries: Set[str]) -> None:
 
     with open(CODESPELL_IGNORE_FILE, "w", encoding="utf-8") as f:
         f.write("# DevOnboarder Codespell Ignore List\n")
-        f.write("# This file contains project-specific terms and " "file patterns\n")
+        f.write("# This file contains project-specific terms and file patterns\n")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         f.write(f"# Last updated: {timestamp}\n")
         f.write("#\n")

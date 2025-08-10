@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Diagnose CI failures by scanning logs for common patterns."""
+
 from __future__ import annotations
 
 import re

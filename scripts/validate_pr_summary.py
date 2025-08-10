@@ -91,7 +91,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
     ]
     if len(content_lines) < 10:
         errors.append(
-            "PR summary appears too brief. " "Please provide more detailed information."
+            "PR summary appears too brief. Please provide more detailed information."
         )
 
     return len(errors) == 0, errors

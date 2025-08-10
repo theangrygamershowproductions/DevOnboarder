@@ -283,12 +283,12 @@ def generate_html_report(scripts, analyses):
     for script in scripts[:20]:  # Limit to first 20 scripts to prevent huge HTML
         html_content += f"""
                 <div class="script-card">
-                    <h3>{safe_html_escape(script['name'])}</h3>
-                    <p><strong>Type:</strong> {safe_html_escape(script['type'])}</p>
+                    <h3>{safe_html_escape(script["name"])}</h3>
+                    <p><strong>Type:</strong> {safe_html_escape(script["type"])}</p>
                     <p><strong>Path:</strong>
-                       <code>{safe_html_escape(script['path'])}</code></p>
-                    <p><strong>Size:</strong> {script['size']} bytes</p>
-                    <p><strong>Modified:</strong> {script['modified'][:19]}</p>
+                       <code>{safe_html_escape(script["path"])}</code></p>
+                    <p><strong>Size:</strong> {script["size"]} bytes</p>
+                    <p><strong>Modified:</strong> {script["modified"][:19]}</p>
                 </div>"""
 
     if len(scripts) > 20:
@@ -306,9 +306,9 @@ def generate_html_report(scripts, analyses):
             <h2>📋 Raw Analysis Data</h2>
             <details>
                 <summary>Click to view JSON data</summary>
-                <div class="analysis-output">{safe_html_escape(
-                    json.dumps(analyses, indent=2)
-                )}</div>
+                <div class="analysis-output">{
+        safe_html_escape(json.dumps(analyses, indent=2))
+    }</div>
             </details>
         </div>
     </div>

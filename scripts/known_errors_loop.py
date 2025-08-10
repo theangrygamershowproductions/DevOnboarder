@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Process error logs against the known error database."""
+
 from __future__ import annotations
 
 import json

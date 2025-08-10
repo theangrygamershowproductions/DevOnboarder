@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Update the coverage badge using the generated Markdown summary."""
+
 from __future__ import annotations
 
 import re
