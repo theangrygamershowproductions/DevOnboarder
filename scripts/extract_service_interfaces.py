@@ -92,7 +92,6 @@ def extract_route_info(
             and decorator.value.id == "router"
             and decorator.attr in http_methods
         ):
-
             method = decorator.attr.upper()
             path = "/"
 

@@ -31,7 +31,7 @@ This document tracks versioning and metadata for configuration files across the 
 - **Version**: 1.0.0
 - **Purpose**: Root project documentation scripts and tools
 - **Key Dependencies**: typedoc, markdownlint-cli2
-- **Node Engine**: >=20
+- **Node Engine**: >=22
 - **Standards**: DevOnboarder Project Standards compliant
 - **Last Modified**: 2025-07-25
 - **Notes**: Controls documentation generation for bot and frontend APIs

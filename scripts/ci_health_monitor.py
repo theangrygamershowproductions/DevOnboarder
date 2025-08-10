@@ -232,9 +232,9 @@ class CIHealthMonitor:
                     "type": "duration_high",
                     "severity": "medium",
                     "message": (
-                        f"Average CI duration ({avg_duration/60:.1f} min) exceeds "
+                        f"Average CI duration ({avg_duration / 60:.1f} min) exceeds "
                         f"threshold "
-                        f"({self.metrics_config['avg_duration_threshold']/60:.1f} "
+                        f"({self.metrics_config['avg_duration_threshold'] / 60:.1f} "
                         f"min)"
                     ),
                     "metric": "avg_duration",
@@ -337,8 +337,7 @@ class CIHealthMonitor:
     ) -> None:
         """Run continuous CI health monitoring."""
         print(
-            f"🔄 Starting continuous CI health monitoring "
-            f"(interval: {interval_hours}h)"
+            f"🔄 Starting continuous CI health monitoring (interval: {interval_hours}h)"
         )
 
         iteration = 0
@@ -433,7 +432,7 @@ def main():
             print(f"   Success rate: {stats.get('success_rate', 0):.1%}")
             print(
                 f"   Average duration: "
-                f"{stats.get('avg_duration_seconds', 0)/60:.1f} minutes"
+                f"{stats.get('avg_duration_seconds', 0) / 60:.1f} minutes"
             )
             print(f"   Health score: {metrics.get('health_score', 0)}/100")
 

@@ -95,10 +95,10 @@ def create_structured_comment(
     summary_table = f"""
 | Metric | Value |
 |--------|-------|
-| Files Changed | {aar_summary.get('files_changed', 'Unknown')} |
-| Codex Agents | {aar_summary.get('agents_updated', '0')} updated |
-| Action Items | {aar_summary.get('action_items', '0')} identified |
-| Codex Alignment | {aar_summary.get('codex_alignment', 'Not verified')} |
+| Files Changed | {aar_summary.get("files_changed", "Unknown")} |
+| Codex Agents | {aar_summary.get("agents_updated", "0")} updated |
+| Action Items | {aar_summary.get("action_items", "0")} identified |
+| Codex Alignment | {aar_summary.get("codex_alignment", "Not verified")} |
 """
 
     comment = f"""## {icon} {title}
@@ -118,7 +118,7 @@ def create_structured_comment(
 - **Technical Decisions**: Documented in AAR for future reference
 - **Process Analysis**: Development workflow insights captured
 - **Lessons Learned**: Best practices and gotchas identified
-- **Action Items**: {aar_summary.get('action_items', '0')} items tracked for follow-up
+- **Action Items**: {aar_summary.get("action_items", "0")} items tracked for follow-up
 
 ### 💡 For Developers
 

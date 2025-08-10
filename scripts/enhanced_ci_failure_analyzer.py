@@ -506,9 +506,7 @@ def main():
         if primary and isinstance(primary, dict):
             primary_type = str(primary.get("type", "unknown"))
             primary_severity = str(primary.get("severity", "unknown"))
-            print(
-                f"   Primary failure: {primary_type} " f"(severity: {primary_severity})"
-            )
+            print(f"   Primary failure: {primary_type} (severity: {primary_severity})")
             print(f"   Auto-fixable: {primary.get('auto_fixable', False)}")
             print(f"   Confidence: {analysis['confidence_score']:.1%}")
 

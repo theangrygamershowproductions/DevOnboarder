@@ -1,0 +1,240 @@
+{
+  "version": "2.0",
+  "last_updated": "2025-08-08",
+  "execution_plan": "foundation_first_docker_mesh_integration",
+  "mvp_timeline": {
+    "start_date": "2025-08-08",
+    "target_completion": "2025-08-30",
+    "total_weeks": 4,
+    "buffer_week": "2025-08-25_to_2025-08-30"
+  },
+  "execution_phases": {
+    "week_1": {
+      "phase_name": "Infrastructure Foundation",
+      "dates": "2025-08-08_to_2025-08-11",
+      "priority": "P0_MVP_BLOCKING",
+      "status": "active",
+      "success_criteria": {
+        "terminal_violations": "22_to_10_or_fewer",
+        "network_tiers": "auth_api_data_operational",
+        "service_isolation": "100_percent_data_tier",
+        "dns_discovery": "hostname_based_contracts"
+      }
+    },
+    "week_2": {
+      "phase_name": "Quality Framework",
+      "dates": "2025-08-12_to_2025-08-17",
+      "priority": "P0_MVP_QUALITY",
+      "status": "queued",
+      "success_criteria": {
+        "quality_gates": "precommit_and_ci_enforcement",
+        "ci_network_validation": "contract_enforcement_active",
+        "network_violations": "zero_unauthorized_exposure"
+      }
+    },
+    "week_3": {
+      "phase_name": "Advanced Infrastructure",
+      "dates": "2025-08-18_to_2025-08-24",
+      "priority": "P1_MVP_ENHANCEMENT",
+      "status": "queued",
+      "success_criteria": {
+        "artifact_pollution": "zero_violations_with_isolation",
+        "coverage_automation": "tier_aware_recovery_paths",
+        "ci_hygiene_score": "service_isolation_benefits"
+      }
+    },
+    "week_4": {
+      "phase_name": "Security & Documentation",
+      "dates": "2025-08-25_to_2025-08-30",
+      "priority": "P1_MVP_COMPLETION",
+      "status": "buffer_week",
+      "success_criteria": {
+        "token_security": "scoped_tokens_network_restrictions",
+        "agent_documentation": "mesh_reflected_in_codex_metadata",
+        "mvp_handoff": "complete_coverage_and_validation"
+      }
+    },
+    "post_mvp": {
+      "phase_name": "Advanced Observability",
+      "dates": "2025-09-01_onwards",
+      "priority": "P2_STRATEGIC_EVOLUTION",
+      "status": "deferred",
+      "success_criteria": {
+        "modular_runtime": "post_mvp_evolution",
+        "mesh_phases_2_4_5": "observability_metadata_visualizer"
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "terminal_output_enhancement",
+      "name": "Terminal Output Enhancement",
+      "week": 1,
+      "priority": "CRITICAL",
+      "status": "staged_to_active",
+      "files": ["enhanced_terminal_output_valdation_and_enforcement_system.md"],
+      "dependencies": [],
+      "enables": ["docker_service_mesh_phase1", "mvp_quality_gates"],
+      "success_metric": "violations_22_to_10",
+      "estimated_effort": "3_days",
+      "assigned_team": "infrastructure",
+      "mvp_blocking": true
+    },
+    {
+      "id": "docker_service_mesh_phase1",
+      "name": "Docker Service Mesh Phase 1",
+      "week": 1,
+      "priority": "CRITICAL",
+      "status": "new_to_active",
+      "files": ["scripts/scaffold_phase1_networks.sh", "docker-compose.dev.yaml"],
+      "dependencies": ["terminal_output_enhancement"],
+      "enables": ["docker_service_mesh_phase3", "mvp_quality_gates", "root_artifact_guard"],
+      "success_metric": "3_network_tiers_operational",
+      "estimated_effort": "4_days",
+      "assigned_team": "infrastructure",
+      "mvp_blocking": true
+    },
+    {
+      "id": "mvp_quality_gates",
+      "name": "MVP Quality Gates Framework",
+      "week": 2,
+      "priority": "CRITICAL",
+      "status": "staged_to_scheduled",
+      "files": ["implement_mvp_quality_gates_framework.md"],
+      "dependencies": ["docker_service_mesh_phase1"],
+      "enables": ["root_artifact_guard", "codex_catch_system"],
+      "success_metric": "8_quality_metrics_enforced",
+      "estimated_effort": "3_days",
+      "assigned_team": "full_stack",
+      "mvp_blocking": true
+    },
+    {
+      "id": "docker_service_mesh_phase3",
+      "name": "Docker Service Mesh Phase 3 - CI Validation",
+      "week": 2,
+      "priority": "CRITICAL",
+      "status": "new_to_scheduled",
+      "files": ["scripts/validate_network_contracts.sh", ".github/workflows/network-validation.yml"],
+      "dependencies": ["docker_service_mesh_phase1"],
+      "enables": ["root_artifact_guard", "ci_token_security"],
+      "success_metric": "zero_network_violations",
+      "estimated_effort": "3_days",
+      "assigned_team": "infrastructure",
+      "mvp_blocking": true
+    },
+    {
+      "id": "root_artifact_guard",
+      "name": "Root Artifact Guard Enhancement",
+      "week": 3,
+      "priority": "HIGH",
+      "status": "staged_to_scheduled",
+      "files": ["root_artifcact_guard_and_ci_hygiene_system_enhancement.md"],
+      "dependencies": ["mvp_quality_gates", "docker_service_mesh_phase3"],
+      "enables": ["codex_catch_system"],
+      "success_metric": "zero_root_pollution",
+      "estimated_effort": "2_days",
+      "assigned_team": "infrastructure",
+      "mvp_blocking": false
+    },
+    {
+      "id": "codex_catch_system",
+      "name": "Codex Catch System - Coverage Automation",
+      "week": 3,
+      "priority": "HIGH",
+      "status": "staged_to_scheduled",
+      "files": ["implement_codex_catch_system.md"],
+      "dependencies": ["root_artifact_guard", "terminal_output_enhancement"],
+      "enables": ["agent_validation"],
+      "success_metric": "automated_coverage_management",
+      "estimated_effort": "3_days",
+      "assigned_team": "full_stack",
+      "mvp_blocking": false
+    },
+    {
+      "id": "agent_validation",
+      "name": "Agent Documentation & Validation",
+      "week": 4,
+      "priority": "MEDIUM",
+      "status": "staged_to_scheduled",
+      "files": ["agent_documentation_and_validation_system_enhancement.md"],
+      "dependencies": ["codex_catch_system"],
+      "enables": ["modular_runtime"],
+      "success_metric": "automated_agent_framework",
+      "estimated_effort": "3_days",
+      "assigned_team": "architecture",
+      "mvp_blocking": false
+    },
+    {
+      "id": "ci_token_security",
+      "name": "CI Token Security Enhancement",
+      "week": 4,
+      "priority": "MEDIUM",
+      "status": "staged_to_scheduled",
+      "files": ["ci_workflow_token_security_and_authentication_enhancement.md"],
+      "dependencies": ["docker_service_mesh_phase3"],
+      "enables": ["modular_runtime"],
+      "success_metric": "enhanced_token_hierarchy",
+      "estimated_effort": "2_days",
+      "assigned_team": "security",
+      "mvp_blocking": false
+    },
+    {
+      "id": "modular_runtime",
+      "name": "Modular Runtime System",
+      "week": 5,
+      "priority": "LOW",
+      "status": "staged_to_post_mvp",
+      "files": ["implement_modular_runtime_and_module_manifest.md"],
+      "dependencies": ["agent_validation", "ci_token_security"],
+      "enables": ["docker_service_mesh_advanced"],
+      "success_metric": "modular_architecture_ready",
+      "estimated_effort": "5_days",
+      "assigned_team": "architecture",
+      "mvp_blocking": false
+    },
+    {
+      "id": "docker_service_mesh_advanced",
+      "name": "Docker Service Mesh Advanced Features",
+      "week": 6,
+      "priority": "LOW",
+      "status": "new_to_post_mvp",
+      "files": ["phases_2_4_5_implementation"],
+      "dependencies": ["modular_runtime"],
+      "enables": [],
+      "success_metric": "comprehensive_observability",
+      "estimated_effort": "4_days",
+      "assigned_team": "architecture",
+      "mvp_blocking": false
+    }
+  ],
+  "integration_matrix": {
+    "terminal_output_docker_ci": "reliable_infrastructure_validation",
+    "quality_gates_network_contracts": "comprehensive_enforcement",
+    "artifact_guard_network_isolation": "complete_hygiene_system",
+    "agent_validation_service_discovery": "intelligent_routing",
+    "token_security_network_boundaries": "defense_in_depth"
+  },
+  "risk_mitigation": {
+    "foundation_first": "infrastructure_stable_before_advanced_features",
+    "incremental_rollout": "each_week_builds_on_previous",
+    "quality_gates": "continuous_validation_at_every_level",
+    "rollback_capability": "each_task_independently_deployable"
+  },
+  "resource_allocation": {
+    "week_1_2": {
+      "team": "infrastructure",
+      "developers": 2,
+      "focus": "foundation_and_quality"
+    },
+    "week_3_4": {
+      "team": "full_stack",
+      "developers": 3,
+      "focus": "advanced_infrastructure_and_security"
+    },
+    "week_5_6": {
+      "team": "architecture",
+      "developers": 2,
+      "focus": "post_mvp_evolution"
+    }
+  }
+}

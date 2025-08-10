@@ -278,6 +278,62 @@ services:
       - "traefik.http.routers.dashboard-prod.tls.certresolver=letsencrypt"
       - "traefik.http.services.dashboard-prod.loadbalancer.server.port=8003"
 
+  # AAR UI Service - Production
+  aar-ui:
+    image: ghcr.io/theangrygamershowproductions/devonboarder-aar-ui:latest
+    container_name: devonboarder-aar-ui-prod
+    hostname: aar-ui.devonboarder.prod
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - AAR_UI_PORT=3000
+      - CORS_ORIGINS=https://aar.theangrygamershow.com
+    networks:
+      - devonboarder_network
+    volumes:
+      - ./docs/AAR:/app/docs/AAR:ro
+      - ./logs:/app/logs
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=devonboarder_network"
+
+      # Production domain routing
+      - "traefik.http.routers.aar-ui-prod.rule=Host(`aar.theangrygamershow.com`)"
+      - "traefik.http.routers.aar-ui-prod.entrypoints=websecure"
+      - "traefik.http.routers.aar-ui-prod.tls=true"
+      - "traefik.http.routers.aar-ui-prod.tls.certresolver=cloudflare"
+      - "traefik.http.routers.aar-ui-prod.service=aar-ui-prod"
+
+      # Service configuration
+      - "traefik.http.services.aar-ui-prod.loadbalancer.server.port=3000"
+      - "traefik.http.services.aar-ui-prod.loadbalancer.healthcheck.path=/api/health"
+      - "traefik.http.services.aar-ui-prod.loadbalancer.healthcheck.interval=30s"
+
+      # Security headers
+      - "traefik.http.middlewares.aar-security.headers.frameDeny=true"
+      - "traefik.http.middlewares.aar-security.headers.sslRedirect=true"
+      - "traefik.http.middlewares.aar-security.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.aar-security.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.aar-security.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.aar-security.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.aar-security.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.aar-security.headers.stsPreload=true"
+
+      # Apply security middleware
+      - "traefik.http.routers.aar-ui-prod.middlewares=aar-security"
+
+      # Rate limiting
+      - "traefik.http.middlewares.aar-ratelimit.ratelimit.burst=10"
+      - "traefik.http.middlewares.aar-ratelimit.ratelimit.average=2"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   # Cloudflare Tunnel
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest

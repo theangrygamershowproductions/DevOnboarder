@@ -490,6 +490,7 @@ def test_expired_token_decode_fails(monkeypatch):
             auth_service.SECRET_KEY,
             algorithms=[auth_service.ALGORITHM],
             options={"verify_exp": True},
+            leeway=1,  # Add 1 second leeway for timing issues
         )
 
 

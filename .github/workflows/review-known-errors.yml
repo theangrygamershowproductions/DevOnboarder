@@ -29,6 +29,7 @@ jobs:
             - name: Check for outdated entries
               id: check
               run: |
+                  # terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter
                   python - <<'PY'
                   import datetime, json, yaml
                   from pathlib import Path
@@ -49,6 +50,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
+                  # terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter
                   payload=$(python - <<'PY'
                   import json
                   from pathlib import Path

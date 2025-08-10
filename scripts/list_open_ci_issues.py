@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Print numbers of open ci-failure issues."""
+
 from __future__ import annotations
 
 import json

@@ -35,7 +35,31 @@ This guide provides step-by-step, reproducible instructions for setting up DevOn
 
 ## 🚀 Phase 1: Initial Setup
 
-### 1.1 System Setup
+### 1.1 Universal Development Experience Setup (REQUIRED FIRST)
+
+**Critical**: Set up the Universal Development Experience Policy before any development work:
+
+```bash
+# Clone repository
+git clone https://github.com/theangrygamershowproductions/DevOnboarder.git
+cd DevOnboarder
+
+# One-liner setup for whitespace elimination and Git configuration
+bash scripts/setup_git_whitespace_config.sh
+
+# Install pre-commit hooks for formatting consistency  
+pip install pre-commit
+pre-commit install
+
+# Set up virtual environment (MANDATORY)
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .[test]
+```
+
+**Why This Matters**: This eliminates whitespace drama, enables safe commits, and ensures consistent development experience across all team members.
+
+### 1.2 System Setup
 
 ```bash
 # Install system dependencies

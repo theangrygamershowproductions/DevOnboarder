@@ -1,0 +1,75 @@
+# Backend Service Environment Variables Allowlist
+#
+# Variables that are safe to synchronize to backend service environments
+# These include API configuration and non-sensitive application settings
+
+# API Configuration
+API_BASE_URL
+API_PORT
+API_HOST
+BACKEND_URL
+
+# Database Configuration
+DATABASE_URL
+
+# Authentication Configuration
+AUTH_URL
+JWT_ALGORITHM
+TOKEN_EXPIRE_SECONDS
+
+# CORS Configuration
+CORS_ALLOW_ORIGINS
+CORS_ALLOW_METHODS
+CORS_ALLOW_HEADERS
+
+# Environment Configuration
+ENVIRONMENT
+NODE_ENV
+PYTHON_ENV
+
+# Service Configuration
+SERVICE_NAME
+SERVICE_VERSION
+SERVICE_PORT
+SERVICE_HOST
+
+# Feature Flags
+FEATURE_USER_ONBOARDING
+FEATURE_XP_SYSTEM
+FEATURE_CONTRIBUTION_TRACKING
+FEATURE_DASHBOARD_API
+
+# Database Configuration
+INIT_DB_ON_STARTUP
+AUTO_MIGRATE
+DB_POOL_SIZE
+DB_TIMEOUT
+
+# Logging Configuration
+LOG_LEVEL
+LOG_FORMAT
+BACKEND_LOG_LEVEL
+
+# Health Check Configuration
+HEALTH_CHECK_ENDPOINT
+HEALTH_CHECK_INTERVAL
+HEALTH_CHECK_TIMEOUT
+
+# Rate Limiting
+RATE_LIMIT_ENABLED
+RATE_LIMIT_REQUESTS_PER_MINUTE
+RATE_LIMIT_BURST_SIZE
+
+# Cache Configuration
+CACHE_ENABLED
+CACHE_TTL
+CACHE_MAX_SIZE
+
+# External API Configuration
+DISCORD_API_ENDPOINT
+GITHUB_API_ENDPOINT
+
+# Development Configuration
+DEBUG_MODE
+DEV_RELOAD
+TESTING_MODE

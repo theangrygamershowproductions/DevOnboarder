@@ -25,6 +25,22 @@ npm ci --prefix frontend
 pre-commit install
 ```
 
+## Formatting and Commit Workflow
+
+**Preferred Development Flow** (Zero Whitespace Drama):
+
+```bash
+# One-time setup
+pre-commit install
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Preferred commit flow
+bash scripts/enhanced_safe_commit.sh "feat: descriptive message"
+# Falls back to safe_commit.sh if pre-commit not available
+```
+
+**Why This Works**: Our pre-commit hooks run formatters FIRST, then whitespace validation LAST as fail-only. This eliminates the restage loop that causes whitespace drama.
+
 ## Centralized Logging Policy
 
 **CRITICAL**: ALL logging must use the centralized `logs/` directory. This is enforced by CI/CD:

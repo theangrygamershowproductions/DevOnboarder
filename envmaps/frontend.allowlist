@@ -1,0 +1,35 @@
+# Frontend Environment Variables Allowlist
+#
+# Variables that are safe to synchronize to frontend environments
+# These are primarily Vite configuration variables for client-side apps
+
+# Vite Frontend Configuration
+VITE_AUTH_URL
+VITE_API_URL
+VITE_FEEDBACK_URL
+VITE_DISCORD_INTEGRATION_URL
+VITE_DASHBOARD_URL
+VITE_DISCORD_CLIENT_ID
+
+# Vite Development Configuration
+VITE_ALLOWED_HOST_DEV
+VITE_ALLOWED_HOST_PROD
+
+# Development Tunnel URLs
+DEV_TUNNEL_FRONTEND_URL
+DEV_TUNNEL_APP_URL
+
+# Public Configuration
+PUBLIC_API_ENDPOINT
+PUBLIC_DOCS_URL
+PUBLIC_STATUS_URL
+
+# Build Configuration
+BUILD_NUMBER
+BUILD_TIMESTAMP
+BUILD_VERSION
+
+# Feature Flags (Public)
+FEATURE_DASHBOARD_ENABLED
+FEATURE_FEEDBACK_ENABLED
+FEATURE_DISCORD_INTEGRATION

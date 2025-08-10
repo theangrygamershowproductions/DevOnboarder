@@ -1,3 +1,7 @@
+# DevOnboarder Token Policy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+# Required for: Issue and PR automation, AAR workflow triggers
+# Purpose: Automates AAR generation for closed issues and merged PRs
+# DevOnboarder No Default Token Policy v1.0 compliance: Follows token hierarchy
 ---
 name: AAR Automation
 
@@ -26,6 +30,9 @@ on:
         description: 'AAR title (for non-issue AARs)'
         required: false
         type: string
+
+permissions:
+  contents: read
 
 jobs:
   generate-aar:
@@ -67,21 +74,11 @@ jobs:
           source .venv/bin/activate
           pip install --upgrade pip
 
-      - name: Install GitHub CLI
+      - name: Setup environment
         run: |
-          type -p curl >/dev/null || \
-            (sudo apt update && sudo apt install curl -y)
-          curl -fsSL \
-            https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-            sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          sudo chmod go+r \
-            /usr/share/keyrings/githubcli-archive-keyring.gpg
-          ARCH=$(dpkg --print-architecture)
-          printf 'deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' \
-              "$ARCH" | \
-              sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt update
-          sudo apt install gh -y
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
 
       - name: Generate AAR (Issue Closure)
         if: github.event_name == 'issues'
@@ -121,18 +118,21 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .aar/
+          git add docs/AAR/
           git add logs/
           if git diff --staged --quiet; then
             echo "No AAR files to commit"
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              echo "DOCS(aar): add after actions report for ${{ github.event.issue.number }}" > commit_msg.txt
+              ISSUE_NUM="${{ github.event.issue.number }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$ISSUE_NUM" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              echo "DOCS(aar): add after actions report for PR#${{ github.event.pull_request.number }}" > commit_msg.txt
+              PR_NUM="${{ github.event.pull_request.number }}"
+              printf "DOCS(aar): add after actions report for PR#%s\n" "$PR_NUM" > commit_msg.txt
             else
-              echo "DOCS(aar): add after actions report for ${{ github.event.inputs.aar_type }}" > commit_msg.txt
+              AAR_TYPE="${{ github.event.inputs.aar_type }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$AAR_TYPE" > commit_msg.txt
             fi
             git commit -F commit_msg.txt
             git push
@@ -151,7 +151,7 @@ jobs:
             This issue tracks the action items identified in the After Actions Report for #${issueNumber}.
 
             **Original Issue**: #${issueNumber} - ${issueTitle}
-            **AAR Location**: \`.aar/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
 
             ## Action Items
             <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
@@ -194,7 +194,7 @@ jobs:
 
             **Original PR**: #${prNumber} - ${prTitle}
             **PR Author**: @${prAuthor}
-            **AAR Location**: \`.aar/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/pull-requests/pr-${prNumber}-*.md\`
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/pull-requests/pr-${prNumber}-*.md\`
 
             ## Action Items
             <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
@@ -231,7 +231,7 @@ jobs:
             const prTitle = context.payload.pull_request.title;
             const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
             const year = new Date().getFullYear();
-            const aarPath = `.aar/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
 
             const comment = `## After Action Report Generated
 
@@ -265,7 +265,7 @@ jobs:
             const issueTitle = context.payload.issue.title;
             const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
             const year = new Date().getFullYear();
-            const aarPath = `.aar/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
 
             const comment = `## After Action Report Generated
 
@@ -309,6 +309,6 @@ jobs:
         with:
           name: aar-files-${{ github.run_number }}
           path: |
-            .aar/
+            docs/AAR/
             logs/aar_generation_*.log
           retention-days: 30

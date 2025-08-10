@@ -1,1 +1,31 @@
-*       @theangrygamershowproductions/maintainers
+# DevOnboarder Code Ownership Rules
+
+# Ensures meaningful review gates with domain expertise
+
+# Default: Maintainers review all changes
+
+* @theangrygamershowproductions/maintainers
+
+# Documentation: Specialized review for docs
+
+docs/** @theangrygamershowproductions/maintainers
+*.md @theangrygamershowproductions/maintainers
+
+# Infrastructure & CI/CD: Critical system components
+
+.github/workflows/** @theangrygamershowproductions/maintainers
+scripts/** @theangrygamershowproductions/maintainers
+docker-compose*.yaml @theangrygamershowproductions/maintainers
+Dockerfile* @theangrygamershowproductions/maintainers
+
+# Security & Token Management: Enhanced Potato Policy enforcement
+
+.codex/tokens/** @theangrygamershowproductions/maintainers
+docs/security/** @theangrygamershowproductions/maintainers
+protection.json @theangrygamershowproductions/maintainers
+
+# Critical configuration files: Extra scrutiny required
+
+pyproject.toml @theangrygamershowproductions/maintainers
+package.json @theangrygamershowproductions/maintainers
+.env* @theangrygamershowproductions/maintainers

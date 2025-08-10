@@ -1,0 +1,45 @@
+# Bot Environment Variables Allowlist
+#
+# Variables that are safe to synchronize to bot environments
+# These are primarily Discord and API configuration variables
+
+# Discord Configuration (Public)
+DISCORD_CLIENT_ID
+DISCORD_GUILD_ID
+DISCORD_GUILD_IDS
+
+# Environment Configuration
+ENVIRONMENT
+NODE_ENV
+DEBUG
+
+# API Endpoints
+API_BASE_URL
+AUTH_URL
+DISCORD_REDIRECT_URI
+
+# Development Tunnel URLs
+DEV_TUNNEL_DISCORD_URL
+DEV_TUNNEL_API_URL
+DEV_TUNNEL_AUTH_URL
+
+# Bot Configuration (Non-sensitive)
+BOT_NAME
+BOT_VERSION
+BOT_COMMAND_PREFIX
+BOT_STATUS_MESSAGE
+
+# Database Configuration (Connection strings only)
+DATABASE_URL
+
+# CORS Configuration
+CORS_ALLOW_ORIGINS
+
+# Logging Configuration
+LOG_LEVEL
+LOG_FORMAT
+
+# Feature Flags
+FEATURE_SLASH_COMMANDS
+FEATURE_ROLE_MANAGEMENT
+FEATURE_VERIFICATION_SYSTEM

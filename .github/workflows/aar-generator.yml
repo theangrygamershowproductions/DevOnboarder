@@ -28,6 +28,9 @@ on:
         type: boolean
         default: true
 
+permissions:
+  contents: read
+
 env:
   # CRITICAL: Follow DevOnboarder No Default Token Policy v1.0
   # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
