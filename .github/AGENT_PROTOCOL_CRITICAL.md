@@ -1,6 +1,6 @@
 # CRITICAL AI Agent Protocol Rules
 
-## ⚠️ TERMINAL OUTPUT - ZERO TOLERANCE
+## TERMINAL OUTPUT - ZERO TOLERANCE
 
 **NEVER use these (WILL CAUSE HANGING):**
 
@@ -17,15 +17,15 @@ echo "Task completed"              # Plain ASCII only
 printf "Status: %s\n" "$VAR"     # Variables with printf
 ```
 
-## 🚫 ABSOLUTELY FORBIDDEN
+## ABSOLUTELY FORBIDDEN
 
-1. **NEVER** use `git commit --no-verify` (bypasses quality gates)
+1. **NEVER** use `git commit --no-verify` (bypasses quality gates) <!-- POTATO: EMERGENCY APPROVED - documentation-example-violation-20250810 -->
 2. **NEVER** use emojis/Unicode in terminal output
 3. **NEVER** install to system Python (always use `.venv`)
 4. **NEVER** modify linting configs without human approval
 5. **NEVER** create non-compliant markdown expecting auto-fix
 
-## ✅ MANDATORY PATTERNS
+## MANDATORY PATTERNS
 
 1. **ALWAYS** activate virtual environment: `source .venv/bin/activate`  
 2. **ALWAYS** use safe commit: `./scripts/safe_commit.sh "message"`
@@ -33,7 +33,7 @@ printf "Status: %s\n" "$VAR"     # Variables with printf
 4. **ALWAYS** create markdown compliant from start
 5. **ALWAYS** follow validation-driven troubleshooting
 
-## 🔍 VALIDATION FIRST
+## VALIDATION FIRST
 
 Before doing anything, run appropriate validation:
 
