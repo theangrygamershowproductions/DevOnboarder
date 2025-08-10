@@ -10,20 +10,19 @@ RUN npm run build
 
 # Build Express API
 WORKDIR /app/api
-COPY package.json ./
-COPY scripts/aar_api/ ./
-COPY app/aar-ui/lib/ ./lib/
-RUN npm install express cors zod @types/express @types/cors typescript
-RUN npx tsc server.ts --outDir dist --target es2022 --module es2022 --moduleResolution node --esModuleInterop
+COPY app/aar-core/package*.json ./
+RUN npm ci
+COPY app/aar-core/ ./
+RUN npm run build
 
 # Production image
 FROM node:22-alpine
 
 WORKDIR /app
 
-# Install production dependencies
-COPY package.json ./
-RUN npm install express cors zod --only=production
+# Install production dependencies for API
+COPY app/aar-core/package*.json ./
+RUN npm ci --only=production
 
 # Copy built assets
 COPY --from=build /app/ui/dist ./public
@@ -31,9 +30,6 @@ COPY --from=build /app/api/dist ./api
 
 # Copy AAR system components
 COPY docs/AAR/ ./docs/AAR/
-COPY scripts/render_aar.js ./scripts/
-COPY scripts/test_aar_golden.js ./scripts/
-COPY scripts/migrate_aar.js ./scripts/
 
 # Create necessary directories
 RUN mkdir -p logs docs/AAR/data docs/AAR/reports
