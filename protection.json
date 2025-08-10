@@ -2,18 +2,15 @@
   "required_status_checks": {
     "strict": true,
     "contexts": [
-      "Version Policy Audit/Verify Node 22.x + Python 3.12.x Policy (pull_request)",
-      "Validate Permissions/check (pull_request)",
-      "Pre-commit Validation/Validate pre-commit hooks (pull_request)",
-      "CI/test (3.12, 22) (pull_request)",
-      "AAR System Validation/Validate AAR System (pull_request)",
-      "Orchestrator/orchestrate (pull_request)",
-      "CodeQL/Analyze (python) (dynamic)",
-      "CodeQL/Analyze (javascript-typescript) (dynamic)",
-      "Root Artifact Monitor/Root Artifact Guard (pull_request)",
-      "Terminal Output Policy Enforcement/Enforce Terminal Output Policy (pull_request)",
-      "Enhanced Potato Policy Enforcement/enhanced-potato-policy (pull_request)",
-      "Documentation Quality/validate-docs (pull_request)"
+      "check",
+      "Validate pre-commit hooks",
+      "test",
+      "Validate AAR System",
+      "orchestrate",
+      "Root Artifact Guard",
+      "Enforce Terminal Output Policy",
+      "enhanced-potato-policy",
+      "validate-docs"
     ]
   },
   "enforce_admins": true,
