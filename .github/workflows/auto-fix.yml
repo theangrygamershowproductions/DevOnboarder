@@ -19,6 +19,9 @@ on:
         types:
             - completed
 
+permissions:
+    contents: read
+
 jobs:
     validate-yaml:
         runs-on: ubuntu-latest
