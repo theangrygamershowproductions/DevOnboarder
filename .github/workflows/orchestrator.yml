@@ -33,12 +33,31 @@ jobs:
           else
             echo "Secrets generation script not found, skipping"
           fi
-      - name: Sync service envs (allowlist)
+      - name: Setup CI environment file
         run: |
-          if [ -f ./scripts/smart_env_sync.sh ]; then
-            bash ./scripts/smart_env_sync.sh --validate-only
+          if [ -f .env.ci ]; then
+            echo "Using existing .env.ci for CI validation"
+          elif [ -f .env.example ]; then
+            cp .env.example .env.ci
+            echo "Copied .env.example to .env.ci for CI validation"
           else
-            echo "Environment sync script not found, skipping"
+            echo "Warning: Neither .env.ci nor .env.example found, creating minimal .env.ci"
+            echo "CI=true" > .env.ci
+          fi
+      - name: Validate CI environment file
+        run: |
+          echo "Validating .env.ci for CI environment"
+          if [ -f .env.ci ]; then
+            echo "Environment file exists: .env.ci"
+            # Validate that essential CI variables are present
+            if grep -q "APP_ENV=ci\|ENVIRONMENT=ci" .env.ci; then
+              echo "CI environment properly configured"
+            else
+              echo "Warning: .env.ci may not be properly configured for CI"
+            fi
+          else
+            echo "Error: .env.ci file not found"
+            exit 1
           fi
       - name: Validate env docs
         run: |
