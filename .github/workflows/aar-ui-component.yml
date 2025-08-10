@@ -1,5 +1,8 @@
 name: AAR UI Component CI
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:

@@ -1,19 +1,22 @@
 name: AAR System Hardening Validation
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
     paths:
       - 'docs/AAR/**'
       - 'scripts/*aar*'
-      - 'package.json'
+      - 'aar/package.json'
       - '.github/workflows/aar*.yml'
   pull_request:
     branches: [main]
     paths:
       - 'docs/AAR/**'
       - 'scripts/*aar*'
-      - 'package.json'
+      - 'aar/package.json'
       - '.github/workflows/aar*.yml'
 
 jobs:
@@ -30,9 +33,12 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: aar/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          cd aar
+          npm ci
 
       - name: Validate schema syntax
         run: |
@@ -87,16 +93,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate all AAR data files
+      - name: � Test AAR Generation Pipeline
         run: |
-          echo "Checking: Validating all AAR data files..."
-
-          if ls docs/AAR/data/*.aar.json >/dev/null 2>&1; then
-            npm run aar:validate docs/AAR/data/*.aar.json
-            echo "Success: All AAR data files validated successfully"
-          else
-            echo "Status: No AAR data files found to validate"
-          fi
+          echo "Testing AAR data to markdown generation..."
+          cd aar && npm run aar:test
 
       - name: Check for migration requirements
         run: |
@@ -145,13 +145,13 @@ jobs:
       - name: Run golden file tests
         run: |
           echo "Testing: Running golden file snapshot tests..."
-          npm run aar:test-golden
+          cd aar && npm run aar:test-golden
 
       - name: Check for template changes
         if: failure()
         run: |
           echo "Warning: Golden file tests failed - this may indicate template changes"
-          echo "Info: If template changes are intentional, run 'npm run aar:update-snapshots'"
+          echo "Info: If template changes are intentional, run 'cd aar && npm run aar:update-snapshots'"
           echo "Status: Review the diff files in tests/golden/aar/output/ for details"
 
   aar-rendered-markdown:
@@ -179,7 +179,7 @@ jobs:
             for file in docs/AAR/data/*.aar.json; do
               BASENAME=$(basename "$file")
               printf "Rendering: %s\n" "$BASENAME"
-              npm run aar:render "$file" docs/AAR/reports
+              cd aar && npm run aar:render "$file" ../docs/AAR/reports
             done
             echo "Success: All reports generated successfully"
           else
@@ -222,7 +222,7 @@ jobs:
       - name: Security audit of dependencies
         run: |
           echo "Security: Running security audit..."
-          npm audit --audit-level=moderate
+          cd aar && npm audit --audit-level=moderate
 
       - name: Validate URL security
         run: |
@@ -304,12 +304,12 @@ jobs:
 
           # Validate test data
           echo "Step 1: Validating test data..."
-          npm run aar:validate test_integration.aar.json
+          cd aar && npm run aar:validate test_integration.aar.json
 
           # Render test report
           echo "Step 2: Rendering test report..."
           mkdir -p test_output
-          npm run aar:render test_integration.aar.json test_output
+          cd aar && npm run aar:render test_integration.aar.json test_output
 
           # Verify output exists
           echo "Step 3: Verifying output..."
@@ -361,7 +361,7 @@ jobs:
 
           # Render with provenance
           mkdir -p test_provenance_output
-          npm run aar:render test_provenance.aar.json test_provenance_output
+          cd aar && npm run aar:render test_provenance.aar.json test_provenance_output
 
           # Check for provenance footer
           if grep -q "Schema Version:" test_provenance_output/provenance_test.md; then

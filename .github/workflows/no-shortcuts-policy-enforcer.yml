@@ -1,6 +1,9 @@
 ---
 name: "NO_SHORTCUTS_POLICY Enforcer"
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     paths:

@@ -1,5 +1,8 @@
 name: Frontend Component CI
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
