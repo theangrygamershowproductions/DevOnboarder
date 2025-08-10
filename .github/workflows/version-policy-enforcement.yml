@@ -1,0 +1,117 @@
+name: Version Policy Enforcement
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  enforce-versions:
+    name: Version Policy Compliance Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Verify Python version
+        run: |
+          echo "Python version enforcement check"
+          python_version=$(python3 --version | awk '{print $2}')
+          major_minor=$(echo "$python_version" | cut -d'.' -f1,2)
+
+          if [[ "$major_minor" != "3.12" ]]; then
+            echo "FAIL: Expected Python 3.12.x, got $python_version"
+            exit 1
+          fi
+
+          echo "PASS: Python $python_version meets policy (3.12.x)"
+
+      - name: Verify Node.js version
+        run: |
+          echo "Node.js version enforcement check"
+          node_version=$(node --version | sed 's/v//')
+          major=$(echo "$node_version" | cut -d'.' -f1)
+
+          if [[ "$major" != "22" ]]; then
+            echo "FAIL: Expected Node.js 22.x, got v$node_version"
+            exit 1
+          fi
+
+          echo "PASS: Node.js v$node_version meets policy (22.x)"
+
+      - name: Verify version control files
+        run: |
+          echo "Checking version control files"
+
+          if [[ ! -f .nvmrc ]]; then
+            echo "FAIL: Missing .nvmrc file"
+            exit 1
+          fi
+
+          if [[ ! -f .python-version ]]; then
+            echo "FAIL: Missing .python-version file"
+            exit 1
+          fi
+
+          nvmrc_version=$(cat .nvmrc)
+          python_version_file=$(cat .python-version)
+
+          if [[ "$nvmrc_version" != "22" ]]; then
+            echo "FAIL: .nvmrc contains '$nvmrc_version', expected '22'"
+            exit 1
+          fi
+
+          if [[ "$python_version_file" != "3.12" ]]; then
+            echo "FAIL: .python-version contains '$python_version_file', expected '3.12'"
+            exit 1
+          fi
+
+          echo "PASS: Version control files are correct"
+          echo "   .nvmrc: $nvmrc_version"
+          echo "   .python-version: $python_version_file"
+
+      - name: Run version policy script
+        run: |
+          echo "Running DevOnboarder version policy enforcement"
+          chmod +x scripts/enforce_version_policy.sh
+          ./scripts/enforce_version_policy.sh
+
+      - name: Validate workflow consistency
+        run: |
+          echo "Checking workflow files for version consistency"
+
+          # Check for any workflows still using old versions
+          old_python_count=$(grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ | wc -l || echo "0")
+          old_node_count=$(grep -r "node-version.*20\|node-version.*18" .github/workflows/ | wc -l || echo "0")
+
+          if [[ "$old_python_count" -gt 0 ]]; then
+            echo "FAIL: Found $old_python_count workflow(s) using old Python versions:"
+            grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ || true
+            exit 1
+          fi
+
+          if [[ "$old_node_count" -gt 0 ]]; then
+            echo "FAIL: Found $old_node_count workflow(s) using old Node.js versions:"
+            grep -r "node-version.*20\|node-version.*18" .github/workflows/ || true
+            exit 1
+          fi
+
+          echo "PASS: All workflows comply with version policy"
+          echo "   Python 3.12.x and Node.js 22.x enforced consistently"

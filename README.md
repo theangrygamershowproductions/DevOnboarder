@@ -95,6 +95,38 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 _Designed to automate onboarding, reduce friction, and support developers building from the ground up._
 
+## 📋 **Version Requirements**
+
+DevOnboarder enforces **universal version consistency** across all environments to ensure reliable development and deployment:
+
+| Component | Required Version | Enforcement |
+|-----------|------------------|-------------|
+| **Python** | **3.12.x** | CI + Local Scripts |
+| **Node.js** | **22.x** | CI + Local Scripts |
+| **npm** | **Latest** (ships with Node 22) | Automatic |
+
+### Quick Setup
+
+```bash
+# Install versions with mise/asdf (recommended)
+mise install  # Reads .tool-versions file
+
+# Or with version managers
+pyenv install 3.12 && pyenv local 3.12
+nvm install 22 && nvm use 22
+
+# Verify compliance
+./scripts/enforce_version_policy.sh
+```
+
+### Version Control Files
+
+- **`.python-version`** → Python 3.12 (pyenv/mise)
+- **`.nvmrc`** → Node.js 22 (nvm/mise)
+- **`.tool-versions`** → All versions (mise/asdf)
+
+**Policy**: All GitHub Actions workflows, local development, and CI use these exact versions. No exceptions.
+
 ## Why This Project Exists
 
 The short version: everything broke, then got rebuilt.
