@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { z } from 'zod';
 import { validateAAR, formatValidationErrors } from './lib/aar.zod.js';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
@@ -71,7 +72,9 @@ app.post('/api/aar/submit', async (req, res) => {
     // Validate AAR data against Zod schema
     const validation = validateAAR(req.body);
     if (!validation.success) {
-      const errors = formatValidationErrors(validation.error);
+      // Type assertion for the error case
+      const validationError = validation as { success: false; error: z.ZodError };
+      const errors = formatValidationErrors(validationError.error);
       console.log('❌ Validation failed:', errors);
       return res.status(400).json({
         success: false,
@@ -80,6 +83,7 @@ app.post('/api/aar/submit', async (req, res) => {
       });
     }
 
+    // TypeScript assertion - we know validation.success is true here
     const aar = validation.data;
 
     // Generate filename and ensure directory exists
