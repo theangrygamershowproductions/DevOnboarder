@@ -48,5 +48,5 @@ jobs:
         run: |
           chmod +x scripts/assert_required_checks.sh
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          echo "Validating required checks for PR #$PR_NUMBER"
+          printf "Validating required checks for PR #%s\n" "$PR_NUMBER"
           ./scripts/assert_required_checks.sh "$PR_NUMBER"

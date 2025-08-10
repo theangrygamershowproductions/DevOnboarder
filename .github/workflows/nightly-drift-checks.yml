@@ -10,10 +10,10 @@
 # - Creates issues for detected drift requiring manual intervention
 #
 # COMPLIANCE:
-# ✅ CodeQL security requirements satisfied
-# ✅ Token policy hierarchy respected
-# ✅ Branch protection integration verified
-# ✅ Production hardening applied
+#  CodeQL security requirements satisfied
+#  Token policy hierarchy respected
+#  Branch protection integration verified
+#  Production hardening applied
 #
 name: Nightly Drift Checks
 
@@ -44,9 +44,9 @@ jobs:
           chmod +x scripts/verify-branch-protection.sh
           echo "Running branch protection verification..."
           if ./scripts/verify-branch-protection.sh; then
-            echo "✅ Branch protection verification passed"
+            echo " Branch protection verification passed"
           else
-            echo "❌ Branch protection drift detected"
+            echo " Branch protection drift detected"
             echo "DRIFT_DETECTED=branch-protection" >> $GITHUB_ENV
           fi
 
@@ -55,9 +55,9 @@ jobs:
           chmod +x scripts/matrix_drift_protection.sh
           echo "Running matrix drift protection..."
           if ./scripts/matrix_drift_protection.sh; then
-            echo "✅ Matrix drift protection passed"
+            echo " Matrix drift protection passed"
           else
-            echo "❌ Documentation drift detected"
+            echo " Documentation drift detected"
             echo "DRIFT_DETECTED=${DRIFT_DETECTED:-}documentation" >> $GITHUB_ENV
           fi
 
@@ -66,9 +66,9 @@ jobs:
           chmod +x scripts/audit-workflow-headers.sh
           echo "Running workflow headers audit..."
           if ./scripts/audit-workflow-headers.sh; then
-            echo "✅ Workflow headers audit passed"
+            echo " Workflow headers audit passed"
           else
-            echo "❌ Workflow header compliance issues detected"
+            echo " Workflow header compliance issues detected"
             echo "DRIFT_DETECTED=${DRIFT_DETECTED:-}workflow-headers" >> $GITHUB_ENV
           fi
 
@@ -140,18 +140,19 @@ jobs:
       - name: Summary report
         run: |
           echo "===== Nightly Drift Check Summary ====="
-          echo "Date: $(date -u)"
+          CURRENT_DATE=$(date -u)
+          printf "Date: %s\n" "$CURRENT_DATE"
           echo "Status: ${DRIFT_DETECTED:-CLEAN}"
 
           if [[ -z "${DRIFT_DETECTED:-}" ]]; then
-            echo "✅ All CI governance checks passed"
-            echo "✅ Branch protection state verified"
-            echo "✅ Documentation synchronization confirmed"
-            echo "✅ Workflow header compliance validated"
+            echo " All CI governance checks passed"
+            echo " Branch protection state verified"
+            echo " Documentation synchronization confirmed"
+            echo " Workflow header compliance validated"
             echo ""
             echo "DevOnboarder CI governance is operating correctly."
           else
-            echo "❌ Drift detected in: ${DRIFT_DETECTED}"
+            echo " Drift detected in: ${DRIFT_DETECTED}"
             echo "🔔 Issue created for manual intervention"
             echo ""
             echo "Manual review and correction required."
