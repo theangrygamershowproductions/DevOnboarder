@@ -1,0 +1,110 @@
+name: CI Doctor - Version Policy Diagnostics
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [docs/aar-system-documentation-cleanup]
+
+jobs:
+  ci-doctor:
+    name: CI Doctor - Environment Diagnostics
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            aar/package-lock.json
+            bot/package-lock.json
+            frontend/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: CI Doctor - Comprehensive Diagnostics
+        run: |
+          echo "CI DOCTOR: DevOnboarder Version Policy Diagnostics"
+          echo "=================================================="
+          echo ""
+
+          echo "PYTHON ENVIRONMENT:"
+          python --version
+          which python
+          pip --version
+          echo ""
+
+          echo "NODE.JS ENVIRONMENT:"
+          node --version
+          npm --version
+          which node
+          echo ""
+
+          echo "WORKING DIRECTORIES & PACKAGE.JSON LOCATIONS:"
+          pwd
+          test -d aar && echo "AAR directory: YES" || echo "AAR directory: NO"
+          test -f aar/package.json && echo "AAR package.json: YES" || echo "AAR package.json: NO"
+          test -f package.json && echo "Root package.json: YES" || echo "Root package.json: NO"
+          test -f bot/package.json && echo "Bot package.json: YES" || echo "Bot package.json: NO"
+          test -f frontend/package.json && echo "Frontend package.json: YES" || echo "Frontend package.json: NO"
+          echo ""
+
+          echo "VERSION POLICY FILES:"
+          test -f .nvmrc && echo ".nvmrc: YES" || echo ".nvmrc: NO"
+          if [ -f .nvmrc ]; then
+            echo ".nvmrc content:"
+            cat .nvmrc
+          fi
+          test -f .python-version && echo ".python-version: YES" || echo ".python-version: NO"
+          if [ -f .python-version ]; then
+            echo ".python-version content:"
+            cat .python-version
+          fi
+          test -f .tool-versions && echo ".tool-versions: YES" || echo ".tool-versions: NO"
+          echo ""
+
+          echo "JEST CONFIGURATIONS:"
+          find . -name "package.json" -not -path "*/node_modules/*" | while read -r pkg; do
+            if grep -q "jest" "$pkg" 2>/dev/null; then
+              echo "Jest config found in: $pkg"
+              if grep -q "testTimeout" "$pkg" 2>/dev/null; then
+                echo "  - Has testTimeout configured"
+              else
+                echo "  - WARNING: Missing testTimeout"
+              fi
+            fi
+          done
+          echo ""
+
+          echo "CACHE INFORMATION:"
+          echo "Cache buster pattern: v-node22-py312"
+          echo "Expected cache paths:"
+          echo "  - aar/package-lock.json"
+          echo "  - bot/package-lock.json"
+          echo "  - frontend/package-lock.json"
+          echo ""
+
+          echo "ENGINE SPECIFICATIONS:"
+          find . -name "package.json" -not -path "*/node_modules/*" | while read -r pkg; do
+            if grep -q "engines" "$pkg" 2>/dev/null; then
+              echo "Engines found in: $pkg"
+              grep -A 3 "engines" "$pkg" | sed 's/^/  /'
+            fi
+          done
+          echo ""
+
+          echo "ORCHESTRATOR DRY-RUN SIMULATION:"
+          echo "Expected orchestrator output:"
+          echo '{ "runtime": { "node": "22.x", "python": "3.12" } }'
+          echo ""
+
+          echo "CI DOCTOR DIAGNOSTICS COMPLETE"
+          echo "Monitor these values in actual workflow runs!"
