@@ -47,8 +47,8 @@ while IFS= read -r file; do
     if [ -n "$file" ]; then
         echo -n "  Validating $file... "
 
-        # Run validation
-        if npm run aar:validate "$file" &>/dev/null; then
+        # Run validation (from aar directory)
+        if (cd aar && npm run aar:validate "../$file") &>/dev/null; then
             echo -e "${GREEN}SUCCESS${NC}"
         else
             echo -e "${RED}FAILED${NC}"
@@ -56,7 +56,7 @@ while IFS= read -r file; do
 
             # Show detailed validation errors
             echo "    Detailed errors:"
-            npm run aar:validate "$file" 2>&1 | sed 's/^/      /'
+            (cd aar && npm run aar:validate "../$file") 2>&1 | sed 's/^/      /'
 
             VALIDATION_FAILED=1
         fi
@@ -66,11 +66,11 @@ done <<< "$AAR_FILES"
 # Run golden file tests if any AAR files changed
 if [ "$VALIDATION_FAILED" -eq 0 ] && [ -n "$AAR_FILES" ]; then
     echo "EMOJI Running golden file tests..."
-    if npm run aar:test-golden &>/dev/null; then
+    if (cd aar && npm run aar:test-golden) &>/dev/null; then
         echo -e "${GREEN}SUCCESS Golden file tests passed${NC}"
     else
         echo -e "${YELLOW}WARNING  Golden file tests failed - this may indicate template changes${NC}"
-        echo "   Run 'npm run aar:update-snapshots' if template changes are intentional"
+        echo "   Run 'cd aar && npm run aar:update-snapshots' if template changes are intentional"
         # Don't fail commit for golden test failures - they might be intentional
     fi
 fi

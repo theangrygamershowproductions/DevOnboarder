@@ -62,13 +62,13 @@ print_success "Core dependencies verified"
 
 # Test the system
 print_status "Testing AAR system..."
-npm run aar:full-test
+(cd aar && npm run aar:full-test)
 
 print_success "AAR system tests passed"
 
 # Build the Docker image
 print_status "Building AAR UI Docker image..."
-npm run aar:stack:build
+(cd aar && npm run aar:stack:build)
 
 print_success "Docker image built successfully"
 
