@@ -95,6 +95,25 @@ permissions:
 - ✅ **Principle of Least Privilege**: Minimal required permissions
 - ✅ **Consistency**: Standardized across all workflows
 
+## Exception Process
+
+**Requesting Enhanced Permissions** (e.g., `contents: write`):
+
+1. **Document justification** in workflow comments explaining why enhanced permissions are required
+2. **Submit PR** with maintainer review request via CODEOWNERS
+3. **Security review** must demonstrate necessity and scope limitation
+
+Example exception request format:
+
+```yaml
+# PERMISSION EXCEPTION: contents: write required for automated releases
+# Justification: Workflow creates Git tags and GitHub releases
+# Scope: Limited to release branch only
+# Approved by: @maintainer-handle
+permissions:
+    contents: write
+```
+
 ---
 
 **Related Policies**: No Default Token Policy, DevOnboarder Universal Version Policy

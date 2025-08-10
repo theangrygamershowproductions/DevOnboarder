@@ -1,1 +1,4 @@
 *       @theangrygamershowproductions/maintainers
+
+# Universal Workflow Permissions Policy - guard against unauthorized changes
+/.github/workflows/**   @theangrygamershowproductions/maintainers

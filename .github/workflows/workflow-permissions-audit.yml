@@ -1,0 +1,26 @@
+name: Workflow Permissions Audit
+
+on:
+    schedule:
+        - cron: "0 5 * * *"  # 5 AM UTC daily
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    audit:
+        runs-on: ubuntu-latest
+        name: Validate workflow permissions compliance
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Validate explicit permissions
+              run: bash scripts/validate_workflow_permissions.sh
+
+            - name: Report compliance status
+              run: |
+                  echo "Workflow permissions audit completed"
+                  echo "All workflows must have explicit permissions blocks"
+                  echo "See Universal Workflow Permissions Policy for details"
