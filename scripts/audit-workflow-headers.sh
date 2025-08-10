@@ -22,43 +22,43 @@ check_workflow_headers() {
 
     # Check for token documentation (flexible patterns)
     if ! head -n 10 "$workflow_file" | grep -qi 'token\|auth'; then
-        echo "  ❌ Missing token usage documentation"
+        echo "  FAILED Missing token usage documentation"
         ((issues++))
     else
-        echo "  ✅ Token usage documented"
+        echo "  SUCCESS Token usage documented"
     fi
 
     # Check for permissions documentation (either explicit block or reference)
     if grep -q "permissions:" "$workflow_file"; then
-        echo "  ✅ Explicit permissions block present"
+        echo "  SUCCESS Explicit permissions block present"
     elif head -n 10 "$workflow_file" | grep -qi 'permission\|scope'; then
-        echo "  ✅ Permissions referenced in header"
+        echo "  SUCCESS Permissions referenced in header"
     else
-        echo "  ❌ Missing permissions documentation"
+        echo "  FAILED Missing permissions documentation"
         ((issues++))
     fi
 
     # Check for policy compliance reference
     if head -n 15 "$workflow_file" | grep -qi 'no default token policy\|universal.*policy\|compliance'; then
-        echo "  ✅ Policy compliance referenced"
+        echo "  SUCCESS Policy compliance referenced"
     else
-        echo "  ❌ Missing policy compliance reference"
+        echo "  FAILED Missing policy compliance reference"
         ((issues++))
     fi
 
     # Check for maintenance notes (purpose/scope documentation)
     if head -n 15 "$workflow_file" | grep -qi 'purpose\|role\|maintenance\|scope'; then
-        echo "  ✅ Purpose/maintenance documentation present"
+        echo "  SUCCESS Purpose/maintenance documentation present"
     else
-        echo "  ❌ Missing purpose/maintenance documentation"
+        echo "  FAILED Missing purpose/maintenance documentation"
         ((issues++))
     fi
 
     if [[ $issues -eq 0 ]]; then
-        echo "  🎯 FULLY COMPLIANT"
+        echo "  TARGET FULLY COMPLIANT"
         ((compliant_workflows++))
     else
-        echo "  ⚠ $issues compliance issues found"
+        echo "  WARNING $issues compliance issues found"
         ((fail += issues))
     fi
 
@@ -84,16 +84,16 @@ echo "Total compliance issues: $fail"
 
 if [[ $fail -eq 0 ]]; then
     echo ""
-    echo "🎉 ALL WORKFLOWS COMPLIANT"
-    echo "✅ Token usage documented in all workflows"
-    echo "✅ Permissions properly declared or referenced"
-    echo "✅ Policy compliance verified across all workflows"
-    echo "✅ Purpose and maintenance documentation present"
+    echo "SYMBOL ALL WORKFLOWS COMPLIANT"
+    echo "SUCCESS Token usage documented in all workflows"
+    echo "SUCCESS Permissions properly declared or referenced"
+    echo "SUCCESS Policy compliance verified across all workflows"
+    echo "SUCCESS Purpose and maintenance documentation present"
     echo ""
     echo "Workflow headers audit: PASSED"
 else
     echo ""
-    echo "❌ WORKFLOW HEADER ISSUES FOUND"
+    echo "FAILED WORKFLOW HEADER ISSUES FOUND"
     echo ""
     echo "To fix compliance issues:"
     echo ""

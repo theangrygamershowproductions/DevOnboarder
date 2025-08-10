@@ -280,8 +280,8 @@ PROTECTED_PATTERNS = {
 def ensure_virtual_environment() -> None:
     """Ensure script is running in virtual environment (DevOnboarder req)."""
     if not os.environ.get("VIRTUAL_ENV"):
-        print("❌ ERROR: Virtual environment not detected")
-        print("🔧 SOLUTION: Activate virtual environment first:")
+        print("FAILED ERROR: Virtual environment not detected")
+        print("CONFIG SOLUTION: Activate virtual environment first:")
         print("   source .venv/bin/activate")
         print("   pip install -e .[test]")
         sys.exit(1)
@@ -293,8 +293,8 @@ def ensure_virtual_environment() -> None:
 
         pathlib.Path(".")  # Basic test
     except ImportError:
-        print("❌ ERROR: Python environment not properly configured")
-        print("🔧 SOLUTION: Install dependencies:")
+        print("FAILED ERROR: Python environment not properly configured")
+        print("CONFIG SOLUTION: Install dependencies:")
         print("   pip install -e .[test]")
         sys.exit(1)
 
@@ -313,7 +313,7 @@ def log_message(message: str, level: str = "INFO") -> None:
         f.write(log_entry)
 
     if level in ["ERROR", "WARNING"]:
-        print(f"🔍 {level}: {message}")
+        print(f"SEARCH {level}: {message}")
 
 
 def load_current_dictionary() -> Set[str]:
@@ -398,16 +398,16 @@ def audit_dictionary() -> Dict[str, Any]:
 
 def print_audit_report(analysis: Dict[str, Any]) -> None:
     """Print comprehensive audit report."""
-    print("\n📊 DevOnboarder Dictionary Audit Report")
+    print("\nSTATS DevOnboarder Dictionary Audit Report")
     print("=" * 50)
-    print(f"📝 Total entries: {analysis['total_entries']}")
-    print(f"📁 File patterns: {analysis['file_patterns']}")
-    print(f"🔤 Word entries: {analysis['words']}")
-    print(f"🔒 Protected patterns: {analysis['protected_patterns_count']}")
+    print(f"EDIT Total entries: {analysis['total_entries']}")
+    print(f"FOLDER File patterns: {analysis['file_patterns']}")
+    print(f"SYMBOL Word entries: {analysis['words']}")
+    print(f"SYMBOL Protected patterns: {analysis['protected_patterns_count']}")
 
     if analysis["missing_core_terms"]:
         missing_count = len(analysis["missing_core_terms"])
-        print(f"\n⚠️  Missing {missing_count} core DevOnboarder terms:")
+        print(f"\nWARNING  Missing {missing_count} core DevOnboarder terms:")
         # Show first 10
         for term in sorted(analysis["missing_core_terms"])[:10]:
             print(f"   • {term}")
@@ -417,9 +417,9 @@ def print_audit_report(analysis: Dict[str, Any]) -> None:
 
     if analysis["extra_terms"]:
         extra_count = len(analysis["extra_terms"])
-        print(f"\n📋 {extra_count} additional project terms found")
+        print(f"\nSYMBOL {extra_count} additional project terms found")
 
-    print(f"\n📊 Log file: {LOG_FILE}")
+    print(f"\nSTATS Log file: {LOG_FILE}")
 
 
 def add_core_terms() -> int:
@@ -474,12 +474,12 @@ def remove_term(term: str) -> bool:
 
 def interactive_mode() -> None:
     """Interactive mode for bulk dictionary management."""
-    print("\n🔧 DevOnboarder Dictionary Interactive Mode")
+    print("\nCONFIG DevOnboarder Dictionary Interactive Mode")
     print("Commands: add <term>, remove <term>, audit, core, quit")
 
     while True:
         try:
-            command = input("\n📝 Dictionary > ").strip().lower()
+            command = input("\nEDIT Dictionary > ").strip().lower()
 
             if command == "quit" or command == "q":
                 break
@@ -488,19 +488,19 @@ def interactive_mode() -> None:
                 print_audit_report(analysis)
             elif command == "core":
                 added = add_core_terms()
-                print(f"✅ Added {added} core DevOnboarder terms")
+                print(f"SUCCESS Added {added} core DevOnboarder terms")
             elif command.startswith("add "):
                 term = command[4:].strip()
                 if add_term(term):
-                    print(f"✅ Added: {term}")
+                    print(f"SUCCESS Added: {term}")
                 else:
-                    print(f"⚠️  Already exists: {term}")
+                    print(f"WARNING  Already exists: {term}")
             elif command.startswith("remove "):
                 term = command[7:].strip()
                 if remove_term(term):
-                    print(f"🗑️  Removed: {term}")
+                    print(f"SYMBOL  Removed: {term}")
                 else:
-                    print(f"❌ Cannot remove: {term}")
+                    print(f"FAILED Cannot remove: {term}")
             elif command == "help" or command == "?":
                 print("Available commands:")
                 print("  add <term>    - Add a term to dictionary")
@@ -509,14 +509,14 @@ def interactive_mode() -> None:
                 print("  core          - Add missing core DevOnboarder terms")
                 print("  quit          - Exit interactive mode")
             else:
-                print("❓ Unknown command. Type 'help' for available commands.")
+                print("SYMBOL Unknown command. Type 'help' for available commands.")
 
         except (KeyboardInterrupt, EOFError):
-            print("\n👋 Goodbye!")
+            print("\nSYMBOL Goodbye!")
             break
         except (OSError, IOError, ValueError) as e:
             log_message(f"Interactive mode error: {e}", "ERROR")
-            print(f"❌ Error: {e}")
+            print(f"FAILED Error: {e}")
 
 
 def main() -> None:
@@ -560,31 +560,31 @@ DevOnboarder Requirements:
             print_audit_report(analysis)
         elif args.add:
             if add_term(args.add):
-                print(f"✅ Added term: {args.add}")
+                print(f"SUCCESS Added term: {args.add}")
             else:
-                print(f"⚠️  Term already exists: {args.add}")
+                print(f"WARNING  Term already exists: {args.add}")
         elif args.remove:
             if remove_term(args.remove):
-                print(f"🗑️  Removed term: {args.remove}")
+                print(f"SYMBOL  Removed term: {args.remove}")
             else:
-                print(f"❌ Cannot remove term: {args.remove}")
+                print(f"FAILED Cannot remove term: {args.remove}")
         elif args.core:
             added = add_core_terms()
-            print(f"✅ Added {added} missing core DevOnboarder terms")
+            print(f"SUCCESS Added {added} missing core DevOnboarder terms")
             if added > 0:
-                print("💡 Run --audit to see updated statistics")
+                print("IDEA Run --audit to see updated statistics")
         else:
             # No arguments: enter interactive mode
             interactive_mode()
 
     except (OSError, IOError, ValueError) as e:
         log_message(f"Script error: {e}", "ERROR")
-        print(f"❌ Error: {e}")
-        print(f"📊 Check log: {LOG_FILE}")
+        print(f"FAILED Error: {e}")
+        print(f"STATS Check log: {LOG_FILE}")
         sys.exit(1)
 
     log_message("DevOnboarder dictionary update session completed")
-    print(f"📊 Session log: {LOG_FILE}")
+    print(f"STATS Session log: {LOG_FILE}")
 
 
 if __name__ == "__main__":

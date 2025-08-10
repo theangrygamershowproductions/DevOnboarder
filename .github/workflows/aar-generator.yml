@@ -33,7 +33,7 @@ permissions:
 
 env:
   # CRITICAL: Follow DevOnboarder No Default Token Policy v1.0
-  # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+  # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
   PYTHON_ENV: ci
   NODE_ENV: test
   CI: true

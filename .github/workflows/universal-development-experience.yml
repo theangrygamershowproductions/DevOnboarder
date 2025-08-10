@@ -45,7 +45,7 @@ jobs:
             echo "Universal Development Experience Policy requires .editorconfig"
             exit 1
           fi
-          echo "SUCCESS: .editorconfig file found"
+          echo "Complete: .editorconfig file found"
 
       - name: Validate VSCode settings exist
         run: |
@@ -54,7 +54,7 @@ jobs:
             echo "Universal Development Experience Policy requires VSCode workspace settings"
             exit 1
           fi
-          echo "SUCCESS: VSCode workspace settings found"
+          echo "Complete: VSCode workspace settings found"
 
       - name: Validate Enhanced Safe Commit exists
         run: |
@@ -68,7 +68,7 @@ jobs:
             exit 1
           fi
 
-          echo "SUCCESS: Enhanced safe commit script ready"
+          echo "Complete: Enhanced safe commit script ready"
 
       - name: Validate Pre-commit Configuration
         run: |
@@ -82,7 +82,7 @@ jobs:
           echo "Testing pre-commit hooks..."
           pre-commit run --all-files --verbose || true
 
-          echo "SUCCESS: Pre-commit configuration valid"
+          echo "Complete: Pre-commit configuration valid"
 
       - name: Test Enhanced Safe Commit (Dry Run)
         run: |
@@ -102,7 +102,7 @@ jobs:
           git reset HEAD test_whitespace.txt || true
           rm -f test_whitespace.txt || true
 
-          echo "SUCCESS: Enhanced safe commit script functional"
+          echo "Complete: Enhanced safe commit script functional"
 
       - name: Validate Policy Documentation
         run: |
@@ -121,4 +121,4 @@ jobs:
             echo "SKIP: markdownlint not available, manual validation required"
           fi
 
-          echo "SUCCESS: Policy documentation exists and accessible"
+          echo "Complete: Policy documentation exists and accessible"

@@ -117,13 +117,13 @@ def main() -> int:
     _, errors = validate_pr_summary(file_path)
 
     if errors:
-        print("❌ PR Summary Validation Failed:")
+        print("FAILED PR Summary Validation Failed:")
         for error in errors:
             print(f"  • {error}")
-        print("\n💡 Use the template: .github/PR_SUMMARY_TEMPLATE.md")
+        print("\nIDEA Use the template: .github/PR_SUMMARY_TEMPLATE.md")
         return 1
 
-    print("✅ PR Summary validation passed")
+    print("SUCCESS PR Summary validation passed")
     return 0
 
 

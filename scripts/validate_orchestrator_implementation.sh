@@ -3,7 +3,7 @@
 # Orchestrator Implementation Validation Script
 # =============================================================================
 
-echo "🎯 DevOnboarder Orchestrator Hub-and-Spoke Validation"
+echo "TARGET DevOnboarder Orchestrator Hub-and-Spoke Validation"
 echo "======================================================"
 echo ""
 
@@ -20,22 +20,22 @@ check_component() {
 
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
-    echo -n "🔍 Checking $component_name... "
+    echo -n "SEARCH Checking $component_name... "
 
     if eval "$check_command" >/dev/null 2>&1; then
         if [ "$expected_result" = "exists" ] || [ "$expected_result" = "true" ]; then
-            echo "✅ PASS"
+            echo "SUCCESS PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "❌ FAIL (unexpected success)"
+            echo "FAILED FAIL (unexpected success)"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
     else
         if [ "$expected_result" = "false" ] || [ "$expected_result" = "missing" ]; then
-            echo "✅ PASS (expected failure)"
+            echo "SUCCESS PASS (expected failure)"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "❌ FAIL"
+            echo "FAILED FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
     fi
@@ -57,13 +57,13 @@ count_and_report() {
         count=0
     fi
 
-    echo -n "📊 Counting $component_name... "
+    echo -n "STATS Counting $component_name... "
 
     if [ "$count" -ge "$expected_min" ]; then
-        echo "✅ PASS ($count files, expected ≥$expected_min)"
+        echo "SUCCESS PASS ($count files, expected ≥$expected_min)"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo "❌ FAIL ($count files, expected ≥$expected_min)"
+        echo "FAILED FAIL ($count files, expected ≥$expected_min)"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
 }
@@ -115,7 +115,7 @@ check_component "TypeScript API Syntax" "head -10 src/routes/orchestrator/pr-rou
 check_component "React Component Syntax" "head -10 frontend/src/components/orchestrator/PRRoutingToggle.tsx | grep -q 'interface'" "exists"
 echo ""
 
-echo "🎯 VALIDATION SUMMARY"
+echo "TARGET VALIDATION SUMMARY"
 echo "===================="
 echo "Total Checks: $TOTAL_CHECKS"
 echo "Passed: $PASSED_CHECKS"
@@ -123,18 +123,18 @@ echo "Failed: $FAILED_CHECKS"
 echo ""
 
 if [ $FAILED_CHECKS -eq 0 ]; then
-    echo "🎉 ALL VALIDATIONS PASSED!"
+    echo "SYMBOL ALL VALIDATIONS PASSED!"
     echo "The Orchestrator Hub-and-Spoke system is completely implemented."
     echo ""
-    echo "✅ Ready for Production Deployment"
-    echo "✅ All 5 Phases Complete"
-    echo "✅ Security Model Implemented"
-    echo "✅ API Integration Ready"
-    echo "✅ Documentation Complete"
+    echo "SUCCESS Ready for Production Deployment"
+    echo "SUCCESS All 5 Phases Complete"
+    echo "SUCCESS Security Model Implemented"
+    echo "SUCCESS API Integration Ready"
+    echo "SUCCESS Documentation Complete"
     echo ""
     exit 0
 else
-    echo "⚠️  VALIDATION ISSUES FOUND"
+    echo "WARNING  VALIDATION ISSUES FOUND"
     echo "Please address the failed checks before deployment."
     echo ""
     exit 1

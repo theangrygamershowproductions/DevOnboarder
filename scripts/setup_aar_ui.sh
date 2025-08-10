@@ -5,7 +5,7 @@
 
 set -e  # Exit on any error
 
-echo "🚀 Setting up DevOnboarder AAR UI Stack Integration..."
+echo "DEPLOY Setting up DevOnboarder AAR UI Stack Integration..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -84,30 +84,30 @@ fi
 
 print_success "Docker networks verified"
 
-print_status "Setup complete! 🎉"
+print_status "Setup complete! SYMBOL"
 echo
-echo "📋 Stack Commands:"
+echo "SYMBOL Stack Commands:"
 echo "  npm run aar:stack:up          # Start AAR UI service in stack"
 echo "  npm run aar:stack:down        # Stop AAR UI service"
 echo "  npm run aar:stack:logs        # View service logs"
 echo "  npm run aar:stack:build       # Rebuild Docker image"
 echo "  npm run aar:stack:prod        # Start with production config"
 echo
-echo "🌐 Stack URLs (after starting):"
+echo "SYMBOL Stack URLs (after starting):"
 echo "  AAR UI:       https://aar.theangrygamershow.com (production)"
 echo "  AAR UI:       http://localhost (development via Traefik)"
 echo "  Traefik:      http://localhost:8090 (dashboard)"
 echo
-echo "🐳 Docker Commands:"
+echo "SYMBOL Docker Commands:"
 echo "  docker compose -f docker-compose.dev.yaml up -d    # Start full stack"
 echo "  docker compose -f docker-compose.dev.yaml ps       # Check services"
 echo "  docker compose -f docker-compose.dev.yaml down     # Stop stack"
 echo
-echo "📖 Usage:"
+echo "SYMBOL Usage:"
 echo "  1. Run 'npm run aar:stack:up' to start the AAR UI service"
 echo "  2. Access via Traefik at configured domain"
 echo "  3. Create AARs via React form or GitHub Issues"
 echo "  4. All AARs automatically validated and rendered"
 echo "  5. Reports available at /reports/ endpoint"
 echo
-print_success "AAR UI integrated into DevOnboarder stack! 🚀"
+print_success "AAR UI integrated into DevOnboarder stack! DEPLOY"

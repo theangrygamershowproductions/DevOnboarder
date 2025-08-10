@@ -40,9 +40,9 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     echo "Validating file: $file"
 
-    # 1. Check for emojis and Unicode characters (CRITICAL)
-    if grep -l '[✅❌🎯🚀📋🔍📝💡⚠️🛠️📊📈📥🔗🐛🔐📖]' "$file" 2>/dev/null; then
-        echo "  CRITICAL: Emoji/Unicode characters found"
+    # 1. Check for specific Unicode characters that cause terminal hanging
+    if grep -F "→" "$file" 2>/dev/null || grep -F "•" "$file" 2>/dev/null || grep -F "‑" "$file" 2>/dev/null || grep -F "…" "$file" 2>/dev/null; then
+        echo "  CRITICAL: Unicode characters found"
         ((total_violations++))
     fi
 
@@ -103,7 +103,7 @@ if [ "$total_violations" -gt 0 ]; then
     exit 1
 else
     echo ""
-    echo "✓ ENFORCEMENT SUCCESS: No critical terminal output violations found"
+    echo "SYMBOL ENFORCEMENT SUCCESS: No critical terminal output violations found"
     echo "All workflows comply with ZERO TOLERANCE policy"
     exit 0
 fi

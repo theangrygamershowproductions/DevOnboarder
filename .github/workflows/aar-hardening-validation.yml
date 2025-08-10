@@ -93,7 +93,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: � Test AAR Generation Pipeline
+      - name: Checking Test AAR Generation Pipeline
         run: |
           echo "Testing AAR data to markdown generation..."
           cd aar && npm run aar:test

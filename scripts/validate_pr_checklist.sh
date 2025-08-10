@@ -27,7 +27,7 @@ if echo "$pr_title" | grep -iE "(retro|retrospective|process|workflow|checklist|
 
     pr_body=$(gh pr view "$pr_number" --json body -q '.body' 2>/dev/null || echo "")
 
-    has_heading=$(echo "$pr_body" | grep -Eiq '^#+[[:space:]]*(✅[[:space:]]*)?Continuous Improvement Checklist' && echo yes || echo no)
+    has_heading=$(echo "$pr_body" | grep -Eiq '^#+[[:space:]]*(SUCCESS[[:space:]]*)?Continuous Improvement Checklist' && echo yes || echo no)
     has_checkbox=$(echo "$pr_body" | grep -Eq '\- \[[ xX]\]' && echo yes || echo no)
 
     if [ "$has_heading" = "yes" ] && [ "$has_checkbox" = "yes" ]; then
@@ -39,14 +39,14 @@ if echo "$pr_title" | grep -iE "(retro|retrospective|process|workflow|checklist|
     checklist_content=$(cat "$checklist_file")
 
     comment_body=$(cat <<EOF
-⚠️ **Process PR: Continuous Improvement Checklist Required**
+WARNING **Process PR: Continuous Improvement Checklist Required**
 
 This appears to be a process-related PR. Please complete the continuous improvement checklist:
 
 ---
 
 <details>
-<summary>📋 Continuous Improvement Checklist</summary>
+<summary>CHECKLIST Continuous Improvement Checklist</summary>
 
 \`\`\`markdown
 $checklist_content

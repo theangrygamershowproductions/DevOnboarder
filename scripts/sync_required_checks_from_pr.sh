@@ -106,7 +106,7 @@ PY
 if command -v jq >/dev/null 2>&1; then
     if jq . "$tmp" >/dev/null 2>&1; then
         jq . "$tmp" > protection.json
-        echo "✅ protection.json updated with valid JSON"
+        echo "SUCCESS protection.json updated with valid JSON"
     else
         echo "Error: Generated invalid JSON"
         cat "$tmp"
@@ -114,7 +114,7 @@ if command -v jq >/dev/null 2>&1; then
     fi
 else
     mv "$tmp" protection.json
-    echo "✅ protection.json updated (jq not available for validation)"
+    echo "SUCCESS protection.json updated (jq not available for validation)"
 fi
 
 rm -f "$tmp" 2>/dev/null || true
@@ -151,7 +151,7 @@ git push -u origin "$branch"
 
 echo "Creating pull request..."
 gh pr create \
-    --title "🔧 Sync required checks from PR #$PR" \
+    --title "CONFIG Sync required checks from PR #$PR" \
     --body "## Auto-sync Required Status Checks
 
 **Source PR**: #$PR (commit $SHA)
@@ -163,7 +163,11 @@ gh pr create \
 - Preserves all other protection settings
 
 ### Check Names Synced
-$(printf '- `%s`\n' "${LIVE[@]}")
+$(
+for check in "${LIVE[@]}"; do
+    printf '- **%s**\n' "$check"
+done
+)
 
 This PR was generated automatically by the drift auto-fix system.
 
@@ -172,6 +176,6 @@ This PR was generated automatically by the drift auto-fix system.
     --label "automation,ci-governance,drift-fix,auto-generated"
 
 echo ""
-echo "✅ Self-healing sync complete!"
-echo "📋 PR created: review and merge to apply updated protection"
-echo "🔍 Verify with: ./scripts/verify-branch-protection.sh (after merge)"
+echo "SUCCESS Self-healing sync complete!"
+echo "SYMBOL PR created: review and merge to apply updated protection"
+echo "SEARCH Verify with: ./scripts/verify-branch-protection.sh (after merge)"

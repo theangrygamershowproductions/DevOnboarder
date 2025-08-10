@@ -4,16 +4,16 @@
 
 set -euo pipefail
 
-echo "🚀 Phase 1: Network Foundation Scaffolding"
+echo "DEPLOY Phase 1: Network Foundation Scaffolding"
 echo "==========================================="
 
 # Backup current configuration
-echo "📋 Creating backup..."
+echo "SYMBOL Creating backup..."
 cp docker-compose.dev.yaml docker-compose.dev.yaml.backup
-echo "✅ Backup created: docker-compose.dev.yaml.backup"
+echo "SUCCESS Backup created: docker-compose.dev.yaml.backup"
 
 # Create network definitions
-echo "🔧 Adding tiered network definitions..."
+echo "CONFIG Adding tiered network definitions..."
 
 # Create the new networks section if it doesn't exist
 if ! grep -q "networks:" docker-compose.dev.yaml; then
@@ -30,29 +30,29 @@ networks:
     driver: bridge
     internal: true  # Isolated from external access" >> docker-compose.dev.yaml
 else
-    echo "⚠️  Networks section already exists - manual merge required"
+    echo "WARNING  Networks section already exists - manual merge required"
 fi
 
-echo "✅ Network definitions added"
+echo "SUCCESS Network definitions added"
 
 # Show what networks will be created
-echo "📊 New network architecture:"
-echo "   🔐 auth_tier (auth-service, traefik)"
-echo "   🌐 api_tier (backend, discord-integration, dashboard, frontend)"
-echo "   🗄️  data_tier (db - isolated)"
+echo "STATS New network architecture:"
+echo "   SYMBOL auth_tier (auth-service, traefik)"
+echo "   SYMBOL api_tier (backend, discord-integration, dashboard, frontend)"
+echo "   SYMBOL  data_tier (db - isolated)"
 
 echo ""
-echo "🎯 Next Steps:"
+echo "TARGET Next Steps:"
 echo "1. Review docker-compose.dev.yaml changes"
 echo "2. Update service network assignments"
 echo "3. Test with: make up"
 echo "4. Validate: docker network ls | grep devonboarder"
 
 echo ""
-echo "🔧 Manual Service Updates Required:"
+echo "CONFIG Manual Service Updates Required:"
 echo "   - Move auth-service to auth_tier"
 echo "   - Move backend/bot/frontend to api_tier"
 echo "   - Move db to data_tier (isolated)"
 
 echo ""
-echo "✅ Phase 1 scaffolding complete!"
+echo "SUCCESS Phase 1 scaffolding complete!"

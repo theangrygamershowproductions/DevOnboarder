@@ -84,11 +84,11 @@ def create_structured_comment(
 
     if ref_type == "pull_request":
         aar_path = f".aar/{year}/{quarter}/pull-requests/pr-{ref_number}-*.md"
-        icon = "🔀"
+        icon = "SYMBOL"
         title = f"AAR Complete for PR #{ref_number}"
     else:
         aar_path = f".aar/{year}/{quarter}/issues/issue-{ref_number}-*.md"
-        icon = "🎯"
+        icon = "TARGET"
         title = f"AAR Complete for Issue #{ref_number}"
 
     # Build summary table
@@ -103,24 +103,24 @@ def create_structured_comment(
 
     comment = f"""## {icon} {title}
 
-### 📊 Summary
+### STATS Summary
 
 {summary_table}
 
-### 📁 Resources
+### FOLDER Resources
 
 **AAR Location**: `{aar_path}`
 **Follow-up Issue**: Automatically created with action items
 **Purpose**: Preserve institutional knowledge and improve development processes
 
-### 🧠 Key Insights
+### BRAIN Key Insights
 
 - **Technical Decisions**: Documented in AAR for future reference
 - **Process Analysis**: Development workflow insights captured
 - **Lessons Learned**: Best practices and gotchas identified
 - **Action Items**: {aar_summary.get("action_items", "0")} items tracked for follow-up
 
-### 💡 For Developers
+### IDEA For Developers
 
 This AAR is immediately accessible in VSCode via:
 - GitHub Issues/PRs panel

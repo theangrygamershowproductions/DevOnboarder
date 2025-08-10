@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🔤 FINAL UNICODE COMMENT FIX"
+echo "SYMBOL FINAL UNICODE COMMENT FIX"
 echo "============================"
 
 # Create a clean validation script without Unicode issues
@@ -46,6 +46,6 @@ EOF
 
 chmod +x scripts/clean_pr_validation.sh
 
-echo "✅ Clean validation script created"
-echo "✅ No Unicode escape sequences"
-echo "✅ Plain text formatting for compatibility"
+echo "SUCCESS Clean validation script created"
+echo "SUCCESS No Unicode escape sequences"
+echo "SUCCESS Plain text formatting for compatibility"

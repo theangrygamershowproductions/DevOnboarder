@@ -17,13 +17,13 @@ set -e
 BOT_NAME="$1"
 PERMISSION="$2"
 
-echo "🔍 Checking if bot '$BOT_NAME' has '$PERMISSION' permission..."
+echo "SEARCH Checking if bot '$BOT_NAME' has '$PERMISSION' permission..."
 
 # Path to your permissions manifest file (update path if needed)
 PERMISSIONS_FILE="agents/permissions.yml"
 
 if [[ ! -f "$PERMISSIONS_FILE" ]]; then
-    echo "❌ Permissions manifest '$PERMISSIONS_FILE' not found."
+    echo "FAILED Permissions manifest '$PERMISSIONS_FILE' not found."
     exit 1
 fi
 
@@ -36,15 +36,15 @@ else
 fi
 
 if [[ -z "$HAS_PERMISSION" ]]; then
-    echo "❌ Bot '$BOT_NAME' is NOT authorized for '$PERMISSION'"
+    echo "FAILED Bot '$BOT_NAME' is NOT authorized for '$PERMISSION'"
     exit 1
 else
-    echo "✅ Bot '$BOT_NAME' IS authorized for '$PERMISSION'"
+    echo "SUCCESS Bot '$BOT_NAME' IS authorized for '$PERMISSION'"
 fi
 
 # Optionally, show the token prefix for audit/debugging (never print the whole token)
 if [[ -n "$BOT_KEY" ]]; then
-    echo "🔑 BOT_KEY present (starts with: ${BOT_KEY:0:6}...)"
+    echo "SYMBOL BOT_KEY present (starts with: ${BOT_KEY:0:6}...)"
 else
-    echo "⚠️  BOT_KEY environment variable is NOT set!"
+    echo "WARNING  BOT_KEY environment variable is NOT set!"
 fi

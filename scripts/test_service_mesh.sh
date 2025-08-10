@@ -38,9 +38,9 @@ test_service_mesh() {
     echo "Test 1: Network Creation"
     for network in devonboarder_auth_tier devonboarder_api_tier devonboarder_data_tier devonboarder_edge_tier; do
         if docker network inspect "$network" >/dev/null 2>&1; then
-            echo "  ✓ Network $network exists"
+            echo "  SYMBOL Network $network exists"
         else
-            echo "  ✗ Network $network missing"
+            echo "  SYMBOL Network $network missing"
             ((failed_tests++))
         fi
     done
@@ -55,25 +55,25 @@ test_service_mesh() {
 
     # Check auth service
     if docker exec devonboarder-auth-dev curl -f http://localhost:8002/health >/dev/null 2>&1; then
-        echo "  ✓ Auth service health check passed"
+        echo "  SYMBOL Auth service health check passed"
     else
-        echo "  ✗ Auth service health check failed"
+        echo "  SYMBOL Auth service health check failed"
         ((failed_tests++))
     fi
 
     # Check backend service
     if docker exec devonboarder-xp-dev curl -f http://localhost:8001/health >/dev/null 2>&1; then
-        echo "  ✓ Backend service health check passed"
+        echo "  SYMBOL Backend service health check passed"
     else
-        echo "  ✗ Backend service health check failed"
+        echo "  SYMBOL Backend service health check failed"
         ((failed_tests++))
     fi
 
     # Check discord integration
     if docker exec devonboarder-discord-dev curl -f http://localhost:8081/health >/dev/null 2>&1; then
-        echo "  ✓ Discord integration health check passed"
+        echo "  SYMBOL Discord integration health check passed"
     else
-        echo "  ✗ Discord integration health check failed"
+        echo "  SYMBOL Discord integration health check failed"
         ((failed_tests++))
     fi
 
@@ -83,9 +83,9 @@ test_service_mesh() {
 
     # Test Traefik dashboard
     if curl -f http://localhost:8090 >/dev/null 2>&1; then
-        echo "  ✓ Traefik dashboard accessible"
+        echo "  SYMBOL Traefik dashboard accessible"
     else
-        echo "  ✗ Traefik dashboard not accessible"
+        echo "  SYMBOL Traefik dashboard not accessible"
         ((failed_tests++))
     fi
 
@@ -99,10 +99,10 @@ run_validation() {
     echo "==================================="
 
     if bash "$SCRIPT_DIR/validate_network_contracts.sh"; then
-        echo "  ✓ Network contract validation passed"
+        echo "  SYMBOL Network contract validation passed"
         return 0
     else
-        echo "  ✗ Network contract validation failed"
+        echo "  SYMBOL Network contract validation failed"
         return 1
     fi
 }
@@ -167,14 +167,14 @@ main() {
 
             if [[ $total_failures -eq 0 ]]; then
                 echo
-                echo "🎉 SUCCESS: Docker Service Mesh Phase 1 implementation complete!"
+                echo "SYMBOL SUCCESS: Docker Service Mesh Phase 1 implementation complete!"
                 echo "   All services running with tiered network architecture"
                 echo "   Network contracts validated and enforced"
                 echo "   Ready for Phase 2 implementation"
                 exit 0
             else
                 echo
-                echo "❌ FAILED: $total_failures total failures detected"
+                echo "FAILED FAILED: $total_failures total failures detected"
                 echo "   Check logs and network configuration"
                 exit 1
             fi

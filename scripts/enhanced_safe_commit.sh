@@ -13,9 +13,9 @@ COMMIT_MSG="$1"
 
 # Check if pre-commit is installed
 if ! command -v pre-commit >/dev/null 2>&1; then
-    echo "⚠️  pre-commit not found. Install with: pip install pre-commit"
-    echo "📋 For best experience, run once: pre-commit install"
-    echo "🔄 Falling back to standard safe commit..."
+    echo "WARNING  pre-commit not found. Install with: pip install pre-commit"
+    echo "SYMBOL For best experience, run once: pre-commit install"
+    echo "SYMBOL Falling back to standard safe commit..."
     exec bash scripts/safe_commit.sh "$COMMIT_MSG"
 fi
 
@@ -26,12 +26,12 @@ if [[ -z "${VIRTUAL_ENV:-}" ]]; then
     source .venv/bin/activate
 fi
 
-echo "🚀 Enhanced Safe Commit - Zero Disruption Mode"
+echo "DEPLOY Enhanced Safe Commit - Zero Disruption Mode"
 echo "Commit message: $COMMIT_MSG"
 
 # Step 1: PROACTIVE formatting to prevent hook modifications
 echo ""
-echo "🔧 Step 1: Proactive file formatting (prevents hook disruption)..."
+echo "CONFIG Step 1: Proactive file formatting (prevents hook disruption)..."
 
 # Run whitespace and end-of-file formatters on ALL tracked files first
 echo "  - Running trailing-whitespace cleanup..."
@@ -47,11 +47,11 @@ pre-commit run black --all-files 2>/dev/null || true
 echo "  - Running ruff formatting..."
 pre-commit run ruff --all-files 2>/dev/null || true
 
-echo "✅ Proactive formatting complete"
+echo "SUCCESS Proactive formatting complete"
 
 # Step 3: NOW stage the files (they should be pre-formatted)
 echo ""
-echo "📁 Step 2: Staging files after proactive formatting..."
+echo "FOLDER Step 2: Staging files after proactive formatting..."
 
 # Check if there are any changes to stage
 if [[ $# -gt 1 ]]; then
@@ -68,7 +68,7 @@ fi
 # Get list of staged files for reference
 STAGED_FILES=$(git diff --cached --name-only)
 if [[ -z "$STAGED_FILES" ]]; then
-    echo "❌ No files staged for commit. Nothing to commit."
+    echo "FAILED No files staged for commit. Nothing to commit."
     exit 1
 fi
 
@@ -77,23 +77,23 @@ echo "$STAGED_FILES" | while IFS= read -r line; do echo "     $line"; done
 
 # Step 4: Run validation-only hooks (should NOT modify files)
 echo ""
-echo "🔍 Step 3: Running validation hooks (no file modifications expected)..."
+echo "SEARCH Step 3: Running validation hooks (no file modifications expected)..."
 
 # Run the full pre-commit suite - should be validation only now
 if git commit -m "$COMMIT_MSG"; then
     echo ""
-    echo "🎉 Commit successful - no hook disruptions!"
+    echo "SYMBOL Commit successful - no hook disruptions!"
     exit 0
 else
     COMMIT_EXIT_CODE=$?
     echo ""
-    echo "⚠️  Pre-commit validation failed (exit code: $COMMIT_EXIT_CODE)"
+    echo "WARNING  Pre-commit validation failed (exit code: $COMMIT_EXIT_CODE)"
 
     # Check if files were STILL modified despite proactive formatting
     MODIFIED_FILES=$(git diff --name-only)
     if [[ -n "$MODIFIED_FILES" ]]; then
         echo ""
-        echo "🚨 UNEXPECTED: Files were modified even after proactive formatting!"
+        echo "SYMBOL UNEXPECTED: Files were modified even after proactive formatting!"
         echo "Modified files:"
         echo "$MODIFIED_FILES" | while IFS= read -r line; do echo "   $line"; done
         echo ""
@@ -102,7 +102,7 @@ else
         echo "  2. A new hook was added that we don't handle proactively"
         echo "  3. There's a race condition in the formatting tools"
         echo ""
-        echo "🔄 Attempting standard safe commit fallback..."
+        echo "SYMBOL Attempting standard safe commit fallback..."
 
         # Fall back to the standard safe_commit approach
         echo "$STAGED_FILES" | while read -r file; do
@@ -113,25 +113,25 @@ else
         done
 
         if git commit -m "$COMMIT_MSG"; then
-            echo "✅ Commit successful after fallback re-staging"
+            echo "SUCCESS Commit successful after fallback re-staging"
         else
             FINAL_EXIT_CODE=$?
-            echo "❌ CRITICAL: Enhanced safe commit failed completely"
+            echo "FAILED CRITICAL: Enhanced safe commit failed completely"
             echo "Please run: bash scripts/safe_commit.sh \"$COMMIT_MSG\""
             exit $FINAL_EXIT_CODE
         fi
     else
         echo ""
-        echo "❌ Validation failed but no files were modified."
+        echo "FAILED Validation failed but no files were modified."
         echo "This indicates a genuine validation error that needs attention."
         echo ""
-        echo "🔍 Common validation failures:"
+        echo "SEARCH Common validation failures:"
         echo "  - Linting errors (ruff, eslint)"
         echo "  - Type checking errors (mypy)"
         echo "  - Test failures"
         echo "  - YAML syntax errors"
         echo ""
-        echo "💡 Run this to see specific errors:"
+        echo "IDEA Run this to see specific errors:"
         echo "   pre-commit run --all-files"
 
         exit $COMMIT_EXIT_CODE

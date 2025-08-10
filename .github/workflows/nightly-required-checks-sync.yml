@@ -1,7 +1,7 @@
 # DevOnboarder Token Policy: GITHUB_TOKEN (read/write/repo-admin)
 #
 # Required for: Branch protection updates, auto-fixing drift detected by nightly validation
-# Fallback chain: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN (this workflow)
+# Fallback chain: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN (this workflow)
 #
 # DevOnboarder No Default Token Policy v1.0 compliance:
 # - Uses repo-admin token for branch protection API access
@@ -66,7 +66,7 @@ jobs:
       - name: Skip if no source PR available
         if: steps.pick-pr.outputs.pr == ''
         run: |
-          echo "WARNING: No source PR available for sync - skipping self-healing"
+          echo "Notice: No source PR available for sync - skipping self-healing"
           echo "Manual options:"
           echo "  1. Wait for next merged PR"
           echo "  2. Trigger workflow_dispatch with specific PR number"
@@ -135,5 +135,5 @@ jobs:
           elif [ "${{ steps.pick-pr.outputs.pr }}" != "" ]; then
             echo " Configuration validated - no sync needed"
           else
-            echo "WARNING: No source PR available - manual intervention may be needed"
+            echo "Notice: No source PR available - manual intervention may be needed"
           fi

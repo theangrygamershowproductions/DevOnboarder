@@ -23,4 +23,4 @@ if [ "$failed" -ne 0 ]; then
   exit 1
 fi
 
-echo "All required domains are reachable ✅"
+echo "All required domains are reachable SUCCESS"

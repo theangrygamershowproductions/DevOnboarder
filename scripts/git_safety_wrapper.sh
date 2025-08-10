@@ -59,9 +59,9 @@ check_potato_approval() {
 # Create emergency approval prompt
 request_potato_approval() {
     echo ""
-    echo "════════════════════════════════════════════════════════════════"
-    echo "🥔 POTATO EMERGENCY APPROVAL REQUIRED"
-    echo "════════════════════════════════════════════════════════════════"
+    echo "SYMBOL"
+    echo "POTATO POTATO EMERGENCY APPROVAL REQUIRED"
+    echo "SYMBOL"
     echo ""
     echo "You are attempting to use --no-verify which bypasses DevOnboarder's"
     echo "quality gates. This should only be used in true emergencies."
@@ -72,7 +72,7 @@ request_potato_approval() {
 
     # Show current quality gate status
     echo "Current quality gate issues:"
-    echo "────────────────────────────────────────────────────────────────"
+    echo "SYMBOL"
 
     # Try to run pre-commit to show what would fail
     if command -v pre-commit >/dev/null 2>&1; then
@@ -82,7 +82,7 @@ request_potato_approval() {
         echo "Pre-commit not available - cannot show specific issues"
     fi
 
-    echo "────────────────────────────────────────────────────────────────"
+    echo "SYMBOL"
     echo ""
 
     # Emergency justification questions
@@ -122,7 +122,7 @@ request_potato_approval() {
     # Final confirmation
     echo ""
     echo "Emergency Approval Summary:"
-    echo "──────────────────────────"
+    echo "SYMBOL"
     echo "Reason: $emergency_reason"
     echo "Impact: $impact"
     echo "Rollback: $rollback_plan"
@@ -201,7 +201,7 @@ git_wrapper() {
             echo "Working directory: $(pwd)"
             echo "Git status:"
             git status --porcelain
-            echo "────────────────────────────────────────"
+            echo "SYMBOL"
         } >> "$LOG_FILE"
     fi
 

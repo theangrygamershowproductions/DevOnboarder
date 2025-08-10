@@ -5,7 +5,7 @@
 #   scope: .github/workflows/ci.yml
 #   triggers: Push and pull_request events
 #   output: Build artifacts and coverage reports
-#   token: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN (fallback chain)
+#   token: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN (fallback chain)
 #   permissions: See .codex/bot-permissions.yaml for token capabilities
 # ---
 name: CI
@@ -225,7 +225,7 @@ jobs:
                       echo "RUNNING: 95% Quality Control validation..."
                       ./scripts/qc_pre_push.sh
                   else
-                      echo "WARNING: QC script not found, skipping comprehensive validation"
+                      echo "Notice: QC script not found, skipping comprehensive validation"
                   fi
             - name: Generate OpenAPI spec
               run: |
@@ -552,7 +552,7 @@ jobs:
               run: |
                   echo "CI completed successfully - smart cleaning temporary artifacts"
                   bash scripts/manage_logs.sh smart-clean
-                  echo "SUCCESS: Temporary artifacts cleaned, important logs preserved for next run"
+                  echo "Complete: Temporary artifacts cleaned, important logs preserved for next run"
 
             - name: Wait for auth service
               run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth

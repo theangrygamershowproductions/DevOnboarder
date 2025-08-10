@@ -52,7 +52,7 @@ jobs:
           NPM_VERSION=$(npm -v)
           printf "npm version: %s\n" "$NPM_VERSION"
 
-          echo "SUCCESS: All versions meet DevOnboarder policy"
+          echo "Complete: All versions meet DevOnboarder policy"
           echo "Ready for development with:"
           echo "  - Python 3.12.x for backend services"
           echo "  - Node.js 22.x for frontend/bot development"

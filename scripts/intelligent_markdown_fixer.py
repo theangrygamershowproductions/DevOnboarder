@@ -285,7 +285,7 @@ def main():
     if changed_files and not args.dry_run:
         print("\nFixed files:")
         for f in changed_files:
-            print(f"  ✅ {f}")
+            print(f"  SUCCESS {f}")
 
 
 if __name__ == "__main__":

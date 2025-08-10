@@ -110,7 +110,7 @@ echo "$PROTECTION_CHECKS" | while read -r line; do echo "  - $line"; done
 
 # Extract check names from documentation
 echo "Extracting checks from documentation..."
-DOC_CHECKS=$(grep -o '`[^`]*` ✅ VERIFIED' "$REQUIRED_CHECKS_DOC" | sed 's/`//g; s/ ✅ VERIFIED$//' | sort)
+DOC_CHECKS=$(grep -o '[a-zA-Z0-9_-]* SUCCESS VERIFIED' "$REQUIRED_CHECKS_DOC" | sed 's/ SUCCESS VERIFIED$//' | sort)
 
 echo "Found checks in documentation:"
 echo "$DOC_CHECKS" | while read -r line; do echo "  - $line"; done
@@ -142,12 +142,12 @@ for check in "${doc_array[@]}"; do
 done
 
 if [[ "$drift_found" == "true" ]]; then
-    echo "❌ DRIFT DETECTED: Documentation and protection config are out of sync!"
+    echo "FAILED DRIFT DETECTED: Documentation and protection config are out of sync!"
     echo "Manual intervention required to resolve inconsistencies."
     echo "Log saved to: $LOG_FILE"
     exit 1
 else
-    echo "✅ NO DRIFT: Documentation and protection config are synchronized"
+    echo "SUCCESS NO DRIFT: Documentation and protection config are synchronized"
     echo "All $(echo "$PROTECTION_CHECKS" | wc -l | tr -d ' ') required checks are properly documented"
 fi
 

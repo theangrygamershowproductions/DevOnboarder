@@ -136,9 +136,9 @@ def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
     calls = gh_calls.read_text().splitlines()
 
     assert any("pr view" in call for call in calls), f"Missing 'pr view' in: {calls}"
-    assert any(
-        "pr comment" in call for call in calls
-    ), f"Missing 'pr comment' in: {calls}"
+    assert any("pr comment" in call for call in calls), (
+        f"Missing 'pr comment' in: {calls}"
+    )
 
 
 def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path) -> None:
@@ -180,6 +180,6 @@ def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path) -> None:
 
     # Should check title but not comment since it's a feature PR
     assert any("pr view" in call for call in calls), f"Missing 'pr view' in: {calls}"
-    assert not any(
-        "pr comment" in call for call in calls
-    ), f"Unexpected 'pr comment' for feature PR in: {calls}"
+    assert not any("pr comment" in call for call in calls), (
+        f"Unexpected 'pr comment' for feature PR in: {calls}"
+    )

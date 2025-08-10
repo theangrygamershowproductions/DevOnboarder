@@ -4,31 +4,31 @@
 
 set -euo pipefail
 
-echo "🎫 Creating MVP GitHub Issues for Docker Service Mesh"
+echo "SYMBOL Creating MVP GitHub Issues for Docker Service Mesh"
 echo "=================================================="
 
 # Check if GitHub CLI is available
 if ! command -v gh >/dev/null 2>&1; then
-    echo "❌ GitHub CLI (gh) not installed"
+    echo "FAILED GitHub CLI (gh) not installed"
     echo "Install: https://cli.github.com/"
     exit 1
 fi
 
 # Check if authenticated
 if ! gh auth status >/dev/null 2>&1; then
-    echo "❌ Not authenticated with GitHub CLI"
+    echo "FAILED Not authenticated with GitHub CLI"
     echo "Run: gh auth login"
     exit 1
 fi
 
-echo "✅ GitHub CLI ready"
+echo "SUCCESS GitHub CLI ready"
 
 # Create Phase 1 Issue
 echo ""
-echo "📋 Creating Phase 1 Issue: Network Tiering + DNS Aliases"
+echo "SYMBOL Creating Phase 1 Issue: Network Tiering + DNS Aliases"
 
 PHASE1_BODY=$(cat << 'EOF'
-# 🥇 MVP Phase 1: Docker Network Tiering + DNS Aliases
+# FIRST MVP Phase 1: Docker Network Tiering + DNS Aliases
 
 **Timeline**: Week 1 of MVP
 **Priority**: P0 (MVP Infrastructure Foundation)
@@ -72,14 +72,14 @@ gh issue create \
     --label "MVP,docker,network,P0,phase-1" \
     --milestone "MVP Docker Service Mesh" 2>/dev/null || echo "Note: Milestone may not exist yet"
 
-echo "✅ Phase 1 issue created"
+echo "SUCCESS Phase 1 issue created"
 
 # Create Phase 3 Issue
 echo ""
-echo "📋 Creating Phase 3 Issue: CI Network Contract Validation"
+echo "SYMBOL Creating Phase 3 Issue: CI Network Contract Validation"
 
 PHASE3_BODY=$(cat << 'EOF'
-# 🥇 MVP Phase 3: CI Network Contract Validation
+# FIRST MVP Phase 3: CI Network Contract Validation
 
 **Timeline**: Week 2 of MVP
 **Priority**: P0 (MVP CI/CD Integration)
@@ -120,20 +120,20 @@ gh issue create \
     --label "MVP,ci,validation,P0,phase-3" \
     --milestone "MVP Docker Service Mesh" 2>/dev/null || echo "Note: Milestone may not exist yet"
 
-echo "✅ Phase 3 issue created"
+echo "SUCCESS Phase 3 issue created"
 
 # Summary
 echo ""
-echo "🎯 MVP Issues Created Successfully!"
+echo "TARGET MVP Issues Created Successfully!"
 echo ""
-echo "📊 Summary:"
-echo "✅ Phase 1: Network Foundation (Week 1)"
-echo "✅ Phase 3: CI Validation (Week 2)"
-echo "🚫 Phase 2, 4, 5: Deferred to Post-MVP"
+echo "STATS Summary:"
+echo "SUCCESS Phase 1: Network Foundation (Week 1)"
+echo "SUCCESS Phase 3: CI Validation (Week 2)"
+echo "SYMBOL Phase 2, 4, 5: Deferred to Post-MVP"
 
 echo ""
-echo "🔗 View Issues:"
+echo "LINK View Issues:"
 echo "gh issue list --label MVP"
 echo ""
-echo "🚀 Ready to start implementation!"
+echo "DEPLOY Ready to start implementation!"
 echo "Begin with: ./scripts/mvp_docker_service_mesh.sh"

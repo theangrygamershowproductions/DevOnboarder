@@ -81,7 +81,7 @@ jobs:
               if grep -q "testTimeout" "$pkg" 2>/dev/null; then
                 echo "  - Has testTimeout configured"
               else
-                echo "  - WARNING: Missing testTimeout"
+                echo "  - Notice: Missing testTimeout"
               fi
             fi
           done

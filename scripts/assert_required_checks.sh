@@ -101,5 +101,5 @@ if [ ${#missing[@]} -gt 0 ]; then
     exit 1
 fi
 
-echo "✅ Required checks match live PR check names."
+echo "SUCCESS Required checks match live PR check names."
 echo "All ${#required[@]} required checks are present in PR #$PR"

@@ -55,17 +55,17 @@ check_and_enhance_workflow() {
             # Add compliance note to end of file
             cat >> "$workflow_file" << 'EOF'
 
-# PRODUCTION HARDENING COMPLETE ✅
+# PRODUCTION HARDENING COMPLETE SUCCESS
 # This workflow meets DevOnboarder Universal Workflow Permissions Policy
 # Token usage aligns with No Default Token Policy v1.0
 # Required status checks documented in docs/ci/required-checks.md
 # Skip behavior validated for conditional jobs compatibility
 EOF
         else
-            echo "  ✅ Already compliant"
+            echo "  SUCCESS Already compliant"
         fi
     else
-        echo "  ⚠ Needs manual review for complete documentation"
+        echo "  WARNING Needs manual review for complete documentation"
     fi
 }
 
@@ -88,7 +88,7 @@ for workflow in "${CRITICAL_WORKFLOWS[@]}"; do
         check_and_enhance_workflow "$workflow"
         ((total_count++))
     else
-        echo "⚠ Workflow not found: $workflow"
+        echo "WARNING Workflow not found: $workflow"
     fi
 done
 
@@ -96,30 +96,30 @@ echo ""
 echo "===== Production Hardening Summary ====="
 
 cat << 'EOF'
-🎯 PRODUCTION HARDENING COMPLETE
+TARGET PRODUCTION HARDENING COMPLETE
 
 The following hardening steps have been successfully implemented:
 
-✅ Step 1: Enhanced CODEOWNERS
+SUCCESS Step 1: Enhanced CODEOWNERS
    - Domain-specific ownership rules added
    - Security and infrastructure expertise assigned
 
-✅ Step 2: Enhanced Branch Protection
+SUCCESS Step 2: Enhanced Branch Protection
    - Conversation resolution requirement enabled
    - 12 required status checks enforced
    - Admin exemption disabled for strict governance
 
-✅ Step 3: Matrix Drift Protection
+SUCCESS Step 3: Matrix Drift Protection
    - Automated detection of doc/config inconsistencies
    - Validation script created and verified
    - Documentation synchronized with protection config
 
-✅ Step 4: Skip Behavior Confirmation
+SUCCESS Step 4: Skip Behavior Confirmation
    - Conditional job analysis completed
    - Required check compatibility verified
    - Skip scenarios documented and validated
 
-✅ Step 5: Workflow Headers Enhancement
+SUCCESS Step 5: Workflow Headers Enhancement
    - Compliance verification added to workflows
    - Token usage documentation confirmed
    - Maintenance standards established
@@ -149,28 +149,28 @@ echo "Running final compliance checks..."
 
 # Check if protection is active
 if command -v gh >/dev/null 2>&1; then
-    echo "✅ GitHub branch protection: ACTIVE"
-    echo "✅ Required status checks: $(gh api repos/:owner/:repo/branches/main/protection 2>/dev/null | jq -r '.required_status_checks.contexts | length' 2>/dev/null || echo 'CONFIGURED')"
+    echo "SUCCESS GitHub branch protection: ACTIVE"
+    echo "SUCCESS Required status checks: $(gh api repos/:owner/:repo/branches/main/protection 2>/dev/null | jq -r '.required_status_checks.contexts | length' 2>/dev/null || echo 'CONFIGURED')"
 else
-    echo "⚠ GitHub CLI not available for live validation"
+    echo "WARNING GitHub CLI not available for live validation"
 fi
 
 # Check documentation
 if [[ -f "docs/ci/required-checks.md" ]]; then
-    echo "✅ Documentation: UP TO DATE"
+    echo "SUCCESS Documentation: UP TO DATE"
 else
-    echo "❌ Documentation: MISSING"
+    echo "FAILED Documentation: MISSING"
 fi
 
 # Check scripts
 if [[ -x "scripts/matrix_drift_protection.sh" && -x "scripts/skip_behavior_confirmation.sh" ]]; then
-    echo "✅ Validation scripts: OPERATIONAL"
+    echo "SUCCESS Validation scripts: OPERATIONAL"
 else
-    echo "❌ Validation scripts: MISSING"
+    echo "FAILED Validation scripts: MISSING"
 fi
 
 echo ""
-echo "🎉 PRODUCTION HARDENING: COMPLETE"
+echo "SYMBOL PRODUCTION HARDENING: COMPLETE"
 echo ""
 echo "DevOnboarder now has comprehensive CI governance with:"
 echo "- Zero CodeQL violations"

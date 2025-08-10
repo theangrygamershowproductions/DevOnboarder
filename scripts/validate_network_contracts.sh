@@ -73,15 +73,15 @@ check_service_networks() {
 NETWORKS=("devonboarder_auth_tier" "devonboarder_api_tier" "devonboarder_data_tier")
 for network in "${NETWORKS[@]}"; do
     if docker network ls | grep -q "$network"; then
-        echo "✅ $network exists"
+        echo "SUCCESS $network exists"
     else
-        echo "❌ $network missing"
+        echo "FAILED $network missing"
     fi
 done
 
 # Check service assignments
 echo ""
-echo "🏗️  Service Network Assignments:"
+echo "SYMBOL  Service Network Assignments:"
 
 # Function to check service network
 check_service_network() {
@@ -92,12 +92,12 @@ check_service_network() {
         local networks
         networks=$(docker inspect "$service" --format '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' 2>/dev/null || echo "not found")
         if echo "$networks" | grep -q "$expected_network"; then
-            echo "✅ $service → $expected_network"
+            echo "SUCCESS $service → $expected_network"
         else
-            echo "❌ $service → expected: $expected_network, actual: $networks"
+            echo "FAILED $service → expected: $expected_network, actual: $networks"
         fi
     else
-        echo "⚠️  $service not running"
+        echo "WARNING  $service not running"
     fi
 }
 
@@ -109,32 +109,32 @@ check_service_network "devonboarder-db" "devonboarder_data_tier"
 
 # Test data tier isolation
 echo ""
-echo "🔐 Security Validation:"
+echo "SYMBOL Security Validation:"
 
 if docker ps --format "table {{.Names}}" | grep -q "devonboarder-backend"; then
     echo "Testing data tier isolation..."
     # Try to ping db from backend (should work if on same network)
     if docker exec devonboarder-backend ping -c 1 devonboarder-db >/dev/null 2>&1; then
-        echo "⚠️  Backend can reach database (check network isolation)"
+        echo "WARNING  Backend can reach database (check network isolation)"
     else
-        echo "❌ Backend cannot reach database (isolation working or connection issue)"
+        echo "FAILED Backend cannot reach database (isolation working or connection issue)"
     fi
 fi
 
 # DNS alias testing
 echo ""
-echo "🌐 DNS Resolution Testing:"
+echo "SYMBOL DNS Resolution Testing:"
 
 if docker ps --format "table {{.Names}}" | grep -q "devonboarder-backend"; then
     # Test internal DNS resolution
     if docker exec devonboarder-backend nslookup auth-service >/dev/null 2>&1; then
-        echo "✅ Service discovery working"
+        echo "SUCCESS Service discovery working"
     else
-        echo "❌ Service discovery not working"
+        echo "FAILED Service discovery not working"
     fi
 fi
 
 echo ""
-echo "📊 Summary:"
+echo "STATS Summary:"
 echo "Run this script after implementing Phase 1 to validate network setup"
 echo "Expected: All services assigned to correct tiers with proper isolation"

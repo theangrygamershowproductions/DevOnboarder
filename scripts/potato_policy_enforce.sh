@@ -12,7 +12,7 @@
 
 set -euo pipefail
 
-echo "🥔 Potato Policy Enforcement"
+echo "POTATO Potato Policy Enforcement"
 echo "==========================="
 
 # Check and update ignore files
@@ -27,14 +27,14 @@ for file in "${FILES[@]}"; do
                 echo "$entry" >> "$file"
             fi
         done
-        echo "✅ $file updated"
+        echo "SUCCESS $file updated"
     else
-        echo "⚠️  $file not found, creating..."
+        echo "WARNING  $file not found, creating..."
         for entry in "${REQUIRED[@]}"; do
             echo "$entry" >> "$file"
         done
-        echo "✅ $file created"
+        echo "SUCCESS $file created"
     fi
 done
 
-echo "🥔 Potato policy enforcement complete"
+echo "POTATO Potato policy enforcement complete"

@@ -41,15 +41,15 @@ log() {
 }
 
 success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREEN}SUCCESS $1${NC}"
 }
 
 warn() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    echo -e "${YELLOW}WARNING  $1${NC}"
 }
 
 error() {
-    echo -e "${RED}❌ $1${NC}"
+    echo -e "${RED}FAILED $1${NC}"
     exit 1
 }
 
@@ -248,7 +248,7 @@ generate_summary_report() {
 
     echo ""
     echo "=============================================="
-    echo "🎯 Infrastructure Initiative Created Successfully"
+    echo "TARGET Infrastructure Initiative Created Successfully"
     echo "=============================================="
     echo ""
     echo "Initiative: $INITIATIVE_NAME"
@@ -256,17 +256,17 @@ generate_summary_report() {
     echo "Timeline: $TIMELINE"
     echo "Priority: $PRIORITY"
     echo ""
-    echo "📋 Created Issues:"
+    echo "SYMBOL Created Issues:"
     for issue_url in "${issue_urls[@]}"; do
         echo "  - $issue_url"
     done
     echo ""
-    echo "📊 GitHub Projects:"
+    echo "STATS GitHub Projects:"
     echo "  - Team Planning: https://github.com/orgs/$ORG/projects/$TEAM_PLANNING_PROJECT"
     echo "  - Feature Release: https://github.com/orgs/$ORG/projects/$FEATURE_RELEASE_PROJECT"
     echo "  - Roadmap: https://github.com/orgs/$ORG/projects/$ROADMAP_PROJECT"
     echo ""
-    echo "🔄 Next Steps:"
+    echo "SYMBOL Next Steps:"
     echo "  1. Customize issue templates with specific implementation details"
     echo "  2. Assign team members to issues in GitHub Projects"
     echo "  3. Set up dependency tracking between issues"

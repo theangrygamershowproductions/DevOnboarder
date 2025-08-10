@@ -79,7 +79,7 @@ jobs:
           # Create issue only if drift was detected
           if [ -n "${DRIFT_DETECTED:-}" ]; then
             cat > drift-issue.md << 'EOF'
-          # 🚨 CI Governance Drift Detected
+          # Checking CI Governance Drift Detected
 
           **Date**: $(date -u)
           **Detection**: Automated nightly drift check
@@ -132,7 +132,7 @@ jobs:
           EOF
 
           gh issue create \
-            --title "🚨 CI Governance Drift Detected - $(date -u +%Y-%m-%d)" \
+            --title "Checking CI Governance Drift Detected - $(date -u +%Y-%m-%d)" \
             --body-file drift-issue.md \
             --label "automation,ci-governance,drift-detection,priority-high" \
             --assignee "@me"
@@ -153,7 +153,7 @@ jobs:
             echo "DevOnboarder CI governance is operating correctly."
           else
             echo " Drift detected in: ${DRIFT_DETECTED}"
-            echo "🔔 Issue created for manual intervention"
+            echo "Checking Issue created for manual intervention"
             echo ""
             echo "Manual review and correction required."
           fi

@@ -1,0 +1,20 @@
+name: Agent Policy Enforcement
+on:
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "**/*.sh"
+      - ".github/workflows/**"
+  push:
+    branches: [main]
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Enforce terminal output policy
+        run: python scripts/agent_policy_enforcer.py

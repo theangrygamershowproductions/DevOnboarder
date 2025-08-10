@@ -32,9 +32,9 @@ add_result() {
 
     if [ "$status" = "FAIL" ]; then
         ((VALIDATION_FAILURES++))
-        echo "❌ $test_name: $details"
+        echo "FAILED $test_name: $details"
     else
-        echo "✅ $test_name: $details"
+        echo "SUCCESS $test_name: $details"
     fi
 }
 
@@ -85,25 +85,25 @@ echo "Mode: $MODE"
 case $MODE in
     "strict")
         if [ $VALIDATION_FAILURES -gt 0 ]; then
-            echo "❌ STRICT MODE: Blocking CI due to validation failures"
+            echo "FAILED STRICT MODE: Blocking CI due to validation failures"
             exit 1
         else
-            echo "✅ STRICT MODE: All validations passed, CI approved"
+            echo "SUCCESS STRICT MODE: All validations passed, CI approved"
         fi
         ;;
     "warning")
         if [ $VALIDATION_FAILURES -gt 0 ]; then
-            echo "⚠️  WARNING MODE: Validation failures detected, but CI allowed to continue"
+            echo "WARNING  WARNING MODE: Validation failures detected, but CI allowed to continue"
             echo "Consider reviewing failures before merge"
         else
-            echo "✅ WARNING MODE: All validations passed"
+            echo "SUCCESS WARNING MODE: All validations passed"
         fi
         ;;
     "monitoring")
-        echo "📊 MONITORING MODE: Validation results recorded for metrics"
+        echo "STATS MONITORING MODE: Validation results recorded for metrics"
         ;;
     *)
-        echo "❌ Unknown mode: $MODE. Use strict, warning, or monitoring"
+        echo "FAILED Unknown mode: $MODE. Use strict, warning, or monitoring"
         exit 1
         ;;
 esac

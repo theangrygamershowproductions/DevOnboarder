@@ -2,7 +2,7 @@
 # filepath: scripts/trigger_codex_agent_dryrun.sh
 set -euo pipefail
 
-echo "🧪 Codex Agent Dry-Run Integration Testing"
+echo "EMOJI Codex Agent Dry-Run Integration Testing"
 echo "=========================================="
 
 # Configuration
@@ -20,7 +20,7 @@ export DEPLOY_ENV="$DEPLOY_ENV"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "🔧 Configuration:"
+echo "CONFIG Configuration:"
 echo "   Agent: $AGENT_NAME"
 echo "   Environment: $DEPLOY_ENV"
 echo "   Dry-run Mode: $CODEX_DRY_RUN"
@@ -33,13 +33,13 @@ validate_agent() {
     local agent_file=".codex/agents/${AGENT_NAME}.md"
 
     if [[ ! -f "$agent_file" ]]; then
-        echo "❌ Agent file not found: $agent_file"
+        echo "FAILED Agent file not found: $agent_file"
         echo "Available agents:"
         find .codex/agents/ -name "*.md" -type f 2>/dev/null | sed 's/.codex\/agents\///; s/\.md$//' | sed 's/^/   /' || echo "   No agents found"
         return 1
     fi
 
-    echo "✅ Agent file found: $agent_file"
+    echo "SUCCESS Agent file found: $agent_file"
     return 0
 }
 
@@ -47,20 +47,20 @@ validate_agent() {
 check_dry_run_config() {
     local agent_file=".codex/agents/${AGENT_NAME}.md"
 
-    echo "🔍 Checking dry-run configuration..."
+    echo "SEARCH Checking dry-run configuration..."
 
     if [[ -f "$agent_file" ]]; then
         if grep -q "codex_dry_run: true" "$agent_file"; then
-            echo "✅ Dry-run mode enabled in agent configuration"
+            echo "SUCCESS Dry-run mode enabled in agent configuration"
         else
-            echo "⚠️  Dry-run mode not explicitly set in agent configuration"
+            echo "WARNING  Dry-run mode not explicitly set in agent configuration"
             echo "   Adding dry-run safety check..."
         fi
 
-        if grep -q "⚠️.*dry-run mode" "$agent_file"; then
-            echo "✅ Dry-run warning notice present"
+        if grep -q "WARNING.*dry-run mode" "$agent_file"; then
+            echo "SUCCESS Dry-run warning notice present"
         else
-            echo "⚠️  Dry-run warning notice not found"
+            echo "WARNING  Dry-run warning notice not found"
         fi
     fi
 }
@@ -71,7 +71,7 @@ simulate_codex_execution() {
     timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     local test_command="CTO security audit"
 
-    echo "🎭 Simulating Codex agent execution..."
+    echo "SYMBOL Simulating Codex agent execution..."
     echo "   Command: $test_command"
     echo "   Target Discord Server: 1386935663139749998 (TAGS: DevOnboarder)"
     echo ""
@@ -107,94 +107,94 @@ simulate_codex_execution() {
 }
 EOF
 
-    echo "📄 Dry-run output saved to: ${OUTPUT_DIR}/management-ingest-dryrun-${timestamp}.json"
+    echo "FILE Dry-run output saved to: ${OUTPUT_DIR}/management-ingest-dryrun-${timestamp}.json"
 }
 
 # Function to validate integration readiness
 validate_integration_readiness() {
-    echo "🔍 Validating integration readiness..."
+    echo "SEARCH Validating integration readiness..."
 
     local errors=0
 
     # Check Discord environment setup
     if [[ -f "scripts/setup_discord_env.sh" ]]; then
-        echo "✅ Discord environment setup script available"
+        echo "SUCCESS Discord environment setup script available"
     else
-        echo "❌ Discord environment setup script missing"
+        echo "FAILED Discord environment setup script missing"
         ((errors++))
     fi
 
     # Check bot configuration
     if [[ -f "bot/.env.dev" ]]; then
-        echo "✅ Bot development environment configured"
+        echo "SUCCESS Bot development environment configured"
     else
-        echo "⚠️  Bot development environment not set up"
+        echo "WARNING  Bot development environment not set up"
     fi
 
     # Check Codex directory structure
     if [[ -d ".codex" ]]; then
-        echo "✅ Codex directory exists"
+        echo "SUCCESS Codex directory exists"
         mkdir -p .codex/agents .codex/state .codex/logs
     else
-        echo "⚠️  Codex directory missing, creating structure..."
+        echo "WARNING  Codex directory missing, creating structure..."
         mkdir -p .codex/agents .codex/state .codex/logs
     fi
 
     # Check CI configuration
     if [[ -f ".github/workflows/ci.yml" ]] || [[ -f ".github/workflows/discord-integration.yml" ]]; then
-        echo "✅ CI workflows configured"
+        echo "SUCCESS CI workflows configured"
     else
-        echo "⚠️  CI workflows not found"
+        echo "WARNING  CI workflows not found"
     fi
 
     if [[ $errors -gt 0 ]]; then
-        echo "❌ $errors critical integration issues found"
+        echo "FAILED $errors critical integration issues found"
         return 1
     else
-        echo "✅ Integration readiness validation passed"
+        echo "SUCCESS Integration readiness validation passed"
         return 0
     fi
 }
 
 # Function to run integration tests
 run_integration_tests() {
-    echo "🧪 Running integration tests..."
+    echo "EMOJI Running integration tests..."
 
     # Test 1: Directory structure
     echo "   Test 1: Directory structure..."
     if [[ -d ".codex" ]] && [[ -d "bot" ]] && [[ -d "scripts" ]]; then
-        echo "   ✅ Directory structure test passed"
+        echo "   SUCCESS Directory structure test passed"
     else
-        echo "   ❌ Directory structure test failed"
+        echo "   FAILED Directory structure test failed"
         return 1
     fi
 
     # Test 2: Environment setup
     echo "   Test 2: Environment setup..."
     if [[ -f "bot/.env.dev" ]]; then
-        echo "   ✅ Environment setup test passed"
+        echo "   SUCCESS Environment setup test passed"
     else
-        echo "   ⚠️  Environment setup test had warnings (expected if first run)"
+        echo "   WARNING  Environment setup test had warnings (expected if first run)"
     fi
 
     # Test 3: Dry-run execution
     echo "   Test 3: Dry-run execution..."
     simulate_codex_execution
-    echo "   ✅ Dry-run execution test passed"
+    echo "   SUCCESS Dry-run execution test passed"
 
     # Test 4: Integration readiness
     echo "   Test 4: Integration readiness..."
     if validate_integration_readiness; then
-        echo "   ✅ Integration readiness test passed"
+        echo "   SUCCESS Integration readiness test passed"
     else
-        echo "   ⚠️  Integration readiness test had warnings"
+        echo "   WARNING  Integration readiness test had warnings"
     fi
 }
 
 # Function to display summary
 display_summary() {
     echo ""
-    echo "🎯 Dry-Run Summary:"
+    echo "TARGET Dry-Run Summary:"
     echo "=================="
     echo "   Agent: $AGENT_NAME"
     echo "   Environment: $DEPLOY_ENV"
@@ -203,17 +203,17 @@ display_summary() {
     echo "   Live Actions: Disabled"
     echo "   Output Directory: $OUTPUT_DIR"
     echo ""
-    echo "📋 Next Steps:"
+    echo "SYMBOL Next Steps:"
     echo "   1. Review dry-run output in $OUTPUT_DIR"
     echo "   2. Test Discord bot: cd bot && ./start-dev.sh"
     echo "   3. When ready for live testing: export DISCORD_BOT_READY=true"
     echo "   4. For production: export LIVE_TRIGGERS_ENABLED=true"
     echo ""
-    echo "🔗 Integration Status:"
-    echo "   - DevOnboarder CI: ✅ Resolved"
-    echo "   - Discord Environment: ✅ Configured"
-    echo "   - Codex Agents: 🧪 Dry-run mode active"
-    echo "   - Live Integration: ⏸️ Awaiting authorization"
+    echo "LINK Integration Status:"
+    echo "   - DevOnboarder CI: SUCCESS Resolved"
+    echo "   - Discord Environment: SUCCESS Configured"
+    echo "   - Codex Agents: EMOJI Dry-run mode active"
+    echo "   - Live Integration: ⏸SYMBOL Awaiting authorization"
 }
 
 # Main execution
@@ -222,7 +222,7 @@ main() {
     exec > >(tee -a "$LOG_FILE")
     exec 2>&1
 
-    echo "🧪 Starting Codex agent dry-run at $(date)"
+    echo "EMOJI Starting Codex agent dry-run at $(date)"
     echo "Arguments: $*"
     echo ""
 
@@ -233,8 +233,8 @@ main() {
     display_summary
 
     echo ""
-    echo "✅ Codex agent dry-run complete!"
-    echo "📝 Full log saved to: $LOG_FILE"
+    echo "SUCCESS Codex agent dry-run complete!"
+    echo "EDIT Full log saved to: $LOG_FILE"
 }
 
 # Execute main function with all arguments

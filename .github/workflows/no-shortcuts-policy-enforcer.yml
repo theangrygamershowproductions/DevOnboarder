@@ -127,9 +127,9 @@ jobs:
           fi
           echo "PASSED: Commit message format validation passed"
 
-      - name: " SUCCESS: All Quality Gates Passed"
+      - name: " Complete: All Quality Gates Passed"
         run: |
-          echo "SUCCESS: NO_SHORTCUTS_POLICY: All enforcement checks passed!"
+          echo "Complete: NO_SHORTCUTS_POLICY: All enforcement checks passed!"
           echo "PASSED: Markdown linting compliance"
           echo "PASSED: Documentation quality standards"
           echo "PASSED: Agent schema validation"
@@ -152,14 +152,14 @@ jobs:
           echo "  4. Re-run validation locally before pushing"
           echo ""
           echo " AUTO-FIX COMMANDS:"
-          echo "  • Markdown: npx markdownlint-cli2 --fix '**/*.md'"
-          echo "  • Python: source .venv/bin/activate && python -m black ."
-          echo "  • Python: source .venv/bin/activate && python -m ruff --fix ."
+          echo "  - Markdown: npx markdownlint-cli2 --fix '**/*.md'"
+          echo "  - Python: source .venv/bin/activate && python -m black ."
+          echo "  - Python: source .venv/bin/activate && python -m ruff --fix ."
           echo ""
           echo " POLICY REFERENCE:"
-          echo "  • NO_SHORTCUTS_POLICY: docs/policies/NO_SHORTCUTS_POLICY.md"
-          echo "  • Quality standards enforced for platform reliability"
-          echo "  • All quality gates must pass before merge"
+          echo "  - NO_SHORTCUTS_POLICY: docs/policies/NO_SHORTCUTS_POLICY.md"
+          echo "  - Quality standards enforced for platform reliability"
+          echo "  - All quality gates must pass before merge"
           echo ""
           echo "NOT_PERMITTED: BYPASSING QUALITY GATES IS NOT PERMITTED"
           exit 1

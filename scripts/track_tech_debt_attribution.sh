@@ -8,7 +8,7 @@ set -euo pipefail
 LOG_FILE="logs/tech_debt_attribution_$(date +%Y%m%d_%H%M%S).log"
 mkdir -p logs
 
-echo "🔍 Tech Debt Attribution Analysis" | tee "$LOG_FILE"
+echo "SEARCH Tech Debt Attribution Analysis" | tee "$LOG_FILE"
 echo "===============================" | tee -a "$LOG_FILE"
 echo "Generated: $(date)" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
@@ -26,7 +26,7 @@ AI_VIOLATIONS=0
 BULK_VIOLATIONS=0
 UNKNOWN_VIOLATIONS=0
 
-echo "📋 SCANNING FOR QUALITY VIOLATIONS..." | tee -a "$LOG_FILE"
+echo "SYMBOL SCANNING FOR QUALITY VIOLATIONS..." | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
 # Function to determine source attribution based on git history and patterns
@@ -42,18 +42,18 @@ determine_source() {
 
     # AI Agent patterns
     if echo "$last_commit_msg" | grep -qi "claude\|copilot\|ai\|agent\|auto-fix\|automated"; then
-        echo "🤖 AI Agent"
+        echo "Bot AI Agent"
         ((AI_VIOLATIONS++))
     # Bulk import patterns
     elif echo "$last_commit_msg" | grep -qi "bulk\|import\|migrate\|batch\|scaffold"; then
-        echo "🗂️ Bulk Import"
+        echo "SYMBOL Bulk Import"
         ((BULK_VIOLATIONS++))
     # Human patterns
     elif echo "$last_author" | grep -qi "potato\|human\|manual"; then
-        echo "🧑 Human"
+        echo "USER Human"
         ((HUMAN_VIOLATIONS++))
     else
-        echo "❓ Unknown"
+        echo "SYMBOL Unknown"
         ((UNKNOWN_VIOLATIONS++))
     fi
 }
@@ -71,15 +71,15 @@ if command -v markdownlint-cli2 >/dev/null 2>&1; then
                 file=$(echo "$line" | cut -d: -f1)
                 violation=$(echo "$line" | cut -d: -f2-)
                 source=$(determine_source "$file" "$violation")
-                echo "❌ $file: $violation [$source]" | tee -a "$LOG_FILE"
+                echo "FAILED $file: $violation [$source]" | tee -a "$LOG_FILE"
                 ((MARKDOWN_VIOLATIONS++))
             fi
         done
     else
-        echo "✅ No markdown violations found" | tee -a "$LOG_FILE"
+        echo "SUCCESS No markdown violations found" | tee -a "$LOG_FILE"
     fi
 else
-    echo "⚠️ markdownlint-cli2 not available" | tee -a "$LOG_FILE"
+    echo "WARNING markdownlint-cli2 not available" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
@@ -96,7 +96,7 @@ if command -v shellcheck >/dev/null 2>&1; then
             shell_errors=$(shellcheck "$file" 2>&1 || true)
             if [ -n "$shell_errors" ]; then
                 source=$(determine_source "$file" "shellcheck violations")
-                echo "❌ $file [$source]:" | tee -a "$LOG_FILE"
+                echo "FAILED $file [$source]:" | tee -a "$LOG_FILE"
                 echo "$shell_errors" | sed 's/^/    /' | tee -a "$LOG_FILE"
                 ((SHELL_VIOLATIONS++))
             fi
@@ -104,10 +104,10 @@ if command -v shellcheck >/dev/null 2>&1; then
     fi
 
     if [ "$SHELL_VIOLATIONS" -eq 0 ]; then
-        echo "✅ No shell script violations found" | tee -a "$LOG_FILE"
+        echo "SUCCESS No shell script violations found" | tee -a "$LOG_FILE"
     fi
 else
-    echo "⚠️ shellcheck not available" | tee -a "$LOG_FILE"
+    echo "WARNING shellcheck not available" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
@@ -125,15 +125,15 @@ if command -v yamllint >/dev/null 2>&1; then
                 file=$(echo "$line" | cut -d: -f1)
                 violation=$(echo "$line" | cut -d: -f2-)
                 source=$(determine_source "$file" "$violation")
-                echo "❌ $file: $violation [$source]" | tee -a "$LOG_FILE"
+                echo "FAILED $file: $violation [$source]" | tee -a "$LOG_FILE"
                 ((YAML_VIOLATIONS++))
             fi
         done
     else
-        echo "✅ No YAML violations found" | tee -a "$LOG_FILE"
+        echo "SUCCESS No YAML violations found" | tee -a "$LOG_FILE"
     fi
 else
-    echo "⚠️ yamllint not available" | tee -a "$LOG_FILE"
+    echo "WARNING yamllint not available" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
@@ -153,15 +153,15 @@ if [ -f scripts/validate_agents.py ]; then
             if [[ "$line" =~ agents/.*\.md ]]; then
                 file=$(echo "$line" | grep -o 'agents/[^[:space:]]*\.md')
                 source=$(determine_source "$file" "schema violation")
-                echo "❌ $file: Agent schema violation [$source]" | tee -a "$LOG_FILE"
+                echo "FAILED $file: Agent schema violation [$source]" | tee -a "$LOG_FILE"
                 ((AGENT_VIOLATIONS++))
             fi
         done
     else
-        echo "✅ No agent schema violations found" | tee -a "$LOG_FILE"
+        echo "SUCCESS No agent schema violations found" | tee -a "$LOG_FILE"
     fi
 else
-    echo "⚠️ Agent validation script not available" | tee -a "$LOG_FILE"
+    echo "WARNING Agent validation script not available" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
@@ -175,31 +175,31 @@ if command -v vale >/dev/null 2>&1; then
     source .venv/bin/activate 2>/dev/null || true
     doc_errors=$(python -m vale docs/ 2>&1 || true)
 
-    if echo "$doc_errors" | grep -q "✖\|Error"; then
-        echo "$doc_errors" | grep "✖\|Error" | while IFS= read -r line; do
+    if echo "$doc_errors" | grep -q "SYMBOL\|Error"; then
+        echo "$doc_errors" | grep "SYMBOL\|Error" | while IFS= read -r line; do
             if [[ "$line" =~ docs/.*\.md ]]; then
                 file=$(echo "$line" | cut -d: -f1)
                 violation=$(echo "$line" | cut -d: -f2-)
                 source=$(determine_source "$file" "$violation")
-                echo "❌ $file: $violation [$source]" | tee -a "$LOG_FILE"
+                echo "FAILED $file: $violation [$source]" | tee -a "$LOG_FILE"
                 ((DOCUMENTATION_VIOLATIONS++))
             fi
         done
     else
-        echo "✅ No documentation quality violations found" | tee -a "$LOG_FILE"
+        echo "SUCCESS No documentation quality violations found" | tee -a "$LOG_FILE"
     fi
 else
-    echo "⚠️ Vale documentation linter not available" | tee -a "$LOG_FILE"
+    echo "WARNING Vale documentation linter not available" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
 
 # Summary Report
-echo "📊 TECH DEBT ATTRIBUTION SUMMARY" | tee -a "$LOG_FILE"
+echo "STATS TECH DEBT ATTRIBUTION SUMMARY" | tee -a "$LOG_FILE"
 echo "=================================" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
-echo "📋 Violation Types:" | tee -a "$LOG_FILE"
+echo "SYMBOL Violation Types:" | tee -a "$LOG_FILE"
 echo "  • Markdown Linting: $MARKDOWN_VIOLATIONS" | tee -a "$LOG_FILE"
 echo "  • Shell Scripts: $SHELL_VIOLATIONS" | tee -a "$LOG_FILE"
 echo "  • YAML Syntax: $YAML_VIOLATIONS" | tee -a "$LOG_FILE"
@@ -209,23 +209,23 @@ echo "" | tee -a "$LOG_FILE"
 
 TOTAL_VIOLATIONS=$((MARKDOWN_VIOLATIONS + SHELL_VIOLATIONS + YAML_VIOLATIONS + AGENT_VIOLATIONS + DOCUMENTATION_VIOLATIONS))
 
-echo "🔍 Attribution by Source:" | tee -a "$LOG_FILE"
-echo "  • 🧑 Human: $HUMAN_VIOLATIONS" | tee -a "$LOG_FILE"
-echo "  • 🤖 AI Agent: $AI_VIOLATIONS" | tee -a "$LOG_FILE"
-echo "  • 🗂️ Bulk Import: $BULK_VIOLATIONS" | tee -a "$LOG_FILE"
-echo "  • ❓ Unknown: $UNKNOWN_VIOLATIONS" | tee -a "$LOG_FILE"
+echo "SEARCH Attribution by Source:" | tee -a "$LOG_FILE"
+echo "  • USER Human: $HUMAN_VIOLATIONS" | tee -a "$LOG_FILE"
+echo "  • Bot AI Agent: $AI_VIOLATIONS" | tee -a "$LOG_FILE"
+echo "  • SYMBOL Bulk Import: $BULK_VIOLATIONS" | tee -a "$LOG_FILE"
+echo "  • SYMBOL Unknown: $UNKNOWN_VIOLATIONS" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
-echo "📈 Total Quality Violations: $TOTAL_VIOLATIONS" | tee -a "$LOG_FILE"
+echo "SYMBOL Total Quality Violations: $TOTAL_VIOLATIONS" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
 # Recommendations
-echo "🎯 RECOMMENDED ACTIONS" | tee -a "$LOG_FILE"
+echo "TARGET RECOMMENDED ACTIONS" | tee -a "$LOG_FILE"
 echo "======================" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
 if [ "$AI_VIOLATIONS" -gt 0 ]; then
-    echo "🤖 AI Agent Training Needed:" | tee -a "$LOG_FILE"
+    echo "Bot AI Agent Training Needed:" | tee -a "$LOG_FILE"
     echo "  • Review NO_SHORTCUTS_POLICY.md with AI agents" | tee -a "$LOG_FILE"
     echo "  • Enhance agent guidelines with quality standards" | tee -a "$LOG_FILE"
     echo "  • Implement stricter AI agent validation" | tee -a "$LOG_FILE"
@@ -233,7 +233,7 @@ if [ "$AI_VIOLATIONS" -gt 0 ]; then
 fi
 
 if [ "$HUMAN_VIOLATIONS" -gt 0 ]; then
-    echo "🧑 Human Process Improvement:" | tee -a "$LOG_FILE"
+    echo "USER Human Process Improvement:" | tee -a "$LOG_FILE"
     echo "  • Enable pre-commit hooks for local validation" | tee -a "$LOG_FILE"
     echo "  • Training on quality standards and tooling" | tee -a "$LOG_FILE"
     echo "  • Documentation of proper development workflow" | tee -a "$LOG_FILE"
@@ -241,7 +241,7 @@ if [ "$HUMAN_VIOLATIONS" -gt 0 ]; then
 fi
 
 if [ "$BULK_VIOLATIONS" -gt 0 ]; then
-    echo "🗂️ Bulk Import Cleanup:" | tee -a "$LOG_FILE"
+    echo "SYMBOL Bulk Import Cleanup:" | tee -a "$LOG_FILE"
     echo "  • Schedule tech debt cleanup sprint" | tee -a "$LOG_FILE"
     echo "  • Implement validation in import scripts" | tee -a "$LOG_FILE"
     echo "  • Review and update legacy content" | tee -a "$LOG_FILE"
@@ -249,15 +249,15 @@ if [ "$BULK_VIOLATIONS" -gt 0 ]; then
 fi
 
 if [ "$TOTAL_VIOLATIONS" -eq 0 ]; then
-    echo "🎉 EXCELLENT: No quality violations detected!" | tee -a "$LOG_FILE"
-    echo "✅ All files meet NO_SHORTCUTS_POLICY standards" | tee -a "$LOG_FILE"
+    echo "SYMBOL EXCELLENT: No quality violations detected!" | tee -a "$LOG_FILE"
+    echo "SUCCESS All files meet NO_SHORTCUTS_POLICY standards" | tee -a "$LOG_FILE"
 else
-    echo "🚨 ACTION REQUIRED: Quality violations need attention" | tee -a "$LOG_FILE"
-    echo "📖 Reference: docs/policies/NO_SHORTCUTS_POLICY.md" | tee -a "$LOG_FILE"
+    echo "SYMBOL ACTION REQUIRED: Quality violations need attention" | tee -a "$LOG_FILE"
+    echo "SYMBOL Reference: docs/policies/NO_SHORTCUTS_POLICY.md" | tee -a "$LOG_FILE"
 fi
 
 echo "" | tee -a "$LOG_FILE"
-echo "📄 Full report saved to: $LOG_FILE" | tee -a "$LOG_FILE"
+echo "FILE Full report saved to: $LOG_FILE" | tee -a "$LOG_FILE"
 
 # Exit with failure if violations found (for CI integration)
 exit "$TOTAL_VIOLATIONS"

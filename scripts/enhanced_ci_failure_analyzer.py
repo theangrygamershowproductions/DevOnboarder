@@ -212,17 +212,17 @@ class CIFailureAnalyzer:
     def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
-            print("❌ Virtual environment not detected")
-            print("💡 DevOnboarder requires virtual environment isolation")
-            print("🔧 Run: python -m venv .venv && source .venv/bin/activate")
+            print("FAILED Virtual environment not detected")
+            print("IDEA DevOnboarder requires virtual environment isolation")
+            print("CONFIG Run: python -m venv .venv && source .venv/bin/activate")
             sys.exit(1)
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
-            print(f"❌ Virtual environment invalid: {self.venv_path}")
+            print(f"FAILED Virtual environment invalid: {self.venv_path}")
             sys.exit(1)
 
-        print(f"✅ Virtual environment validated: {self.venv_path}")
+        print(f"SUCCESS Virtual environment validated: {self.venv_path}")
 
     def analyze_failure_log(self, log_content: str) -> Dict[str, Any]:
         """Analyze CI failure log and classify failure types."""
@@ -355,7 +355,7 @@ class CIFailureAnalyzer:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"📊 Analysis report saved: {output_path}")
+        print(f"STATS Analysis report saved: {output_path}")
 
     def generate_aar_integration(
         self,
@@ -385,7 +385,7 @@ class CIFailureAnalyzer:
             # Check if AAR generator is available
             aar_script = Path("scripts/generate_aar.py")
             if not aar_script.exists():
-                print("   ⚠️ AAR generator script not found")
+                print("   WARNING AAR generator script not found")
                 return False
 
             # Prepare AAR data
@@ -396,7 +396,7 @@ class CIFailureAnalyzer:
             # Use Python AAR generator with proper arguments
             aar_script = Path("scripts/generate_aar.py")
             if not aar_script.exists():
-                print("   ⚠️ AAR generator script not found")
+                print("   WARNING AAR generator script not found")
                 return False
 
             # Create AAR command
@@ -428,20 +428,20 @@ class CIFailureAnalyzer:
             )
 
             if result.returncode == 0:
-                print(f"   📋 AAR generated: {aar_title}")
+                print(f"   SYMBOL AAR generated: {aar_title}")
                 # Use resolution_plan context for logging
                 strategy = resolution_plan.get("resolution_strategy", "unknown")
-                print(f"   🔧 Resolution strategy: {strategy}")
+                print(f"   CONFIG Resolution strategy: {strategy}")
                 return True
             else:
-                print(f"   ❌ AAR generation failed: {result.stderr}")
+                print(f"   FAILED AAR generation failed: {result.stderr}")
                 return False
 
         except (subprocess.TimeoutExpired, subprocess.SubprocessError) as e:
-            print(f"   ❌ AAR subprocess error: {e}")
+            print(f"   FAILED AAR subprocess error: {e}")
             return False
         except OSError as e:
-            print(f"   ❌ AAR file system error: {e}")
+            print(f"   FAILED AAR file system error: {e}")
             return False
 
 
@@ -484,21 +484,21 @@ def main():
                 combined_log += f"\n--- {log_file} ---\n"
                 combined_log += f.read()
         else:
-            print(f"⚠️  Log file not found: {log_file}")
+            print(f"WARNING  Log file not found: {log_file}")
 
     if not combined_log.strip():
-        print("❌ No valid log content found")
+        print("FAILED No valid log content found")
         sys.exit(1)
 
     # Analyze failures
-    print("🔍 Analyzing CI failures with enhanced pattern recognition...")
+    print("SEARCH Analyzing CI failures with enhanced pattern recognition...")
     analysis = analyzer.analyze_failure_log(combined_log)
 
     # Generate resolution plan
     resolution_plan = analyzer.generate_resolution_plan(analysis)
 
     # Output results
-    print("\n📊 Analysis Results:")
+    print("\nSTATS Analysis Results:")
     print(f"   Detected failures: {len(analysis['detected_failures'])}")
     if analysis["primary_failure"]:
         primary = analysis["primary_failure"]
@@ -510,7 +510,7 @@ def main():
             print(f"   Auto-fixable: {primary.get('auto_fixable', False)}")
             print(f"   Confidence: {analysis['confidence_score']:.1%}")
 
-    print("\n🔧 Resolution Plan:")
+    print("\nCONFIG Resolution Plan:")
     strategy = resolution_plan.get("resolution_strategy", "manual_investigation")
     print(f"   Strategy: {strategy}")
     success_rate = resolution_plan.get("estimated_success_rate", 0)
@@ -528,7 +528,7 @@ def main():
         and analysis["confidence_score"] > 0.8
     )
     if auto_conditions:
-        print("\n🤖 Attempting auto-resolution...")
+        print("\nBot Attempting auto-resolution...")
         print(f"   Command: {resolution_plan.get('command', 'N/A')}")
         # Note: Actual auto-resolution would be implemented here
         print("   Auto-resolution framework ready for implementation")
@@ -540,16 +540,16 @@ def main():
         or len(analysis["detected_failures"]) > 2
     )
     if aar_conditions:
-        print("\n📋 Generating After Action Report...")
+        print("\nSYMBOL Generating After Action Report...")
         aar_success = analyzer.generate_aar_integration(
             analysis, resolution_plan, args.workflow_run_id
         )
         if aar_success:
-            print("   ✅ AAR generated successfully")
+            print("   SUCCESS AAR generated successfully")
         else:
-            print("   ⚠️ AAR generation encountered issues")
+            print("   WARNING AAR generation encountered issues")
 
-    print("\n✅ Enhanced CI failure analysis complete")
+    print("\nSUCCESS Enhanced CI failure analysis complete")
 
 
 if __name__ == "__main__":

@@ -59,9 +59,11 @@ add_workflow_header() {
 EOF
 
     if [[ -n "$permissions_block" ]]; then
-        echo "#" >> "$temp_file"
-        echo "# EXPLICIT PERMISSIONS:" >> "$temp_file"
-        echo "$permissions_block" >> "$temp_file"
+        {
+            echo "#"
+            echo "# EXPLICIT PERMISSIONS:"
+            echo "$permissions_block"
+        } >> "$temp_file"
     fi
 
     cat >> "$temp_file" << 'EOF'
@@ -73,16 +75,16 @@ EOF
 # - Skip behavior validated for conditional jobs compatibility
 #
 # COMPLIANCE:
-# ✅ CodeQL security requirements satisfied
-# ✅ Token policy hierarchy respected
-# ✅ Branch protection integration verified
-# ✅ Production hardening applied
+# SUCCESS CodeQL security requirements satisfied
+# SUCCESS Token policy hierarchy respected
+# SUCCESS Branch protection integration verified
+# SUCCESS Production hardening applied
 #
 EOF
 
     # Check if workflow already has similar header
     if head -20 "$workflow_file" | grep -q "WORKFLOW:"; then
-        echo "  ○ Header already present, updating..."
+        echo "  SYMBOL Header already present, updating..."
         # Skip existing header and add new one
         awk '/^#/ && /WORKFLOW:/ {skip=1} /^[^#]/ {skip=0} !skip {print}' "$workflow_file" >> "$temp_file"
     else
@@ -95,7 +97,7 @@ EOF
     cp "$workflow_file" "${workflow_file}.backup"
     mv "$temp_file" "$workflow_file"
 
-    echo "  ✓ Header added to $workflow_name"
+    echo "  SYMBOL Header added to $workflow_name"
 }
 
 # Function to check workflow header compliance
@@ -110,32 +112,32 @@ check_workflow_compliance() {
 
     # Check for header presence
     if ! head -20 "$workflow_file" | grep -q "WORKFLOW:"; then
-        echo "  ❌ Missing workflow header"
+        echo "  FAILED Missing workflow header"
         ((issues++))
     fi
 
     # Check for token documentation
     if ! grep -q "TOKEN:" "$workflow_file"; then
-        echo "  ❌ Missing token usage documentation"
+        echo "  FAILED Missing token usage documentation"
         ((issues++))
     fi
 
     # Check for permissions alignment
     if grep -q "permissions:" "$workflow_file" && ! grep -q "PERMISSIONS:" "$workflow_file"; then
-        echo "  ⚠ Permissions block present but not documented in header"
+        echo "  WARNING Permissions block present but not documented in header"
         ((issues++))
     fi
 
     # Check for maintenance notes
     if ! grep -q "MAINTENANCE NOTES:" "$workflow_file"; then
-        echo "  ❌ Missing maintenance documentation"
+        echo "  FAILED Missing maintenance documentation"
         ((issues++))
     fi
 
     if [[ $issues -eq 0 ]]; then
-        echo "  ✅ Fully compliant"
+        echo "  SUCCESS Fully compliant"
     else
-        echo "  ⚠ $issues compliance issues found"
+        echo "  WARNING $issues compliance issues found"
     fi
 
     return $issues
@@ -161,7 +163,7 @@ for workflow in "${CRITICAL_WORKFLOWS[@]}"; do
         add_workflow_header "$workflow"
         ((total_processed++))
     else
-        echo "⚠ Workflow not found: $workflow"
+        echo "WARNING Workflow not found: $workflow"
     fi
 done
 
@@ -207,10 +209,10 @@ All workflow files must include a standardized header with:
 ### Permissions Alignment
 
 All workflows must use **token-aligned permissions** to satisfy:
-- ✅ CodeQL security requirements
-- ✅ Token capability boundaries
-- ✅ Branch protection integration
-- ✅ Principle of least privilege
+- SUCCESS CodeQL security requirements
+- SUCCESS Token capability boundaries
+- SUCCESS Branch protection integration
+- SUCCESS Principle of least privilege
 
 ## Required Status Checks
 
@@ -280,11 +282,11 @@ echo "- Backup files: *.backup created for safety"
 
 if [[ $total_issues -gt 0 ]]; then
     echo ""
-    echo "⚠ Manual review recommended for compliance gaps"
+    echo "WARNING Manual review recommended for compliance gaps"
     echo "Run individual workflow checks for detailed issues"
 else
     echo ""
-    echo "✅ All workflows meet header standards"
+    echo "SUCCESS All workflows meet header standards"
     echo "Production hardening Step 5 completed successfully"
 fi
 

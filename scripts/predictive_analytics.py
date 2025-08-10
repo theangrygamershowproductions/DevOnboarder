@@ -76,10 +76,10 @@ class PredictiveAnalytics:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                "❌ Virtual environment not detected. "
+                "FAILED Virtual environment not detected. "
                 "DevOnboarder Phase 5 requires virtual environment isolation."
             )
-        print(f"✅ Predictive Analytics virtual environment: {self.venv_path}")
+        print(f"SUCCESS Predictive Analytics virtual environment: {self.venv_path}")
 
     def setup_logging(self) -> None:
         """Configure logging for analytics events."""
@@ -375,24 +375,24 @@ class PredictiveAnalytics:
     def generate_failure_recommendation(self, risk_score: float, metrics: Dict) -> str:
         """Generate actionable recommendation based on failure risk."""
         if risk_score < 0.2:
-            return "✅ System healthy - continue monitoring"
+            return "SUCCESS System healthy - continue monitoring"
         elif risk_score < 0.5:
-            return "⚠️ Elevated risk - consider scaling resources"
+            return "WARNING Elevated risk - consider scaling resources"
         elif risk_score < 0.8:
-            return "🚨 High risk - immediate attention required"
+            return "SYMBOL High risk - immediate attention required"
         else:
-            return "❌ Critical risk - activate incident response"
+            return "FAILED Critical risk - activate incident response"
 
     def generate_performance_recommendation(self, score: float) -> str:
         """Generate performance optimization recommendation."""
         if score >= 90:
-            return "✅ Excellent performance - maintain current configuration"
+            return "SUCCESS Excellent performance - maintain current configuration"
         elif score >= 80:
-            return "👍 Good performance - minor optimizations available"
+            return "SYMBOL Good performance - minor optimizations available"
         elif score >= 70:
-            return "⚠️ Fair performance - consider resource optimization"
+            return "WARNING Fair performance - consider resource optimization"
         else:
-            return "🚨 Poor performance - immediate optimization required"
+            return "SYMBOL Poor performance - immediate optimization required"
 
     def save_prediction_report(
         self, predictions: List[PredictionResult], output_path: str
@@ -420,7 +420,7 @@ class PredictiveAnalytics:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        self.logger.info(f"📊 Prediction report saved: {output_path}")
+        self.logger.info(f"STATS Prediction report saved: {output_path}")
 
 
 # CLI Interface
@@ -447,7 +447,7 @@ def main():
     failure_prediction = analytics.predict_failure_risk(current_metrics)
     performance_forecast = analytics.forecast_performance(current_metrics)
 
-    print("🔮 DevOnboarder Predictive Analytics Results")
+    print("SYMBOL DevOnboarder Predictive Analytics Results")
     print(f"   Failure Risk: {failure_prediction.prediction:.1%}")
     print(f"   Confidence: {failure_prediction.confidence:.1%}")
     print(f"   Recommendation: {failure_prediction.recommendation}")

@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-echo "🔒 WORKFLOW PERMISSIONS VALIDATOR"
+echo "SYMBOL WORKFLOW PERMISSIONS VALIDATOR"
 echo "================================="
 echo ""
 
@@ -17,7 +17,7 @@ if [[ ! -d "$WORKFLOWS_DIR" ]]; then
     exit 1
 fi
 
-echo "🔍 Scanning workflows for permissions compliance..."
+echo "SEARCH Scanning workflows for permissions compliance..."
 echo ""
 
 # Find all workflow files
@@ -29,7 +29,7 @@ for workflow in "$WORKFLOWS_DIR"/*.yml "$WORKFLOWS_DIR"/*.yaml; do
 
     # Check if workflow has permissions block
     if ! grep -q "^permissions:" "$workflow"; then
-        echo "❌ VIOLATION: $filename"
+        echo "FAILED VIOLATION: $filename"
         echo "   Missing explicit permissions block"
         echo "   Required: Add 'permissions:' with minimal 'contents: read'"
         echo ""
@@ -37,9 +37,9 @@ for workflow in "$WORKFLOWS_DIR"/*.yml "$WORKFLOWS_DIR"/*.yaml; do
     else
         # Check if it has contents: read at minimum
         if grep -A 5 "^permissions:" "$workflow" | grep -q "contents:.*read"; then
-            echo "✅ COMPLIANT: $filename"
+            echo "SUCCESS COMPLIANT: $filename"
         else
-            echo "⚠️  WARNING: $filename"
+            echo "WARNING  WARNING: $filename"
             echo "   Has permissions block but missing 'contents: read'"
             echo "   Review permissions for principle of least privilege"
             echo ""
@@ -48,24 +48,24 @@ for workflow in "$WORKFLOWS_DIR"/*.yml "$WORKFLOWS_DIR"/*.yaml; do
 done
 
 echo ""
-echo "📊 SUMMARY:"
+echo "STATS SUMMARY:"
 echo "==========="
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "✅ All workflows have explicit permissions"
-    echo "🔒 Security compliance: PASS"
+    echo "SUCCESS All workflows have explicit permissions"
+    echo "SYMBOL Security compliance: PASS"
     exit 0
 else
-    echo "❌ Found $VIOLATIONS workflows missing permissions"
-    echo "🔒 Security compliance: FAIL"
+    echo "FAILED Found $VIOLATIONS workflows missing permissions"
+    echo "SYMBOL Security compliance: FAIL"
     echo ""
-    echo "💡 REMEDIATION:"
+    echo "IDEA REMEDIATION:"
     echo "Add to affected workflows:"
     echo ""
     echo "permissions:"
     echo "  contents: read"
     echo ""
-    echo "📖 Policy: DevOnboarder Universal Workflow Permissions Policy v1.0"
-    echo "🎯 Goal: Explicit permissions prevent CodeQL security warnings"
+    echo "SYMBOL Policy: DevOnboarder Universal Workflow Permissions Policy v1.0"
+    echo "TARGET Goal: Explicit permissions prevent CodeQL security warnings"
     exit 1
 fi

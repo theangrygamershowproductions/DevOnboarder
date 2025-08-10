@@ -9,7 +9,7 @@
 set -euo pipefail
 shopt -s nullglob
 
-echo "🔒 WORKFLOW PERMISSIONS AUTO-FIXER"
+echo "SYMBOL WORKFLOW PERMISSIONS AUTO-FIXER"
 echo "=================================="
 echo ""
 
@@ -22,7 +22,7 @@ for f in .github/workflows/*.yml .github/workflows/*.yaml; do
 
   # Skip if file already has a top-level permissions block (matching validator logic)
   if grep -q "^permissions:" "$f"; then
-    echo "✅ OK   $(basename "$f") (has permissions)"
+    echo "SUCCESS OK   $(basename "$f") (has permissions)"
     SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
     continue
   fi
@@ -60,24 +60,24 @@ for f in .github/workflows/*.yml .github/workflows/*.yaml; do
     }
   ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
 
-  echo "🔧 FIX  $(basename "$f") (added permissions: contents: read)"
+  echo "CONFIG FIX  $(basename "$f") (added permissions: contents: read)"
   FIXED_COUNT=$((FIXED_COUNT + 1))
 done
 
 echo ""
-echo "📊 SUMMARY:"
+echo "STATS SUMMARY:"
 echo "==========="
-echo "✅ Workflows already compliant: $SKIPPED_COUNT"
-echo "🔧 Workflows fixed: $FIXED_COUNT"
+echo "SUCCESS Workflows already compliant: $SKIPPED_COUNT"
+echo "CONFIG Workflows fixed: $FIXED_COUNT"
 echo ""
 
 if [[ $FIXED_COUNT -gt 0 ]]; then
-  echo "🎯 Next steps:"
+  echo "TARGET Next steps:"
   echo "  1. Review the changes: git diff .github/workflows/"
   echo "  2. Stage changes: git add .github/workflows/"
   echo "  3. Commit: bash scripts/safe_commit.sh \"FIX(ci): add missing permissions blocks to workflows\""
   echo ""
-  echo "💡 Backup files created (.backup) - remove after confirming changes"
+  echo "IDEA Backup files created (.backup) - remove after confirming changes"
 else
-  echo "✨ All workflows are already compliant!"
+  echo "SYMBOL All workflows are already compliant!"
 fi

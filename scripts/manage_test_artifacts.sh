@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Ensure we're in DevOnboarder root (required pattern)
 if [ ! -f ".github/workflows/ci.yml" ]; then
-    echo "❌ Please run this script from the DevOnboarder root directory"
+    echo "FAILED Please run this script from the DevOnboarder root directory"
     exit 1
 fi
 
@@ -22,7 +22,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${GREEN}🧪 DevOnboarder Enhanced Test Artifact Manager${NC}"
+echo -e "${GREEN}EMOJI DevOnboarder Enhanced Test Artifact Manager${NC}"
 echo "=============================================="
 echo "Integrating token governance with test artifact management"
 echo ""
@@ -38,19 +38,19 @@ CURRENT_SESSION="test_session_$(date +%Y%m%d_%H%M%S)"
 
 # Function to validate token environment with governance integration
 validate_token_environment() {
-    echo -e "${BLUE}🔐 Validating Token Environment & Policy Compliance${NC}"
+    echo -e "${BLUE}SYMBOL Validating Token Environment & Policy Compliance${NC}"
 
     # Create token audit directory
     mkdir -p "$TOKEN_AUDIT_DIR"
 
     # Check for token scope registry
     if [ ! -f ".codex/tokens/token_scope_map.yaml" ]; then
-        echo "   ⚠️  Token scope registry not found"
+        echo "   WARNING  Token scope registry not found"
         echo "   Creating basic registry structure..."
         mkdir -p .codex/tokens
         echo "# Token scope registry - please configure" > .codex/tokens/token_scope_map.yaml
     else
-        echo "   ✅ Token scope registry found"
+        echo "   SUCCESS Token scope registry found"
     fi
 
     # Run token audit if available
@@ -63,10 +63,10 @@ validate_token_environment() {
             python scripts/audit_token_usage.py \
                 --project-root . \
                 --json-output "$TOKEN_AUDIT_DIR/session-token-audit.json" 2>/dev/null || {
-                echo "   ⚠️  Token audit encountered issues - check logs"
+                echo "   WARNING  Token audit encountered issues - check logs"
             }
         else
-            echo "   ⚠️  Virtual environment not found - skipping Python token audit"
+            echo "   WARNING  Virtual environment not found - skipping Python token audit"
         fi
     fi
 
@@ -75,16 +75,16 @@ validate_token_environment() {
     local token_compliance="compliant"
 
     if [ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]; then
-        github_token_status="✅ CI_ISSUE_AUTOMATION_TOKEN (primary - compliant)"
+        github_token_status="SUCCESS CI_ISSUE_AUTOMATION_TOKEN (primary - compliant)"
     elif [ -n "${DIAGNOSTICS_BOT_KEY:-}" ]; then
-        github_token_status="✅ DIAGNOSTICS_BOT_KEY (specialized - compliant)"
+        github_token_status="SUCCESS DIAGNOSTICS_BOT_KEY (specialized - compliant)"
     elif [ -n "${CI_HEALTH_KEY:-}" ]; then
-        github_token_status="✅ CI_HEALTH_KEY (health monitoring - compliant)"
+        github_token_status="SUCCESS CI_HEALTH_KEY (health monitoring - compliant)"
     elif [ -n "${GITHUB_TOKEN:-}" ]; then
-        github_token_status="⚠️  GITHUB_TOKEN (policy violation - readonly only)"
+        github_token_status="WARNING GITHUB_TOKEN (policy violation - readonly only)"
         token_compliance="violation"
     else
-        github_token_status="❌ No GitHub tokens configured"
+        github_token_status="FAILED No GitHub tokens configured"
         token_compliance="missing"
     fi
 
@@ -101,9 +101,9 @@ validate_token_environment() {
     for token_check in "${specialized_tokens[@]}"; do
         IFS=':' read -r token_name description <<< "$token_check"
         if [ -n "${!token_name:-}" ]; then
-            echo "   ✅ $description configured ($token_name)"
+            echo "   SUCCESS $description configured ($token_name)"
         else
-            echo "   ⚠️  $description not configured ($token_name)"
+            echo "   WARNING  $description not configured ($token_name)"
         fi
     done
 
@@ -120,25 +120,25 @@ validate_token_environment() {
 }
 EOF
 
-    echo "   📋 Token environment summary: $TOKEN_AUDIT_DIR/token-environment-summary.json"
+    echo "   CHECKLIST Token environment summary: $TOKEN_AUDIT_DIR/token-environment-summary.json"
 
     # Overall compliance assessment
     case "$token_compliance" in
         "compliant")
-            echo "   🔒 Overall Token Compliance: ✅ COMPLIANT"
+            echo "   LOCKED Overall Token Compliance: SUCCESS COMPLIANT"
             ;;
         "violation")
-            echo "   🔒 Overall Token Compliance: ⚠️  POLICY VIOLATIONS DETECTED"
+            echo "   LOCKED Overall Token Compliance: WARNING  POLICY VIOLATIONS DETECTED"
             ;;
         "missing")
-            echo "   🔒 Overall Token Compliance: ❌ CRITICAL TOKENS MISSING"
+            echo "   LOCKED Overall Token Compliance: FAILED CRITICAL TOKENS MISSING"
             ;;
     esac
 }
 
 # Function to create structured temp area within logs/ with token awareness
 init_enhanced_structure() {
-    echo -e "${BLUE}📁 Initializing enhanced log structure with token governance...${NC}"
+    echo -e "${BLUE}SYMBOL Initializing enhanced log structure with token governance...${NC}"
 
     mkdir -p "$TEMP_DIR"
     mkdir -p "$ARCHIVE_DIR"
@@ -160,12 +160,12 @@ EOF
     # Validate token environment during initialization
     validate_token_environment
 
-    echo "✅ Enhanced structure ready in $LOGS_DIR with token governance"
+    echo "SUCCESS Enhanced structure ready in $LOGS_DIR with token governance"
 }
 
 # Function to setup test session with token validation
 setup_test_session() {
-    echo -e "${BLUE}📁 Setting up test session with token governance: $CURRENT_SESSION${NC}"
+    echo -e "${BLUE}SYMBOL Setting up test session with token governance: $CURRENT_SESSION${NC}"
 
     init_enhanced_structure
 
@@ -184,7 +184,7 @@ setup_test_session() {
     export NODE_ENV="test"
     export CI="true"
 
-    echo "✅ Test session ready: $session_dir"
+    echo "SUCCESS Test session ready: $session_dir"
     echo "   Pytest cache: $PYTEST_CACHE_DIR"
     echo "   Coverage data: $COVERAGE_FILE"
     echo "   Session logs: $session_dir/logs/"
@@ -228,7 +228,7 @@ EOF
 # Function to activate virtual environment with validation (DevOnboarder requirement)
 activate_virtual_env() {
     if [ ! -d ".venv" ]; then
-        echo -e "${RED}❌ Virtual environment not found${NC}"
+        echo -e "${RED}FAILED Virtual environment not found${NC}"
         echo "DevOnboarder requires virtual environment setup:"
         echo "  python -m venv .venv"
         echo "  source .venv/bin/activate"
@@ -240,7 +240,7 @@ activate_virtual_env() {
     source .venv/bin/activate
 
     # Validate environment (DevOnboarder pattern)
-    echo -e "${BLUE}🐍 Virtual environment activated${NC}"
+    echo -e "${BLUE}SYMBOL Virtual environment activated${NC}"
     echo "   Python: $(which python)"
     echo "   Pip: $(which pip)"
     echo "   Python version: $(python --version)"
@@ -252,7 +252,7 @@ activate_virtual_env() {
     python -c "import yaml" 2>/dev/null || missing_packages+=("pyyaml")
 
     if [ ${#missing_packages[@]} -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  Missing packages: ${missing_packages[*]}${NC}"
+        echo -e "${YELLOW}WARNING  Missing packages: ${missing_packages[*]}${NC}"
         echo "Installing missing packages..."
         pip install -e '.[test]'
     fi
@@ -261,7 +261,7 @@ activate_virtual_env() {
 # Enhanced cleanup function with token audit preservation
 cleanup_test_session_with_tokens() {
     local session_dir="$1"
-    echo -e "${YELLOW}🧹 Cleaning up test session with token governance...${NC}"
+    echo -e "${YELLOW}CLEANUP Cleaning up test session with token governance...${NC}"
 
     if [ -d "$session_dir" ]; then
         # Update session info with end time and token compliance
@@ -286,19 +286,19 @@ cleanup_test_session_with_tokens() {
         # Archive token audit data to persistent location
         if [ -d "$session_dir/token-audit" ]; then
             cp -r "$session_dir/token-audit"/* "$TOKEN_AUDIT_DIR/" 2>/dev/null || true
-            echo "✅ Token audit data preserved in $TOKEN_AUDIT_DIR/"
+            echo "SUCCESS Token audit data preserved in $TOKEN_AUDIT_DIR/"
         fi
 
         # Preserve coverage data (DevOnboarder pattern)
         if [ -f "$session_dir/coverage/.coverage" ]; then
             cp "$session_dir/coverage/.coverage" "$COVERAGE_DIR/.coverage.$(date +%Y%m%d_%H%M%S)"
-            echo "✅ Coverage data archived to $COVERAGE_DIR/"
+            echo "SUCCESS Coverage data archived to $COVERAGE_DIR/"
         fi
 
         # Copy HTML coverage reports if they exist
         if [ -d "$session_dir/coverage/htmlcov" ]; then
             cp -r "$session_dir/coverage/htmlcov" "$COVERAGE_DIR/htmlcov_$(date +%Y%m%d_%H%M%S)"
-            echo "✅ HTML coverage report archived"
+            echo "SUCCESS HTML coverage report archived"
         fi
 
         # Archive test logs to main logs directory (centralized logging requirement)
@@ -314,14 +314,14 @@ cleanup_test_session_with_tokens() {
         archive_name="test_artifacts_$(date +%Y%m%d_%H%M%S).tar.gz"
         echo "Creating session archive with token governance data..."
         tar -czf "$ARCHIVE_DIR/$archive_name" -C "$TEMP_DIR" "$(basename "$session_dir")" 2>/dev/null || {
-            echo "⚠️  Archive creation failed, but continuing cleanup"
+            echo "WARNING  Archive creation failed, but continuing cleanup"
         }
 
         # Remove temporary session directory
         rm -rf "$session_dir"
         rm -f "$TEMP_DIR/.current_session"
 
-        echo "✅ Test session cleaned up with token governance preserved"
+        echo "SUCCESS Test session cleaned up with token governance preserved"
         echo "   Archive: $ARCHIVE_DIR/$archive_name"
         echo "   Coverage: $COVERAGE_DIR/"
         echo "   Token audit: $TOKEN_AUDIT_DIR/"
@@ -331,7 +331,7 @@ cleanup_test_session_with_tokens() {
 
 # Enhanced test execution with token governance integration
 run_tests_with_artifacts() {
-    echo -e "${BLUE}🧪 Running tests with enhanced artifact management & token governance${NC}"
+    echo -e "${BLUE}EMOJI Running tests with enhanced artifact management & token governance${NC}"
 
     setup_test_session
     local session_dir="$TEMP_DIR/$CURRENT_SESSION"
@@ -349,7 +349,7 @@ run_tests_with_artifacts() {
     local token_audit_exit_code=0
 
     # Run token compliance audit first
-    echo -e "${BLUE}🔐 Running token compliance audit...${NC}"
+    echo -e "${BLUE}SYMBOL Running token compliance audit...${NC}"
     if [ -f "scripts/audit_token_usage.py" ]; then
         python scripts/audit_token_usage.py \
             --project-root . \
@@ -358,11 +358,11 @@ run_tests_with_artifacts() {
         token_audit_exit_code=${PIPESTATUS[0]}
         echo "Token audit completed with exit code: $token_audit_exit_code"
     else
-        echo "⚠️  Token audit script not available"
+        echo "WARNING  Token audit script not available"
     fi
 
     # Run Python tests with session-specific paths (DevOnboarder pattern)
-    echo -e "${BLUE}📊 Running Python tests...${NC}"
+    echo -e "${BLUE}STATS Running Python tests...${NC}"
     python -m pytest \
         --cache-dir="$session_dir/pytest/.pytest_cache" \
         --cov=src \
@@ -378,7 +378,7 @@ run_tests_with_artifacts() {
 
     # Run bot tests if bot directory exists (Node.js hygiene)
     if [ -d "bot" ]; then
-        echo -e "${BLUE}🤖 Running bot tests...${NC}"
+        echo -e "${BLUE}Bot Running bot tests...${NC}"
         (
             cd bot
             # Ensure bot dependencies are installed (DevOnboarder pattern)
@@ -396,12 +396,12 @@ run_tests_with_artifacts() {
         bot_exit_code=${PIPESTATUS[0]}
         echo "Bot tests completed with exit code: $bot_exit_code"
     else
-        echo "⚠️  Bot directory not found, skipping bot tests"
+        echo "WARNING  Bot directory not found, skipping bot tests"
     fi
 
     # Run frontend tests if frontend directory exists (Node.js hygiene)
     if [ -d "frontend" ]; then
-        echo -e "${BLUE}⚛️  Running frontend tests...${NC}"
+        echo -e "${BLUE}SYMBOL  Running frontend tests...${NC}"
         (
             cd frontend
             # Ensure frontend dependencies are installed (DevOnboarder pattern)
@@ -419,7 +419,7 @@ run_tests_with_artifacts() {
         frontend_exit_code=${PIPESTATUS[0]}
         echo "Frontend tests completed with exit code: $frontend_exit_code"
     else
-        echo "⚠️  Frontend directory not found, skipping frontend tests"
+        echo "WARNING  Frontend directory not found, skipping frontend tests"
     fi
 
     local end_time
@@ -437,15 +437,15 @@ run_tests_with_artifacts() {
 
 ## Token Governance Results
 
-- **Token Audit**: $([ "$token_audit_exit_code" -eq 0 ] && echo "✅ COMPLIANT" || echo "⚠️  ISSUES DETECTED (exit code: $token_audit_exit_code)")
-- **Registry Available**: $([ -f ".codex/tokens/token_scope_map.yaml" ] && echo "✅ YES" || echo "❌ NO")
-- **Virtual Environment**: $([ -d ".venv" ] && echo "✅ ACTIVE" || echo "❌ MISSING")
+- **Token Audit**: $([ "$token_audit_exit_code" -eq 0 ] && echo "SUCCESS COMPLIANT" || echo "WARNING  ISSUES DETECTED (exit code: $token_audit_exit_code)")
+- **Registry Available**: $([ -f ".codex/tokens/token_scope_map.yaml" ] && echo "SUCCESS YES" || echo "FAILED NO")
+- **Virtual Environment**: $([ -d ".venv" ] && echo "SUCCESS ACTIVE" || echo "FAILED MISSING")
 
 ## Test Results
 
-- **Python Tests**: $([ "$pytest_exit_code" -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED (exit code: $pytest_exit_code)")
-- **Bot Tests**: $([ "$bot_exit_code" -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED (exit code: $bot_exit_code)")
-- **Frontend Tests**: $([ "$frontend_exit_code" -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED (exit code: $frontend_exit_code)")
+- **Python Tests**: $([ "$pytest_exit_code" -eq 0 ] && echo "SUCCESS PASSED" || echo "FAILED FAILED (exit code: $pytest_exit_code)")
+- **Bot Tests**: $([ "$bot_exit_code" -eq 0 ] && echo "SUCCESS PASSED" || echo "FAILED FAILED (exit code: $bot_exit_code)")
+- **Frontend Tests**: $([ "$frontend_exit_code" -eq 0 ] && echo "SUCCESS PASSED" || echo "FAILED FAILED (exit code: $frontend_exit_code)")
 
 ## Coverage Reports
 
@@ -512,11 +512,11 @@ EOF
 EOF
 
     echo ""
-    echo -e "${GREEN}✅ Test execution complete with token governance${NC}"
-    echo "📊 Results summary: $session_dir/artifacts/test-summary.md"
-    echo "📋 JSON results: $session_dir/artifacts/test-results.json"
-    echo "🔐 Token audit: $session_dir/token-audit/"
-    echo "📁 Session directory: $session_dir"
+    echo -e "${GREEN}SUCCESS Test execution complete with token governance${NC}"
+    echo "STATS Results summary: $session_dir/artifacts/test-summary.md"
+    echo "CHECKLIST JSON results: $session_dir/artifacts/test-results.json"
+    echo "SYMBOL Token audit: $session_dir/token-audit/"
+    echo "SYMBOL Session directory: $session_dir"
     echo ""
 
     # Display overall result including token compliance
@@ -527,15 +527,15 @@ EOF
     fi
 
     if [ "$token_audit_exit_code" -ne 0 ]; then
-        echo -e "${YELLOW}⚠️  Token governance issues detected${NC}"
+        echo -e "${YELLOW}WARNING  Token governance issues detected${NC}"
         echo "Review token audit results in: $session_dir/token-audit/"
     fi
 
     if $overall_success; then
-        echo -e "${GREEN}🎉 All tests passed with token governance compliance!${NC}"
+        echo -e "${GREEN}COMPLETE All tests passed with token governance compliance!${NC}"
         return 0
     else
-        echo -e "${RED}❌ Some tests failed${NC}"
+        echo -e "${RED}FAILED Some tests failed${NC}"
         echo "Check logs in: $session_dir/logs/"
         return 1
     fi
@@ -543,15 +543,15 @@ EOF
 
 # Enhanced artifact listing with token governance information
 list_artifacts() {
-    echo -e "${BLUE}📊 Current Test Artifacts with Token Governance${NC}"
+    echo -e "${BLUE}STATS Current Test Artifacts with Token Governance${NC}"
     echo ""
 
     init_enhanced_structure
 
     echo "Token Governance Status:"
-    echo "  Registry: $([ -f ".codex/tokens/token_scope_map.yaml" ] && echo "✅ Available" || echo "❌ Missing")"
-    echo "  Audit Script: $([ -f "scripts/audit_token_usage.py" ] && echo "✅ Available" || echo "❌ Missing")"
-    echo "  Virtual Env: $([ -d ".venv" ] && echo "✅ Active" || echo "❌ Missing")"
+    echo "  Registry: $([ -f ".codex/tokens/token_scope_map.yaml" ] && echo "SUCCESS Available" || echo "FAILED Missing")"
+    echo "  Audit Script: $([ -f "scripts/audit_token_usage.py" ] && echo "SUCCESS Available" || echo "FAILED Missing")"
+    echo "  Virtual Env: $([ -d ".venv" ] && echo "SUCCESS Active" || echo "FAILED Missing")"
     echo ""
 
     echo "Active Sessions:"
@@ -653,7 +653,7 @@ list_artifacts() {
 # Enhanced cleanup with token audit preservation
 clean_old_artifacts() {
     local days="${1:-7}"
-    echo -e "${YELLOW}🧹 Cleaning test artifacts older than $days days (preserving token audit data)${NC}"
+    echo -e "${YELLOW}CLEANUP Cleaning test artifacts older than $days days (preserving token audit data)${NC}"
 
     init_enhanced_structure
 
@@ -695,7 +695,7 @@ clean_old_artifacts() {
         find "$TOKEN_AUDIT_DIR" -name "*.log" -mtime +"$token_audit_retention" -delete 2>/dev/null || true
     fi
 
-    echo "✅ Cleanup complete (token audit data retained for ${token_audit_retention} days)"
+    echo "SUCCESS Cleanup complete (token audit data retained for ${token_audit_retention} days)"
 }
 
 # Main command handling with token governance

@@ -14,16 +14,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo "🤖 Validating Codex Agent Files..."
+echo "Bot Validating Codex Agent Files..."
 
 if [ ! -f "$SCHEMA_FILE" ]; then
-    echo -e "${RED}❌ Agent schema not found: $SCHEMA_FILE${NC}" >&2
+    echo -e "${RED}FAILED Agent schema not found: $SCHEMA_FILE${NC}" >&2
     exit 1
 fi
 
 # Check if ajv is available
 if [ ! -f "$PROJECT_ROOT/node_modules/.bin/ajv" ]; then
-    echo -e "${YELLOW}⚠️  ajv-cli not found locally, trying npx...${NC}"
+    echo -e "${YELLOW}WARNING  ajv-cli not found locally, trying npx...${NC}"
     AJV_CMD="npx -y ajv-cli"
 else
     AJV_CMD="$PROJECT_ROOT/node_modules/.bin/ajv"
@@ -46,7 +46,7 @@ for agent_file in $(find "$PROJECT_ROOT" -path "*/.codex/agents/*.md" -o -path "
 
     # Check if file has frontmatter
     if [ "$(head -n1 "$agent_file")" != "---" ]; then
-        echo -e "${YELLOW}⚠️  $agent_name: No frontmatter found${NC}"
+        echo -e "${YELLOW}WARNING  $agent_name: No frontmatter found${NC}"
         continue
     fi
 
@@ -69,7 +69,7 @@ except Exception as e:
     print(f'YAML parsing error: {e}', file=sys.stderr)
     sys.exit(1)
 " 2>/dev/null; then
-        echo -e "${RED}❌ $agent_name: Failed to parse YAML frontmatter${NC}"
+        echo -e "${RED}FAILED $agent_name: Failed to parse YAML frontmatter${NC}"
         validation_errors=$((validation_errors + 1))
         rm -f "$tmp_frontmatter" "$tmp_json"
         continue
@@ -77,9 +77,9 @@ except Exception as e:
 
     # Validate against schema
     if $AJV_CMD validate $AJV_OPTS -s "$SCHEMA_FILE" -d "$tmp_json" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ $agent_name: Valid${NC}"
+        echo -e "${GREEN}SUCCESS $agent_name: Valid${NC}"
     else
-        echo -e "${RED}❌ $agent_name: Schema validation failed${NC}"
+        echo -e "${RED}FAILED $agent_name: Schema validation failed${NC}"
         echo "   Detailed errors:"
         $AJV_CMD validate $AJV_OPTS -s "$SCHEMA_FILE" -d "$tmp_json" 2>&1 | sed 's/^/   /' || true
         validation_errors=$((validation_errors + 1))
@@ -90,14 +90,14 @@ except Exception as e:
 done
 
 echo ""
-echo "📊 Agent Validation Summary:"
+echo "STATS Agent Validation Summary:"
 echo "   Total files: $total_files"
 echo "   Validation errors: $validation_errors"
 
 if [ $validation_errors -eq 0 ]; then
-    echo -e "${GREEN}🎉 All agent files are valid!${NC}"
+    echo -e "${GREEN}SYMBOL All agent files are valid!${NC}"
     exit 0
 else
-    echo -e "${RED}💥 $validation_errors agent file(s) failed validation${NC}"
+    echo -e "${RED}SYMBOL $validation_errors agent file(s) failed validation${NC}"
     exit 1
 fi

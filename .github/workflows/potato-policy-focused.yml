@@ -85,7 +85,7 @@ jobs:
                   source .venv/bin/activate
 
                   echo "Enhanced Potato Policy Comprehensive Check..."
-                  echo "Framework: v2.0 - Pain → Protocol → Protection"
+                  echo "Framework: v2.0 - Pain -> Protocol -> Protection"
                   echo "Virtual Environment:"
                   printf "Path: %s\n" "$VIRTUAL_ENV"
                   echo ""
@@ -258,7 +258,7 @@ jobs:
                   echo "==============================================="
                   echo "Enhanced Potato Policy Enforcement Complete"
                   echo "==============================================="
-                  echo "Framework: v2.0 - Pain → Protocol → Protection"
+                  echo "Framework: v2.0 - Pain -> Protocol -> Protection"
                   echo "Virtual Environment: Required and validated"
                   echo "Audit Type: ${{ github.event.inputs.audit_type || 'automatic' }}"
                   echo "Trigger: ${{ github.event_name }}"

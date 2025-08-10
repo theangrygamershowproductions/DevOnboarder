@@ -184,7 +184,7 @@ EOF
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo "${BLUE}📊 Summary: Closed $closed_count of $issue_count issues${NC}"
+    echo "${BLUE}STATS Summary: Closed $closed_count of $issue_count issues${NC}"
     rm -f temp_issues.json
     return 0
 }
@@ -239,7 +239,7 @@ EOF
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo "${BLUE}📊 Summary: Commented on $commented_count of $issue_count issues${NC}"
+    echo "${BLUE}STATS Summary: Commented on $commented_count of $issue_count issues${NC}"
     rm -f temp_issues.json
     return 0
 }

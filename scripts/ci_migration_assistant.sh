@@ -86,9 +86,9 @@ validate_component_workflows() {
 
     for workflow in "${workflows[@]}"; do
         if [ -f "$PROJECT_ROOT/.github/workflows/$workflow" ]; then
-            print_status "✅ Found: $workflow"
+            print_status "SUCCESS Found: $workflow"
         else
-            print_error "❌ Missing: $workflow"
+            print_error "FAILED Missing: $workflow"
             return 1
         fi
     done
@@ -106,7 +106,7 @@ test_component_workflows() {
     for workflow in .github/workflows/*-component*.yml; do
         if [ -f "$workflow" ]; then
             echo "Testing $(basename "$workflow")..."
-            python -c "import yaml; yaml.safe_load(open('$workflow'))" && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
+            python -c "import yaml; yaml.safe_load(open('$workflow'))" && echo "SUCCESS Valid YAML" || echo "FAILED Invalid YAML"
         fi
     done
 }
@@ -117,21 +117,21 @@ show_migration_status() {
     echo
 
     echo "Component Workflows:"
-    echo "  ✅ Orchestrator: Routes changes to appropriate components"
-    echo "  ✅ Backend: Python FastAPI testing and validation"
-    echo "  ✅ Frontend: React testing with Vitest"
-    echo "  ✅ Bot: Discord.js TypeScript testing"
-    echo "  ✅ AAR UI: React component testing"
-    echo "  ✅ Docs: Vale and markdownlint validation"
-    echo "  ✅ Infrastructure: Docker, scripts, and workflow validation"
+    echo "  SUCCESS Orchestrator: Routes changes to appropriate components"
+    echo "  SUCCESS Backend: Python FastAPI testing and validation"
+    echo "  SUCCESS Frontend: React testing with Vitest"
+    echo "  SUCCESS Bot: Discord.js TypeScript testing"
+    echo "  SUCCESS AAR UI: React component testing"
+    echo "  SUCCESS Docs: Vale and markdownlint validation"
+    echo "  SUCCESS Infrastructure: Docker, scripts, and workflow validation"
     echo
 
     echo "Migration Benefits:"
-    echo "  🚀 Faster CI: Only run tests for changed components"
-    echo "  💰 Cost Savings: Reduced GitHub Actions minutes usage"
-    echo "  🎯 Targeted Feedback: Component-specific error reporting"
-    echo "  📊 Better Coverage: Component-level coverage reporting"
-    echo "  🔧 Easier Maintenance: Smaller, focused workflow files"
+    echo "  DEPLOY Faster CI: Only run tests for changed components"
+    echo "  SYMBOL Cost Savings: Reduced GitHub Actions minutes usage"
+    echo "  TARGET Targeted Feedback: Component-specific error reporting"
+    echo "  STATS Better Coverage: Component-level coverage reporting"
+    echo "  CONFIG Easier Maintenance: Smaller, focused workflow files"
     echo
 }
 
@@ -146,7 +146,7 @@ main() {
     show_migration_status
 
     echo
-    print_status "🎉 Component-based CI migration completed successfully!"
+    print_status "SYMBOL Component-based CI migration completed successfully!"
     echo
     print_step "Next Steps:"
     echo "1. Test the new component workflows with a small change"

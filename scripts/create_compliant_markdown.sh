@@ -8,7 +8,7 @@ FILENAME="$1"
 TITLE="$2"
 FILEPATH="docs/${FILENAME}.md"
 
-echo "📝 Creating lint-compliant markdown: $FILEPATH"
+echo "EDIT Creating lint-compliant markdown: $FILEPATH"
 
 # Create file with proper formatting from the start
 cat > "$FILEPATH" << EOF
@@ -54,14 +54,14 @@ Final thoughts and next steps.
 *Generated using lint-compliant markdown template*
 EOF
 
-echo "✅ Created: $FILEPATH"
-echo "🔍 Running lint check..."
+echo "SUCCESS Created: $FILEPATH"
+echo "SEARCH Running lint check..."
 
 # Validate immediately
 if command -v markdownlint &> /dev/null; then
-    markdownlint "$FILEPATH" && echo "✅ Lint check passed" || echo "❌ Lint check failed"
+    markdownlint "$FILEPATH" && echo "SUCCESS Lint check passed" || echo "FAILED Lint check failed"
 else
-    echo "ℹ️ markdownlint not available, manual validation recommended"
+    echo "ℹSYMBOL markdownlint not available, manual validation recommended"
 fi
 
-echo "📁 File ready for editing: $FILEPATH"
+echo "FOLDER File ready for editing: $FILEPATH"

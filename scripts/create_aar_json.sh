@@ -72,7 +72,7 @@ cat > "$FILEPATH" << EOF
 }
 EOF
 
-echo "✅ AAR JSON template created: $FILEPATH"
-echo "📝 Schema version 1.0.0 automatically included"
-echo "🔧 Edit the file to add your specific content"
-echo "🚀 Generate markdown with: node scripts/render_aar.js '$FILEPATH' docs/AAR/reports"
+echo "SUCCESS AAR JSON template created: $FILEPATH"
+echo "EDIT Schema version 1.0.0 automatically included"
+echo "CONFIG Edit the file to add your specific content"
+echo "DEPLOY Generate markdown with: node scripts/render_aar.js '$FILEPATH' docs/AAR/reports"

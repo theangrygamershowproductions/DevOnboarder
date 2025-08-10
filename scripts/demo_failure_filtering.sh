@@ -4,15 +4,15 @@ set -euo pipefail
 # Local CI Analysis Demo
 # Demonstrates failure filtering concepts without requiring GitHub CLI authentication
 
-echo "🔍 CI Failure Analysis - Local Demo"
+echo "SEARCH CI Failure Analysis - Local Demo"
 echo "===================================="
 echo ""
 
-echo "💡 This demo shows how the 'conclusion: FAILURE' filter works"
+echo "IDEA This demo shows how the 'conclusion: FAILURE' filter works"
 echo "   In a real environment with GitHub CLI authentication, you would use:"
 echo ""
 
-echo "🔧 Basic GitHub CLI Commands with Failure Filter:"
+echo "CONFIG Basic GitHub CLI Commands with Failure Filter:"
 echo ""
 echo "   # List only failed runs"
 echo "   gh run list --status failure --limit 10"
@@ -24,7 +24,7 @@ echo "   # Failed runs for specific workflow"
 echo "   gh run list -w 'Enhanced Potato Policy Enforcement' --status failure"
 echo ""
 
-echo "📊 Example Failed Run Analysis:"
+echo "STATS Example Failed Run Analysis:"
 echo ""
 
 # Simulate failed run data (what would come from GitHub CLI)
@@ -57,7 +57,7 @@ cat << 'EOF'
 EOF
 
 echo ""
-echo "🎯 Analysis with jq (simulating what our scripts do):"
+echo "TARGET Analysis with jq (simulating what our scripts do):"
 echo ""
 
 # Demonstrate filtering and analysis
@@ -69,12 +69,12 @@ SAMPLE_DATA='[
   {"conclusion":"SUCCESS","workflowName":"Documentation","createdAt":"2025-01-28T08:30:00Z"}
 ]'
 
-echo "📈 Total runs: $(echo "$SAMPLE_DATA" | jq length)"
-echo "❌ Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
-echo "✅ Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
+echo "SYMBOL Total runs: $(echo "$SAMPLE_DATA" | jq length)"
+echo "FAILED Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
+echo "SUCCESS Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
 
 echo ""
-echo "🔧 Failures grouped by workflow:"
+echo "CONFIG Failures grouped by workflow:"
 echo "$SAMPLE_DATA" | jq -r '
   [.[] | select(.conclusion == "FAILURE")] |
   group_by(.workflowName) |
@@ -84,7 +84,7 @@ echo "$SAMPLE_DATA" | jq -r '
 '
 
 echo ""
-echo "🕒 Recent failures timeline:"
+echo "SYMBOL Recent failures timeline:"
 echo "$SAMPLE_DATA" | jq -r '
   [.[] | select(.conclusion == "FAILURE")] |
   sort_by(.createdAt) |
@@ -94,22 +94,22 @@ echo "$SAMPLE_DATA" | jq -r '
 '
 
 echo ""
-echo "🎯 Key Benefits of Failure Filtering:"
-echo "   ✅ Focus only on relevant failures"
-echo "   ✅ Reduce analysis time and noise"
-echo "   ✅ Better pattern recognition"
-echo "   ✅ More efficient troubleshooting"
+echo "TARGET Key Benefits of Failure Filtering:"
+echo "   SUCCESS Focus only on relevant failures"
+echo "   SUCCESS Reduce analysis time and noise"
+echo "   SUCCESS Better pattern recognition"
+echo "   SUCCESS More efficient troubleshooting"
 echo ""
 
-echo "🔗 Available Tools in DevOnboarder:"
-echo "   📱 python .codex/scripts/ci-monitor.py <PR>"
-echo "   🔍 bash scripts/analyze_failed_ci_runs.sh"
-echo "   📊 bash scripts/monitor_ci_health.sh"
+echo "LINK Available Tools in DevOnboarder:"
+echo "   SYMBOL python .codex/scripts/ci-monitor.py <PR>"
+echo "   SEARCH bash scripts/analyze_failed_ci_runs.sh"
+echo "   STATS bash scripts/monitor_ci_health.sh"
 echo ""
 
-echo "💡 For authentication setup:"
+echo "IDEA For authentication setup:"
 echo "   gh auth login"
 echo "   gh auth status"
 echo ""
 
-echo "📚 Complete guide: docs/ci-failure-analysis-guide.md"
+echo "SYMBOL Complete guide: docs/ci-failure-analysis-guide.md"

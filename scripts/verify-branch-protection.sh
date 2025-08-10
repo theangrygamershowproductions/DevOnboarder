@@ -57,7 +57,7 @@ if [[ -n "$diff_out" ]]; then
     exit 1
 fi
 
-echo "✅ Required status check contexts match"
+echo "SUCCESS Required status check contexts match"
 
 # Compare core boolean toggles
 echo "Comparing core protection settings..."
@@ -90,7 +90,7 @@ for path in "${!PATHS[@]}"; do
             echo "  File: $file_v"
             drift_found=true
         elif [[ "$file_v" != "" ]]; then
-            echo "✅ $description: $file_v"
+            echo "SUCCESS $description: $file_v"
         fi
     else
         # Regular comparison for other fields
@@ -101,7 +101,7 @@ for path in "${!PATHS[@]}"; do
             echo "  File: $file_v"
             drift_found=true
         elif [[ "$file_v" != "" ]]; then
-            echo "✅ $description: $file_v"
+            echo "SUCCESS $description: $file_v"
         fi
     fi
 done
@@ -119,7 +119,7 @@ if [[ "$drift_found" == "true" ]]; then
 fi
 
 echo ""
-echo "✅ Branch protection matches protection.json"
+echo "SUCCESS Branch protection matches protection.json"
 echo "Server configuration is consistent with local file"
 
 # Additional validation: check that all required checks are reasonable
@@ -127,16 +127,16 @@ echo ""
 echo "Additional validation checks..."
 
 ctx_count=$(echo "$file_ctx" | wc -l | tr -d ' ')
-echo "✅ Total required checks: $ctx_count"
+echo "SUCCESS Total required checks: $ctx_count"
 
 if [[ $ctx_count -gt 20 ]]; then
-    echo "⚠ Warning: Very high number of required checks ($ctx_count)"
+    echo "WARNING Warning: Very high number of required checks ($ctx_count)"
     echo "Consider if all checks are truly necessary for merge blocking"
 fi
 
 if [[ $ctx_count -lt 5 ]]; then
-    echo "⚠ Warning: Very few required checks ($ctx_count)"
+    echo "WARNING Warning: Very few required checks ($ctx_count)"
     echo "Consider if additional quality gates are needed"
 fi
 
-echo "✅ Branch protection verification completed successfully"
+echo "SUCCESS Branch protection verification completed successfully"

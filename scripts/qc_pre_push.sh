@@ -4,12 +4,12 @@
 
 set -euo pipefail
 
-echo "🔍 Running 95% QC Pre-Push Validation..."
+echo "SEARCH Running 95% QC Pre-Push Validation..."
 
 # Ensure we're in virtual environment
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
-        echo "🐍 Activating virtual environment..."
+        echo "SYMBOL Activating virtual environment..."
         # shellcheck source=/dev/null
         source .venv/bin/activate
     else
@@ -23,7 +23,7 @@ declare -a CHECKS=()
 declare -a FAILURES=()
 
 # 1. YAML Linting
-echo "📋 Checking YAML files..."
+echo "SYMBOL Checking YAML files..."
 if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
     CHECKS+=("SUCCESS: YAML lint")
 else
@@ -32,7 +32,7 @@ else
 fi
 
 # 2. Python Code Quality
-echo "🐍 Checking Python code quality..."
+echo "SYMBOL Checking Python code quality..."
 if python -m ruff check . --quiet 2>/dev/null; then
     CHECKS+=("SUCCESS: Ruff lint")
 else
@@ -41,11 +41,11 @@ else
 fi
 
 # 3. Python Formatting
-echo "🖤 Checking Python formatting..."
-if python -m black --check . --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Black format")
+echo "SYMBOL Checking Python formatting..."
+if python -m ruff format --check . --quiet 2>/dev/null; then
+    CHECKS+=("SUCCESS: Ruff format")
 else
-    CHECKS+=("FAILED: Black format")
+    CHECKS+=("FAILED: Ruff format")
     FAILURES+=("Python code formatting issues")
 fi
 
@@ -62,7 +62,7 @@ fi
 
 # 5. Test Coverage Check (if tests exist)
 if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
-    echo "🧪 Checking test coverage..."
+    echo "EMOJI Checking test coverage..."
     if python -m pytest --cov=src --cov-fail-under=95 --quiet 2>/dev/null; then
         CHECKS+=("SUCCESS: Test coverage ≥95%")
     else
@@ -72,7 +72,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
 fi
 
 # 6. Documentation Quality
-echo "📚 Checking documentation..."
+echo "SYMBOL Checking documentation..."
 if [[ -x "scripts/check_docs.sh" ]]; then
     if bash scripts/check_docs.sh >/dev/null 2>&1; then
         CHECKS+=("SUCCESS: Documentation")
@@ -85,7 +85,7 @@ else
 fi
 
 # 7. Commit Message Quality
-echo "📝 Checking commit messages..."
+echo "EDIT Checking commit messages..."
 if bash scripts/check_commit_messages.sh >/dev/null 2>&1; then
     CHECKS+=("SUCCESS: Commit messages")
 else
@@ -94,7 +94,7 @@ else
 fi
 
 # 8. Security Scan
-echo "🔒 Running security scan..."
+echo "SYMBOL Running security scan..."
 if python -m bandit -r src -ll --quiet 2>/dev/null; then
     CHECKS+=("SUCCESS: Security scan")
 else
@@ -115,24 +115,24 @@ for check in "${CHECKS[@]}"; do
 done
 
 echo ""
-echo "📈 Quality Score: $SUCCESS_COUNT/$TOTAL_CHECKS ($PERCENTAGE%)"
+echo "SYMBOL Quality Score: $SUCCESS_COUNT/$TOTAL_CHECKS ($PERCENTAGE%)"
 
 # Check if we meet 95% threshold
 if [[ $PERCENTAGE -ge 95 ]]; then
     echo "SUCCESS: PASS: Quality score meets 95% threshold"
-    echo "🚀 Ready to push!"
+    echo "DEPLOY Ready to push!"
     exit 0
 else
     echo "FAILED: FAIL: Quality score below 95% threshold"
     echo ""
-    echo "🔧 Issues to fix:"
+    echo "CONFIG Issues to fix:"
     for failure in "${FAILURES[@]}"; do
         echo "  • $failure"
     done
     echo ""
-    echo "💡 Fix these issues before pushing:"
+    echo "IDEA Fix these issues before pushing:"
     echo "  • Run: python -m ruff check . && python -m ruff check . --fix"
-    echo "  • Run: python -m black ."
+    echo "  • Run: python -m ruff format ."
     echo "  • Run: python -m mypy src/devonboarder"
     echo "  • Run: yamllint -c .github/.yamllint-config .github/workflows/"
     echo "  • Run: python -m pytest --cov=src --cov-fail-under=95"

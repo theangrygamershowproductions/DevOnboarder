@@ -23,8 +23,8 @@ echo
 # Step 3: Final validation
 echo "Step 3: Final validation..."
 if npx markdownlint-cli2 "$@"; then
-    echo "✅ All markdown files are now compliant!"
+    echo "SUCCESS All markdown files are now compliant!"
 else
-    echo "⚠️  Some manual fixes may still be required for complex cases"
+    echo "WARNING  Some manual fixes may still be required for complex cases"
     echo "   Run 'npx markdownlint-cli2 \$FILES' to see remaining issues"
 fi

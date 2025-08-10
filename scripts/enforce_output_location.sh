@@ -23,11 +23,11 @@ check_root_pollution() {
     local violations=0
     local violation_files=()
 
-    log_message "$GREEN" "🔍 $SCRIPT_NAME: Scanning repository root for pollution artifacts..."
+    log_message "$GREEN" "SEARCH $SCRIPT_NAME: Scanning repository root for pollution artifacts..."
 
     # Check for pytest artifacts in root
     if find . -maxdepth 1 -name "pytest-of-*" -type d 2>/dev/null | grep -q .; then
-        log_message "$RED" "❌ VIOLATION: Pytest sandbox directories in root"
+        log_message "$RED" "FAILED VIOLATION: Pytest sandbox directories in root"
         find . -maxdepth 1 -name "pytest-of-*" -type d | while read -r dir; do
             echo "   $dir"
             violation_files+=("$dir")
@@ -38,7 +38,7 @@ check_root_pollution() {
     # Check for coverage files in root (should be in logs/)
     coverage_files=$(find . -maxdepth 1 -name ".coverage*" -type f 2>/dev/null | wc -l)
     if [[ "$coverage_files" -gt 0 ]]; then
-        log_message "$RED" "❌ VIOLATION: Coverage files in root (should be in logs/)"
+        log_message "$RED" "FAILED VIOLATION: Coverage files in root (should be in logs/)"
         find . -maxdepth 1 -name ".coverage*" -type f | while read -r file; do
             echo "   $file → should be logs/$(basename "$file")"
             violation_files+=("$file")
@@ -48,7 +48,7 @@ check_root_pollution() {
 
     # Check for Vale results in root (should be in logs/)
     if find . -maxdepth 1 -name "vale-results.json" -type f 2>/dev/null | grep -q .; then
-        log_message "$RED" "❌ VIOLATION: Vale results in root (should be in logs/)"
+        log_message "$RED" "FAILED VIOLATION: Vale results in root (should be in logs/)"
         find . -maxdepth 1 -name "vale-results.json" -type f | while read -r file; do
             echo "   $file → should be logs/vale-results.json"
             violation_files+=("$file")
@@ -59,7 +59,7 @@ check_root_pollution() {
     # Check for CI logs in root (should be in logs/)
     for logfile in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
         if [[ -f "$logfile" ]]; then
-            log_message "$RED" "❌ VIOLATION: $logfile in root (should be logs/$logfile)"
+            log_message "$RED" "FAILED VIOLATION: $logfile in root (should be logs/$logfile)"
             violation_files+=("$logfile")
             violations=$((violations + 1))
         fi
@@ -67,7 +67,7 @@ check_root_pollution() {
 
     # Check for temporary database files in root
     if find . -maxdepth 1 -name "test.db" -o -name "*.db-journal" -type f 2>/dev/null | grep -q .; then
-        log_message "$RED" "❌ VIOLATION: Temporary database files in root"
+        log_message "$RED" "FAILED VIOLATION: Temporary database files in root"
         find . -maxdepth 1 -name "test.db" -o -name "*.db-journal" -type f | while read -r file; do
             echo "   $file → temporary file should be cleaned"
             violation_files+=("$file")
@@ -77,7 +77,7 @@ check_root_pollution() {
 
     # Check for Python cache in root (should be cleaned or in .venv)
     if find . -maxdepth 1 -name "__pycache__" -type d 2>/dev/null | grep -q .; then
-        log_message "$RED" "❌ VIOLATION: Python cache directories in root"
+        log_message "$RED" "FAILED VIOLATION: Python cache directories in root"
         find . -maxdepth 1 -name "__pycache__" -type d | while read -r dir; do
             echo "   $dir → should be cleaned"
             violation_files+=("$dir")
@@ -89,7 +89,7 @@ check_root_pollution() {
     if [[ -d "config_backups" ]]; then
         backup_count=$(find config_backups/ -type f 2>/dev/null | wc -l)
         if [[ "$backup_count" -gt 0 ]]; then
-            log_message "$RED" "❌ VIOLATION: Configuration backups present ($backup_count files)"
+            log_message "$RED" "FAILED VIOLATION: Configuration backups present ($backup_count files)"
             echo "   config_backups/ → should be removed when committing changes"
             violation_files+=("config_backups/")
             violations=$((violations + 1))
@@ -98,7 +98,7 @@ check_root_pollution() {
 
     # Check for tox artifacts
     if [[ -d ".tox" ]]; then
-        log_message "$RED" "❌ VIOLATION: Tox artifacts in root"
+        log_message "$RED" "FAILED VIOLATION: Tox artifacts in root"
         echo "   .tox/ → should be cleaned"
         violation_files+=(".tox/")
         violations=$((violations + 1))
@@ -106,7 +106,7 @@ check_root_pollution() {
 
     # Check for npm/node artifacts outside designated directories
     if find . -maxdepth 1 -name "node_modules" -type d 2>/dev/null | grep -v -E "^\\./bot/node_modules$|^\\./frontend/node_modules$" | grep -q .; then
-        log_message "$RED" "❌ VIOLATION: Unexpected node_modules in root"
+        log_message "$RED" "FAILED VIOLATION: Unexpected node_modules in root"
         find . -maxdepth 1 -name "node_modules" -type d | while read -r dir; do
             echo "   $dir → should be in bot/ or frontend/ only"
             violation_files+=("$dir")
@@ -119,7 +119,7 @@ check_root_pollution() {
 
 # Function to suggest cleanup commands
 suggest_cleanup() {
-    log_message "$YELLOW" "🔧 $SCRIPT_NAME: Suggested cleanup commands:"
+    log_message "$YELLOW" "CONFIG $SCRIPT_NAME: Suggested cleanup commands:"
     echo ""
     echo "   # Run comprehensive cleanup script"
     echo "   bash scripts/final_cleanup.sh"
@@ -138,14 +138,14 @@ main() {
     cd "$PROJECT_ROOT"
 
     if check_root_pollution; then
-        log_message "$GREEN" "✅ $SCRIPT_NAME: No root pollution artifacts detected"
+        log_message "$GREEN" "SUCCESS $SCRIPT_NAME: No root pollution artifacts detected"
         log_message "$GREEN" "   Repository root is clean and properly organized"
         exit 0
     else
         violations=$?
-        log_message "$RED" "❌ $SCRIPT_NAME: Found $violations types of root pollution"
+        log_message "$RED" "FAILED $SCRIPT_NAME: Found $violations types of root pollution"
         echo ""
-        log_message "$YELLOW" "📋 Root pollution violates DevOnboarder CI hygiene standards:"
+        log_message "$YELLOW" "SYMBOL Root pollution violates DevOnboarder CI hygiene standards:"
         echo "   • Test artifacts should be in logs/ or cleaned after use"
         echo "   • Coverage data should be redirected to logs/.coverage"
         echo "   • Vale results should output to logs/vale-results.json"
@@ -154,7 +154,7 @@ main() {
         echo ""
         suggest_cleanup
         echo ""
-        log_message "$RED" "🛑 Fix root pollution before proceeding with commit"
+        log_message "$RED" "SYMBOL Fix root pollution before proceeding with commit"
         exit 1
     fi
 }
@@ -165,10 +165,10 @@ case "${1:-check}" in
         main
         ;;
     --clean|clean)
-        log_message "$YELLOW" "🧹 $SCRIPT_NAME: Running automatic cleanup..."
+        log_message "$YELLOW" "EMOJI $SCRIPT_NAME: Running automatic cleanup..."
         bash scripts/final_cleanup.sh
         echo ""
-        log_message "$GREEN" "✅ Cleanup complete. Re-checking..."
+        log_message "$GREEN" "SUCCESS Cleanup complete. Re-checking..."
         main
         ;;
     --help|help)
@@ -186,7 +186,7 @@ case "${1:-check}" in
         echo "polluting the repository root directory."
         ;;
     *)
-        log_message "$RED" "❌ Unknown command: $1"
+        log_message "$RED" "FAILED Unknown command: $1"
         echo "Use '$0 help' for usage information"
         exit 1
         ;;

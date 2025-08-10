@@ -126,3 +126,6 @@ cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
 .ci-migration-backup/
 DevOnboarder/
 scripts/doc_audit_system.py
+
+# emoji scrub backups
+*.emoji_backup

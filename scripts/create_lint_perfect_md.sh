@@ -59,7 +59,7 @@ EOF
     # Replace placeholder with actual title
     sed -i "s/TITLE_PLACEHOLDER/$title/g" "$filepath"
 
-    echo "✅ Created lint-perfect markdown: $filepath"
+    echo "SUCCESS Created lint-perfect markdown: $filepath"
 }
 
 # Usage examples

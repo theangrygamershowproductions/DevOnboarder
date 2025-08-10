@@ -20,77 +20,77 @@ log_info() {
 }
 
 show_enforcement_status() {
-    echo "════════════════════════════════════════════════════════════════"
-    echo "🥔 DevOnboarder --no-verify Enforcement System Status"
-    echo "════════════════════════════════════════════════════════════════"
+    echo "SYMBOL"
+    echo "POTATO DevOnboarder --no-verify Enforcement System Status"
+    echo "SYMBOL"
     echo ""
 
     # Policy Documentation
-    echo "📋 POLICY DOCUMENTATION:"
+    echo "SYMBOL POLICY DOCUMENTATION:"
     if [ -f "docs/NO_VERIFY_POLICY.md" ]; then
-        echo "✅ Policy document: docs/NO_VERIFY_POLICY.md"
+        echo "SUCCESS Policy document: docs/NO_VERIFY_POLICY.md"
         echo "   - Zero Tolerance Policy defined"
         echo "   - Emergency procedures documented"
         echo "   - Potato Approval requirements specified"
     else
-        echo "❌ Policy document missing"
+        echo "FAILED Policy document missing"
     fi
     echo ""
 
     # Validation Scripts
-    echo "🔧 ENFORCEMENT SCRIPTS:"
+    echo "CONFIG ENFORCEMENT SCRIPTS:"
     if [ -f "scripts/validate_no_verify_usage.sh" ] && [ -x "scripts/validate_no_verify_usage.sh" ]; then
-        echo "✅ Validation script: scripts/validate_no_verify_usage.sh (executable)"
+        echo "SUCCESS Validation script: scripts/validate_no_verify_usage.sh (executable)"
     else
-        echo "❌ Validation script missing or not executable"
+        echo "FAILED Validation script missing or not executable"
     fi
 
     if [ -f "scripts/git_safety_wrapper.sh" ] && [ -x "scripts/git_safety_wrapper.sh" ]; then
-        echo "✅ Safety wrapper: scripts/git_safety_wrapper.sh (executable)"
+        echo "SUCCESS Safety wrapper: scripts/git_safety_wrapper.sh (executable)"
     else
-        echo "❌ Safety wrapper missing or not executable"
+        echo "FAILED Safety wrapper missing or not executable"
     fi
     echo ""
 
     # Pre-commit Hooks
-    echo "🪝 PRE-COMMIT INTEGRATION:"
+    echo "HOOK PRE-COMMIT INTEGRATION:"
     if [ -f ".pre-commit-config.yaml" ]; then
         if grep -q "validate-no-verify" ".pre-commit-config.yaml"; then
-            echo "✅ Pre-commit hook: validate-no-verify configured"
+            echo "SUCCESS Pre-commit hook: validate-no-verify configured"
         else
-            echo "❌ Pre-commit hook not configured"
+            echo "FAILED Pre-commit hook not configured"
         fi
     else
-        echo "❌ Pre-commit config missing"
+        echo "FAILED Pre-commit config missing"
     fi
     echo ""
 
     # CI/CD Integration
-    echo "🚀 CI/CD INTEGRATION:"
+    echo "DEPLOY CI/CD INTEGRATION:"
     if [ -f ".github/workflows/no-verify-policy.yml" ]; then
-        echo "✅ GitHub Actions: no-verify-policy.yml configured"
+        echo "SUCCESS GitHub Actions: no-verify-policy.yml configured"
     else
-        echo "❌ GitHub Actions workflow missing"
+        echo "FAILED GitHub Actions workflow missing"
     fi
     echo ""
 
     # Current Status
-    echo "📊 CURRENT COMPLIANCE STATUS:"
+    echo "STATS CURRENT COMPLIANCE STATUS:"
     log_info "Running validation check"
 
     if ./scripts/validate_no_verify_usage.sh >/dev/null 2>&1; then
-        echo "✅ COMPLIANT: All --no-verify usage properly authorized"
+        echo "SUCCESS COMPLIANT: All --no-verify usage properly authorized"
         local emergency_approvals
         emergency_approvals=$(grep -r "POTATO.*APPROVED\|Emergency.*Potato" . --include="*.sh" --include="*.md" 2>/dev/null | wc -l || echo 0)
         echo "   Emergency approvals found: $emergency_approvals"
     else
-        echo "❌ VIOLATION: Unauthorized --no-verify usage detected"
+        echo "FAILED VIOLATION: Unauthorized --no-verify usage detected"
         echo "   Run: ./scripts/validate_no_verify_usage.sh for details"
     fi
     echo ""
 
     # Emergency Procedures
-    echo "🚨 EMERGENCY PROCEDURES:"
+    echo "SYMBOL EMERGENCY PROCEDURES:"
     echo "For true emergencies requiring --no-verify bypass:"
     echo "1. Use: ./scripts/git_safety_wrapper.sh commit --no-verify -m 'Emergency'"
     echo "2. Answer justification questions (production outage, security fix, etc.)"
@@ -100,7 +100,7 @@ show_enforcement_status() {
     echo ""
 
     # Quality Gate Alternative
-    echo "✅ PREFERRED: QUALITY GATE RESOLUTION:"
+    echo "SUCCESS PREFERRED: QUALITY GATE RESOLUTION:"
     echo "Instead of bypassing, fix the actual issues:"
     echo "1. Run: ./scripts/qc_pre_push.sh (identify specific issues)"
     echo "2. Fix: python -m ruff check --fix . (Python issues)"
@@ -109,7 +109,7 @@ show_enforcement_status() {
     echo ""
 
     # Monitoring
-    echo "📈 MONITORING CAPABILITIES:"
+    echo "SYMBOL MONITORING CAPABILITIES:"
     echo "- Comprehensive audit logging: logs/git_safety_*.log"
     echo "- Emergency approval tracking with timestamps"
     echo "- CI pipeline validation reports"
@@ -117,11 +117,11 @@ show_enforcement_status() {
     echo "- Git alias detection and prevention"
     echo ""
 
-    echo "════════════════════════════════════════════════════════════════"
+    echo "SYMBOL"
     echo "DevOnboarder maintains 'quiet reliability' through quality gates."
     echo "This enforcement system ensures --no-verify is only used for true"
     echo "emergencies with proper approval and documentation."
-    echo "════════════════════════════════════════════════════════════════"
+    echo "SYMBOL"
 }
 
 # Show usage

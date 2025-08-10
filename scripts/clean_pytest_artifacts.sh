@@ -2,17 +2,17 @@
 set -euo pipefail
 
 # Comprehensive pytest and test artifact cleanup
-echo "🧪 Comprehensive pytest sandbox artifact cleanup..."
+echo "Comprehensive pytest sandbox artifact cleanup..."
 
 # Enhanced pytest directory cleanup - more aggressive patterns
-echo "   🗑️  Removing pytest temporary directories..."
+echo "   Removing pytest temporary directories..."
 find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" | while read -r dir; do
     echo "     Removing: $dir"
     rm -rf "$dir"
 done
 
 # AGGRESSIVE coverage cleanup (addressing the 31 coverage artifacts issue)
-echo "   📊 Cleaning ALL coverage artifacts..."
+echo "   Cleaning ALL coverage artifacts..."
 find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
@@ -22,26 +22,26 @@ rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 # Clean coverage artifacts in logs/
     if [[ -d "logs/" ]]; then
-        echo "   📊 Cleaning logs coverage artifacts..."
+        echo "   Cleaning logs coverage artifacts..."
         find logs/ -name ".coverage*" -delete 2>/dev/null || true
         find logs/ -name "coverage.xml" -delete 2>/dev/null || true
         find logs/ -name "coverage.json" -delete 2>/dev/null || true
         rm -rf logs/htmlcov/ 2>/dev/null || true
 
-        echo "   � Cleaning dashboard execution logs..."
+        echo "   Cleaning dashboard execution logs..."
         find logs/ -name "dashboard_execution_*.log" -delete 2>/dev/null || true
 
-        echo "   �📝 Cleaning timestamped log files..."
+        echo "   Cleaning timestamped log files..."
         find logs/ -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
 
-        echo "   🔍 Cleaning validation artifacts..."
+        echo "   Cleaning validation artifacts..."
         find logs/ -name "validation_*.log" -delete 2>/dev/null || true
 
-        echo "   💾 Cleaning temporary database files..."
+        echo "   Cleaning temporary database files..."
         find logs/ -name "tmp*.db" -delete 2>/dev/null || true
         find logs/ -name "*.db" -delete 2>/dev/null || true
 
-        echo "   📝 Moving stray root logs into logs/ ..."
+        echo "   Moving stray root logs into logs/ ..."
         for lf in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
             if [[ -f "$lf" ]]; then
                 mv -f "$lf" logs/ 2>/dev/null || true
@@ -50,45 +50,45 @@ rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
     fi
 
 # Clean pytest cache directories more thoroughly
-echo "   📦 Cleaning pytest cache..."
+echo "   Cleaning Cleaning pytest cache..."
 find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 
 # Clean ALL Python cache (following DevOnboarder virtual environment standards)
-echo "   🐍 Cleaning ALL Python cache..."
+echo "   Cleaning Cleaning ALL Python cache..."
 find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 find . -name "*.pyc" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.pyo" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
 # Clean any generated test database files
-echo "   💾 Cleaning test databases..."
+echo "   Cleaning Cleaning test databases..."
 find . -name "test.db" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
 # Remove ALL configuration backups (we're committing changes, so backups are unnecessary)
-echo "   🗂️  Removing configuration backups..."
+echo "   Cleaning  Removing configuration backups..."
 if [[ -d "config_backups" ]]; then
     backup_count=$(find config_backups/ -type f 2>/dev/null | wc -l || echo "0")
     echo "     Removing entire config_backups directory with $backup_count files..."
     rm -rf config_backups/ 2>/dev/null || true
-    echo "     ✅ config_backups directory removed"
+    echo "     Complete config_backups directory removed"
 fi
 
 # Remove Vale result artifacts (should not be committed)
-echo "   📝 Cleaning Vale validation artifacts..."
+echo "   Organizing Cleaning Vale validation artifacts..."
 find . -name "vale-results.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "vale-*.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 rm -f vale-results.json vale-*.json 2>/dev/null || true
 
 # Clean tox artifacts
-echo "   🧪 Cleaning tox artifacts..."
+echo "   Enhanced Cleaning tox artifacts..."
 rm -rf .tox/ 2>/dev/null || true
 
 # Remove any top-level coverage artifacts
-echo "   📈 Cleaning top-level coverage..."
+echo "   Cleaning Cleaning top-level coverage..."
 rm -rf htmlcov/ .coverage coverage.xml 2>/dev/null || true
 
 # CRITICAL: Remove any files containing 'foo' references (test artifacts only)
-echo "   🎯 Purging test artifact files with 'foo' references..."
+echo "   Targeting Purging test artifact files with 'foo' references..."
 find . -type f \( -name "*.log" -o -name "*.yaml" -o -name "*.yml" -o -name "*.txt" -o -name "*.json" \) \
     -not -path "./.git/*" \
     -not -path "./.venv/*" \
@@ -107,7 +107,7 @@ remaining_pytest=$(find . -name "*pytest*" -not -path "./.git/*" -not -path "./.
 remaining_coverage=$(find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
 remaining_cache=$(find . -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" 2>/dev/null | wc -l)
 
-echo "   ✅ Enhanced cleanup summary:"
+echo "   Complete Enhanced cleanup summary:"
 echo "     - $remaining_pytest pytest artifacts remaining (target: 0)"
 echo "     - $remaining_coverage coverage artifacts remaining (target: 0)"
 echo "     - $remaining_cache cache directories remaining (target: 0)"
@@ -119,12 +119,12 @@ fi
 
 # Debug: Show what files are being counted if any remain
 if [[ "$remaining_pytest" -gt 0 ]]; then
-    echo "   🔍 DEBUG: Remaining pytest files:"
+    echo "   Finding DEBUG: Remaining pytest files:"
     find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
 fi
 
 if [[ "$remaining_coverage" -gt 0 ]]; then
-    echo "   🔍 DEBUG: Remaining coverage files:"
+    echo "   Finding DEBUG: Remaining coverage files:"
     find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | sed 's/^/     /'
 fi
 
@@ -146,7 +146,7 @@ foo_refs=$(echo "$foo_refs" | tr -d '\n')
 echo "     - ${foo_refs} 'foo' references remaining in non-test files (target: 0)"
 
 if [[ "$foo_refs" -gt 0 ]]; then
-    echo "   ⚠️  WARNING: 'foo' references still exist in non-test files!"
+    echo "   Warning  Warning: 'foo' references still exist in non-test files!"
     grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
         --exclude-dir=.git \
         --exclude-dir=.venv \
@@ -164,9 +164,9 @@ fi
 
 # Final success check
 if [[ "$remaining_pytest" -eq 0 && "$remaining_coverage" -eq 0 && "$foo_refs" -eq 0 ]]; then
-    echo "🎉 Enhanced comprehensive cleanup complete - ALL artifacts eliminated"
+    echo "Cleaning Enhanced comprehensive cleanup complete - ALL artifacts eliminated"
     exit 0
 else
-    echo "⚠️  Cleanup complete but some artifacts remain - check counts above"
+    echo "Warning  Cleanup complete but some artifacts remain - check counts above"
     exit 0  # Don't fail, just warn
 fi

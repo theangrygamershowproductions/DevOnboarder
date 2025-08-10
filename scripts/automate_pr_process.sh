@@ -25,7 +25,7 @@ if [ -z "$PR_NUMBER" ]; then
     exit 1
 fi
 
-echo -e "${BLUE}🤖 AUTOMATED PR PROCESS CONTROLLER${NC}"
+echo -e "${BLUE}Bot AUTOMATED PR PROCESS CONTROLLER${NC}"
 echo "========================================"
 echo -e "${BLUE}PR: #$PR_NUMBER | Mode: $ACTION_MODE${NC}"
 echo ""
@@ -43,31 +43,31 @@ log() {
     echo "[$TIMESTAMP] $1" | tee -a "$LOG_FILE"
 }
 
-log "🚀 Starting automated PR process for #$PR_NUMBER"
+log "DEPLOY Starting automated PR process for #$PR_NUMBER"
 
 # Step 1: Health Assessment
-echo -e "${YELLOW}📊 STEP 1: Health Assessment${NC}"
+echo -e "${YELLOW}STATS STEP 1: Health Assessment${NC}"
 HEALTH_RESULT=$(bash scripts/assess_pr_health.sh "$PR_NUMBER" 2>&1 | tee -a "$LOG_FILE")
 HEALTH_SCORE=$(echo "$HEALTH_RESULT" | grep "PR Health Score:" | sed 's/.*: \([0-9]*\)%.*/\1/' || echo "0")
 
 # Step 2: Pattern Analysis
-echo -e "${YELLOW}📋 STEP 2: CI Pattern Analysis${NC}"
+echo -e "${YELLOW}SYMBOL STEP 2: CI Pattern Analysis${NC}"
 set +e  # Allow this step to fail gracefully
 PATTERN_RESULT=$(bash scripts/analyze_ci_patterns.sh "$PR_NUMBER" 2>&1 | tee -a "$LOG_FILE")
 PATTERN_EXIT_CODE=$?
 set -e  # Re-enable strict error handling
 
 if [ $PATTERN_EXIT_CODE -ne 0 ]; then
-    log "⚠️  Pattern analysis encountered issues, continuing with limited analysis"
+    log "WARNING  Pattern analysis encountered issues, continuing with limited analysis"
     PATTERN_RESULT="Pattern analysis unavailable"
 fi
 
 # Step 3: Strategic Decision
-echo -e "${YELLOW}🧠 STEP 3: Strategic Decision Engine${NC}"
+echo -e "${YELLOW}BRAIN STEP 3: Strategic Decision Engine${NC}"
 if DECISION_RESULT=$(bash scripts/pr_decision_engine.sh "$PR_NUMBER" 2>&1 | tee -a "$LOG_FILE"); then
     RECOMMENDATION=$(echo "$DECISION_RESULT" | grep "Decision:" | sed 's/.*Decision: //' || echo "UNKNOWN")
 else
-    log "⚠️  Decision engine encountered issues, using fallback decision"
+    log "WARNING  Decision engine encountered issues, using fallback decision"
     DECISION_RESULT="Decision engine failed - using fallback analysis"
     RECOMMENDATION="ANALYZE_MANUALLY"
 fi
@@ -77,14 +77,14 @@ log "Recommendation: $RECOMMENDATION"
 
 # Step 4: Automated Actions (if execute or full-auto mode)
 if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
-    echo -e "${YELLOW}🔧 STEP 4: Automated Fixes${NC}"
+    echo -e "${YELLOW}CONFIG STEP 4: Automated Fixes${NC}"
 
     # Get PR branch
     PR_BRANCH=$(gh pr view "$PR_NUMBER" --json headRefName --jq '.headRefName')
     CURRENT_BRANCH=$(git branch --show-current)
 
     if [ "$PR_BRANCH" != "$CURRENT_BRANCH" ]; then
-        echo "⚠️  Already on correct branch: $CURRENT_BRANCH"
+        echo "WARNING  Already on correct branch: $CURRENT_BRANCH"
     fi
 
     # Apply automated fixes based on pattern analysis
@@ -92,11 +92,11 @@ if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
 
     # Fix markdown issues
     if echo "$PATTERN_RESULT" | grep -q "Documentation\|Markdown"; then
-        echo "🔧 Applying markdown fixes..."
+        echo "CONFIG Applying markdown fixes..."
         if command -v markdownlint >/dev/null 2>&1; then
             # Exclude protected files
             if markdownlint --fix . --ignore Potato.md --ignore node_modules --ignore .git 2>/dev/null || true; then
-                echo "✅ Markdown linting fixes applied"
+                echo "SUCCESS Markdown linting fixes applied"
                 ((FIXES_APPLIED++))
             fi
         fi
@@ -104,16 +104,16 @@ if [ "$ACTION_MODE" = "execute" ] || [ "$ACTION_MODE" = "full-auto" ]; then
 
     # Fix Python formatting
     if echo "$PATTERN_RESULT" | grep -q "Formatting\|lint"; then
-        echo "🔧 Applying Python formatting fixes..."
+        echo "CONFIG Applying Python formatting fixes..."
         if command -v black >/dev/null 2>&1; then
             black . --quiet --exclude "Potato.md" 2>/dev/null || true
-            echo "✅ Black formatting applied"
+            echo "SUCCESS Black formatting applied"
             ((FIXES_APPLIED++))
         fi
 
         if command -v ruff >/dev/null 2>&1; then
             ruff check . --fix --quiet --exclude "Potato.md" 2>/dev/null || true
-            echo "✅ Ruff fixes applied"
+            echo "SUCCESS Ruff fixes applied"
             ((FIXES_APPLIED++))
         fi
     fi
@@ -130,22 +130,22 @@ Applied by PR Automation Controller:
 - Import organization
 
 [automated-commit]" 2>/dev/null || true
-            echo "✅ Automated fixes committed"
+            echo "SUCCESS Automated fixes committed"
 
             # Push fixes
-            git push origin "$PR_BRANCH" 2>/dev/null || echo "⚠️  Push failed - may need manual intervention"
-            echo "✅ Fixes pushed to PR branch"
+            git push origin "$PR_BRANCH" 2>/dev/null || echo "WARNING  Push failed - may need manual intervention"
+            echo "SUCCESS Fixes pushed to PR branch"
 
             log "Applied $FIXES_APPLIED automated fixes"
         else
-            echo "ℹ️  No changes to commit after fixes"
+            echo "ℹSYMBOL  No changes to commit after fixes"
         fi
     fi
 fi
 
 # Step 5: Auto-merge logic (if full-auto mode)
 if [ "$ACTION_MODE" = "full-auto" ]; then
-    echo -e "${YELLOW}🚀 STEP 5: Auto-Merge Evaluation${NC}"
+    echo -e "${YELLOW}DEPLOY STEP 5: Auto-Merge Evaluation${NC}"
 
     # Re-evaluate health
     UPDATED_HEALTH=$(bash scripts/assess_pr_health.sh "$PR_NUMBER" 2>/dev/null | grep "PR Health Score:" | sed 's/.*: \([0-9]*\)%.*/\1/' || echo "0")
@@ -157,25 +157,25 @@ if [ "$ACTION_MODE" = "full-auto" ]; then
 
     if [ "${UPDATED_HEALTH:-0}" -ge 80 ]; then
         AUTO_MERGE=true
-        log "✅ Auto-merge criteria met: Health score >= 80%"
+        log "SUCCESS Auto-merge criteria met: Health score >= 80%"
     elif [ "${UPDATED_HEALTH:-0}" -ge 70 ] && echo "$RECOMMENDATION" | grep -q "MERGE"; then
         AUTO_MERGE=true
-        log "✅ Auto-merge criteria met: Health >= 70% + merge recommendation"
+        log "SUCCESS Auto-merge criteria met: Health >= 70% + merge recommendation"
     fi
 
     if [ "$AUTO_MERGE" = true ]; then
-        echo -e "${GREEN}🎉 AUTO-MERGE CONDITIONS MET${NC}"
+        echo -e "${GREEN}SYMBOL AUTO-MERGE CONDITIONS MET${NC}"
         echo "Note: Auto-merge would be executed here in production mode"
         log "Auto-merge conditions met but not executed (safety mode)"
     else
-        echo -e "${YELLOW}⚠️  AUTO-MERGE CRITERIA NOT MET${NC}"
+        echo -e "${YELLOW}WARNING  AUTO-MERGE CRITERIA NOT MET${NC}"
         echo "Health: ${UPDATED_HEALTH}% | Recommendation: $RECOMMENDATION"
         log "Auto-merge skipped - criteria not met"
     fi
 fi
 
 # Step 6: Generate Automation Report
-echo -e "${YELLOW}📋 STEP 6: Automation Report${NC}"
+echo -e "${YELLOW}SYMBOL STEP 6: Automation Report${NC}"
 
 cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 # PR #$PR_NUMBER Automation Report
@@ -186,7 +186,7 @@ cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 
 **Controller:** PR Automation Framework v1.0
 
-## 📊 Analysis Results
+## STATS Analysis Results
 
 ### Health Assessment
 
@@ -204,16 +204,16 @@ cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 - **Commits Created:** $([ $FIXES_APPLIED -gt 0 ] && echo "1 (automated fixes)" || echo "0")
 - **Auto-Merge:** $([ "$ACTION_MODE" = "full-auto" ] && echo "Evaluated" || echo "Not attempted")
 
-## 🎯 Next Steps
+## TARGET Next Steps
 
 $(case "$RECOMMENDATION" in
-    *"MERGE"*) echo "- ✅ Ready for human review and merge approval";;
-    *"EVALUATE"*) echo "- 🤔 Manual evaluation of core mission completion needed";;
-    *"FRESH START"*) echo "- 🔄 Consider creating new PR with focused scope";;
-    *) echo "- 🔧 Continue with targeted fixes as recommended";;
+    *"MERGE"*) echo "- SUCCESS Ready for human review and merge approval";;
+    *"EVALUATE"*) echo "- THINKING Manual evaluation of core mission completion needed";;
+    *"FRESH START"*) echo "- SYMBOL Consider creating new PR with focused scope";;
+    *) echo "- CONFIG Continue with targeted fixes as recommended";;
 esac)
 
-## 📁 Artifacts
+## FOLDER Artifacts
 
 - **Full Log:** \`$LOG_FILE\`
 - **Health Analysis:** Available in automation logs
@@ -224,25 +224,25 @@ esac)
 Generated by PR Automation Controller - DevOnboarder Project
 EOF
 
-echo -e "${GREEN}✅ Automation report generated: reports/pr_${PR_NUMBER}_automation_report.md${NC}"
+echo -e "${GREEN}SUCCESS Automation report generated: reports/pr_${PR_NUMBER}_automation_report.md${NC}"
 
 # Final summary
 echo ""
-echo -e "${PURPLE}🎯 AUTOMATION COMPLETE${NC}"
+echo -e "${PURPLE}TARGET AUTOMATION COMPLETE${NC}"
 echo "==============================="
-echo -e "📊 Health Score: ${HEALTH_SCORE}%"
-echo -e "🎯 Recommendation: $RECOMMENDATION"
-echo -e "🔧 Fixes Applied: $FIXES_APPLIED"
-echo -e "📋 Full Report: reports/pr_${PR_NUMBER}_automation_report.md"
-echo -e "📝 Detailed Log: $LOG_FILE"
+echo -e "STATS Health Score: ${HEALTH_SCORE}%"
+echo -e "TARGET Recommendation: $RECOMMENDATION"
+echo -e "CONFIG Fixes Applied: $FIXES_APPLIED"
+echo -e "SYMBOL Full Report: reports/pr_${PR_NUMBER}_automation_report.md"
+echo -e "EDIT Detailed Log: $LOG_FILE"
 
 if [ "$ACTION_MODE" = "analyze" ]; then
     echo ""
-    echo -e "${BLUE}🚀 To execute automated fixes:${NC}"
+    echo -e "${BLUE}DEPLOY To execute automated fixes:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER execute"
     echo ""
-    echo -e "${BLUE}🤖 For full automation:${NC}"
+    echo -e "${BLUE}Bot For full automation:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER full-auto"
 fi
 
-log "🏁 Automation process completed"
+log "SYMBOL Automation process completed"
