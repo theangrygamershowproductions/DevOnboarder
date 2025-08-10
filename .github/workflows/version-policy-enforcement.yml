@@ -25,10 +25,9 @@ jobs:
           python-version: '3.12'
 
       - name: Set up Node.js 22
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
-          # Using v3 to avoid cache-related lock file detection issues
 
       - name: Verify Python version
         run: |
@@ -97,19 +96,19 @@ jobs:
         run: |
           echo "Checking workflow files for version consistency"
 
-          # Check for any workflows still using old versions
-          old_python_count=$(grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ | wc -l || echo "0")
-          old_node_count=$(grep -r "node-version.*20\|node-version.*18" .github/workflows/ | wc -l || echo "0")
+          # Check for any workflows still using old versions (excluding this file which contains grep patterns)
+          old_python_count=$(grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ --exclude="version-policy-enforcement.yml" | wc -l || echo "0")
+          old_node_count=$(grep -r "node-version.*20\|node-version.*18" .github/workflows/ --exclude="version-policy-enforcement.yml" | wc -l || echo "0")
 
           if [[ "$old_python_count" -gt 0 ]]; then
             echo "FAIL: Found $old_python_count workflow(s) using old Python versions:"
-            grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ || true
+            grep -r "python-version.*3\.11\|python-version.*3\.10" .github/workflows/ --exclude="version-policy-enforcement.yml" || true
             exit 1
           fi
 
           if [[ "$old_node_count" -gt 0 ]]; then
             echo "FAIL: Found $old_node_count workflow(s) using old Node.js versions:"
-            grep -r "node-version.*20\|node-version.*18" .github/workflows/ || true
+            grep -r "node-version.*20\|node-version.*18" .github/workflows/ --exclude="version-policy-enforcement.yml" || true
             exit 1
           fi
 
