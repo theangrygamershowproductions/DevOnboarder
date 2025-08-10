@@ -400,7 +400,7 @@ services:
     hostname: aar-ui.devonboarder.local
     restart: unless-stopped
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - AAR_UI_PORT=3000
       - CORS_ORIGINS=https://aar.theangrygamershow.com,http://localhost:5174
     networks:
