@@ -1,3 +1,7 @@
+# DevOnboarder Token Policy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+# Required for: Issue and PR automation, AAR workflow triggers
+# Purpose: Automates AAR generation for closed issues and merged PRs
+# DevOnboarder No Default Token Policy v1.0 compliance: Follows token hierarchy
 ---
 name: AAR Automation
 

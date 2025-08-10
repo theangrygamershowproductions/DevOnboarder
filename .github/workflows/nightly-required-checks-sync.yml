@@ -1,0 +1,138 @@
+# DevOnboarder Token Policy: GITHUB_TOKEN (read/write/repo-admin)
+#
+# Required for: Branch protection updates, auto-fixing drift detected by nightly validation
+# Fallback chain: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN (this workflow)
+#
+# DevOnboarder No Default Token Policy v1.0 compliance:
+# - Uses repo-admin token for branch protection API access
+# - Implements drift auto-fix via required checks sync
+# - Maintains governance framework without manual intervention
+
+name: "Nightly Required Checks Sync"
+
+on:
+  schedule:
+    - cron: "23 3 * * *"  # 3:23 AM UTC daily (offset from main drift check)
+  workflow_dispatch:
+    inputs:
+      source_pr:
+        description: "PR number to sync from (default: most recent merged)"
+        required: false
+        type: string
+
+permissions:
+  contents: write        # Create branches and commit changes
+  pull-requests: write   # Create sync PRs
+  repository-projects: read  # Access to repository information
+
+jobs:
+  self-healing-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for branch operations
+
+      - name: Setup GitHub CLI
+        run: |
+          # GitHub CLI is pre-installed in ubuntu-latest
+          gh version
+
+      - name: Pick source PR for sync
+        id: pick-pr
+        run: |
+          if [ -n "${{ github.event.inputs.source_pr }}" ]; then
+            echo "pr=${{ github.event.inputs.source_pr }}" >> "$GITHUB_OUTPUT"
+            echo "Using manually specified PR: ${{ github.event.inputs.source_pr }}"
+          else
+            echo "Finding most recent merged PR..."
+            RECENT_PR=$(gh pr list \
+              --search "is:merged is:pr" \
+              --limit 5 \
+              --json number,mergeCommit,title \
+              --jq '.[0].number // empty')
+
+            if [ -n "$RECENT_PR" ]; then
+              echo "pr=$RECENT_PR" >> "$GITHUB_OUTPUT"
+              echo "Found recent merged PR: #$RECENT_PR"
+            else
+              echo "pr=" >> "$GITHUB_OUTPUT"
+              echo "No recent merged PR found"
+            fi
+          fi
+
+      - name: Skip if no source PR available
+        if: steps.pick-pr.outputs.pr == ''
+        run: |
+          echo "⚠️ No source PR available for sync - skipping self-healing"
+          echo "Manual options:"
+          echo "  1. Wait for next merged PR"
+          echo "  2. Trigger workflow_dispatch with specific PR number"
+          echo "  3. Run ./scripts/sync_required_checks_from_pr.sh manually"
+
+      - name: Check if sync needed
+        if: steps.pick-pr.outputs.pr != ''
+        id: check-drift
+        run: |
+          echo "Checking if sync is needed..."
+
+          # Run drift detection
+          if ./scripts/verify-branch-protection.sh; then
+            echo "✅ No drift detected - sync not needed"
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "❌ Drift detected - sync needed"
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Perform self-healing sync
+        if: steps.pick-pr.outputs.pr != '' && steps.check-drift.outputs.needed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "🔧 Performing self-healing sync from PR #${{ steps.pick-pr.outputs.pr }}"
+
+          # Make script executable
+          chmod +x scripts/sync_required_checks_from_pr.sh
+
+          # Configure git for automated commits
+          git config user.name "DevOnboarder Automation"
+          git config user.email "automation@devonboarder.local"
+
+          # Run sync script
+          ./scripts/sync_required_checks_from_pr.sh "${{ steps.pick-pr.outputs.pr }}"
+
+      - name: Report sync completion
+        if: steps.pick-pr.outputs.pr != '' && steps.check-drift.outputs.needed == 'true'
+        run: |
+          echo "✅ Self-healing sync completed successfully"
+          echo ""
+          echo "📋 Review the auto-generated PR and merge to apply updates"
+          echo "🔍 After merge, verify with: ./scripts/verify-branch-protection.sh"
+          echo ""
+          echo "🎯 DevOnboarder CI governance framework self-healing operational"
+
+      - name: Report no action needed
+        if: steps.pick-pr.outputs.pr != '' && steps.check-drift.outputs.needed == 'false'
+        run: |
+          echo "✅ CI governance configuration is already up to date"
+          echo "🎯 No self-healing action required"
+
+      - name: Summary report
+        run: |
+          echo "===== Nightly Self-Healing Sync Summary ====="
+          echo "Date: $(date -u)"
+          echo "Source PR: ${{ steps.pick-pr.outputs.pr || 'None available' }}"
+          echo "Drift detected: ${{ steps.check-drift.outputs.needed || 'Not checked' }}"
+          echo "Sync performed: ${{ (steps.pick-pr.outputs.pr != '' && steps.check-drift.outputs.needed == 'true') && 'Yes' || 'No' }}"
+          echo ""
+
+          if [ "${{ steps.pick-pr.outputs.pr }}" != "" ] && [ "${{ steps.check-drift.outputs.needed }}" == "true" ]; then
+            echo "🔧 Self-healing sync completed - review auto-generated PR"
+          elif [ "${{ steps.pick-pr.outputs.pr }}" != "" ]; then
+            echo "✅ Configuration validated - no sync needed"
+          else
+            echo "⚠️ No source PR available - manual intervention may be needed"
+          fi

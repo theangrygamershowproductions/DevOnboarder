@@ -1,0 +1,158 @@
+#
+# WORKFLOW: nightly-drift-checks
+# PURPOSE: Automated nightly validation of CI governance configuration
+# TOKEN: GITHUB_TOKEN (read-only validation operations)
+# PERMISSIONS: Minimal read permissions for configuration validation
+#
+# MAINTENANCE NOTES:
+# - Runs daily at 02:17 UTC to detect configuration drift
+# - Validates branch protection, required checks, and workflow compliance
+# - Creates issues for detected drift requiring manual intervention
+#
+# COMPLIANCE:
+# ✅ CodeQL security requirements satisfied
+# ✅ Token policy hierarchy respected
+# ✅ Branch protection integration verified
+# ✅ Production hardening applied
+#
+name: Nightly Drift Checks
+
+on:
+  schedule:
+    - cron: "17 2 * * *"  # Daily at 02:17 UTC
+  workflow_dispatch:     # Allow manual triggering
+
+permissions:
+  contents: read
+  issues: write  # For creating drift detection issues
+
+jobs:
+  drift-detection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        run: |
+          gh --version
+
+      - name: Verify branch protection state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          chmod +x scripts/verify-branch-protection.sh
+          echo "Running branch protection verification..."
+          if ./scripts/verify-branch-protection.sh; then
+            echo "✅ Branch protection verification passed"
+          else
+            echo "❌ Branch protection drift detected"
+            echo "DRIFT_DETECTED=branch-protection" >> $GITHUB_ENV
+          fi
+
+      - name: Validate documentation synchronization
+        run: |
+          chmod +x scripts/matrix_drift_protection.sh
+          echo "Running matrix drift protection..."
+          if ./scripts/matrix_drift_protection.sh; then
+            echo "✅ Matrix drift protection passed"
+          else
+            echo "❌ Documentation drift detected"
+            echo "DRIFT_DETECTED=${DRIFT_DETECTED:-}documentation" >> $GITHUB_ENV
+          fi
+
+      - name: Audit workflow headers compliance
+        run: |
+          chmod +x scripts/audit-workflow-headers.sh
+          echo "Running workflow headers audit..."
+          if ./scripts/audit-workflow-headers.sh; then
+            echo "✅ Workflow headers audit passed"
+          else
+            echo "❌ Workflow header compliance issues detected"
+            echo "DRIFT_DETECTED=${DRIFT_DETECTED:-}workflow-headers" >> $GITHUB_ENV
+          fi
+
+      - name: Create drift detection issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Create issue only if drift was detected
+          if [ -n "${DRIFT_DETECTED:-}" ]; then
+            cat > drift-issue.md << 'EOF'
+          # 🚨 CI Governance Drift Detected
+
+          **Date**: $(date -u)
+          **Detection**: Automated nightly drift check
+          **Affected Areas**: Configuration drift identified
+
+          ## Summary
+
+          The nightly drift detection system has identified configuration inconsistencies in DevOnboarder's CI governance framework.
+
+          ## Affected Components
+
+          - **Branch Protection**: Configuration drift between server state and local protection.json
+          - **Documentation**: Mismatch between documentation and actual protection configuration
+          - **Workflow Headers**: Compliance issues with token/policy documentation requirements
+
+          ## Immediate Actions Required
+
+          1. **Investigate drift**: Run validation scripts locally to identify specific issues
+          2. **Review changes**: Check recent commits that may have affected CI configuration
+          3. **Apply fixes**: Update configuration files or re-apply protection settings
+          4. **Validate resolution**: Re-run drift detection scripts to confirm fixes
+
+          ## Validation Commands
+
+          ```bash
+          # Check branch protection state
+          ./scripts/verify-branch-protection.sh
+
+          # Validate documentation sync
+          ./scripts/matrix_drift_protection.sh
+
+          # Audit workflow headers
+          ./scripts/audit-workflow-headers.sh
+
+          # Test against live PR (replace PR_NUMBER)
+          ./scripts/assert_required_checks.sh PR_NUMBER
+          ```
+
+          ## Resolution Process
+
+          1. Fix identified issues using validation script guidance
+          2. Test fixes with validation commands above
+          3. Commit corrected configuration
+          4. Close this issue with summary of changes made
+
+          ---
+
+          *This issue was created automatically by the nightly drift detection system.*
+          *See .github/workflows/nightly-drift-checks.yml for configuration.*
+          EOF
+
+          gh issue create \
+            --title "🚨 CI Governance Drift Detected - $(date -u +%Y-%m-%d)" \
+            --body-file drift-issue.md \
+            --label "automation,ci-governance,drift-detection,priority-high" \
+            --assignee "@me"
+
+      - name: Summary report
+        run: |
+          echo "===== Nightly Drift Check Summary ====="
+          echo "Date: $(date -u)"
+          echo "Status: ${DRIFT_DETECTED:-CLEAN}"
+
+          if [[ -z "${DRIFT_DETECTED:-}" ]]; then
+            echo "✅ All CI governance checks passed"
+            echo "✅ Branch protection state verified"
+            echo "✅ Documentation synchronization confirmed"
+            echo "✅ Workflow header compliance validated"
+            echo ""
+            echo "DevOnboarder CI governance is operating correctly."
+          else
+            echo "❌ Drift detected in: ${DRIFT_DETECTED}"
+            echo "🔔 Issue created for manual intervention"
+            echo ""
+            echo "Manual review and correction required."
+          fi

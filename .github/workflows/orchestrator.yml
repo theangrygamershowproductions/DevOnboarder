@@ -3,7 +3,12 @@ on:
   workflow_dispatch:
   schedule: [{cron: '0 */6 * * *'}]
   pull_request: {types: [labeled, opened, synchronize]}
-permissions: {contents: write, pull-requests: write, issues: write}
+
+permissions:
+  contents: write        # ✅ Orchestration needs write access
+  pull-requests: write   # ✅ ORCHESTRATION_BOT_KEY authorized
+  issues: write         # ✅ ORCHESTRATION_BOT_KEY authorized
+  actions: read         # For workflow coordination
 env:
   CACHE_BUSTER: v-node22-py312
 jobs:

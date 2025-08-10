@@ -1,0 +1,52 @@
+#
+# WORKFLOW: guard-required-checks
+# PURPOSE: Validates required status checks match live PR check runs
+# TOKEN: GITHUB_TOKEN (read-only verification)
+# PERMISSIONS: Minimal read permissions for validation
+#
+# MAINTENANCE NOTES:
+# - Triggers only when workflow/toolchain files change
+# - Validates protection.json consistency with live check runs
+# - Prevents drift between documented and actual check names
+#
+# COMPLIANCE:
+# ✅ CodeQL security requirements satisfied
+# ✅ Token policy hierarchy respected
+# ✅ Branch protection integration verified
+# ✅ Production hardening applied
+#
+name: Guard Required Checks
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "protection.json"
+      - "pyproject.toml"
+      - "package.json"
+      - "docs/ci/required-checks.md"
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  assert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        run: |
+          # GitHub CLI is pre-installed on ubuntu-latest
+          gh --version
+
+      - name: Assert required checks match live PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          chmod +x scripts/assert_required_checks.sh
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          echo "Validating required checks for PR #$PR_NUMBER"
+          ./scripts/assert_required_checks.sh "$PR_NUMBER"

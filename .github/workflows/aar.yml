@@ -1,7 +1,11 @@
+# AAR System Validation
+# Token: None required (read-only validation)
+# Permissions: See .codex/bot-permissions.yaml - minimal read access only
 name: AAR System Validation
 
 permissions:
-  contents: read
+  contents: read          # AAR validation only needs read access
+  # No issues: write - this workflow only validates, doesn't create issues
 
 env:
   CACHE_BUSTER: v-node22-py312
