@@ -11,6 +11,14 @@ set -euo pipefail
 # Store the commit message
 COMMIT_MSG="$1"
 
+# Check if pre-commit is installed
+if ! command -v pre-commit >/dev/null 2>&1; then
+    echo "⚠️  pre-commit not found. Install with: pip install pre-commit"
+    echo "📋 For best experience, run once: pre-commit install"
+    echo "🔄 Falling back to standard safe commit..."
+    exec bash scripts/safe_commit.sh "$COMMIT_MSG"
+fi
+
 # Check if virtual environment is activated
 if [[ -z "${VIRTUAL_ENV:-}" ]]; then
     echo "Activating virtual environment..."

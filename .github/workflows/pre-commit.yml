@@ -1,0 +1,37 @@
+name: Pre-commit Validation
+
+on:
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    pre-commit:
+        runs-on: ubuntu-latest
+        name: Validate pre-commit hooks
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: '3.12'
+
+            - name: Set up virtual environment
+              run: |
+                  python -m venv .venv
+                  source .venv/bin/activate
+                  pip install -e .[test]
+
+            - name: Install pre-commit
+              run: |
+                  source .venv/bin/activate
+                  pip install pre-commit
+
+            - name: Run pre-commit hooks
+              run: |
+                  source .venv/bin/activate
+                  pre-commit run --all-files

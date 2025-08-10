@@ -1,5 +1,6 @@
 ---
 repos:
+    # 1) Language formatters FIRST
     - repo: https://github.com/psf/black
       rev: 25.1.0
       hooks:
@@ -11,13 +12,13 @@ repos:
       hooks:
           - id: ruff
             args: [--fix, --exit-non-zero-on-fix]
+          - id: ruff-format
     # prettier disabled to prevent root node_modules pollution
     # Use manual formatting: cd frontend && npx prettier --write "**/*.{json,yaml,yml}"
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v5.0.0
+    - repo: https://github.com/adrienverge/yamllint.git
+      rev: v1.37.0
       hooks:
-          - id: trailing-whitespace
-          - id: end-of-file-fixer
+          - id: yamllint
     - repo: https://github.com/shellcheck-py/shellcheck-py
       rev: v0.10.0.1
       hooks:
@@ -33,10 +34,15 @@ repos:
       rev: v0.18.1
       hooks:
           - id: markdownlint-cli2
-    - repo: https://github.com/adrienverge/yamllint.git
-      rev: v1.37.0
+
+    # 2) Whitespace LAST, fail-only (no edits)
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
       hooks:
-          - id: yamllint
+          - id: end-of-file-fixer
+          - id: trailing-whitespace
+            args: [--markdown-linebreak-ext=md]   # allow Markdown double-space linebreaks
+            stages: [commit]                      # run at commit stage
     - repo: local
       hooks:
           - id: terminal-output-policy
