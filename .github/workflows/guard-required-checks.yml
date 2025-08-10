@@ -10,10 +10,10 @@
 # - Prevents drift between documented and actual check names
 #
 # COMPLIANCE:
-# ✅ CodeQL security requirements satisfied
-# ✅ Token policy hierarchy respected
-# ✅ Branch protection integration verified
-# ✅ Production hardening applied
+# CodeQL security requirements satisfied
+# Token policy hierarchy respected
+# Branch protection integration verified
+# Production hardening applied
 #
 name: Guard Required Checks
 

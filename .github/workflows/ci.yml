@@ -23,8 +23,8 @@ concurrency:
 
 permissions:
     contents: read          # Base access (write only when needed)
-    issues: write          # ✅ CI_ISSUE_AUTOMATION_TOKEN authorized
-    pull-requests: write   # ✅ CI_ISSUE_AUTOMATION_TOKEN authorized
+    issues: write          # CI_ISSUE_AUTOMATION_TOKEN authorized
+    pull-requests: write   # CI_ISSUE_AUTOMATION_TOKEN authorized
     actions: read          # For workflow monitoring
 
 jobs:
@@ -759,7 +759,7 @@ jobs:
               if: always()
               run: bash scripts/enforce_output_location.sh
 
-# PRODUCTION HARDENING COMPLETE ✅
+# PRODUCTION HARDENING COMPLETE
 # This workflow meets DevOnboarder Universal Workflow Permissions Policy
 # Token usage aligns with No Default Token Policy v1.0
 # Required status checks documented in docs/ci/required-checks.md
