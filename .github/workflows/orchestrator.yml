@@ -49,8 +49,6 @@ jobs:
             echo "Environment docs audit not found, skipping"
           fi
       - name: Orchestrator dry-run (sanity)
-        env:
-          CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
         run: |
           python - << 'PY'
           import yaml, json, os
