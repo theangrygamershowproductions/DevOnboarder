@@ -69,6 +69,7 @@ jobs:
           fi
       - name: Orchestrator dry-run (sanity)
         run: |
+          source .venv/bin/activate
           python - << 'PY'
           import yaml, json, os
           config_path = '.codex/orchestrator/config.yml'
