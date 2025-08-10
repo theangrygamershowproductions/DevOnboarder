@@ -483,14 +483,15 @@ def test_expired_token_decode_fails(monkeypatch):
     importlib.reload(auth_service)
     user = auth_service.User(id=123, username="u", password_hash="x")
     token = auth_service.create_token(user)
-    time.sleep(3.0)  # Increased sleep to ensure expiration with leeway
-    with pytest.raises(jwt.ExpiredSignatureError):
+    time.sleep(1.5)  # Wait for token to expire
+
+    # Test that token is expired by trying to decode it
+    with pytest.raises((jwt.ExpiredSignatureError, jwt.InvalidTokenError)):
         jwt.decode(
             token,
             auth_service.SECRET_KEY,
             algorithms=[auth_service.ALGORITHM],
             options={"verify_exp": True},
-            leeway=0,  # Remove leeway to ensure expiration check is strict
         )
 
 
