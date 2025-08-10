@@ -1,5 +1,8 @@
 name: Version Policy Audit
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     branches: [main]

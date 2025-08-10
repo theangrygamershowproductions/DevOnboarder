@@ -1,5 +1,8 @@
 name: CI Doctor - Version Policy Diagnostics
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     branches: [main]
