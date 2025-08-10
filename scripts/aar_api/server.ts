@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const execFileAsync = promisify(execFile);
 
 const app = express();
-const PORT = process.env.AAR_UI_PORT || 3000;
+const PORT = parseInt(process.env.AAR_UI_PORT || '3000', 10);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middleware
