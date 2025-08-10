@@ -42,7 +42,7 @@ repos:
           - id: end-of-file-fixer
           - id: trailing-whitespace
             args: [--markdown-linebreak-ext=md]   # allow Markdown double-space linebreaks
-            stages: [commit]                      # run at commit stage
+            stages: [pre-commit]                      # run at commit stage
     - repo: local
       hooks:
           - id: terminal-output-policy
