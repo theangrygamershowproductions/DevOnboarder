@@ -52,6 +52,7 @@ test = [
     "pytest-asyncio",
     "requests",
     "pyyaml",
+    "yamllint",
     "jsonschema",
     "black",
     "openapi-spec-validator",
