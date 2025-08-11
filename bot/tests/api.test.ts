@@ -22,6 +22,7 @@ afterEach(() => {
     mockedFetch.mockReset();
     global.fetch = originalFetch;
     delete process.env.BOT_JWT;
+    delete process.env.API_BASE_URL;
     jest.restoreAllMocks();
 });
 
@@ -99,4 +100,52 @@ test("network errors are logged and rethrown", async () => {
         "Network error while requesting /api/user/level?username=frank:",
         error,
     );
+});
+
+test("uses default baseUrl when API_BASE_URL is not set", async () => {
+    // Mock the module to test the fallback behavior
+    jest.resetModules(); // Clear module cache
+    const originalEnv = process.env.API_BASE_URL;
+    delete process.env.API_BASE_URL;
+
+    // Re-import the module so it re-evaluates the baseUrl constant
+    const { getUserLevel: freshGetUserLevel } = require("../src/api");
+
+    mockedFetch.mockResolvedValue(mockResponse({ level: 2 }));
+    await freshGetUserLevel("defaultUser", "tok");
+
+    expect(mockedFetch).toHaveBeenCalledWith(
+        "http://localhost:8001/api/user/level?username=defaultUser",
+        expect.objectContaining({ headers: { Authorization: "Bearer tok" } }),
+    );
+
+    // Restore original environment
+    if (originalEnv) {
+        process.env.API_BASE_URL = originalEnv;
+    }
+});
+
+test("uses custom baseUrl when API_BASE_URL is set", async () => {
+    // Mock the module to test custom baseUrl behavior
+    jest.resetModules(); // Clear module cache
+    const originalEnv = process.env.API_BASE_URL;
+    process.env.API_BASE_URL = "https://custom-api.example.com";
+
+    // Re-import the module so it re-evaluates the baseUrl constant
+    const { getUserLevel: customGetUserLevel } = require("../src/api");
+
+    mockedFetch.mockResolvedValue(mockResponse({ level: 4 }));
+    await customGetUserLevel("customUser", "tok");
+
+    expect(mockedFetch).toHaveBeenCalledWith(
+        "https://custom-api.example.com/api/user/level?username=customUser",
+        expect.objectContaining({ headers: { Authorization: "Bearer tok" } }),
+    );
+
+    // Restore original environment
+    if (originalEnv) {
+        process.env.API_BASE_URL = originalEnv;
+    } else {
+        delete process.env.API_BASE_URL;
+    }
 });
