@@ -7,10 +7,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Set up test environment variables before importing auth_service
-os.environ.setdefault("APP_ENV", "development")
+os.environ["APP_ENV"] = "testing"  # Force testing mode
 os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key-for-testing")
-# Use logs directory for test database to avoid root pollution
-os.environ.setdefault("DATABASE_URL", "sqlite:///logs/test.db")
+# Remove any DATABASE_URL override to let environment system work
+if "DATABASE_URL" in os.environ:
+    del os.environ["DATABASE_URL"]
+# Remove any CORS override to let environment system work
+if "CORS_ALLOW_ORIGINS" in os.environ:
+    del os.environ["CORS_ALLOW_ORIGINS"]
 os.environ.setdefault("DISCORD_TOKEN", "test-discord-token")
 os.environ.setdefault("DISCORD_GUILD_ID", "12345")
 

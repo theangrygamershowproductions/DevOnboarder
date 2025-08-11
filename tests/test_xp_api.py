@@ -111,6 +111,7 @@ def test_health_and_security_headers():
     resp = client.get("/health")
     assert resp.json() == {"status": "ok"}
     assert resp.headers["X-Content-Type-Options"] == "nosniff"
+    # In testing environment, CORS should allow everything
     assert resp.headers["Access-Control-Allow-Origin"] == "*"
 
 

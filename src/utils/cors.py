@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-import os
+from .environment import get_cors_origins as env_get_cors_origins
 
 
 def get_cors_origins() -> list[str]:
-    """Return allowed CORS origins from the environment."""
-    origins = os.getenv("CORS_ALLOW_ORIGINS")
-    if origins:
-        return [o.strip() for o in origins.split(",") if o.strip()]
-    if os.getenv("APP_ENV") == "development":
-        return ["*"]
-    return []
+    """Return allowed CORS origins from the environment.
+    This function maintains backward compatibility while leveraging
+    the new comprehensive environment system.
+    """
+    return env_get_cors_origins()

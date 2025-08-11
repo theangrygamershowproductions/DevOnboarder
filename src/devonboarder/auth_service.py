@@ -1,19 +1,16 @@
 """Authentication service with Discord integration and JWT utilities."""
 
 from __future__ import annotations
+import os
+import time
+import logging
 from typing import Optional
-
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.responses import RedirectResponse
-
-from utils.discord import get_user_roles, get_user_profile
-from utils.roles import resolve_user_flags
-from utils.cors import get_cors_origins
 from urllib.parse import urlencode, urlparse, unquote
+
 import httpx
+import jwt
+from jwt.exceptions import InvalidTokenError
+from passlib.context import CryptContext
 from sqlalchemy import (
     Column,
     Integer,
@@ -23,12 +20,16 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
-from passlib.context import CryptContext
-import jwt
-from jwt.exceptions import InvalidTokenError
-import os
-import time
-import logging
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import RedirectResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+
+from utils.discord import get_user_roles, get_user_profile
+from utils.roles import resolve_user_flags
+from utils.cors import get_cors_origins
+from utils.environment import get_database_url
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -132,7 +133,7 @@ API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 CONTRIBUTION_XP = 50
 
 Base = declarative_base()
-_db_url = os.getenv("DATABASE_URL", "sqlite:///./auth.db")
+_db_url = get_database_url()
 _engine_kwargs = (
     {"connect_args": {"check_same_thread": False}}
     if _db_url.startswith("sqlite")

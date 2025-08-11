@@ -186,7 +186,27 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    # See docs/cli-shortcuts.md for full shell integration guide
    ```
 
-4. **Use safe commit workflow**:
+4. **Configure environment mode** (NEW - 5 Environment System):
+
+   ```bash
+   # Edit .env file to set environment mode (defaults to development)
+   # APP_ENV=testing      # Unit tests with fast cycles
+   # APP_ENV=ci          # CI pipelines with detailed logging  
+   # APP_ENV=debug       # Debug mode with maximum verbosity
+   # APP_ENV=development # Local development (DEFAULT)
+   # APP_ENV=production  # Production with security-first config
+
+   # Check current environment
+   python -c "
+   import sys; sys.path.insert(0, 'src')
+   from utils.environment import get_environment
+   print(f'Current environment: {get_environment()}')
+   "
+
+   # Quick reference: docs/ENVIRONMENT_QUICK_START.md
+   ```
+
+5. **Use safe commit workflow**:
 
    ```bash
    # Preferred: Enhanced safe commit (zero whitespace drama)
@@ -196,13 +216,13 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    bash scripts/safe_commit.sh "feat: your change description"
    ```
 
-5. Run locally:
+6. Run locally:
 
    ```bash
    docker compose up -d
    ```
 
-6. **Optional**: Enable CLI shortcuts:
+7. **Optional**: Enable CLI shortcuts:
 
    ```bash
    # If you have DevOnboarder .zshrc integration:
@@ -211,13 +231,13 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
    gh-ci-health         # Quick CI check
    ```
 
-7. Run tests:
+8. Run tests:
 
    ```bash
    ./scripts/run_tests.sh
    ```
 
-8. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
+9. You're live 🎉 – Check [docs/README.md](docs/README.md) for full agent + CI logic.
 
 ### Common Issues
 

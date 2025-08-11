@@ -128,6 +128,45 @@ bash scripts/generate_potato_report.sh
 
 ### 2.2 Environment Configuration
 
+#### Environment Mode Setup (NEW - 5 Environment System)
+
+DevOnboarder supports 5 environment modes for different use cases. Configure by editing your `.env` file:
+
+```bash
+# Edit .env file to set environment mode
+# APP_ENV=testing      # Unit tests with fast cycles
+# APP_ENV=ci          # CI pipelines with detailed logging  
+# APP_ENV=debug       # Debug mode with maximum verbosity
+# APP_ENV=development # Local development (DEFAULT)
+# APP_ENV=production  # Production with security-first config
+
+# Current setting (check your .env file):
+grep "APP_ENV=" .env
+
+# Example: Switch to testing mode
+sed -i 's/APP_ENV=.*/APP_ENV=testing/' .env
+
+# Verify environment detection
+source .venv/bin/activate
+python -c "
+import sys; sys.path.insert(0, 'src')
+from utils.environment import get_environment
+print(f'Current environment: {get_environment()}')
+"
+```
+
+**Quick Reference**:
+
+- `testing` - SQLite, 60s tokens, WARNING logs (unit tests)
+- `ci` - SQLite, 5min tokens, INFO logs (CI pipelines)  
+- `debug` - SQLite, 1h tokens, DEBUG logs (troubleshooting)
+- `development` - PostgreSQL, 1h tokens, INFO logs (local dev)
+- `production` - PostgreSQL, 30min tokens, ERROR logs (production)
+
+For complete details: `docs/ENVIRONMENT_QUICK_START.md`
+
+#### Traditional Environment Setup
+
 ```bash
 # Bootstrap development environment
 bash scripts/bootstrap.sh
