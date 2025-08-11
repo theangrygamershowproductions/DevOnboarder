@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Audit Workflow Headers - Ensures every workflow declares token usage and policy compliance
-set -euo pipefail
+set -eo pipefail  # Removed -u (nounset) temporarily to debug
 
 echo "===== Audit Workflow Headers ====="
 echo "Checking all workflows for required header documentation..."
@@ -56,10 +56,14 @@ check_workflow_headers() {
 
     if [[ $issues -eq 0 ]]; then
         echo "  TARGET FULLY COMPLIANT"
-        ((compliant_workflows++))
+        # Use temporary variable to avoid set -u issues
+        local temp_compliant=$((compliant_workflows + 1))
+        compliant_workflows=$temp_compliant
     else
         echo "  WARNING $issues compliance issues found"
-        ((fail += issues))
+        # Use temporary variable to avoid set -u issues
+        local temp_fail=$((fail + issues))
+        fail=$temp_fail
     fi
 
     return $issues
@@ -70,8 +74,10 @@ echo "Scanning .github/workflows/ directory..."
 
 for workflow_file in .github/workflows/*.yml .github/workflows/*.yaml; do
     if [[ -f "$workflow_file" ]]; then
+        set +e  # Temporarily disable exit on error
         check_workflow_headers "$workflow_file"
-        ((total_workflows++))
+        set -e  # Re-enable exit on error
+        total_workflows=$((total_workflows + 1))
     fi
 done
 
