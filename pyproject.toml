@@ -51,6 +51,7 @@ test = [
     "pytest-cov",
     "pytest-asyncio",
     "requests",
+    "types-requests",
     "pyyaml",
     "yamllint",
     "jsonschema",

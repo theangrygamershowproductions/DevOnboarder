@@ -71,7 +71,7 @@ def get_roles(
         raise HTTPException(status_code=404, detail="User not found")
 
     try:
-        roles = get_user_roles(user.discord_token)
+        roles = get_user_roles(str(user.discord_token))
     except httpx.TimeoutException as exc:
         raise HTTPException(status_code=504, detail="Discord API timeout") from exc
 
@@ -85,7 +85,7 @@ def create_app() -> FastAPI:
     cors_origins = get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
-        async def dispatch(self, request, call_next):  # type: ignore[override]
+        async def dispatch(self, request, call_next):
             resp = await call_next(request)
             resp.headers.setdefault("X-Content-Type-Options", "nosniff")
             resp.headers.setdefault(
