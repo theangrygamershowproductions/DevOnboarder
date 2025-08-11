@@ -376,7 +376,7 @@ run_step "Verify Services" "docker compose -f docker-compose.ci.yaml --env-file 
 run_step "Service Diagnostics" "python -m diagnostics"
 
 # CORS and security headers check
-run_step "Security Headers" "python scripts/check_headers.py"
+run_step "Security Headers" "env -i PATH=\"\$PATH\" bash -c 'set -a; source .env.ci; set +a; python scripts/check_headers.py'"
 
 start_section "ADVANCED FRONTEND TESTING" "e2e"
 
