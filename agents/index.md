@@ -59,6 +59,9 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | AUTH_PORT                     | Port for the authentication service |
 | AUTH_SECRET_KEY               |  |
 | AUTH_URL                      | Auth service URL for Playwright tests |
+| AUTH_URL_CI                   | Auth service URL for CI environment |
+| AUTH_URL_DEV                  | Auth service URL for development environment |
+| AUTH_URL_PROD                 | Auth service URL for production environment |
 | BACKEND_PORT                  | Port for the backend API service |
 | BOT_API_URL                   | API URL for bot-to-backend communication |
 | BOT_JWT                       | JWT used by the bot for API calls |
@@ -73,6 +76,9 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | CI_ISSUE_TOKEN                | Token used to open CI failure issues |
 | CODEX_DRY_RUN                 | Enable dry-run mode for Codex operations |
 | CORS_ALLOW_ORIGINS            | Comma-separated list of allowed CORS origins |
+| CORS_ALLOW_ORIGINS_CI         | CORS origins for CI environment |
+| CORS_ALLOW_ORIGINS_DEV        | CORS origins for development environment |
+| CORS_ALLOW_ORIGINS_PROD       | CORS origins for production environment |
 | DATABASE_URL                  | Postgres connection string |
 | DEBUG                         | Enable debug logging and features |
 | DEV_ORCHESTRATION_BOT_KEY     | Secret token for development orchestrator |
@@ -95,6 +101,9 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | DISCORD_PROD_GUILD_ID         | Discord guild ID for production environment |
 | DISCORD_PUBLIC_KEY            |  |
 | DISCORD_REDIRECT_URI          | OAuth callback URL for Discord |
+| DISCORD_REDIRECT_URI_CI       | Discord OAuth callback URL for CI environment |
+| DISCORD_REDIRECT_URI_DEV      | Discord OAuth callback URL for development environment |
+| DISCORD_REDIRECT_URI_PROD     | Discord OAuth callback URL for production environment |
 | DISCORD_TOKEN                 | Primary Discord authentication token |
 | DISCORD_WEBHOOK_URL           | Webhook URL for Discord notifications |
 | EDUCATION_ROLE_ID             | Role for school or university affiliation |
@@ -144,6 +153,9 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 | VITE_ALLOWED_HOST_PROD        |  |
 | VITE_API_URL                  | XP API URL for the frontend |
 | VITE_AUTH_URL                 | Auth service URL for the frontend |
+| VITE_AUTH_URL_CI              | Frontend auth service URL for CI environment |
+| VITE_AUTH_URL_DEV             | Frontend auth service URL for development environment |
+| VITE_AUTH_URL_PROD            | Frontend auth service URL for production environment |
 | VITE_DASHBOARD_URL            |  |
 | VITE_DISCORD_CLIENT_ID        | Discord client ID for the frontend |
 | VITE_DISCORD_INTEGRATION_URL  |  |
