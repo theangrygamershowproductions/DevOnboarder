@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
@@ -11,6 +12,17 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate limiting middleware
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
+
 // CORS configuration
 app.use(cors({
   origin: process.env.CORS_ORIGIN || ['http://localhost:5173', 'http://localhost:3000'],
@@ -20,7 +32,7 @@ app.use(cors({
 app.use(express.json());
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'aar-core' });
 });
 
@@ -62,6 +74,18 @@ const aarSchema = z.object({
   })).optional()
 });
 
+// Input validation helpers
+const validateId = (id: string): boolean => {
+  // Only allow alphanumeric characters, hyphens, and underscores
+  // Prevent path traversal attempts
+  if (!id || typeof id !== 'string') {
+    return false;
+  }
+
+  const sanitizedId = id.replace(/[^a-zA-Z0-9\-_]/g, '');
+  return sanitizedId === id && id.length > 0 && id.length <= 100;
+};
+
 // Get AAR data directory path
 const getAARDataPath = () => {
   const possiblePaths = [
@@ -79,8 +103,17 @@ const getAARDataPath = () => {
   throw new Error('AAR data directory not found');
 };
 
+// More restrictive rate limiting for file system access endpoints
+const fileAccessLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 30, // Limit each IP to 30 file access requests per windowMs
+  message: 'Too many file access requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // List all AAR files
-app.get('/api/aars', (req, res) => {
+app.get('/api/aars', fileAccessLimiter, (_req, res) => {
   try {
     const dataPath = getAARDataPath();
     const files = readdirSync(dataPath)
@@ -105,9 +138,15 @@ app.get('/api/aars', (req, res) => {
 });
 
 // Get specific AAR by ID
-app.get('/api/aars/:id', (req, res) => {
+app.get('/api/aars/:id', fileAccessLimiter, (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validate and sanitize the ID parameter
+    if (!validateId(id)) {
+      return res.status(400).json({ error: 'Invalid AAR ID format' });
+    }
+
     const dataPath = getAARDataPath();
     const filePath = join(dataPath, `${id}.aar.json`);
 
@@ -118,14 +157,14 @@ app.get('/api/aars/:id', (req, res) => {
     const content = JSON.parse(readFileSync(filePath, 'utf-8'));
     const validatedContent = aarSchema.parse(content);
 
-    res.json(validatedContent);
+    return res.json(validatedContent);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: 'Invalid AAR format', details: error.errors });
     }
 
     console.error('Error reading AAR:', error);
-    res.status(500).json({ error: 'Failed to read AAR file' });
+    return res.status(500).json({ error: 'Failed to read AAR file' });
   }
 });
 
@@ -133,7 +172,7 @@ app.get('/api/aars/:id', (req, res) => {
 app.post('/api/aars/validate', (req, res) => {
   try {
     const validatedData = aarSchema.parse(req.body);
-    res.json({ valid: true, data: validatedData });
+    return res.json({ valid: true, data: validatedData });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
@@ -145,18 +184,18 @@ app.post('/api/aars/validate', (req, res) => {
       });
     }
 
-    res.status(500).json({ error: 'Validation failed' });
+    return res.status(500).json({ error: 'Validation failed' });
   }
 });
 
 // Error handling middleware
-app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Unhandled error:', error);
   res.status(500).json({ error: 'Internal server error' });
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 

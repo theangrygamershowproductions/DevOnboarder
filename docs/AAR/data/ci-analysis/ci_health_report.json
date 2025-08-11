@@ -1,0 +1,20 @@
+{
+  "ci_health_report": {
+    "version": "1.0",
+    "framework": "Phase 4: CI Triage Guard Enhancement",
+    "virtual_env": "/home/potato/DevOnboarder/.venv",
+    "metrics": {
+      "collection_time": "2025-08-10T20:07:26.288633",
+      "period_days": 7,
+      "start_date": "2025-08-03T20:07:26.288633",
+      "end_date": "2025-08-10T20:07:26.288633",
+      "workflow_runs": [],
+      "summary_stats": {},
+      "health_score": 0.0,
+      "alerts": [],
+      "error": "Command '['gh', 'run', 'list', '--limit', '100', '--json', 'status,conclusion,createdAt,updatedAt,workflowName,displayTitle,url,id']' returned non-zero exit status 1."
+    },
+    "recommendations": [],
+    "next_monitoring": "2025-08-11T02:07:26.436459"
+  }
+}
