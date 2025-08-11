@@ -56,7 +56,7 @@ jobs:
         run: |
           echo " NO_SHORTCUTS_POLICY: Enforcing documentation quality"
           source .venv/bin/activate
-          if ! python -m vale docs/; then
+          if ! bash scripts/check_docs.sh; then
             echo "BLOCKED: BLOCKED: Documentation quality standards not met"
             echo "INFO: Vale configuration: .vale.ini"
             echo " Writing guide: docs/writing-style-guide.md"

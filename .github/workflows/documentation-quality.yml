@@ -58,8 +58,11 @@ jobs:
         run: |
           source .venv/bin/activate
           echo "Running Vale documentation quality checks..."
-          python -m vale docs/ > logs/vale-results.log 2>&1 || true
-          cat logs/vale-results.log
+          bash scripts/check_docs.sh || true
+          if [ -f logs/vale-results.json ]; then
+            echo "Vale results:"
+            cat logs/vale-results.json
+          fi
         continue-on-error: true
 
       - name: Check Potato Policy compliance
