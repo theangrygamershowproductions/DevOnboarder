@@ -1,0 +1,31 @@
+# DevOnboarder Known Errors Database
+# This file tracks recurring error patterns for automated resolution
+# Schema: error_code, error_message, hits, solution, date_added, auto_fix
+
+- error_code: "PRECOMMIT_TEST_DB_CYCLE"
+  error_message: "test_devonboarder.db causing pre-commit hook cycling"
+  hits: 0
+  solution: "git reset HEAD test_devonboarder.db"
+  date_added: "2025-08-11T15:30:00"
+  auto_fix: true
+
+- error_code: "SC2218_UNICODE"
+  error_message: "shellcheck SC2218 function definition order with Unicode corruption"
+  hits: 0
+  solution: "bash scripts/fix_unicode_corruption.sh"
+  date_added: "2025-08-11T15:30:00"
+  auto_fix: false
+
+- error_code: "MD022_HEADERS"
+  error_message: "markdownlint MD022 headers need blank lines"
+  hits: 0
+  solution: "npx markdownlint-cli2 --fix"
+  date_added: "2025-08-11T15:30:00"
+  auto_fix: true
+
+- error_code: "PYTEST_CACHE_POLLUTION"
+  error_message: "pytest cache files in repository root"
+  hits: 0
+  solution: "bash scripts/clean_pytest_artifacts.sh"
+  date_added: "2025-08-11T15:30:00"
+  auto_fix: true

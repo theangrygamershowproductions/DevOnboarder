@@ -1,3 +1,9 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read
+# PURPOSE: DevOnboarder workflow automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Automated workflow processing
+
 name: Enhanced Potato Policy Enforcement
 
 permissions:

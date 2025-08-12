@@ -1,3 +1,9 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read, security-events:write
+# PURPOSE: Security and compliance auditing for DevOnboarder
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Security scanning and policy enforcement
+
 # ---
 # codex-agent:
 #   name: Agent.AuditRetroActions

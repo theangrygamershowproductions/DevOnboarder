@@ -1,0 +1,960 @@
+2025-08-12T00:17:52.927695 black....................................................................Passed
+2025-08-12T00:17:52.927695 ruff (legacy alias)......................................................Passed
+2025-08-12T00:17:52.927695 trim trailing whitespace.................................................Passed
+2025-08-12T00:17:52.927695 fix end of files.........................................................Passed
+2025-08-12T00:17:52.927695 shellcheck...............................................................Failed
+2025-08-12T00:17:52.927695 - hook id: shellcheck
+2025-08-12T00:17:52.927695 - exit code: 1
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 9:
+2025-08-12T00:17:52.927695 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+2025-08-12T00:17:52.927695 ^----------^ SC2034 (warning): PROJECT_ROOT appears unused. Verify use (or export if used externally).
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 172:
+2025-08-12T00:17:52.927695     local safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T00:17:52.927695           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 261:
+2025-08-12T00:17:52.927695     local safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T00:17:52.927695           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 362:
+2025-08-12T00:17:52.927695     local safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T00:17:52.927695           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 588:
+2025-08-12T00:17:52.927695     local total_aars=$(find .aar -name "*.md" -not -name "index.md" -not -path ".aar/templates/*" 2>/dev/null | wc -l)
+2025-08-12T00:17:52.927695           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 589:
+2025-08-12T00:17:52.927695     local current_quarter_aars=$(find ".aar/$YEAR/$QUARTER" -name "*.md" 2>/dev/null | wc -l)
+2025-08-12T00:17:52.927695           ^------------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 595:
+2025-08-12T00:17:52.927695     local issue_aars=$(find ".aar/$YEAR/$QUARTER/issues" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No issue AARs yet")
+2025-08-12T00:17:52.927695           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 596:
+2025-08-12T00:17:52.927695     local sprint_aars=$(find ".aar/$YEAR/$QUARTER/sprints" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No sprint AARs yet")
+2025-08-12T00:17:52.927695           ^---------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 597:
+2025-08-12T00:17:52.927695     local incident_aars=$(find ".aar/$YEAR/$QUARTER/incidents" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No incident AARs yet")
+2025-08-12T00:17:52.927695           ^-----------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 In scripts/generate_aar.sh line 598:
+2025-08-12T00:17:52.927695     local automation_aars=$(find ".aar/$YEAR/$QUARTER/automation" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No automation AARs yet")
+2025-08-12T00:17:52.927695           ^-------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 For more information:
+2025-08-12T00:17:52.927695   https://www.shellcheck.net/wiki/SC2034 -- PROJECT_ROOT appears unused. Veri...
+2025-08-12T00:17:52.927695   https://www.shellcheck.net/wiki/SC2155 -- Declare and assign separately to ...
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 codespell................................................................Passed
+2025-08-12T00:17:52.927695 markdownlint-cli2........................................................Failed
+2025-08-12T00:17:52.927695 - hook id: markdownlint-cli2
+2025-08-12T00:17:52.927695 - exit code: 1
+2025-08-12T00:17:52.927695
+2025-08-12T00:17:52.927695 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T00:17:52.927695 Finding: docs/ci-env-vars.md docs/bot-types.md codex/prompts/ci_resilience_hardening.md docs/codex-e2e-report.md templates/potato-report.md docs/git/Git.md agents/ci-bot.md agents/branch-cleanup.md SETUP.md reports/pr_968_merge_completion_report.md docs/tasks/doc_lint_debt.md docs/tags_integration.md .github/PR_SUMMARY_TEMPLATE.md docs/discord/configuration.md reports/pr_968_mission_accomplished.md docs/merge-checklist.md codex.plan.md infra/blueprint-laramie.md scripts/README.md README.md docs/phase4-ci-triage-guard.md agents/llama2-agile-helper.md docs/offline-setup.md .codex/agents/diagnostics-bot.md docs/KEKB.md codex/prompts/dependency_inventory.md .github/ISSUE_TEMPLATE/secret-alignment.md docs/fips-golang.md .github/instructions/copilot-instructions.md docs/markdown-best-practices.md docs/potato-policy-aar.md docs/quality-control-95-rule.md CODE_OF_CONDUCT.md agents/agent-maintenance.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T00:17:52.927695 Linting: 204 file(s)
+2025-08-12T00:17:52.927695 Summary: 14 error(s)
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T00:17:52.927695 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T00:17:52.927695 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T00:17:52.927695 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T00:17:52.927695 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T00:17:52.927695 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T00:17:52.927695 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T00:17:52.927695 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T00:17:52.927695 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T00:17:52.927695 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T00:17:52.927695 Finding: docs/first-pr-guide.md docs/ci-first-policy.md ISSUE_RESOLUTION_SUMMARY.md docs/prd/feedback-dashboard.md docs/e2e-tests.md bot/README.md MISSION_ACCOMPLISHED_SUMMARY.md FOUNDERS.md docs/security-audit-2025-06-21.md agents/onboarding-agent.md docs/phase-3-root-artifact-guard-plan.md docs/ci-workflow-analysis-report.md .aar/2025/Q3/incidents/incident-2025-07-30.md reports/pr_966_closure_summary.md docs/checklists/ci-checklist-snippet.md PROJECT_RESOLUTION_SUMMARY.md .aar/index.md agents/dev-orchestrator.md .codex/Agents.md agents/prod-orchestrator.md agents/templates/agent-spec-template.md reports/cli_failure_response_complete.md docs/task-management.md docs/endpoint-reference.md phase4-ci-triage-guard-complete.md docs/Agents.md .codex/agents/ai-mentor.md CONTRIBUTING.md docs/dependencies.md tests/README.md docs/network-exception-list.md docs/ci-failure-issues.md docs/ci-infrastructure-repair-epic.md COMMIT_HELP.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T00:17:52.927695 Linting: 204 file(s)
+2025-08-12T00:17:52.927695 Summary: 14 error(s)
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T00:17:52.927695 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T00:17:52.927695 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T00:17:52.927695 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T00:17:52.927695 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T00:17:52.927695 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T00:17:52.927695 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T00:17:52.927695 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T00:17:52.927695 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T00:17:52.927695 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T00:17:52.927695 Finding: prompts/devonboarder_integration_task.md ci-status-demo.md docs/ONBOARDING.md PR_SUMMARY.md infra/README.md codex/agents/validate-permissions.md .codex/agents/tags/ci_root_artifact_guard.md metrics/llama2-usage.md SECURITY.md docs/standards/centralized-logging-policy.md docs/checklists/retros/2025-07-22-roadmap-documentation.md ALPHA_TESTERS.md .github/copilot-instructions.md phase5-advanced-orchestration.md docs/service-status.md CI_RESOLUTION_REPORT.md AUTOMATION_INTEGRATION_SUMMARY.md infra/blueprint-aurora.md docs/checklists/retrospective-template.md .codex/checklists/triage_reports/2025-07-28_execution_success.md docs/enhanced-logging-setup.md docs/ROADMAP.md docs/ubuntu-setup.md .codex/agents/management-ingest.md docs/git-guidelines.md codex/agents/review-known-errors.md docs/troubleshooting.md .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md docs/builder_ethics_dossier.md agents/ci-monitor.md BRANCH_CLEANUP_ANALYSIS.md archive/docs/pull_request_template.md docs/pull-request-success.md CI_CORRECTION_REPORT.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T00:17:52.927695 Linting: 204 file(s)
+2025-08-12T00:17:52.927695 Summary: 14 error(s)
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T00:17:52.927695 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T00:17:52.927695 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T00:17:52.927695 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T00:17:52.927695 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T00:17:52.927695 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T00:17:52.927695 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T00:17:52.927695 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 black....................................................................Passed
+2025-08-12T02:33:33.409823 ruff (legacy alias)......................................................Passed
+2025-08-12T02:33:33.409823 trim trailing whitespace.................................................Passed
+2025-08-12T02:33:33.409823 fix end of files.........................................................Passed
+2025-08-12T02:33:33.409823 shellcheck...............................................................Failed
+2025-08-12T02:33:33.409823 - hook id: shellcheck
+2025-08-12T02:33:33.409823 - exit code: 1
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 9:
+2025-08-12T02:33:33.409823 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+2025-08-12T02:33:33.409823 ^----------^ SC2034 (warning): PROJECT_ROOT appears unused. Verify use (or export if used externally).
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 172:
+2025-08-12T02:33:33.409823     local safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:33:33.409823           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 261:
+2025-08-12T02:33:33.409823     local safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:33:33.409823           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 362:
+2025-08-12T02:33:33.409823     local safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:33:33.409823           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 588:
+2025-08-12T02:33:33.409823     local total_aars=$(find .aar -name "*.md" -not -name "index.md" -not -path ".aar/templates/*" 2>/dev/null | wc -l)
+2025-08-12T02:33:33.409823           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 589:
+2025-08-12T02:33:33.409823     local current_quarter_aars=$(find ".aar/$YEAR/$QUARTER" -name "*.md" 2>/dev/null | wc -l)
+2025-08-12T02:33:33.409823           ^------------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 595:
+2025-08-12T02:33:33.409823     local issue_aars=$(find ".aar/$YEAR/$QUARTER/issues" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No issue AARs yet")
+2025-08-12T02:33:33.409823           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 596:
+2025-08-12T02:33:33.409823     local sprint_aars=$(find ".aar/$YEAR/$QUARTER/sprints" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No sprint AARs yet")
+2025-08-12T02:33:33.409823           ^---------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 597:
+2025-08-12T02:33:33.409823     local incident_aars=$(find ".aar/$YEAR/$QUARTER/incidents" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No incident AARs yet")
+2025-08-12T02:33:33.409823           ^-----------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 In scripts/generate_aar.sh line 598:
+2025-08-12T02:33:33.409823     local automation_aars=$(find ".aar/$YEAR/$QUARTER/automation" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No automation AARs yet")
+2025-08-12T02:33:33.409823           ^-------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 For more information:
+2025-08-12T02:33:33.409823   https://www.shellcheck.net/wiki/SC2034 -- PROJECT_ROOT appears unused. Veri...
+2025-08-12T02:33:33.409823   https://www.shellcheck.net/wiki/SC2155 -- Declare and assign separately to ...
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 codespell................................................................Passed
+2025-08-12T02:33:33.409823 markdownlint-cli2........................................................Failed
+2025-08-12T02:33:33.409823 - hook id: markdownlint-cli2
+2025-08-12T02:33:33.409823 - exit code: 1
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: docs/ci-env-vars.md docs/bot-types.md codex/prompts/ci_resilience_hardening.md docs/codex-e2e-report.md templates/potato-report.md docs/git/Git.md agents/ci-bot.md agents/branch-cleanup.md SETUP.md reports/pr_968_merge_completion_report.md docs/tasks/doc_lint_debt.md docs/tags_integration.md .github/PR_SUMMARY_TEMPLATE.md docs/discord/configuration.md reports/pr_968_mission_accomplished.md docs/merge-checklist.md codex.plan.md infra/blueprint-laramie.md scripts/README.md README.md docs/phase4-ci-triage-guard.md agents/llama2-agile-helper.md docs/offline-setup.md .codex/agents/diagnostics-bot.md docs/KEKB.md codex/prompts/dependency_inventory.md .github/ISSUE_TEMPLATE/secret-alignment.md docs/fips-golang.md .github/instructions/copilot-instructions.md docs/markdown-best-practices.md docs/potato-policy-aar.md docs/quality-control-95-rule.md CODE_OF_CONDUCT.md agents/agent-maintenance.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: docs/first-pr-guide.md docs/ci-first-policy.md ISSUE_RESOLUTION_SUMMARY.md docs/prd/feedback-dashboard.md docs/e2e-tests.md bot/README.md MISSION_ACCOMPLISHED_SUMMARY.md FOUNDERS.md docs/security-audit-2025-06-21.md agents/onboarding-agent.md docs/phase-3-root-artifact-guard-plan.md docs/ci-workflow-analysis-report.md .aar/2025/Q3/incidents/incident-2025-07-30.md reports/pr_966_closure_summary.md docs/checklists/ci-checklist-snippet.md PROJECT_RESOLUTION_SUMMARY.md .aar/index.md agents/dev-orchestrator.md .codex/Agents.md agents/prod-orchestrator.md agents/templates/agent-spec-template.md reports/cli_failure_response_complete.md docs/task-management.md docs/endpoint-reference.md phase4-ci-triage-guard-complete.md docs/Agents.md .codex/agents/ai-mentor.md CONTRIBUTING.md docs/dependencies.md tests/README.md docs/network-exception-list.md docs/ci-failure-issues.md docs/ci-infrastructure-repair-epic.md COMMIT_HELP.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: prompts/devonboarder_integration_task.md ci-status-demo.md docs/ONBOARDING.md PR_SUMMARY.md infra/README.md codex/agents/validate-permissions.md .codex/agents/tags/ci_root_artifact_guard.md metrics/llama2-usage.md SECURITY.md docs/standards/centralized-logging-policy.md docs/checklists/retros/2025-07-22-roadmap-documentation.md ALPHA_TESTERS.md .github/copilot-instructions.md phase5-advanced-orchestration.md docs/service-status.md CI_RESOLUTION_REPORT.md AUTOMATION_INTEGRATION_SUMMARY.md infra/blueprint-aurora.md docs/checklists/retrospective-template.md .codex/checklists/triage_reports/2025-07-28_execution_success.md docs/enhanced-logging-setup.md docs/ROADMAP.md docs/ubuntu-setup.md .codex/agents/management-ingest.md docs/git-guidelines.md codex/agents/review-known-errors.md docs/troubleshooting.md .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md docs/builder_ethics_dossier.md agents/ci-monitor.md BRANCH_CLEANUP_ANALYSIS.md archive/docs/pull_request_template.md docs/pull-request-success.md CI_CORRECTION_REPORT.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: docs/origin.md .aar/2025/Q3/sprints/sprint-2025-07-30.md docs/alpha/alpha-wave-rollout-guide.md emails/invite_alpha_email.md agents/documentation-quality.md agents/staging-orchestrator.md agents/index.md docs/ci-dashboard.md agents/discord-integration.md docs/scripts/git-utilities.md .github/ISSUE_TEMPLATE/envvar-misalignment.md .github/pull_request_template.md docs/QA_CHECKLIST.md docs/network-troubleshooting.md docs/assessments/engineer_assessment_work_items.md Codex_Contributor_Dashboard.md codex/journal/devonboarder_feedback_log.md ci-status-report.md docs/discord-bot-deployment-success.md templates/markdown-template.md docs/bot-configuration-status-clean.md docs/potato-policy-enhancements.md reports/potato-policy-audit-20250726-195832.md docs/ci-failure-analysis-guide.md docs/doc-quality-onboarding.md .github/prompts/bootstrap_tags_codex.md docs/ecosystem.md docs/security-audit-2025-07-01.md ci-status-current.md docs/checklists/retros/2025-07-22-ci-documentation-quality.md AGENTS.md emails/founders_invite.md COVERAGE_STATUS.md docs/enhanced-potato-policy.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: docs/phase-4-ci-triage-guard.md PRE_COMMIT_ERROR_RESOLUTION.md docs/phase-3-implementation-complete.md .codex/agents/code_quality_agent.md agents/templates/Agent.md frontend/README.md docs/env.md docs/alpha/feedback-template.md docs/CONFIG_VERSIONS.md LICENSE.md .codex/agents/README.md docs/orchestration.md docs/governance/bot_access_governance.md docs/git/MERGE_CHECKLIST.md reports/pr_970_automation_report.md docs/environment.md agents/idme-verification.md reports/ci_infrastructure_repair_complete.md docs/founders/README.md .codex/case-studies/pr-970-ci-recovery-fixed.md codex_response_to_scope_alignment.md docs/README.md .codex/checklists/standards/node_modules_hygiene.md agents/ai-mentor.md .aar/2025/Q3/automation/automation-enhancement-2025-07-30.md HAND-OFF.md docs/devonboarder-integration-status.md ROADMAP.md docs/discord/discord-message-templates.md VERIFICATION_REPORT.md .codex/automation-tasks.md .aar/templates/issue-aar-template.md docs/founders/charter.md agents/ms-teams-integration.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:33:33.409823 Finding: .codex/agents/metadata-standards.md docs/standards/after-actions-report-process.md .codex/agents/dev-orchestrator.md codex/tasks/confirm_doc_alignment.md agents/diagnostics-bot.md docs/sample-pr.md docs/core-metadata-standards.md docs/about-potato.md codex/agents/README.md phase5-advanced-orchestration-complete.md docs/CHANGELOG.md .codex/case-studies/pr-970-ci-recovery.md codex/journal/2025-07-05.md docs/alpha/README.md agents/envvar-manager.md .codex/templates/pr-status-report.md templates/HAND-OFF.md docs/checklists/continuous-improvement.md .codex/checklists/triage_reports/2025-07-28_root_artifact_pollution.md .github/ISSUE_TEMPLATE/assessment.md emails/style-guide.md docs/alpha/feedback-form.md docs/phase2-enhanced-potato-policy-status.md BRANCH_PROTECTION_SUMMARY.md docs/failure-filtering-implementation-summary.md agents/ci-helper-agent.md docs/codex-issue-autoclose.md docs/roadmap/alpha-phase.md codex/agents/notify.md ci-status-live.md ROADMAP_SUMMARY.md docs/outreach-materials.md docs/ci-workflow.md docs/git/README.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:33:33.409823 Linting: 204 file(s)
+2025-08-12T02:33:33.409823 Summary: 14 error(s)
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:33:33.409823 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:33:33.409823 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:33:33.409823 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:33:33.409823 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:33:33.409823 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:33:33.409823 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:33:33.409823 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:33:33.409823 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:33:33.409823 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 Root Artifact Guard......................................................Passed
+2025-08-12T02:33:33.409823 Clean pytest sandbox artifacts...........................................Passed
+2025-08-12T02:33:33.409823 Centralized Logging Policy Enforcement...................................Passed
+2025-08-12T02:33:33.409823 Docs quality checks......................................................Passed
+2025-08-12T02:33:33.409823 Potato ignore policy.....................................................Passed
+2025-08-12T02:33:33.409823 Environment docs check...................................................Passed
+2025-08-12T02:33:33.409823 Validate Codex Agents with DevOnboarder Standards........................Passed
+2025-08-12T02:33:33.409823 Core Metadata Standards Compliance.......................................Passed
+2025-08-12T02:33:33.409823 Frontend ESLint..........................................................Passed
+2025-08-12T02:33:33.409823 Bot ESLint...............................................................Passed
+2025-08-12T02:33:33.409823 Python tests.............................................................Failed
+2025-08-12T02:33:33.409823 - hook id: pytest
+2025-08-12T02:33:33.409823 - exit code: 1
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 ============================= test session starts ==============================
+2025-08-12T02:33:33.409823 platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+2025-08-12T02:33:33.409823 rootdir: /home/potato/DevOnboarder
+2025-08-12T02:33:33.409823 configfile: pytest.ini
+2025-08-12T02:33:33.409823 plugins: cov-6.2.1, mock-3.14.1, anyio-4.9.0
+2025-08-12T02:33:33.409823 collected 115 items
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 tests/test_app.py ..                                                     [  1%]
+2025-08-12T02:33:33.409823 tests/test_auth_service.py ....................                          [ 19%]
+2025-08-12T02:33:33.409823 tests/test_bootstrap_script.py .                                         [ 20%]
+2025-08-12T02:33:33.409823 tests/test_check_headers.py ..                                           [ 21%]
+2025-08-12T02:33:33.409823 tests/test_ci_failure_diagnoser.py ..                                    [ 23%]
+2025-08-12T02:33:33.409823 tests/test_cli.py ...                                                    [ 26%]
+2025-08-12T02:33:33.409823 tests/test_create_retro_file.py ..                                       [ 27%]
+2025-08-12T02:33:33.409823 tests/test_diagnostics.py ......                                         [ 33%]
+2025-08-12T02:33:33.409823 tests/test_discord_integration.py .....                                  [ 37%]
+2025-08-12T02:33:33.409823 tests/test_discord_utils.py .......                                      [ 43%]
+2025-08-12T02:33:33.409823 tests/test_docker_compose.py ......                                      [ 48%]
+2025-08-12T02:33:33.409823 tests/test_feedback_api.py .                                             [ 49%]
+2025-08-12T02:33:33.409823 tests/test_health.py ..                                                  [ 51%]
+2025-08-12T02:33:33.409823 tests/test_hello_world.py .                                              [ 52%]
+2025-08-12T02:33:33.409823 tests/test_known_errors_loop.py ..                                       [ 53%]
+2025-08-12T02:33:33.409823 tests/test_llama2_agile_helper.py ....                                   [ 57%]
+2025-08-12T02:33:33.409823 tests/test_parse_retro_actions.py ..                                     [ 59%]
+2025-08-12T02:33:33.409823 tests/test_plugins.py .                                                  [ 60%]
+2025-08-12T02:33:33.409823 tests/test_pr_validation.py .                                            [ 60%]
+2025-08-12T02:33:33.409823 tests/test_process_notifications.py .                                    [ 61%]
+2025-08-12T02:33:33.409823 tests/test_qa_checklist.py .                                             [ 62%]
+2025-08-12T02:33:33.409823 tests/test_roles.py .....................                                [ 80%]
+2025-08-12T02:33:33.409823 tests/test_server.py .........                                           [ 88%]
+2025-08-12T02:33:33.409823 tests/test_setup_env.py ..                                               [ 90%]
+2025-08-12T02:33:33.409823 tests/test_show_network_exceptions.py .                                  [ 91%]
+2025-08-12T02:33:33.409823 tests/test_smoke.py .                                                    [ 92%]
+2025-08-12T02:33:33.409823 tests/test_sync_issue_to_kekb.py .                                       [ 93%]
+2025-08-12T02:33:33.409823 tests/test_validate_pr_checklist.py .F                                   [ 94%]
+2025-08-12T02:33:33.409823 tests/test_xp_api.py ......                                              [100%]
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 =================================== FAILURES ===================================
+2025-08-12T02:33:33.409823 ______________________ test_validate_pr_checklist_failure ______________________
+2025-08-12T02:33:33.409823 tests/test_validate_pr_checklist.py:72: in test_validate_pr_checklist_failure
+2025-08-12T02:33:33.409823     assert any("pr comment" in call for call in calls)
+2025-08-12T02:33:33.409823 E   assert False
+2025-08-12T02:33:33.409823 E    +  where False = any(<generator object test_validate_pr_checklist_failure.<locals>.<genexpr> at 0x7f40c38420c0>)
+2025-08-12T02:33:33.409823 =============================== warnings summary ===============================
+2025-08-12T02:33:33.409823 .venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+2025-08-12T02:33:33.409823   /home/potato/DevOnboarder/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+2025-08-12T02:33:33.409823     from crypt import crypt as _crypt
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 tests/test_cli.py::test_cli_invocation_via_module
+2025-08-12T02:33:33.409823   <frozen runpy>:128: RuntimeWarning: 'devonboarder.cli' found in sys.modules after import of package 'devonboarder', but prior to execution of 'devonboarder.cli'; this may result in unpredictable behaviour
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 tests/test_known_errors_loop.py::test_known_error_increments_hits
+2025-08-12T02:33:33.409823 tests/test_known_errors_loop.py::test_unknown_error_triggers_notification
+2025-08-12T02:33:33.409823   /home/potato/DevOnboarder/scripts/known_errors_loop.py:46: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2025-08-12T02:33:33.409823     now = datetime.utcnow().isoformat()
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2025-08-12T02:33:33.409823 ================================ tests coverage ================================
+2025-08-12T02:33:33.409823 _______________ coverage: platform linux, python 3.12.3-final-0 ________________
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 Name                                  Stmts   Miss  Cover
+2025-08-12T02:33:33.409823 ---------------------------------------------------------
+2025-08-12T02:33:33.409823 src/devonboarder/__init__.py             21      1    95%
+2025-08-12T02:33:33.409823 src/devonboarder/app.py                   3      0   100%
+2025-08-12T02:33:33.409823 src/devonboarder/auth_service.py        204     12    94%
+2025-08-12T02:33:33.409823 src/devonboarder/cli.py                   7      0   100%
+2025-08-12T02:33:33.409823 src/devonboarder/server.py               39      0   100%
+2025-08-12T02:33:33.409823 src/diagnostics.py                       46      0   100%
+2025-08-12T02:33:33.409823 src/discord_integration/__init__.py       2      0   100%
+2025-08-12T02:33:33.409823 src/discord_integration/api.py           59      4    93%
+2025-08-12T02:33:33.409823 src/feedback_service/__init__.py          2      0   100%
+2025-08-12T02:33:33.409823 src/feedback_service/api.py              63      4    94%
+2025-08-12T02:33:33.409823 src/llama2_agile_helper/__init__.py       2      0   100%
+2025-08-12T02:33:33.409823 src/llama2_agile_helper/api.py           51      0   100%
+2025-08-12T02:33:33.409823 src/routes/__init__.py                    0      0   100%
+2025-08-12T02:33:33.409823 src/routes/user.py                        8      0   100%
+2025-08-12T02:33:33.409823 src/utils/__init__.py                     2      0   100%
+2025-08-12T02:33:33.409823 src/utils/cors.py                         9      1    89%
+2025-08-12T02:33:33.409823 src/utils/discord.py                     24      0   100%
+2025-08-12T02:33:33.409823 src/utils/roles.py                       30      0   100%
+2025-08-12T02:33:33.409823 src/xp/__init__.py                        0      0   100%
+2025-08-12T02:33:33.409823 src/xp/api/__init__.py                   49      2    96%
+2025-08-12T02:33:33.409823 ---------------------------------------------------------
+2025-08-12T02:33:33.409823 TOTAL                                   621     24    96%
+2025-08-12T02:33:33.409823 Coverage HTML written to dir logs/htmlcov
+2025-08-12T02:33:33.409823 Coverage XML written to file logs/coverage.xml
+2025-08-12T02:33:33.409823 Required test coverage of 95% reached. Total coverage: 96.14%
+2025-08-12T02:33:33.409823 =========================== short test summary info ============================
+2025-08-12T02:33:33.409823 FAILED tests/test_validate_pr_checklist.py::test_validate_pr_checklist_failure
+2025-08-12T02:33:33.409823 ================== 1 failed, 114 passed, 4 warnings in 43.07s ==================
+2025-08-12T02:33:33.409823
+2025-08-12T02:33:33.409823 Full validation suite....................................................Passed
+2025-08-12T02:41:46.459920 black....................................................................Passed
+2025-08-12T02:41:46.459920 ruff (legacy alias)......................................................Passed
+2025-08-12T02:41:46.459920 trim trailing whitespace.................................................Passed
+2025-08-12T02:41:46.459920 fix end of files.........................................................Passed
+2025-08-12T02:41:46.459920 shellcheck...............................................................Failed
+2025-08-12T02:41:46.459920 - hook id: shellcheck
+2025-08-12T02:41:46.459920 - exit code: 1
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 9:
+2025-08-12T02:41:46.459920 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+2025-08-12T02:41:46.459920 ^----------^ SC2034 (warning): PROJECT_ROOT appears unused. Verify use (or export if used externally).
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 172:
+2025-08-12T02:41:46.459920     local safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:41:46.459920           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 261:
+2025-08-12T02:41:46.459920     local safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:41:46.459920           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 362:
+2025-08-12T02:41:46.459920     local safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:41:46.459920           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 588:
+2025-08-12T02:41:46.459920     local total_aars=$(find .aar -name "*.md" -not -name "index.md" -not -path ".aar/templates/*" 2>/dev/null | wc -l)
+2025-08-12T02:41:46.459920           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 589:
+2025-08-12T02:41:46.459920     local current_quarter_aars=$(find ".aar/$YEAR/$QUARTER" -name "*.md" 2>/dev/null | wc -l)
+2025-08-12T02:41:46.459920           ^------------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 595:
+2025-08-12T02:41:46.459920     local issue_aars=$(find ".aar/$YEAR/$QUARTER/issues" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No issue AARs yet")
+2025-08-12T02:41:46.459920           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 596:
+2025-08-12T02:41:46.459920     local sprint_aars=$(find ".aar/$YEAR/$QUARTER/sprints" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No sprint AARs yet")
+2025-08-12T02:41:46.459920           ^---------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 597:
+2025-08-12T02:41:46.459920     local incident_aars=$(find ".aar/$YEAR/$QUARTER/incidents" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No incident AARs yet")
+2025-08-12T02:41:46.459920           ^-----------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 In scripts/generate_aar.sh line 598:
+2025-08-12T02:41:46.459920     local automation_aars=$(find ".aar/$YEAR/$QUARTER/automation" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No automation AARs yet")
+2025-08-12T02:41:46.459920           ^-------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 For more information:
+2025-08-12T02:41:46.459920   https://www.shellcheck.net/wiki/SC2034 -- PROJECT_ROOT appears unused. Veri...
+2025-08-12T02:41:46.459920   https://www.shellcheck.net/wiki/SC2155 -- Declare and assign separately to ...
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 codespell................................................................Passed
+2025-08-12T02:41:46.459920 markdownlint-cli2........................................................Failed
+2025-08-12T02:41:46.459920 - hook id: markdownlint-cli2
+2025-08-12T02:41:46.459920 - exit code: 1
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: docs/ci-env-vars.md docs/bot-types.md codex/prompts/ci_resilience_hardening.md docs/codex-e2e-report.md templates/potato-report.md docs/git/Git.md agents/ci-bot.md agents/branch-cleanup.md SETUP.md reports/pr_968_merge_completion_report.md docs/tasks/doc_lint_debt.md docs/tags_integration.md .github/PR_SUMMARY_TEMPLATE.md docs/discord/configuration.md reports/pr_968_mission_accomplished.md docs/merge-checklist.md codex.plan.md infra/blueprint-laramie.md scripts/README.md README.md docs/phase4-ci-triage-guard.md agents/llama2-agile-helper.md docs/offline-setup.md .codex/agents/diagnostics-bot.md docs/KEKB.md codex/prompts/dependency_inventory.md .github/ISSUE_TEMPLATE/secret-alignment.md docs/fips-golang.md .github/instructions/copilot-instructions.md docs/markdown-best-practices.md docs/potato-policy-aar.md docs/quality-control-95-rule.md CODE_OF_CONDUCT.md agents/agent-maintenance.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: docs/first-pr-guide.md docs/ci-first-policy.md ISSUE_RESOLUTION_SUMMARY.md docs/prd/feedback-dashboard.md docs/e2e-tests.md bot/README.md MISSION_ACCOMPLISHED_SUMMARY.md FOUNDERS.md docs/security-audit-2025-06-21.md agents/onboarding-agent.md docs/phase-3-root-artifact-guard-plan.md docs/ci-workflow-analysis-report.md .aar/2025/Q3/incidents/incident-2025-07-30.md reports/pr_966_closure_summary.md docs/checklists/ci-checklist-snippet.md PROJECT_RESOLUTION_SUMMARY.md .aar/index.md agents/dev-orchestrator.md .codex/Agents.md agents/prod-orchestrator.md agents/templates/agent-spec-template.md reports/cli_failure_response_complete.md docs/task-management.md docs/endpoint-reference.md phase4-ci-triage-guard-complete.md docs/Agents.md .codex/agents/ai-mentor.md CONTRIBUTING.md docs/dependencies.md tests/README.md docs/network-exception-list.md docs/ci-failure-issues.md docs/ci-infrastructure-repair-epic.md COMMIT_HELP.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: prompts/devonboarder_integration_task.md ci-status-demo.md docs/ONBOARDING.md PR_SUMMARY.md infra/README.md codex/agents/validate-permissions.md .codex/agents/tags/ci_root_artifact_guard.md metrics/llama2-usage.md SECURITY.md docs/standards/centralized-logging-policy.md docs/checklists/retros/2025-07-22-roadmap-documentation.md ALPHA_TESTERS.md .github/copilot-instructions.md phase5-advanced-orchestration.md docs/service-status.md CI_RESOLUTION_REPORT.md AUTOMATION_INTEGRATION_SUMMARY.md infra/blueprint-aurora.md docs/checklists/retrospective-template.md .codex/checklists/triage_reports/2025-07-28_execution_success.md docs/enhanced-logging-setup.md docs/ROADMAP.md docs/ubuntu-setup.md .codex/agents/management-ingest.md docs/git-guidelines.md codex/agents/review-known-errors.md docs/troubleshooting.md .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md docs/builder_ethics_dossier.md agents/ci-monitor.md BRANCH_CLEANUP_ANALYSIS.md archive/docs/pull_request_template.md docs/pull-request-success.md CI_CORRECTION_REPORT.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: docs/origin.md .aar/2025/Q3/sprints/sprint-2025-07-30.md docs/alpha/alpha-wave-rollout-guide.md emails/invite_alpha_email.md agents/documentation-quality.md agents/staging-orchestrator.md agents/index.md docs/ci-dashboard.md agents/discord-integration.md docs/scripts/git-utilities.md .github/ISSUE_TEMPLATE/envvar-misalignment.md .github/pull_request_template.md docs/QA_CHECKLIST.md docs/network-troubleshooting.md docs/assessments/engineer_assessment_work_items.md Codex_Contributor_Dashboard.md codex/journal/devonboarder_feedback_log.md ci-status-report.md docs/discord-bot-deployment-success.md templates/markdown-template.md docs/bot-configuration-status-clean.md docs/potato-policy-enhancements.md reports/potato-policy-audit-20250726-195832.md docs/ci-failure-analysis-guide.md docs/doc-quality-onboarding.md .github/prompts/bootstrap_tags_codex.md docs/ecosystem.md docs/security-audit-2025-07-01.md ci-status-current.md docs/checklists/retros/2025-07-22-ci-documentation-quality.md AGENTS.md emails/founders_invite.md COVERAGE_STATUS.md docs/enhanced-potato-policy.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: docs/phase-4-ci-triage-guard.md PRE_COMMIT_ERROR_RESOLUTION.md docs/phase-3-implementation-complete.md .codex/agents/code_quality_agent.md agents/templates/Agent.md frontend/README.md docs/env.md docs/alpha/feedback-template.md docs/CONFIG_VERSIONS.md LICENSE.md .codex/agents/README.md docs/orchestration.md docs/governance/bot_access_governance.md docs/git/MERGE_CHECKLIST.md reports/pr_970_automation_report.md docs/environment.md agents/idme-verification.md reports/ci_infrastructure_repair_complete.md docs/founders/README.md .codex/case-studies/pr-970-ci-recovery-fixed.md codex_response_to_scope_alignment.md docs/README.md .codex/checklists/standards/node_modules_hygiene.md agents/ai-mentor.md .aar/2025/Q3/automation/automation-enhancement-2025-07-30.md HAND-OFF.md docs/devonboarder-integration-status.md ROADMAP.md docs/discord/discord-message-templates.md VERIFICATION_REPORT.md .codex/automation-tasks.md .aar/templates/issue-aar-template.md docs/founders/charter.md agents/ms-teams-integration.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:41:46.459920 Finding: .codex/agents/metadata-standards.md docs/standards/after-actions-report-process.md .codex/agents/dev-orchestrator.md codex/tasks/confirm_doc_alignment.md agents/diagnostics-bot.md docs/sample-pr.md docs/core-metadata-standards.md docs/about-potato.md codex/agents/README.md phase5-advanced-orchestration-complete.md docs/CHANGELOG.md .codex/case-studies/pr-970-ci-recovery.md codex/journal/2025-07-05.md docs/alpha/README.md agents/envvar-manager.md .codex/templates/pr-status-report.md templates/HAND-OFF.md docs/checklists/continuous-improvement.md .codex/checklists/triage_reports/2025-07-28_root_artifact_pollution.md .github/ISSUE_TEMPLATE/assessment.md emails/style-guide.md docs/alpha/feedback-form.md docs/phase2-enhanced-potato-policy-status.md BRANCH_PROTECTION_SUMMARY.md docs/failure-filtering-implementation-summary.md agents/ci-helper-agent.md docs/codex-issue-autoclose.md docs/roadmap/alpha-phase.md codex/agents/notify.md ci-status-live.md ROADMAP_SUMMARY.md docs/outreach-materials.md docs/ci-workflow.md docs/git/README.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:41:46.459920 Linting: 204 file(s)
+2025-08-12T02:41:46.459920 Summary: 14 error(s)
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:41:46.459920 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:41:46.459920 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:41:46.459920 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:41:46.459920 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:41:46.459920 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:41:46.459920 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:41:46.459920 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:41:46.459920 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:41:46.459920 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 Root Artifact Guard......................................................Passed
+2025-08-12T02:41:46.459920 Clean pytest sandbox artifacts...........................................Passed
+2025-08-12T02:41:46.459920 Centralized Logging Policy Enforcement...................................Passed
+2025-08-12T02:41:46.459920 Docs quality checks......................................................Passed
+2025-08-12T02:41:46.459920 Potato ignore policy.....................................................Passed
+2025-08-12T02:41:46.459920 Environment docs check...................................................Passed
+2025-08-12T02:41:46.459920 Validate Codex Agents with DevOnboarder Standards........................Passed
+2025-08-12T02:41:46.459920 Core Metadata Standards Compliance.......................................Passed
+2025-08-12T02:41:46.459920 Frontend ESLint..........................................................Passed
+2025-08-12T02:41:46.459920 Bot ESLint...............................................................Passed
+2025-08-12T02:41:46.459920 Python tests.............................................................Failed
+2025-08-12T02:41:46.459920 - hook id: pytest
+2025-08-12T02:41:46.459920 - exit code: 1
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 ============================= test session starts ==============================
+2025-08-12T02:41:46.459920 platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+2025-08-12T02:41:46.459920 rootdir: /home/potato/DevOnboarder
+2025-08-12T02:41:46.459920 configfile: pytest.ini
+2025-08-12T02:41:46.459920 plugins: cov-6.2.1, mock-3.14.1, anyio-4.9.0
+2025-08-12T02:41:46.459920 collected 115 items
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 tests/test_app.py ..                                                     [  1%]
+2025-08-12T02:41:46.459920 tests/test_auth_service.py ....................                          [ 19%]
+2025-08-12T02:41:46.459920 tests/test_bootstrap_script.py .                                         [ 20%]
+2025-08-12T02:41:46.459920 tests/test_check_headers.py ..                                           [ 21%]
+2025-08-12T02:41:46.459920 tests/test_ci_failure_diagnoser.py ..                                    [ 23%]
+2025-08-12T02:41:46.459920 tests/test_cli.py ...                                                    [ 26%]
+2025-08-12T02:41:46.459920 tests/test_create_retro_file.py ..                                       [ 27%]
+2025-08-12T02:41:46.459920 tests/test_diagnostics.py ......                                         [ 33%]
+2025-08-12T02:41:46.459920 tests/test_discord_integration.py .....                                  [ 37%]
+2025-08-12T02:41:46.459920 tests/test_discord_utils.py .......                                      [ 43%]
+2025-08-12T02:41:46.459920 tests/test_docker_compose.py ......                                      [ 48%]
+2025-08-12T02:41:46.459920 tests/test_feedback_api.py .                                             [ 49%]
+2025-08-12T02:41:46.459920 tests/test_health.py ..                                                  [ 51%]
+2025-08-12T02:41:46.459920 tests/test_hello_world.py .                                              [ 52%]
+2025-08-12T02:41:46.459920 tests/test_known_errors_loop.py ..                                       [ 53%]
+2025-08-12T02:41:46.459920 tests/test_llama2_agile_helper.py ....                                   [ 57%]
+2025-08-12T02:41:46.459920 tests/test_parse_retro_actions.py ..                                     [ 59%]
+2025-08-12T02:41:46.459920 tests/test_plugins.py .                                                  [ 60%]
+2025-08-12T02:41:46.459920 tests/test_pr_validation.py .                                            [ 60%]
+2025-08-12T02:41:46.459920 tests/test_process_notifications.py .                                    [ 61%]
+2025-08-12T02:41:46.459920 tests/test_qa_checklist.py .                                             [ 62%]
+2025-08-12T02:41:46.459920 tests/test_roles.py .....................                                [ 80%]
+2025-08-12T02:41:46.459920 tests/test_server.py .........                                           [ 88%]
+2025-08-12T02:41:46.459920 tests/test_setup_env.py ..                                               [ 90%]
+2025-08-12T02:41:46.459920 tests/test_show_network_exceptions.py .                                  [ 91%]
+2025-08-12T02:41:46.459920 tests/test_smoke.py .                                                    [ 92%]
+2025-08-12T02:41:46.459920 tests/test_sync_issue_to_kekb.py .                                       [ 93%]
+2025-08-12T02:41:46.459920 tests/test_validate_pr_checklist.py .F                                   [ 94%]
+2025-08-12T02:41:46.459920 tests/test_xp_api.py ......                                              [100%]
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 =================================== FAILURES ===================================
+2025-08-12T02:41:46.459920 ______________________ test_validate_pr_checklist_failure ______________________
+2025-08-12T02:41:46.459920 tests/test_validate_pr_checklist.py:72: in test_validate_pr_checklist_failure
+2025-08-12T02:41:46.459920     assert any("pr comment" in call for call in calls)
+2025-08-12T02:41:46.459920 E   assert False
+2025-08-12T02:41:46.459920 E    +  where False = any(<generator object test_validate_pr_checklist_failure.<locals>.<genexpr> at 0x7f40c38420c0>)
+2025-08-12T02:41:46.459920 =============================== warnings summary ===============================
+2025-08-12T02:41:46.459920 .venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+2025-08-12T02:41:46.459920   /home/potato/DevOnboarder/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+2025-08-12T02:41:46.459920     from crypt import crypt as _crypt
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 tests/test_cli.py::test_cli_invocation_via_module
+2025-08-12T02:41:46.459920   <frozen runpy>:128: RuntimeWarning: 'devonboarder.cli' found in sys.modules after import of package 'devonboarder', but prior to execution of 'devonboarder.cli'; this may result in unpredictable behaviour
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 tests/test_known_errors_loop.py::test_known_error_increments_hits
+2025-08-12T02:41:46.459920 tests/test_known_errors_loop.py::test_unknown_error_triggers_notification
+2025-08-12T02:41:46.459920   /home/potato/DevOnboarder/scripts/known_errors_loop.py:46: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2025-08-12T02:41:46.459920     now = datetime.utcnow().isoformat()
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2025-08-12T02:41:46.459920 ================================ tests coverage ================================
+2025-08-12T02:41:46.459920 _______________ coverage: platform linux, python 3.12.3-final-0 ________________
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 Name                                  Stmts   Miss  Cover
+2025-08-12T02:41:46.459920 ---------------------------------------------------------
+2025-08-12T02:41:46.459920 src/devonboarder/__init__.py             21      1    95%
+2025-08-12T02:41:46.459920 src/devonboarder/app.py                   3      0   100%
+2025-08-12T02:41:46.459920 src/devonboarder/auth_service.py        204     12    94%
+2025-08-12T02:41:46.459920 src/devonboarder/cli.py                   7      0   100%
+2025-08-12T02:41:46.459920 src/devonboarder/server.py               39      0   100%
+2025-08-12T02:41:46.459920 src/diagnostics.py                       46      0   100%
+2025-08-12T02:41:46.459920 src/discord_integration/__init__.py       2      0   100%
+2025-08-12T02:41:46.459920 src/discord_integration/api.py           59      4    93%
+2025-08-12T02:41:46.459920 src/feedback_service/__init__.py          2      0   100%
+2025-08-12T02:41:46.459920 src/feedback_service/api.py              63      4    94%
+2025-08-12T02:41:46.459920 src/llama2_agile_helper/__init__.py       2      0   100%
+2025-08-12T02:41:46.459920 src/llama2_agile_helper/api.py           51      0   100%
+2025-08-12T02:41:46.459920 src/routes/__init__.py                    0      0   100%
+2025-08-12T02:41:46.459920 src/routes/user.py                        8      0   100%
+2025-08-12T02:41:46.459920 src/utils/__init__.py                     2      0   100%
+2025-08-12T02:41:46.459920 src/utils/cors.py                         9      1    89%
+2025-08-12T02:41:46.459920 src/utils/discord.py                     24      0   100%
+2025-08-12T02:41:46.459920 src/utils/roles.py                       30      0   100%
+2025-08-12T02:41:46.459920 src/xp/__init__.py                        0      0   100%
+2025-08-12T02:41:46.459920 src/xp/api/__init__.py                   49      2    96%
+2025-08-12T02:41:46.459920 ---------------------------------------------------------
+2025-08-12T02:41:46.459920 TOTAL                                   621     24    96%
+2025-08-12T02:41:46.459920 Coverage HTML written to dir logs/htmlcov
+2025-08-12T02:41:46.459920 Coverage XML written to file logs/coverage.xml
+2025-08-12T02:41:46.459920 Required test coverage of 95% reached. Total coverage: 96.14%
+2025-08-12T02:41:46.459920 =========================== short test summary info ============================
+2025-08-12T02:41:46.459920 FAILED tests/test_validate_pr_checklist.py::test_validate_pr_checklist_failure
+2025-08-12T02:41:46.459920 ================== 1 failed, 114 passed, 4 warnings in 43.07s ==================
+2025-08-12T02:41:46.459920
+2025-08-12T02:41:46.459920 Full validation suite....................................................Passed
+2025-08-12T02:55:03.015770 black....................................................................Passed
+2025-08-12T02:55:03.015770 ruff (legacy alias)......................................................Passed
+2025-08-12T02:55:03.015770 trim trailing whitespace.................................................Passed
+2025-08-12T02:55:03.015770 fix end of files.........................................................Passed
+2025-08-12T02:55:03.015770 shellcheck...............................................................Failed
+2025-08-12T02:55:03.015770 - hook id: shellcheck
+2025-08-12T02:55:03.015770 - exit code: 1
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 9:
+2025-08-12T02:55:03.015770 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+2025-08-12T02:55:03.015770 ^----------^ SC2034 (warning): PROJECT_ROOT appears unused. Verify use (or export if used externally).
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 172:
+2025-08-12T02:55:03.015770     local safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:55:03.015770           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 261:
+2025-08-12T02:55:03.015770     local safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:55:03.015770           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 362:
+2025-08-12T02:55:03.015770     local safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
+2025-08-12T02:55:03.015770           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 588:
+2025-08-12T02:55:03.015770     local total_aars=$(find .aar -name "*.md" -not -name "index.md" -not -path ".aar/templates/*" 2>/dev/null | wc -l)
+2025-08-12T02:55:03.015770           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 589:
+2025-08-12T02:55:03.015770     local current_quarter_aars=$(find ".aar/$YEAR/$QUARTER" -name "*.md" 2>/dev/null | wc -l)
+2025-08-12T02:55:03.015770           ^------------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 595:
+2025-08-12T02:55:03.015770     local issue_aars=$(find ".aar/$YEAR/$QUARTER/issues" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No issue AARs yet")
+2025-08-12T02:55:03.015770           ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 596:
+2025-08-12T02:55:03.015770     local sprint_aars=$(find ".aar/$YEAR/$QUARTER/sprints" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No sprint AARs yet")
+2025-08-12T02:55:03.015770           ^---------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 597:
+2025-08-12T02:55:03.015770     local incident_aars=$(find ".aar/$YEAR/$QUARTER/incidents" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No incident AARs yet")
+2025-08-12T02:55:03.015770           ^-----------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 In scripts/generate_aar.sh line 598:
+2025-08-12T02:55:03.015770     local automation_aars=$(find ".aar/$YEAR/$QUARTER/automation" -name "*.md" -exec basename {} \; 2>/dev/null | sed 's/^/- /' | head -5 || echo "- No automation AARs yet")
+2025-08-12T02:55:03.015770           ^-------------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 For more information:
+2025-08-12T02:55:03.015770   https://www.shellcheck.net/wiki/SC2034 -- PROJECT_ROOT appears unused. Veri...
+2025-08-12T02:55:03.015770   https://www.shellcheck.net/wiki/SC2155 -- Declare and assign separately to ...
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 codespell................................................................Passed
+2025-08-12T02:55:03.015770 markdownlint-cli2........................................................Failed
+2025-08-12T02:55:03.015770 - hook id: markdownlint-cli2
+2025-08-12T02:55:03.015770 - exit code: 1
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: docs/ci-env-vars.md docs/bot-types.md codex/prompts/ci_resilience_hardening.md docs/codex-e2e-report.md templates/potato-report.md docs/git/Git.md agents/ci-bot.md agents/branch-cleanup.md SETUP.md reports/pr_968_merge_completion_report.md docs/tasks/doc_lint_debt.md docs/tags_integration.md .github/PR_SUMMARY_TEMPLATE.md docs/discord/configuration.md reports/pr_968_mission_accomplished.md docs/merge-checklist.md codex.plan.md infra/blueprint-laramie.md scripts/README.md README.md docs/phase4-ci-triage-guard.md agents/llama2-agile-helper.md docs/offline-setup.md .codex/agents/diagnostics-bot.md docs/KEKB.md codex/prompts/dependency_inventory.md .github/ISSUE_TEMPLATE/secret-alignment.md docs/fips-golang.md .github/instructions/copilot-instructions.md docs/markdown-best-practices.md docs/potato-policy-aar.md docs/quality-control-95-rule.md CODE_OF_CONDUCT.md agents/agent-maintenance.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: docs/first-pr-guide.md docs/ci-first-policy.md ISSUE_RESOLUTION_SUMMARY.md docs/prd/feedback-dashboard.md docs/e2e-tests.md bot/README.md MISSION_ACCOMPLISHED_SUMMARY.md FOUNDERS.md docs/security-audit-2025-06-21.md agents/onboarding-agent.md docs/phase-3-root-artifact-guard-plan.md docs/ci-workflow-analysis-report.md .aar/2025/Q3/incidents/incident-2025-07-30.md reports/pr_966_closure_summary.md docs/checklists/ci-checklist-snippet.md PROJECT_RESOLUTION_SUMMARY.md .aar/index.md agents/dev-orchestrator.md .codex/Agents.md agents/prod-orchestrator.md agents/templates/agent-spec-template.md reports/cli_failure_response_complete.md docs/task-management.md docs/endpoint-reference.md phase4-ci-triage-guard-complete.md docs/Agents.md .codex/agents/ai-mentor.md CONTRIBUTING.md docs/dependencies.md tests/README.md docs/network-exception-list.md docs/ci-failure-issues.md docs/ci-infrastructure-repair-epic.md COMMIT_HELP.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: prompts/devonboarder_integration_task.md ci-status-demo.md docs/ONBOARDING.md PR_SUMMARY.md infra/README.md codex/agents/validate-permissions.md .codex/agents/tags/ci_root_artifact_guard.md metrics/llama2-usage.md SECURITY.md docs/standards/centralized-logging-policy.md docs/checklists/retros/2025-07-22-roadmap-documentation.md ALPHA_TESTERS.md .github/copilot-instructions.md phase5-advanced-orchestration.md docs/service-status.md CI_RESOLUTION_REPORT.md AUTOMATION_INTEGRATION_SUMMARY.md infra/blueprint-aurora.md docs/checklists/retrospective-template.md .codex/checklists/triage_reports/2025-07-28_execution_success.md docs/enhanced-logging-setup.md docs/ROADMAP.md docs/ubuntu-setup.md .codex/agents/management-ingest.md docs/git-guidelines.md codex/agents/review-known-errors.md docs/troubleshooting.md .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md docs/builder_ethics_dossier.md agents/ci-monitor.md BRANCH_CLEANUP_ANALYSIS.md archive/docs/pull_request_template.md docs/pull-request-success.md CI_CORRECTION_REPORT.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: docs/origin.md .aar/2025/Q3/sprints/sprint-2025-07-30.md docs/alpha/alpha-wave-rollout-guide.md emails/invite_alpha_email.md agents/documentation-quality.md agents/staging-orchestrator.md agents/index.md docs/ci-dashboard.md agents/discord-integration.md docs/scripts/git-utilities.md .github/ISSUE_TEMPLATE/envvar-misalignment.md .github/pull_request_template.md docs/QA_CHECKLIST.md docs/network-troubleshooting.md docs/assessments/engineer_assessment_work_items.md Codex_Contributor_Dashboard.md codex/journal/devonboarder_feedback_log.md ci-status-report.md docs/discord-bot-deployment-success.md templates/markdown-template.md docs/bot-configuration-status-clean.md docs/potato-policy-enhancements.md reports/potato-policy-audit-20250726-195832.md docs/ci-failure-analysis-guide.md docs/doc-quality-onboarding.md .github/prompts/bootstrap_tags_codex.md docs/ecosystem.md docs/security-audit-2025-07-01.md ci-status-current.md docs/checklists/retros/2025-07-22-ci-documentation-quality.md AGENTS.md emails/founders_invite.md COVERAGE_STATUS.md docs/enhanced-potato-policy.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: docs/phase-4-ci-triage-guard.md PRE_COMMIT_ERROR_RESOLUTION.md docs/phase-3-implementation-complete.md .codex/agents/code_quality_agent.md agents/templates/Agent.md frontend/README.md docs/env.md docs/alpha/feedback-template.md docs/CONFIG_VERSIONS.md LICENSE.md .codex/agents/README.md docs/orchestration.md docs/governance/bot_access_governance.md docs/git/MERGE_CHECKLIST.md reports/pr_970_automation_report.md docs/environment.md agents/idme-verification.md reports/ci_infrastructure_repair_complete.md docs/founders/README.md .codex/case-studies/pr-970-ci-recovery-fixed.md codex_response_to_scope_alignment.md docs/README.md .codex/checklists/standards/node_modules_hygiene.md agents/ai-mentor.md .aar/2025/Q3/automation/automation-enhancement-2025-07-30.md HAND-OFF.md docs/devonboarder-integration-status.md ROADMAP.md docs/discord/discord-message-templates.md VERIFICATION_REPORT.md .codex/automation-tasks.md .aar/templates/issue-aar-template.md docs/founders/charter.md agents/ms-teams-integration.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+2025-08-12T02:55:03.015770 Finding: .codex/agents/metadata-standards.md docs/standards/after-actions-report-process.md .codex/agents/dev-orchestrator.md codex/tasks/confirm_doc_alignment.md agents/diagnostics-bot.md docs/sample-pr.md docs/core-metadata-standards.md docs/about-potato.md codex/agents/README.md phase5-advanced-orchestration-complete.md docs/CHANGELOG.md .codex/case-studies/pr-970-ci-recovery.md codex/journal/2025-07-05.md docs/alpha/README.md agents/envvar-manager.md .codex/templates/pr-status-report.md templates/HAND-OFF.md docs/checklists/continuous-improvement.md .codex/checklists/triage_reports/2025-07-28_root_artifact_pollution.md .github/ISSUE_TEMPLATE/assessment.md emails/style-guide.md docs/alpha/feedback-form.md docs/phase2-enhanced-potato-policy-status.md BRANCH_PROTECTION_SUMMARY.md docs/failure-filtering-implementation-summary.md agents/ci-helper-agent.md docs/codex-issue-autoclose.md docs/roadmap/alpha-phase.md codex/agents/notify.md ci-status-live.md ROADMAP_SUMMARY.md docs/outreach-materials.md docs/ci-workflow.md docs/git/README.md **/*.md !node_modules/** !frontend/node_modules/** !bot/node_modules/** !htmlcov/** !.venv/** !venv/** !*.egg-info/** !archive/** !logs/** !tmp/** !.git/** !Potato.md
+2025-08-12T02:55:03.015770 Linting: 204 file(s)
+2025-08-12T02:55:03.015770 Summary: 14 error(s)
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #Discord B..."]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Sprint Context"]
+2025-08-12T02:55:03.015770 .aar/2025/Q3/sprints/sprint-2025-07-30.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Sprint Name**: Sprint-2025..."]
+2025-08-12T02:55:03.015770 .aar/index.md:11 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Issues"]
+2025-08-12T02:55:03.015770 .aar/index.md:12 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- issue-Discord Bot Authentica..."]
+2025-08-12T02:55:03.015770 .aar/index.md:14 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Sprints"]
+2025-08-12T02:55:03.015770 .aar/index.md:15 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- sprint-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:17 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Incidents"]
+2025-08-12T02:55:03.015770 .aar/index.md:18 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- incident-2025-07-30.md"]
+2025-08-12T02:55:03.015770 .aar/index.md:20 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "#### Automation"]
+2025-08-12T02:55:03.015770 .aar/index.md:21 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- automation-enhancement-2025-..."]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:6 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: "## Context"]
+2025-08-12T02:55:03.015770 .aar/templates/issue-aar-template.md:7 MD032/blanks-around-lists Lists should be surrounded by blank lines [Context: "- **Issue Number**: #[Issue Nu..."]
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 Root Artifact Guard......................................................Passed
+2025-08-12T02:55:03.015770 Clean pytest sandbox artifacts...........................................Passed
+2025-08-12T02:55:03.015770 Centralized Logging Policy Enforcement...................................Passed
+2025-08-12T02:55:03.015770 Docs quality checks......................................................Passed
+2025-08-12T02:55:03.015770 Potato ignore policy.....................................................Passed
+2025-08-12T02:55:03.015770 Environment docs check...................................................Passed
+2025-08-12T02:55:03.015770 Validate Codex Agents with DevOnboarder Standards........................Passed
+2025-08-12T02:55:03.015770 Core Metadata Standards Compliance.......................................Passed
+2025-08-12T02:55:03.015770 Frontend ESLint..........................................................Passed
+2025-08-12T02:55:03.015770 Bot ESLint...............................................................Passed
+2025-08-12T02:55:03.015770 Python tests.............................................................Failed
+2025-08-12T02:55:03.015770 - hook id: pytest
+2025-08-12T02:55:03.015770 - exit code: 1
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 ============================= test session starts ==============================
+2025-08-12T02:55:03.015770 platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+2025-08-12T02:55:03.015770 rootdir: /home/potato/DevOnboarder
+2025-08-12T02:55:03.015770 configfile: pytest.ini
+2025-08-12T02:55:03.015770 plugins: cov-6.2.1, mock-3.14.1, anyio-4.9.0
+2025-08-12T02:55:03.015770 collected 115 items
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 tests/test_app.py ..                                                     [  1%]
+2025-08-12T02:55:03.015770 tests/test_auth_service.py ....................                          [ 19%]
+2025-08-12T02:55:03.015770 tests/test_bootstrap_script.py .                                         [ 20%]
+2025-08-12T02:55:03.015770 tests/test_check_headers.py ..                                           [ 21%]
+2025-08-12T02:55:03.015770 tests/test_ci_failure_diagnoser.py ..                                    [ 23%]
+2025-08-12T02:55:03.015770 tests/test_cli.py ...                                                    [ 26%]
+2025-08-12T02:55:03.015770 tests/test_create_retro_file.py ..                                       [ 27%]
+2025-08-12T02:55:03.015770 tests/test_diagnostics.py ......                                         [ 33%]
+2025-08-12T02:55:03.015770 tests/test_discord_integration.py .....                                  [ 37%]
+2025-08-12T02:55:03.015770 tests/test_discord_utils.py .......                                      [ 43%]
+2025-08-12T02:55:03.015770 tests/test_docker_compose.py ......                                      [ 48%]
+2025-08-12T02:55:03.015770 tests/test_feedback_api.py .                                             [ 49%]
+2025-08-12T02:55:03.015770 tests/test_health.py ..                                                  [ 51%]
+2025-08-12T02:55:03.015770 tests/test_hello_world.py .                                              [ 52%]
+2025-08-12T02:55:03.015770 tests/test_known_errors_loop.py ..                                       [ 53%]
+2025-08-12T02:55:03.015770 tests/test_llama2_agile_helper.py ....                                   [ 57%]
+2025-08-12T02:55:03.015770 tests/test_parse_retro_actions.py ..                                     [ 59%]
+2025-08-12T02:55:03.015770 tests/test_plugins.py .                                                  [ 60%]
+2025-08-12T02:55:03.015770 tests/test_pr_validation.py .                                            [ 60%]
+2025-08-12T02:55:03.015770 tests/test_process_notifications.py .                                    [ 61%]
+2025-08-12T02:55:03.015770 tests/test_qa_checklist.py .                                             [ 62%]
+2025-08-12T02:55:03.015770 tests/test_roles.py .....................                                [ 80%]
+2025-08-12T02:55:03.015770 tests/test_server.py .........                                           [ 88%]
+2025-08-12T02:55:03.015770 tests/test_setup_env.py ..                                               [ 90%]
+2025-08-12T02:55:03.015770 tests/test_show_network_exceptions.py .                                  [ 91%]
+2025-08-12T02:55:03.015770 tests/test_smoke.py .                                                    [ 92%]
+2025-08-12T02:55:03.015770 tests/test_sync_issue_to_kekb.py .                                       [ 93%]
+2025-08-12T02:55:03.015770 tests/test_validate_pr_checklist.py .F                                   [ 94%]
+2025-08-12T02:55:03.015770 tests/test_xp_api.py ......                                              [100%]
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 =================================== FAILURES ===================================
+2025-08-12T02:55:03.015770 ______________________ test_validate_pr_checklist_failure ______________________
+2025-08-12T02:55:03.015770 tests/test_validate_pr_checklist.py:72: in test_validate_pr_checklist_failure
+2025-08-12T02:55:03.015770     assert any("pr comment" in call for call in calls)
+2025-08-12T02:55:03.015770 E   assert False
+2025-08-12T02:55:03.015770 E    +  where False = any(<generator object test_validate_pr_checklist_failure.<locals>.<genexpr> at 0x7f40c38420c0>)
+2025-08-12T02:55:03.015770 =============================== warnings summary ===============================
+2025-08-12T02:55:03.015770 .venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+2025-08-12T02:55:03.015770   /home/potato/DevOnboarder/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+2025-08-12T02:55:03.015770     from crypt import crypt as _crypt
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 tests/test_cli.py::test_cli_invocation_via_module
+2025-08-12T02:55:03.015770   <frozen runpy>:128: RuntimeWarning: 'devonboarder.cli' found in sys.modules after import of package 'devonboarder', but prior to execution of 'devonboarder.cli'; this may result in unpredictable behaviour
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 tests/test_known_errors_loop.py::test_known_error_increments_hits
+2025-08-12T02:55:03.015770 tests/test_known_errors_loop.py::test_unknown_error_triggers_notification
+2025-08-12T02:55:03.015770   /home/potato/DevOnboarder/scripts/known_errors_loop.py:46: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+2025-08-12T02:55:03.015770     now = datetime.utcnow().isoformat()
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2025-08-12T02:55:03.015770 ================================ tests coverage ================================
+2025-08-12T02:55:03.015770 _______________ coverage: platform linux, python 3.12.3-final-0 ________________
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 Name                                  Stmts   Miss  Cover
+2025-08-12T02:55:03.015770 ---------------------------------------------------------
+2025-08-12T02:55:03.015770 src/devonboarder/__init__.py             21      1    95%
+2025-08-12T02:55:03.015770 src/devonboarder/app.py                   3      0   100%
+2025-08-12T02:55:03.015770 src/devonboarder/auth_service.py        204     12    94%
+2025-08-12T02:55:03.015770 src/devonboarder/cli.py                   7      0   100%
+2025-08-12T02:55:03.015770 src/devonboarder/server.py               39      0   100%
+2025-08-12T02:55:03.015770 src/diagnostics.py                       46      0   100%
+2025-08-12T02:55:03.015770 src/discord_integration/__init__.py       2      0   100%
+2025-08-12T02:55:03.015770 src/discord_integration/api.py           59      4    93%
+2025-08-12T02:55:03.015770 src/feedback_service/__init__.py          2      0   100%
+2025-08-12T02:55:03.015770 src/feedback_service/api.py              63      4    94%
+2025-08-12T02:55:03.015770 src/llama2_agile_helper/__init__.py       2      0   100%
+2025-08-12T02:55:03.015770 src/llama2_agile_helper/api.py           51      0   100%
+2025-08-12T02:55:03.015770 src/routes/__init__.py                    0      0   100%
+2025-08-12T02:55:03.015770 src/routes/user.py                        8      0   100%
+2025-08-12T02:55:03.015770 src/utils/__init__.py                     2      0   100%
+2025-08-12T02:55:03.015770 src/utils/cors.py                         9      1    89%
+2025-08-12T02:55:03.015770 src/utils/discord.py                     24      0   100%
+2025-08-12T02:55:03.015770 src/utils/roles.py                       30      0   100%
+2025-08-12T02:55:03.015770 src/xp/__init__.py                        0      0   100%
+2025-08-12T02:55:03.015770 src/xp/api/__init__.py                   49      2    96%
+2025-08-12T02:55:03.015770 ---------------------------------------------------------
+2025-08-12T02:55:03.015770 TOTAL                                   621     24    96%
+2025-08-12T02:55:03.015770 Coverage HTML written to dir logs/htmlcov
+2025-08-12T02:55:03.015770 Coverage XML written to file logs/coverage.xml
+2025-08-12T02:55:03.015770 Required test coverage of 95% reached. Total coverage: 96.14%
+2025-08-12T02:55:03.015770 =========================== short test summary info ============================
+2025-08-12T02:55:03.015770 FAILED tests/test_validate_pr_checklist.py::test_validate_pr_checklist_failure
+2025-08-12T02:55:03.015770 ================== 1 failed, 114 passed, 4 warnings in 43.07s ==================
+2025-08-12T02:55:03.015770 
+2025-08-12T02:55:03.015770 Full validation suite....................................................Passed

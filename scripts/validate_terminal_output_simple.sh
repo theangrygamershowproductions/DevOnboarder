@@ -18,9 +18,48 @@
 
 set -euo pipefail
 
-echo "Starting Terminal Output Policy Validation (Simplified)"
-echo "Target: GitHub Actions workflows"
+# Configuration
+VIOLATIONS_DB=".codex/terminal_violations.json"
+
+echo "Starting Terminal Output Policy Validation (Data-Driven)"
+echo "Target: GitHub Actions workflows and pre-commit config"
 echo "Policy: ZERO TOLERANCE for actual terminal-hanging patterns"
+echo "Database: $VIOLATIONS_DB"
+
+# Check if violations database exists
+if [ ! -f "$VIOLATIONS_DB" ]; then
+    echo "ERROR: Terminal violations database not found: $VIOLATIONS_DB"
+    exit 1
+fi
+
+# Extract all problematic characters from JSON database
+echo "Loading character database..."
+PROBLEMATIC_CHARS=$(python3 -c "
+import json
+import sys
+
+try:
+    with open('$VIOLATIONS_DB', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    chars = []
+    for category in data['categories'].values():
+        for item in category['characters']:
+            chars.append(item['char'])
+
+    # Output characters for grep pattern
+    print('|'.join(chars))
+except Exception as e:
+    print(f'Error loading database: {e}', file=sys.stderr)
+    sys.exit(1)
+")
+
+if [ -z "$PROBLEMATIC_CHARS" ]; then
+    echo "ERROR: Could not load character database"
+    exit 1
+fi
+
+echo "Loaded $(echo "$PROBLEMATIC_CHARS" | tr '|' '\n' | wc -l) problematic characters"
 
 total_violations=0
 WORKFLOW_DIR=".github/workflows"
@@ -31,20 +70,33 @@ if [ ! -d "$WORKFLOW_DIR" ]; then
     exit 0
 fi
 
-echo "Scanning workflows in $WORKFLOW_DIR"
+echo "Scanning workflows in $WORKFLOW_DIR and .pre-commit-config.yaml"
 
-# Process each workflow file
-for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
+# Process each workflow file AND pre-commit config
+for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml ".pre-commit-config.yaml"; do
     # Skip if no files match the pattern
     [ -f "$file" ] || continue
 
     echo "Validating file: $file"
 
-    # 1. Check for specific Unicode characters that cause terminal hanging
-    if grep -F "→" "$file" 2>/dev/null || grep -F "•" "$file" 2>/dev/null || grep -F "‑" "$file" 2>/dev/null || grep -F "…" "$file" 2>/dev/null; then
-        echo "  CRITICAL: Unicode characters found"
+    # 1. Check for problematic characters from database (CRITICAL - causes terminal hanging)
+    violations_found=""
+
+    echo "$PROBLEMATIC_CHARS" | tr '|' '\n' | while read -r char; do
+        if [ -n "$char" ] && grep -F "$char" "$file" >/dev/null 2>&1; then
+            echo "VIOLATION:$char"
+        fi
+    done > "/tmp/violations_$$"
+
+    if [ -s "/tmp/violations_$$" ]; then
+        echo "  CRITICAL: Problematic characters found (causes terminal hanging)"
+        while read -r line; do
+            char="${line#VIOLATION:}"
+            echo "    Found: $char"
+        done < "/tmp/violations_$$"
         ((total_violations++))
     fi
+    rm -f "/tmp/violations_$$"
 
     # 2. Check for variable expansion in echo (CRITICAL - causes hanging)
     # Exclude safe GitHub Actions patterns and variable assignments

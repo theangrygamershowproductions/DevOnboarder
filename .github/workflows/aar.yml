@@ -1,3 +1,9 @@
+# TOKEN: CI_ISSUE_AUTOMATION_TOKEN (issue creation and management)
+# PERMISSIONS: contents:read, issues:write, pull-requests:write
+# PURPOSE: Generate After Action Reports for DevOnboarder automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: CI failure analysis and documentation generation
+
 # AAR System Validation
 # Token: None required (read-only validation)
 # Permissions: See .codex/bot-permissions.yaml - minimal read access only

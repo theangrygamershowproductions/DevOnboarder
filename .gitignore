@@ -15,6 +15,7 @@
 # Python artifacts
 # Root pollution block - CI hygiene enforcement
 **/node_modules/
+*.db
 *.db-journal
 *.egg-info/
 *.env

@@ -174,26 +174,26 @@ repos:
             language: system
             pass_filenames: false
           - id: no-shortcuts-policy-enforcer
-            name: "🔐 NO_SHORTCUTS_POLICY Enforcer"
-            entry: bash
-            args:
-                [
-                    "-c",
-                    "echo '🔐 NO_SHORTCUTS_POLICY: All quality gates must pass' && echo '📖 Reference: docs/policies/NO_SHORTCUTS_POLICY.md' && echo '🛠️ Auto-fix available for most markdown issues: npx markdownlint-cli2 --fix \"**/*.md\"'",
-                ]
+            name: "NO_SHORTCUTS_POLICY Enforcer"
+            entry: echo
+            args: ["NO_SHORTCUTS_POLICY: All quality gates must pass"]
             language: system
             files: \.(md|sh|yml|yaml)$
             pass_filenames: false
-            verbose: true
+            verbose: false
           - id: qc-pre-push-validation
-            name: "🎯 95% Quality Threshold Enforcement"
+            name: "95% Quality Threshold Enforcement"
             entry: bash
-            args:
-                [
-                    "-c",
-                    "echo '🎯 Running 95% QC Validation...' && source .venv/bin/activate && bash scripts/qc_pre_push.sh",
-                ]
+            args: ["-c", "source .venv/bin/activate && bash scripts/qc_pre_push.sh"]
             language: system
             always_run: true
             pass_filenames: false
-            verbose: true
+            verbose: false
+          - id: error-learning-system
+            name: "Error Learning System"
+            entry: bash
+            args: ["-c", "if [ -f logs/pre-commit-errors.log ]; then python scripts/known_errors_loop.py logs/pre-commit-errors.log; fi"]
+            language: system
+            always_run: true
+            pass_filenames: false
+            verbose: false

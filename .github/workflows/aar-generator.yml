@@ -1,3 +1,9 @@
+# TOKEN: CI_ISSUE_AUTOMATION_TOKEN (issue creation and management)
+# PERMISSIONS: contents:read, issues:write, pull-requests:write
+# PURPOSE: Generate automated After Action Reports for CI failures
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Triggered by CI, PR Automation, and Auto-Fix workflow completions
+
 name: "After Action Report (AAR) Generator"
 
 # DevOnboarder AAR System - Automated CI failure analysis with token governance

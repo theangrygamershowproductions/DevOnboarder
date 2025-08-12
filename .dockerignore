@@ -38,6 +38,7 @@ tunnel-credentials.json
 .vscode/
 Potato
 Potato.md
+*.db
 Thumbs.db
 __pycache__/
 auth.db
