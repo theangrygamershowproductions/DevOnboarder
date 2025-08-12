@@ -17,7 +17,7 @@ mkdir -p logs
 LOG_FILE="logs/branch_cleanup_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🧹 DevOnboarder Branch Cleanup Utility"
+echo "EMOJI DevOnboarder Branch Cleanup Utility"
 echo "======================================="
 echo "Log: $LOG_FILE"
 echo ""
@@ -27,7 +27,7 @@ safe_git() {
     if command -v git >/dev/null 2>&1; then
         git "$@"
     else
-        echo "❌ Git not found. Please install git."
+        echo "FAILED Git not found. Please install git."
         exit 1
     fi
 }
@@ -35,7 +35,7 @@ safe_git() {
 # Function to check if we're in a git repository
 check_git_repo() {
     if ! safe_git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository."
+        echo "FAILED Not in a git repository."
         exit 1
     fi
 }
@@ -47,7 +47,7 @@ get_current_branch() {
 
 # Function to list all branches with details
 list_branches() {
-    echo -e "${BLUE}📋 Branch Analysis${NC}"
+    echo -e "${BLUE}SYMBOL Branch Analysis${NC}"
     echo "==================="
 
     current_branch=$(get_current_branch)
@@ -75,7 +75,7 @@ list_branches() {
 
 # Function to find merged branches
 find_merged_branches() {
-    echo -e "${BLUE}🔍 Finding Merged Branches${NC}"
+    echo -e "${BLUE}SEARCH Finding Merged Branches${NC}"
     echo "============================"
 
     base_branch="${1:-main}"
@@ -113,7 +113,7 @@ find_merged_branches() {
 
 # Function to safely delete local branches
 cleanup_local_branches() {
-    echo -e "${BLUE}🗑️  Local Branch Cleanup${NC}"
+    echo -e "${BLUE}SYMBOL  Local Branch Cleanup${NC}"
     echo "========================="
 
     current_branch=$(get_current_branch)
@@ -123,7 +123,7 @@ cleanup_local_branches() {
     if [ "$current_branch" != "$base_branch" ]; then
         echo "Switching to $base_branch..."
         safe_git checkout "$base_branch" 2>/dev/null || {
-            echo "❌ Failed to switch to $base_branch. Please switch manually."
+            echo "FAILED Failed to switch to $base_branch. Please switch manually."
             return 1
         }
     fi
@@ -138,7 +138,7 @@ cleanup_local_branches() {
                    sed 's/^[ *]*//' || echo "")
 
     if [ -z "$merged_locals" ]; then
-        echo "✅ No local merged branches to delete"
+        echo "SUCCESS No local merged branches to delete"
         return 0
     fi
 
@@ -153,11 +153,11 @@ cleanup_local_branches() {
             if [ -n "$branch" ]; then
                 echo "Deleting local branch: $branch"
                 safe_git branch -d "$branch" 2>/dev/null || {
-                    echo "⚠️  Failed to delete $branch (may have unmerged changes)"
+                    echo "WARNING  Failed to delete $branch (may have unmerged changes)"
                     read -p "Force delete $branch? [y/N] " -n 1 -r
                     echo ""
                     if [[ $REPLY =~ ^[Yy]$ ]]; then
-                        safe_git branch -D "$branch" && echo "✅ Force deleted $branch"
+                        safe_git branch -D "$branch" && echo "SUCCESS Force deleted $branch"
                     fi
                 }
             fi
@@ -169,7 +169,7 @@ cleanup_local_branches() {
 
 # Function to list stale branches
 list_stale_branches() {
-    echo -e "${BLUE}📅 Stale Branch Analysis${NC}"
+    echo -e "${BLUE}SYMBOL Stale Branch Analysis${NC}"
     echo "========================"
 
     days_threshold="${1:-30}"
@@ -200,7 +200,7 @@ list_stale_branches() {
 
 # Function to run automated cleanup (safe mode)
 run_automated_cleanup() {
-    echo -e "${BLUE}🤖 Automated Safe Cleanup${NC}"
+    echo -e "${BLUE}Bot Automated Safe Cleanup${NC}"
     echo "=========================="
 
     # Run existing cleanup script in dry-run mode
@@ -208,13 +208,13 @@ run_automated_cleanup() {
         echo "Running existing cleanup script (dry-run mode)..."
         DRY_RUN=true BASE_BRANCH=main DAYS_STALE=30 bash scripts/cleanup_branches.sh
     else
-        echo "⚠️  Cleanup script not found. Manual cleanup only."
+        echo "WARNING  Cleanup script not found. Manual cleanup only."
     fi
 }
 
 # Main menu
 main_menu() {
-    echo -e "${GREEN}🧹 Branch Cleanup Options${NC}"
+    echo -e "${GREEN}EMOJI Branch Cleanup Options${NC}"
     echo "=========================="
     echo "1. List all branches"
     echo "2. Find merged branches"
@@ -253,7 +253,7 @@ main_menu() {
             main_menu
             ;;
         6)
-            echo "👋 Branch cleanup complete. Log saved to: $LOG_FILE"
+            echo "SYMBOL Branch cleanup complete. Log saved to: $LOG_FILE"
             exit 0
             ;;
         *)
@@ -267,7 +267,7 @@ main_menu() {
 main() {
     check_git_repo
 
-    echo "🔍 Quick branch overview:"
+    echo "SEARCH Quick branch overview:"
     echo "Current branch: $(get_current_branch)"
     echo "Local branches: $(safe_git branch 2>/dev/null | wc -l || echo 'unknown')"
     echo "Remote branches: $(safe_git branch -r 2>/dev/null | wc -l || echo 'unknown')"

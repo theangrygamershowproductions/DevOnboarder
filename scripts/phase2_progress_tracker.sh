@@ -146,50 +146,50 @@ TOTAL_CRITERIA=6
 
 # Criterion 1: Terminal violations ≤10
 if [ "$CURRENT_VIOLATIONS" -le "$TARGET_VIOLATIONS" ]; then
-    echo "✅ Terminal violations ≤$TARGET_VIOLATIONS: ACHIEVED"
+    echo "SUCCESS Terminal violations ≤$TARGET_VIOLATIONS: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Terminal violations ≤$TARGET_VIOLATIONS: $CURRENT_VIOLATIONS violations remaining"
+    echo "FAILED Terminal violations ≤$TARGET_VIOLATIONS: $CURRENT_VIOLATIONS violations remaining"
 fi
 
 # Criterion 2: Root Artifact Guard passes
 if bash scripts/enforce_output_location.sh >/dev/null 2>&1; then
-    echo "✅ Root Artifact Guard clean: ACHIEVED"
+    echo "SUCCESS Root Artifact Guard clean: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Root Artifact Guard clean: Artifacts detected"
+    echo "FAILED Root Artifact Guard clean: Artifacts detected"
 fi
 
 # Criterion 3: Smart Log Cleanup System functional
 if [ -f "scripts/smart_cleanup.sh" ] && grep -q "smart-cleanup" .github/workflows/post-merge-cleanup.yml 2>/dev/null; then
-    echo "✅ Smart Log Cleanup System: FUNCTIONAL"
+    echo "SUCCESS Smart Log Cleanup System: FUNCTIONAL"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Smart Log Cleanup System: Incomplete"
+    echo "FAILED Smart Log Cleanup System: Incomplete"
 fi
 
 # Criterion 4: All workflows compliant
 if [ "$VIOLATING_WORKFLOWS" -eq 0 ]; then
-    echo "✅ All workflows compliant: ACHIEVED"
+    echo "SUCCESS All workflows compliant: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ All workflows compliant: $VIOLATING_WORKFLOWS workflows need fixes"
+    echo "FAILED All workflows compliant: $VIOLATING_WORKFLOWS workflows need fixes"
 fi
 
 # Criterion 5: Copilot instructions enforced
 if grep -q "phase2_terminal_output_compliance" .github/copilot-instructions.md 2>/dev/null; then
-    echo "✅ Copilot instructions enforced: ACHIEVED"
+    echo "SUCCESS Copilot instructions enforced: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Copilot instructions enforced: Not configured"
+    echo "FAILED Copilot instructions enforced: Not configured"
 fi
 
 # Criterion 6: QC standards maintained
 if [ -f "scripts/qc_pre_push.sh" ] && bash scripts/qc_pre_push.sh >/dev/null 2>&1; then
-    echo "✅ QC standards maintained: ACHIEVED"
+    echo "SUCCESS QC standards maintained: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ QC standards maintained: Failing"
+    echo "FAILED QC standards maintained: Failing"
 fi
 
 echo ""
@@ -200,13 +200,13 @@ echo "Completion percentage: $COMPLETION_PERCENTAGE%"
 
 if [ "$COMPLETION_CRITERIA" -eq "$TOTAL_CRITERIA" ]; then
     echo ""
-    echo "🎉 PHASE 2 COMPLETE! Ready for Phase 3 transition."
+    echo "SYMBOL PHASE 2 COMPLETE! Ready for Phase 3 transition."
 elif [ "$COMPLETION_CRITERIA" -ge 4 ]; then
     echo ""
-    echo "🟡 PHASE 2 NEARLY COMPLETE: $((TOTAL_CRITERIA - COMPLETION_CRITERIA)) criteria remaining"
+    echo "YELLOW PHASE 2 NEARLY COMPLETE: $((TOTAL_CRITERIA - COMPLETION_CRITERIA)) criteria remaining"
 else
     echo ""
-    echo "🔴 PHASE 2 IN PROGRESS: $((TOTAL_CRITERIA - COMPLETION_CRITERIA)) criteria remaining"
+    echo "RED PHASE 2 IN PROGRESS: $((TOTAL_CRITERIA - COMPLETION_CRITERIA)) criteria remaining"
 fi
 
 echo ""

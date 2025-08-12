@@ -1,3 +1,9 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read, pull-requests:write
+# PURPOSE: Continuous integration and testing for DevOnboarder
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Code quality validation and test execution
+
 # ---
 # codex-agent:
 #     name: Agent.CiHealth
@@ -83,7 +89,7 @@ jobs:
               with:
                   python-version: ${{ matrix['python-version'] }}
             - name: Set up Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix['node-version'] }}
             - name: Run CI tests

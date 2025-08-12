@@ -7,9 +7,138 @@ Discord bot services each provide their own examples &ndash; copy
 `auth/.env.example` to `auth/.env` and `bot/.env.example` to `bot/.env`
 when working with those packages directly.
 
+## Environment Configuration System
+
+DevOnboarder supports comprehensive environment configuration with 5 distinct modes. Each environment provides optimized defaults for different use cases.
+
+### Available Environments
+
+Set `APP_ENV` in your `.env` file to switch between environments:
+
+- **`testing`** &ndash; Unit tests and automated testing
+    - Fast token expiration (60s), SQLite database, minimal logging
+    - Optimized for rapid test cycles
+- **`ci`** &ndash; Continuous integration pipelines
+    - SQLite database, detailed logging, 6 localhost CORS origins
+    - Comprehensive testing environment
+- **`debug`** &ndash; Development with verbose logging
+    - DEBUG level logging, extended token timeout (1h), SQLite database
+    - Maximum verbosity for troubleshooting
+- **`development`** &ndash; Local development (default)
+    - PostgreSQL database, wildcard CORS, balanced logging
+    - Developer-friendly defaults
+- **`production`** &ndash; Production deployment
+    - PostgreSQL database, restricted CORS, error-only logging
+    - Security-first configuration
+
+### Switching Environments
+
+#### Method 1: Edit .env file (Recommended)
+
+```bash
+# Edit .env file and change:
+APP_ENV=development  # Change to: testing, ci, debug, development, or production
+
+# Sync to other environment files (optional)
+bash scripts/smart_env_sync.sh --sync-all
+```
+
+#### Method 2: Temporary override
+
+```bash
+# For current terminal session only
+export APP_ENV=testing
+```
+
+### Environment-Specific Defaults
+
+Each environment automatically configures:
+
+- **Database URLs**: SQLite for testing/CI/debug, PostgreSQL for dev/prod
+- **CORS Origins**: Appropriate security boundaries per environment
+- **Logging Levels**: From WARNING (testing) to DEBUG (debug) to ERROR (production)
+- **Token Expiration**: From 60s (testing) to 30min (production)
+- **Redis URLs**: Isolated database numbers per environment
+- **Initialization**: Auto-setup enabled for dev environments, manual for production
+
+### Programming Usage
+
+Use the environment system in your code:
+
+```python
+from utils.environment import (
+    get_environment,
+    is_testing,
+    is_debug,
+    get_database_url,
+    get_cors_origins,
+    get_config_value
+)
+
+# Check current environment
+env = get_environment()
+print(f"Running in {env} mode")
+
+# Environment-specific logic
+if is_testing():
+    # Fast test setup
+    timeout = 5
+elif is_debug():
+    # Verbose debugging
+    timeout = 300
+else:
+    # Normal operation
+    timeout = 30
+
+# Get environment-appropriate configuration
+db_url = get_database_url()
+cors_origins = get_cors_origins()
+token_expire = get_config_value("TOKEN_EXPIRE_SECONDS")
+```
+
+#### Enhanced Conditional Helpers
+
+For the environments we control (testing, CI, debug), use enhanced conditionals:
+
+```python
+from utils.environment import (
+    is_controlled_environment,      # testing, ci, debug
+    is_fast_environment,           # testing, ci (speed optimized)
+    allows_dangerous_operations,   # testing, ci, debug (safe to reset)
+    requires_production_safety     # development, production (conservative)
+)
+
+# Database operations
+if allows_dangerous_operations():
+    # Safe to reset database in controlled environments
+    reset_database()
+    clear_all_caches()
+
+# Performance optimizations  
+if is_fast_environment():
+    # Aggressive caching for testing/CI
+    enable_fast_mode()
+
+# Safety measures
+if requires_production_safety():
+    # Conservative settings for dev/prod
+    enable_rate_limiting()
+    enable_audit_logging()
+```
+
+### Quick Reference
+
+| Environment  | Database | CORS      | Log Level | Token Exp | Use Case              |
+|-------------|----------|-----------|-----------|-----------|----------------------|
+| `testing`   | SQLite   | Wildcard  | WARNING   | 60s       | Unit tests           |
+| `ci`        | SQLite   | 6 origins | INFO      | 5min      | CI pipelines         |
+| `debug`     | SQLite   | Wildcard  | DEBUG     | 1h        | Troubleshooting      |
+| `development` | PostgreSQL | Wildcard | INFO    | 1h        | Local development    |
+| `production` | PostgreSQL | Restricted | ERROR  | 30min     | Production deployment |
+
 ## Core settings
 
-- `APP_ENV` &ndash; application mode such as `development` or `production`.
+- `APP_ENV` &ndash; Environment mode: `testing`, `ci`, `debug`, `development`, or `production`.
 - `DATABASE_URL` &ndash; Postgres connection string for the main database.
 - `TOKEN_EXPIRE_SECONDS` &ndash; lifetime of auth tokens in seconds (default `3600`).
 - `TAGS_MODE` &ndash; set to `true` when running within the TAGS stack so

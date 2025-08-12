@@ -11,14 +11,14 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}📝 DevOnboarder Commit Message Guide${NC}"
+echo -e "${GREEN}EDIT DevOnboarder Commit Message Guide${NC}"
 echo "===================================="
 echo ""
 echo -e "${YELLOW}This guide helps you write proper commit messages following DevOnboarder conventions.${NC}"
 echo ""
 
 show_examples() {
-    echo -e "${BLUE}🎯 Commit Type Examples${NC}"
+    echo -e "${BLUE}TARGET Commit Type Examples${NC}"
     echo "======================"
     echo ""
 
@@ -76,7 +76,7 @@ show_examples() {
 }
 
 show_scope_guide() {
-    echo -e "${BLUE}🎯 Scope Guidelines${NC}"
+    echo -e "${BLUE}TARGET Scope Guidelines${NC}"
     echo "=================="
     echo ""
     echo -e "${CYAN}Common scopes in DevOnboarder:${NC}"
@@ -94,34 +94,34 @@ show_scope_guide() {
 }
 
 show_message_structure() {
-    echo -e "${BLUE}📐 Message Structure${NC}"
+    echo -e "${BLUE}SYMBOL Message Structure${NC}"
     echo "==================="
     echo ""
     echo -e "${CYAN}Format:${NC} TYPE(scope): subject"
     echo ""
     echo -e "${CYAN}Rules:${NC}"
-    echo "  ✅ TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
-    echo "  ✅ scope is optional but recommended (lowercase)"
-    echo "  ✅ subject should be imperative mood (\"add\" not \"added\")"
-    echo "  ✅ subject should be descriptive and concise"
-    echo "  ✅ no period at the end of subject"
-    echo "  ✅ keep under 72 characters for better git log display"
+    echo "  SUCCESS TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
+    echo "  SUCCESS scope is optional but recommended (lowercase)"
+    echo "  SUCCESS subject should be imperative mood (\"add\" not \"added\")"
+    echo "  SUCCESS subject should be descriptive and concise"
+    echo "  SUCCESS no period at the end of subject"
+    echo "  SUCCESS keep under 72 characters for better git log display"
     echo ""
     echo -e "${CYAN}Examples:${NC}"
-    echo "  ✅ FEAT(auth): add JWT token validation middleware"
-    echo "  ✅ FIX(bot): resolve Discord connection timeout handling"
-    echo "  ✅ DOCS: update git workflow utilities documentation"
+    echo "  SUCCESS FEAT(auth): add JWT token validation middleware"
+    echo "  SUCCESS FIX(bot): resolve Discord connection timeout handling"
+    echo "  SUCCESS DOCS: update git workflow utilities documentation"
     echo ""
     echo -e "${CYAN}Avoid:${NC}"
-    echo "  ❌ fix bug (too vague)"
-    echo "  ❌ Updated documentation (wrong tense)"
-    echo "  ❌ feat: add feature (wrong case)"
-    echo "  ❌ FEAT(auth): Added JWT validation. (wrong tense, has period)"
+    echo "  FAILED fix bug (too vague)"
+    echo "  FAILED Updated documentation (wrong tense)"
+    echo "  FAILED feat: add feature (wrong case)"
+    echo "  FAILED FEAT(auth): Added JWT validation. (wrong tense, has period)"
     echo ""
 }
 
 show_interactive_helper() {
-    echo -e "${BLUE}🤖 Interactive Commit Helper${NC}"
+    echo -e "${BLUE}Bot Interactive Commit Helper${NC}"
     echo "============================="
     echo ""
     echo "Let's build a commit message step by step!"
@@ -195,21 +195,21 @@ show_interactive_helper() {
     fi
 
     echo ""
-    echo -e "${GREEN}🎉 Generated commit message:${NC}"
+    echo -e "${GREEN}SYMBOL Generated commit message:${NC}"
     echo "  $commit_msg"
     echo ""
-    echo -e "${YELLOW}💡 Copy this message and use it with git commit -m \"$commit_msg\"${NC}"
+    echo -e "${YELLOW}IDEA Copy this message and use it with git commit -m \"$commit_msg\"${NC}"
     echo "   Or use ./scripts/commit_changes.sh and select the custom message option."
     echo ""
 }
 
 show_current_changes() {
-    echo -e "${BLUE}🔍 Current Changes Analysis${NC}"
+    echo -e "${BLUE}SEARCH Current Changes Analysis${NC}"
     echo "=========================="
     echo ""
 
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository"
+        echo "FAILED Not in a git repository"
         return
     fi
 
@@ -223,7 +223,7 @@ show_current_changes() {
             echo -e "${YELLOW}Unstaged changes found:${NC}"
             git diff --name-only | head -10
             echo ""
-            echo "💡 Run 'git add .' to stage changes, then use this guide again."
+            echo "IDEA Run 'git add .' to stage changes, then use this guide again."
         else
             echo "Working directory is clean."
         fi
@@ -245,23 +245,23 @@ show_current_changes() {
     echo -e "${CYAN}Suggested commit types based on your changes:${NC}"
 
     if echo "$changed_files" | grep -q "\.md$"; then
-        echo "  📝 DOCS - You have documentation files"
+        echo "  EDIT DOCS - You have documentation files"
     fi
 
     if echo "$changed_files" | grep -q "scripts/"; then
-        echo "  🔧 CHORE(scripts) or FEAT(scripts) - You have script changes"
+        echo "  CONFIG CHORE(scripts) or FEAT(scripts) - You have script changes"
     fi
 
     if echo "$changed_files" | grep -q "\.py$"; then
-        echo "  🐍 FEAT, FIX, or REFACTOR - You have Python changes"
+        echo "  SYMBOL FEAT, FIX, or REFACTOR - You have Python changes"
     fi
 
     if echo "$changed_files" | grep -q "\.(js|ts)$"; then
-        echo "  ⚡ FEAT, FIX, or REFACTOR - You have JavaScript/TypeScript changes"
+        echo "  SYMBOL FEAT, FIX, or REFACTOR - You have JavaScript/TypeScript changes"
     fi
 
     if echo "$changed_files" | grep -q "\.(yml|yaml)$"; then
-        echo "  ⚙️ CI or CONFIG - You have YAML configuration changes"
+        echo "  SYMBOL CI or CONFIG - You have YAML configuration changes"
     fi
 
     echo ""
@@ -269,7 +269,7 @@ show_current_changes() {
 
 # Main menu
 main_menu() {
-    echo -e "${GREEN}📚 What would you like to learn about?${NC}"
+    echo -e "${GREEN}SYMBOL What would you like to learn about?${NC}"
     echo "====================================="
     echo "1. Show commit message examples"
     echo "2. Show scope guidelines"
@@ -308,7 +308,7 @@ main_menu() {
             main_menu
             ;;
         6)
-            echo "👋 Happy committing!"
+            echo "SYMBOL Happy committing!"
             exit 0
             ;;
         *)

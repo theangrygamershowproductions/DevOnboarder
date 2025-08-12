@@ -1,0 +1,198 @@
+name: 📋 After Action Report
+description: Submit an AAR for automated processing and documentation
+title: "AAR: [Initiative Name] – [Date]"
+labels: ["aar", "documentation", "automated"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## After Action Report Submission
+
+        This form creates a validated AAR using DevOnboarder's schema-driven system.
+        The data will be automatically processed and converted to documentation.
+
+  - type: input
+    id: title
+    attributes:
+      label: "Initiative Title"
+      description: "Clear, descriptive title for the initiative"
+      placeholder: "Docker Service Mesh Implementation – Phase 3"
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: "Completion Date"
+      description: "Initiative completion date (YYYY-MM-DD format)"
+      placeholder: "2025-08-08"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: "Initiative Type"
+      description: "Category that best describes this initiative"
+      options:
+        - Infrastructure
+        - CI
+        - Monitoring
+        - Documentation
+        - Feature
+        - Security
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority Level"
+      description: "Business impact and urgency level"
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: participants
+    attributes:
+      label: "Participants"
+      description: "Team members involved (one per line, use @username format)"
+      placeholder: |
+        @alice-engineer
+        @bob-devops
+        @charlie-pm
+    validations:
+      required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem Statement"
+      description: "What problem was being addressed?"
+      placeholder: "Describe the problem that needed to be solved..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Solution Approach"
+      description: "What approach was taken to solve the problem?"
+      placeholder: "Describe the solution that was implemented..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: "Outcome and Impact"
+      description: "What was the final result and impact achieved?"
+      placeholder: "Describe the outcome and impact delivered..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: phases
+    attributes:
+      label: "Project Phases"
+      description: "Major phases of the initiative (one per line: Phase Name | Duration | Status)"
+      placeholder: |
+        Planning | 1 week | Completed
+        Implementation | 3 weeks | Completed
+        Testing | 1 week | Completed
+        Deployment | 2 days | Completed
+    validations:
+      required: false
+
+  - type: textarea
+    id: success_metrics
+    attributes:
+      label: "Success Metrics"
+      description: "Measurable improvements achieved (one per line)"
+      placeholder: |
+        Performance: 45% improvement in response time
+        Reliability: 99.9% uptime achieved
+        Cost: 30% reduction in infrastructure spend
+        Developer Experience: 60% faster deployment cycles
+    validations:
+      required: false
+
+  - type: textarea
+    id: challenges_overcome
+    attributes:
+      label: "Challenges Overcome"
+      description: "Major obstacles that were successfully addressed (one per line)"
+      placeholder: |
+        Legacy system integration complexity resolved through adapter pattern
+        Team training requirements addressed with comprehensive documentation
+        Performance bottlenecks eliminated through caching strategy
+    validations:
+      required: false
+
+  - type: textarea
+    id: action_items
+    attributes:
+      label: "Follow-up Action Items"
+      description: "Tasks to be completed (one per line: Task | Owner | Due Date | Status)"
+      placeholder: |
+        Complete documentation updates | @platform-team | 2025-08-15 | Not Started
+        Conduct team training sessions | @lead-engineer | 2025-08-20 | In Progress
+        Monitor performance metrics | @devops-team | 2025-09-01 | Not Started
+    validations:
+      required: false
+
+  - type: textarea
+    id: lessons_learned
+    attributes:
+      label: "Lessons Learned"
+      description: "Key insights for future projects (one per line)"
+      placeholder: |
+        Schema-first approach prevents format inconsistencies
+        Automation reduces manual overhead significantly
+        Team training investment pays dividends in execution speed
+        Early stakeholder engagement prevents late-stage changes
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "Reference Links"
+      description: "Related documentation, PRs, issues (one per line: Title | URL | Type)"
+      placeholder: |
+        Infrastructure Design Doc | https://docs.example.com/design | documentation
+        Implementation PR #123 | https://github.com/org/repo/pull/123 | pr
+        Monitoring Dashboard | https://grafana.example.com/dashboard | external
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: "Confirmation"
+      description: "Please confirm the following"
+      options:
+        - label: "This AAR contains accurate information about the completed initiative"
+          required: true
+        - label: "I understand this will be processed automatically and create documentation"
+          required: true
+        - label: "All sensitive information has been removed or generalized"
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **Next Steps**: After submission, this AAR will be automatically processed:
+        1. ✅ Data validation against schema
+        2. 📄 Markdown report generation
+        3. 🔗 Integration with DevOnboarder documentation
+        4. 📊 Addition to AAR dashboard and metrics
+
+        Questions? Check the [AAR Documentation](../docs/AAR/README.md) or contact @platform-team.

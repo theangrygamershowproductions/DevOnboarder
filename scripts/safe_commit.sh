@@ -56,41 +56,41 @@ else
             echo "Commit successful after re-staging!"
         else
             SECOND_EXIT_CODE=$?
-            echo "❌ CRITICAL: Pre-commit failed AGAIN after re-staging files!"
+            echo "FAILED CRITICAL: Pre-commit failed AGAIN after re-staging files!"
             echo "Exit code: $SECOND_EXIT_CODE"
             echo ""
-            echo "🔍 AUTOMATIC LOG ANALYSIS:"
+            echo "SEARCH AUTOMATIC LOG ANALYSIS:"
             echo "=========================="
 
             # Show recent pre-commit logs
-            echo "📋 Recent pre-commit cache logs:"
+            echo "SYMBOL Recent pre-commit cache logs:"
             find ~/.cache/pre-commit -name "*.log" -type f -mtime -1 2>/dev/null | head -3 | while read -r logfile; do
-                echo "📄 Log: $logfile"
+                echo "FILE Log: $logfile"
                 echo "   Last 10 lines:"
                 tail -10 "$logfile" 2>/dev/null | sed 's/^/     /'
                 echo ""
             done
 
             # Show git status for debugging
-            echo "📋 Current git status:"
+            echo "SYMBOL Current git status:"
             git status --porcelain | sed 's/^/   /'
             echo ""
 
             # Show what files were supposed to be committed
             if [[ -n "$STAGED_FILES" ]]; then
-            echo "📋 Files that should have been staged:"
+            echo "SYMBOL Files that should have been staged:"
             # shellcheck disable=SC2001 # Using sed for proper indentation formatting
             echo "$STAGED_FILES" | sed 's/^/   /'
         fi
             echo ""
 
             # Show current staged files
-            echo "📋 Actually staged files:"
+            echo "SYMBOL Actually staged files:"
             git diff --cached --name-only | sed 's/^/   /'
             echo ""
 
-            echo "🚨 This indicates a systemic pre-commit issue, not just whitespace fixes."
-            echo "💡 Recommended actions:"
+            echo "SYMBOL This indicates a systemic pre-commit issue, not just whitespace fixes."
+            echo "IDEA Recommended actions:"
             echo "   1. Check the log output above for specific error patterns"
             echo "   2. Run: source .venv/bin/activate && pre-commit run --all-files"
             echo "   3. Or run individual hooks: pre-commit run <hook-name> --all-files"

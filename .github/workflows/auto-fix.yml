@@ -1,3 +1,9 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read
+# PURPOSE: DevOnboarder workflow automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Automated workflow processing
+
 # ---
 # codex-agent:
 #   name: Agent.AutoFix
@@ -18,6 +24,9 @@ on:
         workflows: ["CI"]
         types:
             - completed
+
+permissions:
+    contents: read
 
 jobs:
     validate-yaml:
@@ -82,6 +91,7 @@ jobs:
                     snippet=$(sed -n "${start},${end}p" "$file" 2>/dev/null || true)
                   fi
                   export SNIPPET="$snippet"
+                  # terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter
                   patch=$(python - "$OPENAI_API_KEY" <<'PY'
                     import sys, os, openai
                     openai.api_key = sys.argv[1]
@@ -103,6 +113,7 @@ jobs:
                     exit 1
                   fi
                   pip install openai
+                  # terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter
                   suggestion=$(python - "$OPENAI_API_KEY" <<'PY'
                     import sys, openai
                     openai.api_key = sys.argv[1]

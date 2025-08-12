@@ -32,7 +32,7 @@ version = "0.1.0"
 description = "Sample trunk-based workflow project"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "httpx<0.29",
     "fastapi",
@@ -51,7 +51,9 @@ test = [
     "pytest-cov",
     "pytest-asyncio",
     "requests",
+    "types-requests",
     "pyyaml",
+    "yamllint",
     "jsonschema",
     "black",
     "openapi-spec-validator",

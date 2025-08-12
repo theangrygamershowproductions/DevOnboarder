@@ -53,17 +53,17 @@ class CIHealthMonitor:
     def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
-            print("❌ Virtual environment not detected")
-            print("💡 DevOnboarder requires virtual environment isolation")
-            print("🔧 Run: python -m venv .venv && source .venv/bin/activate")
+            print("FAILED Virtual environment not detected")
+            print("IDEA DevOnboarder requires virtual environment isolation")
+            print("CONFIG Run: python -m venv .venv && source .venv/bin/activate")
             sys.exit(1)
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
-            print(f"❌ Virtual environment invalid: {self.venv_path}")
+            print(f"FAILED Virtual environment invalid: {self.venv_path}")
             sys.exit(1)
 
-        print(f"✅ Virtual environment validated: {self.venv_path}")
+        print(f"SUCCESS Virtual environment validated: {self.venv_path}")
 
     def collect_ci_metrics(self, days_back: int = 7) -> Dict[str, Any]:
         """Collect CI metrics from GitHub Actions."""
@@ -117,11 +117,11 @@ class CIHealthMonitor:
                 metrics["alerts"] = self._generate_health_alerts(summary_stats)
 
         except subprocess.CalledProcessError as e:
-            print(f"⚠️  GitHub CLI error: {e}")
-            print("💡 Ensure 'gh' is authenticated and available")
+            print(f"WARNING  GitHub CLI error: {e}")
+            print("IDEA Ensure 'gh' is authenticated and available")
             metrics["error"] = str(e)
         except (json.JSONDecodeError, OSError) as e:
-            print(f"❌ Error collecting CI metrics: {e}")
+            print(f"FAILED Error collecting CI metrics: {e}")
             metrics["error"] = str(e)
 
         return metrics
@@ -232,9 +232,9 @@ class CIHealthMonitor:
                     "type": "duration_high",
                     "severity": "medium",
                     "message": (
-                        f"Average CI duration ({avg_duration/60:.1f} min) exceeds "
+                        f"Average CI duration ({avg_duration / 60:.1f} min) exceeds "
                         f"threshold "
-                        f"({self.metrics_config['avg_duration_threshold']/60:.1f} "
+                        f"({self.metrics_config['avg_duration_threshold'] / 60:.1f} "
                         f"min)"
                     ),
                     "metric": "avg_duration",
@@ -275,7 +275,7 @@ class CIHealthMonitor:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"📊 Health report saved: {output_path}")
+        print(f"STATS Health report saved: {output_path}")
 
     def _generate_recommendations(
         self, metrics: Dict[str, Any]
@@ -337,7 +337,7 @@ class CIHealthMonitor:
     ) -> None:
         """Run continuous CI health monitoring."""
         print(
-            f"🔄 Starting continuous CI health monitoring "
+            f"SYMBOL Starting continuous CI health monitoring "
             f"(interval: {interval_hours}h)"
         )
 
@@ -353,14 +353,14 @@ class CIHealthMonitor:
                 health_score = metrics.get("health_score", 0)
                 alerts = metrics.get("alerts", [])
 
-                print(f"🏥 CI Health Score: {health_score}/100")
+                print(f"SYMBOL CI Health Score: {health_score}/100")
 
                 if alerts:
-                    print(f"🚨 Active Alerts: {len(alerts)}")
+                    print(f"SYMBOL Active Alerts: {len(alerts)}")
                     for alert in alerts[:3]:  # Show top 3 alerts
                         print(f"   • {alert['message']}")
                 else:
-                    print("✅ No active alerts")
+                    print("SUCCESS No active alerts")
 
                 # Save monitoring report
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -374,11 +374,11 @@ class CIHealthMonitor:
                     time.sleep(interval_hours * 3600)
 
             except KeyboardInterrupt:
-                print("\n🛑 Monitoring stopped by user")
+                print("\nSYMBOL Monitoring stopped by user")
                 break
             except (subprocess.CalledProcessError, FileNotFoundError) as e:
-                print(f"❌ Monitoring error: {e}")
-                print("🔄 Continuing monitoring...")
+                print(f"FAILED Monitoring error: {e}")
+                print("SYMBOL Continuing monitoring...")
                 time.sleep(300)  # Wait 5 minutes before retry
 
 
@@ -422,33 +422,33 @@ def main():
     if args.continuous:
         monitor.monitor_continuously(args.interval, args.max_iterations)
     else:
-        print(f"🔍 Collecting CI metrics for last {args.days_back} days...")
+        print(f"SEARCH Collecting CI metrics for last {args.days_back} days...")
         metrics = monitor.collect_ci_metrics(args.days_back)
 
         # Display summary
         stats = metrics.get("summary_stats", {})
         if stats:
-            print("\n📊 CI Health Summary:")
+            print("\nSTATS CI Health Summary:")
             print(f"   Total runs: {stats.get('total_runs', 0)}")
             print(f"   Success rate: {stats.get('success_rate', 0):.1%}")
             print(
                 f"   Average duration: "
-                f"{stats.get('avg_duration_seconds', 0)/60:.1f} minutes"
+                f"{stats.get('avg_duration_seconds', 0) / 60:.1f} minutes"
             )
             print(f"   Health score: {metrics.get('health_score', 0)}/100")
 
         alerts = metrics.get("alerts", [])
         if alerts:
-            print(f"\n🚨 Active Alerts ({len(alerts)}):")
+            print(f"\nSYMBOL Active Alerts ({len(alerts)}):")
             for alert in alerts:
                 print(f"   • [{alert['severity'].upper()}] {alert['message']}")
         else:
-            print("\n✅ No active health alerts")
+            print("\nSUCCESS No active health alerts")
 
         # Generate report
         monitor.generate_health_report(metrics, args.output)
 
-        print("\n✅ CI health monitoring complete")
+        print("\nSUCCESS CI health monitoring complete")
 
 
 if __name__ == "__main__":

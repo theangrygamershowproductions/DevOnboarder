@@ -8,7 +8,7 @@ SCRIPT_DIR=$(dirname "$0")
 VALIDATE_SCRIPT="$SCRIPT_DIR/validate_ci_locally.sh"
 
 show_quick_help() {
-    echo "🚀 DevOnboarder Quick Validation Helper"
+    echo "DEPLOY DevOnboarder Quick Validation Helper"
     echo "==============================================="
     echo
     echo "QUICK SHORTCUTS:"
@@ -44,33 +44,33 @@ show_quick_help() {
 
 case "${1:-help}" in
     "lint")
-        echo "🔍 Running linting checks only..."
+        echo "SEARCH Running linting checks only..."
         bash "$VALIDATE_SCRIPT" --section validation
         ;;
     "test")
-        echo "🧪 Running all tests..."
+        echo "EMOJI Running all tests..."
         bash "$VALIDATE_SCRIPT" --section build --step "Python Tests"
         bash "$VALIDATE_SCRIPT" --section frontend --step "Frontend Tests"
         bash "$VALIDATE_SCRIPT" --section bot --step "Bot Tests"
         ;;
     "security")
-        echo "🔒 Running security checks..."
+        echo "SYMBOL Running security checks..."
         bash "$VALIDATE_SCRIPT" --section security
         ;;
     "frontend")
-        echo "🎨 Running frontend validation..."
+        echo "SYMBOL Running frontend validation..."
         bash "$VALIDATE_SCRIPT" --section frontend
         ;;
     "bot")
-        echo "🤖 Running bot validation..."
+        echo "Bot Running bot validation..."
         bash "$VALIDATE_SCRIPT" --section bot
         ;;
     "build")
-        echo "🏗️ Running build pipeline..."
+        echo "SYMBOL Running build pipeline..."
         bash "$VALIDATE_SCRIPT" --section build
         ;;
     "fast")
-        echo "⚡ Running fast checks (no Docker/services)..."
+        echo "SYMBOL Running fast checks (no Docker/services)..."
         bash "$VALIDATE_SCRIPT" --section validation
         bash "$VALIDATE_SCRIPT" --section documentation
         bash "$VALIDATE_SCRIPT" --section frontend
@@ -81,39 +81,39 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --list
         ;;
     "full")
-        echo "🎯 Running complete validation suite..."
+        echo "TARGET Running complete validation suite..."
         bash "$VALIDATE_SCRIPT"
         ;;
     "step")
         if [[ -n "$2" ]]; then
-            echo "🎯 Running specific step: $2"
+            echo "TARGET Running specific step: $2"
             bash "$VALIDATE_SCRIPT" --step "$2"
         else
-            echo "❌ Error: Please specify a step name or number"
+            echo "FAILED Error: Please specify a step name or number"
             echo "Example: $0 step \"Python Tests\""
             exit 1
         fi
         ;;
     "dry")
         if [[ -n "$2" ]]; then
-            echo "🔍 Dry run for section: $2"
+            echo "SEARCH Dry run for section: $2"
             bash "$VALIDATE_SCRIPT" --dry-run --section "$2"
         else
-            echo "❌ Error: Please specify a section for dry run"
+            echo "FAILED Error: Please specify a section for dry run"
             echo "Example: $0 dry frontend"
             exit 1
         fi
         ;;
     "fix-yaml")
-        echo "🔧 Running YAML linting..."
+        echo "CONFIG Running YAML linting..."
         bash "$VALIDATE_SCRIPT" --step "YAML Linting"
         ;;
     "fix-shell")
-        echo "🔧 Running Shellcheck..."
+        echo "CONFIG Running Shellcheck..."
         bash "$VALIDATE_SCRIPT" --step "Shellcheck Linting"
         ;;
     "fix-python")
-        echo "🔧 Running Python checks..."
+        echo "CONFIG Running Python checks..."
         bash "$VALIDATE_SCRIPT" --step "Black Formatting"
         bash "$VALIDATE_SCRIPT" --step "Ruff Linting"
         bash "$VALIDATE_SCRIPT" --step "MyPy Type Check"
@@ -123,7 +123,7 @@ case "${1:-help}" in
         show_quick_help
         ;;
     *)
-        echo "❌ Unknown command: $1"
+        echo "FAILED Unknown command: $1"
         echo "Use '$0 help' to see available commands"
         exit 1
         ;;

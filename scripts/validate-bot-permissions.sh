@@ -44,4 +44,4 @@ if [ -n "$missing_required" ]; then
   exit 1
 fi
 
-echo "Bot permissions file valid ✅"
+echo "Bot permissions file valid SUCCESS"

@@ -1,3 +1,9 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read, pages:write
+# PURPOSE: Documentation generation and maintenance
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Documentation quality and publishing automation
+
 # ---
 # codex-agent:
 #   name: Agent.DocumentationQuality
@@ -20,6 +26,9 @@ on:
       - '**.md'
       - 'docs/**'
       - '.github/workflows/documentation-quality.yml'
+
+permissions:
+  contents: read
 
 jobs:
   validate-docs:
@@ -55,8 +64,11 @@ jobs:
         run: |
           source .venv/bin/activate
           echo "Running Vale documentation quality checks..."
-          python -m vale docs/ > logs/vale-results.log 2>&1 || true
-          cat logs/vale-results.log
+          bash scripts/check_docs.sh || true
+          if [ -f logs/vale-results.json ]; then
+            echo "Vale results:"
+            cat logs/vale-results.json
+          fi
         continue-on-error: true
 
       - name: Check Potato Policy compliance

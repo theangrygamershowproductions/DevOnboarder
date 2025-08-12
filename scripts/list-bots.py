@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """List codex agents defined in workflows and index entries."""
+
 from __future__ import annotations
 
 import json

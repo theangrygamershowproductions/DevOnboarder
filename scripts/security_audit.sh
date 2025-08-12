@@ -16,7 +16,7 @@ OUT="docs/security-audit-${DATE}.md"
 
   # Check for ignored vulnerabilities and report them
   if [ -f ".pip-audit-ignore" ]; then
-    echo "### ⚠️ Ignored Vulnerabilities (Require Periodic Review)"
+    echo "### WARNING Ignored Vulnerabilities (Require Periodic Review)"
     echo
     echo "The following vulnerabilities are currently ignored:"
     echo

@@ -14,12 +14,12 @@ commit_with_log_review() {
     local commit_message="$1"
     local show_success_details="${2:-true}"
 
-    echo -e "${GREEN}📝 Committing changes...${NC}"
+    echo -e "${GREEN}EDIT Committing changes...${NC}"
     echo "Message: $commit_message"
     echo ""
 
     if git commit -m "$commit_message"; then
-        echo -e "${GREEN}✅ Commit successful!${NC}"
+        echo -e "${GREEN}SUCCESS Commit successful!${NC}"
 
         if [ "$show_success_details" = "true" ]; then
             # Show the latest commit
@@ -27,18 +27,18 @@ commit_with_log_review() {
             echo -e "${YELLOW}Latest commit:${NC}"
             git log --oneline -1
             echo ""
-            echo -e "${GREEN}🎉 All changes committed successfully!${NC}"
+            echo -e "${GREEN}SYMBOL All changes committed successfully!${NC}"
         fi
         return 0
     else
         echo ""
-        echo -e "${RED}⚠️  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES${NC}"
+        echo -e "${RED}WARNING  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES${NC}"
         echo "====================================================="
         echo ""
-        echo -e "${YELLOW}🔍 LOG REVIEW REQUIRED:${NC}"
+        echo -e "${YELLOW}SEARCH LOG REVIEW REQUIRED:${NC}"
         echo "Pre-commit hooks have flagged issues that must be fixed before commit."
         echo ""
-        echo -e "${YELLOW}📋 Common Issues to Check:${NC}"
+        echo -e "${YELLOW}SYMBOL Common Issues to Check:${NC}"
         echo "  • ${BLUE}Markdown violations:${NC}"
         echo "    - MD022: Headings must have blank lines before and after"
         echo "    - MD032: Lists must have blank lines before and after"
@@ -56,32 +56,32 @@ commit_with_log_review() {
         echo "    - TypeScript/JavaScript: ESLint violations"
         echo "    - File formatting (trailing spaces, line endings)"
         echo ""
-        echo -e "${YELLOW}🛠️  Step-by-Step Fix Process:${NC}"
+        echo -e "${YELLOW}TOOLS  Step-by-Step Fix Process:${NC}"
         echo "  1. ${BLUE}Read the error output above carefully${NC} - it tells you exactly what to fix"
         echo "  2. ${BLUE}Fix all reported violations${NC} in the affected files"
         echo "  3. ${BLUE}Stage your fixes:${NC} git add ."
         echo "  4. ${BLUE}Re-attempt commit:${NC} git commit -m \"$commit_message\""
         echo "  5. ${BLUE}Or amend this commit:${NC} git commit --amend --no-edit"
         echo ""
-        echo -e "${YELLOW}🔄 Recovery Options if Needed:${NC}"
+        echo -e "${YELLOW}SYMBOL Recovery Options if Needed:${NC}"
         echo "  • ${BLUE}Reset this commit attempt:${NC} git reset --soft HEAD~1"
         echo "  • ${BLUE}Check current status:${NC} git status"
         echo "  • ${BLUE}Use smart commit tool:${NC} ./scripts/commit_changes.sh"
         echo "  • ${BLUE}Learn commit patterns:${NC} ./scripts/commit_message_guide.sh"
         echo ""
-        echo -e "${YELLOW}🎯 Pro Tips:${NC}"
+        echo -e "${YELLOW}TARGET Pro Tips:${NC}"
         echo "  • Run ${BLUE}markdownlint-cli2${NC} on .md files to check markdown before commit"
         echo "  • Run ${BLUE}shellcheck${NC} on .sh files to check bash scripts"
         echo "  • Use ${BLUE}git add -p${NC} to stage changes interactively"
         echo ""
 
-        read -r -p "⏸️  Press Enter after you've reviewed the errors and understand what needs fixing..."
+        read -r -p "⏸SYMBOL  Press Enter after you've reviewed the errors and understand what needs fixing..."
         echo ""
-        echo -e "${YELLOW}💡 IMPORTANT: All issues must be fixed for the commit to succeed.${NC}"
+        echo -e "${YELLOW}IDEA IMPORTANT: All issues must be fixed for the commit to succeed.${NC}"
         echo "   DevOnboarder enforces strict quality standards via pre-commit hooks."
         echo "   This ensures code quality and prevents issues from entering the repository."
         echo ""
-        echo -e "${GREEN}🚀 Once you've fixed the issues, retry with:${NC}"
+        echo -e "${GREEN}DEPLOY Once you've fixed the issues, retry with:${NC}"
         echo "   git commit -m \"$commit_message\""
         echo ""
         return 1
@@ -92,7 +92,7 @@ commit_with_log_review() {
 stage_changes_with_confirmation() {
     local description="$1"
 
-    echo -e "${YELLOW}📋 Staging $description...${NC}"
+    echo -e "${YELLOW}SYMBOL Staging $description...${NC}"
     echo ""
     echo "Files to be staged:"
     git status --short
@@ -103,7 +103,7 @@ stage_changes_with_confirmation() {
 
     if [[ ! $REPLY =~ ^[Nn]$ ]]; then
         git add .
-        echo -e "${GREEN}✅ Changes staged${NC}"
+        echo -e "${GREEN}SUCCESS Changes staged${NC}"
         echo ""
         echo "Staged files:"
         git diff --staged --name-status
@@ -117,12 +117,12 @@ stage_changes_with_confirmation() {
 # Function to check if there are changes to commit
 check_for_changes() {
     if git diff --quiet && git diff --staged --quiet; then
-        echo -e "${GREEN}✅ No changes to commit - working directory is clean${NC}"
+        echo -e "${GREEN}SUCCESS No changes to commit - working directory is clean${NC}"
         return 1
     fi
 
     if git diff --staged --quiet; then
-        echo -e "${YELLOW}⚠️  No staged changes found${NC}"
+        echo -e "${YELLOW}WARNING  No staged changes found${NC}"
         if ! git diff --quiet; then
             echo "Unstaged changes are available:"
             git status --short
@@ -136,7 +136,7 @@ check_for_changes() {
 
 # Function to show commit preparation summary
 show_commit_preparation() {
-    echo -e "${BLUE}📝 Commit Preparation Summary${NC}"
+    echo -e "${BLUE}EDIT Commit Preparation Summary${NC}"
     echo "=========================="
     echo ""
 
@@ -150,7 +150,7 @@ show_commit_preparation() {
     local file_count
     file_count=$(echo "$staged_files" | wc -l)
 
-    echo "  📁 Total files: $file_count"
+    echo "  FOLDER Total files: $file_count"
 
     # Analyze file types
     local doc_files script_files python_files config_files js_files
@@ -160,11 +160,11 @@ show_commit_preparation() {
     config_files=$(echo "$staged_files" | grep -cE "\.(yml|yaml|json|toml)$")
     js_files=$(echo "$staged_files" | grep -cE "\.(js|ts|jsx|tsx)$")
 
-    [ "$doc_files" -gt 0 ] && echo "  📝 Documentation files: $doc_files"
-    [ "$script_files" -gt 0 ] && echo "  🔧 Script files: $script_files"
-    [ "$python_files" -gt 0 ] && echo "  🐍 Python files: $python_files"
-    [ "$config_files" -gt 0 ] && echo "  ⚙️ Configuration files: $config_files"
-    [ "$js_files" -gt 0 ] && echo "  ⚡ JavaScript/TypeScript files: $js_files"
+    [ "$doc_files" -gt 0 ] && echo "  EDIT Documentation files: $doc_files"
+    [ "$script_files" -gt 0 ] && echo "  CONFIG Script files: $script_files"
+    [ "$python_files" -gt 0 ] && echo "  SYMBOL Python files: $python_files"
+    [ "$config_files" -gt 0 ] && echo "  SYMBOL Configuration files: $config_files"
+    [ "$js_files" -gt 0 ] && echo "  SYMBOL JavaScript/TypeScript files: $js_files"
 
     echo ""
 }

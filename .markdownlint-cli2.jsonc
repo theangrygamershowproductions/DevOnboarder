@@ -1,0 +1,15 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD007": { "indent": 4 },
+    "MD025": false
+  },
+  "ignores": [
+    "**/node_modules/**",
+    "node_modules/**",
+    "app/aar-ui/node_modules/**",
+    "frontend/node_modules/**",
+    "bot/node_modules/**"
+  ]
+}

@@ -27,21 +27,37 @@ def test_get_cors_origins_development_mode(monkeypatch):
 def test_get_cors_origins_production_mode(monkeypatch):
     """Test CORS origins in production mode (no env vars)."""
     monkeypatch.delenv("CORS_ALLOW_ORIGINS", raising=False)
-    monkeypatch.delenv("APP_ENV", raising=False)
+    monkeypatch.setenv("APP_ENV", "production")
 
     origins = get_cors_origins()
 
-    assert origins == []
+    # Production should return specific production URLs
+    expected_production = [
+        "https://dev.theangrygamershow.com",
+        "https://auth.theangrygamershow.com",
+        "https://api.theangrygamershow.com",
+        "https://discord.theangrygamershow.com",
+        "https://dashboard.theangrygamershow.com",
+    ]
+    assert origins == expected_production
 
 
 def test_get_cors_origins_empty_string(monkeypatch):
     """Test CORS origins with empty string."""
     monkeypatch.setenv("CORS_ALLOW_ORIGINS", "")
-    monkeypatch.delenv("APP_ENV", raising=False)  # Ensure not in development mode
+    monkeypatch.setenv("APP_ENV", "production")
 
     origins = get_cors_origins()
 
-    assert origins == []
+    # Empty CORS_ALLOW_ORIGINS falls back to environment defaults
+    expected_production = [
+        "https://dev.theangrygamershow.com",
+        "https://auth.theangrygamershow.com",
+        "https://api.theangrygamershow.com",
+        "https://discord.theangrygamershow.com",
+        "https://dashboard.theangrygamershow.com",
+    ]
+    assert origins == expected_production
 
 
 def test_get_cors_origins_whitespace_only(monkeypatch):

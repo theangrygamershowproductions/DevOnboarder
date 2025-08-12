@@ -1,0 +1,16 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff",
+        "redhat.vscode-yaml",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "timonwong.shellcheck",
+        "davidanson.vscode-markdownlint",
+        "vitest.explorer",
+        "ms-vscode.test-adapter-converter",
+        "postman.postman-for-vscode"
+    ]
+}

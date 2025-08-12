@@ -12,7 +12,7 @@ OUTPUT_FILE=${1:-summary.md}
 
 {
   echo ""
-  echo "### 📊 Coverage Summary"
+  echo "### STATS Coverage Summary"
   echo ""
   if [ -n "$COVERED_LINES" ] && [ -n "$TOTAL_LINES" ]; then
     echo "- **Lines:** ${COVERED_LINES}/${TOTAL_LINES} (${COVERAGE_PERCENT}%)"

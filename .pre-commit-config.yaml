@@ -1,28 +1,30 @@
 ---
 repos:
-    - repo: https://github.com/psf/black
-      rev: 25.1.0
-      hooks:
-          - id: black
-            language_version: python3
-            args: ["--line-length=88", "--target-version=py312"]
+    # 1) Language formatters FIRST
     - repo: https://github.com/charliermarsh/ruff-pre-commit
       rev: v0.12.5
       hooks:
           - id: ruff
             args: [--fix, --exit-non-zero-on-fix]
+          - id: ruff-format
     # prettier disabled to prevent root node_modules pollution
     # Use manual formatting: cd frontend && npx prettier --write "**/*.{json,yaml,yml}"
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v5.0.0
+    - repo: https://github.com/adrienverge/yamllint.git
+      rev: v1.37.0
       hooks:
-          - id: trailing-whitespace
-          - id: end-of-file-fixer
+          - id: yamllint
     - repo: https://github.com/shellcheck-py/shellcheck-py
       rev: v0.10.0.1
       hooks:
           - id: shellcheck
             files: ^scripts/.*\.sh$
+    - repo: local
+      hooks:
+          - id: agent-policy
+            name: agent policy enforcer
+            entry: python scripts/agent_policy_enforcer.py
+            language: system
+            stages: [pre-commit, pre-push]
     - repo: https://github.com/codespell-project/codespell
       rev: v2.4.1
       hooks:
@@ -33,10 +35,15 @@ repos:
       rev: v0.18.1
       hooks:
           - id: markdownlint-cli2
-    - repo: https://github.com/adrienverge/yamllint.git
-      rev: v1.37.0
+
+    # 2) Whitespace LAST, fail-only (no edits)
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v5.0.0
       hooks:
-          - id: yamllint
+          - id: end-of-file-fixer
+          - id: trailing-whitespace
+            args: [--markdown-linebreak-ext=md]   # allow Markdown double-space linebreaks
+            stages: [pre-commit]                      # run at commit stage
     - repo: local
       hooks:
           - id: terminal-output-policy
@@ -166,3 +173,27 @@ repos:
                 ]
             language: system
             pass_filenames: false
+          - id: no-shortcuts-policy-enforcer
+            name: "NO_SHORTCUTS_POLICY Enforcer"
+            entry: echo
+            args: ["NO_SHORTCUTS_POLICY: All quality gates must pass"]
+            language: system
+            files: \.(md|sh|yml|yaml)$
+            pass_filenames: false
+            verbose: false
+          - id: qc-pre-push-validation
+            name: "95% Quality Threshold Enforcement"
+            entry: bash
+            args: ["-c", "source .venv/bin/activate && bash scripts/qc_pre_push.sh"]
+            language: system
+            always_run: true
+            pass_filenames: false
+            verbose: false
+          - id: error-learning-system
+            name: "Error Learning System"
+            entry: bash
+            args: ["-c", "if [ -f logs/pre-commit-errors.log ]; then python scripts/known_errors_loop.py logs/pre-commit-errors.log; fi"]
+            language: system
+            always_run: true
+            pass_filenames: false
+            verbose: false

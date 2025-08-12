@@ -70,6 +70,8 @@ class AARPortalGenerator:
                 "sprints": 0,
                 "incidents": 0,
                 "automation": 0,
+                "infrastructure": 0,
+                "integration": 0,
             },
             "metrics": {
                 "total_files_changed": 0,
@@ -102,6 +104,8 @@ class AARPortalGenerator:
                     "sprints": [],
                     "incidents": [],
                     "automation": [],
+                    "infrastructure": [],
+                    "integration": [],
                 }
 
                 # Scan type directories
@@ -555,7 +559,7 @@ class AARPortalGenerator:
                                             <a href="vscode://file/{{ aar.absolute_path }}" class="btn btn-outline-primary btn-sm" title="Open in VSCode">
                                                 <i class="bi bi-code"></i>
                                             </a>
-                                            <a href="../../.aar/{{ aar.file_path }}"
+                                            <a href="../AAR/reports/{{ aar.file_path }}"
                                                class="btn btn-outline-secondary btn-sm"
                                                title="View File">
                                                 <i class="bi bi-eye"></i>
@@ -887,7 +891,9 @@ def main():
         description="Generate HTML portal from DevOnboarder AAR data"
     )
     parser.add_argument(
-        "--aar-dir", default=".aar", help="Path to AAR directory (default: .aar)"
+        "--aar-dir",
+        default="docs/AAR/reports",
+        help="Path to AAR directory (default: docs/AAR/reports)",
     )
     parser.add_argument(
         "--output-dir",

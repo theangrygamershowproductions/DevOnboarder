@@ -8,16 +8,17 @@
 
 **Solution Implemented**:
 
-- Fixed path generation in `scripts/generate_aar_portal.py` line 558
-- Changed from `href="../{{ aar.file_path }}"` to `href="../../.aar/{{ aar.file_path }}"`
-- Properly handles relative path calculation from `docs/aar-portal/` to `.aar/` directory
+- Updated AAR Portal to use unified `docs/AAR/reports/` structure
+- Fixed path generation in `scripts/generate_aar_portal.py`
+- Now properly scans `docs/AAR/reports/` directory for all AAR files
+- Portal generates correct relative paths to GitHub repository structure
 
 **Validation Results**:
 
-- ✅ AAR Portal regenerated successfully
-- ✅ All 5 AAR files now properly linkable via portal
-- ✅ Path structure verified: `../../.aar/2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md`
-- ✅ No more "file not found" errors when clicking AAR links
+- ✅ AAR Portal regenerated with unified system
+- ✅ All 10 AAR files now properly linkable via portal
+- ✅ Path structure verified: `docs/AAR/reports/2025/Q3/Infrastructure/project-name.md`
+- ✅ Schema-driven and legacy AARs unified in single portal view
 
 ### Stage 1B: FastAPI Dashboard Service - COMPLETE ✅
 

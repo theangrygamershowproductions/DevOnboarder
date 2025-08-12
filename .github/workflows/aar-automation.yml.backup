@@ -1,0 +1,314 @@
+# DevOnboarder Token Policy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
+# Required for: Issue and PR automation, AAR workflow triggers
+# Purpose: Automates AAR generation for closed issues and merged PRs
+# DevOnboarder No Default Token Policy v1.0 compliance: Follows token hierarchy
+---
+name: AAR Automation
+
+on:
+  issues:
+    types: [closed]
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      aar_type:
+        description: 'Type of AAR to generate'
+        required: true
+        type: choice
+        options:
+          - issue
+          - pull_request
+          - sprint
+          - incident
+          - automation
+      reference:
+        description: 'Issue number (for issue AAR) or title/description'
+        required: false
+        type: string
+      title:
+        description: 'AAR title (for non-issue AARs)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate-aar:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' &&
+       (contains(github.event.issue.labels.*.name, 'needs-aar') ||
+        contains(github.event.issue.labels.*.name, 'critical') ||
+        contains(github.event.issue.labels.*.name, 'infrastructure') ||
+        contains(github.event.issue.labels.*.name, 'security'))) ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       (contains(github.event.pull_request.labels.*.name, 'needs-aar') ||
+        contains(github.event.pull_request.labels.*.name, 'critical') ||
+        contains(github.event.pull_request.labels.*.name, 'infrastructure') ||
+        contains(github.event.pull_request.labels.*.name, 'security') ||
+        contains(github.event.pull_request.labels.*.name, 'feature') ||
+        contains(github.event.pull_request.labels.*.name, 'breaking-change') ||
+        github.event.pull_request.changed_files > 10)) ||
+      github.event_name == 'workflow_dispatch'
+
+    permissions:
+      # Minimal permissions for AAR automation
+      contents: write        # Required for git commits and push
+      issues: write          # Required for creating follow-up issues
+      pull-requests: read    # Required for PR data access
+      actions: read          # Required for workflow metadata access
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Python environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+
+      - name: Setup environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Generate AAR (Issue Closure)
+        if: github.event_name == 'issues'
+        run: |
+          chmod +x scripts/generate_aar.sh
+          ./scripts/generate_aar.sh issue ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate AAR (PR Closure)
+        if: github.event_name == 'pull_request'
+        run: |
+          chmod +x scripts/generate_aar.sh
+          ./scripts/generate_aar.sh pull_request ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate AAR (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          chmod +x scripts/generate_aar.sh
+          case "${{ github.event.inputs.aar_type }}" in
+            "issue")
+              ./scripts/generate_aar.sh issue "${{ github.event.inputs.reference }}"
+              ;;
+            "pull_request")
+              ./scripts/generate_aar.sh pull_request "${{ github.event.inputs.reference }}"
+              ;;
+            "sprint"|"incident"|"automation")
+              ./scripts/generate_aar.sh "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.title }}"
+              ;;
+          esac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit AAR files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/AAR/
+          git add logs/
+          if git diff --staged --quiet; then
+            echo "No AAR files to commit"
+          else
+            # Determine AAR type for commit message
+            if [ "${{ github.event_name }}" = "issues" ]; then
+              ISSUE_NUM="${{ github.event.issue.number }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$ISSUE_NUM" > commit_msg.txt
+            elif [ "${{ github.event_name }}" = "pull_request" ]; then
+              PR_NUM="${{ github.event.pull_request.number }}"
+              printf "DOCS(aar): add after actions report for PR#%s\n" "$PR_NUM" > commit_msg.txt
+            else
+              AAR_TYPE="${{ github.event.inputs.aar_type }}"
+              printf "DOCS(aar): add after actions report for %s\n" "$AAR_TYPE" > commit_msg.txt
+            fi
+            git commit -F commit_msg.txt
+            git push
+          fi
+
+      - name: Create follow-up issue for action items
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const issueTitle = context.payload.issue.title;
+
+            const body = `## AAR Follow-up: Action Items for #${issueNumber}
+
+            This issue tracks the action items identified in the After Actions Report for #${issueNumber}.
+
+            **Original Issue**: #${issueNumber} - ${issueTitle}
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/issues/issue-${issueNumber}-*.md\`
+
+            ## Action Items
+            <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
+
+            - [ ] Review AAR and extract specific action items
+            - [ ] Assign owners and due dates for each action item
+            - [ ] Update documentation as specified in AAR
+            - [ ] Implement process improvements identified in AAR
+
+            ## Next Steps
+            1. Review the generated AAR file
+            2. Extract specific action items and update this issue
+            3. Assign action items to appropriate team members
+            4. Set due dates based on priority and complexity
+            5. Close this issue when all action items are complete
+
+            **Labels**: \`aar-follow-up\`, \`process-improvement\`
+            `;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `AAR Follow-up: Action Items for #${issueNumber}`,
+              body: body,
+              labels: ['aar-follow-up', 'process-improvement']
+            });
+
+      - name: Create follow-up issue for PR action items
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+            const prAuthor = context.payload.pull_request.user.login;
+
+            const body = `## AAR Follow-up: Action Items for PR #${prNumber}
+
+            This issue tracks the action items identified in the After Actions Report for PR #${prNumber}.
+
+            **Original PR**: #${prNumber} - ${prTitle}
+            **PR Author**: @${prAuthor}
+            **AAR Location**: \`docs/AAR/reports/${new Date().getFullYear()}/Q${Math.ceil((new Date().getMonth() + 1) / 3)}/pull-requests/pr-${prNumber}-*.md\`
+
+            ## Action Items
+            <!-- Copy action items from the AAR and convert to GitHub issue tasks -->
+
+            - [ ] Review AAR and extract specific action items
+            - [ ] Update documentation based on PR learnings
+            - [ ] Implement process improvements identified
+            - [ ] Share knowledge with team members
+
+            ## Next Steps
+            1. Review the generated AAR file
+            2. Extract specific action items and update this issue
+            3. Assign action items to appropriate team members
+            4. Document any architectural decisions made
+            5. Close this issue when all action items are complete
+
+            **Labels**: \`aar-follow-up\`, \`process-improvement\`, \`pr-learnings\`
+            `;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `AAR Follow-up: Action Items for PR #${prNumber}`,
+              body: body,
+              labels: ['aar-follow-up', 'process-improvement', 'pr-learnings']
+            });
+
+      - name: Comment on PR with AAR link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+            const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
+            const year = new Date().getFullYear();
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/pull-requests/pr-${prNumber}-*.md`;
+
+            const comment = `## After Action Report Generated
+
+            An AAR has been automatically generated for this PR to capture development insights and learnings.
+
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Preserve institutional knowledge and improve development processes
+
+            ### What's Included:
+            - Technical decisions and architectural choices
+            - Development process analysis
+            - Lessons learned and best practices
+            - Action items for future improvements
+
+            This helps maintain DevOnboarder's "quiet reliability" philosophy by capturing valuable insights from every significant change.`;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+      - name: Comment on Issue with AAR link
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const issueTitle = context.payload.issue.title;
+            const quarter = Math.ceil((new Date().getMonth() + 1) / 3);
+            const year = new Date().getFullYear();
+            const aarPath = `docs/AAR/reports/${year}/Q${quarter}/issues/issue-${issueNumber}-*.md`;
+
+            const comment = `## After Action Report Generated
+
+            An AAR has been automatically generated for this issue to capture resolution insights and process learnings.
+
+            **AAR Location**: \`${aarPath}\`
+            **Follow-up Issue**: Will be created with action items from the AAR
+            **Purpose**: Document lessons learned and prevent similar issues
+
+            ### What's Included:
+            - Root cause analysis
+            - Resolution timeline and process
+            - What worked well and areas for improvement
+            - Preventive measures and action items
+
+            This systematic approach helps DevOnboarder continuously improve its reliability and processes.`;
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
+
+      - name: Enhanced Issue Comment with AAR Summary
+        if: github.event_name == 'issues' || github.event_name == 'pull_request'
+        run: |
+          source .venv/bin/activate
+          chmod +x scripts/comment_on_issue.py
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 scripts/comment_on_issue.py --type aar --ref "pr-${{ github.event.pull_request.number }}"
+          else
+            python3 scripts/comment_on_issue.py --type aar --ref "${{ github.event.issue.number }}"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload AAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aar-files-${{ github.run_number }}
+          path: |
+            docs/AAR/
+            logs/aar_generation_*.log
+          retention-days: 30

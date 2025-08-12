@@ -1,0 +1,91 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read
+# PURPOSE: DevOnboarder workflow automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Automated workflow processing
+
+name: Orchestrator
+on:
+  workflow_dispatch:
+  schedule: [{cron: '0 */6 * * *'}]
+  pull_request: {types: [labeled, opened, synchronize]}
+
+permissions:
+  contents: write        #  Orchestration needs write access
+  pull-requests: write   #  ORCHESTRATION_BOT_KEY authorized
+  issues: write         #  ORCHESTRATION_BOT_KEY authorized
+  actions: read         # For workflow coordination
+env:
+  CACHE_BUSTER: v-node22-py312
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Set up Python venv
+        run: python -m venv .venv
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+      - name: Generate secrets
+        run: |
+          if [ -f ./scripts/generate-secrets.sh ]; then
+            bash ./scripts/generate-secrets.sh
+          else
+            echo "Secrets generation script not found, skipping"
+          fi
+      - name: Setup CI environment file
+        run: |
+          if [ -f .env.ci ]; then
+            echo "Using existing .env.ci for CI validation"
+          elif [ -f .env.example ]; then
+            cp .env.example .env.ci
+            echo "Copied .env.example to .env.ci for CI validation"
+          else
+            echo "Warning: Neither .env.ci nor .env.example found, creating minimal .env.ci"
+            echo "CI=true" > .env.ci
+          fi
+      - name: Validate CI environment file
+        run: |
+          echo "Validating .env.ci for CI environment"
+          if [ -f .env.ci ]; then
+            echo "Environment file exists: .env.ci"
+            # Validate that essential CI variables are present
+            if grep -q "APP_ENV=ci\|ENVIRONMENT=ci" .env.ci; then
+              echo "CI environment properly configured"
+            else
+              echo "Warning: .env.ci may not be properly configured for CI"
+            fi
+          else
+            echo "Error: .env.ci file not found"
+            exit 1
+          fi
+      - name: Validate env docs
+        run: |
+          source .venv/bin/activate
+          if [ -f scripts/audit_env_docs.py ]; then
+            python3 scripts/audit_env_docs.py
+          else
+            echo "Environment docs audit not found, skipping"
+          fi
+      - name: Orchestrator dry-run (sanity)
+        run: |
+          source .venv/bin/activate
+          python - << 'PY'
+          import yaml, json, os
+          config_path = '.codex/orchestrator/config.yml'
+          if os.path.exists(config_path):
+              with open(config_path) as f:
+                  cfg = yaml.safe_load(f)
+              print(json.dumps({
+                'agents': list(cfg.get('agents',{}).keys()),
+                'routing_rules': len(cfg.get('routing', []))
+              }, indent=2))
+          else:
+              print('{"error": "Orchestrator config not found"}')
+          PY

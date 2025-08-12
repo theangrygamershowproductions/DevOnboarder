@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Aggregate human notifications into a single issue."""
+
 from __future__ import annotations
 
 import json

@@ -15,6 +15,7 @@
 # Python artifacts
 # Root pollution block - CI hygiene enforcement
 **/node_modules/
+*.db
 *.db-journal
 *.egg-info/
 *.env
@@ -45,7 +46,9 @@
 .terraform/
 .venv/
 .vscode-integrations/
-.vscode/
+# .vscode/ - Commented out to support Universal Development Experience Policy
+.vscode/launch.json
+.vscode/*.tmp
 /.coverage*
 /.pytest_cache/
 /.tox/
@@ -59,6 +62,18 @@
 cloudflared/
 *.tunnel.json
 tunnel-credentials.json
+
+# Orchestrator Private Configuration - INTERNAL ONLY
+.codex/orchestrator/secrets/
+.codex/orchestrator/private/
+.codex/orchestrator/runtime/
+
+# Orchestrator Privacy Protection - Hub-and-Spoke System
+.codex/orchestrator/config.yml.private
+.codex/orchestrator/routing-rules.yml
+.codex/orchestrator/agent-assignments.yml
+.codex/orchestrator/*.token
+.codex/orchestrator/*.key
 
 # Potato Policy Protected Files
 Potato
@@ -83,6 +98,7 @@ id_rsa*
 lcov-report/
 logs/
 node_modules/
+aar/node_modules/
 pnpm-lock.yaml
 secrets.yaml
 secrets.yml
@@ -109,3 +125,11 @@ traefik/traefik.yml
 traefik/dynamic.yml
 cloudflared/config.yml
 cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
+# Backup and temporary directories
+.ci-migration-backup/
+DevOnboarder/
+scripts/doc_audit_system.py
+
+# emoji scrub backups
+*.emoji_backup
+tree-snapshot.txt

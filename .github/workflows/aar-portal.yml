@@ -1,14 +1,20 @@
+# TOKEN: CI_ISSUE_AUTOMATION_TOKEN (issue creation and management)
+# PERMISSIONS: contents:read, issues:write, pull-requests:write
+# PURPOSE: Generate After Action Reports for DevOnboarder automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: CI failure analysis and documentation generation
+
 name: Generate AAR Portal
 
 on:
   push:
     paths:
-      - '.aar/**'
+      - 'docs/AAR/**'
       - 'scripts/generate_aar_portal.py'
     branches: [main]
   pull_request:
     paths:
-      - '.aar/**'
+      - 'docs/AAR/**'
       - 'scripts/generate_aar_portal.py'
     branches: [main]
   schedule:
@@ -49,7 +55,7 @@ jobs:
       - name: Generate AAR Portal
         run: |
           python scripts/generate_aar_portal.py \
-            --aar-dir .aar \
+            --aar-dir docs/AAR/reports \
             --output-dir docs/aar-portal
 
       - name: Commit portal updates

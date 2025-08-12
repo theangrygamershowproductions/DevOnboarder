@@ -1,12 +1,12 @@
 ---
-codex-agent:
-    name: Agent.CodeQuality
-    role: Automatically detects and fixes common linting issues across markdown, shell, Python, and YAML files
-    scope: code quality automation
-    triggers: on_pr_created, on_pr_updated, on_file_changed
-    output: .codex/logs/code-quality.log
-    environment: CI
-    permissions: ["repo:write", "workflows:write"]
+agent: code-quality-auto-fix
+purpose: Automatically detects and fixes common linting issues across markdown, shell, Python, and YAML files
+trigger: on_pr_created, on_pr_updated, on_file_changed
+environment: CI
+output: .codex/logs/code-quality.log
+permissions:
+    - repo:write
+    - workflows:write
 ---
 
 # Code Quality Auto-Fix Agent

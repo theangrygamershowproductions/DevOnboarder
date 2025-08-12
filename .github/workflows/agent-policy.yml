@@ -1,0 +1,26 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read
+# PURPOSE: DevOnboarder workflow automation
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Automated workflow processing
+
+name: Agent Policy Enforcement
+on:
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "**/*.sh"
+      - ".github/workflows/**"
+  push:
+    branches: [main]
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Enforce terminal output policy
+        run: python scripts/agent_policy_enforcer.py

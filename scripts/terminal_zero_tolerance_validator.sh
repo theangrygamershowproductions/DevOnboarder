@@ -11,8 +11,8 @@ echo
 
 # Critical violation patterns that cause hanging
 declare -a CRITICAL_PATTERNS=(
-    "echo.*[✅❌🎯🚀📋🔍📝💡⚠️]"     # Emojis cause immediate hanging
-    "echo.*[→≥≤┌└├]"                    # Unicode characters cause hanging
+    "echo.*[SUCCESSFAILEDTARGETDEPLOYSYMBOLSEARCHEDITIDEAWARNING]"     # Emojis cause immediate hanging
+    "echo.*[→≥≤SYMBOL]"                    # Unicode characters cause hanging
     "echo.*\\$\\("                      # Command substitution in echo
     "echo.*\\$\\{"                      # Variable expansion in echo
     "echo -e.*\\\\n"                    # Multi-line escape sequences

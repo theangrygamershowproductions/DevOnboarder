@@ -111,7 +111,7 @@ except:
 }
 EOF
 
-    echo "📋 Token governance status prepared for AAR integration"
+    echo "SYMBOL Token governance status prepared for AAR integration"
 }
 
 if [ -z "$AAR_TYPE" ]; then
@@ -273,7 +273,7 @@ EOF
 
     # If GitHub CLI is available, add comment to issue
     if command -v gh >/dev/null 2>&1; then
-        gh issue comment "$issue_num" --body "## 📋 After Actions Report Generated
+        gh issue comment "$issue_num" --body "## SYMBOL After Actions Report Generated
 
 **AAR Location**: \`$aar_file\`
 **Generated**: $(date +%Y-%m-%d)
@@ -389,7 +389,7 @@ EOF
     # Add GitHub comment if CLI is available
     if command -v gh >/dev/null 2>&1; then
         gh pr comment "$pr_num" --body "
-📋 **After Actions Report Generated**
+SYMBOL **After Actions Report Generated**
 
 An AAR has been created for this PR to capture lessons learned and action items.
 
@@ -933,8 +933,8 @@ update_aar_index
 
 echo ""
 echo "AAR Generation Complete"
-echo "📁 AAR Location: $AAR_BASE_DIR"
-echo "📋 Index: .aar/index.md"
+echo "FOLDER AAR Location: $AAR_BASE_DIR"
+echo "SYMBOL Index: .aar/index.md"
 echo "Log: $LOG_FILE"
 echo ""
 echo "Next steps:"

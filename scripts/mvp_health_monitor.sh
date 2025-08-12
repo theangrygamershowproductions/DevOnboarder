@@ -17,7 +17,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 declare -A failure_counts
 declare -A last_status
 
-echo "🏥 DevOnboarder MVP Health Monitor Started"
+echo "SYMBOL DevOnboarder MVP Health Monitor Started"
 echo "=========================================="
 echo "Monitor interval: ${MONITOR_INTERVAL}s"
 echo "Log file: $LOG_FILE"
@@ -74,7 +74,7 @@ send_alert() {
     # If GitHub CLI is available, create an issue
     if command -v gh >/dev/null 2>&1; then
         gh issue create \
-            --title "🚨 MVP Health Alert: $service_name Service Failure" \
+            --title "SYMBOL MVP Health Alert: $service_name Service Failure" \
             --body "**Service**: $service_name
 **Failure Count**: $failure_count consecutive failures
 **Timestamp**: $(date)
@@ -154,7 +154,7 @@ trap cleanup SIGINT SIGTERM
 log_message "INFO" "Health monitoring started"
 
 while true; do
-    echo "🔍 Health Check - $(date '+%H:%M:%S')"
+    echo "SEARCH Health Check - $(date '+%H:%M:%S')"
 
     # Service health checks
     check_service_health "auth-service" "curl -sf http://localhost:8002/health" "healthy\\|ok\\|running"
@@ -189,12 +189,12 @@ while true; do
         fi
     done
 
-    echo "📊 Status: $healthy_count/$total_services services healthy"
+    echo "STATS Status: $healthy_count/$total_services services healthy"
 
     if [[ $healthy_count -eq $total_services ]]; then
-        echo "✅ All services operational"
+        echo "SUCCESS All services operational"
     else
-        echo "⚠️  Some services need attention"
+        echo "WARNING  Some services need attention"
     fi
 
     echo "⏰ Next check in ${MONITOR_INTERVAL}s..."

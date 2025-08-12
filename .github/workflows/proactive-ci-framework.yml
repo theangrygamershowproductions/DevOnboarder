@@ -1,0 +1,197 @@
+name: Proactive CI Framework
+
+on:
+  push:
+    branches: [main, develop, 'feat/*', 'fix/*', 'ci/*']
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'docs/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'docs/**'
+      - '.github/workflows/**'
+  schedule:
+    # Run proactive validation twice daily
+    - cron: '0 6,18 * * *'
+  workflow_dispatch:
+    inputs:
+      validation_mode:
+        description: 'Validation mode'
+        required: true
+        default: 'enhanced'
+        type: choice
+        options:
+          - enhanced
+          - comprehensive
+          - monitoring-only
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  proactive-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Cache Python Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-
+
+      - name: Install Dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+          pip install watchdog
+
+      - name: Integration Status Check
+        run: |
+          source .venv/bin/activate
+          echo "SYMBOL Proactive CI Framework Integration"
+          echo "   Base Branch: ${{ github.base_ref || 'main' }}"
+          echo "   Current Branch: ${{ github.ref_name }}"
+          echo "   Integration with emoji policy enforcement framework"
+          echo ""
+
+          # Show integration status
+          chmod +x scripts/enhanced_qc_system.sh
+          scripts/enhanced_qc_system.sh status
+
+      - name: Enhanced QC Validation
+        if: ${{ github.event.inputs.validation_mode != 'monitoring-only' }}
+        run: |
+          source .venv/bin/activate
+          echo "SYMBOL Running Enhanced QC with Proactive Integration"
+
+          # Set proactive mode based on input
+          export PROACTIVE_CI_ENABLED=true
+          export QC_VIOLATION_THRESHOLD=3
+
+          # Run enhanced QC system
+          scripts/enhanced_qc_system.sh run
+
+      - name: Comprehensive QC Validation
+        if: ${{ github.event.inputs.validation_mode == 'comprehensive' }}
+        run: |
+          source .venv/bin/activate
+          echo "SYMBOL Running Comprehensive QC Validation"
+
+          # Run existing comprehensive QC
+          scripts/qc_pre_push.sh
+
+      - name: Proactive Monitoring Test
+        if: ${{ github.event.inputs.validation_mode == 'monitoring-only' || github.event_name == 'schedule' }}
+        timeout-minutes: 5
+        run: |
+          source .venv/bin/activate
+          echo "SYMBOL Testing Proactive Monitoring Integration"
+
+          # Test proactive monitoring for 30 seconds
+          timeout 30s scripts/enhanced_qc_system.sh monitor || true
+
+          echo "SYMBOL Proactive monitoring test completed"
+
+      - name: Upload QC Cache
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qc-cache-${{ github.run_id }}
+          path: logs/qc_cache/
+          retention-days: 7
+
+      - name: Integration Summary
+        if: always()
+        run: |
+          echo "SYMBOL Proactive CI Integration Summary"
+          echo ""
+          echo "SYMBOL Enhanced QC System: Integrated with emoji policy enforcement"
+          echo "SYMBOL Real-time Monitoring: File system watchers configured"
+          echo "SYMBOL Smart Pre-commit: Enhanced validation with auto-fixes"
+          echo "SYMBOL Workflow Integration: Proactive validation in CI pipeline"
+          echo ""
+          echo "SYMBOL Framework Components:"
+          echo "   - Proactive Policy Monitor (real-time)"
+          echo "   - Enhanced Smart Pre-commit (git hooks)"
+          echo "   - Enhanced QC System (comprehensive)"
+          echo "   - Workflow Integration (CI/CD)"
+          echo ""
+          echo "SYMBOL Configuration:"
+          echo "   Validation Mode: ${{ github.event.inputs.validation_mode || 'enhanced' }}"
+          echo "   Proactive Enabled: true"
+          echo "   Violation Threshold: 3"
+          echo ""
+          echo "SYMBOL To use locally:"
+          echo "   1. source .venv/bin/activate"
+          echo "   2. scripts/enhanced_qc_system.sh run    # Enhanced QC"
+          echo "   3. scripts/enhanced_qc_system.sh monitor # Real-time monitoring"
+          echo "   4. scripts/enhanced_smart_precommit.sh   # Pre-commit validation"
+
+  integration-validation:
+    runs-on: ubuntu-latest
+    needs: proactive-validation
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Integration Points
+        run: |
+          echo "SYMBOL Validating Proactive CI Integration Points"
+          echo ""
+
+          # Check that all integration files exist
+          integration_files=(
+            "scripts/proactive_policy_monitor.py"
+            "scripts/enhanced_smart_precommit.sh"
+            "scripts/enhanced_qc_system.sh"
+            "scripts/agent_policy_enforcer.py"
+            "scripts/comprehensive_emoji_scrub.py"
+            "scripts/validate_terminal_output_simple.sh"
+            "scripts/qc_pre_push.sh"
+          )
+
+          missing_files=0
+          for file in "${integration_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "   SYMBOL $file"
+            else
+              echo "   SYMBOL $file (missing)"
+              missing_files=$((missing_files + 1))
+            fi
+          done
+
+          if [ $missing_files -gt 0 ]; then
+            echo ""
+            echo "SYMBOL Integration validation failed: $missing_files missing files"
+            exit 1
+          fi
+
+          echo ""
+          echo "SYMBOL All integration components present"
+          echo "SYMBOL Proactive CI Framework ready for deployment"

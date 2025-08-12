@@ -1,0 +1,40 @@
+/* Status pill styles for PublicLandingPage
+ * DevOnboarder CI Stabilization Bundle - Objective 2
+ */
+
+.status-pill[data-status="online"] {
+    background-color: #10b981;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+.status-pill[data-status="error"] {
+    background-color: #ef4444;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+.status-pill[data-status="offline"] {
+    background-color: #6b7280;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+
+/* Service status indicators with accessibility */
+.service-status-online {
+    --status-color: #10b981;
+}
+
+.service-status-error {
+    --status-color: #ef4444;
+}
+
+.service-status-offline {
+    --status-color: #6b7280;
+}

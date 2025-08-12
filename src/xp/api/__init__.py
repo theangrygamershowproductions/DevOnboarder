@@ -61,7 +61,7 @@ def create_app() -> FastAPI:
     cors_origins = get_cors_origins()
 
     class _SecurityHeadersMiddleware(BaseHTTPMiddleware):
-        async def dispatch(self, request, call_next):  # type: ignore[override]
+        async def dispatch(self, request, call_next):
             resp = await call_next(request)
             resp.headers.setdefault("X-Content-Type-Options", "nosniff")
             resp.headers.setdefault(

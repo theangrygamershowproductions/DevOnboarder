@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "DevOnboarder: Quick Validation",
+            "type": "shell",
+            "command": "./scripts/quick_validate.sh",
+            "args": ["${input:validationType}"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DevOnboarder: Full CI Validation",
+            "type": "shell",
+            "command": "source .venv/bin/activate && ./scripts/validate_ci_locally.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DevOnboarder: YAML Lint Fix",
+            "type": "shell",
+            "command": "source .venv/bin/activate && yamllint .github/workflows/*.yml",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DevOnboarder: Setup Environment",
+            "type": "shell",
+            "command": "python -m venv .venv && source .venv/bin/activate && pip install -e .[test]",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "validationType",
+            "description": "Select validation type",
+            "type": "pickString",
+            "options": [
+                "lint",
+                "frontend",
+                "security",
+                "build",
+                "test",
+                "all"
+            ]
+        }
+    ]
+}

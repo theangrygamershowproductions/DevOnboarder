@@ -63,8 +63,8 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     echo "Validating file: $file"
     file_violations=0
 
-    # 1. Check for emojis and Unicode characters (keep this check)
-    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' "$file" 2>/dev/null; then
+    # 1. Check for emojis and Unicode characters (actual problematic patterns only)
+    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|[\x{1F900}-\x{1F9FF}]|→|•|‑' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Emoji/Unicode characters found in $file"
         echo "These WILL cause immediate terminal hanging"
         ((file_violations++))

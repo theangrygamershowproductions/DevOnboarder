@@ -14,4 +14,4 @@ fi
 
 pre-commit install
 
-echo "Development environment ready ✅"
+echo "Development environment ready SUCCESS"

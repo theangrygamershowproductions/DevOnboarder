@@ -1,12 +1,65 @@
 #!/bin/bash
 # Terminal Output Policy Enforcement Script - Simplified
 # ZERO TOLERANCE for violations that cause terminal hanging
+#
+# SUPPRESSION SYSTEM:
+# Add this comment above reviewed-safe patterns to suppress warnings:
+# # terminal-output-policy: reviewed-safe - [reason]
+#
+# Example:
+# # terminal-output-policy: reviewed-safe - Python here-doc with quoted delimiter
+# result=$(python - <<'PY'
+# import json
+# print("safe")
+# PY
+# )
+#
+# Documentation: docs/standards/terminal-output-policy-suppression.md
 
 set -euo pipefail
 
-echo "Starting Terminal Output Policy Validation (Simplified)"
-echo "Target: GitHub Actions workflows"
+# Configuration
+VIOLATIONS_DB=".codex/terminal_violations.json"
+
+echo "Starting Terminal Output Policy Validation (Data-Driven)"
+echo "Target: GitHub Actions workflows and pre-commit config"
 echo "Policy: ZERO TOLERANCE for actual terminal-hanging patterns"
+echo "Database: $VIOLATIONS_DB"
+
+# Check if violations database exists
+if [ ! -f "$VIOLATIONS_DB" ]; then
+    echo "ERROR: Terminal violations database not found: $VIOLATIONS_DB"
+    exit 1
+fi
+
+# Extract all problematic characters from JSON database
+echo "Loading character database..."
+PROBLEMATIC_CHARS=$(python3 -c "
+import json
+import sys
+
+try:
+    with open('$VIOLATIONS_DB', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    chars = []
+    for category in data['categories'].values():
+        for item in category['characters']:
+            chars.append(item['char'])
+
+    # Output characters for grep pattern
+    print('|'.join(chars))
+except Exception as e:
+    print(f'Error loading database: {e}', file=sys.stderr)
+    sys.exit(1)
+")
+
+if [ -z "$PROBLEMATIC_CHARS" ]; then
+    echo "ERROR: Could not load character database"
+    exit 1
+fi
+
+echo "Loaded $(echo "$PROBLEMATIC_CHARS" | tr '|' '\n' | wc -l) problematic characters"
 
 total_violations=0
 WORKFLOW_DIR=".github/workflows"
@@ -17,26 +70,39 @@ if [ ! -d "$WORKFLOW_DIR" ]; then
     exit 0
 fi
 
-echo "Scanning workflows in $WORKFLOW_DIR"
+echo "Scanning workflows in $WORKFLOW_DIR and .pre-commit-config.yaml"
 
-# Process each workflow file
-for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
+# Process each workflow file AND pre-commit config
+for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml ".pre-commit-config.yaml"; do
     # Skip if no files match the pattern
     [ -f "$file" ] || continue
 
     echo "Validating file: $file"
 
-    # 1. Check for emojis and Unicode characters (CRITICAL)
-    if grep -l '✅\|❌\|🎯\|🚀\|📋\|🔍\|📝\|💡\|⚠️\|🛠️\|📊\|📈\|📥\|🔗\|🐛' "$file" 2>/dev/null; then
-        echo "  ❌ CRITICAL: Emoji/Unicode characters found"
+    # 1. Check for problematic characters from database (CRITICAL - causes terminal hanging)
+    violations_found=""
+
+    echo "$PROBLEMATIC_CHARS" | tr '|' '\n' | while read -r char; do
+        if [ -n "$char" ] && grep -F "$char" "$file" >/dev/null 2>&1; then
+            echo "VIOLATION:$char"
+        fi
+    done > "/tmp/violations_$$"
+
+    if [ -s "/tmp/violations_$$" ]; then
+        echo "  CRITICAL: Problematic characters found (causes terminal hanging)"
+        while read -r line; do
+            char="${line#VIOLATION:}"
+            echo "    Found: $char"
+        done < "/tmp/violations_$$"
         ((total_violations++))
     fi
+    rm -f "/tmp/violations_$$"
 
     # 2. Check for variable expansion in echo (CRITICAL - causes hanging)
     # Exclude safe GitHub Actions patterns and variable assignments
     violations_found=$(grep -n '^\s*echo\s.*\$[A-Z_]' "$file" 2>/dev/null | grep -v 'GITHUB_OUTPUT\|GITHUB_ENV\|GITHUB_PATH' || true)
     if [ -n "$violations_found" ]; then
-        echo "  ❌ CRITICAL: Variable expansion in echo found"
+        echo "  CRITICAL: Variable expansion in echo found"
         echo "$violations_found" | head -3 | while read -r line; do
             echo "    Line: $line"
         done
@@ -46,7 +112,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     # 3. Check for command substitution in echo (CRITICAL)
     violations_found=$(grep -n "echo.*\\\$(" "$file" 2>/dev/null | grep -v 'GITHUB_OUTPUT\|GITHUB_ENV' || true)
     if [ -n "$violations_found" ]; then
-        echo "  ❌ CRITICAL: Command substitution in echo found"
+        echo "  CRITICAL: Command substitution in echo found"
         echo "$violations_found" | head -3 | while read -r line; do
             echo "    Line: $line"
         done
@@ -55,13 +121,17 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     # 4. Check for multi-line echo with escape sequences (CRITICAL)
     if grep -n 'echo.*\\n\|echo.*\\t' "$file" 2>/dev/null | head -1 >/dev/null; then
-        echo "  ❌ CRITICAL: Multi-line echo with escape sequences found"
+        echo "  CRITICAL: Multi-line echo with escape sequences found"
         ((total_violations++))
     fi
 
-    # 5. Check for here-doc patterns (WARNING - context dependent)
-    if grep -A3 -B3 'EOF' "$file" 2>/dev/null | grep 'echo\|comment.*body' | head -1 >/dev/null; then
-        echo "  ⚠️  WARNING: Here-doc near echo context - verify safety"
+    # 5. Check for dangerous here-doc patterns (WARNING - context dependent)
+    # Look for actual here-doc syntax that could cause hanging, but exclude safe GitHub Actions patterns
+    # Skip files with suppression comments: terminal-output-policy: reviewed-safe
+    if ! grep -q "terminal-output-policy: reviewed-safe" "$file" 2>/dev/null; then
+        if grep -n 'cat.*<<\|python.*<<\|bash.*<<' "$file" 2>/dev/null | head -1 >/dev/null; then
+            echo "  WARNING: Actual here-doc pattern found - verify safety (add '# terminal-output-policy: reviewed-safe' to suppress)"
+        fi
     fi
 
 done
@@ -73,19 +143,19 @@ echo "Total critical violations: $total_violations"
 # Check if any violations were found
 if [ "$total_violations" -gt 0 ]; then
     echo ""
-    echo "❌ ENFORCEMENT FAILURE: $total_violations critical violations found"
+    echo "ENFORCEMENT FAILURE: $total_violations critical violations found"
     echo "These violations WILL cause terminal hanging in DevOnboarder environment"
     echo ""
     echo "Required fixes:"
     printf "  • Replace echo with variable expansion: echo \"\\$VAR\" → printf '%%s\\n' \"\\$VAR\"\n"
     echo "  • Replace echo with command substitution: echo \"\$(cmd)\" → cmd"
-    echo "  • Remove emojis/Unicode: ✅ → [OK]"
+    echo "  • Remove emojis/Unicode: [checkmark] -> [OK]"
     printf "  • Replace multi-line echo: echo -e \"line1\\nline2\" → individual echo commands\n"
     echo ""
     exit 1
 else
     echo ""
-    echo "✓ ENFORCEMENT SUCCESS: No critical terminal output violations found"
+    echo "SYMBOL ENFORCEMENT SUCCESS: No critical terminal output violations found"
     echo "All workflows comply with ZERO TOLERANCE policy"
     exit 0
 fi

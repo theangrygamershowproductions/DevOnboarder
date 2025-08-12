@@ -1,0 +1,11 @@
+# .git-blame-ignore-revs
+# Commits that should be ignored by git blame for better code archaeology
+#
+# To use this file, run:
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# This prevents massive formatting commits from obscuring actual code changes
+# in git blame output, making code archaeology more effective.
+
+# Universal Workflow Permissions Policy implementation with global formatting sweep
+7e6622c

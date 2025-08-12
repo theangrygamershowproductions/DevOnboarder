@@ -1,13 +1,15 @@
+# TOKEN: GITHUB_TOKEN (default with explicit permissions)
+# PERMISSIONS: contents:read, pull-requests:write, issues:write
+# PURPOSE: Enforce DevOnboarder terminal output policy to prevent hanging
+# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# SCOPE: Validates all shell scripts for ZERO TOLERANCE emoji/Unicode violations
+
 name: Terminal Output Policy Enforcement
 
 on:
   pull_request:
-    paths:
-      - '.github/workflows/**'
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:

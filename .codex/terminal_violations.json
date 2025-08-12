@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "description": "DevOnboarder Terminal Output Policy - Characters that cause terminal hanging",
+  "last_updated": "2025-08-11",
+  "categories": {
+    "critical_emojis": {
+      "description": "Emojis that cause immediate terminal hanging in DevOnboarder environment",
+      "characters": [
+        {"char": "🔐", "code": "U+1F510", "name": "CLOSED LOCK WITH KEY", "context": "security icons"},
+        {"char": "🎯", "code": "U+1F3AF", "name": "DIRECT HIT", "context": "target/goal icons"},
+        {"char": "🧠", "code": "U+1F9E0", "name": "BRAIN", "context": "intelligence icons"},
+        {"char": "📖", "code": "U+1F4D6", "name": "OPEN BOOK", "context": "documentation icons"},
+        {"char": "🛠️", "code": "U+1F6E0+FE0F", "name": "HAMMER AND WRENCH", "context": "tool icons"},
+        {"char": "✅", "code": "U+2705", "name": "WHITE HEAVY CHECK MARK", "context": "success indicators"},
+        {"char": "❌", "code": "U+274C", "name": "CROSS MARK", "context": "failure indicators"},
+        {"char": "⚠️", "code": "U+26A0+FE0F", "name": "WARNING SIGN", "context": "warning indicators"},
+        {"char": "💡", "code": "U+1F4A1", "name": "ELECTRIC LIGHT BULB", "context": "idea icons"},
+        {"char": "🚀", "code": "U+1F680", "name": "ROCKET", "context": "deployment icons"},
+        {"char": "📋", "code": "U+1F4CB", "name": "CLIPBOARD", "context": "checklist icons"},
+        {"char": "🔍", "code": "U+1F50D", "name": "LEFT-POINTING MAGNIFYING GLASS", "context": "search icons"}
+      ]
+    },
+    "unicode_symbols": {
+      "description": "Unicode symbols that cause terminal issues",
+      "characters": [
+        {"char": "→", "code": "U+2192", "name": "RIGHTWARDS ARROW", "context": "flow indicators"},
+        {"char": "•", "code": "U+2022", "name": "BULLET", "context": "list markers"},
+        {"char": "‑", "code": "U+2011", "name": "NON-BREAKING HYPHEN", "context": "typography"},
+        {"char": "…", "code": "U+2026", "name": "HORIZONTAL ELLIPSIS", "context": "truncation indicators"}
+      ]
+    },
+    "variation_selectors": {
+      "description": "Unicode variation selectors that modify emoji presentation",
+      "characters": [
+        {"char": "️", "code": "U+FE0F", "name": "VARIATION SELECTOR-16", "context": "emoji presentation modifier"}
+      ]
+    }
+  },
+  "unicode_ranges": {
+    "description": "Unicode block ranges known to contain problematic characters",
+    "ranges": [
+      {"start": "U+1F600", "end": "U+1F64F", "name": "Emoticons"},
+      {"start": "U+1F300", "end": "U+1F5FF", "name": "Miscellaneous Symbols and Pictographs"},
+      {"start": "U+1F680", "end": "U+1F6FF", "name": "Transport and Map Symbols"},
+      {"start": "U+1F700", "end": "U+1F77F", "name": "Alchemical Symbols"},
+      {"start": "U+1F780", "end": "U+1F7FF", "name": "Geometric Shapes Extended"},
+      {"start": "U+1F800", "end": "U+1F8FF", "name": "Supplemental Arrows-C"},
+      {"start": "U+1F900", "end": "U+1F9FF", "name": "Supplemental Symbols and Pictographs"},
+      {"start": "U+1FA00", "end": "U+1FAFF", "name": "Chess Symbols"},
+      {"start": "U+1FB00", "end": "U+1FBFF", "name": "Symbols for Legacy Computing"},
+      {"start": "U+2600", "end": "U+26FF", "name": "Miscellaneous Symbols"},
+      {"start": "U+2700", "end": "U+27BF", "name": "Dingbats"}
+    ]
+  },
+  "safe_replacements": {
+    "description": "ASCII alternatives for common problematic characters",
+    "replacements": {
+      "🔐": "[LOCK]",
+      "🎯": "[TARGET]",
+      "🧠": "[BRAIN]",
+      "📖": "[DOCS]",
+      "🛠️": "[TOOLS]",
+      "✅": "[OK]",
+      "❌": "[FAIL]",
+      "⚠️": "[WARN]",
+      "💡": "[IDEA]",
+      "🚀": "[DEPLOY]",
+      "📋": "[LIST]",
+      "🔍": "[SEARCH]",
+      "→": "->",
+      "•": "*",
+      "‑": "-",
+      "…": "..."
+    }
+  }
+}

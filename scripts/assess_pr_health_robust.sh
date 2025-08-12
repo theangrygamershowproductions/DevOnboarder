@@ -9,7 +9,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-echo "🏥 Robust PR Health Assessment #$PR_NUMBER"
+echo "SYMBOL Robust PR Health Assessment #$PR_NUMBER"
 echo "========================================"
 
 # Robust GitHub CLI execution with explicit output handling
@@ -34,41 +34,41 @@ execute_gh_command() {
 }
 
 # Get PR basic information with error handling
-echo "📋 Retrieving PR information..."
+echo "SYMBOL Retrieving PR information..."
 if ! PR_INFO=$(execute_gh_command "pr view $PR_NUMBER --json number,title,state,mergeable"); then
-    echo "❌ Failed to retrieve PR information"
-    echo "📊 Health Score: Cannot calculate (PR data unavailable)"
+    echo "FAILED Failed to retrieve PR information"
+    echo "STATS Health Score: Cannot calculate (PR data unavailable)"
     exit 1
 fi
 
-echo "✅ PR Information Retrieved:"
+echo "SUCCESS PR Information Retrieved:"
 echo "  Number: $(echo "$PR_INFO" | jq -r '.number // "unknown"')"
 echo "  Title: $(echo "$PR_INFO" | jq -r '.title // "unknown"')"
 echo "  State: $(echo "$PR_INFO" | jq -r '.state // "unknown"')"
 echo ""
 
 # Get check status with robust error handling
-echo "🔍 Retrieving check status..."
+echo "SEARCH Retrieving check status..."
 if CHECK_INFO=$(execute_gh_command "pr checks $PR_NUMBER --json name,conclusion,status"); then
-    echo "✅ Check information retrieved"
+    echo "SUCCESS Check information retrieved"
 else
-    echo "⚠️  Using alternative check retrieval method..."
+    echo "WARNING  Using alternative check retrieval method..."
     # Alternative: Get from status checks if regular checks fail
     if CHECK_INFO=$(execute_gh_command "pr view $PR_NUMBER --json statusCheckRollup"); then
         # Transform statusCheckRollup to match expected format
         CHECK_INFO=$(echo "$CHECK_INFO" | jq '.statusCheckRollup | map({name: .name, conclusion: .conclusion, status: .status})')
-        echo "✅ Check information retrieved via alternative method"
+        echo "SUCCESS Check information retrieved via alternative method"
     else
-        echo "❌ Cannot retrieve check information"
-        echo "📊 Health Score: Cannot calculate (check data unavailable)"
+        echo "FAILED Cannot retrieve check information"
+        echo "STATS Health Score: Cannot calculate (check data unavailable)"
         exit 1
     fi
 fi
 
 # Calculate health score with proper error handling
 if [ "$(echo "$CHECK_INFO" | jq length)" -eq 0 ]; then
-    echo "⚠️  No checks found"
-    echo "📊 Health Score: 0% (no checks available)"
+    echo "WARNING  No checks found"
+    echo "STATS Health Score: 0% (no checks available)"
     exit 0
 fi
 
@@ -77,41 +77,41 @@ SUCCESS_CHECKS=$(echo "$CHECK_INFO" | jq '[.[] | select(.conclusion == "success"
 FAILURE_CHECKS=$(echo "$CHECK_INFO" | jq '[.[] | select(.conclusion == "failure")] | length')
 PENDING_CHECKS=$(echo "$CHECK_INFO" | jq '[.[] | select(.conclusion == null or .conclusion == "" or .status == "in_progress")] | length')
 
-echo "📊 Check Summary:"
+echo "STATS Check Summary:"
 echo "  Total: $TOTAL_CHECKS"
-echo "  ✅ Success: $SUCCESS_CHECKS"
-echo "  ❌ Failed: $FAILURE_CHECKS"
+echo "  SUCCESS Success: $SUCCESS_CHECKS"
+echo "  FAILED Failed: $FAILURE_CHECKS"
 echo "  ⏳ Pending: $PENDING_CHECKS"
 echo ""
 
 # Calculate health percentage
 HEALTH_SCORE=$((SUCCESS_CHECKS * 100 / TOTAL_CHECKS))
-echo "📊 PR Health Score: ${HEALTH_SCORE}%"
+echo "STATS PR Health Score: ${HEALTH_SCORE}%"
 
 # Health recommendations based on recalibrated standards
 if [ "$HEALTH_SCORE" -ge 95 ]; then
-    echo "🎉 EXCELLENT: Meets 95% quality standard"
-    echo "🎯 Recommendation: Ready for merge"
+    echo "SYMBOL EXCELLENT: Meets 95% quality standard"
+    echo "TARGET Recommendation: Ready for merge"
 elif [ "$HEALTH_SCORE" -ge 85 ]; then
-    echo "✅ GOOD: Strong health score"
-    echo "🎯 Recommendation: Manual review recommended"
+    echo "SUCCESS GOOD: Strong health score"
+    echo "TARGET Recommendation: Manual review recommended"
 elif [ "$HEALTH_SCORE" -ge 70 ]; then
-    echo "⚠️  ACCEPTABLE: Functional but needs improvement"
-    echo "🎯 Recommendation: Targeted fixes required"
+    echo "WARNING  ACCEPTABLE: Functional but needs improvement"
+    echo "TARGET Recommendation: Targeted fixes required"
 elif [ "$HEALTH_SCORE" -ge 50 ]; then
-    echo "❌ POOR: Significant issues present"
-    echo "🎯 Recommendation: Major fixes required"
+    echo "FAILED POOR: Significant issues present"
+    echo "TARGET Recommendation: Major fixes required"
 else
-    echo "🚨 FAILING: Critical failures present"
-    echo "🎯 Recommendation: Fresh start recommended"
+    echo "SYMBOL FAILING: Critical failures present"
+    echo "TARGET Recommendation: Fresh start recommended"
 fi
 
 # Show failing checks if any
 if [ "$FAILURE_CHECKS" -gt 0 ]; then
     echo ""
-    echo "❌ Failing Checks:"
+    echo "FAILED Failing Checks:"
     echo "$CHECK_INFO" | jq -r '.[] | select(.conclusion == "failure") | "  - \(.name)"'
 fi
 
 echo ""
-echo "✅ Robust health assessment complete"
+echo "SUCCESS Robust health assessment complete"

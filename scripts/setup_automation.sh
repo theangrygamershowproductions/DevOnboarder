@@ -3,16 +3,16 @@
 
 set -euo pipefail
 
-echo "🤖 Setting up PR Automation Framework"
+echo "Bot Setting up PR Automation Framework"
 echo "====================================="
 
 # Create required directories
 mkdir -p {logs,reports,tmp}
-echo "✅ Created directories: logs, reports, tmp"
+echo "SUCCESS Created directories: logs, reports, tmp"
 
 # Make all scripts executable
 find scripts/ -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
-echo "✅ Made all scripts executable"
+echo "SUCCESS Made all scripts executable"
 
 # Create automation configuration
 cat > .automation-config.json << 'EOF'
@@ -36,7 +36,7 @@ cat > .automation-config.json << 'EOF'
   }
 }
 EOF
-echo "✅ Created automation configuration"
+echo "SUCCESS Created automation configuration"
 
 # Create automation alias
 cat > scripts/pr-auto << 'EOF'
@@ -45,34 +45,34 @@ cat > scripts/pr-auto << 'EOF'
 bash scripts/automate_pr_process.sh "$@"
 EOF
 chmod +x scripts/pr-auto
-echo "✅ Created pr-auto alias"
+echo "SUCCESS Created pr-auto alias"
 
 # Test basic dependencies
 echo ""
-echo "🔍 Checking dependencies..."
+echo "SEARCH Checking dependencies..."
 
 if command -v gh >/dev/null 2>&1; then
-    echo "✅ GitHub CLI: Available"
+    echo "SUCCESS GitHub CLI: Available"
 else
-    echo "⚠️  GitHub CLI: Not found - may need installation"
+    echo "WARNING  GitHub CLI: Not found - may need installation"
 fi
 
 if command -v jq >/dev/null 2>&1; then
-    echo "✅ jq: Available"
+    echo "SUCCESS jq: Available"
 else
-    echo "⚠️  jq: Not found - may need installation"
+    echo "WARNING  jq: Not found - may need installation"
 fi
 
 if command -v markdownlint >/dev/null 2>&1; then
-    echo "✅ markdownlint: Available"
+    echo "SUCCESS markdownlint: Available"
 else
-    echo "⚠️  markdownlint: Not found - formatting fixes will be skipped"
+    echo "WARNING  markdownlint: Not found - formatting fixes will be skipped"
 fi
 
 echo ""
-echo "✅ PR Automation Framework setup complete!"
+echo "SUCCESS PR Automation Framework setup complete!"
 echo ""
-echo "🚀 Usage Examples:"
+echo "DEPLOY Usage Examples:"
 echo "  # Analyze PR #966"
 echo "  bash scripts/automate_pr_process.sh 966 analyze"
 echo ""

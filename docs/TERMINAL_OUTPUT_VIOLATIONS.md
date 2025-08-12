@@ -68,13 +68,19 @@ echo "Next step: review results"
 bash scripts/validate_terminal_output.sh
 ```
 
+**Suppression System**: For reviewed-safe patterns, add suppression comment:
+
+```bash
+# terminal-output-policy: reviewed-safe - [reason]
+```
+
 ### 2. CI Pipeline Enforcement
 
 All workflows include validation step that blocks deployment on violations.
 
 ### 3. Automated Code Review
 
-Bot automatically rejects PRs containing forbidden patterns.
+Bot automatically rejects PRs containing forbidden patterns, but respects suppression comments for manually reviewed safe code.
 
 ## Violation Consequences
 

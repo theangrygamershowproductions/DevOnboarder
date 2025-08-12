@@ -1,22 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "📊 DevOnboarder Log Analysis Report"
+echo "STATS DevOnboarder Log Analysis Report"
 echo "=================================="
 
 if [[ ! -d "logs/" ]]; then
-    echo "❌ No logs directory found"
+    echo "FAILED No logs directory found"
     exit 0
 fi
 
 # Clean artifacts first for accurate analysis
-echo "🧹 Cleaning test artifacts for accurate analysis..."
+echo "EMOJI Cleaning test artifacts for accurate analysis..."
 if [[ -f "scripts/clean_pytest_artifacts.sh" ]]; then
     bash scripts/clean_pytest_artifacts.sh
 fi
 
 echo
-echo "📁 Current Log Directory Contents:"
+echo "FOLDER Current Log Directory Contents:"
 echo "----------------------------------"
 
 # Count files by type
@@ -28,7 +28,7 @@ echo "Total size: $total_size"
 echo
 
 # Categorize logs
-echo "📋 Log Categories:"
+echo "SYMBOL Log Categories:"
 echo "  Test runs: $(find logs/ -name "test_run_*.log" 2>/dev/null | wc -l)"
 echo "  Coverage data: $(find logs/ -name "coverage_data_*" 2>/dev/null | wc -l)"
 echo "  Validation logs: $(find logs/ -name "*_validation_*.log" 2>/dev/null | wc -l)"
@@ -36,7 +36,7 @@ echo "  ESLint logs: $(find logs/ -name "*_eslint_*.log" 2>/dev/null | wc -l)"
 echo "  Other logs: $(find logs/ -type f ! -name "test_run_*.log" ! -name "coverage_data_*" ! -name "*_validation_*.log" ! -name "*_eslint_*.log" 2>/dev/null | wc -l)"
 
 echo
-echo "🕒 Recent Activity (last 5 files):"
+echo "SYMBOL Recent Activity (last 5 files):"
 echo "-----------------------------------"
 if [[ $total_files -gt 0 ]]; then
     find logs/ -type f -printf "%T@ %p\n" 2>/dev/null | sort -n | tail -5 | while read -r timestamp file; do
@@ -48,4 +48,4 @@ else
 fi
 
 echo
-echo "🔍 Analysis complete. Use 'bash scripts/manage_logs.sh list' for detailed view."
+echo "SEARCH Analysis complete. Use 'bash scripts/manage_logs.sh list' for detailed view."
