@@ -52,7 +52,7 @@ jobs:
         run: gh --version
 
       - name: Authenticate with GitHub
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+        run: printf '%s\n' "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Extract PR details
         id: prinfo
@@ -70,10 +70,10 @@ jobs:
             PR_BRANCH="${{ github.event.pull_request.head.ref }}"
           fi
 
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
-          echo "pr_author=$PR_AUTHOR" >> $GITHUB_OUTPUT
-          echo "pr_branch=$PR_BRANCH" >> $GITHUB_OUTPUT
+          printf 'pr_number=%s\n' "$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          printf 'pr_title=%s\n' "$PR_TITLE" >> "$GITHUB_OUTPUT"
+          printf 'pr_author=%s\n' "$PR_AUTHOR" >> "$GITHUB_OUTPUT"
+          printf 'pr_branch=%s\n' "$PR_BRANCH" >> "$GITHUB_OUTPUT"
 
       - name: Create PR tracking issue
         env:

@@ -95,7 +95,7 @@ jobs:
           if [ -n "$S1" ]; then TOKEN="$S1";
           elif [ -n "$S2" ]; then TOKEN="$S2";
           else TOKEN="$BUILTIN"; fi
-          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          printf 'token=%s\n' "$TOKEN" >> "$GITHUB_OUTPUT"
           if [ "$TOKEN" = "$BUILTIN" ]; then
             echo "::notice title=Token Selection::Using BUILT-IN token (fallback)"
           else
@@ -136,9 +136,9 @@ jobs:
           FAILURE_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'unknown' }}
         run: |
           source .venv/bin/activate
-          echo "Starting AAR generation for workflow run: ${WORKFLOW_RUN_ID}"
-          echo "Triggered by: ${TRIGGER_WORKFLOW}"
-          echo "Conclusion: ${FAILURE_CONCLUSION}"
+          printf 'Starting AAR generation for workflow run: %s\n' "$WORKFLOW_RUN_ID"
+          printf 'Triggered by: %s\n' "$TRIGGER_WORKFLOW"
+          printf 'Conclusion: %s\n' "$FAILURE_CONCLUSION"
 
           if [ -n "$WORKFLOW_RUN_ID" ]; then
             python scripts/generate_aar.py \
