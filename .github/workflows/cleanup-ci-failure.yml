@@ -21,7 +21,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -45,10 +45,13 @@ jobs:
         env:
             GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY }}
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
             - name: Check for Cleanup Token
               run: |
                   if [ -z "$GH_TOKEN" ]; then
-                    echo "::error::CLEANUP_CI_FAILURE_KEY is not set! Exiting to prevent unauthenticated GitHub CLI use."
+                    echo "::error::CLEANUP_CI_FAILURE_KEY is not set. Exiting to prevent unauthenticated GitHub CLI use."
                     exit 1
                   fi
             - name: Install the gh cli
@@ -64,7 +67,7 @@ jobs:
                   ver=$(gh --version | head -n1 | awk '{print $3}')
                   major=${ver%%.*}
                   if [ "$major" -lt 2 ]; then
-                    echo "::error::GitHub CLI v2 or higher required" >&2
+                    echo "::error::GitHub CLI v2 or higher required"
                     exit 1
                   fi
             - name: Install PyYAML
@@ -77,53 +80,51 @@ jobs:
                   gh api rate_limit
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
-            - name: Checkout repository
-              uses: actions/checkout@v4
             - name: Smart CI failure cleanup
               run: |
                   mkdir -p logs
 
                   # Determine trigger type and handle appropriately
                   if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                    echo "Triggered by PR #${{ github.event.number }} closure"
+                    echo "Triggered by pull request closure"
                     if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
-                      echo "PR was merged - closing related CI failure issues"
+                      echo "Pull request was merged. Closing related CI failure issues."
                       bash scripts/manage_ci_failure_issues.sh close ${{ github.event.number }}
                     else
-                      echo "PR was closed without merge - leaving CI failure issues open"
+                      echo "Pull request was closed without merge. CI failure issues will remain open."
                     fi
                   elif [[ "${{ github.event_name }}" == "workflow_run" ]]; then
                     echo "Triggered by CI workflow completion"
                     if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
-                      echo "CI workflow succeeded - checking for outdated failure issues"
+                      echo "CI workflow succeeded. Checking for outdated failure issues."
                       # Get recent PR numbers from successful runs and clean their issues
                       gh run list --workflow=ci.yml --status=success --limit=5 --json number,headBranch | \
                         jq -r '.[] | select(.headBranch != "main") | .number' | \
                         while read -r run_id; do
                           pr_num=$(gh run view "$run_id" --json headBranch | jq -r '.headBranch' | sed 's/.*pr-//' | sed 's/-.*//')
                           if [[ "$pr_num" =~ ^[0-9]+$ ]]; then
-                            echo "Cleaning issues for PR #$pr_num after successful CI"
+                            echo "Cleaning issues for pull request after successful CI"
                             bash scripts/manage_ci_failure_issues.sh close "$pr_num" || true
                           fi
                         done
                     fi
                   else
-                    echo "Daily scheduled cleanup - using script for stale CI failure issues"
+                    echo "Daily scheduled cleanup. Using script for stale CI failure issues."
                     # Use the approved script for all issue management
                     bash scripts/manage_ci_failure_issues.sh list | while read -r line; do
                       if [[ "$line" =~ ^Issue\ #([0-9]+): ]]; then
                         issue_num="${BASH_REMATCH[1]}"
-                        echo "Processing CI failure issue #$issue_num"
+                        echo "Processing CI failure issue."
                         # Check if this is for a merged PR via issue title
                         if [[ "$line" =~ PR\ #([0-9]+) ]]; then
                           pr_num="${BASH_REMATCH[1]}"
                           pr_state=$(gh pr view "$pr_num" --json state,merged | jq -r '.state + ":" + (.merged|tostring)' 2>/dev/null || echo "UNKNOWN:false")
                           if [[ "$pr_state" == "MERGED:true" ]]; then
-                            echo "Closing CI failure issue #$issue_num for merged PR #$pr_num"
+                            echo "Closing CI failure issue for merged pull request."
                             bash scripts/manage_ci_failure_issues.sh close "$pr_num" || true
                           fi
                         else
-                          echo "Found stale CI failure issue #$issue_num without PR reference"
+                          echo "Found stale CI failure issue without pull request reference."
                           # Note: Cannot close issues without PR reference using current script
                           # This would require script enhancement or manual cleanup
                         fi

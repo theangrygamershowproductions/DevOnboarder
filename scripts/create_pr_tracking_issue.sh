@@ -5,6 +5,7 @@
 set -euo pipefail
 
 # Color definitions for DevOnboarder consistency
+RED='\033[0;31m'
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -66,11 +67,11 @@ ISSUE_TITLE="Track PR #$PR_NUMBER: $PR_TITLE"
 ISSUE_BODY=$(cat << EOF
 # PR Tracking Issue: #$PR_NUMBER
 
-## 📋 Overview
+## SYMBOL Overview
 
 This issue tracks the development and review progress of **Pull Request #$PR_NUMBER**.
 
-### 🔗 PR Details
+### LINK PR Details
 
 - **Title**: $PR_TITLE
 - **Author**: @$PR_AUTHOR
@@ -78,7 +79,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - **Type**: $ISSUE_TYPE
 - **Priority**: $PRIORITY
 
-### 📊 Development Progress
+### STATS Development Progress
 
 - [ ] **Initial Implementation**: Code changes committed to feature branch
 - [ ] **Code Review**: PR reviewed by maintainers
@@ -87,7 +88,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - [ ] **Documentation Updated**: Any required docs updated
 - [ ] **Ready for Merge**: PR approved and ready for integration
 
-### 🎯 Acceptance Criteria
+### TARGET Acceptance Criteria
 
 **Definition of Done**:
 - All CI checks passing (coverage, linting, security)
@@ -96,14 +97,14 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - No breaking changes or proper migration provided
 - Follows DevOnboarder quality standards
 
-### 🔧 Technical Details
+### CONFIG Technical Details
 
 **Implementation Scope**:
 - Feature/fix implementation in \`$PR_BRANCH\`
 - Integration with existing DevOnboarder architecture
 - Compliance with project coding standards
 
-### 📝 Notes
+### EDIT Notes
 
 - This issue will be automatically closed when PR #$PR_NUMBER is merged
 - Progress updates will be posted as comments
@@ -152,11 +153,11 @@ if ISSUE_URL=$(GITHUB_TOKEN="$TOKEN" gh issue create \
     echo "Issue #$ISSUE_NUMBER" >> "$LOG_FILE"
 
     # Add initial progress comment
-    PROGRESS_COMMENT="## 🚀 Development Started
+    PROGRESS_COMMENT="## DEPLOY Development Started
 
 PR #$PR_NUMBER has been opened and is now being tracked.
 
-### 📈 Current Status
+### SYMBOL Current Status
 - **Development Phase**: Implementation in progress
 - **Branch**: \`$PR_BRANCH\`
 - **Author**: @$PR_AUTHOR
