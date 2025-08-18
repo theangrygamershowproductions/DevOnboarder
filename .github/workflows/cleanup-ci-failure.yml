@@ -45,6 +45,8 @@ jobs:
         env:
             GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY }}
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
             - name: Check for Cleanup Token
               run: |
                   if [ -z "$GH_TOKEN" ]; then
@@ -77,8 +79,6 @@ jobs:
                   gh api rate_limit
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
-            - name: Checkout repository
-              uses: actions/checkout@v4
             - name: Smart CI failure cleanup
               run: |
                   mkdir -p logs
