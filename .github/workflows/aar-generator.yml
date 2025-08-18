@@ -16,8 +16,7 @@ on:
       - "Auto-Fix"
       - "Documentation Quality"
       - "Security Audit"
-    types:
-      - completed
+    types: [completed]
     branches:
       - main
       - "feature/**"
@@ -39,7 +38,7 @@ permissions:
 
 env:
   # CRITICAL: Follow DevOnboarder No Default Token Policy v1.0
-  # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
+  # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> built-in GITHUB_TOKEN
   PYTHON_ENV: ci
   NODE_ENV: test
   CI: true
@@ -47,7 +46,7 @@ env:
 jobs:
   generate-aar:
     name: "Generate After Action Report"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
 
     permissions:
@@ -55,6 +54,9 @@ jobs:
       contents: read
       issues: write
       actions: read
+      # uncomment if your script reads checks or PRs:
+      # checks: read
+      # pull-requests: read
 
     steps:
       - name: "Checkout repository"
@@ -63,7 +65,7 @@ jobs:
           fetch-depth: 50  # Get recent history for change analysis
 
       - name: "Setup Python environment"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
@@ -78,9 +80,39 @@ jobs:
       - name: "Install dependencies"
         run: |
           source .venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -e .[test]
 
+      # --- Token selection (policy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> built-in) ---
+      - name: "Select automation token"
+        id: pick-token
+        shell: bash
+        env:
+          S1: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+          S2: ${{ secrets.CI_BOT_TOKEN }}
+          BUILTIN: ${{ github.token }}  # absolute fallback only
+        run: |
+          if [ -n "$S1" ]; then TOKEN="$S1";
+          elif [ -n "$S2" ]; then TOKEN="$S2";
+          else TOKEN="$BUILTIN"; fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          if [ "$TOKEN" = "$BUILTIN" ]; then
+            echo "::notice title=Token Selection::Using BUILT-IN token (fallback)"
+          else
+            echo "::notice title=Token Selection::Using FINE-GRAINED secret"
+          fi
+
+      # Optional hard-fail if only built-in token is available (strict mode)
+      # - name: "Enforce No-Default-Token policy (block if fallback)"
+      #   if: ${{ steps.pick-token.outputs.token == github.token }}
+      #   run: |
+      #     echo "Policy violation: refusing to use built-in token in this job." >&2
+      #     exit 1
+
       - name: "Validate AAR environment"
+        env:
+          # Pass the selected token for scripts that may call GitHub API
+          GITHUB_TOKEN: ${{ steps.pick-token.outputs.token }}
         run: |
           source .venv/bin/activate
           python scripts/aar_security.py
@@ -93,11 +125,10 @@ jobs:
       - name: "Generate AAR report"
         env:
           # CRITICAL: Use proper token hierarchy for AAR operations
-          # Following DevOnboarder No Default Token Policy v1.0
           CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
           CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-          # GITHUB_TOKEN only as absolute fallback
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Unified token selection result (do not rename)
+          GITHUB_TOKEN: ${{ steps.pick-token.outputs.token }}
 
           # Workflow context for analysis
           WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id }}
@@ -105,12 +136,10 @@ jobs:
           FAILURE_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'unknown' }}
         run: |
           source .venv/bin/activate
-
           echo "Starting AAR generation for workflow run: ${WORKFLOW_RUN_ID}"
           echo "Triggered by: ${TRIGGER_WORKFLOW}"
           echo "Conclusion: ${FAILURE_CONCLUSION}"
 
-          # Generate comprehensive AAR report
           if [ -n "$WORKFLOW_RUN_ID" ]; then
             python scripts/generate_aar.py \
               --workflow-run-id "$WORKFLOW_RUN_ID" \
@@ -123,13 +152,12 @@ jobs:
           fi
 
       - name: "Create GitHub issue"
-        if: ${{ github.event.inputs.create_issue != 'false' }}
+        # If manually dispatched, respect the boolean input; for workflow_run, always create
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.create_issue) || (github.event_name != 'workflow_dispatch') }}
         env:
-          # Use same token hierarchy for issue creation
           CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
           CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GITHUB_TOKEN: ${{ steps.pick-token.outputs.token }}
           WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id }}
         run: |
           source .venv/bin/activate
@@ -157,6 +185,8 @@ jobs:
           retention-days: 30
 
       - name: "Generate change analysis"
+        env:
+          GITHUB_TOKEN: ${{ steps.pick-token.outputs.token }}
         run: |
           source .venv/bin/activate
 
@@ -183,11 +213,9 @@ jobs:
           echo "Trigger: ${{ github.event.workflow_run.name || 'manual' }}"
           echo "Token Policy: No Default Token Policy v1.0 COMPLIANT"
           echo "Reports Generated:"
-
           if [ -d "logs/aar" ]; then
             ls -la logs/aar/*.md 2>/dev/null || echo "  No AAR reports found"
           fi
-
           echo ""
           echo "Artifacts:"
           if [ -d "logs/token-audit" ]; then
@@ -196,7 +224,7 @@ jobs:
 
   security-audit:
     name: "AAR Security Audit"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: generate-aar
     if: always()
 
@@ -209,7 +237,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Setup Python environment"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
@@ -223,6 +251,7 @@ jobs:
       - name: "Install dependencies"
         run: |
           source .venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -e .[test]
 
       - name: "Create logs directory"
@@ -236,19 +265,34 @@ jobs:
           path: "aar-artifacts/"
         continue-on-error: true
 
+      # --- Token selection (policy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> built-in) ---
+      - name: "Select automation token"
+        id: pick-token
+        shell: bash
+        env:
+          S1: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+          S2: ${{ secrets.CI_BOT_TOKEN }}
+          BUILTIN: ${{ github.token }}
+        run: |
+          if [ -n "$S1" ]; then TOKEN="$S1";
+          elif [ -n "$S2" ]; then TOKEN="$S2";
+          else TOKEN="$BUILTIN"; fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          if [ "$TOKEN" = "$BUILTIN" ]; then
+            echo "::notice title=Token Selection::Using BUILT-IN token (fallback)"
+          else
+            echo "::notice title=Token Selection::Using FINE-GRAINED secret"
+          fi
+
       - name: "Audit token usage compliance"
         env:
           CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
           CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.pick-token.outputs.token }}
         run: |
           source .venv/bin/activate
-
           echo "Performing AAR security audit..."
-
-          # Run token compliance audit
-          python scripts/aar_security.py > "logs/aar-security-audit-${GITHUB_RUN_ID}.log"
-
+          python scripts/aar_security.py > "logs/aar-security-audit-${GITHUB_RUN_ID}.md"
           echo "Token compliance audit completed"
 
       - name: "Validate Potato Policy compliance"
@@ -264,30 +308,10 @@ jobs:
             echo "Sensitive token check completed"
           fi
 
-      - name: "Generate security report"
-        run: |
-          echo "AAR Security Audit Report" > "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "=========================" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          printf "**Generated**: %s\n" "$TIMESTAMP" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "**Workflow**: ${{ github.workflow }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "**Run ID**: ${{ github.run_id }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "## Compliance Status" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- No Default Token Policy v1.0: COMPLIANT" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Enhanced Potato Policy: VALIDATED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Virtual Environment: ENFORCED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Centralized Logging: ACTIVE" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-
-          echo "Security audit report generated"
-
       - name: "Archive security audit"
         uses: actions/upload-artifact@v4
         with:
           name: "aar-security-audit-${{ github.run_id }}"
           path: |
-            logs/aar-security-*.log
             logs/aar-security-*.md
           retention-days: 30
