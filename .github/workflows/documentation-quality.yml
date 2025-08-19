@@ -22,10 +22,6 @@ on:
       - 'docs/**'
       - '.github/workflows/documentation-quality.yml'
   pull_request:
-    paths:
-      - '**.md'
-      - 'docs/**'
-      - '.github/workflows/documentation-quality.yml'
 
 permissions:
   contents: read
@@ -35,25 +31,45 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    outputs:
+      docs_changed: ${{ steps.check_docs.outputs.docs_changed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Detect documentation changes
+        id: check_docs
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }} --depth=1
+            if git diff --name-only origin/${{ github.base_ref }}... | grep -qE '(^docs/|\\.md$)'; then
+              echo "docs_changed=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "docs_changed=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "docs_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Python environment
+        if: steps.check_docs.outputs.docs_changed == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
 
       - name: Create virtual environment and install dependencies
+        if: steps.check_docs.outputs.docs_changed == 'true'
         run: |
           python -m venv .venv
           source .venv/bin/activate
           pip install -e .[test]
 
       - name: Setup logs directory
+        if: steps.check_docs.outputs.docs_changed == 'true'
         run: mkdir -p logs
 
       - name: Validate markdown with markdownlint
+        if: steps.check_docs.outputs.docs_changed == 'true'
         run: |
           source .venv/bin/activate
           echo "Running markdownlint validation..."
@@ -61,6 +77,7 @@ jobs:
         continue-on-error: true
 
       - name: Run Vale documentation linting
+        if: steps.check_docs.outputs.docs_changed == 'true'
         run: |
           source .venv/bin/activate
           echo "Running Vale documentation quality checks..."
@@ -72,6 +89,7 @@ jobs:
         continue-on-error: true
 
       - name: Check Potato Policy compliance
+        if: steps.check_docs.outputs.docs_changed == 'true'
         run: |
           source .venv/bin/activate
           echo "Validating Potato Policy ignore compliance..."
@@ -79,17 +97,21 @@ jobs:
         continue-on-error: true
 
       - name: Upload documentation quality logs
-        if: always()
+        if: steps.check_docs.outputs.docs_changed == 'true' && always()
         uses: actions/upload-artifact@v4
         with:
           name: documentation-quality-logs
           path: logs/
           retention-days: 7
 
+      - name: No documentation changes detected
+        if: steps.check_docs.outputs.docs_changed == 'false'
+        run: echo "No documentation changes detected. Skipping documentation validation."
+
   quality-assessment:
     needs: validate-docs
     runs-on: ubuntu-latest
-    if: always()
+    if: needs.validate-docs.outputs.docs_changed == 'true'
     permissions:
       contents: read
       actions: read
