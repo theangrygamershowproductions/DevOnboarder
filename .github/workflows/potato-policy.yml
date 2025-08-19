@@ -19,6 +19,8 @@ on:
 
 jobs:
   potato-policy-placeholder:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Potato Policy Placeholder Step
