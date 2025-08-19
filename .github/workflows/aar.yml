@@ -77,27 +77,27 @@ jobs:
       - name: Find AAR data files
         id: find_data
         run: |
-          echo "Finding AAR data files..."
+            echo "Finding AAR data files..."
           if [ -d "docs/AAR/data" ]; then
             FILES=$(find docs/AAR/data -name "*.aar.json" -type f || echo "")
             if [ -n "$FILES" ]; then
-              echo "Found AAR data files:"
-              printf "%s\n" "$FILES" | while read -r file; do
-                echo "  - $file"
-              done
-              {
-                echo "aar_files<<EOF"
-                printf "%s\n" "$FILES"
-                echo "EOF"
-              } >> $GITHUB_OUTPUT
-              echo "has_files=true" >> $GITHUB_OUTPUT
+                echo "Found AAR data files:"
+                printf '%s\n' "$FILES" | while read -r file; do
+                  printf '  - %s\n' "$file"
+                done
+                {
+                  echo "aar_files<<EOF"
+                  printf '%s\n' "$FILES"
+                  echo "EOF"
+                } >> "$GITHUB_OUTPUT"
+                printf 'has_files=true\n' >> "$GITHUB_OUTPUT"
             else
-              echo "No AAR data files found"
-              echo "has_files=false" >> $GITHUB_OUTPUT
+                echo "No AAR data files found"
+                printf 'has_files=false\n' >> "$GITHUB_OUTPUT"
             fi
           else
             echo "AAR data directory does not exist"
-            echo "has_files=false" >> $GITHUB_OUTPUT
+            printf 'has_files=false\n' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Validate AAR data files
@@ -105,9 +105,9 @@ jobs:
         run: |
           echo "Validating AAR data files..."
           cd aar
-          echo "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
-            if [ -n "$file" ]; then
-              echo "Validating: $file"
+            printf '%s\n' "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
+              if [ -n "$file" ]; then
+                printf 'Validating: %s\n' "$file"
               # Use relative path from aar directory
               relative_file="../$file"
               NODE_PATH=./node_modules node -e "
@@ -126,16 +126,16 @@ jobs:
       - name: Test AAR rendering
         if: steps.find_data.outputs.has_files == 'true'
         run: |
-          echo "Testing AAR rendering..."
-          mkdir -p test-output
-          cd aar
-          echo "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
-            if [ -n "$file" ]; then
-              echo "Rendering: $file"
-              # Use NODE_PATH and relative paths
-              NODE_PATH=./node_modules node ../scripts/render_aar.js "../$file" ../test-output
-            fi
-          done
+            echo "Testing AAR rendering..."
+            mkdir -p test-output
+            cd aar
+            printf '%s\n' "${{ steps.find_data.outputs.aar_files }}" | while read -r file; do
+              if [ -n "$file" ]; then
+                printf 'Rendering: %s\n' "$file"
+                # Use NODE_PATH and relative paths
+                NODE_PATH=./node_modules node ../scripts/render_aar.js "../$file" ../test-output
+              fi
+            done
 
       - name: Validate generated markdown
         if: steps.find_data.outputs.has_files == 'true'
