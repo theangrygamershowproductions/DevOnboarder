@@ -1,0 +1,24 @@
+name: Potato Policy Placeholder
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - main
+      - feat/*
+      - fix/*
+      - chore/*
+      - docs/*
+      - refactor/*
+      - test/*
+      - phase2/*
+      - phase3/*
+      - phase4/*
+  pull_request:
+
+jobs:
+  potato-policy-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Potato Policy Placeholder Step
+        run: echo "Potato Policy enforcement is handled by scripts and potato-policy-focused.yml"
