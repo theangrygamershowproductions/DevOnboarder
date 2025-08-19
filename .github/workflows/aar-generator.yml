@@ -136,9 +136,15 @@ jobs:
           FAILURE_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'unknown' }}
         run: |
           source .venv/bin/activate
+<<<<<<< HEAD
           printf 'Starting AAR generation for workflow run: %s\n' "$WORKFLOW_RUN_ID"
           printf 'Triggered by: %s\n' "$TRIGGER_WORKFLOW"
           printf 'Conclusion: %s\n' "$FAILURE_CONCLUSION"
+=======
+          echo "Starting AAR generation for workflow run: ${WORKFLOW_RUN_ID}"
+          echo "Triggered by: ${TRIGGER_WORKFLOW}"
+          echo "Conclusion: ${FAILURE_CONCLUSION}"
+>>>>>>> 89b4e51 (FIX(CI): Update aar-generator.yml)
 
           if [ -n "$WORKFLOW_RUN_ID" ]; then
             python scripts/generate_aar.py \
@@ -265,7 +271,11 @@ jobs:
           path: "aar-artifacts/"
         continue-on-error: true
 
+<<<<<<< HEAD
       # --- Token selection (policy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> built-in) ---
+=======
+      # --- Token selection (policy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → built-in) ---
+>>>>>>> 89b4e51 (FIX(CI): Update aar-generator.yml)
       - name: "Select automation token"
         id: pick-token
         shell: bash
@@ -277,7 +287,11 @@ jobs:
           if [ -n "$S1" ]; then TOKEN="$S1";
           elif [ -n "$S2" ]; then TOKEN="$S2";
           else TOKEN="$BUILTIN"; fi
+<<<<<<< HEAD
           printf 'token=%s\n' "$TOKEN" >> "$GITHUB_OUTPUT"
+=======
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+>>>>>>> 89b4e51 (FIX(CI): Update aar-generator.yml)
           if [ "$TOKEN" = "$BUILTIN" ]; then
             echo "::notice title=Token Selection::Using BUILT-IN token (fallback)"
           else

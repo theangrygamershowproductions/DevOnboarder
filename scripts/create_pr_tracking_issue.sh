@@ -3,7 +3,6 @@
 # Creates GitHub issues automatically when PRs are opened
 
 set -euo pipefail
-
 PR_NUMBER="${1:-}"
 PR_TITLE="${2:-No title provided}"
 PR_AUTHOR="${3:-unknown}"
