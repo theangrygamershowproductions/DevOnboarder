@@ -4,27 +4,20 @@
 
 set -euo pipefail
 
-# Color definitions for DevOnboarder consistency
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
 PR_NUMBER="${1:-}"
 PR_TITLE="${2:-No title provided}"
 PR_AUTHOR="${3:-unknown}"
 PR_BRANCH="${4:-unknown}"
 
 if [[ -z "$PR_NUMBER" ]]; then
-    echo "Usage: $0 <pr-number> <pr-title> <pr-author> <pr-branch>"
+    printf 'Usage: %s <pr-number> <pr-title> <pr-author> <pr-branch>\n' "$0"
     exit 1
 fi
 
-echo -e "${BLUE}Creating tracking issue for PR #$PR_NUMBER${NC}"
-echo "Title: $PR_TITLE"
-echo "Author: $PR_AUTHOR"
-echo "Branch: $PR_BRANCH"
+printf 'Creating tracking issue for PR #%s\n' "$PR_NUMBER"
+printf 'Title: %s\n' "$PR_TITLE"
+printf 'Author: %s\n' "$PR_AUTHOR"
+printf 'Branch: %s\n' "$PR_BRANCH"
 
 # Ensure centralized logging directory exists
 mkdir -p logs
@@ -34,7 +27,7 @@ LOG_FILE="logs/pr_issue_creation_${PR_NUMBER}.log"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 log() {
-    echo "[$TIMESTAMP] $1" | tee -a "$LOG_FILE"
+    printf '[%s] %s\n' "$TIMESTAMP" "$1" | tee -a "$LOG_FILE"
 }
 
 log "Starting PR tracking issue creation for #$PR_NUMBER"
@@ -130,27 +123,27 @@ elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
     TOKEN="$GITHUB_TOKEN"
     log "Using GITHUB_TOKEN for issue creation"
 else
-    echo "ERROR: No GitHub token available for issue creation"
+    printf 'ERROR: No GitHub token available for issue creation\n'
     log "ERROR: No GitHub token available"
     exit 1
 fi
 
 # Create the GitHub issue
-echo -e "${YELLOW}Creating GitHub issue...${NC}"
+printf 'Creating GitHub issue...\n'
 
 if ISSUE_URL=$(GITHUB_TOKEN="$TOKEN" gh issue create \
     --title "$ISSUE_TITLE" \
     --body "$ISSUE_BODY" \
     --label "$LABELS" 2>&1); then
 
-    ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -o '[0-9]\+$')
-    echo -e "${GREEN}Issue #$ISSUE_NUMBER created successfully${NC}"
-    echo "URL: $ISSUE_URL"
+    ISSUE_NUMBER=$(printf '%s' "$ISSUE_URL" | grep -o '[0-9]\+$')
+    printf 'Issue #%s created successfully\n' "$ISSUE_NUMBER"
+    printf 'URL: %s\n' "$ISSUE_URL"
 
     log "Issue #$ISSUE_NUMBER created successfully: $ISSUE_URL"
 
     # Save issue number for linking
-    echo "Issue #$ISSUE_NUMBER" >> "$LOG_FILE"
+    printf 'Issue #%s\n' "$ISSUE_NUMBER" >> "$LOG_FILE"
 
     # Add initial progress comment
     PROGRESS_COMMENT="## DEPLOY Development Started
@@ -171,11 +164,11 @@ Development progress will be updated as the PR advances through review and valid
     fi
 
 else
-    echo -e "${RED}Failed to create GitHub issue${NC}"
-    echo "Error: $ISSUE_URL"
+    printf 'Failed to create GitHub issue\n'
+    printf 'Error: %s\n' "$ISSUE_URL"
     log "ERROR: Failed to create issue - $ISSUE_URL"
     exit 1
 fi
 
-echo -e "${GREEN}PR tracking issue creation complete${NC}"
+printf 'PR tracking issue creation complete\n'
 log "PR tracking issue creation completed successfully"

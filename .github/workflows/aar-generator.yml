@@ -195,7 +195,7 @@ jobs:
 
           # Analyze Git changes if we have workflow context
           if [ -n "${{ github.event.workflow_run.head_sha }}" ]; then
-            echo "Analyzing changes since: ${{ github.event.workflow_run.head_sha }}"
+            printf 'Analyzing changes since: %s\n' "${{ github.event.workflow_run.head_sha }}"
             python scripts/file_version_tracker.py --git-diff "${{ github.event.workflow_run.head_sha }}" \
               > "logs/aar/change-analysis-${GITHUB_RUN_ID}.md"
           fi
@@ -209,8 +209,8 @@ jobs:
         run: |
           echo "AAR Generation Summary"
           echo "====================="
-          echo "Workflow Run ID: ${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id || 'N/A' }}"
-          echo "Trigger: ${{ github.event.workflow_run.name || 'manual' }}"
+          printf 'Workflow Run ID: %s\n' "${{ github.event.workflow_run.id || github.event.inputs.workflow_run_id || 'N/A' }}"
+          printf 'Trigger: %s\n' "${{ github.event.workflow_run.name || 'manual' }}"
           echo "Token Policy: No Default Token Policy v1.0 COMPLIANT"
           echo "Reports Generated:"
           if [ -d "logs/aar" ]; then
@@ -277,7 +277,7 @@ jobs:
           if [ -n "$S1" ]; then TOKEN="$S1";
           elif [ -n "$S2" ]; then TOKEN="$S2";
           else TOKEN="$BUILTIN"; fi
-          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          printf 'token=%s\n' "$TOKEN" >> "$GITHUB_OUTPUT"
           if [ "$TOKEN" = "$BUILTIN" ]; then
             echo "::notice title=Token Selection::Using BUILT-IN token (fallback)"
           else

@@ -1,4 +1,4 @@
-# TOKEN: CI_ISSUE_AUTOMATION_TOKEN → GITHUB_TOKEN
+# TOKEN: CI_ISSUE_AUTOMATION_TOKEN -> GITHUB_TOKEN
 # PERMISSIONS: contents:read, issues:write, pull-requests:write
 # PURPOSE: Run proactive CI validations for src/, scripts/, docs/
 # COMPLIANCE: No Default Token Policy v1.0; Universal Workflow Permissions Policy
@@ -78,8 +78,8 @@ jobs:
         run: |
           source .venv/bin/activate
           echo "SYMBOL Proactive CI Framework Integration"
-          echo "   Base Branch: ${{ github.base_ref || 'main' }}"
-          echo "   Current Branch: ${{ github.ref_name }}"
+          printf '   Base Branch: %s\n' "${{ github.base_ref || 'main' }}"
+          printf '   Current Branch: %s\n' "${{ github.ref_name }}"
           echo "   Integration with emoji policy enforcement framework"
           echo ""
 
@@ -146,7 +146,7 @@ jobs:
           echo "   - Workflow Integration (CI/CD)"
           echo ""
           echo "SYMBOL Configuration:"
-          echo "   Validation Mode: ${{ github.event.inputs.validation_mode || 'enhanced' }}"
+          printf '   Validation Mode: %s\n' "${{ github.event.inputs.validation_mode || 'enhanced' }}"
           echo "   Proactive Enabled: true"
           echo "   Violation Threshold: 3"
           echo ""
@@ -184,16 +184,16 @@ jobs:
           missing_files=0
           for file in "${integration_files[@]}"; do
             if [ -f "$file" ]; then
-              echo "   SYMBOL $file"
+              printf '   SYMBOL %s\n' "$file"
             else
-              echo "   SYMBOL $file (missing)"
+              printf '   SYMBOL %s (missing)\n' "$file"
               missing_files=$((missing_files + 1))
             fi
           done
 
           if [ $missing_files -gt 0 ]; then
             echo ""
-            echo "SYMBOL Integration validation failed: $missing_files missing files"
+            printf 'SYMBOL Integration validation failed: %s missing files\n' "$missing_files"
             exit 1
           fi
 

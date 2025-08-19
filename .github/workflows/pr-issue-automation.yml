@@ -60,9 +60,9 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             PR_NUMBER="${{ github.event.inputs.pr_number }}"
             PR_DETAILS=$(gh pr view "$PR_NUMBER" --json title,author,headRefName)
-            PR_TITLE=$(echo "$PR_DETAILS" | jq -r '.title')
-            PR_AUTHOR=$(echo "$PR_DETAILS" | jq -r '.author.login')
-            PR_BRANCH=$(echo "$PR_DETAILS" | jq -r '.headRefName')
+            PR_TITLE=$(printf '%s' "$PR_DETAILS" | jq -r '.title')
+            PR_AUTHOR=$(printf '%s' "$PR_DETAILS" | jq -r '.author.login')
+            PR_BRANCH=$(printf '%s' "$PR_DETAILS" | jq -r '.headRefName')
           else
             PR_NUMBER="${{ github.event.pull_request.number }}"
             PR_TITLE="${{ github.event.pull_request.title }}"
@@ -117,4 +117,4 @@ jobs:
         run: |
           PR_NUMBER="${{ steps.prinfo.outputs.pr_number }}"
           printf 'Adding tracking labels to PR #%s\n' "$PR_NUMBER"
-          gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || echo "Could not add labels"
+          gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || printf 'Could not add labels\n'
