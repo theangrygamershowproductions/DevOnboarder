@@ -1,8 +1,10 @@
 # Ignore node_modules and dependencies
 
-node_modules/
-frontend/node_modules/
-bot/node_modules/
+node_modules/**
+frontend/node_modules/**
+bot/node_modules/**
+app/aar-ui/node_modules/**
+app/aar-core/node_modules/**
 htmlcov/
 .venv/
 venv/
