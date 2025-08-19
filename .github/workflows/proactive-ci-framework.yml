@@ -1,7 +1,7 @@
-# TOKEN: CI_ISSUE_AUTOMATION_TOKEN -> GITHUB_TOKEN
+# TOKEN: CI_ISSUE_AUTOMATION_TOKEN → GITHUB_TOKEN
 # PERMISSIONS: contents:read, issues:write, pull-requests:write
 # PURPOSE: Run proactive CI validations for src/, scripts/, docs/
-# COMPLIANCE: Universal Workflow Permissions Policy + No Default Token Policy v1.0
+# COMPLIANCE: No Default Token Policy v1.0; Universal Workflow Permissions Policy
 # SCOPE: src/, scripts/, docs/; triggers on push, pull_request, schedule, workflow_dispatch
 name: Proactive CI Framework
 
