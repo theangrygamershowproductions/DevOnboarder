@@ -1,15 +1,31 @@
+# ---
+# codex-agent:
+#   name: Agent.CI
+#   role: Runs tests, security scans, and documentation checks for pushes and PRs
+#   scope: .github/workflows/ci-failure-analyzer.yml
+#   triggers: Push and pull_request events
+#   output: Build artifacts, coverage reports, diagnostics
+#   tokens:
+#     gh_cli: CI_BOT_TOKEN
+#     issue_automation: CI_ISSUE_AUTOMATION_TOKEN
+#     aar_integration: AAR_TOKEN (optional)
+# ---
+
 name: CI Failure Analyzer
 
 on:
   workflow_run:
-    workflows: ["CI", "Auto-fix", "Documentation Quality", "Security Audit"]
-    types:
-      - completed
+    workflows:
+      - CI
+      - Auto-fix
+      - Documentation Quality
+      - Security Audit
+    types: [completed]
     branches:
       - main
       - develop
-      - "feat/**"
-      - "fix/**"
+      - 'feat/**'
+      - 'fix/**'
 
   workflow_dispatch:
     inputs:
@@ -25,274 +41,286 @@ on:
 
 permissions:
   contents: read
-  issues: write
   actions: read
+  issues: write
   pull-requests: write
 
 jobs:
   analyze-ci-failures:
     name: Enhanced CI Failure Analysis
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch'
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'failure' }}
+    env:
+      GH_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+      AAR_TOKEN: ${{ secrets.AAR_TOKEN }}
+      CI_FA_LOG: logs/ci-failure-analyzer.log
 
     steps:
-      - name: Checkout repository
+      - name: Init logs dir
+        run: |
+          mkdir -p logs
+          : > "$CI_FA_LOG"
+
+      - name: Verify required tokens
+        env:
+          CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+          CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+        run: |
+          missing=0
+          [ -n "$CI_BOT_TOKEN" ] || { printf 'Missing CI_BOT_TOKEN\n'; missing=1; }
+          [ -n "$CI_ISSUE_AUTOMATION_TOKEN" ] || { printf 'Missing CI_ISSUE_AUTOMATION_TOKEN\n'; missing=1; }
+          if [ "$missing" -ne 0 ]; then
+            printf 'Token verification failed\n'
+            exit 1
+          fi
+          printf 'Tokens verified\n'
+
+      - name: Checkout repository (bot token)
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_BOT_TOKEN }}
 
-      - name: Setup Python environment
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Create and activate virtual environment
+      - name: Create virtual environment
         run: |
-          echo "Creating virtual environment for DevOnboarder compliance"
           python -m venv .venv
-          source .venv/bin/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          . .venv/bin/activate
+          printf 'VIRTUAL_ENV=%s\n' "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf '%s/bin\n' "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
-      - name: Install dependencies
+      - name: Install analyzer dependencies
         run: |
-          source .venv/bin/activate
+          . .venv/bin/activate
           pip install -e .[test]
-          echo "Dependencies installed in virtual environment"
+
+      - name: Install GitHub CLI
+        uses: sersoft-gmbh/setup-gh-cli-action@v2
+        with:
+          version: stable
+
+      - name: Install jq and unzip (for log processing)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq unzip
 
       - name: Determine workflow run to analyze
         id: workflow-info
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.workflow_run_id }}" ]; then
-          echo "run_id=${{ github.event.inputs.workflow_run_id }}" >> $GITHUB_OUTPUT
+            printf 'run_id=%s\n' '${{ github.event.inputs.workflow_run_id }}' >> "$GITHUB_OUTPUT"
+            printf 'workflow_name=%s\n' 'manual' >> "$GITHUB_OUTPUT"
+            printf 'head_branch=%s\n' '${{ github.ref_name }}' >> "$GITHUB_OUTPUT"
           else
-          echo "run_id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
+            printf 'run_id=%s\n' '${{ github.event.workflow_run.id }}' >> "$GITHUB_OUTPUT"
+            printf 'workflow_name=%s\n' '${{ github.event.workflow_run.name }}' >> "$GITHUB_OUTPUT"
+            printf 'head_branch=%s\n' '${{ github.event.workflow_run.head_branch }}' >> "$GITHUB_OUTPUT"
           fi
-          echo "workflow_name=${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
 
-      - name: Download workflow logs
+      - name: Download workflow logs (zip) via REST
         id: download-logs
         run: |
-          source .venv/bin/activate
           mkdir -p logs/ci-analysis
+          printf 'Downloading logs for run %s\n' '${{ steps.workflow-info.outputs.run_id }}'
+          gh api -H "Accept: application/vnd.github+json" \
+            "repos/${{ github.repository }}/actions/runs/${{ steps.workflow-info.outputs.run_id }}/logs" \
+            -o logs/ci-analysis/logs.zip || true
 
-          # Download logs using GitHub CLI
-          echo "Downloading logs for workflow run ${{ steps.workflow-info.outputs.run_id }}"
-          gh run download ${{ steps.workflow-info.outputs.run_id }} --dir logs/ci-analysis || true
-
-          # Find log files
-          LOG_FILES=$(find logs/ci-analysis -name "*.txt" -o -name "*.log" | head -10)
-          echo "Found log files:"
-          printf "%s\n" "$LOG_FILES"
-
-          if [ -z "$LOG_FILES" ]; then
-          echo "No log files found, creating minimal analysis"
-          echo "Workflow failed but no logs available for analysis" > logs/ci-analysis/no-logs.txt
-          LOG_FILES="logs/ci-analysis/no-logs.txt"
+          if [ -s logs/ci-analysis/logs.zip ]; then
+            unzip -q -d logs/ci-analysis logs/ci-analysis/logs.zip || true
           fi
 
-          echo "log_files<<EOF" >> $GITHUB_OUTPUT
-          printf "%s\n" "$LOG_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_FILES="$(find logs/ci-analysis -type f \( -name '*.txt' -o -name '*.log' \) | head -n 10)"
+          printf 'Found log files:\n'
+          printf '%s\n' "$LOG_FILES"
+
+          if [ -z "$LOG_FILES" ]; then
+            printf 'No log files found, creating minimal analysis\n'
+            printf 'Workflow failed but no logs available for analysis\n' > logs/ci-analysis/no-logs.txt
+            LOG_FILES="logs/ci-analysis/no-logs.txt"
+          fi
+
+          printf 'log_files<<EOF\n' >> "$GITHUB_OUTPUT"
+          printf '%s\n' "$LOG_FILES" >> "$GITHUB_OUTPUT"
+          printf 'EOF\n' >> "$GITHUB_OUTPUT"
 
       - name: Run Enhanced CI Failure Analyzer
         id: analysis
         run: |
-          source .venv/bin/activate
-          echo "Running Enhanced CI Failure Analyzer v1.0 with AAR integration"
+          . .venv/bin/activate
+          printf 'Running Enhanced CI Failure Analyzer\n'
 
-          # Prepare analysis parameters
           AUTO_RESOLVE_FLAG=""
-          AAR_INTEGRATION_FLAG="--generate-aar"
-          WORKFLOW_RUN_FLAG="--workflow-run-id ${{ steps.workflow-info.outputs.run_id }}"
-
-          if [ "${{ github.event.inputs.auto_resolve }}" = "true" ]; then
-          AUTO_RESOLVE_FLAG="--auto-resolve"
-          echo "Auto-resolution enabled for high-confidence failures"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.auto_resolve }}" = "true" ]; then
+            AUTO_RESOLVE_FLAG="--auto-resolve"
+            printf 'Auto-resolution enabled\n'
           fi
 
-          # Run analysis on collected logs
+          AAR_FLAG="--generate-aar"
+          RUN_FLAG="--workflow-run-id ${{ steps.workflow-info.outputs.run_id }}"
           ANALYSIS_OUTPUT="logs/ci-failure-analysis-$(date +%Y%m%d_%H%M%S).json"
 
           if [ -n "${{ steps.download-logs.outputs.log_files }}" ]; then
-          echo "${{ steps.download-logs.outputs.log_files }}" | while read -r log_file; do
-          if [ -f "$log_file" ]; then
-          echo "Analyzing:"
-          printf "%s\n" "$log_file"
-          python scripts/enhanced_ci_failure_analyzer.py \
-          "$log_file" \
-          --output "$ANALYSIS_OUTPUT" \
-          $AUTO_RESOLVE_FLAG \
-          $AAR_INTEGRATION_FLAG \
-          $WORKFLOW_RUN_FLAG
-          fi
-          done
+            printf '%s\n' "${{ steps.download-logs.outputs.log_files }}" | while IFS= read -r f; do
+              if [ -f "$f" ]; then
+                printf 'Analyzing: %s\n' "$f"
+                python scripts/enhanced_ci_failure_analyzer.py \
+                  "$f" \
+                  --output "$ANALYSIS_OUTPUT" \
+                  $AUTO_RESOLVE_FLAG \
+                  $AAR_FLAG \
+                  $RUN_FLAG
+              fi
+            done
           else
-          echo "No logs to analyze, creating empty analysis"
-          python scripts/enhanced_ci_failure_analyzer.py \
-          logs/ci-analysis/no-logs.txt \
-          --output "$ANALYSIS_OUTPUT" \
-          $AAR_INTEGRATION_FLAG \
-          $WORKFLOW_RUN_FLAG
+            printf 'No logs to analyze. Using placeholder\n'
+            python scripts/enhanced_ci_failure_analyzer.py \
+              logs/ci-analysis/no-logs.txt \
+              --output "$ANALYSIS_OUTPUT" \
+              $AAR_FLAG \
+              $RUN_FLAG
           fi
 
-          echo "analysis_file=$ANALYSIS_OUTPUT" >> $GITHUB_OUTPUT
+          printf 'analysis_file=%s\n' "$ANALYSIS_OUTPUT" >> "$GITHUB_OUTPUT"
 
-          # Extract key metrics for output
           if [ -f "$ANALYSIS_OUTPUT" ]; then
-          CONFIDENCE=$(jq -r '.enhanced_ci_analysis.analysis.confidence_score // 0' "$ANALYSIS_OUTPUT")
-          AUTO_FIXABLE=$(jq -r '.enhanced_ci_analysis.analysis.auto_fixable // false' "$ANALYSIS_OUTPUT")
-          FAILURE_COUNT=$(jq -r '.enhanced_ci_analysis.analysis.detected_failures | length' "$ANALYSIS_OUTPUT")
-          PRIMARY_TYPE=$(jq -r '.enhanced_ci_analysis.analysis.primary_failure.type // "unknown"' "$ANALYSIS_OUTPUT")
+            CONFIDENCE="$(jq -r '.enhanced_ci_analysis.analysis.confidence_score // 0' "$ANALYSIS_OUTPUT")"
+            AUTO_FIXABLE="$(jq -r '.enhanced_ci_analysis.analysis.auto_fixable // false' "$ANALYSIS_OUTPUT")"
+            FAILURE_COUNT="$(jq -r '.enhanced_ci_analysis.analysis.detected_failures | length' "$ANALYSIS_OUTPUT")"
+            PRIMARY_TYPE="$(jq -r '.enhanced_ci_analysis.analysis.primary_failure.type // "unknown"' "$ANALYSIS_OUTPUT")"
 
-          echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
-          echo "auto_fixable=$AUTO_FIXABLE" >> $GITHUB_OUTPUT
-          echo "failure_count=$FAILURE_COUNT" >> $GITHUB_OUTPUT
-          echo "primary_type=$PRIMARY_TYPE" >> $GITHUB_OUTPUT
+            printf 'confidence=%s\n' "$CONFIDENCE" >> "$GITHUB_OUTPUT"
+            printf 'auto_fixable=%s\n' "$AUTO_FIXABLE" >> "$GITHUB_OUTPUT"
+            printf 'failure_count=%s\n' "$FAILURE_COUNT" >> "$GITHUB_OUTPUT"
+            printf 'primary_type=%s\n' "$PRIMARY_TYPE" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload analysis report
-        uses: actions/upload-artifact@v4
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: ci-failure-analysis-${{ github.run_id }}
           path: logs/ci-failure-analysis-*.json
+          if-no-files-found: ignore
           retention-days: 30
 
       - name: Create GitHub issue for manual failures
-        if: steps.analysis.outputs.auto_fixable == 'false' && steps.analysis.outputs.failure_count > 0
+        if: ${{ steps.analysis.outputs.auto_fixable == 'false' && steps.analysis.outputs.failure_count != '' && steps.analysis.outputs.failure_count != '0' }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
           script: |
             const fs = require('fs');
             const analysisFile = '${{ steps.analysis.outputs.analysis_file }}';
-
             if (!fs.existsSync(analysisFile)) {
               console.log('Analysis file not found, skipping issue creation');
               return;
             }
-
             const analysis = JSON.parse(fs.readFileSync(analysisFile, 'utf8'));
-            const ciAnalysis = analysis.enhanced_ci_analysis;
-            const primaryFailure = ciAnalysis.analysis.primary_failure;
-
-            const issueTitle = `CI Failure: ${primaryFailure?.type || 'Unknown'} in ${{ steps.workflow-info.outputs.workflow_name }}`;
-            const issueBody = `
-            ## CI Failure Analysis Report
-
-            **Workflow**: ${{ steps.workflow-info.outputs.workflow_name }}
-            **Run ID**: ${{ steps.workflow-info.outputs.run_id }}
-            **Branch**: ${{ github.ref_name }}
-            **Commit**: ${{ github.sha }}
-            **Analysis Date**: ${ciAnalysis.analysis.timestamp}
-
-            ### Failure Summary
-
-            - **Primary Failure Type**: ${primaryFailure?.type || 'Unknown'}
-            - **Severity**: ${primaryFailure?.severity || 'Unknown'}
-            - **Detected Failures**: ${ciAnalysis.analysis.detected_failures.length}
-            - **Confidence Score**: ${(ciAnalysis.analysis.confidence_score * 100).toFixed(1)}%
-            - **Auto-fixable**: ${ciAnalysis.analysis.auto_fixable ? 'Yes' : 'No'}
-
-            ### Recommended Resolution
-
-            ${ciAnalysis.resolution_plan?.description || 'Manual investigation required'}
-
-            ${ciAnalysis.resolution_plan?.command ?
-              \`**Command**: \\\`${ciAnalysis.resolution_plan.command}\\\`\` : ''}
-
-            ### Next Steps
-
-            ${ciAnalysis.resolution_plan?.next_steps?.map(step => \`- ${step}\`).join('\\n') || '- Manual investigation required'}
-
-            ### Links
-
-            - [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ steps.workflow-info.outputs.run_id }})
-            - [Analysis Artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-            ---
-            *Generated by Enhanced CI Failure Analyzer v1.0*
-            *Framework: DevOnboarder Phase 4: CI Triage Guard Enhancement*
-            `;
+            const ci = analysis.enhanced_ci_analysis;
+            const primary = ci.analysis.primary_failure || {};
+            const title = `CI Failure: ${primary.type || 'Unknown'} in ${{ steps.workflow-info.outputs.workflow_name }}`;
+            const body = [
+              '## CI Failure Analysis Report',
+              '',
+              `**Workflow**: ${{ steps.workflow-info.outputs.workflow_name }}`,
+              `**Run ID**: ${{ steps.workflow-info.outputs.run_id }}`,
+              `**Branch**: ${{ steps.workflow-info.outputs.head_branch }}`,
+              `**Commit**: ${{ github.sha }}`,
+              `**Analysis Date**: ${ci.analysis.timestamp}`,
+              '',
+              '### Failure Summary',
+              `- **Primary Failure Type**: ${primary.type || 'Unknown'}`,
+              `- **Severity**: ${primary.severity || 'Unknown'}`,
+              `- **Detected Failures**: ${ci.analysis.detected_failures.length}`,
+              `- **Confidence Score**: ${(ci.analysis.confidence_score * 100).toFixed(1)}%`,
+              `- **Auto-fixable**: ${ci.analysis.auto_fixable ? 'Yes' : 'No'}`,
+              '',
+              '### Recommended Resolution',
+              ci.resolution_plan?.description || 'Manual investigation required',
+              ci.resolution_plan?.command ? `
+              **Command**: \`${ci.resolution_plan.command}\`` : '',
+              '',
+              '### Next Steps',
+              (ci.resolution_plan?.next_steps || ['Manual investigation required']).map(s => `- ${s}`).join('\n'),
+              '',
+              `- Workflow Run: https://github.com/${{ github.repository }}/actions/runs/${{ steps.workflow-info.outputs.run_id }}`,
+              `- Analysis Artifact: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}`,
+              '',
+              '*Generated by Enhanced CI Failure Analyzer*'
+            ].join('\n');
 
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: issueTitle,
-              body: issueBody,
-              labels: ['ci-failure', 'automated-analysis', \`severity-${primaryFailure?.severity || 'unknown'}\`]
+              title,
+              body,
+              labels: ['ci-failure', 'automated-analysis', `severity-${primary.severity || 'unknown'}`]
             });
 
       - name: Add PR comment for pull request failures
-        if: github.event.workflow_run.event == 'pull_request' && steps.analysis.outputs.failure_count > 0
+        if: ${{ github.event.workflow_run.event == 'pull_request' && steps.analysis.outputs.failure_count != '' && steps.analysis.outputs.failure_count != '0' }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
           script: |
             const fs = require('fs');
             const analysisFile = '${{ steps.analysis.outputs.analysis_file }}';
-
             if (!fs.existsSync(analysisFile)) {
               console.log('Analysis file not found, skipping PR comment');
               return;
             }
-
             const analysis = JSON.parse(fs.readFileSync(analysisFile, 'utf8'));
-            const ciAnalysis = analysis.enhanced_ci_analysis;
-            const primaryFailure = ciAnalysis.analysis.primary_failure;
+            const ci = analysis.enhanced_ci_analysis;
+            const primary = ci.analysis.primary_failure || {};
+            const autoFixStatus = ci.analysis.auto_fixable ? 'Auto-fixable' : 'Manual intervention required';
 
-            // Find the PR number from the triggering workflow
+            const headBranch = '${{ steps.workflow-info.outputs.head_branch }}';
             const pulls = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: \`${context.repo.owner}:${{ github.ref_name }}\`,
+              head: `${context.repo.owner}:${headBranch}`,
               state: 'open'
             });
-
-            if (pulls.data.length === 0) {
+            if (!pulls.data.length) {
               console.log('No open PR found for this branch');
               return;
             }
-
             const prNumber = pulls.data[0].number;
-            const autoFixStatus = ciAnalysis.analysis.auto_fixable ? 'Auto-fixable' : 'Manual intervention required';
 
-            const commentBody = \`
-            ## CI Failure Analysis
-
-            **Status**: ${autoFixStatus}
-            **Failure Type**: ${primaryFailure?.type || 'Unknown'}
-            **Confidence**: ${(ciAnalysis.analysis.confidence_score * 100).toFixed(1)}%
-
-            ${ciAnalysis.analysis.auto_fixable ?
-              \`**Suggested Fix**: \\\`${ciAnalysis.resolution_plan?.command || 'See analysis for details'}\\\`\` :
-              '**Action Required**: Manual investigation needed - see analysis report for details'}
-
-            [View detailed analysis](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-            *Analysis by Enhanced CI Failure Analyzer v1.0*
-            \`;
+            const body = [
+              '## CI Failure Analysis',
+              `**Status**: ${autoFixStatus}`,
+              `**Failure Type**: ${primary.type || 'Unknown'}`,
+              `**Confidence**: ${(ci.analysis.confidence_score * 100).toFixed(1)}%`,
+              '',
+              ci.analysis.auto_fixable
+                ? `**Suggested Fix**: \`${ci.resolution_plan?.command || 'See analysis for details'}\``
+                : '**Action Required**: Manual investigation needed - see analysis report for details',
+              '',
+              `View detailed analysis: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}`,
+              '',
+              '*Analysis by Enhanced CI Failure Analyzer*'
+            ].join('\n');
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: commentBody
+              body
             });
 
-      - name: Summary output
+      - name: Summary output (policy-safe)
         if: always()
         run: |
-          echo "Enhanced CI Failure Analysis Complete"
-          echo "Analyzed workflow: ${{ steps.workflow-info.outputs.workflow_name }}"
-          echo "Failures detected: ${{ steps.analysis.outputs.failure_count }}"
-          echo "Primary failure type: ${{ steps.analysis.outputs.primary_type }}"
-          echo "Confidence score: ${{ steps.analysis.outputs.confidence }}"
-          echo "Auto-fixable: ${{ steps.analysis.outputs.auto_fixable }}"
-
-          if [ "${{ steps.analysis.outputs.analysis_file }}" != "" ]; then
-          echo "Analysis report: ${{ steps.analysis.outputs.analysis_file }}"
-          fi
+          printf 'Enhanced CI Failure Analysis Complete\n'
+          printf 'Analyzed workflow: %s\n' '${{ steps.workflow-info.outputs.workflow_name }}'
+          printf 'Failures detected: %s\n' '${{ steps.analysis.outputs.failure_count }}'
+          printf 'Primary failure type: %s\n' '${{ steps.analysis.outputs.primary_type }}'
+          printf 'Confidence score: %s\n' '${{ steps.analysis.outputs.confidence }}'
+          printf 'Auto-fixable: %s\n' '${{ steps.analysis.outputs.auto_fixable }}'
+          if [ -n '${{ steps.analysis.outputs.analysis_file }}' ]; then
+            printf 'Analysis report: %s\n' '${{ steps.analysis.outputs.analysis_file }}'
