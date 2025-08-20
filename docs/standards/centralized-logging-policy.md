@@ -187,7 +187,7 @@ sed -i 's|ci-logs/|logs/|g' scripts/*.sh
 sed -i 's|tmp/|logs/|g' scripts/*.sh
 
 # Step 2: Update all workflows
-sed -i 's|ci-logs|logs|g' .github/workflows/*.yml
+sed -i 's|ci-logs/|logs/|g' .github/workflows/*.yml
 
 # Step 3: Validate changes
 bash scripts/validate_log_centralization.sh
