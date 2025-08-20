@@ -701,39 +701,9 @@ jobs:
           fi
 
           export GH_TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
-          gh auth status 2>&1 | tee -a gh_cli.log || true
-          if ! gh api user >/dev/null 2>&1; then
-            printf "::warning::GitHub CLI authentication failed. Skipping issue operations.\n"
-            exit 0
-          fi
+          bash scripts/notify_ci_issue.sh comment "$ISSUE" summary.md || \
+            printf "::warning::Failed to notify CI failure for issue %s. Continuing.\n" "$ISSUE"
 
-          ISSUE_FILE=ci_failure_issue.txt
-          ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
-          if [ -f "$ISSUE_FILE" ]; then
-            ISSUE=$(cat "$ISSUE_FILE")
-            gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-              printf "::warning::Failed to comment on issue %s. Continuing.\n" "$ISSUE"
-          else
-            printf "Searching for existing issue\n" | tee -a gh_cli.log
-            if search_output=$(gh issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
-              ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
-              if [ -n "$ISSUE" ]; then
-                gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-                  printf "::warning::Failed to comment on existing issue %s\n" "$ISSUE"
-              else
-                if ISSUE_URL=$(gh issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
-                  ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
-                else
-                  printf "::warning::Failed to create new issue. Continuing.\n"
-                  ISSUE=""
-                fi
-              fi
-            else
-              printf "::warning::Failed to search for issues. Continuing.\n"
-              ISSUE=""
-            fi
-          fi
-          printf "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
       - name: Save CI failure issue number
         if: failure() && steps.guard.outputs.run == 'true' && github.event_name == 'pull_request'
         run: printf '%s\n' "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
