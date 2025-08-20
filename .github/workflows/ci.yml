@@ -731,8 +731,8 @@ jobs:
           if ISSUES=$(gh issue list --label ci-failure --state open 2>/dev/null | awk '{print $1}'); then
             for ISSUE in $ISSUES; do
               if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
-                gh issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." || true
-                gh issue close "$ISSUE" || true
+                bash scripts/notify_ci_issue.sh comment "$ISSUE" "CI run ${{ github.run_id }} passed. Closing." || true
+                bash scripts/notify_ci_issue.sh close "$ISSUE" || true
               fi
             done
           else
