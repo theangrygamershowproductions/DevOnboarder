@@ -56,7 +56,12 @@ echo "Scanning workflows in $WORKFLOW_DIR"
 # Find all workflow files and validate them
 total_violations=0
 
-for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
+# --- ADDED DEBUG OUTPUT FOR FILE DISCOVERY ---
+workflow_files=("$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml)
+echo "Files to validate: ${workflow_files[*]}"
+# ---------------------------------------------
+
+for file in "${workflow_files[@]}"; do
     # Skip if no files match the pattern
     [ -f "$file" ] || continue
 
