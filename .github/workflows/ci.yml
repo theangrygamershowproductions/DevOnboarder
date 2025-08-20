@@ -354,7 +354,10 @@ jobs:
       - name: Annotate pytest failures
         if: steps.guard.outputs.run == 'true' && failure() && hashFiles('test-results/pytest-results.xml') != ''
         run: |
-          line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1 || echo 1)
+          line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
+          if [ -z "$line" ]; then
+            line=1
+          fi
           printf '::error file=test-results/pytest-results.xml,line=%s::Test failures detected\n' "$line"
 
       - name: Install frontend dependencies
