@@ -18,6 +18,7 @@
 *.db-journal
 *.egg-info/
 *.env
+**.env**
 *.key
 *.log
 *.p12

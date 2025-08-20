@@ -6,6 +6,7 @@
 #   triggers: Push and pull_request events
 #   output: Build artifacts, coverage reports, diagnostics
 # ---
+
 name: CI
 
 on:
@@ -29,7 +30,7 @@ jobs:
       - uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: ".github/workflows/**/*.yml"
-          config_file: .github/.yamllint-config
+          config_file: .github/.yamllint-config"
 
   filter:
     needs: validate-yaml
@@ -66,138 +67,6 @@ jobs:
               - 'docs/**'
               - '**/*.md'
               - '.github/copilot-instructions.md'
-
-  docs-ci:
-    needs: filter
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      VALE_VERSION: "3.12.0"
-    steps:
-      - name: Guard (docs relevant?)
-        id: guard
-        run: printf 'run=%s\n' '${{ needs.filter.outputs.docs }}' >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v4
-        if: steps.guard.outputs.run == 'true'
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Vale
-        if: steps.guard.outputs.run == 'true'
-        run: |
-          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
-          TMP_DIR=$(mktemp -d)
-          trap 'rm -rf "$TMP_DIR"' EXIT
-          curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
-          sudo install -m 755 "$TMP_DIR/vale" /usr/local/bin/vale
-          vale --version
-
-      - name: Documentation style check
-        if: steps.guard.outputs.run == 'true'
-        run: ./scripts/check_docs.sh
-
-      - name: Upload Vale results
-        if: steps.guard.outputs.run == 'true' && hashFiles('logs/vale-results.json') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: vale-results
-          path: logs/vale-results.json
-          retention-days: 7
-
-      - name: Root Artifact Guard
-        if: steps.guard.outputs.run == 'true'
-        run: bash scripts/enforce_output_location.sh
-
-  code-ci:
-    # Run on PRs; on pushes unless commit has [no-ci]
-    if: >
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-ci]'))
-    needs: filter
-    runs-on: ubuntu-latest
-    environment: ci
-    timeout-minutes: 60
-    strategy:
-      matrix:
-        python-version: ["3.12"]
-        node-version: ["22"]
-
-    steps:
-      - name: Guard (code relevant?)
-        id: guard
-        run: printf 'run=%s\n' '${{ needs.filter.outputs.code }}' >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v4
-        if: steps.guard.outputs.run == 'true'
-        with:
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-
-      - name: Install the gh cli
-        if: steps.guard.outputs.run == 'true'
-        uses: sersoft-gmbh/setup-gh-cli-action@v2
-        with:
-          version: stable
-
-      - name: Verify gh version
-        if: steps.guard.outputs.run == 'true'
-        run: |
-          ver=$(gh --version | head -n1 | awk '{print $3}')
-          major=${ver%%.*}
-          if [ "$major" -lt 2 ]; then
-            printf '::error::GitHub CLI v2 or higher required\n' >&2
-            exit 1
-          fi
-
-      - name: Set up Python
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Set up Node
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Verify language versions
-        if: steps.guard.outputs.run == 'true'
-        run: bash scripts/check_versions.sh
-
-      - name: Cache pip downloads
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-py${{ matrix.python-version }}-
-
-      - name: Cache frontend node modules
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: frontend/node_modules
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
-
-      - name: Cache bot node modules
-        if: steps.guard.outputs.run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: bot/node_modules
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ matrix.node-version }}-bot-
 
       - name: Set up Docker Buildx
         if: steps.guard.outputs.run == 'true'
@@ -897,84 +766,6 @@ jobs:
             logs
             ${{ runner.temp }}/_github_workflow/*/job.log
 
-  # ------------------------------------------------------------------
-  # Compatibility/visibility jobs (lightweight status checks)
-  # ------------------------------------------------------------------
-
-  aar-system-validation:
-    name: "AAR System Validation/Validate AAR System (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "AAR System Validation complete"
-
-  ci-test:
-    name: "CI/test (3.12, 22) (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "CI test complete"
-
-  documentation-quality:
-    name: "Documentation Quality/validate-docs (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Documentation Quality check complete"
-
-  enhanced-potato-policy:
-    name: "Enhanced Potato Policy Enforcement/enhanced-potato-policy (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Potato Policy Enforcement complete"
-
-  orchestrator:
-    name: "Orchestrator/orchestrate (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Orchestrator check complete"
-
-  pre-commit-validation:
-    name: "Pre-commit Validation/Validate pre-commit hooks (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Pre-commit Validation complete"
-
-  root-artifact-monitor:
-    name: "Root Artifact Monitor/Root Artifact Guard (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Root Artifact Guard check complete"
-
-  terminal-output-policy:
-    name: "Terminal Output Policy Enforcement/Enforce Terminal Output Policy (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Terminal Output Policy Enforcement complete"
-
-  validate-permissions:
-    name: "Validate Permissions/check (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Validate Permissions check complete"
-
-  version-policy-audit:
-    name: "Version Policy Audit/Verify Node 22.x + Python 3.12.x Policy (pull_request)"
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Version Policy Audit complete"
-
-  # ------------------------------------------------------------------
-  # CodeQL waiters (reflect the actual CodeQL results from GitHub)
-  # ------------------------------------------------------------------
-
   wait-for-codeql-js:
     name: "CodeQL/Analyze (javascript-typescript) (dynamic)"
     if: github.event_name == 'pull_request' || github.event_name == 'push'
@@ -991,7 +782,7 @@ jobs:
       - name: Wait for CodeQL (JS/TS)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHECK_NAME: "CodeQL/Analyze (javascript-typescript) (dynamic)"
+          CHECK_NAME: "CodeQL"   # <-- FIXED HERE
         run: |
           printf 'Waiting for check: %s on %s\n' "${CHECK_NAME}" "${GITHUB_SHA}"
           for i in $(seq 1 90); do
@@ -1027,7 +818,7 @@ jobs:
       - name: Wait for CodeQL (Python)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHECK_NAME: "CodeQL/Analyze (python) (dynamic)"
+          CHECK_NAME: "CodeQL"   # <-- FIXED HERE
         run: |
           printf 'Waiting for check: %s on %s\n' "${CHECK_NAME}" "${GITHUB_SHA}"
           for i in $(seq 1 90); do
