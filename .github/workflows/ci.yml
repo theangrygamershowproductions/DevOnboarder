@@ -769,11 +769,11 @@ jobs:
             json=$(gh api \
               repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs \
               -H "Accept: application/vnd.github+json")
-            status=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
-              '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
-            conclusion=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
-              '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
-            if [ "$status" = "completed" ]; then
+              status=$(printf "%s\n" "$json" | jq -r --arg n "$CHECK_NAME" \
+                '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
+              conclusion=$(printf "%s\n" "$json" | jq -r --arg n "$CHECK_NAME" \
+                '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
+                          if [ "$status" = "completed" ]; then
               printf 'Conclusion: %s\n' "$conclusion"
               [ "$conclusion" = "success" ] && exit 0 || exit 1
             fi
@@ -805,12 +805,12 @@ jobs:
             json=$(gh api \
               repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs \
               -H "Accept: application/vnd.github+json")
-            status=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
-              '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
-            conclusion=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
-              '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
-            if [ "$status" = "completed" ]; then
-              printf 'Conclusion: %s\n' "$conclusion"
+              status=$(printf "%s\n" "$json" | jq -r --arg n "$CHECK_NAME" \
+                '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
+              conclusion=$(printf "%s\n" "$json" | jq -r --arg n "$CHECK_NAME" \
+                '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
+                          if [ "$status" = "completed" ]; then
+                            printf 'Conclusion: %s\n' "$conclusion"
               [ "$conclusion" = "success" ] && exit 0 || exit 1
             fi
             sleep 10
