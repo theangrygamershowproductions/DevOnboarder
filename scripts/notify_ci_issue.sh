@@ -2,7 +2,7 @@
 # Usage: bash scripts/notify_ci_issue.sh <action> <issue> <body>
 # action: comment|close
 # issue: issue number
-# body: message or file (for comment)
+# body: message (for comment)
 
 set -euo pipefail
 

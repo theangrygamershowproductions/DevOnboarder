@@ -728,16 +728,7 @@ jobs:
             printf '::warning::GitHub CLI authentication failed. Skipping issue closure.\n'
             exit 0
           fi
-          if ISSUES=$(gh issue list --label ci-failure --state open 2>/dev/null | awk '{print $1}'); then
-            for ISSUE in $ISSUES; do
-              if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
-                bash scripts/notify_ci_issue.sh comment "$ISSUE" "CI run ${{ github.run_id }} passed. Closing." || true
-                bash scripts/notify_ci_issue.sh close "$ISSUE" || true
-              fi
-            done
-          else
-            printf '::warning::Failed to list issues for closure\n'
-          fi
+          bash scripts/ci_issue_batch_close.sh "ci-failure" "CI run ${{ github.run_id }} passed. Closing."
 
       - name: Prepare CI log artifacts
         if: always() && steps.guard.outputs.run == 'true'
