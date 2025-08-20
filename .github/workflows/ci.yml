@@ -538,18 +538,18 @@ jobs:
           if [ -f "coverage.svg" ]; then
             git add coverage.svg
             if git diff --staged --quiet; then
-              echo "No changes to coverage badge"
+              printf 'No changes to coverage badge\n'
             else
               git commit -m "CHORE(ci): update coverage badge"
               TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
-              echo "Pushing badge with selected token"
+              printf 'Pushing badge with selected token...\n'
               git push "https://${TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                printf "FAIL: push failed - uploading badge as artifact\n" >&2
+                printf 'FAIL: push failed - uploading badge as artifact\n' >&2
                 exit 1
               }
             fi
           else
-            echo "Coverage badge file not found"
+            printf 'Coverage badge file not found\n'
           fi
 
       - name: Upload coverage badge as artifact (fallback)
@@ -673,19 +673,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          printf "\n<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
+          printf '\n<!-- sha: %s -->\n' "$GITHUB_SHA" >> summary.md
 
           if [ -f audit.md ]; then
             cat audit.md >> summary.md
           else
-            echo "# CI Analysis" >> summary.md
-            echo "Audit file not available." >> summary.md
+            printf '# CI Analysis\n' >> summary.md
+            printf 'Audit file not available.\n' >> summary.md
           fi
 
           export GH_TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
           gh auth status 2>&1 | tee -a gh_cli.log || true
           if ! gh api user >/dev/null 2>&1; then
-            printf "::warning::GitHub CLI authentication failed. Skipping issue operations.\n"
+            printf '::warning::GitHub CLI authentication failed. Skipping issue operations.\n'
             exit 0
           fi
 
@@ -694,30 +694,28 @@ jobs:
           if [ -f "$ISSUE_FILE" ]; then
             ISSUE=$(cat "$ISSUE_FILE")
             gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-              printf "::warning::Failed to comment on issue %s. Continuing.\n" "$ISSUE"
+              printf '::warning::Failed to comment on issue %s. Continuing.\n' "$ISSUE"
           else
-            echo "Searching for existing issue" | tee -a gh_cli.log
+            printf 'Searching for existing issue\n' | tee -a gh_cli.log
             if search_output=$(gh issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
               ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
               if [ -n "$ISSUE" ]; then
                 gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-                  printf "::warning::Failed to comment on existing issue %s\n" "$ISSUE"
+                  printf '::warning::Failed to comment on existing issue %s\n' "$ISSUE"
               else
                 if ISSUE_URL=$(gh issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
                   ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                 else
-                  printf "::warning::Failed to create new issue. Continuing.\n"
+                  printf '::warning::Failed to create new issue. Continuing.\n'
                   ISSUE=""
                 fi
               fi
             else
-              printf "::warning::Failed to search for issues. Continuing.\n"
+              printf '::warning::Failed to search for issues. Continuing.\n'
               ISSUE=""
             fi
           fi
-          printf "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
-
-
+          printf 'issue-number=%s\n' "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
       - name: Save CI failure issue number
         if: failure() && steps.guard.outputs.run == 'true' && github.event_name == 'pull_request'
         run: printf '%s\n' "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
