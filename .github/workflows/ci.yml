@@ -95,8 +95,7 @@ jobs:
       - name: Install Vale
         if: steps.guard.outputs.run == 'true'
         run: |
-          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/"\
-                   "vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
           TMP_DIR=$(mktemp -d)
           trap 'rm -rf "$TMP_DIR"' EXIT
           curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
