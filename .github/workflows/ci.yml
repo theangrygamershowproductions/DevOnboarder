@@ -262,13 +262,29 @@ jobs:
         if: steps.guard.outputs.run == 'true'
         run: |
           mkdir -p logs
-          env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' > logs/env_audit.log
+          env -i PATH="$PATH" bash -c '
+            set -a
+            source .env.ci
+            set +a
+            JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh
+          ' > logs/env_audit.log
           cat logs/env_audit.log
           cat logs/env_audit.json || true
-          missing=$(python -c 'import json,os; p="logs/env_audit.json"; print("".join(json.load(open(p)).get("missing", [])) if os.path.exists(p) else "")')
-          extras=$(python -c 'import json,os; p="logs/env_audit.json"; print("".join(e for e in (json.load(open(p)).get("extra", []) if os.path.exists(p) else []) if e not in ("PATH","PWD","SHLVL","_")))')
+          missing=$(python -c '
+            import json,os
+            p="logs/env_audit.json"
+            print("".join(json.load(open(p)).get("missing", [])) if os.path.exists(p) else "")
+          ')
+          extras=$(python -c '
+            import json,os
+            p="logs/env_audit.json"
+            print("".join(
+              e for e in (json.load(open(p)).get("extra", []) if os.path.exists(p) else [])
+              if e not in ("PATH","PWD","SHLVL","_")
+            ))
+          ')
           if [ -n "$missing" ] || [ -n "$extras" ]; then
-            printf '::error::Environment variable mismatch detected\n'
+            printf "::error::Environment variable mismatch detected\n"
             exit 1
           fi
 
