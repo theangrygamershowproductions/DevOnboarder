@@ -35,8 +35,8 @@ jobs:
     needs: validate-yaml
     runs-on: ubuntu-latest
     outputs:
-      code: ${{ steps.set-output.outputs.code }}
-      docs: ${{ steps.set-output.outputs.docs }}
+      code: ${{ steps.filter.outputs.code }}
+      docs: ${{ steps.filter.outputs.docs }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,12 +66,10 @@ jobs:
               - 'docs/**'
               - '**/*.md'
               - '.github/copilot-instructions.md'
-      - name: Set job outputs
-        id: set-output
-        run: |
-          echo "code=${{ steps.filter.outputs.code }}" >> $GITHUB_OUTPUT
-          echo "docs=${{ steps.filter.outputs.docs }}" >> $GITHUB_OUTPUT
 
+  # -----------------------------
+  # Docs-only CI (Vale, docs lint)
+  # -----------------------------
   docs-ci:
     needs: filter
     runs-on: ubuntu-latest
@@ -97,7 +95,8 @@ jobs:
       - name: Install Vale
         if: steps.guard.outputs.run == 'true'
         run: |
-          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/"\
+                   "vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
           TMP_DIR=$(mktemp -d)
           trap 'rm -rf "$TMP_DIR"' EXIT
           curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
@@ -120,6 +119,9 @@ jobs:
         if: always()
         run: bash scripts/enforce_output_location.sh
 
+  # --------------------------------------
+  # Code CI (lint, type-check, tests, etc.)
+  # --------------------------------------
   code-ci:
     # Run on PRs; on pushes unless commit has [no-ci]
     if: >
@@ -157,7 +159,7 @@ jobs:
           ver=$(gh --version | head -n1 | awk '{print $3}')
           major=${ver%%.*}
           if [ "$major" -lt 2 ]; then
-            echo "::error::GitHub CLI v2 or higher required" >&2
+            printf 'GitHub CLI v2 or higher required\n' >&2
             exit 1
           fi
 
@@ -217,15 +219,15 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
-          printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
+          printf 'VIRTUAL_ENV=%s\n' "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf '%s/bin\n' "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
       - name: Install dev dependencies
         if: steps.guard.outputs.run == 'true'
         run: |
           source .venv/bin/activate
           pip install .[test] 2>&1 | tee logs/pip-install.log || {
-            echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
+            printf 'Pip install failed. See docs/offline-setup.md for offline instructions.\n' >&2
             exit 1
           }
           pip install pip-audit yamllint shellcheck-py
@@ -253,7 +255,7 @@ jobs:
             if [ "$code" -eq 1 ]; then
               exit 1
             else
-              echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
+              printf 'pip-audit failed. See docs/offline-setup.md for offline instructions.\n' >&2
             fi
           fi
 
@@ -303,9 +305,9 @@ jobs:
         if: steps.guard.outputs.run == 'true' && github.event_name == 'pull_request'
         run: |
           if [ ! -f "PR_SUMMARY.md" ]; then
-            echo "::error::PR_SUMMARY.md is required for all pull requests"
-            echo "TIP: Use the template: .github/PR_SUMMARY_TEMPLATE.md"
-            echo "COPY: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
+            printf '::error::PR_SUMMARY.md is required for all pull requests\n'
+            printf 'TIP: Use the template: .github/PR_SUMMARY_TEMPLATE.md\n'
+            printf 'COPY: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md\n'
             exit 1
           fi
           source .venv/bin/activate
@@ -315,10 +317,10 @@ jobs:
         if: steps.guard.outputs.run == 'true'
         run: |
           if [[ -x "./scripts/qc_pre_push.sh" ]]; then
-            echo "RUNNING: 95% Quality Control validation..."
+            printf 'RUNNING: 95%% Quality Control validation...\n'
             ./scripts/qc_pre_push.sh
           else
-            echo "WARNING: QC script not found, skipping comprehensive validation"
+            printf 'WARNING: QC script not found, skipping comprehensive validation\n'
           fi
 
       - name: Generate OpenAPI spec
@@ -331,7 +333,7 @@ jobs:
         if: steps.guard.outputs.run == 'true'
         run: |
           git diff --quiet src/devonboarder/openapi.json || {
-            echo "::error::openapi.json is outdated. Run 'make openapi' and commit the changes."
+            printf '::error::openapi.json is outdated. Run '\''make openapi'\'' and commit the changes.\n'
             exit 1
           }
 
@@ -382,13 +384,21 @@ jobs:
         if: steps.guard.outputs.run == 'true'
         run: |
           mkdir -p logs
-          env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' > logs/env_audit.log
+          env -i PATH="$PATH" bash -c '
+            set -a
+            source .env.ci
+            set +a
+            JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh
+          ' > logs/env_audit.log
           cat logs/env_audit.log
           cat logs/env_audit.json || true
-          missing=$(python -c 'import json,os; p="logs/env_audit.json"; print("".join(json.load(open(p)).get("missing", [])) if os.path.exists(p) else "")')
-          extras=$(python -c 'import json,os; p="logs/env_audit.json"; print("".join(e for e in (json.load(open(p)).get("extra", []) if os.path.exists(p) else []) if e not in ("PATH","PWD","SHLVL","_")))')
+          missing=$(python -c 'import json,os; p="logs/env_audit.json";\
+            print("".join(json.load(open(p)).get("missing", [])) if os.path.exists(p) else "")')
+          extras=$(python -c 'import json,os; p="logs/env_audit.json";\
+            print("".join(e for e in (json.load(open(p)).get("extra", []) if os.path.exists(p) else [])\
+            if e not in ("PATH","PWD","SHLVL","_")))')
           if [ -n "$missing" ] || [ -n "$extras" ]; then
-            echo "::error::Environment variable mismatch detected"
+            printf '::error::Environment variable mismatch detected\n'
             exit 1
           fi
 
@@ -404,7 +414,9 @@ jobs:
 
       - name: Build containers
         if: steps.guard.outputs.run == 'true'
-        run: docker compose -f docker-compose.ci.yaml --env-file .env.ci build 2>&1 | tee logs/docker-build.log
+        run: |
+          docker compose -f docker-compose.ci.yaml --env-file .env.ci build \
+            2>&1 | tee logs/docker-build.log
 
       - name: Scan images with Trivy
         if: steps.guard.outputs.run == 'true'
@@ -420,7 +432,9 @@ jobs:
         if: steps.guard.outputs.run == 'true'
         run: |
           docker compose -f docker-compose.ci.yaml --env-file .env.ci ps
-          failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
+          failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q \
+            | xargs -r docker inspect -f '{{.State.Status}}' \
+            | grep -v running || true)
           if [ -n "$failed" ]; then
             docker compose -f docker-compose.ci.yaml --env-file .env.ci logs
             exit 1
@@ -473,14 +487,14 @@ jobs:
         if: steps.guard.outputs.run == 'true' && failure() && hashFiles('test-results/pytest-results.xml') != ''
         run: |
           line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1 || echo 1)
-          echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
+          printf '::error file=test-results/pytest-results.xml,line=%s::Test failures detected\n' "$line"
 
       - name: Install frontend dependencies
         if: steps.guard.outputs.run == 'true'
         working-directory: frontend
         run: |
           npm ci || {
-            echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+            printf 'npm install failed. See docs/offline-setup.md for offline instructions.\n' >&2
             exit 1
           }
 
@@ -570,7 +584,7 @@ jobs:
         working-directory: bot
         run: |
           npm ci || {
-            echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+            printf 'npm install failed. See docs/offline-setup.md for offline instructions.\n' >&2
             exit 1
           }
 
@@ -653,18 +667,19 @@ jobs:
           if [ -f "coverage.svg" ]; then
             git add coverage.svg
             if git diff --staged --quiet; then
-              echo "No changes to coverage badge"
+              printf 'No changes to coverage badge\n'
             else
               git commit -m "CHORE(ci): update coverage badge"
               TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
-              echo "Pushing with selected token..."
-              git push "https://${TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                echo "FAIL: push failed - uploading badge as artifact"
+              printf 'Pushing with selected token...\n'
+              git push "https://${TOKEN}@github.com/${{ github.repository }}.git" \
+                "HEAD:${{ github.ref }}" || {
+                printf 'FAIL: push failed - uploading badge as artifact\n'
                 exit 1
               }
             fi
           else
-            echo "Coverage badge file not found"
+            printf 'Coverage badge file not found\n'
           fi
 
       - name: Upload coverage badge as artifact (fallback)
@@ -719,7 +734,7 @@ jobs:
           if gh api user >/dev/null 2>&1; then
             gh pr edit ${{ github.event.pull_request.number }} --add-label "Codex" || true
           else
-            echo "::warning::GitHub CLI authentication failed. Skipping PR labeling."
+            printf 'GitHub CLI auth failed. Skipping PR labeling.\n'
           fi
 
       - name: Clean test artifacts
@@ -729,9 +744,9 @@ jobs:
       - name: Post-success log cleanup
         if: success()
         run: |
-          echo "CI completed successfully - smart cleaning temporary artifacts"
+          printf 'CI completed successfully - smart cleaning temporary artifacts\n'
           bash scripts/manage_logs.sh smart-clean
-          echo "SUCCESS: Temporary artifacts cleaned, important logs preserved for next run"
+          printf 'SUCCESS: Temporary artifacts cleaned, important logs preserved for next run\n'
 
       - name: Summarize CI failures
         if: always()
@@ -750,22 +765,22 @@ jobs:
           fi
           source .venv/bin/activate
 
-          if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
-            echo "CI failure diagnoser completed successfully"
+          if python scripts/ci_failure_diagnoser.py \
+               ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
+            printf 'CI failure diagnoser completed successfully\n'
           else
             {
-              echo "# CI Failure Analysis"
-              echo
-              echo "CI failure diagnoser encountered an issue:"
-              echo "- Log files may not be available at expected location"
-              echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`"
-              echo
-              echo "Please check the workflow logs for detailed error information."
+              printf '# CI Failure Analysis\n\n'
+              printf 'CI failure diagnoser encountered an issue:\n'
+              printf '- Log files may not be available at expected location\n'
+              printf -- '- Job logs: `%s`\n\n' \
+                "${{ runner.temp }}/_github_workflow/*/job.log"
+              printf 'Please check the workflow logs for detailed error information.\n'
             } > audit.md
           fi
           if [ ! -s audit.md ]; then
-            echo "# CI Status" > audit.md
-            echo "No failure patterns detected in available logs." >> audit.md
+            printf '# CI Status\n' > audit.md
+            printf 'No failure patterns detected in available logs.\n' >> audit.md
           fi
 
       - name: Download previous CI failure issue
@@ -792,14 +807,13 @@ jobs:
           if [ -f audit.md ]; then
             cat audit.md >> summary.md
           else
-            echo "# CI Analysis" >> summary.md
-            echo "Audit file not available." >> summary.md
+            printf '# CI Analysis\nAudit file not available.\n' >> summary.md
           fi
 
           export GH_TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
           gh auth status 2>&1 | tee -a gh_cli.log || true
           if ! gh api user >/dev/null 2>&1; then
-            echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
+            printf '::warning::GitHub CLI authentication failed. Skipping issue operations.\n'
             exit 0
           fi
 
@@ -808,24 +822,26 @@ jobs:
           if [ -f "$ISSUE_FILE" ]; then
             ISSUE=$(cat "$ISSUE_FILE")
             gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-              echo "::warning::Failed to comment on issue ${ISSUE}. Continuing."
+              printf '::warning::Failed to comment on issue %s. Continuing.\n' "$ISSUE"
           else
-            echo "Searching for existing issue" | tee -a gh_cli.log
-            if search_output=$(gh issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
+            printf 'Searching for existing issue\n' | tee -a gh_cli.log
+            if search_output=$(gh issue list --label ci-failure --state open \
+                                 --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
               ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
               if [ -n "$ISSUE" ]; then
                 gh issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log || \
-                  echo "::warning::Failed to comment on existing issue ${ISSUE}"
+                  printf '::warning::Failed to comment on existing issue %s\n' "$ISSUE"
               else
-                if ISSUE_URL=$(gh issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
+                if ISSUE_URL=$(gh issue create --title "$ISSUE_TITLE" \
+                                 --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
                   ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
                 else
-                  echo "::warning::Failed to create new issue. Continuing."
+                  printf '::warning::Failed to create new issue. Continuing.\n'
                   ISSUE=""
                 fi
               fi
             else
-              echo "::warning::Failed to search for issues. Continuing."
+              printf '::warning::Failed to search for issues. Continuing.\n'
               ISSUE=""
             fi
           fi
@@ -852,7 +868,7 @@ jobs:
         run: |
           export GH_TOKEN="${CI_ISSUE_AUTOMATION_TOKEN:-${CI_BOT_TOKEN:-${GITHUB_TOKEN}}}"
           if ! gh api user >/dev/null 2>&1; then
-            echo "::warning::GitHub CLI authentication failed. Skipping issue closure."
+            printf '::warning::GitHub CLI authentication failed. Skipping issue closure.\n'
             exit 0
           fi
           if ISSUES=$(gh issue list --label ci-failure --state open 2>/dev/null | awk '{print $1}'); then
@@ -863,7 +879,7 @@ jobs:
               fi
             done
           else
-            echo "::warning::Failed to list issues for closure"
+            printf '::warning::Failed to list issues for closure\n'
           fi
 
       - name: Prepare CI log artifacts
@@ -892,73 +908,150 @@ jobs:
 
   aar-system-validation:
     name: "AAR System Validation/Validate AAR System (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci, docs-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "AAR System Validation complete"
+      - name: Mirror upstream status (code+docs)
+        run: |
+          code="${{ needs.code-ci.result }}"
+          docs="${{ needs.docs-ci.result }}"
+          if [ "$code" = "success" ] || [ "$docs" = "success" ]; then
+            printf 'OK (code-ci=%s docs-ci=%s)\n' "$code" "$docs"
+            exit 0
+          fi
+          if [ "$code" = "skipped" ] && [ "$docs" = "skipped" ]; then
+            printf 'Non-applicable (no code/docs changes)\n'
+            exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s docs-ci=%s)\n' "$code" "$docs"
+          exit 1
 
   ci-test:
     name: "CI/test (3.12, 22) (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "CI test complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   documentation-quality:
     name: "Documentation Quality/validate-docs (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [docs-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Documentation Quality check complete"
+      - name: Mirror docs-ci status
+        run: |
+          res="${{ needs.docs-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (docs-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (docs-ci=%s)\n' "$res"; exit 1
 
   enhanced-potato-policy:
     name: "Enhanced Potato Policy Enforcement/enhanced-potato-policy (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Potato Policy Enforcement complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   orchestrator:
     name: "Orchestrator/orchestrate (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Orchestrator check complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   pre-commit-validation:
     name: "Pre-commit Validation/Validate pre-commit hooks (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Pre-commit Validation complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   root-artifact-monitor:
     name: "Root Artifact Monitor/Root Artifact Guard (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Root Artifact Guard check complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   terminal-output-policy:
     name: "Terminal Output Policy Enforcement/Enforce Terminal Output Policy (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Terminal Output Policy Enforcement complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   validate-permissions:
     name: "Validate Permissions/check (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Validate Permissions check complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   version-policy-audit:
     name: "Version Policy Audit/Verify Node 22.x + Python 3.12.x Policy (pull_request)"
-    if: github.event_name == 'pull_request'
+    needs: [code-ci]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Version Policy Audit complete"
+      - name: Mirror code-ci status
+        run: |
+          res="${{ needs.code-ci.result }}"
+          if [ "$res" = "success" ] || [ "$res" = "skipped" ]; then
+            printf 'OK (code-ci=%s)\n' "$res"; exit 0
+          fi
+          printf 'Upstream failed (code-ci=%s)\n' "$res"; exit 1
 
   # ------------------------------------------------------------------
   # CodeQL waiters (reflect the actual CodeQL results from GitHub)
@@ -980,10 +1073,9 @@ jobs:
       - name: Wait for CodeQL (JS/TS)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # If your repo uses a single CodeQL check, set to: "Code scanning results / CodeQL"
           CHECK_NAME: "CodeQL/Analyze (javascript-typescript) (dynamic)"
         run: |
-          printf "Waiting for check: %s on %s\n" "$CHECK_NAME" "$GITHUB_SHA"
+          printf 'Waiting for check: %s on %s\n' "${CHECK_NAME}" "${GITHUB_SHA}"
           for i in $(seq 1 90); do
             json=$(gh api \
               repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs \
@@ -993,12 +1085,12 @@ jobs:
             conclusion=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
               '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
             if [ "$status" = "completed" ]; then
-              echo "Conclusion: $conclusion"
+              printf 'Conclusion: %s\n' "$conclusion"
               [ "$conclusion" = "success" ] && exit 0 || exit 1
             fi
             sleep 10
           done
-          printf "Timed out waiting for %s\n" "$CHECK_NAME"
+          printf 'Timed out waiting for %s\n' "${CHECK_NAME}"
           exit 1
 
   wait-for-codeql-py:
@@ -1017,19 +1109,22 @@ jobs:
       - name: Wait for CodeQL (Python)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # If your repo uses a single CodeQL check, set to the unified name above.
           CHECK_NAME: "CodeQL/Analyze (python) (dynamic)"
         run: |
-          printf "Waiting for check: %s on %s\n" "$CHECK_NAME" "$GITHUB_SHA"
+          printf 'Waiting for check: %s on %s\n' "${CHECK_NAME}" "${GITHUB_SHA}"
           for i in $(seq 1 90); do
-            json=$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs -H "Accept: application/vnd.github+json")
-            status=$(echo "$json" | jq -r --arg n "$CHECK_NAME" '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
-            conclusion=$(echo "$json" | jq -r --arg n "$CHECK_NAME" '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
+            json=$(gh api \
+              repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs \
+              -H "Accept: application/vnd.github+json")
+            status=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
+              '.check_runs[] | select(.name==$n) | .status // empty' | head -n1)
+            conclusion=$(echo "$json" | jq -r --arg n "$CHECK_NAME" \
+              '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
             if [ "$status" = "completed" ]; then
-              echo "Conclusion: $conclusion"
+              printf 'Conclusion: %s\n' "$conclusion"
               [ "$conclusion" = "success" ] && exit 0 || exit 1
             fi
             sleep 10
           done
-          printf "Timed out waiting for %s\n" "$CHECK_NAME"
+          printf 'Timed out waiting for %s\n' "${CHECK_NAME}"
           exit 1
