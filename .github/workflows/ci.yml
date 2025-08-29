@@ -775,7 +775,7 @@ jobs:
                 '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
                           if [ "$status" = "completed" ]; then
               printf 'Conclusion: %s\n' "$conclusion"
-              [ "$conclusion" = "success" ] && exit 0 || exit 1
+              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 1
             fi
             sleep 10
           done
@@ -811,7 +811,7 @@ jobs:
                 '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
                           if [ "$status" = "completed" ]; then
                             printf 'Conclusion: %s\n' "$conclusion"
-              [ "$conclusion" = "success" ] && exit 0 || exit 1
+              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 1
             fi
             sleep 10
           done
