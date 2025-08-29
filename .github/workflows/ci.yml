@@ -5,6 +5,7 @@
 #   scope: .github/workflows/ci.yml
 #   triggers: Push and pull_request events
 #   output: Build artifacts and coverage reports
+#   gpg-signing: Required for commit verification
 # ---
 name: CI
 
