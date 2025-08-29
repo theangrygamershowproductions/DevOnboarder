@@ -76,7 +76,7 @@ jobs:
           printf 'Tokens verified\n'
 
       - name: Checkout repository (bot token)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.CI_BOT_TOKEN }}
 
