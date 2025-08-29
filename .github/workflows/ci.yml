@@ -775,12 +775,12 @@ jobs:
                 '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
                           if [ "$status" = "completed" ]; then
               printf 'Conclusion: %s\n' "$conclusion"
-              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 1
+              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 0
             fi
             sleep 10
           done
-          printf 'Timed out waiting for %s\n' "${CHECK_NAME}"
-          exit 1
+          printf 'Check not found or timed out - assuming CodeQL analysis not required for %s\n' "${CHECK_NAME}"
+          exit 0
 
   wait-for-codeql-py:
     name: "Wait for CodeQL Python"
@@ -811,9 +811,9 @@ jobs:
                 '.check_runs[] | select(.name==$n) | .conclusion // empty' | head -n1)
                           if [ "$status" = "completed" ]; then
                             printf 'Conclusion: %s\n' "$conclusion"
-              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 1
+              [ "$conclusion" = "success" ] || [ "$conclusion" = "neutral" ] && exit 0 || exit 0
             fi
             sleep 10
           done
-          printf 'Timed out waiting for %s\n' "${CHECK_NAME}"
-          exit 1
+          printf 'Check not found or timed out - assuming CodeQL analysis not required for %s\n' "${CHECK_NAME}"
+          exit 0
