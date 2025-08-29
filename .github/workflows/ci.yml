@@ -747,7 +747,7 @@ jobs:
             ${{ runner.temp }}/_github_workflow/*/job.log
 
   wait-for-codeql-js:
-    name: "CodeQL/Analyze (javascript-typescript) (dynamic)"
+    name: "Wait for CodeQL JS"
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -783,7 +783,7 @@ jobs:
           exit 1
 
   wait-for-codeql-py:
-    name: "CodeQL/Analyze (python) (dynamic)"
+    name: "Wait for CodeQL Python"
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 20
