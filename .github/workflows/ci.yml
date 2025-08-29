@@ -750,15 +750,11 @@ jobs:
     name: "Wait for CodeQL JS"
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     permissions:
       contents: read
       checks: read
     steps:
-      - uses: sersoft-gmbh/setup-gh-cli-action@v2
-        with:
-          version: stable
-      - run: sudo apt-get update && sudo apt-get install -y jq
       - name: Smart Wait for CodeQL JS
         run: |
           bash scripts/smart_codeql_wait_policy_compliant.sh javascript-typescript ${{ github.sha }}
