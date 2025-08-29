@@ -93,46 +93,44 @@ jobs:
               run: shellcheck --severity=warning scripts/*.sh
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
-            - name: Install the gh cli
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
-              with:
-                  version: stable
-            - name: Show gh version
-              run: which gh && gh --version
-            - name: Verify gh version
+            - name: Verify GitHub CLI availability
               run: |
-                  ver=$(gh --version | head -n1 | awk '{print $3}')
-                  major=${ver%%.*}
-                  if [ "$major" -lt 2 ]; then
-                  echo "::error::GitHub CLI v2 or higher required" >&2
-                  exit 1
+                  # GitHub CLI is pre-installed on GitHub Actions runners
+                  if ! command -v gh >/dev/null 2>&1; then
+                      printf "::error::GitHub CLI not found. Installing...\n"
+                      # Install GitHub CLI if not available
+                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                      printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" "$(dpkg --print-architecture)" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      sudo apt update
+                      sudo apt install gh
                   fi
+                  printf "GitHub CLI version: %s\n" "$(gh --version | head -n1)"
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Set up Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
             - name: Verify language versions
               run: bash scripts/check_versions.sh
             - name: Cache pip downloads
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.cache/pip
                   key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
                   restore-keys: |
                       ${{ runner.os }}-py${{ matrix.python-version }}-
             - name: Cache frontend node modules
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: frontend/node_modules
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
                   restore-keys: |
                       ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
             - name: Cache bot node modules
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: bot/node_modules
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
@@ -404,7 +402,7 @@ jobs:
                   path: frontend/vitest.log
                   retention-days: 7
             - name: Cache Playwright browsers
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.cache/ms-playwright
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
