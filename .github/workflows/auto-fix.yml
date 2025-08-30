@@ -90,14 +90,15 @@ jobs:
                   fi
                   export SNIPPET="$snippet"
                   # Simplified patch generation for now
-                  patch: |
-                    diff --git a/example.yml b/example.yml
-                    index 1234567..abcdefg 100644
-                    --- a/example.yml
-                    +++ b/example.yml
-                    @@ -1,1 +1,1 @@
-                    - old content
-                    + new content
+                  cat > fix-ci-health.patch.diff << 'EOF'
+                  diff --git a/example.yml b/example.yml
+                  index 1234567..abcdefg 100644
+                  --- a/example.yml
+                  +++ b/example.yml
+                  @@ -1,1 +1,1 @@
+                  - old content
+                  + new content
+                  EOF
                   echo "$patch" > fix-ci-health.patch.diff
             - name: Apply YAML patch
               run: git apply fix-ci-health.patch.diff || true
