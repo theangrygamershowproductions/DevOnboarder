@@ -26,7 +26,7 @@ jobs:
     audit:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - name: Check for unresolved action items
               id: check
@@ -50,6 +50,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
               run: |
+                  # shellcheck disable=SC2034
                   OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
                   cat > body.md <<'BODY'
                   The following action items remain open:

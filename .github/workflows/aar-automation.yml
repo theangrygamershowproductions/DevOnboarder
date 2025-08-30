@@ -56,7 +56,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -128,11 +128,11 @@ jobs:
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              echo "DOCS(aar): add after actions report for ${{ github.event.issue.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for %s\n' "${{ github.event.issue.number }}" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              echo "DOCS(aar): add after actions report for PR#${{ github.event.pull_request.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for PR#%s\n' "${{ github.event.pull_request.number }}" > commit_msg.txt
             else
-              echo "DOCS(aar): add after actions report for ${{ github.event.inputs.aar_type }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for %s\n' "${{ github.event.inputs.aar_type }}" > commit_msg.txt
             fi
             git commit -F commit_msg.txt
             git push

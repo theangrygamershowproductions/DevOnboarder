@@ -26,7 +26,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -36,7 +36,7 @@ jobs:
         if: github.event.workflow_run.conclusion == 'failure'
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
                   # Security: Only checkout trusted code, not untrusted PR head
@@ -45,7 +45,7 @@ jobs:
               id: workflow-info
               run: |
                   # Safely capture workflow run details without checking out untrusted code
-                  echo "head_sha=${{ github.event.workflow_run.head_sha || github.sha }}" >> $GITHUB_OUTPUT
+                  echo "head_sha=${{ github.event.workflow_run.head_sha || github.sha }}" >> "$GITHUB_OUTPUT"
             - name: Install GitHub CLI
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:

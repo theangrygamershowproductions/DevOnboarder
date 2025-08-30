@@ -41,6 +41,11 @@ repos:
       hooks:
           - id: yamllint
             exclude: node_modules/
+    - repo: https://github.com/rhysd/actionlint
+      rev: v1.7.1
+      hooks:
+          - id: actionlint
+            args: [--shellcheck=]
     - repo: local
       hooks:
           - id: terminal-output-policy

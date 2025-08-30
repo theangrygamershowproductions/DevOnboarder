@@ -20,7 +20,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -29,7 +29,7 @@ jobs:
         needs: validate-yaml
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - name: Install GitHub CLI
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
@@ -46,7 +46,7 @@ jobs:
                   node-version: "22"
             - name: Install Python dependencies
               run: |
-                  pip install .[test]
+                  pip install '.[test]'
                   pip install -e .
                   pip install pip-audit
             - name: Install frontend dependencies

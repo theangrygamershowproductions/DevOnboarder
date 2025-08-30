@@ -97,14 +97,16 @@ jobs:
               run: |
                   # GitHub CLI is pre-installed on GitHub Actions runners
                   if ! command -v gh >/dev/null 2>&1; then
-                      printf "::error::GitHub CLI not found. Installing...\n"
+                      echo "::error::GitHub CLI not found. Installing..."
                       # Install GitHub CLI if not available
                       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" "$(dpkg --print-architecture)" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      ARCH=$(dpkg --print-architecture)
+                      printf "deb [arch=%s] signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg]\n" "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
                       sudo apt update
                       sudo apt install gh
                   fi
-                  printf "GitHub CLI version: %s\n" "$(gh --version | head -n1)"
+                  GH_VERSION=$(gh --version | head -n1)
+                  printf "GitHub CLI version: %s\n" "$GH_VERSION"
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
@@ -144,12 +146,12 @@ jobs:
               run: |
                   python -m venv .venv
                   source .venv/bin/activate
-                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
-                  printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
+                  echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> "$GITHUB_ENV"
+                  echo "$VIRTUAL_ENV/bin" >> "$GITHUB_PATH"
             - name: Install dev dependencies
               run: |
                   source .venv/bin/activate
-                  pip install .[test] 2>&1 | tee logs/pip-install.log || {
+                  pip install ".[test]" 2>&1 | tee logs/pip-install.log || {
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
@@ -195,7 +197,7 @@ jobs:
             - name: Install package
               run: |
                   source .venv/bin/activate
-                  pip install -e .[test] 2>&1 | tee logs/pip-install-editable.log
+                  pip install -e ".[test]" 2>&1 | tee logs/pip-install-editable.log
             - name: Load CI environment variables
               run: |
                   # Load .env.ci file and export variables for subsequent steps
@@ -205,15 +207,17 @@ jobs:
                       source .env.ci
                       set +a
                       # Export key variables to GitHub environment
-                      printf "APP_ENV=%s\n" "$APP_ENV" >> $GITHUB_ENV
-                      printf "JWT_SECRET_KEY=%s\n" "$JWT_SECRET_KEY" >> $GITHUB_ENV
-                      printf "DATABASE_URL=%s\n" "$DATABASE_URL" >> $GITHUB_ENV
-                      printf "JWT_ALGORITHM=%s\n" "$JWT_ALGORITHM" >> $GITHUB_ENV
-                      printf "TOKEN_EXPIRE_SECONDS=%s\n" "$TOKEN_EXPIRE_SECONDS" >> $GITHUB_ENV
-                      printf "DISCORD_API_TIMEOUT=%s\n" "$DISCORD_API_TIMEOUT" >> $GITHUB_ENV
+                      {
+                        printf "APP_ENV=%s\n" "$APP_ENV"
+                        printf "JWT_SECRET_KEY=%s\n" "$JWT_SECRET_KEY"
+                        printf "DATABASE_URL=%s\n" "$DATABASE_URL"
+                        printf "JWT_ALGORITHM=%s\n" "$JWT_ALGORITHM"
+                        printf "TOKEN_EXPIRE_SECONDS=%s\n" "$TOKEN_EXPIRE_SECONDS"
+                        printf "DISCORD_API_TIMEOUT=%s\n" "$DISCORD_API_TIMEOUT"
+                      } >> "$GITHUB_ENV"
                       echo "Environment variables loaded for CI:"
                       printf "  APP_ENV: %s\n" "$APP_ENV"
-                      printf "  DATABASE_URL: %.50s...\n" "$DATABASE_URL"
+                      printf "  DATABASE_URL: %s...\n" "${DATABASE_URL:0:50}"
                   else
                       echo "::error::.env.ci file not found"
                       exit 1
@@ -532,16 +536,16 @@ jobs:
                           # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
                           if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
                               echo "Attempting push with CI_BOT_TOKEN..."
-                              git push https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                              git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                   echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
-                                  git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                                  git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                       echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
                                       exit 1  # Trigger failure condition for artifact upload
                                   }
                               }
                           else
                               echo "Using GITHUB_TOKEN for push..."
-                              git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                              git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                   echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
                                   exit 1  # Trigger failure condition for artifact upload
                               }
@@ -638,13 +642,15 @@ jobs:
                   if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
                       echo "CI failure diagnoser completed successfully"
                   else
-                      echo "# CI Failure Analysis" > audit.md
-                      echo "" >> audit.md
-                      echo "CI failure diagnoser encountered an issue:" >> audit.md
-                      echo "- Log files may not be available at expected location" >> audit.md
-                      echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`" >> audit.md
-                      echo "" >> audit.md
-                      echo "Please check the workflow logs for detailed error information." >> audit.md
+                      {
+                        echo "# CI Failure Analysis"
+                        echo ""
+                        echo "CI failure diagnoser encountered an issue:"
+                        echo "- Log files may not be available at expected location"
+                        echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`"
+                        echo ""
+                        echo "Please check the workflow logs for detailed error information."
+                      } > audit.md
                   fi
                   # Ensure audit.md exists and has content
                   if [ ! -f audit.md ] || [ ! -s audit.md ]; then
@@ -661,7 +667,7 @@ jobs:
               id: ci_failure
               run: |
                   set -euo pipefail
-                  printf '\n<!-- sha: %s -->\n' "$GITHUB_SHA" >> summary.md
+                  printf "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
 
                   # Ensure audit.md exists before trying to read it
                   if [ -f audit.md ]; then
@@ -678,7 +684,7 @@ jobs:
                   if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
                       echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
                       echo "Auth check output:" | tee -a gh_cli.log
-                      printf "%s\n" "$gh_bin_check" | tee -a gh_cli.log
+                      echo "$gh_bin_check" | tee -a gh_cli.log
                       exit 0
                   fi
 
@@ -703,7 +709,7 @@ jobs:
                               fi
                           else
                               if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
-                                  ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+                                ISSUE=$(printf '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
                               else
                                   printf "::warning::Failed to create new issue. Continuing without issue creation.\n"
                                   ISSUE=""

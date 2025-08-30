@@ -29,7 +29,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Setup GitHub CLI
               run: |
@@ -37,7 +37,7 @@ jobs:
 
             - name: Authenticate with GitHub
               run: |
-                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+                printf '%s\n' "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
             - name: Close PR tracking issue
               env:
@@ -52,16 +52,16 @@ jobs:
                       PR_NUMBER="${{ github.event.pull_request.number }}"
                   fi
 
-                  echo "Looking for tracking issue for PR"
+                  printf 'Looking for tracking issue for PR\n'
 
                   # Search for tracking issue with PR number in title using wrapper script
                   ISSUE_SEARCH=$(bash scripts/ci_gh_issue_wrapper.sh list "Track PR #$PR_NUMBER" "open" "number,title,labels")
 
                   if [[ "$ISSUE_SEARCH" != "[]" ]]; then
-                      ISSUE_NUMBER=$(echo "$ISSUE_SEARCH" | jq -r '.[0].number')
-                      ISSUE_TITLE=$(echo "$ISSUE_SEARCH" | jq -r '.[0].title')
+                    ISSUE_NUMBER=$(printf '%s' "$ISSUE_SEARCH" | jq -r '.[0].number')
+                    ISSUE_TITLE=$(printf '%s' "$ISSUE_SEARCH" | jq -r '.[0].title')
 
-                      echo "Found tracking issue"
+                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
 
                       # Add completion comment before closing using wrapper script
                       bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \
@@ -71,7 +71,7 @@ jobs:
                       bash scripts/ci_gh_issue_wrapper.sh close "$ISSUE_NUMBER" \
                         "Automatically closed: PR #$PR_NUMBER merged successfully"
 
-                      echo "Closed tracking issue for merged PR"
+                      printf 'Closed tracking issue for merged PR\n'
                   else
                       echo "No tracking issue found for PR"
                   fi
