@@ -28,6 +28,14 @@ x-env-dev: &env-dev
 services:
     auth:
         <<: [*app-base, *env-dev]
+        environment:
+            - APP_ENV=development
+            - JWT_SECRET_KEY=ci_test_jwt_secret_for_automated_testing_very_long_and_secure
+            - DATABASE_URL=sqlite:///./test_devonboarder.db
+            - JWT_ALGORITHM=HS256
+            - TOKEN_EXPIRE_SECONDS=3600
+            - DISCORD_API_TIMEOUT=10
+            - INIT_DB_ON_STARTUP=true
         command: ["devonboarder-auth"]
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
@@ -38,6 +46,10 @@ services:
             - "8002:8002"
     db:
         <<: [*db-base, *env-dev]
+        environment:
+            - POSTGRES_USER=devuser
+            - POSTGRES_PASSWORD=devpass
+            - POSTGRES_DB=devdb
 
 volumes:
     db_data:

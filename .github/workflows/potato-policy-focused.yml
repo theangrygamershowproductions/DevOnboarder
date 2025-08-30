@@ -48,7 +48,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
                   fetch-depth: 0  # Full history for comprehensive analysis
 
@@ -63,7 +63,7 @@ jobs:
                   python -m venv .venv
                   source .venv/bin/activate
                   pip install --upgrade pip
-                  pip install -e .[test]
+                  pip install -e '.[test]'
                   echo "Virtual environment setup complete"
 
             - name: Validate Virtual Environment
@@ -206,13 +206,15 @@ jobs:
 
                   # Build JSON with individual printf commands to avoid multi-line detection
                   printf '{\n' > reports/security-metrics.json
-                  printf '    "timestamp": "%s",\n' "$TIMESTAMP" >> reports/security-metrics.json
-                  printf '    "protected_patterns": %d,\n' "$PROTECTED_PATTERNS" >> reports/security-metrics.json
-                  printf '    "sensitive_files_detected": %d,\n' "$SENSITIVE_FILES" >> reports/security-metrics.json
-                  printf '    "total_violations": %d,\n' "$VIOLATIONS" >> reports/security-metrics.json
-                  printf '    "virtual_environment": "%s",\n' "$VIRTUAL_ENV_SAFE" >> reports/security-metrics.json
-                  printf '    "framework_version": "Enhanced Potato Policy v2.0"\n' >> reports/security-metrics.json
-                  printf '}\n' >> reports/security-metrics.json
+                  {
+                    printf '    "timestamp": "%s",\n' "$TIMESTAMP"
+                    printf '    "protected_patterns": %d,\n' "$PROTECTED_PATTERNS"
+                    printf '    "sensitive_files_detected": %d,\n' "$SENSITIVE_FILES"
+                    printf '    "total_violations": %d,\n' "$VIOLATIONS"
+                    printf '    "virtual_environment": "%s",\n' "$VIRTUAL_ENV_SAFE"
+                    printf '    "framework_version": "Enhanced Potato Policy v2.0"\n'
+                    printf '}\n'
+                  } >> reports/security-metrics.json
 
                   # Validate generated JSON
                   echo "Generated JSON content:"
@@ -265,7 +267,7 @@ jobs:
                   echo ""
                   if [ -f reports/security-metrics.json ]; then
                       echo "Security Metrics:"
-                      cat reports/security-metrics.json | python -m json.tool
+                      python -m json.tool < reports/security-metrics.json
                   fi
                   echo ""
                   echo "Full audit report: reports/enhanced-potato-policy-audit-*.md"

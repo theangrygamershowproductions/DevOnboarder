@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 50  # Get recent history for change analysis
 
@@ -63,13 +63,13 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
-          printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
+          printf -- "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf -- "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
       - name: "Install dependencies"
         run: |
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
 
       - name: "Validate AAR environment"
         run: |
@@ -197,7 +197,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Setup Python environment"
         uses: actions/setup-python@v4
@@ -208,13 +208,13 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
-          printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
+          printf -- "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf -- "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
       - name: "Install dependencies"
         run: |
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
 
       - name: "Create logs directory"
         run: |
@@ -257,20 +257,22 @@ jobs:
 
       - name: "Generate security report"
         run: |
-          echo "AAR Security Audit Report" > "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "=========================" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          printf "**Generated**: %s\n" "$TIMESTAMP" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "**Workflow**: ${{ github.workflow }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "**Run ID**: ${{ github.run_id }}" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "## Compliance Status" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- No Default Token Policy v1.0: COMPLIANT" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Enhanced Potato Policy: VALIDATED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Virtual Environment: ENFORCED" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
-          echo "- Centralized Logging: ACTIVE" >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
+          {
+            echo "AAR Security Audit Report"
+            echo "========================="
+            echo ""
+            TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+            printf "**Generated**: %s\n" "$TIMESTAMP"
+            echo "**Workflow**: ${{ github.workflow }}"
+            echo "**Run ID**: ${{ github.run_id }}"
+            echo ""
+            echo "## Compliance Status"
+            echo ""
+            echo "- No Default Token Policy v1.0: COMPLIANT"
+            echo "- Enhanced Potato Policy: VALIDATED"
+            echo "- Virtual Environment: ENFORCED"
+            echo "- Centralized Logging: ACTIVE"
+          } >> "logs/aar-security-report-${GITHUB_RUN_ID}.md"
 
           echo "Security audit report generated"
 
