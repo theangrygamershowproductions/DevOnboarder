@@ -3,29 +3,7 @@
     "quarters": {
       "2025": {
         "Q3": {
-          "pull_requests": [
-            {
-              "title": "After Actions Report: Documentation Quality Certification Framework - MVP Ready (#1098)",
-              "file_path": "2025/Q3/pull-requests/pr-1098-documentation-quality-certification-framework---mvp-ready.md",
-              "absolute_path": ".aar/2025/Q3/pull-requests/pr-1098-documentation-quality-certification-framework---mvp-ready.md",
-              "ref_number": "1098",
-              "type": "pull_requests",
-              "date_created": "2025-08-09T06:31:43.703315",
-              "files_changed": 0,
-              "agents_updated": 0,
-              "action_items": 5,
-              "codex_alignment": "Unknown",
-              "labels": [
-                "critical",
-                "infrastructure",
-                "enhancement",
-                "documentation"
-              ],
-              "word_count": 874,
-              "line_count": 136,
-              "content_preview": "# After Actions Report: Documentation Quality Certification Framework - MVP Ready (#1098)\n\n## Executive Summary\n\nThis PR successfully implemented cloudflare tunnel subdomain architecture with comprehensive documentation quality certification framework. Key achievements include terminal output policy compliance, merge conflict resolution, and CI validation framework completion.\n\n## Context\n\n- **PR Number**: #1098\n- **PR Type**: Infrastructure/Documentation Enhancement\n- **Priority**: High\n- **Fil..."
-            }
-          ],
+          "pull_requests": [],
           "issues": [
             {
               "title": "After Actions Report: Issue #Discord Bot Authentication Enhancement",
@@ -33,7 +11,7 @@
               "absolute_path": ".aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md",
               "ref_number": "Discord",
               "type": "issues",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-08-05T06:36:49.219074",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -59,7 +37,7 @@
               "absolute_path": ".aar/2025/Q3/sprints/sprint-2025-07-30.md",
               "ref_number": "2025",
               "type": "sprints",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-08-05T06:36:49.219074",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -83,7 +61,7 @@
               "absolute_path": ".aar/2025/Q3/incidents/incident-2025-07-30.md",
               "ref_number": "2025",
               "type": "incidents",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-08-05T06:36:49.219074",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 4,
@@ -101,34 +79,12 @@
           ],
           "automation": [
             {
-              "title": "Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review",
-              "file_path": "2025/Q3/automation/automation-enhancement-2025-07-30.md",
-              "absolute_path": ".aar/2025/Q3/automation/automation-enhancement-2025-07-30.md",
-              "ref_number": "enhancement",
-              "type": "automation",
-              "date_created": "2025-08-09T06:31:43.702315",
-              "files_changed": 0,
-              "agents_updated": 0,
-              "action_items": 4,
-              "codex_alignment": "Unknown",
-              "labels": [
-                "feature",
-                "bug",
-                "enhancement",
-                "documentation",
-                "performance"
-              ],
-              "word_count": 898,
-              "line_count": 120,
-              "content_preview": "# Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review\n\n## Enhancement Summary\n\nImplemented comprehensive git workflow automation system with intelligent commit message generation, pre-commit log review, and enhanced branch management strategies to resolve developer uncertainty around commit failures and improve code quality enforcement.\n\n## Context\n\n- **Problem Statement**: Developers experienced mysterious commit failures due to pre-commit hooks without clear guidanc..."
-            },
-            {
               "title": "After Actions Report: CI Failure Analyzer Integration",
               "file_path": "2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md",
               "absolute_path": ".aar/2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md",
               "ref_number": "unknown",
               "type": "automation",
-              "date_created": "2025-08-09T06:31:43.702315",
+              "date_created": "2025-08-05T06:36:49.219074",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 12,
@@ -144,14 +100,36 @@
               "word_count": 741,
               "line_count": 157,
               "content_preview": "# After Actions Report: CI Failure Analyzer Integration\n\n## Executive Summary\n\nSuccessfully integrated Enhanced CI Failure Analyzer v1.0 with GitHub Actions, completing Phase 4: CI Triage Guard Enhancement. Delivered production-ready automation for CI failure analysis with intelligent resolution recommendations.\n\n## Context\n\n- **Implementation Type**: GitHub Actions Integration\n- **Priority**: High\n- **Duration**: August 2, 2025\n- **Framework**: DevOnboarder Phase 4: CI Triage Guard Enhancement\n..."
+            },
+            {
+              "title": "Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review",
+              "file_path": "2025/Q3/automation/automation-enhancement-2025-07-30.md",
+              "absolute_path": ".aar/2025/Q3/automation/automation-enhancement-2025-07-30.md",
+              "ref_number": "enhancement",
+              "type": "automation",
+              "date_created": "2025-08-05T06:36:49.219074",
+              "files_changed": 0,
+              "agents_updated": 0,
+              "action_items": 4,
+              "codex_alignment": "Unknown",
+              "labels": [
+                "feature",
+                "bug",
+                "enhancement",
+                "documentation",
+                "performance"
+              ],
+              "word_count": 898,
+              "line_count": 120,
+              "content_preview": "# Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review\n\n## Enhancement Summary\n\nImplemented comprehensive git workflow automation system with intelligent commit message generation, pre-commit log review, and enhanced branch management strategies to resolve developer uncertainty around commit failures and improve code quality enforcement.\n\n## Context\n\n- **Problem Statement**: Developers experienced mysterious commit failures due to pre-commit hooks without clear guidanc..."
             }
           ]
         }
       }
     },
-    "total_aars": 6,
+    "total_aars": 5,
     "types": {
-      "pull_requests": 1,
+      "pull_requests": 0,
       "issues": 1,
       "sprints": 1,
       "incidents": 1,
@@ -160,21 +138,21 @@
     "metrics": {
       "total_files_changed": 0,
       "total_agents_updated": 0,
-      "total_action_items": 31
+      "total_action_items": 26
     }
   },
   "trends": {
     "quarterly_counts": [
       {
         "period": "Q3 2025",
-        "total_aars": 6,
+        "total_aars": 5,
         "files_changed": 0,
         "agents_updated": 0,
-        "action_items": 31
+        "action_items": 26
       }
     ],
     "type_distribution": {
-      "pull_requests": 1,
+      "pull_requests": 0,
       "issues": 1,
       "sprints": 1,
       "incidents": 1,
@@ -189,5 +167,5 @@
       "avg_actions_per_aar": 5.2
     }
   },
-  "generated": "2025-08-09T06:31:50.162360"
+  "generated": "2025-08-05T06:36:59.089246"
 }
