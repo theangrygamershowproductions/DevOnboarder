@@ -6,6 +6,8 @@
 [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 [![📚 Documentation Quality](https://img.shields.io/badge/docs-certified-brightgreen?style=flat&logo=markdown)](docs/public/documentation-quality-certification.md)
 
+> 📘 **CI AAR (2025-09-01)**: [CI Modernization After Action Report](docs/ci/ci-modernization-2025-09-01-archived.md)
+
 ## 🎯 **Project Management Framework**
 
 DevOnboarder uses a comprehensive three-project structure for optimal organization and tracking:
