@@ -513,6 +513,7 @@ jobs:
                   source .venv/bin/activate
                   python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
+              if: github.event_name != 'pull_request'
               env:
                   # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
                   CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
@@ -557,7 +558,7 @@ jobs:
 
             # Upload coverage badge as artifact if git push failed
             - name: Upload coverage badge as artifact (fallback)
-              if: failure()
+              if: failure() || github.event_name == 'pull_request'
               uses: actions/upload-artifact@v4
               with:
                   name: coverage-badge-fallback
