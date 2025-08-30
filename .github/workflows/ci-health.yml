@@ -26,7 +26,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -38,7 +38,7 @@ jobs:
         outputs:
             list: ${{ steps.set.outputs.list }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
             - name: Fetch branches
@@ -68,7 +68,7 @@ jobs:
                 python-version: ["3.12"]
                 node-version: ["22"]
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
                   ref: ${{ matrix.branch }}

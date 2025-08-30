@@ -21,7 +21,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -78,7 +78,7 @@ jobs:
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
             - name: Smart CI failure cleanup
               run: |
                   mkdir -p logs

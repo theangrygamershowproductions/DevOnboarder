@@ -15,7 +15,7 @@ jobs:
       group: sanity-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Green light
         run: |
           printf 'green light\n'
