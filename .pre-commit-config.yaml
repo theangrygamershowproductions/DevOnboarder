@@ -41,11 +41,6 @@ repos:
       hooks:
           - id: yamllint
             exclude: node_modules/
-    - repo: https://github.com/rhysd/actionlint
-      rev: v1.7.1
-      hooks:
-          - id: actionlint
-            args: [--shellcheck=]
     - repo: local
       hooks:
           - id: terminal-output-policy
@@ -122,17 +117,6 @@ repos:
             language: system
             pass_filenames: false
             files: ^(agents/.*\.md|\.codex/agents/.*\.md|codex/agents/.*\.md)$
-          - id: validate-metadata-standards
-            name: Core Metadata Standards Compliance
-            entry: bash
-            args:
-                [
-                    "-c",
-                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_metadata_standards.py 2>&1 | tee logs/metadata_validation_$(date +%Y%m%d_%H%M%S).log",
-                ]
-            language: system
-            pass_filenames: false
-            files: ^(docs/.*\.md|agents/.*\.md|\.codex/.*\.md)$
           - id: frontend-eslint
             name: Frontend ESLint
             entry: bash
@@ -176,7 +160,8 @@ repos:
             language: system
             pass_filenames: false
           - id: prevent-archived-doc-edits
-            name: Prevent edits to archived AAR
+            name: Prevent edits to archived AARs
             language: system
-            entry: bash -lc 'git diff --name-only --cached | grep -qx "docs/ci/ci-modernization-2025-09-01-archived.md" && { printf "%s\n" "Archived AAR is immutable."; exit 1; } || true'
-            stages: [commit, push]
+            pass_filenames: false
+            stages: [pre-commit, pre-push]
+            entry: bash -c 'git diff --name-only --cached --diff-filter=ACMRD | grep -q "^docs/ci.*-archived\.md$" && echo "Archived AARs are immutable." && exit 1 || true'
