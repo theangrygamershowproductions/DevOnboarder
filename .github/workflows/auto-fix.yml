@@ -62,6 +62,7 @@ jobs:
                   pip install yamllint
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
+              if: github.event.workflow_run.conclusion == 'success'
               uses: actions/download-artifact@v4
               with:
                   run-id: ${{ github.event.workflow_run.id }}
