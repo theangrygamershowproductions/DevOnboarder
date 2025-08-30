@@ -85,7 +85,7 @@ jobs:
                   printf "Commit message: %s\n" "$COMMIT_MESSAGE"
 
                   # Extract PR number from commit message (format: "PR #123" or "#123")
-                  PR_NUMBER=$(printf "%s" "$COMMIT_MESSAGE" | grep -oE '#[0-9]+' | head -1 | sed 's/#//')
+                  PR_NUMBER=$(printf -- "%s" "$COMMIT_MESSAGE" | grep -oE '#[0-9]+' | head -1 | sed 's/#//')
 
                   if [ -n "$PR_NUMBER" ]; then
                       printf "Found PR number: %s\n" "$PR_NUMBER"

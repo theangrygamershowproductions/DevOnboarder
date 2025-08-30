@@ -47,11 +47,11 @@ jobs:
               run: |
                   match=$(grep -iE 'rate limit|429 Too Many Requests|quota exceeded' -m1 logs/*.log || true)
                   if [ -n "$match" ]; then
-                    printf "hit=true\n" >> "$GITHUB_OUTPUT"
-                    printf "match=%s\n" "$match" >> "$GITHUB_OUTPUT"
-                    printf "%s\n" "$match"
+                    printf -- "hit=true\n" >> "$GITHUB_OUTPUT"
+                    printf -- "match=%s\n" "$match" >> "$GITHUB_OUTPUT"
+                    printf -- "%s\n" "$match"
                   else
-                    printf "hit=false\n" >> "$GITHUB_OUTPUT"
+                    printf -- "hit=false\n" >> "$GITHUB_OUTPUT"
                   fi
             - name: Install PyYAML
               if: steps.check.outputs.hit == 'true'

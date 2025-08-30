@@ -667,7 +667,7 @@ jobs:
               id: ci_failure
               run: |
                   set -euo pipefail
-                  printf "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
+                  printf -- "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
 
                   # Ensure audit.md exists before trying to read it
                   if [ -f audit.md ]; then
@@ -693,7 +693,7 @@ jobs:
                   if [ -f "$ISSUE_FILE" ]; then
                       ISSUE=$(cat "$ISSUE_FILE")
                       echo "Using saved issue number:" | tee -a gh_cli.log
-                      printf "%s\n" "$ISSUE" | tee -a gh_cli.log
+                      printf -- "%s\n" "$ISSUE" | tee -a gh_cli.log
                       if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
                           echo "Failed to comment on issue. Continuing without issue update." | tee -a gh_cli.log
                           echo "::warning::Failed to comment on issue ${ISSUE}. Continuing without issue update."
@@ -709,7 +709,7 @@ jobs:
                               fi
                           else
                               if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
-                                ISSUE=$(printf '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
+                                ISSUE=$(printf -- '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
                               else
                                   printf "::warning::Failed to create new issue. Continuing without issue creation.\n"
                                   ISSUE=""
@@ -720,7 +720,7 @@ jobs:
                           ISSUE=""
                       fi
                   fi
-                  printf "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
+                  printf -- "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
               env:
                   GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number

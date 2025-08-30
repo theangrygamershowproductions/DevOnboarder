@@ -61,7 +61,7 @@ jobs:
                   bash scripts/security_audit.sh
 
                   # Safe output assignment - use date directly
-                  printf "report=docs/security-audit-%s.md\n" "$(date -I)" >> "$GITHUB_OUTPUT"
+                  printf -- "report=docs/security-audit-%s.md\n" "$(date -I)" >> "$GITHUB_OUTPUT"
             - name: Upload audit report
               if: always()
               uses: actions/upload-artifact@v4

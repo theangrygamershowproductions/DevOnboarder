@@ -47,13 +47,13 @@ jobs:
             echo "Date:"
             date
             echo "Repository:"
-            printf "%s\n" "${{ github.repository }}"
+            printf -- "%s\n" "${{ github.repository }}"
             echo "Branch:"
-            printf "%s\n" "${{ github.ref_name }}"
+            printf -- "%s\n" "${{ github.ref_name }}"
             echo "Commit:"
-            printf "%s\n" "${{ github.sha }}"
+            printf -- "%s\n" "${{ github.sha }}"
             echo "Status:"
-            printf "%s\n" "${{ job.status }}"
+            printf -- "%s\n" "${{ job.status }}"
           } >> logs/enforcement_report.txt
 
       - name: Upload enforcement report
