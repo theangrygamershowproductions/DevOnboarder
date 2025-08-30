@@ -53,6 +53,7 @@
 /config_backups/
 /pytest-of-*/
 /test.db
+*.db
 /vale-*.json
 /vale-results.json
 
@@ -113,7 +114,7 @@ deployment-keys.*
 backup-configs.*
 letsencrypt/acme.json
 traefik/traefik.yml
-.gitignore
 traefik/dynamic.yml
 cloudflared/config.yml
 cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
+work_items
