@@ -41,10 +41,12 @@ else
         echo "Files were modified by pre-commit hooks:"
         echo "$MODIFIED_FILES"
 
-        # Re-add the modified files that were originally staged
-        echo "Re-staging modified files..."
+        # Reset staging area and re-stage only the originally intended files
+        # This prevents the "caching cycle" issue where modified files get staged on top of already staged files
+        echo "Resetting staging area and re-staging modified files..."
+        git reset HEAD --quiet
         echo "$STAGED_FILES" | while read -r file; do
-            if [[ -f "$file" ]] && echo "$MODIFIED_FILES" | grep -q "^$file$"; then
+            if [[ -f "$file" ]]; then
                 echo "  Re-staging: $file"
                 git add "$file"
             fi
