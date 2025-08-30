@@ -33,12 +33,25 @@ def test_check_packages_failure(monkeypatch, capsys):
 def test_check_health_basic(monkeypatch):
     monkeypatch.setenv("AUTH_URL", "http://auth")
 
-    def fake_get(url: str, timeout: int = 5):
+    def fake_get(url, timeout=5):
         return StubResp(200)
 
-    monkeypatch.setattr(diagnostics.requests, "get", fake_get)
-    statuses = diagnostics.check_health()
-    assert statuses == {"auth": "200 OK"}
+    # Mock the requests import in the diagnostics module
+    import sys
+    from unittest.mock import MagicMock
+
+    mock_requests = MagicMock()
+    mock_requests.get = fake_get
+    mock_requests.RequestException = Exception
+    sys.modules["requests"] = mock_requests
+
+    try:
+        statuses = diagnostics.check_health()
+        assert statuses == {"auth": "200 OK"}
+    finally:
+        # Clean up
+        if "requests" in sys.modules:
+            del sys.modules["requests"]
 
 
 def test_check_health_tags_mode(monkeypatch):
@@ -47,12 +60,25 @@ def test_check_health_tags_mode(monkeypatch):
     monkeypatch.setenv("API_BASE_URL", "http://xp")
     monkeypatch.setenv("VITE_FEEDBACK_URL", "http://feedback")
 
-    def fake_get(url: str, timeout: int = 5):
+    def fake_get(url, timeout=5):
         return StubResp(200)
 
-    monkeypatch.setattr(diagnostics.requests, "get", fake_get)
-    statuses = diagnostics.check_health()
-    assert statuses == {"auth": "200 OK", "xp": "200 OK", "feedback": "200 OK"}
+    # Mock the requests import in the diagnostics module
+    import sys
+    from unittest.mock import MagicMock
+
+    mock_requests = MagicMock()
+    mock_requests.get = fake_get
+    mock_requests.RequestException = Exception
+    sys.modules["requests"] = mock_requests
+
+    try:
+        statuses = diagnostics.check_health()
+        assert statuses == {"auth": "200 OK", "xp": "200 OK", "feedback": "200 OK"}
+    finally:
+        # Clean up
+        if "requests" in sys.modules:
+            del sys.modules["requests"]
 
 
 def test_audit_env(monkeypatch, tmp_path, capsys):

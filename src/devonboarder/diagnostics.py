@@ -8,9 +8,6 @@ import os
 import subprocess
 from pathlib import Path
 
-import requests
-
-
 REQUIRED_PACKAGES = ["fastapi", "pytest"]
 
 # Base service mappings used for health checks
@@ -44,6 +41,12 @@ def _get_services() -> dict[str, tuple[str, str]]:
 
 def check_health() -> dict[str, str]:
     """Call each service's `/health` endpoint and return statuses."""
+    # Lazy import requests to avoid import errors in containers
+    try:
+        import requests
+    except ImportError:
+        return {"error": "requests module not available"}
+
     statuses: dict[str, str] = {}
     for name, (env_var, default) in _get_services().items():
         base = os.getenv(env_var, default).rstrip("/")
