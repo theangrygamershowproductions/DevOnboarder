@@ -89,7 +89,7 @@ jobs:
           echo "BLOCKING PR: Terminal output policy violations detected"
 
           # Create rejection comment using safe file approach
-          printf "**AUTOMATED REJECTION: Terminal Output Policy Violations**\n" > rejection_comment.md
+          printf "\*\*AUTOMATED REJECTION: Terminal Output Policy Violations\*\*\n" > rejection_comment.md
           printf "\n" >> rejection_comment.md
           printf "This PR has been automatically rejected due to critical terminal output violations that WILL cause system hanging.\n" >> rejection_comment.md
           printf "\n" >> rejection_comment.md
@@ -102,16 +102,16 @@ jobs:
 
           {
             printf "\n" >> rejection_comment.md
-            printf "**Required Before Re-submission:**\n" >> rejection_comment.md
+            printf "\*\*Required Before Re-submission:\*\*\n" >> rejection_comment.md
             printf "1. Remove ALL emojis from workflow files\n" >> rejection_comment.md
             printf "2. Replace command substitution in terminal output with separate commands\n" >> rejection_comment.md
             printf "3. Use individual terminal output commands with plain ASCII text only\n" >> rejection_comment.md
             printf "4. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md for approved patterns\n" >> rejection_comment.md
             printf "5. Run local validation: bash scripts/validate_terminal_output.sh\n" >> rejection_comment.md
             printf "\n" >> rejection_comment.md
-            printf "**Policy Reminder:** DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.\n" >> rejection_comment.md
+            printf "\*\*Policy Reminder:\*\* DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.\n" >> rejection_comment.md
             printf "\n" >> rejection_comment.md
-            printf "**Next Steps:**\n" >> rejection_comment.md
+            printf "\*\*Next Steps:\*\*\n" >> rejection_comment.md
             printf "- Fix all violations\n" >> rejection_comment.md
             printf "- Validate locally with the enforcement script\n" >> rejection_comment.md
             printf "- Push updates to trigger re-review\n" >> rejection_comment.md
@@ -130,18 +130,18 @@ jobs:
           echo "Adding enforcement checklist to compliant PR"
 
           # Create checklist comment using safe file approach
-          printf "**Terminal Output Policy Compliance Verified**\n" > checklist_comment.md
+          printf "\*\*Terminal Output Policy Compliance Verified\*\*\n" > checklist_comment.md
           printf "\n" >> checklist_comment.md
           printf "Automated review confirms this PR follows DevOnboarder terminal output standards.\n" >> checklist_comment.md
           printf "\n" >> checklist_comment.md
-          printf "**Automated Compliance Verification:**\n" >> checklist_comment.md
+          printf "\*\*Automated Compliance Verification:\*\*\n" >> checklist_comment.md
           printf "- [x] No emojis or Unicode characters in terminal output\n" >> checklist_comment.md
           printf "- [x] No command substitution in terminal output\n" >> checklist_comment.md
           printf "- [x] No variable expansion in terminal output\n" >> checklist_comment.md
           printf "- [x] Only individual terminal output commands with plain ASCII text\n" >> checklist_comment.md
           printf "- [x] Complex output uses file-based patterns (individual terminal output commands)\n" >> checklist_comment.md
           printf "\n" >> checklist_comment.md
-          printf "**Policy Compliance Status: VERIFIED**\n" >> checklist_comment.md
+          printf "\*\*Policy Compliance Status: VERIFIED\*\*\n" >> checklist_comment.md
           printf "This PR has been automatically validated and meets all DevOnboarder terminal output standards.\n" >> checklist_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file checklist_comment.md
