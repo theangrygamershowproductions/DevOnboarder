@@ -17,11 +17,15 @@ on:
         workflows: ["CI"]    # Trigger after CI workflow completes
         types: [completed]
 
+permissions:
+    contents: read
+    issues: write
+
 jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -51,6 +55,8 @@ jobs:
                     echo "::error::CLEANUP_CI_FAILURE_KEY is not set! Exiting to prevent unauthenticated GitHub CLI use."
                     exit 1
                   fi
+            - name: Checkout repository
+              uses: actions/checkout@v5
             - name: Install the gh cli
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
@@ -77,8 +83,6 @@ jobs:
                   gh api rate_limit
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
-            - name: Checkout repository
-              uses: actions/checkout@v4
             - name: Smart CI failure cleanup
               run: |
                   mkdir -p logs

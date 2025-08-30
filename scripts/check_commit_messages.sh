@@ -1,55 +1,64 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Enforce strict conventional commit format per project standards
-# Format: <TYPE>(<scope>): <subject>
-# Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT
-# Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
-# Exception: Build (title case) allowed for Dependabot compatibility
-# The <scope> section is optional, matching the commit-msg hook
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
+# Conventional commit gate:
+# <TYPE>(<scope>): <subject>
+# TYPES: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP
+# Extras: Build (Title case) + build (lowercase) for Dependabot
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build|build|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
 
-messages=$(git log --format=%s origin/main..HEAD)
-if [ -z "$messages" ]; then
-  echo "No new commits to lint"
+# Determine base ref (PRs vs pushes)
+BASE_BRANCH="${GITHUB_BASE_REF:-main}"
+BASE_REF="origin/${BASE_BRANCH}"
+
+# Ensure we have the base ref (checkout often uses shallow clones)
+if ! git rev-parse -q --verify "$BASE_REF" >/dev/null 2>&1; then
+  # Try to fetch base branch; don't fail pipeline if network hiccups
+  git fetch --no-tags --depth=50 origin "${BASE_BRANCH}:${BASE_BRANCH}" 2>/dev/null || \
+  git fetch --unshallow 2>/dev/null || true
+fi
+
+# Collect commit subjects between base and HEAD; skip merge commits at the source
+messages="$(git log --format=%s --no-merges "${BASE_REF}..HEAD" || true)"
+
+if [ -z "${messages}" ]; then
+  printf 'No new commits to lint\n'
   exit 0
 fi
 
-# Use a temp file approach instead of while loop
-temp_file=$(mktemp)
-echo "$messages" > "$temp_file"
+# Temp file to avoid subshell while-read pitfalls
+temp_file="$(mktemp)"
+printf '%s\n' "${messages}" > "${temp_file}"
 
 errors=0
-while IFS= read -r msg || [ -n "$msg" ]; do
-  # Skip empty lines
-  [ -z "$msg" ] && continue
+while IFS= read -r msg || [ -n "${msg:-}" ]; do
+  # Skip empty lines (defensive)
+  [ -z "${msg}" ] && continue
 
-  # Skip merge commits
-  if [[ $msg =~ ^Merge ]]; then
-    echo "Skipping merge commit: $msg"
+  # Legacy exceptions during transition
+  if [[ "${msg}" =~ ^Merge ]]; then
+    printf 'Skipping merge commit: %s\n' "${msg}"
+    continue
+  fi
+  if [[ "${msg}" =~ ^(RESOLVE:|Revert) ]]; then
+    printf 'Skipping legacy commit format: %s\n' "${msg}"
     continue
   fi
 
-  # Legacy commit exceptions - allow these specific patterns during transition
-  if [[ $msg =~ ^(RESOLVE:|Revert) ]]; then
-    echo "Skipping legacy commit format: $msg"
-    continue
-  fi
-
-  if ! echo "$msg" | grep -E "$regex" >/dev/null; then
-    echo "::error ::Commit message '$msg' does not follow <TYPE>(<scope>): <subject> format"
-    echo "::error ::Expected format: Standard types: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT"
-    echo "::error ::Extended types: PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP or Build(deps): for Dependabot"
+  if ! printf '%s' "${msg}" | grep -Eq "${regex}"; then
+    printf '::error ::Commit message %s does not follow <TYPE>(<scope>): <subject> format\n' "${msg}"
+    printf '::error ::Expected: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP (scope optional)\n'
+    printf '::error ::Also allowed: Build|build (deps) for Dependabot\n'
     errors=$((errors+1))
   fi
-done < "$temp_file"
+done < "${temp_file}"
 
-rm -f "$temp_file"
+rm -f "${temp_file}"
 
-if [ $errors -ne 0 ]; then
-  echo "::error ::Found $errors commit message(s) that do not follow the required format."
-  echo "::error ::See scripts/commit-msg for the enforced standard"
+if [ "${errors}" -ne 0 ]; then
+  printf '::error ::Found %d commit message(s) that do not follow the required format.\n' "${errors}"
+  printf '::error ::See scripts/commit-msg for the enforced standard\n'
   exit 1
 fi
 
-echo "SUCCESS: All commit messages pass validation!"
+printf 'SUCCESS: All commit messages pass validation!\n'

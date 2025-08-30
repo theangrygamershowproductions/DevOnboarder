@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,24 +51,24 @@ jobs:
           echo "Creating virtual environment for DevOnboarder compliance"
           python -m venv .venv
           source .venv/bin/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: |
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
           echo "Dependencies installed in virtual environment"
 
       - name: Determine workflow run to analyze
         id: workflow-info
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.workflow_run_id }}" ]; then
-          echo "run_id=${{ github.event.inputs.workflow_run_id }}" >> $GITHUB_OUTPUT
+          printf "run_id=%s\n" "${{ github.event.inputs.workflow_run_id }}" >> "$GITHUB_OUTPUT"
           else
-          echo "run_id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
+          printf "run_id=%s\n" "${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
           fi
-          echo "workflow_name=${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
+          printf "workflow_name=%s\n" "${{ github.event.workflow_run.name }}" >> "$GITHUB_OUTPUT"
 
       - name: Download workflow logs
         id: download-logs
@@ -78,12 +78,12 @@ jobs:
 
           # Download logs using GitHub CLI
           echo "Downloading logs for workflow run ${{ steps.workflow-info.outputs.run_id }}"
-          gh run download ${{ steps.workflow-info.outputs.run_id }} --dir logs/ci-analysis || true
+          gh run download "${{ steps.workflow-info.outputs.run_id }}" --dir logs/ci-analysis || true
 
           # Find log files
           LOG_FILES=$(find logs/ci-analysis -name "*.txt" -o -name "*.log" | head -10)
           echo "Found log files:"
-          printf "%s\n" "$LOG_FILES"
+          printf "Found log files: %s\n" "$LOG_FILES"
 
           if [ -z "$LOG_FILES" ]; then
           echo "No log files found, creating minimal analysis"
@@ -91,9 +91,11 @@ jobs:
           LOG_FILES="logs/ci-analysis/no-logs.txt"
           fi
 
-          echo "log_files<<EOF" >> $GITHUB_OUTPUT
-          printf "%s\n" "$LOG_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "log_files<<EOF"
+            printf "%s\n" "$LOG_FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
           env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -120,13 +122,13 @@ jobs:
           echo "${{ steps.download-logs.outputs.log_files }}" | while read -r log_file; do
           if [ -f "$log_file" ]; then
           echo "Analyzing:"
-          printf "%s\n" "$log_file"
+          echo "$log_file"
           python scripts/enhanced_ci_failure_analyzer.py \
           "$log_file" \
           --output "$ANALYSIS_OUTPUT" \
-          $AUTO_RESOLVE_FLAG \
-          $AAR_INTEGRATION_FLAG \
-          $WORKFLOW_RUN_FLAG
+          "$AUTO_RESOLVE_FLAG" \
+          "$AAR_INTEGRATION_FLAG" \
+          "$WORKFLOW_RUN_FLAG"
           fi
           done
           else
@@ -134,11 +136,11 @@ jobs:
           python scripts/enhanced_ci_failure_analyzer.py \
           logs/ci-analysis/no-logs.txt \
           --output "$ANALYSIS_OUTPUT" \
-          $AAR_INTEGRATION_FLAG \
-          $WORKFLOW_RUN_FLAG
+          "$AAR_INTEGRATION_FLAG" \
+          "$WORKFLOW_RUN_FLAG"
           fi
 
-          echo "analysis_file=$ANALYSIS_OUTPUT" >> $GITHUB_OUTPUT
+          printf "analysis_file=%s\n" "$ANALYSIS_OUTPUT" >> "$GITHUB_OUTPUT"
 
           # Extract key metrics for output
           if [ -f "$ANALYSIS_OUTPUT" ]; then
@@ -147,10 +149,12 @@ jobs:
           FAILURE_COUNT=$(jq -r '.enhanced_ci_analysis.analysis.detected_failures | length' "$ANALYSIS_OUTPUT")
           PRIMARY_TYPE=$(jq -r '.enhanced_ci_analysis.analysis.primary_failure.type // "unknown"' "$ANALYSIS_OUTPUT")
 
-          echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
-          echo "auto_fixable=$AUTO_FIXABLE" >> $GITHUB_OUTPUT
-          echo "failure_count=$FAILURE_COUNT" >> $GITHUB_OUTPUT
-          echo "primary_type=$PRIMARY_TYPE" >> $GITHUB_OUTPUT
+          {
+            printf "confidence=%s\n" "$CONFIDENCE"
+            printf "auto_fixable=%s\n" "$AUTO_FIXABLE"
+            printf "failure_count=%s\n" "$FAILURE_COUNT"
+            printf "primary_type=%s\n" "$PRIMARY_TYPE"
+          } >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload analysis report

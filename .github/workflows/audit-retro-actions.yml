@@ -26,16 +26,16 @@ jobs:
     audit:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - name: Check for unresolved action items
               id: check
               run: |
                   UNRESOLVED=$(python scripts/parse_retro_actions.py || true)
                   if [ -n "$UNRESOLVED" ]; then
-                    echo "unresolved_actions=$UNRESOLVED" >> "$GITHUB_OUTPUT"
+                    printf "unresolved_actions=%s\n" "$UNRESOLVED" >> "$GITHUB_OUTPUT"
                   else
-                    echo "unresolved_actions=None" >> "$GITHUB_OUTPUT"
+                    printf "unresolved_actions=None\n" "$GITHUB_OUTPUT"
                   fi
 
             - name: Install PyYAML
@@ -50,6 +50,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.ORCHESTRATION_BOT_KEY }}
               run: |
+                  # shellcheck disable=SC2034
                   OWNERS=$(python scripts/parse_retro_actions.py --owners || true)
                   cat > body.md <<'BODY'
                   The following action items remain open:

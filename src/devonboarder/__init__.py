@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict
 
 from .app import greet
+from . import diagnostics
 
 
 def _discover_plugins() -> Dict[str, object]:
@@ -29,4 +30,4 @@ def _discover_plugins() -> Dict[str, object]:
 
 PLUGINS = _discover_plugins()
 
-__all__ = ["greet", "PLUGINS"]
+__all__ = ["greet", "diagnostics", "PLUGINS"]

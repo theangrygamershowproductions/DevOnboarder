@@ -1,0 +1,4 @@
+shellcheck:
+  # Disable SC2215 warnings for GitHub Actions template expressions
+  disable:
+    - SC2215

@@ -39,7 +39,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
                   fetch-depth: 1
 
@@ -47,11 +47,11 @@ jobs:
               id: check
               run: |
                   if bash scripts/check_root_artifacts.sh; then
-                      echo "status=clean" >> $GITHUB_OUTPUT
-                      echo "violations=0" >> $GITHUB_OUTPUT
+                      printf "status=clean\n" >> "$GITHUB_OUTPUT"
+                      printf "violations=0\n" >> "$GITHUB_OUTPUT"
                   else
-                      echo "status=violations" >> $GITHUB_OUTPUT
-                      echo "violations=1" >> $GITHUB_OUTPUT
+                      printf "status=violations\n" >> "$GITHUB_OUTPUT"
+                      printf "violations=1\n" >> "$GITHUB_OUTPUT"
                   fi
 
             - name: Generate report
