@@ -36,8 +36,11 @@ jobs:
                   gh --version
 
             - name: Authenticate with GitHub
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+                  # SECURITY: Use environment variable instead of echoing secret
+                  gh auth login --with-token <<< "$GITHUB_TOKEN"
 
             - name: Create PR tracking issue
               env:

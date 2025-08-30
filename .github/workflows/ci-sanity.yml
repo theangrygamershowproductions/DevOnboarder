@@ -8,6 +8,8 @@ on:
 jobs:
   sanity:
     name: CI / sanity
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     concurrency:
       group: sanity-${{ github.ref }}

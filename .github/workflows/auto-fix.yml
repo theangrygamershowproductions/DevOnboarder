@@ -69,9 +69,12 @@ jobs:
                   path: logs
             - name: Ask OpenAI for YAML fix
               id: openai-yaml
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
                   # shellcheck disable=SC2215
-                  if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
+                  # SECURITY: Use environment variable instead of direct secret reference
+                  if [ -z "$OPENAI_API_KEY" ]; then
                     echo "OPENAI_API_KEY not set" >&2
                     exit 1
                   fi
@@ -99,9 +102,12 @@ jobs:
               run: git apply fix-ci-health.patch.diff || true
             - name: Suggest fix with OpenAI
               id: openai
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
                   # shellcheck disable=SC2215
-                  if [ -z "${{ secrets.OPENAI_API_KEY }}" ]; then
+                  # SECURITY: Use environment variable instead of direct secret reference
+                  if [ -z "$OPENAI_API_KEY" ]; then
                     echo "OPENAI_API_KEY not set" >&2
                     exit 1
                   fi
