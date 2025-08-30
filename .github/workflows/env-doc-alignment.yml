@@ -45,7 +45,7 @@ jobs:
               id: workflow-info
               run: |
                   # Safely capture workflow run details without checking out untrusted code
-                  echo "head_sha=${{ github.event.workflow_run.head_sha || github.sha }}" >> "$GITHUB_OUTPUT"
+                  printf "head_sha=%s\n" "${{ github.event.workflow_run.head_sha || github.sha }}" >> "$GITHUB_OUTPUT"
             - name: Install GitHub CLI
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
@@ -55,14 +55,14 @@ jobs:
             - name: Validate env docs
               id: check
               run: |
-                  python scripts/check_env_docs.py > env_docs.log && echo "success=true" >> "$GITHUB_OUTPUT" || echo "success=false" >> "$GITHUB_OUTPUT"
+                  python scripts/check_env_docs.py > env_docs.log && printf "success=true\n" >> "$GITHUB_OUTPUT" || printf "success=false\n" >> "$GITHUB_OUTPUT"
                   cat env_docs.log
             - name: Parse missing variables
               if: steps.check.outputs.success == 'false'
               id: vars
               run: |
                   missing=$(awk '/^Variables missing from agents\/index.md:/{flag=1;next}/^$/{flag=0}flag' env_docs.log | tr '\n' ',' | sed 's/,$//')
-                  echo "missing=$missing" >> "$GITHUB_OUTPUT"
+                  printf "missing=%s\n" "$missing" >> "$GITHUB_OUTPUT"
             - name: Install PyYAML
               if: steps.check.outputs.success == 'false'
               run: pip install PyYAML

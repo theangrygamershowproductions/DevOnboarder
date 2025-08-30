@@ -51,8 +51,8 @@ jobs:
           echo "Creating virtual environment for DevOnboarder compliance"
           python -m venv .venv
           source .venv/bin/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> "$GITHUB_ENV"
-          echo "$VIRTUAL_ENV/bin" >> "$GITHUB_PATH"
+          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: |
@@ -64,11 +64,11 @@ jobs:
         id: workflow-info
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.workflow_run_id }}" ]; then
-          echo "run_id=${{ github.event.inputs.workflow_run_id }}" >> "$GITHUB_OUTPUT"
+          printf "run_id=%s\n" "${{ github.event.inputs.workflow_run_id }}" >> "$GITHUB_OUTPUT"
           else
-          echo "run_id=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+          printf "run_id=%s\n" "${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
           fi
-          echo "workflow_name=${{ github.event.workflow_run.name }}" >> "$GITHUB_OUTPUT"
+          printf "workflow_name=%s\n" "${{ github.event.workflow_run.name }}" >> "$GITHUB_OUTPUT"
 
       - name: Download workflow logs
         id: download-logs
@@ -140,7 +140,7 @@ jobs:
           "$WORKFLOW_RUN_FLAG"
           fi
 
-          echo "analysis_file=$ANALYSIS_OUTPUT" >> "$GITHUB_OUTPUT"
+          printf "analysis_file=%s\n" "$ANALYSIS_OUTPUT" >> "$GITHUB_OUTPUT"
 
           # Extract key metrics for output
           if [ -f "$ANALYSIS_OUTPUT" ]; then
