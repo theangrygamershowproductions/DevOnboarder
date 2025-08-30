@@ -17,6 +17,10 @@ on:
         workflows: ["CI"]    # Trigger after CI workflow completes
         types: [completed]
 
+permissions:
+    contents: read
+    issues: write
+
 jobs:
     validate-yaml:
         runs-on: ubuntu-latest
