@@ -175,3 +175,8 @@ repos:
                 ]
             language: system
             pass_filenames: false
+          - id: prevent-archived-doc-edits
+            name: Prevent edits to archived AAR
+            language: system
+            entry: bash -lc 'git diff --name-only --cached | grep -qx "docs/ci/ci-modernization-2025-09-01-archived.md" && { printf "%s\n" "Archived AAR is immutable."; exit 1; } || true'
+            stages: [commit, push]

@@ -1,5 +1,7 @@
 # CI Modernization: Shellcheck Fixes & Infrastructure Updates
 
+<!-- ARCHIVED: DO NOT EDIT. Changes require @reesey275 approval. -->
+
 **Status:** Archived • **Owner:** @reesey275 • **Updated:** 2025-09-01
 
 ## Overview
