@@ -174,29 +174,28 @@ run_step() {
 
     echo "🔍 Step $STEP_COUNTER: $step_name"
 
-    # Ensure LOG_FILE exists and is writable
-    if [ -n "$LOG_FILE" ] && [ -w "$(dirname "$LOG_FILE")" ]; then
-        {
-            echo "=== Step $STEP_COUNTER: $step_name ==="
-            echo "Command: $step_cmd"
-            echo "Started: $(date)"
-        } >> "$LOG_FILE" 2>/dev/null || {
-            echo "Warning: Could not write to log file $LOG_FILE" >&2
-            LOG_FILE=""
-        }
-    elif [ -n "$LOG_FILE" ]; then
-        echo "Warning: Log file directory is not writable: $(dirname "$LOG_FILE")" >&2
-        LOG_FILE=""
+    # Write to log file with consistent error handling
+    if [ -n "$LOG_FILE" ]; then
+        # Check if we can write to the log file
+        if [ -w "$(dirname "$LOG_FILE")" ] && [ ! -f "$LOG_FILE" ] || [ -w "$LOG_FILE" ]; then
+            {
+                echo "=== Step $STEP_COUNTER: $step_name ==="
+                echo "Command: $step_cmd"
+                echo "Started: $(date)"
+            } >> "$LOG_FILE" 2>/dev/null
+        else
+            echo "Warning: Cannot write to log file $LOG_FILE (check permissions)" >&2
+        fi
     fi
 
     # Run command with detailed logging
     if eval "$step_cmd" > "$step_log" 2>&1; then
         echo "✅ $step_name: PASSED"
-        [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && echo "Status: PASSED" >> "$LOG_FILE" 2>/dev/null || true
+        [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: PASSED" >> "$LOG_FILE" 2>/dev/null; }
         PASSED_STEPS=$((PASSED_STEPS + 1))
     else
         echo "❌ $step_name: FAILED"
-        [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && echo "Status: FAILED" >> "$LOG_FILE" 2>/dev/null || true
+        [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: FAILED" >> "$LOG_FILE" 2>/dev/null; }
         echo "   📋 See detailed output: $step_log"
         if [ -f "$step_log" ]; then
             echo "   🔍 Quick view: tail -20 $step_log"
@@ -207,17 +206,17 @@ run_step() {
 
         # Add failure details to main log (with error handling)
         if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
-            echo "Error output (last 10 lines):" >> "$LOG_FILE" 2>/dev/null || true
+            { echo "Error output (last 10 lines):" >> "$LOG_FILE"; } 2>/dev/null
             if [ -f "$step_log" ]; then
-                tail -10 "$step_log" >> "$LOG_FILE" 2>/dev/null || echo "No output available" >> "$LOG_FILE" 2>/dev/null || true
+                { tail -10 "$step_log" >> "$LOG_FILE" || echo "No output available" >> "$LOG_FILE"; } 2>/dev/null
             else
-                echo "No step log file available" >> "$LOG_FILE" 2>/dev/null || true
+                { echo "No step log file available" >> "$LOG_FILE"; } 2>/dev/null
             fi
         fi
     fi
 
-    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && echo "Completed: $(date)" >> "$LOG_FILE" 2>/dev/null || true
-    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && echo "" >> "$LOG_FILE" 2>/dev/null || true
+    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Completed: $(date)" >> "$LOG_FILE" 2>/dev/null; }
+    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "" >> "$LOG_FILE" 2>/dev/null; }
     echo
 }
 
@@ -480,13 +479,13 @@ echo
 if [ $FAILED_STEPS -eq 0 ]; then
     echo "✅ ALL CHECKS PASSED - Safe to push to GitHub!"
     echo "   This eliminates the 'hit and miss' development cycle"
-    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && echo "SUCCESS" >> "$LOG_FILE" 2>/dev/null || true
+    [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "SUCCESS" >> "$LOG_FILE" 2>/dev/null; }
 else
     echo "⚠️  $FAILED_STEPS step(s) failed - Fix before pushing"
     echo "   This prevents CI failures and saves development time"
     if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ]; then
         echo "   📋 View failed steps: grep -B2 -A10 'Status: FAILED' $LOG_FILE"
-        echo "FAILURES_DETECTED" >> "$LOG_FILE" 2>/dev/null || true
+        { echo "FAILURES_DETECTED" >> "$LOG_FILE"; } 2>/dev/null
     fi
 
     # List failed step logs for easy access

@@ -5,7 +5,7 @@ echo "Comprehensive pytest sandbox artifact cleanup"
 
 echo "Removing pytest temporary directories"
 find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" | while read -r dir; do
-    echo "Removing directory: $dir"
+    printf "Removing directory: %s\n" "$dir"
     rm -rf "$dir"
 done
 
@@ -41,7 +41,7 @@ if [[ -d "logs/" ]]; then
     for lf in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
         if [[ -f "$lf" ]]; then
             mv -f "$lf" logs/ 2>/dev/null || true
-            echo "Moved log file: $lf"
+            printf "Moved log file: %s\n" "$lf"
         fi
     done
 fi
