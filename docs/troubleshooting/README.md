@@ -10,12 +10,17 @@ This directory contains troubleshooting guides for common DevOnboarder issues.
 - **[Docker Container Health Troubleshooting](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md)** - Comprehensive container health debugging
 - **[Centralized Logging Permissions](CENTRALIZED_LOGGING_PERMISSIONS.md)** - Container permissions for centralized logging
 
+### CI/CD Issues
+
+- **[CI MyPy Type Stubs](CI_MYPY_TYPE_STUBS.md)** - MyPy passes locally but fails in CI due to missing type stubs
+
 ### Common Problems
 
 | Problem | Quick Fix | Documentation |
 |---------|-----------|---------------|
 | Bot container shows "unhealthy" | [Health Check Fix](DISCORD_BOT_HEALTH_CHECK_FIX.md) | Custom health check script |
 | Permission denied errors | `sudo chown 1001:1001 logs/bot/` | [Centralized Logging Permissions](CENTRALIZED_LOGGING_PERMISSIONS.md) |
+| MyPy passes locally but fails in CI | Add `types-*` to `pyproject.toml` | [CI MyPy Type Stubs](CI_MYPY_TYPE_STUBS.md) |
 | TypeScript compilation fails | Fix file permissions with container UID | [Permission Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-2-file-permission-mismatches-with-volume-mounts) |
 | Health check scripts fail | Use ES module syntax (`import` not `require`) | [ES Module Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-3-es-module-vs-commonjs-syntax) |
 

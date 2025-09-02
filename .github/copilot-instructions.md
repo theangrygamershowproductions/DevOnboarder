@@ -1178,26 +1178,33 @@ python -m pytest plugins/example_plugin/
     - ✅ **Solution**: Use `python -m command` syntax in virtual environment
     - ❌ **NOT**: Install globally with `pip install --user`
 
-3. **Coverage failures**: Check test quality, not just quantity
+3. **MyPy passes locally but fails in CI**:
 
-4. **Discord connection issues**: Verify token and guild permissions
+    - ✅ **Symptom**: "Library stubs not installed for 'requests' [import-untyped]"
+    - ✅ **Solution**: Add missing `types-*` packages to `pyproject.toml` test dependencies
+    - 📚 **Documentation**: `docs/troubleshooting/CI_MYPY_TYPE_STUBS.md`
+    - ❌ **NOT**: Install type stubs only locally
 
-5. **CI failures**: Check GitHub CLI availability and error handling
+4. **Coverage failures**: Check test quality, not just quantity
 
-6. **Cache pollution in repository root**:
+5. **Discord connection issues**: Verify token and guild permissions
+
+6. **CI failures**: Check GitHub CLI availability and error handling
+
+7. **Cache pollution in repository root**:
 
     - ✅ **Detection**: Run `bash scripts/validate_cache_centralization.sh`
     - ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
     - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
-7. **Jest Test Timeouts in CI**:
+8. **Jest Test Timeouts in CI**:
 
     - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
     - ✅ **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
     - ✅ **Location**: `bot/package.json` Jest configuration block
     - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
 
-8. **Dependency Update Failures**:
+9. **Dependency Update Failures**:
 
     - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
     - ✅ **Pattern**: "TypeScript compilation errors after upgrade" → Breaking changes in major versions
