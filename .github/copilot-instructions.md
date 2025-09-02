@@ -1185,26 +1185,36 @@ python -m pytest plugins/example_plugin/
     - 📚 **Documentation**: `docs/troubleshooting/CI_MYPY_TYPE_STUBS.md`
     - ❌ **NOT**: Install type stubs only locally
 
-4. **Coverage failures**: Check test quality, not just quantity
+4. **Automerge hangs indefinitely** (CRITICAL INFRASTRUCTURE ISSUE):
 
-5. **Discord connection issues**: Verify token and guild permissions
+    - ✅ **Symptom**: All checks pass, automerge enabled, but PR shows "BLOCKED" indefinitely
+    - ✅ **Root Cause**: Repository default branch mismatch OR status check name misalignment
+    - ✅ **Quick Check**: `gh api repos/OWNER/REPO --jq '.default_branch'` (should be "main")
+    - ✅ **Solution**: Fix default branch + align status check names with actual check runs
+    - 📚 **Documentation**: `docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md`
+    - 🛠️ **Health Check**: `bash scripts/check_automerge_health.sh`
+    - ❌ **NOT**: Assume it's a temporary GitHub issue - this requires configuration fixes
 
-6. **CI failures**: Check GitHub CLI availability and error handling
+5. **Coverage failures**: Check test quality, not just quantity
 
-7. **Cache pollution in repository root**:
+6. **Discord connection issues**: Verify token and guild permissions
+
+7. **CI failures**: Check GitHub CLI availability and error handling
+
+8. **Cache pollution in repository root**:
 
     - ✅ **Detection**: Run `bash scripts/validate_cache_centralization.sh`
     - ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
     - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
-8. **Jest Test Timeouts in CI**:
+9. **Jest Test Timeouts in CI**:
 
     - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
     - ✅ **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
     - ✅ **Location**: `bot/package.json` Jest configuration block
     - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
 
-9. **Dependency Update Failures**:
+10. **Dependency Update Failures**:
 
     - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
     - ✅ **Pattern**: "TypeScript compilation errors after upgrade" → Breaking changes in major versions
@@ -1225,7 +1235,7 @@ python -m pytest plugins/example_plugin/
    gh pr checks <pr-number> --watch
    ```
 
-1. **Test Timeout Quick Fix**:
+2. **Test Timeout Quick Fix**:
 
    ```bash
    # Emergency Jest timeout fix
@@ -1233,7 +1243,7 @@ python -m pytest plugins/example_plugin/
    npm test -- --testTimeout=30000
    ```
 
-1. **Incremental Recovery**:
+3. **Incremental Recovery**:
 
    - Merge patch updates first (1.2.3 → 1.2.4)
    - Then minor updates (1.2.x → 1.3.0)
