@@ -184,6 +184,9 @@ run_step() {
             echo "Warning: Could not write to log file $LOG_FILE" >&2
             LOG_FILE=""
         }
+    elif [ -n "$LOG_FILE" ]; then
+        echo "Warning: Log file directory is not writable: $(dirname "$LOG_FILE")" >&2
+        LOG_FILE=""
     fi
 
     # Run command with detailed logging

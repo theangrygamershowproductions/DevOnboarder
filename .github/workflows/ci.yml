@@ -253,8 +253,7 @@ jobs:
             - name: Check committed OpenAPI spec
               run: |
                   git diff --quiet src/devonboarder/openapi.json || {
-                      echo "::error::openapi.json is outdated. Run 'make openapi'" \
-                           " and commit the changes.";
+                      echo "::error::openapi.json is outdated. Run 'make openapi' and commit the changes.";
                       exit 1;
                   }
             - name: Validate OpenAPI contract

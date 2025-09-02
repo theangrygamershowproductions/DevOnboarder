@@ -53,3 +53,17 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   printf -- '%s\n' "$PR_BODY" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
+                  
+                  if [ -s issues.txt ]; then
+                      echo "Found Codex issues to close:"
+                      cat issues.txt
+                      
+                      while read -r issue_number; do
+                          if [ -n "$issue_number" ]; then
+                              echo "Closing issue #$issue_number"
+                              gh issue close "$issue_number" --comment "Automatically closed by merged PR #${{ github.event.pull_request.number }}"
+                          fi
+                      done < issues.txt
+                  else
+                      echo "No Codex issues referenced in PR body"
+                  fi
