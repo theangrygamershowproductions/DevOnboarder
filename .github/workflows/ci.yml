@@ -238,15 +238,50 @@ jobs:
                   # Validate required sections and content
                   source .venv/bin/activate
                   python scripts/validate_pr_summary.py PR_SUMMARY.md
+
             - name: Quality Control Gate
               run: |
-                  # Run comprehensive 95% QC validation
-                  if [[ -x "./scripts/qc_pre_push.sh" ]]; then
-                      echo "RUNNING: 95% Quality Control validation..."
-                      ./scripts/qc_pre_push.sh
-                  else
-                      echo "WARNING: QC script not found, skipping comprehensive validation"
+                echo "Running comprehensive Quality Control validation..."
+                source .venv/bin/activate
+                
+                if ./scripts/qc_pre_push.sh; then
+                  echo "✅ Quality Control Gate: PASSED"
+                else
+                  echo "❌ Quality Control Gate: FAILED"
+                  echo "Running enhanced failure analysis..."
+                  
+                  # Run misalignment detection
+                  if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
+                    echo "Executing system misalignment detection..."
+                    ./scripts/detect_system_misalignment.sh || true
                   fi
+                  
+                  # Run enhanced CI failure analysis
+                  if [[ -x "./scripts/enhanced_ci_failure_analysis.sh" ]]; then
+                    echo "Executing enhanced CI failure analysis..."
+                    ./scripts/enhanced_ci_failure_analysis.sh || true
+                  fi
+                  
+                  # Upload analysis artifacts
+                  echo "Uploading diagnostic artifacts..."
+                  mkdir -p analysis-artifacts
+                  find logs/ -name "*$(date +%Y%m%d)*" -type f 2>/dev/null | head -10 | while read -r file; do
+                    cp "$file" analysis-artifacts/ 2>/dev/null || true
+                  done
+                  
+                  echo "Analysis complete. Check artifacts for detailed diagnostics."
+                  exit 1
+                fi
+
+            - name: Upload Analysis Artifacts
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                name: ci-failure-analysis
+                path: |
+                  logs/
+                  analysis-artifacts/
+                retention-days: 7
             - name: Generate OpenAPI spec
               run: |
                   source .venv/bin/activate
