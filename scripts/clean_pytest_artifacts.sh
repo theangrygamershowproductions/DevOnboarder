@@ -41,7 +41,7 @@ if [[ -d "logs/" ]]; then
     for lf in env_audit.log env_audit.json diagnostics.log gh_cli.log audit.md; do
         if [[ -f "$lf" ]]; then
             mv -f "$lf" logs/ 2>/dev/null || true
-            printf "Moved log file: %s\n" "$lf"
+            printf "Moving file: %s\n" "$lf"
         fi
     done
 fi
@@ -61,9 +61,9 @@ find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -p
 echo "Removing configuration backups"
 if [[ -d "config_backups" ]]; then
     backup_count=$(find config_backups/ -type f 2>/dev/null | wc -l || echo "0")
-    printf "Removing entire config_backups directory with %s files\n" "$backup_count"
+    printf "Removing directory with %s files: config_backups\n" "$backup_count"
     rm -rf config_backups/ 2>/dev/null || true
-    echo "config_backups directory removed"
+    echo "Configuration backups directory removed"
 fi
 
 echo "Cleaning Vale validation artifacts"
@@ -87,7 +87,7 @@ find . -type f \( -name "*.log" -o -name "*.yaml" -o -name "*.yml" -o -name "*.t
     -not -path "./bot/src/*" \
     -not -path "./docs/*" \
     -exec grep -l "ModuleNotFoundError.*foo\|import foo\|from foo" {} \; 2>/dev/null | while read -r file; do
-        printf "Removing foo reference file: %s\n" "$file"
+        printf "Removing file: %s\n" "$file"
         rm -f "$file"
     done
 
@@ -108,14 +108,14 @@ fi
 if [[ "$remaining_pytest" -gt 0 ]]; then
     echo "DEBUG: Remaining pytest files"
     find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | while read -r f; do
-        printf -- "     %s\n" "$f"
+        printf "  File: %s\n" "$f"
     done || true
 fi
 
 if [[ "$remaining_coverage" -gt 0 ]]; then
     echo "DEBUG: Remaining coverage files"
     find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | while read -r f; do
-        printf -- "     %s\n" "$f"
+        printf "  File: %s\n" "$f"
     done || true
 fi
 
@@ -149,7 +149,7 @@ if [[ "$foo_refs" -gt 0 ]]; then
         --exclude-dir=.codex \
         --exclude="*clean_pytest_artifacts.sh" \
         --exclude="README.md" 2>/dev/null | head -3 | while read -r f; do
-            printf -- "     %s\n" "$f"
+            printf "  Reference: %s\n" "$f"
         done || true
     echo "These may be blocking pre-commit validation"
 fi
