@@ -277,11 +277,11 @@ jobs:
               if: failure()
               uses: actions/upload-artifact@v4
               with:
-                name: ci-failure-analysis
-                path: |
-                  logs/
-                  analysis-artifacts/
-                retention-days: 7
+                  name: ci-failure-analysis
+                  path: |
+                    logs/
+                    analysis-artifacts/
+                  retention-days: 7
             - name: Generate OpenAPI spec
               run: |
                   source .venv/bin/activate
