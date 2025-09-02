@@ -53,11 +53,11 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   printf -- '%s\n' "$PR_BODY" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
-                  
+
                   if [ -s issues.txt ]; then
                       echo "Found Codex issues to close:"
                       cat issues.txt
-                      
+
                       while read -r issue_number; do
                           if [ -n "$issue_number" ]; then
                               echo "Closing issue #$issue_number"
