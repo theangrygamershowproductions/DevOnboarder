@@ -60,8 +60,8 @@ jobs:
 
                       while read -r issue_number; do
                           if [ -n "$issue_number" ]; then
-                              echo "Closing issue #$issue_number"
-                              gh issue close "$issue_number" --comment "Automatically closed by merged PR #${{ github.event.pull_request.number }}"
+                              echo "Closing issue #$issue_number using approved wrapper"
+                              bash scripts/ci_gh_issue_wrapper.sh close "$issue_number" "Automatically closed by merged PR #${{ github.event.pull_request.number }}"
                           fi
                       done < issues.txt
                   else
