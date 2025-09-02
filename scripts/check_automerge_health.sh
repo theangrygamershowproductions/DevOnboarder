@@ -71,7 +71,7 @@ if OPEN_PRS=$(gh pr list --state open --json number,headRefOid,autoMergeRequest 
     else
         echo "   Checking $PR_COUNT open PR(s)..."
         
-        echo "$OPEN_PRS" | jq -c '.[]' | while read -r pr; do
+        while read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r '.number')
             HEAD_SHA=$(echo "$pr" | jq -r '.headRefOid')
             AUTO_MERGE_ENABLED=$(echo "$pr" | jq -r '.autoMergeRequest != null')
@@ -97,7 +97,7 @@ if OPEN_PRS=$(gh pr list --state open --json number,headRefOid,autoMergeRequest 
                     fi
                 fi
             fi
-        done
+        done < <(echo "$OPEN_PRS" | jq -c '.[]')
     fi
 else
     yellow "⚠️  Could not fetch open PRs"
