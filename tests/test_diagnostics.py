@@ -1,7 +1,7 @@
 import importlib
 import subprocess
 
-import diagnostics
+from devonboarder import diagnostics
 
 
 class StubResp:
