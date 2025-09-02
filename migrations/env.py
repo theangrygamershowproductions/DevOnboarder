@@ -1,12 +1,20 @@
 from __future__ import annotations
 
 import os
+import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-from devonboarder.auth_service import Base
+# Add src to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+# Set environment variable to bypass JWT validation during migrations
+os.environ.setdefault("JWT_SECRET_KEY", "migration_check_key")
+
+# Import after environment setup
+from devonboarder.auth_service import Base  # noqa: E402
 
 config = context.config
 
@@ -33,8 +41,9 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+    """Run migrations in 'online' mode."""
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
