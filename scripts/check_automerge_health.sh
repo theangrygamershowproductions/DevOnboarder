@@ -14,7 +14,11 @@ echo "$(blue "🔍 DevOnboarder Automerge Health Check")"
 echo "========================================"
 
 # Get repository info
-REPO_FULL="theangrygamershowproductions/DevOnboarder"
+if ! REPO_FULL=$(gh repo view --json owner,name --jq '.owner.login + "/" + .name'); then
+    red "❌ Error: Could not get repository information"
+    echo "Make sure you're in a git repository and have GitHub CLI access"
+    exit 1
+fi
 
 echo "Repository: $(blue "$REPO_FULL")"
 echo ""
