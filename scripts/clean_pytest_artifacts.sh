@@ -9,7 +9,7 @@ find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" 
     rm -rf "$dir"
 done
 
-echo "Cleaning ALL coverage artifacts"
+echo "Removing ALL coverage artifacts"
 find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
@@ -18,22 +18,22 @@ find . -name ".nyc_output" -type d -not -path "./.venv/*" -not -path "./venv/*" 
 rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 if [[ -d "logs/" ]]; then
-    echo "Cleaning logs coverage artifacts"
+    echo "Removing logs coverage artifacts"
     find logs/ -name ".coverage*" -delete 2>/dev/null || true
     find logs/ -name "coverage.xml" -delete 2>/dev/null || true
     find logs/ -name "coverage.json" -delete 2>/dev/null || true
     rm -rf logs/htmlcov/ 2>/dev/null || true
 
-    echo "Cleaning dashboard execution logs"
+    echo "Removing dashboard execution logs"
     find logs/ -name "dashboard_execution_*.log" -delete 2>/dev/null || true
 
-    echo "Cleaning timestamped log files"
+    echo "Removing timestamped log files"
     find logs/ -name "*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].log" -delete 2>/dev/null || true
 
-    echo "Cleaning validation artifacts"
+    echo "Removing validation artifacts"
     find logs/ -name "validation_*.log" -delete 2>/dev/null || true
 
-    echo "Cleaning temporary database files"
+    echo "Removing temporary database files"
     find logs/ -name "tmp*.db" -delete 2>/dev/null || true
     find logs/ -name "*.db" -delete 2>/dev/null || true
 
@@ -46,15 +46,15 @@ if [[ -d "logs/" ]]; then
     done
 fi
 
-echo "Cleaning pytest cache"
+echo "Removing pytest cache"
 find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 
-echo "Cleaning ALL Python cache"
+echo "Removing ALL Python cache"
 find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 find . -name "*.pyc" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.pyo" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
-echo "Cleaning test databases"
+echo "Removing test databases"
 find . -name "test.db" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
@@ -66,18 +66,18 @@ if [[ -d "config_backups" ]]; then
     echo "Configuration backups directory removed"
 fi
 
-echo "Cleaning Vale validation artifacts"
+echo "Removing Vale validation artifacts"
 find . -name "vale-results.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "vale-*.json" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 rm -f vale-results.json vale-*.json 2>/dev/null || true
 
-echo "Cleaning tox artifacts"
+echo "Removing tox artifacts"
 rm -rf .tox/ 2>/dev/null || true
 
-echo "Cleaning top-level coverage"
+echo "Removing top-level coverage"
 rm -rf htmlcov/ .coverage coverage.xml 2>/dev/null || true
 
-echo "Purging test artifact files with foo references"
+echo "Removing test artifact files with foo references"
 find . -type f \( -name "*.log" -o -name "*.yaml" -o -name "*.yml" -o -name "*.txt" -o -name "*.json" \) \
     -not -path "./.git/*" \
     -not -path "./.venv/*" \

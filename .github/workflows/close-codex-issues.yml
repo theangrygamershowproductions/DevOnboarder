@@ -67,6 +67,3 @@ jobs:
                   else
                       echo "No Codex issues referenced in PR body"
                   fi
-                  else
-                      echo "No Codex issues referenced in PR body"
-                  fi

@@ -176,15 +176,15 @@ run_step() {
 
     # Write to log file with consistent error handling
     if [ -n "$LOG_FILE" ]; then
-        # Check if we can write to the log file
-        if [ -w "$(dirname "$LOG_FILE")" ] && [ ! -f "$LOG_FILE" ] || [ -w "$LOG_FILE" ]; then
+        # Proactive permission check to avoid failures during write
+        if [ -w "$(dirname "$LOG_FILE")" ] && { [ ! -f "$LOG_FILE" ] || [ -w "$LOG_FILE" ]; }; then
             {
                 echo "=== Step $STEP_COUNTER: $step_name ==="
                 echo "Command: $step_cmd"
                 echo "Started: $(date)"
             } >> "$LOG_FILE" 2>/dev/null
         else
-            echo "Warning: Cannot write to log file $LOG_FILE (check permissions)" >&2
+            echo "Warning: Cannot write to log file $LOG_FILE (check directory permissions)" >&2
         fi
     fi
 
