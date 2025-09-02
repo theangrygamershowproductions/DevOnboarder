@@ -243,32 +243,32 @@ jobs:
               run: |
                 echo "Running comprehensive Quality Control validation..."
                 source .venv/bin/activate
-                
+
                 if ./scripts/qc_pre_push.sh; then
-                  echo "✅ Quality Control Gate: PASSED"
+                  echo "Quality Control Gate: PASSED"
                 else
-                  echo "❌ Quality Control Gate: FAILED"
+                  echo "Quality Control Gate: FAILED"
                   echo "Running enhanced failure analysis..."
-                  
+
                   # Run misalignment detection
                   if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
                     echo "Executing system misalignment detection..."
                     ./scripts/detect_system_misalignment.sh || true
                   fi
-                  
+
                   # Run enhanced CI failure analysis
                   if [[ -x "./scripts/enhanced_ci_failure_analysis.sh" ]]; then
                     echo "Executing enhanced CI failure analysis..."
                     ./scripts/enhanced_ci_failure_analysis.sh || true
                   fi
-                  
+
                   # Upload analysis artifacts
                   echo "Uploading diagnostic artifacts..."
                   mkdir -p analysis-artifacts
                   find logs/ -name "*$(date +%Y%m%d)*" -type f 2>/dev/null | head -10 | while read -r file; do
                     cp "$file" analysis-artifacts/ 2>/dev/null || true
                   done
-                  
+
                   echo "Analysis complete. Check artifacts for detailed diagnostics."
                   exit 1
                 fi
