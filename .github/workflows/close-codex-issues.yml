@@ -19,7 +19,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -48,16 +48,8 @@ jobs:
             - name: Validate orchestration bot permissions
               run: 'bash scripts/validate-bot-permissions.sh'
             - name: Close referenced Codex issues
-              run: |
-                  echo "${{ github.event.pull_request.body }}" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
-                  gh_bin=$(which gh)
-                  for ISSUE in $(cat issues.txt); do
-                    # Use gh --json instead of jq to get issue author
-                    AUTHOR=$($gh_bin api repos/${{ github.repository }}/issues/$ISSUE --jq '.user.login')
-                    if [ "$AUTHOR" = "codex[bot]" ]; then
-                      $gh_bin issue comment "$ISSUE" --body "Closed via merge of #${{ github.event.pull_request.number }}."
-                      $gh_bin issue close "$ISSUE" --reason completed
-                    fi
-                  done
               env:
+                  PR_BODY: ${{ github.event.pull_request.body }}
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  printf -- '%s\n' "$PR_BODY" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
