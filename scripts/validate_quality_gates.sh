@@ -39,10 +39,17 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "2. Pre-commit Installation Check"
     echo "---------------------------------"
     if [ ! -f .git/hooks/pre-commit ]; then
-        echo "CRITICAL FAILURE: No pre-commit hook found at .git/hooks/pre-commit"
-        echo "Quality gates are NOT installed!"
-        echo "Required action: pre-commit install --install-hooks"
-        exit 1
+        # In CI environments, pre-commit hooks may not be installed
+        # but quality gates are still enforced through workflow steps
+        if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
+            echo "INFO: Pre-commit hooks not installed in CI environment"
+            echo "Quality gates enforced through GitHub Actions workflows"
+        else
+            echo "CRITICAL FAILURE: No pre-commit hook found at .git/hooks/pre-commit"
+            echo "Quality gates are NOT installed!"
+            echo "Required action: pre-commit install --install-hooks"
+            exit 1
+        fi
     else
         echo "SUCCESS: Pre-commit hook file exists"
         echo "Hook details: $(ls -la .git/hooks/pre-commit)"
@@ -53,9 +60,14 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "3. Pre-commit Tool Accessibility"
     echo "---------------------------------"
     if ! command -v pre-commit >/dev/null 2>&1; then
-        echo "CRITICAL FAILURE: pre-commit command not found"
-        echo "Required action: Activate virtual environment and install pre-commit"
-        exit 1
+        if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
+            echo "INFO: pre-commit command not found in CI (expected)"
+            echo "Quality gates enforced through individual workflow steps"
+        else
+            echo "CRITICAL FAILURE: pre-commit command not found"
+            echo "Required action: Activate virtual environment and install pre-commit"
+            exit 1
+        fi
     else
         echo "SUCCESS: pre-commit executable found at: $(which pre-commit)"
         echo "Version: $(pre-commit --version)"
