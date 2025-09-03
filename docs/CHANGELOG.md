@@ -6,6 +6,14 @@ All notable changes to this project will be recorded in this file.
 
 <!-- markdownlint-disable MD030 -->
 
+- feat(automation): add `scripts/create_fix_pr.sh` for automated PR creation workflow with GitHub CLI shell interpretation fix
+- fix(ci): add missing checkout step to close-codex-issues workflow preventing script execution failures
+- docs(troubleshooting): add comprehensive automerge hanging diagnosis and monitoring system with AUTOMERGE_HANGING_INDEFINITELY.md
+- feat(ci): implement automerge health monitoring with `scripts/check_automerge_health.sh`
+- fix(infrastructure): remove path-filtered `validate-docs` from required status checks per DevOnboarder "quiet and reliable" philosophy
+- fix(infrastructure): correct repository default branch and branch protection rules via GitHub API
+- fix(ci): add types-requests dependency for MyPy CI/local environment parity
+- docs(ci): comprehensive CI infrastructure modernization documentation with multi-PR tracking
 - feat(automation): add comprehensive PR-to-issue automation system with automatic tracking issue creation and lifecycle management
 - docs(node): update setup and troubleshooting guides for Node.js 22
 - fix(ci): markdownlint workflow configuration to exclude dependency directories

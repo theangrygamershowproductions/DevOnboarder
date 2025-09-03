@@ -21,6 +21,19 @@ COMMIT_MSG="$1"
 echo "Starting safe commit process..."
 echo "Commit message: $COMMIT_MSG"
 
+# CRITICAL: Validate quality gates are functional before proceeding
+echo "Validating quality gate health..."
+if ! ./scripts/validate_quality_gates.sh > /dev/null 2>&1; then
+    echo "CRITICAL: Quality gates are not functional!"
+    echo "Running full health check for details..."
+    ./scripts/validate_quality_gates.sh
+    echo ""
+    echo "COMMIT BLOCKED: Quality gates must be functional before commits"
+    echo "Fix the issues above and try again"
+    exit 1
+fi
+echo "Quality gates confirmed functional"
+
 # Get list of staged files before pre-commit runs
 STAGED_FILES=$(git diff --cached --name-only)
 echo "Files currently staged:"
