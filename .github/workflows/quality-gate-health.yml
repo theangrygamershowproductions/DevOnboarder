@@ -16,6 +16,10 @@ on:
         default: false
         type: boolean
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   quality-gate-health:
     name: Validate Quality Gate Health

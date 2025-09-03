@@ -123,7 +123,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     BYPASS_COMMITS=$(git log --oneline --since="7 days ago" --grep="--no-verify" --grep="skip.*hook" --grep="bypass.*hook" 2>/dev/null || echo "")
     if [[ -n "$BYPASS_COMMITS" ]]; then
         echo "WARNING: Recent commits may have bypassed quality gates:"
-        # POTATO: EMERGENCY APPROVED - validation-script-documentation-violation-20250902
+        # POTATO: Documentation - This grep pattern detects '--no-verify' bypass attempts; not an actual bypass approval.
         while IFS= read -r line; do
             echo "   $line"
         done <<< "$BYPASS_COMMITS"

@@ -43,37 +43,41 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
 mkdir -p logs
 
 {
-    echo "🔍 DevOnboarder Quality Gate Health Check"
-    echo "📅 Started: $(date -Iseconds)"
-    echo "📁 Repository: $(git remote get-url origin 2>/dev/null || echo 'unknown')"
+    echo "DevOnboarder Quality Gate Health Check"
+    echo "======================================"
+    echo "Started: $(date -Iseconds)"
+    echo "Repository: $(git remote get-url origin 2>/dev/null || echo 'unknown')"
     echo ""
 
     # 1. Verify git hooks are not disabled
-    echo "1️⃣ Git Hooks Configuration Check"
+    echo "1. Git Hooks Configuration Check"
+    echo "--------------------------------"
     if HOOKS_PATH=$(git config --get core.hooksPath 2>/dev/null); then
-        echo "❌ CRITICAL: core.hooksPath is set to: $HOOKS_PATH"
-        echo "   This disables git hooks. Quality gates are BYPASSED!"
-        echo "   Required action: git config --unset core.hooksPath"
+        echo "CRITICAL FAILURE: core.hooksPath is set to: $HOOKS_PATH"
+        echo "This disables git hooks. Quality gates are BYPASSED!"
+        echo "Required action: git config --unset core.hooksPath"
         exit 1
     else
-        echo "✅ core.hooksPath not set (hooks enabled)"
+        echo "SUCCESS: core.hooksPath not set (hooks enabled)"
     fi
 
     # 2. Verify pre-commit is installed
     echo ""
-    echo "2️⃣ Pre-commit Installation Check"
+    echo "2. Pre-commit Installation Check"
+    echo "---------------------------------"
     if [ ! -f .git/hooks/pre-commit ]; then
-        echo "❌ CRITICAL: No pre-commit hook found at .git/hooks/pre-commit"
-        echo "   Quality gates are NOT installed!"
-        echo "   Required action: pre-commit install --install-hooks"
+        echo "CRITICAL FAILURE: No pre-commit hook found at .git/hooks/pre-commit"
+        echo "Quality gates are NOT installed!"
+        echo "Required action: pre-commit install --install-hooks"
         exit 1
     else
-        echo "✅ Pre-commit hook file exists"
+        echo "SUCCESS: Pre-commit hook file exists"
     fi
 
     # 3. Verify pre-commit functionality with test file
     echo ""
-    echo "3️⃣ Pre-commit Functionality Test"
+    echo "3. Pre-commit Functionality Test"
+    echo "---------------------------------"
     TEST_FILE="test_quality_gate_$(date +%s).md"
 
     # Create test file with known violation (trailing space)
@@ -82,44 +86,46 @@ mkdir -p logs
 
     # Test pre-commit run
     if pre-commit run --files "$TEST_FILE" > /dev/null 2>&1; then
-        echo "❌ WARNING: Pre-commit did not catch trailing whitespace violation"
-        echo "   Quality gates may not be functioning properly"
+        echo "CRITICAL FAILURE: Pre-commit did not catch trailing whitespace violation"
+        echo "Quality gates may not be functioning properly"
         git reset HEAD "$TEST_FILE"
         rm -f "$TEST_FILE"
         exit 1
     else
-        echo "✅ Pre-commit correctly caught test violation"
+        echo "SUCCESS: Pre-commit correctly caught test violation"
         git reset HEAD "$TEST_FILE"
         rm -f "$TEST_FILE"
     fi
 
     # 4. Verify virtual environment integration
     echo ""
-    echo "4️⃣ Virtual Environment Integration Check"
+    echo "4. Virtual Environment Integration Check"
+    echo "----------------------------------------"
     if [[ -z "${VIRTUAL_ENV:-}" ]]; then
-        echo "⚠️  WARNING: Virtual environment not activated"
-        echo "   Quality gates may not have access to required tools"
+        echo "WARNING: Virtual environment not activated"
+        echo "Quality gates may not have access to required tools"
     else
-        echo "✅ Virtual environment active: $VIRTUAL_ENV"
+        echo "SUCCESS: Virtual environment active: $VIRTUAL_ENV"
     fi
 
     # 5. Audit recent commits for bypass patterns
     echo ""
-    echo "5️⃣ Recent Commit Bypass Audit"
+    echo "5. Recent Commit Bypass Audit"
+    echo "------------------------------"
     BYPASS_COMMITS=$(git log --oneline --since="7 days ago" --grep="--no-verify" --grep="skip.*hook" --grep="bypass.*hook" || echo "")
     if [[ -n "$BYPASS_COMMITS" ]]; then
-        echo "⚠️  WARNING: Recent commits may have bypassed quality gates:"
+        echo "WARNING: Recent commits may have bypassed quality gates:"
         echo "$BYPASS_COMMITS" | sed 's/^/   /'
     else
-        echo "✅ No recent quality gate bypass detected"
+        echo "SUCCESS: No recent quality gate bypass detected"
     fi
 
     echo ""
-    echo "📊 HEALTH CHECK SUMMARY"
-    echo "======================="
-    echo "✅ Quality gates are FUNCTIONAL and ENFORCED"
-    echo "📝 Health log: $HEALTH_LOG"
-    echo "📅 Completed: $(date -Iseconds)"
+    echo "HEALTH CHECK SUMMARY"
+    echo "===================="
+    echo "SUCCESS: Quality gates are FUNCTIONAL and ENFORCED"
+    echo "Health log: $HEALTH_LOG"
+    echo "Completed: $(date -Iseconds)"
 
 } 2>&1 | tee "$HEALTH_LOG"
 
@@ -316,7 +322,8 @@ bash scripts/validate_quality_gates.sh
 **Never run these commands without explicit approval:**
 
 - `git config core.hooksPath /dev/null` (disables ALL git hooks)
-- `git commit --no-verify` (bypasses pre-commit validation)  # POTATO: EMERGENCY APPROVED - documentation-example-violation-20250902
+<!-- POTATO: EMERGENCY APPROVED - documentation-example-violation-20250902 -->
+- `git commit --no-verify` (bypasses pre-commit validation)
 - `pre-commit uninstall` (removes quality gate enforcement)
 
 ```markdown
