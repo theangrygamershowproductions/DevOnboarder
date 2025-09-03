@@ -105,6 +105,8 @@ The full recovery story lives in [docs/origin.md](docs/origin.md).
 
 - **Bot container shows "unhealthy"**: See [Discord Bot Health Check Fix](docs/troubleshooting/DISCORD_BOT_HEALTH_CHECK_FIX.md)
 - **Permission denied errors**: Check [Docker Container Health Troubleshooting](docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md)
+- **Automerge hangs indefinitely**: See [Automerge Hanging Diagnosis](docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md)
+- **MyPy passes locally but fails in CI**: See [CI MyPy Type Stubs](docs/troubleshooting/CI_MYPY_TYPE_STUBS.md)
 - **General setup issues**: Review [docs/README.md](docs/README.md) troubleshooting section
 
 ## 🔄 PR-to-Issue Automation
