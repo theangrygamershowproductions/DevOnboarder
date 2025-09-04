@@ -1,0 +1,13 @@
+# DevOnboarder ShellCheck Configuration
+# Targeted configuration to minimize false positives while preserving safety
+
+# Enable external source analysis with proper source paths
+external-sources=true
+source-path=SCRIPTDIR
+source-path=.
+source-path=scripts
+
+# Disable only specific patterns that are known safe in DevOnboarder context
+# SC1091: Not following external files (handled by source-path + external-sources)
+disable=SC1091
+# - Any other project-internal sourced scripts

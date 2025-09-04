@@ -5,9 +5,7 @@
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit
-# shellcheck disable=SC1091 # External dependency
 source .venv/bin/activate
-# shellcheck disable=SC1091 # External dependency
 source scripts/load_token_environment.sh > /dev/null 2>&1
 
 echo "Fine-Grained Token Organization Diagnostic"
