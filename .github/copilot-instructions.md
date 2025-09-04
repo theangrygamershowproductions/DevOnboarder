@@ -1521,33 +1521,40 @@ bash scripts/smart_env_sync.sh --sync-all
 echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 ```
 
-### ⚠️ NEW: Shellcheck SC1091 Standard Pattern
+### ⚠️ UPDATED: Shellcheck External Dependencies - Hybrid Approach
 
-**COMMON SCENARIO**: Shellcheck SC1091 warnings for `source .env` or similar operations.
+**CRITICAL UNDERSTANDING**: DevOnboarder uses a hybrid approach for external dependency management.
 
-**STANDARD RESOLUTION PATTERNS**:
+**GLOBAL CONFIGURATION**: `.shellcheckrc` handles common external dependencies:
 
-```bash
-# ✅ CORRECT - For .env files
-if [ -f .env ]; then
-    # shellcheck source=.env disable=SC1091
-    source .env
-fi
-
-# ✅ CORRECT - For runtime source operations
-# shellcheck disable=SC1091 # Runtime source operation
-source .venv/bin/activate
-
-# ✅ CORRECT - For project-specific patterns
-# shellcheck source=scripts/project_root_wrapper.sh disable=SC1091
-source scripts/project_root_wrapper.sh
-```
+- `.venv/bin/activate` - Virtual environment activation
+- `scripts/load_token_environment.sh` - Project token loaders
+- `scripts/enhanced_token_loader.sh` - Token Architecture v2.1 loaders
 
 **AGENT REQUIREMENTS**:
 
-- **ALWAYS** add appropriate shellcheck disable directives for legitimate source operations
-- **NEVER** suggest removing source operations to avoid warnings
-- **USE** the established patterns above for consistency
+- **NO LONGER NEEDED**: `# shellcheck disable=SC1091` for standard DevOnboarder patterns
+- **STILL REQUIRED**: Explicit comments for unusual external dependencies only
+- **REFERENCE**: See `docs/SHELLCHECK_EXTERNAL_DEPENDENCIES.md` for full guidelines
+
+**STANDARD PATTERNS** (no disable comments needed):
+
+```bash
+# ✅ CORRECT - Covered by global .shellcheckrc
+source .venv/bin/activate
+source scripts/load_token_environment.sh
+source scripts/enhanced_token_loader.sh
+
+# ✅ CORRECT - Only for unusual external dependencies
+# shellcheck source=custom-external-config.sh disable=SC1091
+# source custom-external-config.sh
+```
+
+**BENEFITS**:
+
+- Eliminates 60+ repetitive disable comments across Token Architecture scripts
+- Maintains shellcheck safety through targeted configuration
+- Clear project standards documented in `docs/SHELLCHECK_EXTERNAL_DEPENDENCIES.md`
 
 ### ⚠️ NEW: Markdown Content Creation Standards
 

@@ -79,6 +79,7 @@ dist/
 docs/bot-api/
 docs/frontend-api/
 github-tokens.*
+.tokens*
 id_rsa*
 lcov-report/
 logs/
