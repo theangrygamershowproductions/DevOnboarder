@@ -122,7 +122,7 @@ test_endpoint "repos/theangrygamershowproductions/DevOnboarder/actions/workflows
 test_endpoint "repos/theangrygamershowproductions/DevOnboarder/actions/runs" "Workflow Runs"
 
 echo ""
-echo "🔧 Fine-Grained Token Organization Resolution:"
+echo "Fine-Grained Token Organization Resolution:"
 echo "=============================================="
 echo ""
 echo "IDENTIFIED ISSUE: Organization Repository + Fine-Grained Token"
