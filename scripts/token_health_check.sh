@@ -118,29 +118,29 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
     test_github_api "GITHUB_TOKEN" "user" "General GitHub access"
 fi
 
-echo "📊 Health Check Results Summary"
-echo "==============================="
-printf "Value: %s\n" "$TOTAL_TESTS"
-printf "Value: %s\n" "$PASSED_TESTS"
-printf "Value: %s\n" "$PROPAGATION_DELAYS"
-printf "Value: %s\n" "$"
+echo "Health Check Results Summary"
+echo "============================"
+printf "Total Tests: %d\n" "$TOTAL_TESTS"
+printf "Passed: %d\n" "$PASSED_TESTS"
+printf "Propagation Delays: %d\n" "$PROPAGATION_DELAYS"
+printf "Failed: %d\n" "$((TOTAL_TESTS - PASSED_TESTS - PROPAGATION_DELAYS))"
 echo ""
 
 # Calculate health score
 HEALTH_SCORE=$(((PASSED_TESTS * 100) / TOTAL_TESTS))
-printf "Value: %s\n" "$HEALTH_SCORE"
+printf "Token Health Score: %d%%\n" "$HEALTH_SCORE"
 
 if [ $PROPAGATION_DELAYS -gt 0 ]; then
-    printf "Value: %s\n" "$PROPAGATION_DELAYS"
+    printf "Note: %d token(s) experiencing GitHub API propagation delays\n" "$PROPAGATION_DELAYS"
     echo "   This is normal for recently updated Fine-Grained tokens"
     echo "   Wait 2-5 minutes and re-run this check"
 fi
 
 echo ""
 if [ $HEALTH_SCORE -ge 80 ]; then
-    echo "🎉 Overall Status: HEALTHY"
-    echo "Success: Token Architecture v2.1 is working well!"
+    echo "Overall Status: HEALTHY"
+    echo "Token Architecture v2.1 is working well!"
 else
-    echo "Warning:  Overall Status: NEEDS ATTENTION"
-    echo "Error: Multiple token issues require investigation"
+    echo "Overall Status: NEEDS ATTENTION"
+    echo "Multiple token issues require investigation"
 fi
