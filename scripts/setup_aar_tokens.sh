@@ -2,7 +2,16 @@
 # AAR Token Setup Guide for DevOnboarder
 # This script demonstrates proper token configuration for the AAR system
 
-# Load environment if available
+# Load tokens using Token Architecture v2.1 with developer guidance
+if [ -f "scripts/enhanced_token_loader.sh" ]; then
+    # shellcheck source=scripts/enhanced_token_loader.sh disable=SC1091
+    source scripts/enhanced_token_loader.sh
+elif [ -f "scripts/load_token_environment.sh" ]; then
+    # shellcheck source=scripts/load_token_environment.sh disable=SC1091
+    source scripts/load_token_environment.sh
+fi
+
+# Legacy fallback: Load environment if available
 if [ -f .env ]; then
     # shellcheck disable=SC1091
     source .env
@@ -22,7 +31,7 @@ echo "2. CI_BOT_TOKEN (Secondary - for bot operations)"
 echo ""
 
 echo "Policy-Compliant Configuration:"
-echo "✅ GITHUB_TOKEN should NOT be set (broad permissions not needed)"
+echo "Success: GITHUB_TOKEN should NOT be set (broad permissions not needed)"
 echo ""
 
 echo "Additional Available Tokens:"
@@ -35,15 +44,15 @@ echo "==================="
 
 # Check primary token hierarchy (tokens we want to be present)
 if [ -n "$CI_ISSUE_AUTOMATION_TOKEN" ]; then
-    echo "✅ CI_ISSUE_AUTOMATION_TOKEN: Available (length: ${#CI_ISSUE_AUTOMATION_TOKEN})"
+    printf "Length: %d\n" "${#CI_ISSUE_AUTOMATION_TOKEN}"
 else
-    echo "❌ CI_ISSUE_AUTOMATION_TOKEN: Not set"
+    echo "Error: CI_ISSUE_AUTOMATION_TOKEN: Not set"
 fi
 
 if [ -n "$CI_BOT_TOKEN" ]; then
-    echo "✅ CI_BOT_TOKEN: Available (length: ${#CI_BOT_TOKEN})"
+    printf "Length: %d\n" "${#CI_BOT_TOKEN}"
 else
-    echo "❌ CI_BOT_TOKEN: Not set"
+    echo "Error: CI_BOT_TOKEN: Not set"
 fi
 
 # Check additional tokens
@@ -52,19 +61,19 @@ echo "Additional Token Status:"
 echo "======================="
 
 if [ -n "$CI_ISSUE_TOKEN" ]; then
-    echo "✅ CI_ISSUE_TOKEN: Available (length: ${#CI_ISSUE_TOKEN})"
+    printf "Length: %d\n" "${#CI_ISSUE_TOKEN}"
 else
-    echo "❌ CI_ISSUE_TOKEN: Not set"
+    echo "Error: CI_ISSUE_TOKEN: Not set"
 fi
 
 if [ -n "$GH_TOKEN" ]; then
-    echo "✅ GH_TOKEN: Available (length: ${#GH_TOKEN})"
+    printf "Length: %d\n" "${#GH_TOKEN}"
     # Check if it's actually an OpenAI token
     if [[ "$GH_TOKEN" == sk-proj-* ]]; then
-        echo "   ⚠️  WARNING: This appears to be an OpenAI token, not a GitHub token"
+        echo "   Warning:  WARNING: This appears to be an OpenAI token, not a GitHub token"
     fi
 else
-    echo "❌ GH_TOKEN: Not set"
+    echo "Error: GH_TOKEN: Not set"
 fi
 
 echo ""
@@ -72,10 +81,10 @@ echo "Fallback Token Status (Policy Compliance Check):"
 echo "================================================"
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    echo "⚠️  GITHUB_TOKEN: Present (length: ${#GITHUB_TOKEN}) - Consider removing for optimal security"
+    printf "Length: %d\n" "${#GITHUB_TOKEN}"
     echo "   Note: This broad-permissions token is not needed when fine-grained alternatives exist"
 else
-    echo "✅ GITHUB_TOKEN: Not set - Excellent! Following No Default Token Policy v1.0"
+    echo "Success: GITHUB_TOKEN: Not set - Excellent! Following No Default Token Policy v1.0"
     echo "   Note: Using fine-grained tokens instead of broad-permissions fallback"
 fi
 
@@ -85,21 +94,21 @@ echo "Orchestration Bot Tokens:"
 echo "========================"
 
 if [ -n "$DEV_ORCHESTRATION_BOT_KEY" ]; then
-    echo "✅ DEV_ORCHESTRATION_BOT_KEY: Available (length: ${#DEV_ORCHESTRATION_BOT_KEY})"
+    printf "Length: %d\n" "${#DEV_ORCHESTRATION_BOT_KEY}"
 else
-    echo "❌ DEV_ORCHESTRATION_BOT_KEY: Not set"
+    echo "Error: DEV_ORCHESTRATION_BOT_KEY: Not set"
 fi
 
 if [ -n "$STAGING_ORCHESTRATION_BOT_KEY" ]; then
-    echo "✅ STAGING_ORCHESTRATION_BOT_KEY: Available (length: ${#STAGING_ORCHESTRATION_BOT_KEY})"
+    printf "Length: %d\n" "${#STAGING_ORCHESTRATION_BOT_KEY}"
 else
-    echo "❌ STAGING_ORCHESTRATION_BOT_KEY: Not set"
+    echo "Error: STAGING_ORCHESTRATION_BOT_KEY: Not set"
 fi
 
 if [ -n "$PROD_ORCHESTRATION_BOT_KEY" ]; then
-    echo "✅ PROD_ORCHESTRATION_BOT_KEY: Available (length: ${#PROD_ORCHESTRATION_BOT_KEY})"
+    printf "Length: %d\n" "${#PROD_ORCHESTRATION_BOT_KEY}"
 else
-    echo "❌ PROD_ORCHESTRATION_BOT_KEY: Not set"
+    echo "Error: PROD_ORCHESTRATION_BOT_KEY: Not set"
 fi
 
 echo ""
@@ -121,7 +130,7 @@ if [ -n "$CI_ISSUE_TOKEN" ]; then
     github_token_count=$((github_token_count + 1))
 fi
 
-echo "GitHub tokens available: $github_token_count/4"
+printf "Value: %s\n" "$"
 
 # Orchestration token count
 orchestration_token_count=0
@@ -135,23 +144,23 @@ if [ -n "$PROD_ORCHESTRATION_BOT_KEY" ]; then
     orchestration_token_count=$((orchestration_token_count + 1))
 fi
 
-echo "Orchestration tokens available: $orchestration_token_count/3"
+printf "Value: %s\n" "$"
 
 echo ""
 echo "AAR Token Hierarchy Compliance:"
 echo "==============================="
 
 if [ -n "$CI_ISSUE_AUTOMATION_TOKEN" ]; then
-    echo "✅ Primary token available - Full AAR functionality enabled"
+    echo "Success: Primary token available - Full AAR functionality enabled"
     echo "   AAR will use CI_ISSUE_AUTOMATION_TOKEN for issue creation"
 elif [ -n "$CI_BOT_TOKEN" ]; then
-    echo "⚠️  Secondary token available - Limited AAR functionality"
+    echo "Warning:  Secondary token available - Limited AAR functionality"
     echo "   AAR will use CI_BOT_TOKEN for operations"
 elif [ -n "$GITHUB_TOKEN" ]; then
-    echo "⚠️  Fallback token only - Policy violation risk"
+    echo "Warning:  Fallback token only - Policy violation risk"
     echo "   AAR will warn about using broad permissions token"
 else
-    echo "❌ No GitHub tokens available - AAR will run in offline mode"
+    echo "Error: No GitHub tokens available - AAR will run in offline mode"
     echo "   Reports can be generated but no GitHub integration"
 fi
 
@@ -160,7 +169,7 @@ echo "To enable full AAR functionality with GitHub integration:"
 echo ""
 echo "Option 1: Use GitHub CLI authentication (Recommended for development)"
 echo "  gh auth login"
-echo "  export GITHUB_TOKEN=\$(gh auth token)"
+printf "Value: %s\n" "$"
 echo ""
 echo "Option 2: Set environment variables manually"
 echo "  export CI_ISSUE_AUTOMATION_TOKEN=\"your_token_here\""
@@ -176,7 +185,7 @@ echo "Quick Setup:"
 if [ ! -f .env ]; then
     echo "  make aar-env-template  # Create .env template first"
 else
-    echo "  ✅ .env file found - edit to set your tokens"
+    echo "  Success: .env file found - edit to set your tokens"
 fi
 echo "  make aar-setup         # Run full setup with token validation"
 echo ""
@@ -194,11 +203,11 @@ echo "should be preferred. This is the intended security behavior."
 echo ""
 
 echo "Offline Mode:"
-echo "✅ AAR reports can be generated without tokens (as demonstrated)"
-echo "✅ File version tracking works without tokens"
-echo "✅ Local analysis and reporting fully functional"
-echo "❌ GitHub issue creation requires authentication"
-echo "❌ Workflow data collection requires authentication"
+echo "Success: AAR reports can be generated without tokens (as demonstrated)"
+echo "Success: File version tracking works without tokens"
+echo "Success: Local analysis and reporting fully functional"
+echo "Error: GitHub issue creation requires authentication"
+echo "Error: Workflow data collection requires authentication"
 
 echo ""
 echo "Available Commands:"
@@ -220,7 +229,7 @@ if [ "$1" = "analysis" ]; then
             # shellcheck disable=SC1091
             source .venv/bin/activate
         else
-            echo "⚠️  Warning: No virtual environment detected"
+            echo "Warning:  Warning: No virtual environment detected"
             echo "   Run: python -m venv .venv && source .venv/bin/activate"
         fi
     fi
@@ -233,7 +242,7 @@ if [ "$1" = "analysis" ]; then
         echo "Comprehensive analysis complete."
         echo "Check logs/token-audit/ for detailed reports."
     else
-        echo "❌ Python not available for comprehensive analysis"
+        echo "Error: Python not available for comprehensive analysis"
         echo "   Ensure virtual environment is activated"
     fi
 elif [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
@@ -252,7 +261,7 @@ elif [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     echo "  bash scripts/setup_aar_tokens.sh analysis"
     echo "  make aar-setup"
 elif [ -n "$1" ] && [ "$1" != "status" ]; then
-    echo "❌ Unknown command: $1"
+    printf "Value: %s\n" "$"
     echo "   Available: status, analysis, help"
     echo "   Run: bash scripts/setup_aar_tokens.sh help"
 fi

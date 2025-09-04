@@ -13,16 +13,34 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime
 
+# Load environment variables from .env file (DevOnboarder standard)
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env file into environment
+
 
 class AARTokenManager:
     """Manage tokens for AAR GitHub operations following DevOnboarder policy."""
 
     def __init__(self):
         # CRITICAL: Follow DevOnboarder token hierarchy from governance doc
-        # CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
-        self.token_hierarchy = [
-            "CI_ISSUE_AUTOMATION_TOKEN",  # PRIMARY: Issue creation (finely scoped)
-            "CI_BOT_TOKEN",  # SECONDARY: Bot operations (scoped)
+        # Different hierarchies for different operations based on required permissions
+
+        # For Actions API operations (requires actions:read permission)
+        self.actions_token_hierarchy = [
+            "DIAGNOSTICS_BOT_KEY",  # PRIMARY: Actions read + issue write
+            "CI_HEALTH_KEY",  # SECONDARY: Actions read + monitoring
+            "CI_HELPER_AGENT_KEY",  # TERTIARY: Actions read + CI assistance
+            "CI_BOT_TOKEN",  # LEGACY: Has actions:read
+            "GITHUB_TOKEN",  # FALLBACK ONLY: Broad permissions
+        ]
+
+        # For Issue operations (requires issues:write permission)
+        self.issue_token_hierarchy = [
+            "AAR_TOKEN",  # PRIMARY: Dedicated AAR token
+            "CI_ISSUE_AUTOMATION_TOKEN",  # SECONDARY: General CI issue creation
+            "DIAGNOSTICS_BOT_KEY",  # TERTIARY: Also has issue write
+            "CI_BOT_TOKEN",  # LEGACY: Bot operations (scoped)
             "GITHUB_TOKEN",  # FALLBACK ONLY: Broad permissions
         ]
 
@@ -55,9 +73,34 @@ class AARTokenManager:
             print(f"WARNING: Failed to load token registry: {e}")
             return {}
 
+    def get_actions_token(self) -> Optional[str]:
+        """Get GitHub token for Actions API operations (requires actions:read)."""
+        for token_name in self.actions_token_hierarchy:
+            token = os.environ.get(token_name)
+            if token:
+                print(f"Using actions-capable token: {token_name}")
+                return token
+        print("WARNING: No actions-capable token found in hierarchy")
+        return None
+
+    def get_issue_token(self) -> Optional[str]:
+        """Get GitHub token for Issue operations (requires issues:write)."""
+        for token_name in self.issue_token_hierarchy:
+            token = os.environ.get(token_name)
+            if token:
+                print(f"Using issue-capable token: {token_name}")
+                return token
+        print("WARNING: No issue-capable token found in hierarchy")
+        return None
+
     def get_github_token(self) -> Optional[str]:
-        """Get GitHub token following No Default Token Policy hierarchy."""
-        for token_name in self.token_hierarchy:
+        """Get GitHub token following No Default Token Policy hierarchy.
+
+        DEPRECATED: Use get_actions_token() or get_issue_token() for specific
+        operations.
+        """
+        # For backward compatibility, use issue token hierarchy as default
+        for token_name in self.issue_token_hierarchy:
             token = os.environ.get(token_name)
             if token:
                 # Validate token is properly scoped for AAR operations
@@ -152,7 +195,8 @@ class AARTokenManager:
         audit_data = {
             "audit_timestamp": datetime.now().isoformat(),
             "policy_version": "No Default Token Policy v1.0",
-            "token_hierarchy": self.token_hierarchy,
+            "actions_token_hierarchy": self.actions_token_hierarchy,
+            "issue_token_hierarchy": self.issue_token_hierarchy,
             "token_availability": {},
             "token_ecosystem": {},
             "compliance_status": {},
@@ -219,8 +263,9 @@ class AARTokenManager:
                         }
                     )
 
-        # Legacy primary token hierarchy check
-        for token_name in self.token_hierarchy:
+        # Check token availability across both hierarchies
+        all_tokens = set(self.actions_token_hierarchy + self.issue_token_hierarchy)
+        for token_name in all_tokens:
             is_available = bool(os.environ.get(token_name))
             audit_data["token_availability"][token_name] = is_available
 
