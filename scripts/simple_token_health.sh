@@ -75,8 +75,8 @@ if [ -n "${JWT_SECRET:-}" ]; then
 fi
 
 echo ""
-echo "🧪 API Functionality Tests:"
-echo "=========================="
+echo "API Functionality Tests:"
+echo "========================"
 
 # Test AAR_TOKEN
 echo ""
@@ -86,7 +86,7 @@ if [ -n "${AAR_TOKEN:-}" ]; then
         echo "  Success: Actions API: Working perfectly"
         API_WORKING=$((API_WORKING + 1))
     else
-        echo "  ⏳ Actions API: Propagation delay (normal for updated tokens)"
+        echo "  PENDING: Actions API: Propagation delay (normal for updated tokens)"
         API_PENDING=$((API_PENDING + 1))
     fi
 else
@@ -101,7 +101,7 @@ if [ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]; then
         echo "  Success: Issues API: Working perfectly"
         API_WORKING=$((API_WORKING + 1))
     else
-        echo "  ⏳ Issues API: Propagation delay (normal for updated tokens)"
+        echo "  PENDING: Issues API: Propagation delay (normal for updated tokens)"
         API_PENDING=$((API_PENDING + 1))
     fi
 else
@@ -116,7 +116,7 @@ if [ -n "${CI_BOT_TOKEN:-}" ]; then
         echo "  Success: User API: Working perfectly"
         API_WORKING=$((API_WORKING + 1))
     else
-        echo "  ⏳ User API: Propagation delay (normal for updated tokens)"
+        echo "  PENDING: User API: Propagation delay (normal for updated tokens)"
         API_PENDING=$((API_PENDING + 1))
     fi
 else
@@ -124,16 +124,16 @@ else
 fi
 
 echo ""
-echo "📊 Health Check Summary:"
-echo "======================="
-printf "Value: %s\n" "$LOADED_TOKENS"
-printf "Value: %s\n" "$API_WORKING"
-printf "Value: %s\n" "$API_PENDING"
+echo "Health Check Summary:"
+echo "===================="
+printf "Tokens Loaded: %d\n" "$LOADED_TOKENS"
+printf "APIs Working: %d\n" "$API_WORKING"
+printf "APIs Pending: %d (propagation delays)\n" "$API_PENDING"
 echo ""
 
 if [ $API_PENDING -gt 0 ]; then
-    echo "⏱️  GitHub API Propagation Status:"
-    printf "Value: %s\n" "$API_PENDING"
+    echo "GitHub API Propagation Status:"
+    printf "  • %d token(s) experiencing normal propagation delays\n" "$API_PENDING"
     echo "  • Fine-Grained tokens can take 2-5 minutes to propagate"
     echo "  • Re-run this check in a few minutes for updated results"
     echo ""
@@ -141,10 +141,10 @@ fi
 
 # Overall health assessment
 if [ $LOADED_TOKENS -ge 5 ] && [ $API_WORKING -ge 0 ]; then
-    echo "🎉 Overall Status: HEALTHY"
-    echo "Success: Token Architecture v2.1 is working correctly"
-    echo "Ready: DevOnboarder services should function properly"
+    echo "Overall Status: HEALTHY"
+    echo "Token Architecture v2.1 is working correctly"
+    echo "DevOnboarder services should function properly"
 else
-    echo "Warning:  Overall Status: NEEDS ATTENTION"
-    echo "Error: Token configuration requires investigation"
+    echo "Overall Status: NEEDS ATTENTION"
+    echo "Token configuration requires investigation"
 fi
