@@ -96,8 +96,8 @@ class AARTokenManager:
     def get_github_token(self) -> Optional[str]:
         """Get GitHub token following No Default Token Policy hierarchy.
 
-        DEPRECATED: Use get_actions_token() or get_issue_token() for specific
-        operations.
+        DEPRECATED: Use get_actions_token() or get_issue_token() for
+        specific operations.
         """
         # For backward compatibility, use issue token hierarchy as default
         for token_name in self.issue_token_hierarchy:
