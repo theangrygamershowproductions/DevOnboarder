@@ -88,7 +88,7 @@ else
 fi
 
 echo ""
-echo "🔧 Fine-Grained Token Permission Analysis:"
+echo "Fine-Grained Token Permission Analysis:"
 echo "=========================================="
 echo ""
 
