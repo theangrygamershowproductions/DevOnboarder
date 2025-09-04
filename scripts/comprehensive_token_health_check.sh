@@ -131,25 +131,25 @@ for token_var in WEBHOOK_SECRET API_KEY ENCRYPTION_KEY TUNNEL_TOKEN; do
     fi
 done
 
-echo "📊 Token Health Check Summary:"
-echo "=============================="
-printf "Value: %s\n" "$TOTAL_TOKENS"
-printf "Value: %s\n" "$WORKING_TOKENS"
-printf "Value: %s\n" "$"
+echo "Token Health Check Summary:"
+echo "==========================="
+printf "Total Tokens Tested: %d\n" "$TOTAL_TOKENS"
+printf "Working Tokens: %d\n" "$WORKING_TOKENS"
+printf "Failed Tokens: %d\n" "${#FAILED_TOKENS[@]}"
 
 if [ ${#FAILED_TOKENS[@]} -eq 0 ]; then
     echo ""
-    echo "🎉 SUCCESS: All tokens are working correctly!"
-    echo "Success: Token Architecture v2.1 is fully operational"
-    echo "Ready: All DevOnboarder services should function properly"
+    echo "SUCCESS: All tokens are working correctly!"
+    echo "Token Architecture v2.1 is fully operational"
+    echo "All DevOnboarder services should function properly"
 else
     echo ""
-    echo "Warning:  Issues found with the following tokens:"
+    echo "WARNING: Issues found with the following tokens:"
     for failed_token in "${FAILED_TOKENS[@]}"; do
-        printf "- %s\n" "$failed_token"
+        printf "   FAILED: %s\n" "$failed_token"
     done
     echo ""
-    echo "List: Common solutions:"
+    echo "Common solutions:"
     echo "   1. Check GitHub token permissions and expiration dates"
     echo "   2. Wait for GitHub API propagation (2-5 minutes for new tokens)"
     echo "   3. Verify token values in .tokens and .env files"
@@ -157,15 +157,15 @@ else
 fi
 
 echo ""
-printf "Value: %s\n" "$"
+printf "Token Architecture v2.1 Health Score: %d%%\n" "$((WORKING_TOKENS * 100 / TOTAL_TOKENS))"
 
 if [ $WORKING_TOKENS -eq $TOTAL_TOKENS ]; then
-    echo "Target: Status: OPTIMAL - Ready for production use"
+    echo "Status: OPTIMAL - Ready for production use"
     exit 0
 elif [ $WORKING_TOKENS -gt $((TOTAL_TOKENS / 2)) ]; then
-    echo "Warning:  Status: PARTIAL - Some services may be impacted"
+    echo "Status: PARTIAL - Some services may be impacted"
     exit 1
 else
-    echo "Error: Status: CRITICAL - Multiple token issues require attention"
+    echo "Status: CRITICAL - Multiple token issues require attention"
     exit 2
 fi
