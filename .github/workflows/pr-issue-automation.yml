@@ -27,6 +27,11 @@ jobs:
             pull-requests: write
             issues: write
 
+        env:
+            # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
+            # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
+            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v5
@@ -35,34 +40,8 @@ jobs:
               run: |
                   gh --version
 
-            - name: Authenticate with GitHub
-              env:
-                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
-                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
-                  # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
-                  if [[ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]]; then
-                      echo "Using CI_ISSUE_AUTOMATION_TOKEN for authentication (primary)"
-                      gh auth login --with-token <<< "$CI_ISSUE_AUTOMATION_TOKEN"
-                  elif [[ -n "${CI_BOT_TOKEN:-}" ]]; then
-                      echo "Using CI_BOT_TOKEN for authentication (secondary)"
-                      gh auth login --with-token <<< "$CI_BOT_TOKEN"
-                  elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
-                      echo "Using GITHUB_TOKEN for authentication (fallback)"
-                      gh auth login --with-token <<< "$GITHUB_TOKEN"
-                  else
-                      echo "ERROR: No authentication token available"
-                      echo "Required: CI_ISSUE_AUTOMATION_TOKEN, CI_BOT_TOKEN, or GITHUB_TOKEN"
-                      exit 1
-                  fi
-
             - name: Create PR tracking issue
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
-                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
                   PR_TITLE: ${{ github.event.pull_request.title }}
                   PR_AUTHOR: ${{ github.event.pull_request.user.login }}
                   PR_BRANCH: ${{ github.event.pull_request.head.ref }}
@@ -84,14 +63,10 @@ jobs:
                   echo "Author extracted"
                   echo "Branch extracted"
 
-                  # Run PR issue creation script
+                  # Run PR issue creation script (uses already authenticated gh CLI)
                   bash scripts/create_pr_tracking_issue.sh "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BRANCH"
 
             - name: Link issue to PR
-              env:
-                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
-                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
@@ -102,20 +77,16 @@ jobs:
                       if [[ -n "$ISSUE_NUMBER" ]]; then
                           echo "Linking Issue to PR"
 
-                          # Simple comments with basic content using wrapper script
+                          # Simple comments with basic content using wrapper script (uses authenticated gh CLI)
                           bash scripts/ci_gh_issue_wrapper.sh pr-comment "$PR_NUMBER" "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
                           bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
                       fi
                   fi
 
             - name: Update project labels
-              env:
-                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
-                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
-                  # Add tracking labels
+                  # Add tracking labels (uses authenticated gh CLI)
                   echo "Adding tracking labels to PR"
                   gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || echo "Could not add labels"
