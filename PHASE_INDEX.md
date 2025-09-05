@@ -114,7 +114,7 @@ DevOnboarder uses a **layered phase architecture** where multiple phase systems 
 ├─────────────────────────────────────┤
 │ Operational (Setup & Maintenance)   │ ← Day-to-day operations
 └─────────────────────────────────────┘
-```bash
+```
 
 ### Non-Overlapping Scopes
 

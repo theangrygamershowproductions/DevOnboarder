@@ -100,7 +100,7 @@ DevOnboarder's sophisticated multi-layer phase architecture continues operating 
 ├─────────────────────────────────────┤
 │ Operational (Setup & Maintenance)   │ ← Token Architecture Complete
 └─────────────────────────────────────┘
-```bash
+```
 
 **Assessment**: Mature, well-coordinated, minimal maintenance required
 
