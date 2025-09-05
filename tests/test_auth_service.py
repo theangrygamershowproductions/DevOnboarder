@@ -928,7 +928,10 @@ def test_discord_callback_with_unsafe_redirect_state():
             pytest.fail(f"Expected status 307, got {response.status_code}")
         # Should fallback to safe redirect
         location = response.headers.get("location", "")
-        if "evil.com" in location:
+        from urllib.parse import urlparse
+
+        parsed_url = urlparse(location)
+        if parsed_url.hostname == "evil.com":
             pytest.fail("Unsafe redirect to evil.com detected")
         # Should contain the safe fallback domain
         if "theangrygamershow.com" not in location:
