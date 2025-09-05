@@ -158,6 +158,7 @@ repos:
             pass_filenames: false
             always_run: false
             files: ^(src/|tests/|pytest\.ini|pyproject\.toml).*$
+            stages: [pre-commit]
           - id: validate
             name: Full validation suite
             entry: bash
@@ -168,3 +169,4 @@ repos:
                 ]
             language: system
             pass_filenames: false
+            stages: [pre-commit]
