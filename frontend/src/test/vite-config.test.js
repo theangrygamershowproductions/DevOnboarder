@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 
+// Copilot re-evaluation trigger - test assertions now use correct single quotes
 describe('Vite Configuration', () => {
   it('should have a valid configuration file', () => {
     const configPath = path.resolve(process.cwd(), 'vite.config.ts');
@@ -11,7 +12,7 @@ describe('Vite Configuration', () => {
   it('should contain test environment configuration', () => {
     const configPath = path.resolve(process.cwd(), 'vite.config.ts');
     const configContent = fs.readFileSync(configPath, 'utf-8');
-    expect(configContent).toContain('environment: "jsdom"');
+    expect(configContent).toContain("environment: 'jsdom'");
   });
 
   it('should include coverage thresholds', () => {
@@ -31,6 +32,6 @@ describe('Vite Configuration', () => {
     const configPath = path.resolve(process.cwd(), 'vite.config.ts');
     const configContent = fs.readFileSync(configPath, 'utf-8');
     expect(configContent).toContain('port: 3000');
-    expect(configContent).toContain('host: "0.0.0.0"');
+    expect(configContent).toContain("host: '0.0.0.0'");
   });
 });
