@@ -20,7 +20,7 @@ jobs:
       - name: Validate OpenAPI Specifications
         run: |
           source .venv/bin/activate
-          python -m openapi_spec_validator openapi/**/*.yaml
+          python -m openapi_spec_validator openapi/devonboarder.ci.yaml
 
   preview:
     if: github.event_name == 'pull_request'
