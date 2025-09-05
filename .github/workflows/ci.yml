@@ -548,7 +548,7 @@ jobs:
                   source .venv/bin/activate
                   python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
-              if: github.event_name != 'pull_request'
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
                   # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
