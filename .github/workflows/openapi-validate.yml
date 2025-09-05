@@ -1,6 +1,7 @@
 name: openapi-validate
 permissions:
   contents: read
+  actions: write  # Required for artifact upload in preview job
 on:
   pull_request:
   push:
