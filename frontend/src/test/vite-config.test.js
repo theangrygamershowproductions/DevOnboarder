@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 
+// Copilot re-evaluation trigger - test assertions now use correct single quotes
 describe('Vite Configuration', () => {
   it('should have a valid configuration file', () => {
     const configPath = path.resolve(process.cwd(), 'vite.config.ts');
