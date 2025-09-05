@@ -90,16 +90,21 @@ describe("PublicLandingPage Component", () => {
     });
 
     it("displays service health with online status", async () => {
-        const fetchMock = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
+        const fetchMock = vi.fn().mockImplementation(async () => {
+            // Add a small delay to simulate realistic response time
+            await new Promise(resolve => setTimeout(resolve, 50));
+            return {
+                ok: true,
+                json: () => Promise.resolve({}),
+            };
         });
         vi.stubGlobal("fetch", fetchMock);
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to complete
-        await screen.findByText("ONLINE", { exact: false });
+        // Wait for the service health check to complete - expect multiple services to be online
+        const onlineElements = await screen.findAllByText("ONLINE", { exact: false });
+        expect(onlineElements).toHaveLength(4); // 4 services should show online
     });
 
     it("displays service health with error status for failed response", async () => {
@@ -111,8 +116,9 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to show error status
-        await screen.findByText("ERROR", { exact: false });
+        // Wait for the service health check to show error status - expect multiple services in error
+        const errorElements = await screen.findAllByText("ERROR", { exact: false });
+        expect(errorElements).toHaveLength(4); // 4 services should show error
     });
 
     it("displays service health with offline status for network error", async () => {
@@ -121,20 +127,26 @@ describe("PublicLandingPage Component", () => {
 
         render(<PublicLandingPage />);
 
-        // Wait for the service health check to show offline status
-        await screen.findByText("OFFLINE", { exact: false });
+        // Wait for the service health check to show offline status - expect multiple services offline
+        const offlineElements = await screen.findAllByText("OFFLINE", { exact: false });
+        expect(offlineElements).toHaveLength(4); // 4 services should show offline
     });
 
     it("shows response time when service is responsive", async () => {
-        const fetchMock = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
+        const fetchMock = vi.fn().mockImplementation(async () => {
+            // Add a small delay to simulate realistic response time
+            await new Promise(resolve => setTimeout(resolve, 50));
+            return {
+                ok: true,
+                json: () => Promise.resolve({}),
+            };
         });
         vi.stubGlobal("fetch", fetchMock);
 
         render(<PublicLandingPage />);
 
-        // Wait for response time to be displayed
-        await screen.findByText(/Response: \d+ms/, { exact: false });
+        // Wait for response time to be displayed - expect multiple services to show response time
+        const responseTimeElements = await screen.findAllByText(/Response: \d+ms/, { exact: false }, { timeout: 3000 });
+        expect(responseTimeElements).toHaveLength(4); // 4 services should show response time
     });
 });

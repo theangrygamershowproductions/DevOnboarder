@@ -21,7 +21,6 @@ on:
             - "scripts/generate_potato_report.sh"
             - "docs/enhanced-potato-policy.md"
             - ".github/workflows/potato-policy-focused.yml"
-            - ".github/workflows/potato-policy.yml"
     push:
         branches: [main, master]
     schedule:
