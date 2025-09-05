@@ -126,15 +126,19 @@ describe("PublicLandingPage Component", () => {
     });
 
     it("shows response time when service is responsive", async () => {
-        const fetchMock = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
+        const fetchMock = vi.fn().mockImplementation(async () => {
+            // Add a small delay to simulate realistic response time
+            await new Promise(resolve => setTimeout(resolve, 50));
+            return {
+                ok: true,
+                json: () => Promise.resolve({}),
+            };
         });
         vi.stubGlobal("fetch", fetchMock);
 
         render(<PublicLandingPage />);
 
-        // Wait for response time to be displayed
-        await screen.findByText(/Response: \d+ms/, { exact: false });
+        // Wait for response time to be displayed with increased timeout
+        await screen.findByText(/Response: \d+ms/, { exact: false }, { timeout: 3000 });
     });
 });

@@ -9,3 +9,17 @@ orchestration_bot:
         - pull_requests: read
     description: "Orchestrates CI cleanup and failure management"
     token: "CLEANUP_CI_FAILURE_KEY"
+
+Agent.OpenAPI:
+    permissions:
+        - contents: read
+        - actions: write
+    description: "Validates OpenAPI specifications and generates documentation previews"
+
+Agent.PR-Issue-Automation:
+    permissions:
+        - contents: read
+        - pull-requests: write
+        - issues: write
+    description: "Automatically creates tracking issues for pull requests"
+    token: "CI_ISSUE_AUTOMATION_TOKEN"
