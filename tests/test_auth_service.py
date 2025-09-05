@@ -1,9 +1,11 @@
 import importlib
 import os
+import secrets
 
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
-os.environ.setdefault("JWT_SECRET_KEY", "devsecret")  # noqa: S105
+# Generate random test secret to avoid hardcoded credentials
+os.environ.setdefault("JWT_SECRET_KEY", secrets.token_hex(32))
 
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
