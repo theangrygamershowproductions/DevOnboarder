@@ -1,6 +1,7 @@
 ---
 title: "Token Architecture v2.1 — Complete Backlog Clearance"
 description: "41 successful commits delivering 100% compliance, hygiene, and terminal-safe implementation."
+milestone_id: "2025-09-04-token-architecture-v2.1-clearance"
 author: "TAGS Engineering"
 created_at: "2025-09-04"
 updated_at: "2025-09-04"
@@ -29,12 +30,22 @@ codex_runtime: false
 
 ### Evidence Anchors
 
+**Code & Scripts:**
+
 - `scripts/auto_fix_terminal_violations.sh`
 - `scripts/create_pr.sh`
 - `scripts/fix_terminal_output_violations.sh`
 - `scripts/quick_aar_test.sh`
 - `examples/service_with_token_validation.py`
 - `templates/pr/docs.md`, `ci_health_report.json`
+
+**GitHub History:**
+
+- [PR #1244](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1244)
+- [PR #1221](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1221)
+
+**CI Evidence:**
+
 - CI logs: lint, test, compliance
 
 ### Impact
@@ -51,11 +62,15 @@ codex_runtime: false
 
 ---
 
-## 🏆 Zero Accountability Loss Framework Deployment (PR #1221 / Issue #1222)
+## 🏆 Zero Accountability Loss Framework Deployment
+
+**Milestone ID**: `2025-09-03-zero-accountability-loss-framework`
 
 ### Infrastructure Graduation Summary
 
-**Infrastructure Graduation Moment**: Zero Accountability Loss Framework deployed and self-validated. Monitoring system proved itself immediately (Issue #1222). First activation confirmed quality gates are now impossible to bypass.
+**Infrastructure Graduation Moment**: Zero Accountability Loss Framework deployed and self-validated. Monitoring system proved itself immediately ([Issue #1222](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1222)). First activation confirmed quality gates are now impossible to bypass.
+
+**GitHub History**: [PR #1221](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1221) / [Issue #1222](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1222)
 
 ### 🔎 Root Cause & Discovery
 
