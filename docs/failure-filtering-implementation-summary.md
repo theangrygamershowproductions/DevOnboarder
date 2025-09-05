@@ -31,7 +31,7 @@ run_id=$(gh run list -w CI --json databaseId,headSha,conclusion -L 10 --conclusi
     --jq 'map(select(.headSha=="'"$GITHUB_SHA"'" and .databaseId != '"$GITHUB_RUN_ID"')) | .[0].databaseId' || true)
 ```
 
-#### Enhanced `.codex/scripts/ci-monitor.py`
+#### Enhanced `scripts/ci-monitor.py`
 
 - **Added**: `get_failed_workflow_runs()` method with failure filtering
 - **Enhancement**: Reports include recent failed workflow context
@@ -121,7 +121,7 @@ echo "$failed_runs" | jq 'group_by(.workflowName) | map({workflow: .[0].workflow
 
 ```bash
 # Use enhanced CI monitor with failure context
-python .codex/scripts/ci-monitor.py 970
+python scripts/ci-monitor.py 970
 
 # Analyze only failed runs
 bash scripts/analyze_failed_ci_runs.sh

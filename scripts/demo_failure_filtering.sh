@@ -102,7 +102,7 @@ echo "   ✅ More efficient troubleshooting"
 echo ""
 
 echo "🔗 Available Tools in DevOnboarder:"
-echo "   📱 python .codex/scripts/ci-monitor.py <PR>"
+echo "   📱 python scripts/ci-monitor.py <PR>"
 echo "   🔍 bash scripts/analyze_failed_ci_runs.sh"
 echo "   📊 bash scripts/monitor_ci_health.sh"
 echo ""
