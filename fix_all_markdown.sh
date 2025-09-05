@@ -43,9 +43,7 @@ echo "🔍 Finding all markdown files..."
 
 # Find all .md files excluding node_modules, .venv, etc.
 find . -name "*.md" -type f \
-    -not -path "./node_modules/*" \
-    -not -path "./frontend/node_modules/*" \
-    -not -path "./bot/node_modules/*" \
+    -not -path "*/node_modules/*" \
     -not -path "./htmlcov/*" \
     -not -path "./.venv/*" \
     -not -path "./venv/*" \

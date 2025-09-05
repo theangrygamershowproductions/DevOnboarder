@@ -49,6 +49,7 @@ config/secrets.json
 coverage/
 deployment-keys.*
 discord-tokens.*
+.tokens*
 dist/
 github-tokens.*
 id_rsa*

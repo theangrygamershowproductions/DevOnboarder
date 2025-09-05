@@ -3,6 +3,30 @@
 
 set -euo pipefail
 
+# Load tokens using Token Architecture v2.1 with developer guidance
+if [ -f "scripts/enhanced_token_loader.sh" ]; then
+    # shellcheck source=scripts/enhanced_token_loader.sh disable=SC1091
+    source scripts/enhanced_token_loader.sh
+elif [ -f "scripts/load_token_environment.sh" ]; then
+    # shellcheck source=scripts/load_token_environment.sh disable=SC1091
+    source scripts/load_token_environment.sh
+fi
+
+# Legacy fallback for development
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
+# Check for required tokens with enhanced guidance
+if command -v require_tokens >/dev/null 2>&1; then
+    if ! require_tokens "AAR_TOKEN"; then
+        echo "❌ Cannot proceed without required tokens for CI monitoring"
+        echo "💡 CI health monitoring requires GitHub API access"
+        exit 1
+    fi
+fi
+
 echo "📊 CI Infrastructure Health Monitor"
 echo "=================================="
 echo "Post-Repair Monitoring - $(date)"
@@ -11,12 +35,12 @@ echo ""
 # Monitor recent CI performance
 echo "🔄 CI Performance Analysis:"
 
-# Get recent workflow runs with error handling
-if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
+# Get recent workflow runs with error handling using proper token
+if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
     echo "✅ Retrieved recent CI run data"
 
     # Also get failed runs specifically for detailed analysis
-    if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
+    if failed_runs_detailed=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
         echo "✅ Retrieved detailed failed run data"
     fi
 

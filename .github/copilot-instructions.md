@@ -311,6 +311,11 @@ make aar-setup                    # Set up CI failure analysis
 ./scripts/qc_pre_push.sh         # Validates 8 quality metrics
 source .venv/bin/activate        # Always activate venv first
 
+# Documentation quality control (NEW)
+./scripts/qc_docs.sh             # Check all documentation formatting
+./scripts/qc_docs.sh --fix       # Fix markdown formatting issues
+./scripts/qc_docs.sh --file docs/README.md --fix  # Fix specific file
+
 # Service APIs (individual service testing)
 devonboarder-api         # Start main API (port 8001)
 devonboarder-auth        # Start auth service (port 8002)
@@ -456,40 +461,6 @@ echo "Deployment complete"
 ### ⚠️ MANDATORY: Markdown Standards Compliance
 
 **ALL markdown content MUST comply with project linting rules before creation**:
-
-- **MD022**: Headings surrounded by blank lines (before and after)
-- **MD032**: Lists surrounded by blank lines (before and after)
-- **MD031**: Fenced code blocks surrounded by blank lines (before and after)
-- **MD007**: Proper list indentation (4 spaces for nested items)
-- **MD009**: No trailing spaces (except 2 for line breaks)
-
-**Pre-Creation Requirements**:
-
-1. Review existing compliant markdown in the repository
-2. Follow established spacing and formatting patterns
-3. Never create content that will fail markdownlint validation
-4. Treat linting rules as requirements, not post-creation fixes
-
-**Example Compliant Format**:
-
-```markdown
-## Section Title
-
-Paragraph text with proper spacing.
-
-- List item with blank line above
-- Second list item
-    - Nested item with 4-space indentation
-    - Another nested item
-
-Another paragraph after blank line.
-
-### Subsection
-
-More content following the same pattern.
-```
-
-**Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
 
 - **MD022**: Headings surrounded by blank lines (before and after)
 - **MD032**: Lists surrounded by blank lines (before and after)
@@ -1425,7 +1396,140 @@ git status --short  # Should show only intended changes
 - Successful runs automatically close resolved issues
 - Comprehensive logging preserves diagnostic information
 
+## DevOnboarder Key Systems & Utilities
+
+### Phase Framework Navigation
+
+DevOnboarder uses a sophisticated multi-layer phase architecture. When students ask about phases:
+
+**Essential References**:
+
+- `PHASE_INDEX.md` - Comprehensive navigation guide for 7+ active phase systems
+- `PHASE_ISSUE_INDEX.md` - Single pane of glass for phase-to-issue traceability
+- Phase systems operate independently with distinct scopes (Terminal Output, MVP Timeline, Token Architecture, Infrastructure, etc.)
+
+**Key Insight**: Multiple "Phase 2" systems exist simultaneously serving different strategic purposes - this is intentional, not duplication.
+
+### Token Architecture v2.1 System
+
+**15 Enhanced Scripts** across 3 implementation phases with self-contained token loading:
+
+**Phase 1 (Critical)**: 5 scripts including `setup_discord_bot.sh`
+**Phase 2 (Automation)**: 7 scripts including `monitor_ci_health.sh`, `ci_gh_issue_wrapper.sh`
+**Phase 3 (Developer)**: 3 scripts including `validate_token_architecture.sh`
+
+**Token Hierarchy**: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+
+**Key Scripts**:
+
+- `scripts/enhanced_token_loader.sh` - Primary token loading system
+- `scripts/load_token_environment.sh` - Legacy fallback loader
+- `scripts/complete_system_validation.sh` - Validates entire token architecture
+
+### Essential Automation Scripts (100+)
+
+**Quality Control**:
+
+- `scripts/qc_pre_push.sh` - 95% quality validation (8 metrics: YAML linting, Python linting, formatting, type checking, test coverage, documentation quality, commit messages, security scanning)
+- `scripts/validation_summary.sh` - Terminal output violation summary
+- `scripts/validate_terminal_output.sh` - Terminal compliance validation
+
+**Environment Management**:
+
+- `scripts/smart_env_sync.sh` - Centralized environment variable synchronization
+- `scripts/env_security_audit.sh` - Environment variable security validation
+- `scripts/setup-env.sh` - Development environment initialization
+
+**CI/CD & Issue Management**:
+
+- `scripts/manage_ci_failure_issues.sh` - Automated CI failure issue management
+- `scripts/close_resolved_issues.sh` - Automated issue cleanup
+- `scripts/generate_aar.sh` - After Action Report generation for CI failures
+
+**Security & Compliance**:
+
+- `scripts/check_potato_ignore.sh` - Enhanced Potato Policy enforcement
+- `scripts/enforce_output_location.sh` - Root Artifact Guard validation
+- `scripts/security_audit.sh` - Comprehensive security scanning
+
+**Testing & Validation**:
+
+- `scripts/run_tests.sh` - Comprehensive test runner with dependency hints
+- `scripts/run_tests_with_logging.sh` - Enhanced test runner with persistent logging
+- `scripts/manage_logs.sh` - Advanced log management system
+
+### AAR System (After Action Reports)
+
+**Purpose**: Automated CI failure analysis and resolution guidance
+
+**Key Commands**:
+
+```bash
+make aar-setup           # Complete AAR system setup
+make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
+```
+
+**Features**: Token management, environment loading, compliance validation, GitHub integration, offline mode
+
+### Quality Control Framework
+
+**qc_pre_push.sh validates 8 critical metrics**:
+
+1. **YAML Linting** - Configuration file validation
+2. **Python Linting** - Code quality with Ruff
+3. **Python Formatting** - Black code formatting
+4. **Type Checking** - MyPy static analysis
+5. **Test Coverage** - Minimum 95% coverage requirement
+6. **Documentation Quality** - Vale documentation linting
+7. **Commit Messages** - Conventional commit format
+8. **Security Scanning** - Bandit security analysis
+
+**95% Quality Threshold**: ALL changes must pass comprehensive QC validation before merging.
+
+### Multi-Environment Architecture
+
+**Services & Ports**:
+
+- DevOnboarder Server: 8000
+- XP API: 8001
+- Auth Server: 8002
+- Dashboard Service: 8003
+- Discord Integration: 8081
+- PostgreSQL: 5432
+
+**Environment Detection**: Guild ID-based routing for Discord bot (`TAGS: DevOnboarder` vs `TAGS: C2C`)
+
+### Common Student Guidance Patterns
+
+**For setup issues**: Direct to virtual environment activation and `pip install -e .[test]`
+**For commit issues**: Use `scripts/safe_commit.sh "message"` instead of direct `git commit`
+**For quality issues**: Run `./scripts/qc_pre_push.sh` to validate before pushing
+**For token issues**: Check Token Architecture documentation and use enhanced loaders
+**For phase confusion**: Direct to `PHASE_INDEX.md` for navigation guidance
+
 ## Agent-Specific Guidelines
+
+### For Documentation Creation
+
+**CRITICAL**: Check for parallel documentation improvement efforts before creating new documentation:
+
+1. **Survey existing improvement work**:
+   - Look for recent markdown fixing scripts (`scripts/*markdown*.py`, `fix_*markdown*.sh`)
+   - Check changelog entries for comprehensive documentation updates
+   - Review for repository-wide documentation cleanup initiatives
+
+2. **Coordinate with existing workflows**:
+   - Apply comprehensive improvement scripts to new docs immediately after creation
+   - Use existing quality standards proactively during content creation
+   - Integrate with broader cleanup timelines when active
+
+3. **Quality standards approach**:
+   - Create markdown-compliant content from start (MD022, MD032, MD031, MD007, MD009)
+   - Use existing improvement tools on new content to maintain consistency
+   - Avoid creating docs that immediately need comprehensive fixes
+
+**Reference**: `docs/lessons/documentation-coordination-strategy.md` - Coordination strategy and lessons learned
 
 ### For Code Generation
 
@@ -1521,33 +1625,40 @@ bash scripts/smart_env_sync.sh --sync-all
 echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 ```
 
-### ⚠️ NEW: Shellcheck SC1091 Standard Pattern
+### ⚠️ UPDATED: Shellcheck External Dependencies - Hybrid Approach
 
-**COMMON SCENARIO**: Shellcheck SC1091 warnings for `source .env` or similar operations.
+**CRITICAL UNDERSTANDING**: DevOnboarder uses a hybrid approach for external dependency management.
 
-**STANDARD RESOLUTION PATTERNS**:
+**GLOBAL CONFIGURATION**: `.shellcheckrc` handles common external dependencies:
 
-```bash
-# ✅ CORRECT - For .env files
-if [ -f .env ]; then
-    # shellcheck source=.env disable=SC1091
-    source .env
-fi
-
-# ✅ CORRECT - For runtime source operations
-# shellcheck disable=SC1091 # Runtime source operation
-source .venv/bin/activate
-
-# ✅ CORRECT - For project-specific patterns
-# shellcheck source=scripts/project_root_wrapper.sh disable=SC1091
-source scripts/project_root_wrapper.sh
-```
+- `.venv/bin/activate` - Virtual environment activation
+- `scripts/load_token_environment.sh` - Project token loaders
+- `scripts/enhanced_token_loader.sh` - Token Architecture v2.1 loaders
 
 **AGENT REQUIREMENTS**:
 
-- **ALWAYS** add appropriate shellcheck disable directives for legitimate source operations
-- **NEVER** suggest removing source operations to avoid warnings
-- **USE** the established patterns above for consistency
+- **NO LONGER NEEDED**: `# shellcheck disable=SC1091` for standard DevOnboarder patterns
+- **STILL REQUIRED**: Explicit comments for unusual external dependencies only
+- **REFERENCE**: See `docs/SHELLCHECK_EXTERNAL_DEPENDENCIES.md` for full guidelines
+
+**STANDARD PATTERNS** (no disable comments needed):
+
+```bash
+# ✅ CORRECT - Covered by global .shellcheckrc
+source .venv/bin/activate
+source scripts/load_token_environment.sh
+source scripts/enhanced_token_loader.sh
+
+# ✅ CORRECT - Only for unusual external dependencies
+# shellcheck source=custom-external-config.sh disable=SC1091
+# source custom-external-config.sh
+```
+
+**BENEFITS**:
+
+- Eliminates 60+ repetitive disable comments across Token Architecture scripts
+- Maintains shellcheck safety through targeted configuration
+- Clear project standards documented in `docs/SHELLCHECK_EXTERNAL_DEPENDENCIES.md`
 
 ### ⚠️ NEW: Markdown Content Creation Standards
 

@@ -1,4 +1,4 @@
-.PHONY: deps gen-secrets up up-tunnel test openapi aar-setup aar-check aar-generate aar-validate aar-env-template down down-tunnel clean
+.PHONY: deps gen-secrets up up-tunnel test openapi aar-setup aar-check aar-generate aar-validate aar-env-template audit-tokens audit-status audit-clean down down-tunnel clean
 
 deps:
 	docker compose -f docker-compose.dev.yaml build
@@ -98,5 +98,19 @@ aar-env-template:
 			echo "💡 Review existing tokens or manually edit .env"; \
 		fi; \
 	fi
-	@echo "📋 Remember: Uncomment and set your actual tokens"
-	@echo "🔒 .env is gitignored for security"
+	@echo "Remember: Uncomment and set your actual tokens"
+	@echo "Security: .env is gitignored for security"
+
+# Token Audit System Commands
+audit-tokens:
+	@echo "Generating comprehensive token audit report..."
+	@bash scripts/generate_token_audit_report.sh
+	@echo "Token audit complete - check reports/ directory for results"
+
+audit-status:
+	@echo "Checking token audit system status..."
+	@bash scripts/manage_token_audits.sh status
+
+audit-clean:
+	@echo "Cleaning old audit reports (older than 365 days)..."
+	@bash scripts/manage_token_audits.sh clean
