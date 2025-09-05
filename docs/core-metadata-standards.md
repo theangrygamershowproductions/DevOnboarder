@@ -336,13 +336,13 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 ```bash
 # Check current integration status
 source .venv/bin/activate
-python .codex/scripts/ci-monitor.py --health-check
+python scripts/ci-monitor.py --health-check
 
 # Validate all agent files
 python scripts/validate_agents.py
 
 # Generate integration status report
-python .codex/scripts/ci-monitor.py --integration-status
+python scripts/ci-monitor.py --integration-status
 ```
 
 ## Benefits
