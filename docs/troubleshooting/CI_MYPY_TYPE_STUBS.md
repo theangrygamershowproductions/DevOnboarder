@@ -53,7 +53,7 @@ pip list | grep -i types
 
 # Common missing stubs:
 # - types-requests
-# - types-PyYAML  
+# - types-PyYAML
 # - types-setuptools
 # - types-psutil
 ```
@@ -68,7 +68,7 @@ test = [
     # Existing dependencies...
     "mypy",
     "types-requests",     # For requests library
-    "types-PyYAML",       # For yaml library  
+    "types-PyYAML",       # For yaml library
     "types-setuptools",   # For setuptools
     # Add other types-* packages as needed
 ]
@@ -169,7 +169,7 @@ This issue integrates with DevOnboarder's automated diagnostic system:
 
 ---
 
-**Created**: September 2, 2025  
-**Last Updated**: September 2, 2025  
-**Applies To**: DevOnboarder v0.1.0+  
+**Created**: September 2, 2025
+**Last Updated**: September 2, 2025
+**Applies To**: DevOnboarder v0.1.0+
 **Issue Type**: CI Environment Mismatch

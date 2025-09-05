@@ -3,7 +3,7 @@ import os
 
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
-os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
+os.environ.setdefault("JWT_SECRET_KEY", "devsecret")  # noqa: S105
 
 from fastapi.testclient import TestClient
 from devonboarder import auth_service
@@ -833,3 +833,182 @@ def test_auth_service_main_function_execution():
         # Check host and port parameters
         assert call_args[1]["host"] == "0.0.0.0"
         assert call_args[1]["port"] == 8002
+
+
+def test_is_safe_redirect_url_edge_cases():
+    """Test edge cases for URL validation function."""
+    from devonboarder.auth_service import is_safe_redirect_url
+
+    # Test empty URL (line 52)
+    assert not is_safe_redirect_url("")
+    assert not is_safe_redirect_url("   ")  # Whitespace only
+
+    # Test protocol-relative URLs (line 59)
+    assert not is_safe_redirect_url("//evil.com/malicious")
+
+    # Test Unicode/percent-encoded protocol-relative URLs (lines 65-67)
+    assert not is_safe_redirect_url("%2F%2Fevil.com")  # //evil.com encoded
+
+    # Test exception in unquote (lines 71-72) - handled by try/except
+    # This would be hard to trigger as unquote is quite robust
+
+    # Test exception in urlparse (lines 77-79)
+    # urlparse is very robust, but we can test this path is covered
+    # The null byte URL is parsed as a relative path (no scheme/netloc)
+    result_null_byte = is_safe_redirect_url("ht\x00tp://example.com")
+    # Since it's treated as relative path, it returns True
+    assert result_null_byte
+
+    # Test path starting with "//" for relative URLs (line 98)
+    assert not is_safe_redirect_url("//path/that/looks/relative")
+
+    # Test HTTP for non-localhost (line 104)
+    # HTTP not allowed for external domains
+    assert not is_safe_redirect_url("http://example.com")
+
+    # Test HTTP for localhost variations (line 111) - should be allowed
+    assert is_safe_redirect_url("http://localhost:3000")
+    assert is_safe_redirect_url("http://127.0.0.1:8080")
+
+
+def test_missing_discord_client_id_in_oauth():
+    """Test Discord OAuth when client ID is missing (line 305)."""
+    client = TestClient(auth_service.create_app())
+
+    # Temporarily unset DISCORD_CLIENT_ID
+    original_client_id = os.environ.get("DISCORD_CLIENT_ID")
+    if "DISCORD_CLIENT_ID" in os.environ:
+        del os.environ["DISCORD_CLIENT_ID"]
+
+    try:
+        # This should still redirect to Discord (our app doesn't validate client_id)
+        response = client.get("/login/discord", follow_redirects=False)
+        # Our app redirects to Discord, Discord then returns 404 for None client_id
+        assert response.status_code == 307  # Our app's redirect
+
+        # Check that redirect URL contains client_id=None
+        assert "client_id=None" in response.headers["location"]
+    finally:
+        # Restore original environment
+        if original_client_id is not None:
+            os.environ["DISCORD_CLIENT_ID"] = original_client_id
+
+
+def test_discord_callback_with_unsafe_redirect_state():
+    """Test Discord callback with unsafe state parameter (lines 398-417)."""
+    client = TestClient(auth_service.create_app())
+
+    # Mock Discord API responses using StubResponse
+    with pytest.MonkeyPatch().context() as m:
+
+        def mock_post(*args, **kwargs):
+            # Mock token exchange response
+            return StubResponse(200, {"access_token": "test_token"})
+
+        def mock_get(*args, **kwargs):
+            if "users/@me" in str(args[0]):
+                # Mock user info response
+                return StubResponse(200, {"id": "123", "username": "testuser"})
+            else:
+                # Mock guilds response
+                return StubResponse(200, [{"id": "guild1", "name": "Test Guild"}])
+
+        m.setattr(httpx, "post", mock_post)
+        m.setattr(httpx, "get", mock_get)
+
+        # Test with unsafe state parameter that should be blocked
+        callback_url = (
+            "/login/discord/callback?code=test_code" "&state=http://evil.com/malicious"
+        )
+        response = client.get(callback_url, follow_redirects=False)
+
+        # Should redirect to default location, not the malicious URL
+        assert_status = response.status_code == 307
+        if not assert_status:
+            pytest.fail(f"Expected status 307, got {response.status_code}")
+        # Should fallback to safe redirect
+        location = response.headers.get("location", "")
+        if "evil.com" in location:
+            pytest.fail("Unsafe redirect to evil.com detected")
+        # Should contain the safe fallback domain
+        if "theangrygamershow.com" not in location:
+            pytest.fail(f"Expected safe domain in redirect, got: {location}")
+
+
+def test_final_redirect_security_validation():
+    """Test final security validation before redirect (lines 431-432)."""
+    client = TestClient(auth_service.create_app())
+
+    with pytest.MonkeyPatch().context() as m:
+
+        def mock_post(*args, **kwargs):
+            return StubResponse(200, {"access_token": "test_token"})
+
+        def mock_get(*args, **kwargs):
+            if "users/@me" in str(args[0]):
+                return StubResponse(200, {"id": "123", "username": "testuser"})
+            else:
+                return StubResponse(200, [{"id": "guild1", "name": "Test Guild"}])
+
+        m.setattr(httpx, "post", mock_post)
+        m.setattr(httpx, "get", mock_get)
+
+        # This will trigger the final security validation
+        response = client.get(
+            "/login/discord/callback?code=test_code", follow_redirects=False
+        )
+        status_ok = response.status_code == 307
+        if not status_ok:
+            pytest.fail(f"Expected 307, got {response.status_code}")
+
+
+def test_app_creation_with_init_db_on_startup():
+    """Test app creation with INIT_DB_ON_STARTUP flag (line 505)."""
+    # Set the environment variable to trigger database initialization
+    os.environ["INIT_DB_ON_STARTUP"] = "true"
+
+    try:
+        # This should call init_db() during app creation
+        app = auth_service.create_app()
+        if app is None:
+            pytest.fail("App creation returned None")
+        if not isinstance(app, auth_service.FastAPI):
+            pytest.fail("App is not FastAPI instance")
+    finally:
+        # Clean up environment variable
+        if "INIT_DB_ON_STARTUP" in os.environ:
+            del os.environ["INIT_DB_ON_STARTUP"]
+
+
+def test_jwt_secret_key_validation_in_production():
+    """Test JWT secret key validation in production environment (line 124)."""
+    # Save original environment
+    original_secret = os.environ.get("JWT_SECRET_KEY")
+    original_env = os.environ.get("APP_ENV")
+
+    try:
+        # Test production environment with weak/default secret
+        os.environ["JWT_SECRET_KEY"] = "secret"  # Default weak secret
+        os.environ["APP_ENV"] = "production"
+
+        # This should raise RuntimeError in production with default secret
+        error_pattern = "JWT_SECRET_KEY must be set to a non-default value"
+        with pytest.raises(RuntimeError, match=error_pattern):
+            importlib.reload(auth_service)
+
+    finally:
+        # Restore original environment
+        if original_secret is not None:
+            os.environ["JWT_SECRET_KEY"] = original_secret
+        else:
+            os.environ.pop("JWT_SECRET_KEY", None)
+        if original_env is not None:
+            os.environ["APP_ENV"] = original_env
+        else:
+            os.environ.pop("APP_ENV", None)
+
+        # Ensure we're back in development mode with proper secret
+        dev_key = "development_jwt_secret_for_testing"  # noqa: S105
+        os.environ["JWT_SECRET_KEY"] = dev_key
+        os.environ["APP_ENV"] = "development"
+        importlib.reload(auth_service)

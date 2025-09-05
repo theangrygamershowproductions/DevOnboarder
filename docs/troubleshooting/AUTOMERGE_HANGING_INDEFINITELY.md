@@ -1,9 +1,9 @@
 # Automerge Hanging Indefinitely - Critical Infrastructure Troubleshooting
 
-**Symptom Category:** CI/CD Infrastructure  
-**Severity:** CRITICAL - Blocks all PR merges repository-wide  
-**First Documented:** 2025-09-02 (PR #1212)  
-**Resolution Time:** ~2 hours  
+**Symptom Category:** CI/CD Infrastructure
+**Severity:** CRITICAL - Blocks all PR merges repository-wide
+**First Documented:** 2025-09-02 (PR #1212)
+**Resolution Time:** ~2 hours
 
 ## 🚨 Problem Symptoms
 
@@ -53,7 +53,7 @@ gh api repos/OWNER/REPO --jq '.default_branch'
 
 # Actual check runs provide (CORRECT):
 "CodeQL"
-"validate-docs"  
+"validate-docs"
 "enhanced-potato-policy"
 ```
 
@@ -122,7 +122,7 @@ gh api repos/OWNER/REPO/commits/$(git rev-parse HEAD)/check-runs \
 echo '{
   "contexts": [
     "CodeQL",
-    "enhanced-potato-policy", 
+    "enhanced-potato-policy",
     "Root Artifact Guard",
     "Enforce Terminal Output Policy",
     "validate-docs",
@@ -175,8 +175,8 @@ gh pr view ISSUE_NUMBER --json mergeStateStatus,mergeable
    ```bash
    # Default branch check
    gh api repos/OWNER/REPO --jq '.default_branch'
-   
-   # Protection rules check  
+
+   # Protection rules check
    gh api repos/OWNER/REPO/branches/main/protection --jq '.required_status_checks.contexts[]'
    ```
 
@@ -216,7 +216,7 @@ fi
 # Repository health check
 gh api repos/$(gh repo view --json owner,name --jq -r '"\(.owner.login)/\(.name)"') --jq '{default_branch, allow_auto_merge}'
 
-# PR merge eligibility check  
+# PR merge eligibility check
 gh pr view --json mergeStateStatus,mergeable,autoMergeRequest,statusCheckRollup
 
 # Status check alignment verification
@@ -234,9 +234,9 @@ gh pr merge ISSUE_NUMBER --auto --merge
 
 ## 🎯 Case Study: PR #1212 Resolution
 
-**Timeline:** 2025-09-02, ~21:30-21:45 UTC  
-**Duration:** ~15 minutes active troubleshooting  
-**Impact:** Repository-wide automerge restoration  
+**Timeline:** 2025-09-02, ~21:30-21:45 UTC
+**Duration:** ~15 minutes active troubleshooting
+**Impact:** Repository-wide automerge restoration
 
 **Initial State:**
 
@@ -247,7 +247,7 @@ gh pr merge ISSUE_NUMBER --auto --merge
 **Resolution Applied:**
 
 - Default branch: `main` ✅
-- Required checks: `CodeQL` ✅  
+- Required checks: `CodeQL` ✅
 - PR state: `UNKNOWN` → recalculating ✅
 
 **Outcome:**
@@ -264,7 +264,7 @@ gh pr merge ISSUE_NUMBER --auto --merge
 
 ---
 
-**Last Updated:** 2025-09-02  
-**Next Review:** 2025-12-02  
-**Maintainer:** Infrastructure Team  
+**Last Updated:** 2025-09-02
+**Next Review:** 2025-12-02
+**Maintainer:** Infrastructure Team
 **Validation:** Tested on PR #1212 resolution

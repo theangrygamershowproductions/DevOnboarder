@@ -41,7 +41,7 @@ EOF
 update_report() {
     local key="$1"
     local value="$2"
-    
+
     # Use Python to safely update JSON
     python3 -c "
 import json
@@ -69,7 +69,7 @@ add_misalignment() {
     local local_value="$3"
     local expected_value="$4"
     local severity="${5:-medium}"
-    
+
     python3 -c "
 import json
 with open('$REPORT_FILE', 'r') as f:
@@ -94,7 +94,7 @@ with open('$REPORT_FILE', 'w') as f:
 # Detect environment
 detect_environment() {
     log "Detecting execution environment..."
-    
+
     if [[ "${CI:-}" == "true" ]] || [[ -n "${GITHUB_ACTIONS:-}" ]]; then
         update_report "environment.detected" '"ci"'
         update_report "environment.is_ci" 'True'
@@ -104,37 +104,37 @@ detect_environment() {
         update_report "environment.is_local" 'True'
         log "Environment: Local development"
     fi
-    
+
     update_report "timestamp" "\"$(date -Iseconds)\""
 }
 
 # Collect system information
 collect_system_info() {
     log "Collecting system information..."
-    
+
     # Basic system info
     local os_info
     os_info=$(uname -a 2>/dev/null || echo "unknown")
     update_report "system_info.os" "\"$os_info\""
-    
+
     # Python version
     local python_version
     if command -v python >/dev/null 2>&1; then
         python_version=$(python --version 2>&1 || echo "unknown")
         update_report "system_info.python_version" "\"$python_version\""
     fi
-    
+
     # Node version
     local node_version
     if command -v node >/dev/null 2>&1; then
         node_version=$(node --version 2>/dev/null || echo "unknown")
         update_report "system_info.node_version" "\"$node_version\""
     fi
-    
+
     # Virtual environment status
     local venv_status="${VIRTUAL_ENV:-none}"
     update_report "system_info.virtual_env" "\"$venv_status\""
-    
+
     # Available memory (Linux/macOS)
     local memory_info
     if command -v free >/dev/null 2>&1; then
@@ -145,7 +145,7 @@ collect_system_info() {
         memory_info="unknown"
     fi
     update_report "system_info.memory" "\"$memory_info\""
-    
+
     # Disk space
     local disk_space
     disk_space=$(df -h . | tail -1 | awk '{print $4}' || echo "unknown")
@@ -155,19 +155,19 @@ collect_system_info() {
 # Check tool versions against .tool-versions
 check_tool_versions() {
     log "Checking tool versions against .tool-versions..."
-    
+
     if [[ ! -f ".tool-versions" ]]; then
         add_misalignment "tools" "Missing .tool-versions file" "none" "present" "high"
         return
     fi
-    
+
     while IFS= read -r line; do
         [[ -z "$line" || "$line" =~ ^# ]] && continue
-        
+
         local tool version
         tool=$(echo "$line" | awk '{print $1}')
         version=$(echo "$line" | awk '{print $2}')
-        
+
         case "$tool" in
             python)
                 if command -v python >/dev/null 2>&1; then
@@ -194,34 +194,34 @@ check_tool_versions() {
 # Check virtual environment alignment
 check_venv_alignment() {
     log "Checking virtual environment alignment..."
-    
+
     if [[ -z "${VIRTUAL_ENV:-}" ]]; then
         add_misalignment "venv" "Virtual environment not activated" "none" ".venv activated" "high"
         return
     fi
-    
+
     # Check if we're in the project's venv
     local expected_venv="${PROJECT_ROOT}/.venv"
     if [[ "$VIRTUAL_ENV" != "$expected_venv" ]]; then
         add_misalignment "venv_path" "Wrong virtual environment" "$VIRTUAL_ENV" "$expected_venv" "medium"
     fi
-    
+
     # Check if required packages are installed
     local missing_packages=()
-    
+
     # Check for key DevOnboarder dependencies
     if ! python -c "import fastapi" 2>/dev/null; then
         missing_packages+=("fastapi")
     fi
-    
+
     if ! python -c "import pytest" 2>/dev/null; then
         missing_packages+=("pytest")
     fi
-    
+
     if ! python -c "import ruff" 2>/dev/null; then
         missing_packages+=("ruff")
     fi
-    
+
     if [[ ${#missing_packages[@]} -gt 0 ]]; then
         local missing_str
         missing_str=$(IFS=,; echo "${missing_packages[*]}")
@@ -232,19 +232,19 @@ check_venv_alignment() {
 # Run quality control checks and measure timing
 run_qc_checks() {
     log "Running quality control checks with timing..."
-    
+
     if [[ ! -x "./scripts/qc_pre_push.sh" ]]; then
         add_misalignment "qc_script" "QC script not executable" "missing/non-executable" "executable" "high"
         return
     fi
-    
+
     # Time the QC execution
     local start_time end_time duration
     start_time=$(date +%s.%N)
-    
+
     local qc_exit_code=0
     local qc_output
-    
+
     # Run QC with timeout to detect hangs
     if qc_output=$(timeout 300 ./scripts/qc_pre_push.sh 2>&1); then
         log "QC checks passed"
@@ -254,7 +254,7 @@ run_qc_checks() {
         log "QC checks failed with exit code: $qc_exit_code"
         update_report "quality_checks.status" '"failed"'
         update_report "quality_checks.exit_code" "$qc_exit_code"
-        
+
         # Check if it was a timeout
         if [[ $qc_exit_code -eq 124 ]]; then
             add_misalignment "qc_timeout" "QC script timed out (>300s)" "timeout" "completes quickly" "high"
@@ -262,20 +262,20 @@ run_qc_checks() {
             add_misalignment "qc_failure" "QC script failed" "exit_code_$qc_exit_code" "exit_code_0" "high"
         fi
     fi
-    
+
     end_time=$(date +%s.%N)
     duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "unknown")
-    
+
     update_report "quality_checks.duration_seconds" "$duration"
     log "QC execution took: ${duration}s"
-    
+
     # Detect unusual timing (CI should be reasonably fast)
     if command -v bc >/dev/null 2>&1 && [[ "$duration" != "unknown" ]]; then
         if (( $(echo "$duration > 120" | bc -l) )); then
             add_misalignment "qc_performance" "QC script running slowly" "${duration}s" "<120s" "medium"
         fi
     fi
-    
+
     # Store QC output for analysis
     echo "$qc_output" > "${LOG_DIR}/qc_output_${TIMESTAMP}.log"
 }
@@ -285,9 +285,9 @@ check_ci_specific_issues() {
     if [[ "${CI:-}" != "true" ]]; then
         return  # Skip if not in CI
     fi
-    
+
     log "Checking CI-specific issues..."
-    
+
     # Check GitHub Actions specific environment variables
     local required_ci_vars=("GITHUB_WORKSPACE" "GITHUB_REPOSITORY" "RUNNER_OS")
     for var in "${required_ci_vars[@]}"; do
@@ -295,13 +295,13 @@ check_ci_specific_issues() {
             add_misalignment "ci_env_var" "Missing CI environment variable: $var" "unset" "set" "medium"
         fi
     done
-    
+
     # Check runner capacity
     if [[ -n "${RUNNER_OS:-}" ]]; then
         local runner_info="${RUNNER_OS}"
         update_report "system_info.runner_os" "\"$runner_info\""
     fi
-    
+
     # Check if artifacts directory exists and is writable
     local artifacts_dir="logs"
     if [[ ! -d "$artifacts_dir" ]]; then
@@ -314,7 +314,7 @@ check_ci_specific_issues() {
 # Generate recommendations
 generate_recommendations() {
     log "Generating recommendations..."
-    
+
     local misalignment_count
     misalignment_count=$(python3 -c "
 import json
@@ -322,7 +322,7 @@ with open('$REPORT_FILE', 'r') as f:
     data = json.load(f)
 print(len(data.get('misalignments', [])))
 ")
-    
+
     if [[ "$misalignment_count" -eq 0 ]]; then
         update_report "severity" '"none"'
         python3 -c "
@@ -335,7 +335,7 @@ with open('$REPORT_FILE', 'w') as f:
 "
         return
     fi
-    
+
     # Determine overall severity
     local high_count medium_count
     high_count=$(python3 -c "
@@ -344,23 +344,23 @@ with open('$REPORT_FILE', 'r') as f:
     data = json.load(f)
 print(len([m for m in data.get('misalignments', []) if m.get('severity') == 'high']))
 ")
-    
+
     medium_count=$(python3 -c "
 import json
 with open('$REPORT_FILE', 'r') as f:
     data = json.load(f)
 print(len([m for m in data.get('misalignments', []) if m.get('severity') == 'medium']))
 ")
-    
+
     local overall_severity="low"
     if [[ "$high_count" -gt 0 ]]; then
         overall_severity="high"
     elif [[ "$medium_count" -gt 0 ]]; then
         overall_severity="medium"
     fi
-    
+
     update_report "severity" "\"$overall_severity\""
-    
+
     # Generate specific recommendations
     python3 -c "
 import json
@@ -400,7 +400,7 @@ print_summary() {
     log "System Misalignment Detection Complete"
     echo
     echo "=== SYSTEM MISALIGNMENT DETECTION SUMMARY ==="
-    
+
     python3 -c '
 import json
 import sys
@@ -438,11 +438,11 @@ if "status" in qc:
     if "duration_seconds" in qc:
         print("Duration: " + str(qc["duration_seconds"]) + "s")
 '
-    
+
     echo
     echo "Full report: $REPORT_FILE"
     echo "Execution log: $LOG_FILE"
-    
+
     # Return appropriate exit code
     local severity
     severity=$(python3 -c '
@@ -451,7 +451,7 @@ with open("'"$REPORT_FILE"'", "r") as f:
     data = json.load(f)
 print(data.get("severity", "unknown"))
 ')
-    
+
     case "$severity" in
         high) return 2 ;;
         medium) return 1 ;;
@@ -462,10 +462,10 @@ print(data.get("severity", "unknown"))
 # Main execution
 main() {
     log "Starting DevOnboarder System Misalignment Detection"
-    
+
     # Ensure we're in project root
     cd "$PROJECT_ROOT"
-    
+
     init_report
     detect_environment
     collect_system_info

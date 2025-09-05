@@ -42,16 +42,16 @@ safe_replace() {
     local file="$1"
     local placeholder="$2"
     local replacement="$3"
-    
+
     python3 -c "
 import sys
 
 try:
     with open('$file', 'r') as f:
         content = f.read()
-    
+
     content = content.replace('$placeholder', '''$replacement''')
-    
+
     with open('$file', 'w') as f:
         f.write(content)
 except Exception as e:
@@ -66,7 +66,7 @@ gather_context() {
     local trigger="manual"
     local branch="unknown"
     local commit="unknown"
-    
+
     if [[ "${CI:-}" == "true" ]]; then
         env_type="GitHub Actions CI"
         trigger="${GITHUB_EVENT_NAME:-unknown}"
@@ -79,7 +79,7 @@ gather_context() {
             commit=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
         fi
     fi
-    
+
     safe_replace "$ANALYSIS_FILE" "TIMESTAMP_PLACEHOLDER" "$(date -Iseconds)"
     safe_replace "$ANALYSIS_FILE" "ENVIRONMENT_PLACEHOLDER" "$env_type"
     safe_replace "$ANALYSIS_FILE" "TRIGGER_PLACEHOLDER" "$trigger"
@@ -90,42 +90,42 @@ gather_context() {
 # Run misalignment detection and integrate results
 run_misalignment_analysis() {
     local misalignment_content=""
-    
+
     if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
         echo "Running system misalignment detection..."
-        
+
         if ! ./scripts/detect_system_misalignment.sh > "${LOG_DIR}/misalignment_output_${TIMESTAMP}.log" 2>&1; then
             echo "Warning: Misalignment detection returned non-zero exit code" >&2
         fi
-        
+
         # Find the latest misalignment report
         local latest_report
         latest_report=$(find "$LOG_DIR" -name "misalignment_report_*.json" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2- || echo "")
-        
+
         if [[ -n "$latest_report" && -f "$latest_report" ]]; then
             # Create a temporary file for the Python output to avoid shell escaping issues
             local temp_output="${LOG_DIR}/temp_misalignment_${TIMESTAMP}.md"
-            
+
             python3 -c "
 import json
 
 try:
     with open('$latest_report', 'r') as f:
         data = json.load(f)
-    
+
     severity = data.get('severity', 'unknown')
     misalignments = data.get('misalignments', [])
     recommendations = data.get('recommendations', [])
     qc_status = data.get('quality_checks', {}).get('status', 'unknown')
     qc_duration = data.get('quality_checks', {}).get('duration_seconds', 'unknown')
-    
+
     output = []
     output.append(f'### Severity: {severity.upper()}')
     output.append(f'- **Misalignments Found**: {len(misalignments)}')
     output.append(f'- **Quality Check Status**: {qc_status}')
     output.append(f'- **QC Duration**: {qc_duration}s')
     output.append('')
-    
+
     if misalignments:
         output.append('### Detected Misalignments:')
         for i, m in enumerate(misalignments, 1):
@@ -133,7 +133,7 @@ try:
             description = m.get('description', 'No description')
             local_val = m.get('local_value', 'unknown')
             expected_val = m.get('expected_value', 'unknown')
-            
+
             output.append(f'{i}. **{category}**: {description}')
             output.append(f'   - Local Value: \`{local_val}\`')
             output.append(f'   - Expected Value: \`{expected_val}\`')
@@ -141,22 +141,22 @@ try:
     else:
         output.append('✅ No system misalignments detected.')
         output.append('')
-    
+
     if recommendations:
         output.append('### Immediate Actions:')
         for i, rec in enumerate(recommendations, 1):
             output.append(f'{i}. {rec}')
-    
+
     result = '\n'.join(output)
-    
+
     with open('$temp_output', 'w') as f:
         f.write(result)
-    
+
 except Exception as e:
     with open('$temp_output', 'w') as f:
         f.write(f'❌ Error analyzing misalignment report: {e}')
 " 2>/dev/null || echo "❌ Failed to analyze misalignment data" > "$temp_output"
-            
+
             if [[ -f "$temp_output" ]]; then
                 misalignment_content=$(cat "$temp_output")
                 rm -f "$temp_output"
@@ -167,54 +167,54 @@ except Exception as e:
     else
         misalignment_content="⚠️ Misalignment detection script not available"
     fi
-    
+
     safe_replace "$ANALYSIS_FILE" "MISALIGNMENT_PLACEHOLDER" "$misalignment_content"
 }
 
 # Analyze QC failure patterns
 analyze_qc_failure() {
     local qc_content=""
-    
+
     # Find the most recent QC log
     local latest_qc_log
     latest_qc_log=$(find "$LOG_DIR" -name "*qc*" -o -name "qc_output_*.log" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2- || echo "")
-    
+
     if [[ -n "$latest_qc_log" && -f "$latest_qc_log" ]]; then
         local log_size
         log_size=$(wc -l < "$latest_qc_log" 2>/dev/null || echo "0")
-        
+
         qc_content="### Quality Control Log Analysis
 - **Log File**: $(basename "$latest_qc_log")
 - **Log Size**: $log_size lines
 
 #### Common Failure Patterns:"
-        
+
         # Check for specific failure patterns
         if grep -q "coverage.*failed\|coverage.*below" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
 ❌ **Coverage Issue**: Test coverage below threshold"
         fi
-        
+
         if grep -q "timeout\|timed out\|killed" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
 ⏱️ **Timeout Issue**: Process exceeded time limit"
         fi
-        
+
         if grep -q "memory\|out of memory\|OOM" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
 💾 **Memory Issue**: Insufficient memory available"
         fi
-        
+
         if grep -q "permission denied\|not permitted" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
 🔒 **Permission Issue**: Access denied to required resources"
         fi
-        
+
         if grep -q "No module named\|ModuleNotFoundError" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
 📦 **Dependency Issue**: Missing Python modules"
         fi
-        
+
         # Add last few lines of QC log for context
         qc_content+="
 
@@ -225,7 +225,7 @@ $(tail -10 "$latest_qc_log" 2>/dev/null || echo "Could not read log file")
     else
         qc_content="❌ No QC log found for analysis"
     fi
-    
+
     safe_replace "$ANALYSIS_FILE" "QC_ANALYSIS_PLACEHOLDER" "$qc_content"
 }
 
@@ -269,7 +269,7 @@ add_technical_details() {
 - **Node**: $(node --version 2>/dev/null || echo 'not available')
 - **Virtual Env**: ${VIRTUAL_ENV:-none}
 - **Working Directory**: $(pwd)"
-    
+
     # Environment variables (CI-specific)
     if [[ "${CI:-}" == "true" ]]; then
         details+="
@@ -280,7 +280,7 @@ add_technical_details() {
 - **GitHub Repository**: ${GITHUB_REPOSITORY:-unknown}
 - **GitHub Event**: ${GITHUB_EVENT_NAME:-unknown}"
     fi
-    
+
     # Available logs
     details+="
 
@@ -298,28 +298,28 @@ add_technical_details() {
 - No diagnostic files found for this timestamp"
         fi
     fi
-    
+
     safe_replace "$ANALYSIS_FILE" "TECHNICAL_DETAILS_PLACEHOLDER" "$details"
 }
 
 # Main execution
 main() {
     echo "Starting Enhanced CI Failure Analysis..."
-    
+
     cd "$PROJECT_ROOT"
-    
+
     init_analysis_report
     gather_context
     run_misalignment_analysis
     analyze_qc_failure
     generate_recommendations
     add_technical_details
-    
+
     echo
     echo "=== ENHANCED CI FAILURE ANALYSIS COMPLETE ==="
     echo "Report generated: $ANALYSIS_FILE"
     echo
-    
+
     # Display summary
     if [[ -f "$ANALYSIS_FILE" ]]; then
         echo "=== SUMMARY ==="
@@ -327,11 +327,11 @@ main() {
         echo
         echo "📋 Full report: $ANALYSIS_FILE"
     fi
-    
+
     # Return exit code based on severity
     local latest_report
     latest_report=$(find "$LOG_DIR" -name "misalignment_report_*.json" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2- || echo "")
-    
+
     if [[ -n "$latest_report" && -f "$latest_report" ]]; then
         local severity
         severity=$(python3 -c "
@@ -343,14 +343,14 @@ try:
 except:
     print('unknown')
 " 2>/dev/null || echo "unknown")
-        
+
         case "$severity" in
             high) return 2 ;;
             medium) return 1 ;;
             *) return 0 ;;
         esac
     fi
-    
+
     return 0
 }
 

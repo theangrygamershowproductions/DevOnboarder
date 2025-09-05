@@ -190,4 +190,19 @@ describe("ProtectedDashboard Component", () => {
         // Token should be removed from localStorage
         expect(localStorage.getItem("jwt")).toBeNull();
     }) as any;
+
+    it("handles network errors during authentication", async () => {
+        localStorage.setItem("jwt", "valid-token");
+
+        global.fetch = vi.fn().mockRejectedValue(new Error("Network error")) as any;
+
+        render(<ProtectedDashboard />);
+
+        await waitFor(() => {
+            expect(screen.getByTestId("login-component")).toBeInTheDocument();
+        }) as any;
+
+        // Token should be removed from localStorage on network error
+        expect(localStorage.getItem("jwt")).toBeNull();
+    }) as any;
 }) as any;
