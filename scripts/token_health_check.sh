@@ -63,7 +63,8 @@ test_github_api() {
         echo "   Status: Success: API WORKING"
         PASSED_TESTS=$((PASSED_TESTS + 1))
     else
-        if echo "Testing token validity..." > /dev/null; then
+        # Check for propagation delay in the API error message
+        if echo "$result" | grep -qi "propagation delay\|token not yet active\|bad credentials"; then
             echo "   Status: ⏳ PROPAGATION DELAY"
             PROPAGATION_DELAYS=$((PROPAGATION_DELAYS + 1))
         else

@@ -36,7 +36,6 @@ list_reports() {
         return 0
     fi
 
-    # shellcheck disable=SC2010
     if find "$REPORTS_DIR" -name "token-audit-*.md" -type f >/dev/null 2>&1; then
         echo "Found token audit reports:"
         echo ""
@@ -64,7 +63,6 @@ show_status() {
     fi
 
     # Count reports
-    # shellcheck disable=SC2010
     TOTAL_REPORTS=$(find "$REPORTS_DIR" -name "token-audit-*.md" -type f 2>/dev/null | wc -l)
     echo "Total audit reports: $TOTAL_REPORTS"
 
