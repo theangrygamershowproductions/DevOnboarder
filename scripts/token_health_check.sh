@@ -29,12 +29,9 @@ test_token_exists() {
 
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
-    printf "Value: %s\n" "$"
-    printf "Value: %s\n" "$"
-
     local token_value="${!token_name:-}"
     if [ -n "$token_value" ]; then
-        printf "Value: %s\n" "$"
+        echo "   Status: Available"
         PASSED_TESTS=$((PASSED_TESTS + 1))
     else
         echo "   Status: Error: MISSING"

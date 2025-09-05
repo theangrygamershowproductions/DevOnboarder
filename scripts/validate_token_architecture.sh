@@ -26,7 +26,8 @@ if [ -f .env ]; then
     source .env
 fi
 
-printf "[%s] Starting Token Architecture v2.1 Validation\n" "$(date '+%Y-%m-%d %H:%M:%S')"
+START_TIME="$(date '+%Y-%m-%d %H:%M:%S')"
+printf "[%s] Starting Token Architecture v2.1 Validation\n" "$START_TIME"
 printf "\n"
 
 # Define token categories

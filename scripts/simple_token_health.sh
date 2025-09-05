@@ -26,7 +26,7 @@ echo "============================="
 echo ""
 echo "CI/CD Tokens (.tokens file):"
 if [ -n "${AAR_TOKEN:-}" ]; then
-    printf "Value: %s\n" "$"
+    echo "  Status: AAR_TOKEN: Available"
     LOADED_TOKENS=$((LOADED_TOKENS + 1))
 else
     echo "  Error: AAR_TOKEN: Missing"

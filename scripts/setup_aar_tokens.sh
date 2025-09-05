@@ -44,13 +44,13 @@ echo "==================="
 
 # Check primary token hierarchy (tokens we want to be present)
 if [ -n "$CI_ISSUE_AUTOMATION_TOKEN" ]; then
-    printf "Length: %d\n" "${#CI_ISSUE_AUTOMATION_TOKEN}"
+    echo "Status: CI_ISSUE_AUTOMATION_TOKEN: Available"
 else
     echo "Error: CI_ISSUE_AUTOMATION_TOKEN: Not set"
 fi
 
 if [ -n "$CI_BOT_TOKEN" ]; then
-    printf "Length: %d\n" "${#CI_BOT_TOKEN}"
+    echo "Status: CI_BOT_TOKEN: Available"
 else
     echo "Error: CI_BOT_TOKEN: Not set"
 fi
@@ -61,13 +61,13 @@ echo "Additional Token Status:"
 echo "======================="
 
 if [ -n "$CI_ISSUE_TOKEN" ]; then
-    printf "Length: %d\n" "${#CI_ISSUE_TOKEN}"
+    echo "Status: CI_ISSUE_TOKEN: Available"
 else
     echo "Error: CI_ISSUE_TOKEN: Not set"
 fi
 
 if [ -n "$GH_TOKEN" ]; then
-    printf "Length: %d\n" "${#GH_TOKEN}"
+    echo "Status: GH_TOKEN: Available"
     # Check if it's actually an OpenAI token
     if [[ "$GH_TOKEN" == sk-proj-* ]]; then
         echo "   Warning:  WARNING: This appears to be an OpenAI token, not a GitHub token"
@@ -81,7 +81,7 @@ echo "Fallback Token Status (Policy Compliance Check):"
 echo "================================================"
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    printf "Length: %d\n" "${#GITHUB_TOKEN}"
+    echo "Warning: GITHUB_TOKEN: Present - Consider removing for optimal security"
     echo "   Note: This broad-permissions token is not needed when fine-grained alternatives exist"
 else
     echo "Success: GITHUB_TOKEN: Not set - Excellent! Following No Default Token Policy v1.0"
