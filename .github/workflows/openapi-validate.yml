@@ -1,0 +1,34 @@
+name: openapi-validate
+on:
+  pull_request:
+  push:
+    branches: [main, develop, feat/openapi-phase-2]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install CLI tools
+        run: |
+          npm i -g @redocly/cli @stoplight/spectral-cli
+
+      - name: Spectral Lint
+        run: spectral lint "openapi/**/*.yaml"
+
+      - name: Redocly Lint
+        run: redocly lint "openapi/**/*.yaml"
+
+  preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: npm i -g @redocly/cli
+      - name: Bundle HTML docs
+        run: redocly build-docs openapi/devonboarder.ci.yaml -o openapi-preview.html
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-preview
+          path: openapi-preview.html
