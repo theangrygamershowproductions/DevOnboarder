@@ -215,7 +215,7 @@ SENSITIVE_PATTERNS=(
 ```bash
 # CI Monitor + Potato Policy integration
 source .venv/bin/activate
-python .codex/scripts/ci-monitor.py --include-security-scan
+python scripts/ci-monitor.py --include-security-scan
 python scripts/generate_potato_report.sh --ci-integration
 ```
 

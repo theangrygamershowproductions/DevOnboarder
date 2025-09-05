@@ -57,6 +57,7 @@ test = [
     "openapi-spec-validator",
     "ruff",
     "mypy",
+    "types-requests",
     "pip-audit",
     "bandit",
     # Phase 5: Advanced Orchestration dependencies

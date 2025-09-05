@@ -20,7 +20,7 @@ jobs:
     review:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
                   version: stable

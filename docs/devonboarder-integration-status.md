@@ -154,7 +154,7 @@ The CI monitoring framework is **production-ready** and integrated with DevOnboa
 #### ✅ Deployed Components
 
 - **CI Monitor Agent** ([`agents/ci-monitor.md`](../agents/ci-monitor.md)) - Operational
-- **Python Automation Script** ([`.codex/scripts/ci-monitor.py`](../.codex/scripts/ci-monitor.py)) - GitHub CLI integrated
+- **Python Automation Script** ([`scripts/ci-monitor.py`](../scripts/ci-monitor.py)) - GitHub CLI integrated
 - **Auto-Fix Agent** ([`agents/code-quality-auto-fix.md`](../agents/code-quality-auto-fix.md)) - Pre-commit ready
 - **Reporting Templates** ([`.codex/templates/pr-status-report.md`](../.codex/templates/pr-status-report.md)) - Structured output
 - **Case Studies** ([`.codex/case-studies/pr-970-ci-recovery.md`](../.codex/case-studies/pr-970-ci-recovery.md)) - Knowledge base
@@ -164,16 +164,16 @@ The CI monitoring framework is **production-ready** and integrated with DevOnboa
 ```bash
 # Monitor PR status (GitHub CLI integration)
 source .venv/bin/activate
-python .codex/scripts/ci-monitor.py 970
+python scripts/ci-monitor.py 970
 
 # Generate comprehensive reports
-python .codex/scripts/ci-monitor.py 970 --output reports/ci-status.md
+python scripts/ci-monitor.py 970 --output reports/ci-status.md
 
 # JSON output for dashboard integration
-python .codex/scripts/ci-monitor.py 970 --json | jq '.statusCheckRollup'
+python scripts/ci-monitor.py 970 --json | jq '.statusCheckRollup'
 
 # Future capability - PR comment automation
-python .codex/scripts/ci-monitor.py 970 --post-comment
+python scripts/ci-monitor.py 970 --post-comment
 ```
 
 #### Auto-Fix Integration (Active)
@@ -207,7 +207,7 @@ source .venv/bin/activate
 pip install -e .[test]
 
 # CI monitoring commands
-python .codex/scripts/ci-monitor.py 970
+python scripts/ci-monitor.py 970
 
 # Quality validation
 python -m pytest --cov=src --cov-fail-under=95
