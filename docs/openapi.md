@@ -24,13 +24,13 @@ Specs live under `/openapi/*.yaml`. Governance mirrors via `x-codex`.
 
 ## Validate
 
-- Local: `make openapi-lint`
-- CI: `.github/workflows/openapi-validate.yml` (Spectral + Redocly)
+- Local: `source .venv/bin/activate && python -m openapi_spec_validator openapi/**/*.yaml`
+- CI: `.github/workflows/openapi-validate.yml` (uses built-in openapi-spec-validator)
 
 ## Mock
 
-- Local: `make openapi-mock` (Prism on port 4010 by default)
-- Wire tests against the mock to stabilize agent behavior.
+- Local: Use existing DevOnboarder test infrastructure with mocked endpoints
+- Wire tests against the API endpoints to stabilize agent behavior
 
 ## Generate Clients (optional)
 

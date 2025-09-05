@@ -8,16 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-
-      - name: Install CLI tools
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Create virtual environment and install dependencies
         run: |
-          npm i -g @redocly/cli @stoplight/spectral-cli
-
-      - name: Spectral Lint
-        run: spectral lint "openapi/**/*.yaml"
-
-      - name: Redocly Lint
-        run: redocly lint "openapi/**/*.yaml"
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+      - name: Validate OpenAPI Specifications
+        run: |
+          source .venv/bin/activate
+          python -m openapi_spec_validator openapi/**/*.yaml
 
   preview:
     if: github.event_name == 'pull_request'
