@@ -2,7 +2,7 @@ name: openapi-validate
 on:
   pull_request:
   push:
-    branches: [ main, develop, feat/openapi-phase-2 ]
+    branches: [main, develop, feat/openapi-phase-2]
 jobs:
   lint:
     runs-on: ubuntu-latest
