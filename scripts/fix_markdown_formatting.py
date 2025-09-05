@@ -84,9 +84,17 @@ def fix_markdown_formatting(filepath: str) -> bool:
 
         # Fix MD032 - Ensure blank lines around lists
         before_lists = content
-        content = re.sub(r"([^\n])\n(^- )", r"\1\n\n\2", content, flags=re.MULTILINE)
         content = re.sub(
-            r"(^- [^\n]*)\n([^-\n])", r"\1\n\n\2", content, flags=re.MULTILINE
+            r"([^\n])\n(^([\s]*[-*+] |\d+\. ))",
+            r"\1\n\n\2",
+            content,
+            flags=re.MULTILINE,
+        )
+        content = re.sub(
+            r"(^([\s]*[-*+] |\d+\. )[^\n]*)\n([^\n]|(?!(?:[\s]*[-*+] |\d+\. )))",
+            r"\1\n\n\3",
+            content,
+            flags=re.MULTILINE,
         )
         if content != before_lists:
             issues_fixed.append("MD032: Fixed list spacing issues")
