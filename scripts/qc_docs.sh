@@ -85,7 +85,7 @@ if [[ -n "$SPECIFIC_FILE" ]]; then
     echo "Processing single file: $SPECIFIC_FILE"
 else
     # Get all markdown files tracked by git
-    readarray -t FILES < <(git ls-files '*.md' 2>/dev/null || find . -name "*.md" -type f)
+    readarray -t FILES < <(git ls-files '*.md' 2>/dev/null || find . -name "*.md" -type f -not -path './.git/*' -not -path './.*/*')
     echo "Processing ${#FILES[@]} markdown files"
 fi
 

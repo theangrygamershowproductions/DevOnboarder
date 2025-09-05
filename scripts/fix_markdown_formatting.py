@@ -74,10 +74,10 @@ def fix_markdown_formatting(filepath: str) -> bool:
         # Fix MD022 - Ensure blank lines around headings
         before_headings = content
         content = re.sub(
-            r"(^###[^\n]*)\n([^#\n])", r"\1\n\n\2", content, flags=re.MULTILINE
+            r"(^#{1,6}[^\n]*)\n([^#\n])", r"\1\n\n\2", content, flags=re.MULTILINE
         )
         content = re.sub(
-            r"([^\n])\n(^###[^\n]*)", r"\1\n\n\2", content, flags=re.MULTILINE
+            r"([^\n])\n(^#{1,6}[^\n]*)", r"\1\n\n\2", content, flags=re.MULTILINE
         )
         if content != before_headings:
             issues_fixed.append("MD022: Fixed heading spacing issues")
@@ -94,9 +94,7 @@ def fix_markdown_formatting(filepath: str) -> bool:
         # Fix MD031 - Ensure blank lines around fenced code blocks
         before_fenced = content
         content = re.sub(r"([^\n])\n(^```)", r"\1\n\n\2", content, flags=re.MULTILINE)
-        content = re.sub(
-            r"(^```[^\n]*)\n([^`\n])", r"\1\n\n\2", content, flags=re.MULTILINE
-        )
+        content = re.sub(r"(^```$)\n([^`\n])", r"\1\n\n\2", content, flags=re.MULTILINE)
         if content != before_fenced:
             issues_fixed.append("MD031: Fixed fenced code block spacing")
 
