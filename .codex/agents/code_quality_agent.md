@@ -1,29 +1,14 @@
 ---
 codex-agent:
     name: Agent.CodeQuality
-    role: Automatically detects and fixes common linting issues across markdown, shell, Python, a        *.md)
-            echo "Fixing markdown file"
-            printf "File: %s\n" "$file"
-            markdownlint --fix "$file" || true
-            ;;
-        *.sh)
-            echo "Fixing shell script file"
-            printf "File: %s\n" "$file"
-            shellcheck --format=diff "$file" | patch || true
-            ;;
-        *.py)
-            echo "Fixing Python file"
-            printf "File: %s\n" "$file"
-            black "$file" || true
-            ruff --fix "$file" || true
-            ;;
-        *.yml|*.yaml)
-            echo "Fixing YAML file"
-            printf "File: %s\n" "$file"   scope: code quality automation
+    role: Automatically detects and fixes common linting issues across markdown, shell, Python, and YAML files
+    scope: code quality automation
     triggers: on_pr_created, on_pr_updated, on_file_changed
     output: .codex/logs/code-quality.log
     environment: CI
-    permissions: ["repo:write", "workflows:write"]
+permissions:
+    - repo:write
+    - workflows:write
 ---
 
 # Code Quality Auto-Fix Agent
