@@ -1,0 +1,21 @@
+[run]
+source = src/xp
+omit =
+    tests/*
+    */__pycache__/*
+    */migrations/*
+    */venv/*
+    */.venv/*
+
+[report]
+show_missing = True
+skip_covered = False
+precision = 2
+fail_under = 90
+
+[html]
+directory = logs/htmlcov-xp
+title = XP Service Coverage Report
+
+[xml]
+output = logs/coverage-xp.xml

@@ -320,8 +320,8 @@ run_step "Environment Docs" "python scripts/check_env_docs.py"
 # QC Pre-push validation
 run_step "QC Validation (8 metrics)" "bash scripts/qc_pre_push.sh"
 
-# Python tests with coverage
-run_step "Python Tests (95% coverage)" "python -m pytest --cov=src --cov-fail-under=95 -q"
+# Python tests with coverage (using CI environment)
+run_step "Python Tests (95% coverage)" "set -a; source .env.ci; [ -f .tokens.ci ] && source .tokens.ci; set +a; python -m pytest --cov=src --cov-fail-under=95 -q"
 
 start_section "FRONTEND TESTING" "frontend"
 

@@ -138,6 +138,23 @@ describe("Header Component", () => {
         });
     });
 
+    it("handles network error during auth check", async () => {
+        localStorage.setItem("jwt", "valid-token");
+
+        // Mock network error
+        global.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
+
+        render(<Header />);
+
+        // Wait for auth check to fail and show login
+        await waitFor(() => {
+            expect(screen.getByText("Staff Login")).toBeInTheDocument();
+        });
+
+        // Token should be cleared on auth failure
+        expect(localStorage.getItem("jwt")).toBeNull();
+    });
+
     it("renders navigation links correctly", () => {
         render(<Header />);
         expect(screen.getByText("DevOnboarder")).toBeInTheDocument();

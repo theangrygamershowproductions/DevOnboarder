@@ -11,9 +11,9 @@ describe("PublicLandingPage Component", () => {
         localStorage.clear();
     });
 
-    it("renders the main heading", () => {
-        render(<PublicLandingPage />);
-        expect(screen.getByText("Comprehensive Onboarding Platform")).toBeInTheDocument();
+    afterEach(() => {
+        vi.restoreAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it("renders the main heading", () => {

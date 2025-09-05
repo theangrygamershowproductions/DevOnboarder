@@ -174,3 +174,16 @@ documentation_quality:
     permissions:
         - repo: read
         - repo: write
+
+open_api:
+    secret: GITHUB_TOKEN
+    permissions:
+        - contents: read
+        - actions: write
+
+pr-_issue-_automation:
+    secret: CI_ISSUE_AUTOMATION_TOKEN
+    permissions:
+        - contents: read
+        - pull-requests: write
+        - issues: write

@@ -33,4 +33,25 @@ describe("FeedbackAnalytics", () => {
         expect(screen.getByText(/bug/i)).toBeInTheDocument();
         expect(screen.getByText(/open: 1/i)).toBeInTheDocument();
     });
+
+    it("shows error message when fetch fails", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn().mockRejectedValue(new Error("Network error")),
+        );
+
+        render(<FeedbackAnalytics />);
+        expect(
+            await screen.findByText(/failed to load analytics/i),
+        ).toBeInTheDocument();
+    });
+
+    it("shows error message when API returns non-ok response", async () => {
+        vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
+
+        render(<FeedbackAnalytics />);
+        expect(
+            await screen.findByText(/failed to load analytics/i),
+        ).toBeInTheDocument();
+    });
 });

@@ -1,0 +1,32 @@
+# DevOnboarder XP Service Coverage Configuration
+# Complete override for XP service isolated coverage
+
+[tool.coverage.run]
+source = ["src/xp"]
+omit = [
+    "*/tests/*",
+    "src/devonboarder/*",
+    "src/discord_integration/*",
+    "src/feedback_service/*",
+    "src/llama2_agile_helper/*",
+    "src/routes/*",
+    "src/utils/*"
+]
+include = ["src/xp/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self\\.debug:",
+    "if settings\\.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "logs/htmlcov_xp"
