@@ -4,6 +4,21 @@
 
 set -euo pipefail
 
+# Load tokens using Token Architecture v2.1 with developer guidance
+if [ -f "scripts/enhanced_token_loader.sh" ]; then
+    # shellcheck source=scripts/enhanced_token_loader.sh disable=SC1091
+    source scripts/enhanced_token_loader.sh
+elif [ -f "scripts/load_token_environment.sh" ]; then
+    # shellcheck source=scripts/load_token_environment.sh disable=SC1091
+    source scripts/load_token_environment.sh
+fi
+
+# Legacy fallback for development
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
 # Color definitions for DevOnboarder consistency
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
@@ -24,6 +39,15 @@ echo -e "${BLUE}Creating tracking issue for PR #$PR_NUMBER${NC}"
 echo "Title: $PR_TITLE"
 echo "Author: $PR_AUTHOR"
 echo "Branch: $PR_BRANCH"
+
+# Check for required tokens with enhanced guidance
+if command -v require_tokens >/dev/null 2>&1; then
+    if ! require_tokens "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
+        echo "❌ Cannot create PR tracking issue without required tokens"
+        echo "💡 Please add the missing tokens and re-run this script"
+        exit 1
+    fi
+fi
 
 # Ensure centralized logging directory exists
 mkdir -p logs

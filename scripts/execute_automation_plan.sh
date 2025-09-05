@@ -3,6 +3,30 @@
 
 set -euo pipefail
 
+# Load tokens using Token Architecture v2.1 with developer guidance
+if [ -f "scripts/enhanced_token_loader.sh" ]; then
+    # shellcheck source=scripts/enhanced_token_loader.sh disable=SC1091
+    source scripts/enhanced_token_loader.sh
+elif [ -f "scripts/load_token_environment.sh" ]; then
+    # shellcheck source=scripts/load_token_environment.sh disable=SC1091
+    source scripts/load_token_environment.sh
+fi
+
+# Legacy fallback for development
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
+# Check for required tokens with enhanced guidance
+if command -v require_tokens >/dev/null 2>&1; then
+    if ! require_tokens "AAR_TOKEN" "CI_ISSUE_AUTOMATION_TOKEN"; then
+        echo "❌ Cannot proceed without required tokens for PR automation"
+        echo "💡 PR automation requires GitHub API access for health assessment"
+        exit 1
+    fi
+fi
+
 PR_NUMBER=966
 MODE=${1:-analyze}
 
