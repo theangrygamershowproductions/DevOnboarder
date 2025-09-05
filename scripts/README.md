@@ -58,6 +58,45 @@ This directory contains automation scripts that support the project's "quiet rel
 
 ### 📊 Quality Assurance
 
+#### `qc_docs.sh`
+
+**Purpose**: Enhanced documentation quality control with automatic markdown formatting
+
+**Usage**:
+
+```bash
+# Check all documentation for formatting issues
+./scripts/qc_docs.sh
+
+# Automatically fix formatting issues
+./scripts/qc_docs.sh --fix
+
+# Process specific file
+./scripts/qc_docs.sh --file docs/ci/document.md --fix
+```
+
+**Features**:
+
+- ✅ **Automatic markdown formatting**: Fixes MD009, MD022, MD032, MD031 violations
+- ✅ **Integrated validation**: Combines markdownlint and Vale checks
+- ✅ **DevOnboarder standards**: Enforces project markdown conventions
+- ✅ **Backup creation**: Preserves original files during fixes
+- ✅ **Batch processing**: Handles all markdown files or specific targets
+- ✅ **Quality reporting**: Comprehensive summary with actionable feedback
+
+#### `fix_markdown_formatting.py`
+
+**Purpose**: Core markdown formatting engine for DevOnboarder documents
+
+**Usage**: `python scripts/fix_markdown_formatting.py <filepath>`
+
+**Features**:
+
+- ✅ **Precise fixes**: Targets specific markdownlint violations
+- ✅ **Safety first**: Creates backups before modifications
+- ✅ **Detailed reporting**: Shows exactly what issues were fixed
+- ✅ **DevOnboarder compliant**: Follows project quality standards
+
 #### `check_docs.sh`
 
 **Purpose**: Documentation quality checks (markdownlint, Vale)

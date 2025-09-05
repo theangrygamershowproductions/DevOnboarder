@@ -34,6 +34,10 @@
 - `bug` 🐛 - Something isn't working
 - `documentation` 📚 - Doc updates and guides
 
+### Special Purpose
+
+- `zero-accountability-loss` 🛡️ - Critical infrastructure for quality gate protection
+
 ## Quick Labeling Examples
 
 **New Test Feature**: `priority-medium`, `effort-medium`, `testing-infrastructure`, `python`, `enhancement`

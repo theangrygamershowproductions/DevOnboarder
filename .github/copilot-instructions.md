@@ -311,6 +311,11 @@ make aar-setup                    # Set up CI failure analysis
 ./scripts/qc_pre_push.sh         # Validates 8 quality metrics
 source .venv/bin/activate        # Always activate venv first
 
+# Documentation quality control (NEW)
+./scripts/qc_docs.sh             # Check all documentation formatting
+./scripts/qc_docs.sh --fix       # Fix markdown formatting issues
+./scripts/qc_docs.sh --file docs/README.md --fix  # Fix specific file
+
 # Service APIs (individual service testing)
 devonboarder-api         # Start main API (port 8001)
 devonboarder-auth        # Start auth service (port 8002)

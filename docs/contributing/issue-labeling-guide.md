@@ -66,6 +66,7 @@ Technology labels identify the primary tech stack involved:
 |-------|-------------|-------|
 | `artifact-pollution` | Repository hygiene issues | Root directory artifacts, misplaced files |
 | `phase-3` | Legacy project phase identifier | Historical tracking |
+| `zero-accountability-loss` | Critical infrastructure for preventing quality gate bypasses | Quality gate protection, CI reliability, infrastructure security |
 
 ## Usage Guidelines
 
@@ -264,6 +265,14 @@ Labels: enhancement, ci-hygiene, automated, priority-high, effort-large
 ```
 
 - **Why**: Critical infrastructure (`priority-high`), complex implementation (`effort-large`), CI system improvement (`ci-hygiene`)
+
+### Issue #1221: Zero-Accountability-Loss Framework Implementation
+
+```text
+Labels: zero-accountability-loss, ci-hygiene, priority-critical, comprehensive
+```
+
+- **Why**: Critical quality gate protection (`zero-accountability-loss`), infrastructure reliability (`ci-hygiene`), prevents accountability loss (`priority-critical`)
 
 ## Conclusion
 
