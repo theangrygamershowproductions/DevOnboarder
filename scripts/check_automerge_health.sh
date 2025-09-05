@@ -30,7 +30,7 @@ DEFAULT_BRANCH=$(gh api "repos/$REPO_FULL" --jq '.default_branch')
 if [ "$DEFAULT_BRANCH" = "main" ]; then
     green "PASS: Default branch: $DEFAULT_BRANCH"
 else
-    yellow "WARNING:  WARNING: Default branch is '$DEFAULT_BRANCH', expected 'main'"
+    yellow "Default branch is '$DEFAULT_BRANCH', expected 'main'"
     echo "   Fix: gh api repos/$REPO_FULL -X PATCH --field default_branch=main"
 fi
 echo ""
@@ -41,7 +41,7 @@ AUTO_MERGE_ALLOWED=$(gh api "repos/$REPO_FULL" --jq '.allow_auto_merge')
 if [ "$AUTO_MERGE_ALLOWED" = "true" ]; then
     green "PASS: Auto-merge allowed: $AUTO_MERGE_ALLOWED"
 else
-    yellow "WARNING:  WARNING: Auto-merge not allowed at repository level"
+    yellow "Auto-merge not allowed at repository level"
     echo "   Repository settings may prevent automerge functionality"
 fi
 echo ""
@@ -57,10 +57,10 @@ if PROTECTION_RULES=$(gh api "repos/$REPO_FULL/branches/main/protection" 2>/dev/
         echo "   Required status checks:"
         echo "$PROTECTION_RULES" | jq -r '.required_status_checks.contexts[]?' | sed 's/^/     - /'
     else
-        yellow "WARNING:  No required status checks configured"
+        yellow "No required status checks configured"
     fi
 else
-    yellow "WARNING:  No branch protection rules found for main branch"
+    yellow "No branch protection rules found for main branch"
 fi
 echo ""
 
@@ -105,7 +105,7 @@ if OPEN_PRS=$(gh pr list --state open --json number,headRefOid,autoMergeRequest 
         done < <(echo "$OPEN_PRS" | jq -c '.[]')
     fi
 else
-    yellow "WARNING:  Could not fetch open PRs"
+    yellow "Could not fetch open PRs"
 fi
 echo ""
 
@@ -117,11 +117,11 @@ if RECENT_RUNS=$(gh run list --limit 5 --json status,conclusion,workflowName 2>/
     if [ "$FAILED_RUNS" -eq 0 ]; then
         green "PASS: Recent workflow runs look healthy (no failures in last 5)"
     else
-        yellow "WARNING:  $FAILED_RUNS workflow failures in recent runs"
+        yellow "$FAILED_RUNS workflow failures in recent runs"
         echo "   Failed workflows might affect status check reporting"
     fi
 else
-    yellow "WARNING:  Could not check recent workflow runs"
+    yellow "Could not check recent workflow runs"
 fi
 echo ""
 
