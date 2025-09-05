@@ -550,42 +550,34 @@ jobs:
             - name: Commit coverage badge
               if: github.event_name != 'pull_request'
               env:
-                  # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
-                  CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
+                  # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
+                  GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
                   # Ensure we're in virtual environment context for any Python tools
                   source .venv/bin/activate
 
-                  git config user.name "${{ github.actor }}"
-                  git config user.email "${{ github.actor }}@users.noreply.github.com"
-
                   # Check if coverage badge file exists and has changes
                   if [ -f "coverage.svg" ]; then
-                      git add coverage.svg
-
-                      # Only commit if there are changes
-                      if git diff --staged --quiet; then
+                      # Only proceed if there are actual changes to the coverage badge
+                      if git diff --quiet coverage.svg; then
                           echo "No changes to coverage badge"
                       else
-                          git commit -m "CHORE(ci): update coverage badge"
-                          # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
-                          if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
-                              echo "Attempting push with CI_BOT_TOKEN..."
-                              git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                  echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
-                                  git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                      echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
-                                      exit 1  # Trigger failure condition for artifact upload
-                                  }
-                              }
-                          else
-                              echo "Using GITHUB_TOKEN for push..."
-                              git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                  echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
+                          echo "Coverage badge updated, committing changes..."
+
+                          # Use GitHub CLI with scoped token following DevOnboarder Token Architecture v2.1
+                          # This approach avoids GPG signing issues and follows established patterns
+                          gh api repos/${{ github.repository }}/contents/coverage.svg \
+                              --method PUT \
+                              --field message="CHORE(ci): update coverage badge" \
+                              --field content="$(base64 -i coverage.svg)" \
+                              --field sha="$(gh api repos/${{ github.repository }}/contents/coverage.svg --jq '.sha')" \
+                              --field branch="${{ github.ref_name }}" || {
+                                  echo "FAIL: GitHub API coverage badge update failed - will be uploaded as artifact"
                                   exit 1  # Trigger failure condition for artifact upload
                               }
-                          fi
+
+                          echo "Coverage badge successfully updated via GitHub API"
                       fi
                   else
                       echo "Coverage badge file not found"
