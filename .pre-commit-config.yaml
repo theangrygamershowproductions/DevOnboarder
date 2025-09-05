@@ -33,6 +33,8 @@ repos:
       rev: v0.18.1
       hooks:
           - id: markdownlint-cli2
+            files: '\.md$'
+            pass_filenames: true
     - repo: https://github.com/adrienverge/yamllint.git
       rev: v1.37.0
       hooks:

@@ -13,13 +13,13 @@ When analyzing CI issues, filtering by `"conclusion": "FAILURE"` helps:
 
 ## Available Tools with Failure Filtering
 
-### 1. Enhanced CI Monitor (.codex/scripts/ci-monitor.py)
+### 1. Enhanced CI Monitor (scripts/ci-monitor.py)
 
 The CI monitor now includes failed workflow context:
 
 ```bash
 # Monitor PR with failed workflow context
-python .codex/scripts/ci-monitor.py 970
+python scripts/ci-monitor.py 970
 
 # Output includes recent failed runs section when failures are detected
 ```

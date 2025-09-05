@@ -113,10 +113,13 @@ class AARGenerator:
         """
         self.logger.info("Collecting CI failure data with token compliance")
 
-        # Use token manager to get appropriate token
-        token = self.token_manager.get_github_token()
-        if not token:
-            self.logger.error("No valid token available for CI data collection")
+        # Get tokens for different operations
+        actions_token = self.token_manager.get_actions_token()
+
+        if not actions_token:
+            self.logger.error(
+                "No valid actions token available for workflow data collection"
+            )
             return {
                 "timestamp": datetime.now().isoformat(),
                 "workflow_run_id": workflow_run_id,
@@ -127,26 +130,26 @@ class AARGenerator:
         failure_data: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "workflow_run_id": workflow_run_id,
-            "token_used": "CI_ISSUE_AUTOMATION_TOKEN (hierarchy compliant)",
+            "token_used": "Actions token (hierarchy compliant)",
             "data_collection": {},
         }
 
         try:
             # Collect workflow run information
             if workflow_run_id:
-                run_data = self._get_workflow_run_data(workflow_run_id, token)
+                run_data = self._get_workflow_run_data(workflow_run_id, actions_token)
                 failure_data["data_collection"]["workflow_run"] = run_data
 
-            # Collect recent failures
-            recent_failures = self._get_recent_failures(token)
+            # Collect recent failures (requires actions:read permission)
+            recent_failures = self._get_recent_failures(actions_token)
             failure_data["data_collection"]["recent_failures"] = recent_failures
 
-            # Collect job logs
-            job_logs = self._get_job_logs(workflow_run_id, token)
+            # Collect job logs (requires actions:read permission)
+            job_logs = self._get_job_logs(workflow_run_id, actions_token)
             failure_data["data_collection"]["job_logs"] = job_logs
 
-            # Collect artifact information
-            artifacts = self._get_artifacts(workflow_run_id, token)
+            # Collect artifact information (requires actions:read permission)
+            artifacts = self._get_artifacts(workflow_run_id, actions_token)
             failure_data["data_collection"]["artifacts"] = artifacts
 
             # Security audit
@@ -184,8 +187,17 @@ class AARGenerator:
                 f"{repo_path}/actions/runs/{workflow_run_id}",
             ]
 
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
             return json.loads(result.stdout)
 
@@ -217,8 +229,17 @@ class AARGenerator:
                 "per_page=10",
             ]
 
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
             data = json.loads(result.stdout)
             return data.get("workflow_runs", [])
@@ -256,8 +277,17 @@ class AARGenerator:
                 f"{repo_path}/actions/runs/{workflow_run_id}/jobs",
             ]
 
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
             jobs_data = json.loads(result.stdout)
 
@@ -297,8 +327,17 @@ class AARGenerator:
                 f"{repo_path}/actions/jobs/{job_id}/logs",
             ]
 
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
             return result.stdout
 
@@ -334,8 +373,17 @@ class AARGenerator:
                 f"{repo_path}/actions/runs/{workflow_run_id}/artifacts",
             ]
 
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
             data = json.loads(result.stdout)
             return data.get("artifacts", [])
@@ -382,14 +430,14 @@ class AARGenerator:
 
 ### Recent Failures
 {self._format_recent_failures(
-    failure_data.get('data_collection', {}).get('recent_failures', [])
-)}
+            failure_data.get("data_collection", {}).get("recent_failures", [])
+        )}
 
 ### Job Analysis
-{self._format_job_analysis(failure_data.get('data_collection', {}).get('job_logs', {}))}
+{self._format_job_analysis(failure_data.get("data_collection", {}).get("job_logs", {}))}
 
 ### Artifacts
-{self._format_artifacts(failure_data.get('data_collection', {}).get('artifacts', []))}
+{self._format_artifacts(failure_data.get("data_collection", {}).get("artifacts", []))}
 
 ## Root Cause Analysis
 
@@ -703,7 +751,7 @@ class AARGenerator:
 **Compliance**: No Default Token Policy v1.0 ✅
 """
 
-            # Create issue using GitHub CLI (rely on configured authentication)
+            # Create issue using GitHub CLI with proper token
             cmd = [
                 "gh",
                 "issue",
@@ -716,9 +764,19 @@ class AARGenerator:
                 ",".join(labels),
             ]
 
-            # Use current GitHub CLI authentication
+            # Create environment with token for GitHub CLI
+            env = os.environ.copy()
+            token = self.token_manager.get_github_token()
+            if token:
+                env["GH_TOKEN"] = token
+
             result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, encoding="utf-8"
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding="utf-8",
+                env=env,
             )
 
             issue_url = result.stdout.strip()

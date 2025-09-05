@@ -4,17 +4,41 @@
 
 set -euo pipefail
 
+# Load tokens using Token Architecture v2.1 with developer guidance
+if [ -f "scripts/enhanced_token_loader.sh" ]; then
+    # shellcheck source=scripts/enhanced_token_loader.sh disable=SC1091
+    source scripts/enhanced_token_loader.sh
+elif [ -f "scripts/load_token_environment.sh" ]; then
+    # shellcheck source=scripts/load_token_environment.sh disable=SC1091
+    source scripts/load_token_environment.sh
+fi
+
+# Legacy fallback for development
+if [ -f .env ]; then
+    # shellcheck source=.env disable=SC1091
+    source .env
+fi
+
+# Check for required tokens with enhanced guidance
+if command -v require_tokens >/dev/null 2>&1; then
+    if ! require_tokens "AAR_TOKEN"; then
+        echo "❌ Cannot proceed without required tokens for CI pattern analysis"
+        echo "💡 CI pattern analysis requires GitHub API access for PR and workflow data"
+        exit 1
+    fi
+fi
+
 # Use provided PR number or determine from current context
 if [ $# -eq 1 ]; then
     PR_NUMBER="$1"
 elif [ -n "${GITHUB_REF_NAME:-}" ] && [[ "${GITHUB_REF_NAME}" =~ ^feature/ ]]; then
     # In CI context, try to get PR number from GitHub context
-    PR_NUMBER=$(gh pr list --head "${GITHUB_REF_NAME}" --json number --jq '.[0].number' 2>/dev/null || echo "")
+    PR_NUMBER=$(GH_TOKEN="${AAR_TOKEN:-}" gh pr list --head "${GITHUB_REF_NAME}" --json number --jq '.[0].number' 2>/dev/null || echo "")
 else
     # Try to determine current PR from git branch
     current_branch=$(git branch --show-current 2>/dev/null || echo "")
     if [ -n "$current_branch" ] && [[ "$current_branch" =~ ^feature/ ]]; then
-        PR_NUMBER=$(gh pr list --head "$current_branch" --json number --jq '.[0].number' 2>/dev/null || echo "")
+        PR_NUMBER=$(GH_TOKEN="${AAR_TOKEN:-}" gh pr list --head "$current_branch" --json number --jq '.[0].number' 2>/dev/null || echo "")
     else
         PR_NUMBER=""
     fi
