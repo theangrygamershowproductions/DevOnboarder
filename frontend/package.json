@@ -12,6 +12,8 @@
         "preview": "vite preview",
         "start": "vite",
         "test": "vitest run --coverage",
+        "test:config": "vitest run --config vitest.config.validation.ts",
+        "test:all": "npm run test && npm run test:config",
         "coverage": "vitest run --coverage",
         "test:e2e": "playwright test",
         "test:a11y": "playwright test e2e/accessibility.spec.ts",

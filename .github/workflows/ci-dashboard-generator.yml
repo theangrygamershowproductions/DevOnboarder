@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -51,7 +51,7 @@ jobs:
       - name: Install dependencies
         run: |
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
 
       - name: Generate CI Dashboard Report
         env:
@@ -70,10 +70,12 @@ jobs:
 
       - name: Create artifact summary
         run: |
-          printf "CI Dashboard Report Generated\n" >> "$GITHUB_STEP_SUMMARY"
-          printf "\n" >> "$GITHUB_STEP_SUMMARY"
-          printf "A comprehensive CI troubleshooting dashboard has been generated\n" >> "$GITHUB_STEP_SUMMARY"
-          printf "Download the ci-dashboard-report artifact to view the interactive HTML dashboard\n" >> "$GITHUB_STEP_SUMMARY"
+          {
+            printf -- "CI Dashboard Report Generated\n"
+            printf -- "\n"
+            printf -- "A comprehensive CI troubleshooting dashboard has been generated\n"
+            printf -- "Download the ci-dashboard-report artifact to view the interactive HTML dashboard\n"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Dashboard Report
         uses: actions/upload-artifact@v4

@@ -27,23 +27,24 @@ jobs:
             pull-requests: write
             issues: write
 
+        env:
+            # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
+            # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
+            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Setup GitHub CLI
               run: |
                   gh --version
 
-            - name: Authenticate with GitHub
-              run: |
-                  echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
             - name: Create PR tracking issue
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
-                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+                  PR_TITLE: ${{ github.event.pull_request.title }}
+                  PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+                  PR_BRANCH: ${{ github.event.pull_request.head.ref }}
               run: |
                   # Determine PR number
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -54,9 +55,7 @@ jobs:
                       PR_BRANCH=$(echo "$PR_DETAILS" | jq -r '.headRefName')
                   else
                       PR_NUMBER="${{ github.event.pull_request.number }}"
-                      PR_TITLE="${{ github.event.pull_request.title }}"
-                      PR_AUTHOR="${{ github.event.pull_request.user.login }}"
-                      PR_BRANCH="${{ github.event.pull_request.head.ref }}"
+                      # Use environment variables directly
                   fi
 
                   echo "Creating tracking issue for PR"
@@ -64,12 +63,10 @@ jobs:
                   echo "Author extracted"
                   echo "Branch extracted"
 
-                  # Run PR issue creation script
+                  # Run PR issue creation script (uses already authenticated gh CLI)
                   bash scripts/create_pr_tracking_issue.sh "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BRANCH"
 
             - name: Link issue to PR
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
@@ -80,18 +77,16 @@ jobs:
                       if [[ -n "$ISSUE_NUMBER" ]]; then
                           echo "Linking Issue to PR"
 
-                          # Simple comments with basic content using wrapper script
+                          # Simple comments with basic content using wrapper script (uses authenticated gh CLI)
                           bash scripts/ci_gh_issue_wrapper.sh pr-comment "$PR_NUMBER" "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
                           bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
                       fi
                   fi
 
             - name: Update project labels
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
-                  # Add tracking labels
+                  # Add tracking labels (uses authenticated gh CLI)
                   echo "Adding tracking labels to PR"
                   gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || echo "Could not add labels"

@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python environment
         uses: actions/setup-python@v4
@@ -39,7 +39,7 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
 
       - name: Setup logs directory
         run: mkdir -p logs
@@ -83,7 +83,7 @@ jobs:
       actions: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python environment
         uses: actions/setup-python@v4
@@ -94,7 +94,7 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          pip install -e .[test]
+          pip install -e '.[test]'
 
       - name: Run documentation quality assessment
         run: |

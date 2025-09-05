@@ -5,6 +5,7 @@
 #   scope: .github/workflows/ci.yml
 #   triggers: Push and pull_request events
 #   output: Build artifacts and coverage reports
+#   gpg-signing: Required for commit verification
 # ---
 name: CI
 
@@ -25,7 +26,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -37,7 +38,7 @@ jobs:
             code: ${{ steps.filter.outputs.code }}
             docs: ${{ steps.filter.outputs.docs }}
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
             - name: Filter paths
@@ -82,7 +83,7 @@ jobs:
             VALE_VERSION: 3.12.0
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
                   ref: ${{ github.head_ref }}
@@ -92,46 +93,47 @@ jobs:
               run: shellcheck --severity=warning scripts/*.sh
             - name: Lint commit messages
               run: bash scripts/check_commit_messages.sh
-            - name: Install the gh cli
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
-              with:
-                  version: stable
-            - name: Show gh version
-              run: which gh && gh --version
-            - name: Verify gh version
+            - name: Verify GitHub CLI availability
               run: |
-                  ver=$(gh --version | head -n1 | awk '{print $3}')
-                  major=${ver%%.*}
-                  if [ "$major" -lt 2 ]; then
-                  echo "::error::GitHub CLI v2 or higher required" >&2
-                  exit 1
+                  # GitHub CLI is pre-installed on GitHub Actions runners
+                  if ! command -v gh >/dev/null 2>&1; then
+                      echo "::error::GitHub CLI not found. Installing..."
+                      # Install GitHub CLI if not available
+                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                      ARCH=$(dpkg --print-architecture)
+                      printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" \
+                          "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                      sudo apt update
+                      sudo apt install gh
                   fi
+                  GH_VERSION=$(gh --version | head -n1)
+                  printf "GitHub CLI version: %s\n" "$GH_VERSION"
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Set up Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
             - name: Verify language versions
               run: bash scripts/check_versions.sh
             - name: Cache pip downloads
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.cache/pip
                   key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
                   restore-keys: |
                       ${{ runner.os }}-py${{ matrix.python-version }}-
             - name: Cache frontend node modules
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: frontend/node_modules
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
                   restore-keys: |
                       ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
             - name: Cache bot node modules
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: bot/node_modules
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
@@ -145,12 +147,12 @@ jobs:
               run: |
                   python -m venv .venv
                   source .venv/bin/activate
-                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> $GITHUB_ENV
-                  printf "%s/bin\n" "$VIRTUAL_ENV" >> $GITHUB_PATH
+                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+                  printf "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
             - name: Install dev dependencies
               run: |
                   source .venv/bin/activate
-                  pip install .[test] 2>&1 | tee logs/pip-install.log || {
+                  pip install ".[test]" 2>&1 | tee logs/pip-install.log || {
                       echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
                       exit 1
                   }
@@ -196,7 +198,31 @@ jobs:
             - name: Install package
               run: |
                   source .venv/bin/activate
-                  pip install -e .[test] 2>&1 | tee logs/pip-install-editable.log
+                  pip install -e ".[test]" 2>&1 | tee logs/pip-install-editable.log
+            - name: Load CI environment variables
+              run: |
+                  # Load .env.ci file and export variables for subsequent steps
+                  if [ -f .env.ci ]; then
+                      echo "Loading CI environment variables from .env.ci"
+                      set -a
+                      source .env.ci
+                      set +a
+                      # Export key variables to GitHub environment
+                      {
+                        printf "APP_ENV=%s\n" "$APP_ENV"
+                        printf "JWT_SECRET_KEY=%s\n" "$JWT_SECRET_KEY"
+                        printf "DATABASE_URL=%s\n" "$DATABASE_URL"
+                        printf "JWT_ALGORITHM=%s\n" "$JWT_ALGORITHM"
+                        printf "TOKEN_EXPIRE_SECONDS=%s\n" "$TOKEN_EXPIRE_SECONDS"
+                        printf "DISCORD_API_TIMEOUT=%s\n" "$DISCORD_API_TIMEOUT"
+                      } >> "$GITHUB_ENV"
+                      echo "Environment variables loaded for CI:"
+                      printf "  APP_ENV: %s\n" "$APP_ENV"
+                      printf "  DATABASE_URL: %s...\n" "${DATABASE_URL:0:50}"
+                  else
+                      echo "::error::.env.ci file not found"
+                      exit 1
+                  fi
             - name: Enforce Potato ignore policy
               run: bash scripts/check_potato_ignore.sh
             - name: Validate PR Summary
@@ -212,15 +238,50 @@ jobs:
                   # Validate required sections and content
                   source .venv/bin/activate
                   python scripts/validate_pr_summary.py PR_SUMMARY.md
+
             - name: Quality Control Gate
               run: |
-                  # Run comprehensive 95% QC validation
-                  if [[ -x "./scripts/qc_pre_push.sh" ]]; then
-                      echo "RUNNING: 95% Quality Control validation..."
-                      ./scripts/qc_pre_push.sh
-                  else
-                      echo "WARNING: QC script not found, skipping comprehensive validation"
+                echo "Running comprehensive Quality Control validation..."
+                source .venv/bin/activate
+
+                if ./scripts/qc_pre_push.sh; then
+                  echo "Quality Control Gate: PASSED"
+                else
+                  echo "Quality Control Gate: FAILED"
+                  echo "Running enhanced failure analysis..."
+
+                  # Run misalignment detection
+                  if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
+                    echo "Executing system misalignment detection..."
+                    ./scripts/detect_system_misalignment.sh || true
                   fi
+
+                  # Run enhanced CI failure analysis
+                  if [[ -x "./scripts/enhanced_ci_failure_analysis.sh" ]]; then
+                    echo "Executing enhanced CI failure analysis..."
+                    ./scripts/enhanced_ci_failure_analysis.sh || true
+                  fi
+
+                  # Upload analysis artifacts
+                  echo "Uploading diagnostic artifacts..."
+                  mkdir -p analysis-artifacts
+                  find logs/ -name "*$(date +%Y%m%d)*" -type f 2>/dev/null | head -10 | while read -r file; do
+                    cp "$file" analysis-artifacts/ 2>/dev/null || true
+                  done
+
+                  echo "Analysis complete. Check artifacts for detailed diagnostics."
+                  exit 1
+                fi
+
+            - name: Upload Analysis Artifacts
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ci-failure-analysis
+                  path: |
+                    logs/
+                    analysis-artifacts/
+                  retention-days: 7
             - name: Generate OpenAPI spec
               run: |
                   source .venv/bin/activate
@@ -228,8 +289,7 @@ jobs:
             - name: Check committed OpenAPI spec
               run: |
                   git diff --quiet src/devonboarder/openapi.json || {
-                      echo "::error::openapi.json is outdated. Run 'make openapi'" \
-                           " and commit the changes.";
+                      echo "::error::openapi.json is outdated. Run 'make openapi' and commit the changes.";
                       exit 1;
                   }
             - name: Validate OpenAPI contract
@@ -328,7 +388,7 @@ jobs:
               run: |
                   mkdir -p logs
                   source .venv/bin/activate
-                  python -m diagnostics > logs/diagnostics.log
+                  PYTHONPATH=src python -m devonboarder.diagnostics > logs/diagnostics.log
             - name: Upload diagnostics
               if: always()
               uses: actions/upload-artifact@v4
@@ -381,7 +441,7 @@ jobs:
                   path: frontend/vitest.log
                   retention-days: 7
             - name: Cache Playwright browsers
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.cache/ms-playwright
                   key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
@@ -488,6 +548,7 @@ jobs:
                   source .venv/bin/activate
                   python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
             - name: Commit coverage badge
+              if: github.event_name != 'pull_request'
               env:
                   # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
                   CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
@@ -511,16 +572,16 @@ jobs:
                           # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
                           if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
                               echo "Attempting push with CI_BOT_TOKEN..."
-                              git push https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                              git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                   echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
-                                  git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                                  git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                       echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
                                       exit 1  # Trigger failure condition for artifact upload
                                   }
                               }
                           else
                               echo "Using GITHUB_TOKEN for push..."
-                              git push https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || {
+                              git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
                                   echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
                                   exit 1  # Trigger failure condition for artifact upload
                               }
@@ -532,7 +593,7 @@ jobs:
 
             # Upload coverage badge as artifact if git push failed
             - name: Upload coverage badge as artifact (fallback)
-              if: failure()
+              if: failure() || github.event_name == 'pull_request'
               uses: actions/upload-artifact@v4
               with:
                   name: coverage-badge-fallback
@@ -617,13 +678,15 @@ jobs:
                   if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
                       echo "CI failure diagnoser completed successfully"
                   else
-                      echo "# CI Failure Analysis" > audit.md
-                      echo "" >> audit.md
-                      echo "CI failure diagnoser encountered an issue:" >> audit.md
-                      echo "- Log files may not be available at expected location" >> audit.md
-                      echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`" >> audit.md
-                      echo "" >> audit.md
-                      echo "Please check the workflow logs for detailed error information." >> audit.md
+                      {
+                        echo "# CI Failure Analysis"
+                        echo ""
+                        echo "CI failure diagnoser encountered an issue:"
+                        echo "- Log files may not be available at expected location"
+                        echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`"
+                        echo ""
+                        echo "Please check the workflow logs for detailed error information."
+                      } > audit.md
                   fi
                   # Ensure audit.md exists and has content
                   if [ ! -f audit.md ] || [ ! -s audit.md ]; then
@@ -640,7 +703,7 @@ jobs:
               id: ci_failure
               run: |
                   set -euo pipefail
-                  printf '\n<!-- sha: %s -->\n' "$GITHUB_SHA" >> summary.md
+                  printf -- "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
 
                   # Ensure audit.md exists before trying to read it
                   if [ -f audit.md ]; then
@@ -657,7 +720,7 @@ jobs:
                   if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
                       echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
                       echo "Auth check output:" | tee -a gh_cli.log
-                      printf "%s\n" "$gh_bin_check" | tee -a gh_cli.log
+                      echo "$gh_bin_check" | tee -a gh_cli.log
                       exit 0
                   fi
 
@@ -666,7 +729,7 @@ jobs:
                   if [ -f "$ISSUE_FILE" ]; then
                       ISSUE=$(cat "$ISSUE_FILE")
                       echo "Using saved issue number:" | tee -a gh_cli.log
-                      printf "%s\n" "$ISSUE" | tee -a gh_cli.log
+                      printf -- "%s\n" "$ISSUE" | tee -a gh_cli.log
                       if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
                           echo "Failed to comment on issue. Continuing without issue update." | tee -a gh_cli.log
                           echo "::warning::Failed to comment on issue ${ISSUE}. Continuing without issue update."
@@ -678,22 +741,22 @@ jobs:
                           if [ -n "$ISSUE" ]; then
                               if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
                                   echo "Failed to comment on existing issue" | tee -a gh_cli.log
-                                  echo "::warning::Failed to comment on existing issue ${ISSUE}"
+                                  printf "::warning::Failed to comment on existing issue %s\n" "$ISSUE"
                               fi
                           else
                               if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
-                                  ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+                                ISSUE=$(printf -- '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
                               else
-                                  echo "::warning::Failed to create new issue. Continuing without issue creation."
+                                  printf "::warning::Failed to create new issue. Continuing without issue creation.\n"
                                   ISSUE=""
                               fi
                           fi
                       else
-                          echo "::warning::Failed to search for issues. Continuing without issue operations."
+                          printf "::warning::Failed to search for issues. Continuing without issue operations.\n"
                           ISSUE=""
                       fi
                   fi
-                  echo "issue-number=${ISSUE:-none}" >> "$GITHUB_OUTPUT"
+                  printf -- "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
               env:
                   GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Save CI failure issue number

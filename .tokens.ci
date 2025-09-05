@@ -1,0 +1,27 @@
+# =============================================================================
+# DevOnboarder Token Management v2.0
+# File: .tokens.ci (CI Test Environment)
+# Security: COMMITTED - Test values only, no production secrets
+# Synchronization: Managed by scripts/sync_tokens.sh
+# =============================================================================
+
+# GitHub Authentication Tokens (Test Values)
+AAR_TOKEN=ci_test_aar_token_placeholder
+CI_ISSUE_AUTOMATION_TOKEN=ci_test_ci_issue_automation_token_placeholder
+CI_BOT_TOKEN=ci_test_ci_bot_token_placeholder
+
+# Discord Integration (Test Values)
+DISCORD_BOT_TOKEN=ci_test_discord_bot_token_placeholder
+DISCORD_CLIENT_SECRET=ci_test_discord_client_secret_placeholder
+
+# Service Authentication (Test Values)
+BOT_JWT=ci_test_bot_jwt_placeholder
+
+# Infrastructure Tokens (Test Values)
+TUNNEL_TOKEN=ci_test_tunnel_token_placeholder
+CF_DNS_API_TOKEN=ci_test_cf_dns_api_token_placeholder
+
+# Orchestration Tokens (Test Values)
+DEV_ORCHESTRATION_BOT_KEY=ci_test_dev_orchestration_bot_key_placeholder
+PROD_ORCHESTRATION_BOT_KEY=ci_test_prod_orchestration_bot_key_placeholder
+STAGING_ORCHESTRATION_BOT_KEY=ci_test_staging_orchestration_bot_key_placeholder

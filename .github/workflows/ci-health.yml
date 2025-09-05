@@ -26,7 +26,7 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
             - uses: ibiqlik/action-yamllint@v3
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
@@ -38,7 +38,7 @@ jobs:
         outputs:
             list: ${{ steps.set.outputs.list }}
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
             - name: Fetch branches
@@ -49,11 +49,11 @@ jobs:
               run: |
                   cutoff=$(date -d '30 days ago' +%s)
                   active=$(git for-each-ref --format='%(refname:strip=3) %(committerdate:unix)' refs/remotes/origin |
-                    awk -v cutoff=$cutoff '$1 != "HEAD" && $1 != "main" && $2 >= cutoff {print $1}')
+                    awk -v cutoff="$cutoff" '$1 != "HEAD" && $1 != "main" && $2 >= cutoff {print $1}')
                   if [ -z "$active" ]; then
                     printf "list=[]\n" >> "$GITHUB_OUTPUT"
                   else
-                    json=$(printf '%s\n' $active | jq -R . | jq -s .)
+                    json=$(echo "$active" | jq -R . | jq -s .)
                     printf "list=%s\n" "$json" >> "$GITHUB_OUTPUT"
                   fi
 
@@ -68,7 +68,7 @@ jobs:
                 python-version: ["3.12"]
                 node-version: ["22"]
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
                   ref: ${{ matrix.branch }}
@@ -90,7 +90,8 @@ jobs:
               run: bash scripts/run_tests.sh
             - name: Record result
               if: always()
-              run: 'echo "${{ matrix.branch }}: ${{ job.status }}" > result.txt'
+              run: |
+                echo "${{ matrix.branch }}: ${{ job.status }}" > result.txt
             - name: Upload result
               if: always()
               uses: actions/upload-artifact@v4
@@ -115,7 +116,7 @@ jobs:
             - id: summarize
               run: |
                   failures=$(grep -h "" results/result-*/result.txt | awk -F': ' '$2=="failure"{print $1}')
-                  failures_cleaned=$(printf '%s ' $failures | sed 's/ *$//')
+                  failures_cleaned=${failures%%[[:space:]]*}
                   printf "failures=%s\n" "$failures_cleaned" >> "$GITHUB_OUTPUT"
             - name: Install PyYAML
               run: pip install PyYAML
@@ -132,7 +133,7 @@ jobs:
               run: |
                   echo "CI checks failed for the following branches:" > body.md
                   for b in $FAILED; do
-                    printf "- %s\n" "$b" >> body.md
+                    echo "- $b" >> body.md
                   done
                   jq -Rs --arg title "CI health failures $(date -I)" '{title:$title,body:.}' body.md > notify.json
                   gh workflow run notify.yml -f data="$(cat notify.json)"

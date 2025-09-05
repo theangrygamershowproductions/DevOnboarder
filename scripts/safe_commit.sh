@@ -21,6 +21,19 @@ COMMIT_MSG="$1"
 echo "Starting safe commit process..."
 echo "Commit message: $COMMIT_MSG"
 
+# CRITICAL: Validate quality gates are functional before proceeding
+echo "Validating quality gate health..."
+if ! ./scripts/validate_quality_gates.sh > /dev/null 2>&1; then
+    echo "CRITICAL: Quality gates are not functional!"
+    echo "Running full health check for details..."
+    ./scripts/validate_quality_gates.sh
+    echo ""
+    echo "COMMIT BLOCKED: Quality gates must be functional before commits"
+    echo "Fix the issues above and try again"
+    exit 1
+fi
+echo "Quality gates confirmed functional"
+
 # Get list of staged files before pre-commit runs
 STAGED_FILES=$(git diff --cached --name-only)
 echo "Files currently staged:"
@@ -41,10 +54,12 @@ else
         echo "Files were modified by pre-commit hooks:"
         echo "$MODIFIED_FILES"
 
-        # Re-add the modified files that were originally staged
-        echo "Re-staging modified files..."
+        # Reset staging area and re-stage only the originally intended files
+        # This prevents the "caching cycle" issue where modified files get staged on top of already staged files
+        echo "Resetting staging area and re-staging modified files..."
+        git reset HEAD --quiet
         echo "$STAGED_FILES" | while read -r file; do
-            if [[ -f "$file" ]] && echo "$MODIFIED_FILES" | grep -q "^$file$"; then
+            if [[ -f "$file" ]]; then
                 echo "  Re-staging: $file"
                 git add "$file"
             fi
