@@ -1,0 +1,78 @@
+openapi: 3.1.0
+info:
+  title: "DevOnboarder CI Diagnostics API"
+  description: "Read-only endpoints for CI health, logs, and triage hints."
+  version: "0.1.0"
+  contact:
+    name: "TAGS Engineering"
+    url: "https://github.com/theangrygamershowproductions"
+x-codex:
+  project: "DevOnboarder"
+  codex_scope: "tags"
+  codex_role: "cto"
+  codex_type: "service-contract"
+  author: "TAGS Engineering"
+  created_at: "2025-09-04"
+  updated_at: "2025-09-04"
+  tags: ["ci", "diagnostics", "automation"]
+servers:
+  - url: https://api.example.local/ci
+paths:
+  /health:
+    get:
+      summary: "Liveness probe"
+      tags: ["health"]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: ["ok"]
+  /triage/findings:
+    get:
+      summary: "Latest CI findings"
+      tags: ["triage"]
+      parameters:
+        - in: query
+          name: since
+          description: "ISO8601 timestamp; return findings updated since this time."
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "List of findings"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Finding"
+components:
+  schemas:
+    Finding:
+      type: object
+      required:
+        - id
+        - severity
+        - message
+      properties:
+        id:
+          type: string
+        severity:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+            - critical
+        message:
+          type: string
+        evidence_url:
+          type: string
+          format: uri
