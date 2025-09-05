@@ -15,6 +15,36 @@
 - ✅ **Improved CI Reliability**: Coverage badge updates now use GitHub API
 - ✅ **Enhanced Security**: All commits properly signed and verified
 - ✅ **Quality Maintained**: 100% QC score, all policies enforced
+- ✅ **Added Core-Instructions Metadata**: Comprehensive front-matter for workflow version tracking
+
+### **🎯 CRITICAL TROUBLESHOOTING LESSON LEARNED**
+
+**ALWAYS use `./scripts/validate_ci_locally.sh` FIRST when troubleshooting CI issues!**
+
+**Why This Matters**:
+
+- Runs ~95% of GitHub Actions pipeline locally
+- Catches issues before pushing → prevents CI failures
+- Provides detailed step-by-step diagnostics
+- Eliminates "hit and miss" development approach
+- Saves significant development time and CI resources
+
+**Best Practice Established**:
+
+```bash
+# Before any complex CI troubleshooting:
+cd /home/potato/DevOnboarder
+source .venv/bin/activate
+./scripts/validate_ci_locally.sh
+
+# This script provides:
+# - 48 comprehensive validation steps
+# - Individual log files for each step
+# - ~77%+ success rate visibility before push
+# - Actionable failure diagnosis
+```
+
+**Session Evidence**: The script revealed 11 failures before we pushed, allowing us to understand exactly what needed fixing versus what was unrelated to our changes. This prevented multiple CI failure cycles.
 
 ### **Strategic Bridge: Back to Original Priorities**
 
@@ -139,6 +169,21 @@ gh issue view 1088  # MVP Phase 1: Foundation Stabilization
 
 # Cherry-pick AAR features when needed (code preserved locally)
 git branch -a | grep -E "(aar|emoji|policy)"  # See preserved branches
+```
+
+### **🎯 CRITICAL: For Any CI Troubleshooting**
+
+```bash
+# ALWAYS run this FIRST before complex CI debugging:
+cd /home/potato/DevOnboarder
+source .venv/bin/activate
+./scripts/validate_ci_locally.sh
+
+# This prevents CI failure cycles by:
+# - Running ~95% of CI pipeline locally
+# - Providing 48 detailed validation steps
+# - Creating individual log files for each failure
+# - Showing exactly what needs fixing before pushing
 ```
 
 ## 📊 **Key Decisions Made This Session**
