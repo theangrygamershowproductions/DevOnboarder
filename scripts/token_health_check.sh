@@ -48,9 +48,6 @@ test_github_api() {
 
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
-    printf "Value: %s\n" "$"
-    printf "Value: %s\n" "$"
-
     local token_value="${!token_name:-}"
     if [ -z "$token_value" ]; then
         echo "   Status: Error: TOKEN NOT FOUND"
@@ -66,7 +63,8 @@ test_github_api() {
         echo "   Status: Success: API WORKING"
         PASSED_TESTS=$((PASSED_TESTS + 1))
     else
-        if printf "Value: %s\n" "$"; then
+        # Check for propagation delay in the API error message
+        if echo "$result" | grep -qi "propagation delay\|token not yet active\|bad credentials"; then
             echo "   Status: ⏳ PROPAGATION DELAY"
             PROPAGATION_DELAYS=$((PROPAGATION_DELAYS + 1))
         else
