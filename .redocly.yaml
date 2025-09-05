@@ -1,6 +1,0 @@
-aspis:
-  devonboarder:
-    root: openapi/devonboarder.ci.yaml
-lint:
-  extends:
-    - recommended

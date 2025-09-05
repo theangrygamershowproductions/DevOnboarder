@@ -64,7 +64,11 @@ mkdir -p "$LOG_DIR"
 
 echo "DevOnboarder Documentation Quality Control"
 echo "=========================================="
-echo "Mode: $([ "$FIX_MODE" = true ] && echo "CHECK & FIX" || echo "CHECK ONLY")"
+if [ "$FIX_MODE" = true ]; then
+    echo "Mode: CHECK & FIX"
+else
+    echo "Mode: CHECK ONLY"
+fi
 
 # Virtual environment check
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
@@ -78,15 +82,18 @@ fi
 # Determine files to process
 if [[ -n "$SPECIFIC_FILE" ]]; then
     if [[ ! -f "$SPECIFIC_FILE" ]]; then
-        echo "ERROR: File not found: $SPECIFIC_FILE"
+        echo "ERROR: File not found"
+        printf "File path: %s\n" "$SPECIFIC_FILE"
         exit 1
     fi
     FILES=("$SPECIFIC_FILE")
-    echo "Processing single file: $SPECIFIC_FILE"
+    echo "Processing single file"
+    printf "File: %s\n" "$SPECIFIC_FILE"
 else
     # Get all markdown files tracked by git
     readarray -t FILES < <(git ls-files '*.md' 2>/dev/null || find . -name "*.md" -type f -not -path './.git/*' -not -path './.*/*')
-    echo "Processing ${#FILES[@]} markdown files"
+    echo "Processing markdown files"
+    printf "File count: %d\n" "${#FILES[@]}"
 fi
 
 # Initialize counters
@@ -162,22 +169,24 @@ fi
 # Summary report
 echo ""
 echo "=============== SUMMARY ==============="
-echo "Total files processed: $TOTAL_FILES"
-echo "Files needing formatting: $FORMATTED_FILES"
-echo "Processing errors: $ERROR_FILES"
+printf "Total files processed: %d\n" "$TOTAL_FILES"
+printf "Files needing formatting: %d\n" "$FORMATTED_FILES"
+printf "Processing errors: %d\n" "$ERROR_FILES"
 
 if [[ $ERROR_FILES -gt 0 ]]; then
     echo ""
     echo "ERRORS:"
     for error in "${ERRORS[@]}"; do
-        echo "  - $error"
+        echo "  - Error occurred"
+        printf "    Details: %s\n" "$error"
     done
 fi
 
 if [[ "$FIX_MODE" = true ]]; then
     if [[ $FORMATTED_FILES -gt 0 ]]; then
         echo ""
-        echo "SUCCESS: Fixed $FORMATTED_FILES files"
+        echo "SUCCESS: Files have been fixed"
+        printf "Files fixed: %d\n" "$FORMATTED_FILES"
         echo "Please review changes and commit if appropriate"
     else
         echo ""
