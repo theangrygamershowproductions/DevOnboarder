@@ -39,7 +39,35 @@ suggest_milestone_generation() {
 
     # Check if this is significant work (multiple commits or specific patterns)
     local commit_count
-    commit_count=$(git rev-list --count HEAD ^origin/main 2>/dev/null || echo "0")
+
+    # Detect default branch and remote with fallbacks
+    local default_branch
+    local remote_name
+
+    # Try to get the actual default branch from remote HEAD
+    default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|^refs/remotes/origin/||')
+
+    # Fallback to common branch names if remote HEAD not set
+    if [[ -z "$default_branch" ]]; then
+        if git show-ref --verify --quiet refs/remotes/origin/main; then
+            default_branch="main"
+        elif git show-ref --verify --quiet refs/remotes/origin/master; then
+            default_branch="master"
+        elif git show-ref --verify --quiet refs/remotes/origin/develop; then
+            default_branch="develop"
+        else
+            default_branch="main"  # Ultimate fallback
+        fi
+    fi
+
+    # Detect remote name (usually origin)
+    remote_name=$(git remote | head -1)
+    if [[ -z "$remote_name" ]]; then
+        remote_name="origin"  # Fallback
+    fi
+
+    local base_ref="${remote_name}/${default_branch}"
+    commit_count=$(git rev-list --count HEAD ^"$base_ref" 2>/dev/null || echo "0")
 
     if [[ $commit_count -gt 2 ]] || [[ $branch_name =~ (feat|fix|enhance|ci) ]]; then
         echo ""
