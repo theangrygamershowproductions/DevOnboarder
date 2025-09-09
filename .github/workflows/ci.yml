@@ -411,7 +411,15 @@ jobs:
 
                   # Core authentication service - highest standard
                   echo "Testing devonboarder service (95% threshold)..."
-                  if [ "$auth_coverage" -ge 95 ]; then
+                  if COVERAGE_FILE=logs/.coverage_auth pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov --cov-config=config/.coveragerc.auth \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_auth.xml \
+                      --cov-fail-under=95 \
+                      --junitxml=test-results/pytest-auth.xml \
+                      tests/test_auth_service.py \
+                      2>&1 | tee logs/pytest_auth.log; then
                       echo "PASS devonboarder: Coverage above 95% threshold"
                   else
                       echo "FAIL devonboarder: Coverage below 95% threshold"
