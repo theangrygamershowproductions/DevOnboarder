@@ -1,6 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+# ==================================================================================
+# PYTEST ARTIFACTS CLEANUP SCRIPT
+#
+# This script removes temporary test artifacts while protecting permanent project
+# configuration files. See docs/CONFIGURATION_MANAGEMENT_POLICY.md for detailed
+# information about what is protected vs what is cleaned up.
+#
+# PROTECTED: config/ directory and all permanent configuration files
+# REMOVED: Temporary test artifacts, coverage files, cache directories
+# ==================================================================================
+
 echo "Comprehensive pytest sandbox artifact cleanup"
 
 echo "Removing pytest temporary directories"
@@ -9,11 +20,24 @@ find . -type d -name "pytest-of-*" -not -path "./.git/*" -not -path "./.venv/*" 
     rm -rf "$dir"
 done
 
+# ==================================================================================
+# COVERAGE ARTIFACTS CLEANUP
+#
+# CRITICAL: This section removes TEMPORARY coverage artifacts while protecting
+# PERMANENT project configuration files:
+#
+# ✅ PROTECTED: config/.coveragerc.* - Service-specific coverage configurations
+# ✅ PROTECTED: config/* - All permanent project configuration files
+# 🗑️ REMOVED: .coverage*, coverage.xml, etc. - Temporary test artifacts
+#
+# The --not -path "./config/*" exclusion ensures our coverage masking solution
+# configuration files are never deleted during cleanup operations.
+# ==================================================================================
 echo "Removing ALL coverage artifacts"
-find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
-find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
-find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
-find . -name "coverage-final.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
+find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
+find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
+find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
+find . -name "coverage-final.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
 find . -name ".nyc_output" -type d -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
 rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
@@ -58,12 +82,22 @@ echo "Removing test databases"
 find . -name "test.db" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
-echo "Removing configuration backups"
+# ==================================================================================
+# TEMPORARY CONFIGURATION BACKUPS CLEANUP
+#
+# ✅ PROTECTED: config/ - Permanent project configuration directory
+# 🗑️ REMOVED: config_backups/ - Temporary backup directory created during testing
+#
+# DISTINCTION:
+# - config/ contains permanent service configurations (.coveragerc.*, *.yml)
+# - config_backups/ contains temporary copies made during operations
+# ==================================================================================
+echo "Removing temporary config_backups directory"
 if [[ -d "config_backups" ]]; then
     backup_count=$(find config_backups/ -type f 2>/dev/null | wc -l || echo "0")
-    printf "Removing directory with %s files: config_backups\n" "$backup_count"
+    printf "Removing temporary directory with %s files: config_backups/\n" "$backup_count"
     rm -rf config_backups/ 2>/dev/null || true
-    echo "Configuration backups directory removed"
+    echo "Temporary config_backups directory removed"
 fi
 
 echo "Removing Vale validation artifacts"
@@ -92,7 +126,7 @@ find . -type f \( -name "*.log" -o -name "*.yaml" -o -name "*.yml" -o -name "*.t
     done
 
 remaining_pytest=$(find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
-remaining_coverage=$(find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | wc -l)
+remaining_coverage=$(find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -not -path "./config/*" -type f 2>/dev/null | wc -l)
 remaining_cache=$(find . -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" 2>/dev/null | wc -l)
 
 echo "Enhanced cleanup summary"
@@ -114,7 +148,7 @@ fi
 
 if [[ "$remaining_coverage" -gt 0 ]]; then
     echo "DEBUG: Remaining coverage files"
-    find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | while read -r f; do
+    find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -not -path "./config/*" -type f 2>/dev/null | head -5 | while read -r f; do
         printf "  File: %s\n" "$f"
     done || true
 fi

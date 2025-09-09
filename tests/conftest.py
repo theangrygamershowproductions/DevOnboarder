@@ -20,6 +20,18 @@ from devonboarder import auth_service  # noqa: E402
 @pytest.fixture(autouse=True, scope="function")
 def setup_test_database():
     """Set up clean database for each test."""
+    # Set required environment variables for auth_service before any imports
+    import os
+    import sys
+
+    # Add src directory to Python path
+    src_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "src")
+    if src_path not in sys.path:
+        sys.path.insert(0, src_path)
+
+    os.environ.setdefault("JWT_SECRET_KEY", "test-jwt-secret-for-testing")
+    os.environ.setdefault("DATABASE_URL", "sqlite:///test_devonboarder.db")
+
     # Create temporary database file
     db_fd, db_path = tempfile.mkstemp(suffix=".db")
     os.close(db_fd)
@@ -39,7 +51,6 @@ def setup_test_database():
     # Re-import all models to register them with the cleared metadata
     # This ensures fresh registration for each test
     import importlib
-    import sys
 
     # Force reload of modules to re-register models
     modules_to_reload = [
@@ -53,7 +64,11 @@ def setup_test_database():
             importlib.reload(sys.modules[module_name])
 
     # Import feedback model to ensure it's registered
-    from src.feedback_service.api import Feedback  # noqa: F401
+    try:
+        from src.feedback_service.api import Feedback  # noqa: F401
+    except ImportError:
+        # Skip feedback model import if src package not available
+        pass
 
     # Create all tables after models are re-registered
     auth_service.Base.metadata.create_all(bind=auth_service.engine)

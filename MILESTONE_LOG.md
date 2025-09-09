@@ -18,6 +18,22 @@ codex_runtime: false
 
 # DevOnboarder Milestone Log
 
+## Coverage Masking Solution - September 5, 2025 ✅ COMPLETE
+
+**Impact**: CRITICAL - Resolved strategic testing quality measurement problem
+
+**Problem**: pytest-cov coverage masking where well-tested large services masked poorly-tested small services due to `source = ["src"]` in pyproject.toml tracking ALL imported modules regardless of `--cov=src/xp` specification.
+
+**Solution**: Service-specific `.coveragerc` files using `--cov-config=.coveragerc.servicename` to completely override main configuration and achieve perfect per-service coverage isolation.
+
+**Results**:
+
+- XP Service: 49 statements, 100% coverage (true isolation)
+- Discord Service: 59 statements, 100% coverage (true isolation)
+- Strategic per-service testing enabled with ROI-optimized thresholds
+
+**Files**: `.coveragerc.xp`, `.coveragerc.auth`, `.coveragerc.discord`, updated CI workflow, comprehensive documentation in `docs/COVERAGE_MASKING_SOLUTION.md`
+
 ## 📌 Token Architecture v2.1 — Complete Backlog Clearance
 
 ### Summary

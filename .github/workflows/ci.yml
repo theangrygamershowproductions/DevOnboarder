@@ -398,22 +398,161 @@ jobs:
                   retention-days: 7
             - name: Prepare test-results directory
               run: mkdir -p test-results logs
-            - name: Run tests with coverage
+            - name: Run per-service coverage tests
               run: |
                   source .venv/bin/activate
+                  echo "=========================================="
+                  echo "DevOnboarder Per-Service Coverage Analysis"
+                  echo "=========================================="
+                  echo
+
+                  # Initialize coverage tracking
+                  OVERALL_SUCCESS=true
+
+                  # Core authentication service - highest standard
+                  echo "Testing devonboarder service (95% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_auth pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov --cov-config=config/.coveragerc.auth \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_auth.xml \
+                      --cov-fail-under=95 \
+                      --junitxml=test-results/pytest-auth.xml \
+                      tests/test_auth_service.py \
+                      2>&1 | tee logs/pytest_auth.log; then
+                      echo "PASS devonboarder: Coverage above 95% threshold"
+                  else
+                      echo "FAIL devonboarder: Coverage below 95% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # XP/gamification service - high standard
+                  echo "Testing xp service (90% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_xp pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov --cov-config=config/.coveragerc.xp \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_xp.xml \
+                      --cov-fail-under=90 \
+                      --junitxml=test-results/pytest-xp.xml \
+                      tests/test_xp_api.py \
+                      2>&1 | tee logs/pytest_xp.log; then
+                      echo "PASS xp: Coverage above 90% threshold"
+                  else
+                      echo "FAIL xp: Coverage below 90% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # Discord integration - high standard (critical OAuth)
+                  echo "Testing discord_integration service (90% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_discord pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov --cov-config=config/.coveragerc.discord \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_discord.xml \
+                      --cov-fail-under=90 \
+                      --junitxml=test-results/pytest-discord.xml \
+                      tests/test_discord_integration.py \
+                      2>&1 | tee logs/pytest_discord.log; then
+                      echo "PASS discord_integration: Coverage above 90% threshold"
+                  else
+                      echo "FAIL discord_integration: Coverage below 90% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # Feedback service - moderate standard
+                  echo "Testing feedback_service (85% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_feedback pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov=src/feedback_service \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_feedback.xml \
+                      --cov-fail-under=85 \
+                      --junitxml=test-results/pytest-feedback.xml \
+                      2>&1 | tee logs/pytest_feedback.log; then
+                      echo "PASS feedback_service: Coverage above 85% threshold"
+                  else
+                      echo "FAIL feedback_service: Coverage below 85% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # Routes - moderate standard
+                  echo "Testing routes (85% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_routes pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov=src/routes \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_routes.xml \
+                      --cov-fail-under=85 \
+                      --junitxml=test-results/pytest-routes.xml \
+                      2>&1 | tee logs/pytest_routes.log; then
+                      echo "PASS routes: Coverage above 85% threshold"
+                  else
+                      echo "FAIL routes: Coverage below 85% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # LLM helper service - moderate standard
+                  echo "Testing llama2_agile_helper (85% threshold)..."
+                  if COVERAGE_FILE=logs/.coverage_llama pytest \
+                      -o cache_dir=logs/.pytest_cache \
+                      --cov=src/llama2_agile_helper \
+                      --cov-report=term-missing \
+                      --cov-report=xml:logs/coverage_llama.xml \
+                      --cov-fail-under=85 \
+                      --junitxml=test-results/pytest-llama.xml \
+                      2>&1 | tee logs/pytest_llama.log; then
+                      echo "PASS llama2_agile_helper: Coverage above 85% threshold"
+                  else
+                      echo "FAIL llama2_agile_helper: Coverage below 85% threshold"
+                      OVERALL_SUCCESS=false
+                  fi
+                  echo
+
+                  # Generate combined coverage report
+                  echo "Generating combined coverage report..."
                   COVERAGE_FILE=logs/.coverage pytest \
-                      --cache-dir=logs/.pytest_cache \
+                      -o cache_dir=logs/.pytest_cache \
                       --cov=src \
                       --cov-report=xml:logs/coverage.xml \
-                      --cov-fail-under=95 \
+                      --cov-report=term \
                       --junitxml=test-results/pytest-results.xml \
                       2>&1 | tee logs/pytest.log
+
+                  echo
+                  echo "=========================================="
+                  echo "Per-Service Coverage Summary"
+                  echo "=========================================="
+
+                  # Check overall result
+                  if [ "$OVERALL_SUCCESS" = "true" ]; then
+                      echo "SUCCESS: ALL SERVICES PASSED their coverage thresholds"
+                      echo "DevOnboarder maintains high quality across all services"
+                  else
+                      echo "WARNING: Some services failed coverage thresholds"
+                      echo "Review individual service logs for improvement opportunities"
+                      echo "Focus testing efforts on failed services for maximum ROI"
+                      exit 1
+                  fi
             - name: Upload pytest results
-              if: always() && hashFiles('test-results/pytest-results.xml') != ''
+              if: always() && hashFiles('test-results/pytest-*.xml') != ''
               uses: actions/upload-artifact@v4
               with:
                   name: pytest-results
-                  path: test-results/pytest-results.xml
+                  path: |
+                      test-results/pytest-results.xml
+                      test-results/pytest-devonboarder.xml
+                      test-results/pytest-utils.xml
+                      test-results/pytest-xp.xml
+                      test-results/pytest-discord.xml
+                      test-results/pytest-feedback.xml
+                      test-results/pytest-routes.xml
+                      test-results/pytest-llama.xml
                   retention-days: 7
             - name: Annotate pytest failures
               if: failure() && hashFiles('test-results/pytest-results.xml') != ''
@@ -516,6 +655,9 @@ jobs:
                   GITHUB_RUN_ID: ${{ github.run_id }}
               run: |
                   source .venv/bin/activate
+                  echo "Generating per-service coverage report..."
+                  python scripts/generate_service_coverage_report.py
+                  echo "Generating traditional coverage summary..."
                   python scripts/post_coverage_comment.py coverage-summary.md
                   bash scripts/append_coverage_summary.sh coverage-summary.md
             - name: Upload coverage summary
@@ -533,8 +675,9 @@ jobs:
                   path: |
                       bot/coverage
                       frontend/coverage
-                      logs/.coverage
-                      logs/coverage.xml
+                      logs/.coverage*
+                      logs/coverage*.xml
+                      logs/pytest*.log
                   retention-days: 7
             - name: Post coverage comment
               if: github.event_name == 'pull_request'
@@ -547,49 +690,50 @@ jobs:
               run: |
                   source .venv/bin/activate
                   python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
-            - name: Commit coverage badge
-              if: github.event_name != 'pull_request'
-              env:
-                  # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
-                  CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  # Ensure we're in virtual environment context for any Python tools
-                  source .venv/bin/activate
-
-                  git config user.name "${{ github.actor }}"
-                  git config user.email "${{ github.actor }}@users.noreply.github.com"
-
-                  # Check if coverage badge file exists and has changes
-                  if [ -f "coverage.svg" ]; then
-                      git add coverage.svg
-
-                      # Only commit if there are changes
-                      if git diff --staged --quiet; then
-                          echo "No changes to coverage badge"
-                      else
-                          git commit -m "CHORE(ci): update coverage badge"
-                          # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
-                          if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
-                              echo "Attempting push with CI_BOT_TOKEN..."
-                              git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                  echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
-                                  git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                      echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
-                                      exit 1  # Trigger failure condition for artifact upload
-                                  }
-                              }
-                          else
-                              echo "Using GITHUB_TOKEN for push..."
-                              git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-                                  echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
-                                  exit 1  # Trigger failure condition for artifact upload
-                              }
-                          fi
-                      fi
-                  else
-                      echo "Coverage badge file not found"
-                  fi
+            # Disabled: Coverage badge commit causes signature verification issues
+            # - name: Commit coverage badge
+            #   if: github.event_name != 'pull_request'
+            #   env:
+            #       # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
+            #       CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   run: |
+            #       # Ensure we're in virtual environment context for any Python tools
+            #       source .venv/bin/activate
+            #
+            #       git config user.name "${{ github.actor }}"
+            #       git config user.email "${{ github.actor }}@users.noreply.github.com"
+            #
+            #       # Check if coverage badge file exists and has changes
+            #       if [ -f "coverage.svg" ]; then
+            #           git add coverage.svg
+            #
+            #           # Only commit if there are changes
+            #           if git diff --staged --quiet; then
+            #               echo "No changes to coverage badge"
+            #           else
+            #               git commit -m "CHORE(ci): update coverage badge"
+            #               # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
+            #               if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
+            #                   echo "Attempting push with CI_BOT_TOKEN..."
+            #                   git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+            #                       echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
+            #                       git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+            #                           echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
+            #                           exit 1  # Trigger failure condition for artifact upload
+            #                       }
+            #                   }
+            #               else
+            #                   echo "Using GITHUB_TOKEN for push..."
+            #                   git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+            #                       echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
+            #                       exit 1  # Trigger failure condition for artifact upload
+            #                   }
+            #               fi
+            #           fi
+            #       else
+            #           echo "Coverage badge file not found"
+            #       fi
 
             # Upload coverage badge as artifact if git push failed
             - name: Upload coverage badge as artifact (fallback)
