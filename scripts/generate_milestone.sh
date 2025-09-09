@@ -115,9 +115,9 @@ function capture_performance_metrics() {
     local coverage=""
 
     if [[ -f "$LOGS_DIR/test_run_latest.log" ]]; then
-        test_duration=$(grep -oP "======.*in \K[0-9.]+s" "$LOGS_DIR/test_run_latest.log" | tail -1 || echo "")
-        success_rate=$(grep -oP "(\d+) passed" "$LOGS_DIR/test_run_latest.log" | head -1 | grep -oP "\d+" || echo "")
-        coverage=$(grep -oP "TOTAL.*\K[0-9]+%" "$LOGS_DIR/test_run_latest.log" | tail -1 || echo "")
+        test_duration=$(grep "======.*in [0-9.]*s" "$LOGS_DIR/test_run_latest.log" | tail -1 | sed 's/.*in \([0-9.]*s\).*/\1/' || echo "")
+        success_rate=$(grep "[0-9]* passed" "$LOGS_DIR/test_run_latest.log" | head -1 | sed 's/.*\([0-9]*\) passed.*/\1/' || echo "")
+        coverage=$(grep "TOTAL.*[0-9]*%" "$LOGS_DIR/test_run_latest.log" | tail -1 | sed 's/.*\([0-9]*%\).*/\1/' || echo "")
     fi
 
     # QC metrics
