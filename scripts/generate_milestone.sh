@@ -105,9 +105,37 @@ function capture_performance_metrics() {
     local files_changed
     local total_changes
 
-    commit_count=$(git rev-list --count HEAD ^origin/main 2>/dev/null || echo "0")
-    files_changed=$(git diff --name-only origin/main..HEAD 2>/dev/null | wc -l)
-    total_changes=$(git diff --stat origin/main..HEAD 2>/dev/null | tail -1 | awk '{print $4 + $6}' || echo "0")
+    # Detect default branch and remote with fallbacks
+    local default_branch
+    local remote_name
+
+    # Try to get the actual default branch from remote HEAD
+    default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|^refs/remotes/origin/||')
+
+    # Fallback to common branch names if remote HEAD not set
+    if [[ -z "$default_branch" ]]; then
+        if git show-ref --verify --quiet refs/remotes/origin/main; then
+            default_branch="main"
+        elif git show-ref --verify --quiet refs/remotes/origin/master; then
+            default_branch="master"
+        elif git show-ref --verify --quiet refs/remotes/origin/develop; then
+            default_branch="develop"
+        else
+            default_branch="main"  # Ultimate fallback
+        fi
+    fi
+
+    # Detect remote name (usually origin)
+    remote_name=$(git remote | head -1)
+    if [[ -z "$remote_name" ]]; then
+        remote_name="origin"  # Fallback
+    fi
+
+    local base_ref="${remote_name}/${default_branch}"
+
+    commit_count=$(git rev-list --count HEAD ^"$base_ref" 2>/dev/null || echo "0")
+    files_changed=$(git diff --name-only "$base_ref"..HEAD 2>/dev/null | wc -l || echo "0")
+    total_changes=$(git diff --stat "$base_ref"..HEAD 2>/dev/null | tail -1 | awk '{print $4 + $6}' 2>/dev/null || echo "0")
 
     # Recent test results
     local test_duration=""
