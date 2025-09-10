@@ -20,6 +20,7 @@ codex_runtime: false
 
 ## Coverage Masking Solution - September 5, 2025 ✅ COMPLETE
 
+**milestone_id**: coverage-masking-solution-2025-09-05
 **Impact**: CRITICAL - Resolved strategic testing quality measurement problem
 
 **Problem**: pytest-cov coverage masking where well-tested large services masked poorly-tested small services due to `source = ["src"]` in pyproject.toml tracking ALL imported modules regardless of `--cov=src/xp` specification.
@@ -32,9 +33,22 @@ codex_runtime: false
 - Discord Service: 59 statements, 100% coverage (true isolation)
 - Strategic per-service testing enabled with ROI-optimized thresholds
 
-**Files**: `.coveragerc.xp`, `.coveragerc.auth`, `.coveragerc.discord`, updated CI workflow, comprehensive documentation in `docs/COVERAGE_MASKING_SOLUTION.md`
+### Implementation Evidence
+
+**Configuration Files:**
+
+- `.coveragerc.xp` - XP service isolated coverage configuration
+- `.coveragerc.auth` - Auth service isolated coverage configuration
+- `.coveragerc.discord` - Discord service isolated coverage configuration
+- Updated CI workflow with service-specific coverage commands
+
+**Documentation:**
+
+- [docs/COVERAGE_MASKING_SOLUTION.md](https://github.com/theangrygamershowproductions/DevOnboarder/blob/main/docs/COVERAGE_MASKING_SOLUTION.md) - Complete solution documentation
 
 ## 📌 Token Architecture v2.1 — Complete Backlog Clearance
+
+**milestone_id**: token-architecture-v2-1-complete-backlog-clearance
 
 ### Summary
 
@@ -133,6 +147,8 @@ codex_runtime: false
 
 ## 📊 DevOnboarder Capability Valuation Matrix (September 2025)
 
+**milestone_id**: devonboarder-capability-valuation-matrix-2025-09
+
 ### Realistic Enterprise Infrastructure Assessment (Updated 2025-09-02)
 
 | Capability | Status | Evidence | Gap Analysis | Next Action |
@@ -184,6 +200,8 @@ codex_runtime: false
 **Competitive Advantage**: Self-documenting infrastructure with automated accountability
 
 ## 🧩 Phase Framework Integration Status (September 2025)
+
+**milestone_id**: phase-framework-integration-status-2025-09
 
 ### Integration Points Maintained
 
