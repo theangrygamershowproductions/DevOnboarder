@@ -28,7 +28,27 @@
 
 ## 📋 **Issue Management Tools**
 
-### Issue Resolution
+### PR Review & Feedback Integration
+
+| Tool | Purpose | Usage | Safety Level |
+|------|---------|-------|-------------|
+| `scripts/check_pr_inline_comments.sh` | Extract Copilot comments + resolution tracking | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only display, annotation storage) |
+
+```bash
+# Basic comment viewing
+./scripts/check_pr_inline_comments.sh --summary 1330
+./scripts/check_pr_inline_comments.sh --copilot-only --suggestions 1330
+./scripts/check_pr_inline_comments.sh --open-browser 1330
+
+# Resolution tracking workflow (NEW)
+./scripts/check_pr_inline_comments.sh --annotate 1330
+./scripts/check_pr_inline_comments.sh --resolution-summary 1330
+./scripts/check_pr_inline_comments.sh --learning-export 1330
+
+# CI integration
+./scripts/check_pr_inline_comments.sh --verify-resolutions 1330
+./scripts/check_pr_inline_comments.sh --format=json 1330
+```### Issue Resolution
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
