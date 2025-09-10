@@ -65,5 +65,5 @@ FAILED: Failed to close issue #1344
 ## Related Documentation
 
 - [CI Issue Automation Token Failures](./CI_ISSUE_AUTOMATION_TOKEN_FAILURES.md)
-- [Post-Merge Cleanup Workflow](../.github/workflows/post-merge-cleanup.yml)
-- [Issue Management Script](../scripts/manage_ci_failure_issues.sh)
+- [Post-Merge Cleanup Workflow](../../.github/workflows/post-merge-cleanup.yml)
+- [Issue Management Script](../../scripts/manage_ci_failure_issues.sh)
