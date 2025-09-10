@@ -174,11 +174,11 @@ EOF
 
             # Close the issue (check if already closed first)
             current_state=$(gh issue view "$issue_number" --json state --jq .state 2>/dev/null || echo "unknown")
-            if [[ "$current_state" == "CLOSED" ]]; then
+            if [[ "$current_state" == "unknown" ]]; then
+                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation${NC}"
+            elif [[ "$current_state" == "CLOSED" ]]; then
                 echo "${YELLOW}INFO:  Issue #$issue_number already closed, skipping${NC}"
                 ((closed_count++))
-            elif [[ "$current_state" == "unknown" ]]; then
-                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation${NC}"
             elif gh issue close "$issue_number" --reason completed; then
                 echo "${GREEN}SUCCESS: Closed issue #$issue_number${NC}"
                 ((closed_count++))
