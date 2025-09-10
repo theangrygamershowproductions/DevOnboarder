@@ -38,6 +38,13 @@ declare -A PROJECT_CONFIG=(
     [12]="Community Onboarding"
 )
 
+# README-specific project configuration (current project numbers in use)
+declare -A README_PROJECT_CONFIG=(
+    [4]="Team Planning"
+    [5]="Feature Release"
+    [6]="Roadmap"
+)
+
 # Error tracking
 VALIDATION_ERRORS=0
 
@@ -175,11 +182,10 @@ check_project_links() {
     echo ""
     echo "Checking project links in README.md..."
 
-    # Validate project links using configuration
-    # Note: Using current README project numbers, will migrate to PROJECT_CONFIG in future enhancement
-    validate_project_links "4" "Team Planning"
-    validate_project_links "5" "Feature Release"
-    validate_project_links "6" "Roadmap"
+    # Validate project links using README-specific configuration
+    for project_number in "${!README_PROJECT_CONFIG[@]}"; do
+        validate_project_links "$project_number" "${README_PROJECT_CONFIG[$project_number]}"
+    done
 }
 
 generate_summary() {
