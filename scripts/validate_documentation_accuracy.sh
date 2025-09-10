@@ -41,6 +41,16 @@ declare -A PROJECT_CONFIG=(
 # Error tracking
 VALIDATION_ERRORS=0
 
+get_milestone_description() {
+    local phase_number="$1"
+    case "$phase_number" in
+        "1") echo "${MILESTONE_CONFIG[1088]}" ;;
+        "2") echo "${MILESTONE_CONFIG[1089]}" ;;
+        "3") echo "${MILESTONE_CONFIG[1090]}" ;;
+        *) echo "Unknown Phase" ;;
+    esac
+}
+
 print_header() {
     echo "Documentation Accuracy Validation"
     echo "=================================="
@@ -140,12 +150,14 @@ check_readme_phase_statuses() {
         # Note: Phase 2 and 3 checks reserved for future enhancement
 
         if [[ -n "$phase1_line" ]]; then
+            local milestone_desc
+            milestone_desc="$(get_milestone_description "1")"
             if echo "$phase1_line" | grep -q "Complete"; then
                 echo -e "  ${GREEN}✓${NC} Phase 1 shows Complete status"
-                validate_milestone_status "1" "Complete" "Foundation Stabilization"
+                validate_milestone_status "1" "Complete" "$milestone_desc"
             elif echo "$phase1_line" | grep -q "Active"; then
                 echo -e "  ${RED}✗${NC} Phase 1 shows Active status"
-                validate_milestone_status "1" "Active" "Foundation Stabilization"
+                validate_milestone_status "1" "Active" "$milestone_desc"
             else
                 echo -e "  ${YELLOW}⚠${NC} Phase 1 status unclear in README"
             fi
@@ -163,7 +175,8 @@ check_project_links() {
     echo ""
     echo "Checking project links in README.md..."
 
-    # Validate the three main project links
+    # Validate project links using configuration
+    # Note: Using current README project numbers, will migrate to PROJECT_CONFIG in future enhancement
     validate_project_links "4" "Team Planning"
     validate_project_links "5" "Feature Release"
     validate_project_links "6" "Roadmap"
