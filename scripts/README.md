@@ -198,23 +198,35 @@ bash scripts/analyze_logs.sh
 
 #### `check_pr_inline_comments.sh`
 
-**Purpose**: Efficient extraction and review of GitHub Copilot and reviewer inline comments
+**Purpose**: Extract and track GitHub Copilot inline comments with resolution documentation
+
+**Features**:
+
+- Display comments with file/line context and browser integration
+- Interactive resolution annotation system
+- Learning pattern export for documentation
+- Resolution verification for CI integration
+- Enhanced display showing suggestions + resolutions side-by-side
 
 **Usage**:
 
 ```bash
-# Quick summary of all inline comments
+# Basic comment viewing
 ./scripts/check_pr_inline_comments.sh --summary PR_NUMBER
-
-# Show only Copilot suggestions with code fixes
 ./scripts/check_pr_inline_comments.sh --copilot-only --suggestions PR_NUMBER
-
-# Open all comment URLs in browser for detailed review
 ./scripts/check_pr_inline_comments.sh --open-browser PR_NUMBER
 
-# Get raw JSON for automation/integration
+# Resolution tracking workflow
+./scripts/check_pr_inline_comments.sh --annotate PR_NUMBER
+./scripts/check_pr_inline_comments.sh --resolution-summary PR_NUMBER
+./scripts/check_pr_inline_comments.sh --learning-export PR_NUMBER
+./scripts/check_pr_inline_comments.sh --verify-resolutions PR_NUMBER
+
+# CI/Automation integration
 ./scripts/check_pr_inline_comments.sh --format=json PR_NUMBER
 ```
+
+**Resolution Tracking**: Stores resolution annotations in `.devonboarder/pr_resolutions/` with action, reasoning, commit hash, and learning notes for comprehensive Documentation as Infrastructure support.
 
 **Features**:
 

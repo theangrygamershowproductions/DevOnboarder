@@ -1,8 +1,8 @@
-# DevOnboarder PR Inline Comments Workflow
+# DevOnboarder PR Inline Comments Workflow with Resolution Tracking
 
 ## 🎯 Purpose
 
-Efficient extraction and review of GitHub Copilot and reviewer inline comments for improved code quality and faster feedback integration.
+Efficient extraction, review, and resolution tracking of GitHub Copilot and reviewer inline comments for improved code quality, faster feedback integration, and comprehensive learning documentation.
 
 ## 🛠️ Quick Reference
 
@@ -22,6 +22,22 @@ Efficient extraction and review of GitHub Copilot and reviewer inline comments f
 ./scripts/check_pr_inline_comments.sh --format=json PR_NUMBER
 ```
 
+### Resolution Tracking Commands
+
+```bash
+# Add resolution annotations interactively
+./scripts/check_pr_inline_comments.sh --annotate PR_NUMBER
+
+# View resolution summary with metrics
+./scripts/check_pr_inline_comments.sh --resolution-summary PR_NUMBER
+
+# Export learning patterns to documentation
+./scripts/check_pr_inline_comments.sh --learning-export PR_NUMBER
+
+# Verify all comments have resolutions (CI integration)
+./scripts/check_pr_inline_comments.sh --verify-resolutions PR_NUMBER
+```
+
 ### Real-World Example
 
 ```bash
@@ -31,6 +47,13 @@ Efficient extraction and review of GitHub Copilot and reviewer inline comments f
 
 ./scripts/check_pr_inline_comments.sh --copilot-only --suggestions 1330
 # Shows detailed syntax fixes for invalid bash string multiplication
+
+# Add resolution tracking
+./scripts/check_pr_inline_comments.sh --annotate 1330
+# Interactive mode: document what was fixed and why
+
+./scripts/check_pr_inline_comments.sh --resolution-summary 1330
+# Shows: 5/5 comments resolved (100%)
 ```
 
 ## 📋 Workflow Integration
@@ -54,7 +77,30 @@ PR_NUMBER=$(gh pr list --author @me --limit 1 --json number --jq '.[0].number')
 # Script shows exact line numbers and suggested code
 ```
 
-### 3. Browser-Based Review
+### 3. Resolution Tracking Workflow
+
+```bash
+# Step 1: Review comments and apply fixes
+./scripts/check_pr_inline_comments.sh --copilot-only --suggestions PR_NUMBER
+
+# Step 2: Document resolutions interactively
+./scripts/check_pr_inline_comments.sh --annotate PR_NUMBER
+# Interactive prompts for each comment:
+# - Resolution action: "Applied - changed let to const"
+# - Reasoning: "Aligns with DevOnboarder immutability standards"
+# - Additional notes: "Also updated test files for consistency"
+# - Commit hash: "abc123"
+
+# Step 3: Verify all comments are resolved
+./scripts/check_pr_inline_comments.sh --verify-resolutions PR_NUMBER
+# Exit code 0: All resolved, Exit code 1: Some pending
+
+# Step 4: Generate learning documentation
+./scripts/check_pr_inline_comments.sh --learning-export PR_NUMBER
+# Creates: docs/learning/pr-{PR_NUMBER}-lessons.md
+```
+
+### 4. Browser-Based Review
 
 ```bash
 # Open all comments for detailed review
@@ -75,6 +121,41 @@ PR_NUMBER=$(gh pr list --author @me --limit 1 --json number --jq '.[0].number')
 - **Human-readable**: Default formatted output with visual separation
 - **JSON**: Raw API data for automation (`--format=json`)
 - **Browser**: Direct navigation to comment URLs (`--open-browser`)
+
+### Enhanced Display with Resolutions
+
+```bash
+┌─────────────────────────────────────────────────────────────
+│ 💬 Comment ID: 2418567890
+│ 👤 User: github-copilot[bot]
+│ 📅 Date: 2025-09-10 14:30
+│ 📁 File: scripts/devonboarder_policy_check.sh
+│ 📍 Line: 42
+│ 🔗 URL: https://github.com/owner/repo/pull/1330#r2418567890
+├─────────────────────────────────────────────────────────────
+│ 🤖 Comment:
+│ Use printf instead of echo with multiplication:
+│ printf '=%.0s' {1..60}; echo
+│
+│ ✅ RESOLUTION:
+│   ⚡ Action: Applied - replaced echo "=" * 60 with printf pattern
+│   💡 Reason: Invalid bash syntax fix per Copilot suggestion
+│   📝 Notes: Tested locally, passes shellcheck validation
+│   🔗 Commit: abc123def
+└─────────────────────────────────────────────────────────────
+```
+
+### Resolution Summary Format
+
+```bash
+📋 RESOLUTION SUMMARY for PR #1330
+Repository: owner/repo
+
+✅ RESOLVED (5/5 comments - 100%)
+❌ NO RESOLUTION (0 comments)
+
+📊 SUMMARY: 5/5 comments resolved (100%)
+```
 
 ### Example Output
 

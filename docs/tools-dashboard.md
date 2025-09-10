@@ -32,23 +32,23 @@
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
-| `scripts/check_pr_inline_comments.sh` | Extract Copilot inline comments | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only) |
+| `scripts/check_pr_inline_comments.sh` | Extract Copilot comments + resolution tracking | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only display, annotation storage) |
 
 ```bash
-# Quick summary of PR feedback
+# Basic comment viewing
 ./scripts/check_pr_inline_comments.sh --summary 1330
-
-# Focus on Copilot code suggestions
 ./scripts/check_pr_inline_comments.sh --copilot-only --suggestions 1330
-
-# Open all comments in browser for review
 ./scripts/check_pr_inline_comments.sh --open-browser 1330
 
-# Get JSON for automation integration
-./scripts/check_pr_inline_comments.sh --format=json 1330
-```
+# Resolution tracking workflow (NEW)
+./scripts/check_pr_inline_comments.sh --annotate 1330
+./scripts/check_pr_inline_comments.sh --resolution-summary 1330
+./scripts/check_pr_inline_comments.sh --learning-export 1330
 
-### Issue Resolution
+# CI integration
+./scripts/check_pr_inline_comments.sh --verify-resolutions 1330
+./scripts/check_pr_inline_comments.sh --format=json 1330
+```### Issue Resolution
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
