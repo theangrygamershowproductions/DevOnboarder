@@ -177,6 +177,8 @@ EOF
             if [[ "$current_state" == "CLOSED" ]]; then
                 echo "${YELLOW}INFO:  Issue #$issue_number already closed, skipping${NC}"
                 ((closed_count++))
+            elif [[ "$current_state" == "unknown" ]]; then
+                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation${NC}"
             elif gh issue close "$issue_number" --reason completed; then
                 echo "${GREEN}SUCCESS: Closed issue #$issue_number${NC}"
                 ((closed_count++))
