@@ -258,3 +258,6 @@ case "$COMMAND" in
 esac
 
 echo "Post-merge cleanup issue operation completed at $(date)"
+
+# Ensure script exits with success code when operations complete successfully
+exit 0
