@@ -1,0 +1,54 @@
+name: Documentation Validation Template
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - '.markdownlint.json'
+      - '.vale/**'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - '.markdownlint.json'
+      - '.vale/**'
+
+jobs:
+  documentation-quality:
+    permissions:
+      contents: read           # Required for checkout
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Run markdown linting
+        run: |
+          source .venv/bin/activate
+          npx markdownlint "**/*.md" --ignore node_modules
+
+      - name: Run Vale documentation linting
+        run: |
+          source .venv/bin/activate
+          python -m vale docs/
+
+      - name: Validate documentation structure
+        run: |
+          source .venv/bin/activate
+          # Add custom documentation validation logic
+          echo "Validating documentation structure..."

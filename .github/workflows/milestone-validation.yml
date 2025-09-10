@@ -15,12 +15,15 @@ on:
 
 jobs:
   validate-milestones:
+    permissions:
+      contents: read
+      pull-requests: write  # Required for PR comments on validation failure
     runs-on: ubuntu-latest
     name: Validate Milestone Documentation Format
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
