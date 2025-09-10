@@ -196,6 +196,35 @@ bash scripts/analyze_logs.sh
 
 ### 🔄 Git Utilities
 
+#### `check_pr_inline_comments.sh`
+
+**Purpose**: Efficient extraction and review of GitHub Copilot and reviewer inline comments
+
+**Usage**:
+
+```bash
+# Quick summary of all inline comments
+./scripts/check_pr_inline_comments.sh --summary PR_NUMBER
+
+# Show only Copilot suggestions with code fixes
+./scripts/check_pr_inline_comments.sh --copilot-only --suggestions PR_NUMBER
+
+# Open all comment URLs in browser for detailed review
+./scripts/check_pr_inline_comments.sh --open-browser PR_NUMBER
+
+# Get raw JSON for automation/integration
+./scripts/check_pr_inline_comments.sh --format=json PR_NUMBER
+```
+
+**Features**:
+
+- ✅ **Copilot Integration**: Efficiently extract GitHub Copilot code suggestions
+- ✅ **Comment Filtering**: Filter by user type, suggestions, or file
+- ✅ **Browser Integration**: One-command opening of all comment URLs
+- ✅ **Automation Ready**: JSON output for CI/CD pipeline integration
+- ✅ **Summary Analytics**: Comment statistics by file and user
+- ✅ **Quick Actions**: Streamlined review workflow for PR feedback
+
 #### `commit_changes.sh`
 
 **Purpose**: Interactive commit utility with smart message generation

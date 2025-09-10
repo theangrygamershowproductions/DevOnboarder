@@ -28,6 +28,26 @@
 
 ## 📋 **Issue Management Tools**
 
+### PR Review & Feedback Integration
+
+| Tool | Purpose | Usage | Safety Level |
+|------|---------|-------|-------------|
+| `scripts/check_pr_inline_comments.sh` | Extract Copilot inline comments | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only) |
+
+```bash
+# Quick summary of PR feedback
+./scripts/check_pr_inline_comments.sh --summary 1330
+
+# Focus on Copilot code suggestions
+./scripts/check_pr_inline_comments.sh --copilot-only --suggestions 1330
+
+# Open all comments in browser for review
+./scripts/check_pr_inline_comments.sh --open-browser 1330
+
+# Get JSON for automation integration
+./scripts/check_pr_inline_comments.sh --format=json 1330
+```
+
 ### Issue Resolution
 
 | Tool | Purpose | Usage | Safety Level |
