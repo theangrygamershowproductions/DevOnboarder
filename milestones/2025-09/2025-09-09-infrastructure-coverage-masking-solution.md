@@ -1,7 +1,7 @@
 ---
-milestone_id: "2025-09-09-ci-fix-coverage-masking-solution"
+milestone_id: "2025-09-09-coverage-masking-solution"
 date: "2025-09-09"
-type: "ci-fix"
+type: "infrastructure"
 issue_number: "#1286"
 pr_number: ""
 priority: "critical"
@@ -10,6 +10,10 @@ generated_by: "scripts/generate_milestone.sh"
 ---
 
 # Coverage Masking Solution - Performance Milestone
+
+## Overview
+
+This milestone documents the critical coverage masking solution that resolved accuracy issues in per-service coverage measurement. The implementation enables precise testing quality assessment across DevOnboarder's multi-service architecture.
 
 ## Problem Statement
 
@@ -159,3 +163,24 @@ echo "Issues prevented: [X]"
 - **Milestone Generated**: 2025-09-09T16:33:11-04:00
 - **Branch**: main
 - **Commit**: f0115b19
+
+## Evidence Anchors
+
+### Implementation Files
+
+- `.coveragerc.xp` - XP service isolated coverage configuration
+- `.coveragerc.auth` - Auth service isolated coverage configuration
+- `.coveragerc.discord` - Discord service isolated coverage configuration
+- Updated CI workflow with service-specific coverage commands
+
+### GitHub References
+
+- [Issue #1286](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1286) - Coverage masking problem identification
+- Related pull requests: Coverage isolation implementation
+- Commit history: Service-specific coverage configuration
+
+### Documentation
+
+- [docs/COVERAGE_MASKING_SOLUTION.md](https://github.com/theangrygamershowproductions/DevOnboarder/blob/main/docs/COVERAGE_MASKING_SOLUTION.md) - Complete solution documentation
+- CI workflow configuration updates
+- Quality gates validation results
