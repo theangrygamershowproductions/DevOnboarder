@@ -1,12 +1,12 @@
 ---
-milestone_id: "2025-09-09-process-milestone-documentation-standardization-phase1"
+milestone_id: "2025-09-09-milestone-documentation-standardization-phase1"
 date: "2025-09-09"
 type: "process"
 issue_number: "1261"
 pr_number: ""
 priority: "high"
 complexity: "moderate"
-generated_by: "manual"
+generated_by: "scripts/generate_milestone.sh"
 ---
 
 # Milestone Documentation Format Standardization - Phase 1 Implementation

@@ -1,5 +1,5 @@
 ---
-milestone_id: "2025-09-09-enhancement-strategic-foundation-systems-implementation"
+milestone_id: "2025-09-09-strategic-foundation-systems-implementation"
 date: "2025-09-09"
 type: "enhancement"
 issue_number: ""
