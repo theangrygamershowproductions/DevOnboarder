@@ -48,6 +48,24 @@ DevOnboarder uses a **layered phase architecture** where multiple phase systems 
 
 **Status**: Implementation successful - comprehensive Token Architecture v2.1
 
+### 📋 Documentation as Infrastructure (DaI) Framework
+
+**Canonical Documentation**: `docs/troubleshooting/DOCUMENTATION_AS_INFRASTRUCTURE_IMPLEMENTATION_GUIDELINES.md`
+
+**Purpose**: Implementation guidelines for Documentation as Infrastructure work
+
+**Status**: Guidelines established - ready for implementation
+
+**Critical Requirements**:
+
+- Study existing DevOnboarder workflows to understand proper patterns
+- Use plain ASCII text only - no Unicode, no emojis, no special characters
+- Follow Token Architecture v2.1 systematically using existing scripts
+- Test each piece incrementally rather than building everything at once
+- Respect the charter requirements without violating core policies
+
+**Note**: These guidelines are MANDATORY for any DaI implementation work.
+
 **Note**: This phase system has its own scope; do not merge or conflate with others.
 
 ### 📋 OpenAPI Phase 2 Integration (Post-MVP)
