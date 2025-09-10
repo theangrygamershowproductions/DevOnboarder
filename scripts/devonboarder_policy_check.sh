@@ -212,23 +212,23 @@ check_violations() {
 show_all_policies() {
     show_terminal_policy
     echo ""
-    echo "=" * 60
+    printf '=%.0s' {1..60}; echo
     echo ""
     show_triage_sop
     echo ""
-    echo "=" * 60
+    printf '=%.0s' {1..60}; echo
     echo ""
     show_priority_framework
     echo ""
-    echo "=" * 60
+    printf '=%.0s' {1..60}; echo
     echo ""
     show_escalation_procedures
     echo ""
-    echo "=" * 60
+    printf '=%.0s' {1..60}; echo
     echo ""
     show_token_architecture
     echo ""
-    echo "=" * 60
+    printf '=%.0s' {1..60}; echo
     echo ""
     echo "🔍 For current policy violations, run: devonboarder-policy violations"
 }
