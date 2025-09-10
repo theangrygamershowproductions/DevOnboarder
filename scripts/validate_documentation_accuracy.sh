@@ -19,6 +19,25 @@ readonly PROJECT_ROOT
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 readonly README_FILE="$PROJECT_ROOT/README.md"
 
+# GitHub Configuration Constants
+readonly GITHUB_ORG="theangrygamershowproductions"
+readonly GITHUB_REPO="DevOnboarder"
+
+# Project and Milestone Configuration
+# shellcheck disable=SC2034  # Reserved for future enhancement
+declare -A MILESTONE_CONFIG=(
+    [1088]="Foundation Stabilization"
+    [1089]="Feature Completion"
+    [1090]="MVP Finalization"
+)
+
+# shellcheck disable=SC2034  # Reserved for future enhancement
+declare -A PROJECT_CONFIG=(
+    [10]="DevOnboarder MVP"
+    [11]="TAGS Platform Integration"
+    [12]="Community Onboarding"
+)
+
 # Error tracking
 VALIDATION_ERRORS=0
 
@@ -39,7 +58,23 @@ validate_milestone_status() {
     # Get actual milestone status from GitHub
     if command -v gh >/dev/null 2>&1; then
         local actual_status
-        actual_status=$(gh api "repos/theangrygamershowproductions/DevOnboarder/milestones/$milestone_number" --jq '.state' 2>/dev/null || echo "not_found")
+        # Map phase parameter to actual milestone number (Phase 1 = Milestone 1088, etc.)
+        case "$milestone_number" in
+            "1") milestone_number="1088" ;;
+            "2") milestone_number="1089" ;;
+            "3") milestone_number="1090" ;;
+            *)
+                # If already a milestone number, use as-is
+                if ! [[ "$milestone_number" =~ ^[0-9]+$ ]]; then
+                    echo -e "  ${RED}✗${NC} Invalid milestone identifier: $milestone_number"
+                    ((VALIDATION_ERRORS++))
+                    return
+                fi
+                ;;
+        esac
+
+        # Get actual milestone status from GitHub API
+        actual_status=$(gh api "repos/$GITHUB_ORG/$GITHUB_REPO/milestones/$milestone_number" --jq '.state' 2>/dev/null || echo "not_found")
 
         if [[ "$actual_status" == "not_found" ]]; then
             echo -e "  ${RED}✗${NC} Milestone #$milestone_number not found in GitHub"
@@ -75,7 +110,7 @@ validate_project_links() {
 
     if command -v gh >/dev/null 2>&1; then
         local actual_name
-        actual_name=$(gh api "orgs/theangrygamershowproductions/projects/$project_number" --jq '.title' 2>/dev/null || echo "not_found")
+        actual_name=$(gh api "orgs/$GITHUB_ORG/projects/$project_number" --jq '.title' 2>/dev/null || echo "not_found")
 
         if [[ "$actual_name" == "not_found" ]]; then
             echo -e "  ${RED}✗${NC} Project #$project_number not found in GitHub"
