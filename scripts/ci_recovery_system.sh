@@ -20,15 +20,21 @@ echo "Started: $(date)"
 echo "=========================================="
 
 # Function to get failure count
+# shellcheck disable=SC2120  # Function can be called with or without arguments
 count_failures() {
+    local target_date=${1:-$(date +%Y-%m-%d)}
     gh run list --limit 100 --json conclusion,createdAt | \
-        jq "map(select(.conclusion == \"failure\" and (.createdAt | startswith(\"2025-09-09\")))) | length"
+        jq --arg date "$target_date" "map(select(.conclusion == \"failure\" and (.createdAt | startswith(\$date)))) | length"
 }
 
 # Function to get success rate for recent runs
+# shellcheck disable=SC2120  # Function can be called with or without arguments
 get_recent_success_rate() {
+    local target_date=${1:-$(date +%Y-%m-%d)}
+    local hour_filter=${2:-$(date +%H)}
     gh run list --limit 20 --json conclusion,createdAt | \
-        jq "map(select(.createdAt | startswith(\"2025-09-09T23\") or startswith(\"2025-09-09T22:5\"))) |
+        jq --arg date "$target_date" --arg hour "$hour_filter" "
+            map(select(.createdAt | startswith(\$date + \"T\" + \$hour) or startswith(\$date + \"T\" + (\$hour | tonumber - 1 | tostring)))) |
             group_by(.conclusion) |
             map({conclusion: .[0].conclusion, count: length}) |
             map(select(.conclusion == \"success\")) |
