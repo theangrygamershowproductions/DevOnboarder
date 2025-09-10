@@ -61,7 +61,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     # 5. Check for here-doc patterns (WARNING - context dependent)
     if grep -A3 -B3 'EOF' "$file" 2>/dev/null | grep 'echo\|comment.*body' | head -1 >/dev/null; then
-        echo "  ⚠️  WARNING: Here-doc near echo context - verify safety"
+        echo "  WARNING: Here-doc near echo context - verify safety"
     fi
 
 done
@@ -79,13 +79,13 @@ if [ "$total_violations" -gt 0 ]; then
     echo "Required fixes:"
     printf "  • Replace echo with variable expansion: echo \"\\$VAR\" → printf '%%s\\n' \"\\$VAR\"\n"
     echo "  • Replace echo with command substitution: echo \"\$(cmd)\" → cmd"
-    echo "  • Remove emojis/Unicode: ✅ → [OK]"
+    echo "  • Remove emojis/Unicode: [OK] → [OK]"
     printf "  • Replace multi-line echo: echo -e \"line1\\nline2\" → individual echo commands\n"
     echo ""
     exit 1
 else
     echo ""
-    echo "✓ ENFORCEMENT SUCCESS: No critical terminal output violations found"
+    echo "ENFORCEMENT SUCCESS: No critical terminal output violations found"
     echo "All workflows comply with ZERO TOLERANCE policy"
     exit 0
 fi
