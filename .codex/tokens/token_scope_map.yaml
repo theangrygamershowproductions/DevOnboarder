@@ -17,10 +17,12 @@ ci_automation:
       - ".github/workflows/ci-health.yml"
       - ".github/workflows/codex.ci.yml"
       - ".github/workflows/pr-automation.yml"
+      - ".github/workflows/pr-issue-automation.yml"
     authorized_scripts:
       - "scripts/generate_aar.sh"
       - "scripts/ci_log_audit.py"
       - "scripts/automate_pr_process.sh"
+      - "scripts/create_pr_tracking_issue.sh"
     purpose: "Main CI automation, issue creation, PR management"
 
   diagnostics_bot:
