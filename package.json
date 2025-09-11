@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "jest": "^30.0.5",
+    "vitest": "^3.2.4"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "markdownlint-cli2": "^0.18.1",
+    "typedoc": "^0.28.7"
+  }
+}
