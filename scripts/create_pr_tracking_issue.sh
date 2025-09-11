@@ -142,16 +142,13 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 EOF
 )
 
-# Use DevOnboarder token hierarchy for issue creation
-TOKEN=""
+# In CI environment, GITHUB_TOKEN is already set by the workflow
+# Log which token source is being used for debugging
 if [[ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]]; then
-    TOKEN="$CI_ISSUE_AUTOMATION_TOKEN"
     log "Using CI_ISSUE_AUTOMATION_TOKEN for issue creation"
 elif [[ -n "${CI_BOT_TOKEN:-}" ]]; then
-    TOKEN="$CI_BOT_TOKEN"
     log "Using CI_BOT_TOKEN for issue creation"
 elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    TOKEN="$GITHUB_TOKEN"
     log "Using GITHUB_TOKEN for issue creation"
 else
     echo "ERROR: No GitHub token available for issue creation"
@@ -159,10 +156,10 @@ else
     exit 1
 fi
 
-# Create the GitHub issue
+# Create the GitHub issue (trust the GITHUB_TOKEN already set by workflow)
 echo -e "${YELLOW}Creating GitHub issue...${NC}"
 
-if ISSUE_URL=$(GITHUB_TOKEN="$TOKEN" gh issue create \
+if ISSUE_URL=$(gh issue create \
     --title "$ISSUE_TITLE" \
     --body "$ISSUE_BODY" \
     --label "$LABELS" 2>&1); then
@@ -188,7 +185,7 @@ PR #$PR_NUMBER has been opened and is now being tracked.
 
 Development progress will be updated as the PR advances through review and validation stages."
 
-    if GITHUB_TOKEN="$TOKEN" gh issue comment "$ISSUE_NUMBER" --body "$PROGRESS_COMMENT" 2>/dev/null; then
+    if gh issue comment "$ISSUE_NUMBER" --body "$PROGRESS_COMMENT" 2>/dev/null; then
         log "Initial progress comment added to issue #$ISSUE_NUMBER"
     else
         log "Could not add initial progress comment"
