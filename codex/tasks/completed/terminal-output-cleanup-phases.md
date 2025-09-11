@@ -103,7 +103,7 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 
 ### Files to Process
 
-- [ ] `.github/workflows/potato-policy.yml` (pending analysis)
+- [x] ~~`.github/workflows/potato-policy.yml`~~ (REMOVED - empty file causing CI failures)
 - [ ] `.github/workflows/aar-portal.yml` (pending analysis)
 - [ ] `.github/workflows/markdownlint.yml` (pending analysis)
 - [ ] `.github/workflows/branch-cleanup.yml` (pending analysis)
