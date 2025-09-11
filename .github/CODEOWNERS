@@ -1,1 +1,5 @@
 *       @theangrygamershowproductions/maintainers
+
+# Archived CI documentation - protect from accidental edits
+docs/ci/ci-modernization-2025-09-01-archived.md    @reesey275
+docs/ci/*-archived.md                             @reesey275
