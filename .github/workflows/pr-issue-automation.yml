@@ -51,9 +51,9 @@ jobs:
             issues: write
 
         env:
-            # SECURITY: Follow DevOnboarder Token Architecture v2.1 hierarchy
-            # Use fine-grained tokens first, fallback to GITHUB_TOKEN only if needed
-            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+            # SECURITY: Follow DevOnboarder No Default Token Policy v1.0
+            # Use specialized tokens only - NO GITHUB_TOKEN fallback per policy
+            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}
 
         steps:
             - name: Checkout code
