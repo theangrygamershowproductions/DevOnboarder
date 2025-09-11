@@ -78,14 +78,31 @@ node_modules/external-editor/node_modules/tmp
   node_modules/external-editor
     inquirer  3.0.0 - 8.2.6 || 9.0.0 - 9.3.7
     Depends on vulnerable versions of external-editor
-
-**Resolution**: CVE-2025-54798 was resolved using package overrides to force secure tmp@^0.2.5 for all nested dependencies instead of adding direct dependencies. This approach, suggested by GitHub Copilot code review, avoids polluting the production bundle while securing nested dependencies in @lhci/cli and external-editor.
     node_modules/inquirer
 
 4 low severity vulnerabilities
 
 To address all issues (including breaking changes), run:
   npm audit fix --force
+
+**Resolution Approach for tmp Vulnerability (CVE-2025-54798)**:
+
+Instead of upgrading parent packages (@lhci/cli and external-editor) or using `npm audit fix --force`, we implemented package overrides to force secure tmp@^0.2.5 for all nested dependencies. This approach was chosen for several reasons:
+
+1. **Avoiding Breaking Changes**: The npm audit suggested `@lhci/cli@0.1.0` which would be a major breaking change
+2. **Targeted Security Fix**: Package overrides specifically address the vulnerability without affecting other functionality
+3. **Production Bundle Safety**: Keeps tmp out of production dependencies since it's only needed by development tools
+4. **DevOnboarder Standards Compliance**: Follows npm security standards for nested dependency resolution
+
+The fix uses package.json overrides configuration:
+
+```json
+"overrides": {
+    "tmp": "^0.2.5"
+}
+```
+
+This forces all packages that depend on tmp (including @lhci/cli and external-editor) to use the secure version, resolving the vulnerability without introducing breaking changes or unnecessary direct dependencies.
 
 ### bot
 
