@@ -78,6 +78,8 @@ node_modules/external-editor/node_modules/tmp
   node_modules/external-editor
     inquirer  3.0.0 - 8.2.6 || 9.0.0 - 9.3.7
     Depends on vulnerable versions of external-editor
+
+**Resolution**: CVE-2025-54798 was resolved using package overrides to force secure tmp@^0.2.5 for all nested dependencies instead of adding direct dependencies. This approach, suggested by GitHub Copilot code review, avoids polluting the production bundle while securing nested dependencies in @lhci/cli and external-editor.
     node_modules/inquirer
 
 4 low severity vulnerabilities
