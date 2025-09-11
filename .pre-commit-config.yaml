@@ -188,4 +188,4 @@ repos:
             language: system
             pass_filenames: false
             stages: [pre-commit, pre-push]
-            entry: bash -c 'git diff --name-only --cached --diff-filter=ACMRD | grep -q "^docs/ci.*-archived\.md$" && echo "Archived AARs are immutable." && exit 1 || true'
+            entry: bash -c 'git diff --name-only --cached --diff-filter=ACMRD | grep -q "^docs/ci/.*-archived\.md$" && echo "Archived AARs are immutable." && exit 1 || true'
