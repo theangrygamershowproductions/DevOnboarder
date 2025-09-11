@@ -1,0 +1,24 @@
+[run]
+source = src/devonboarder
+omit =
+    tests/*
+    */__pycache__/*
+    */migrations/*
+    */venv/*
+    */.venv/*
+    src/devonboarder/cli.py
+    src/devonboarder/dashboard_service.py
+    src/devonboarder/diagnostics.py
+
+[report]
+show_missing = True
+skip_covered = False
+precision = 2
+fail_under = 90
+
+[html]
+directory = logs/htmlcov-auth
+title = DevOnboarder Auth Service Coverage Report
+
+[xml]
+output = logs/coverage-auth.xml

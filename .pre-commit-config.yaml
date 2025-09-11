@@ -158,6 +158,20 @@ repos:
             pass_filenames: false
             always_run: false
             files: ^(src/|tests/|pytest\.ini|pyproject\.toml).*$
+            stages: [pre-commit]
+          - id: milestone-format-validation
+            name: Milestone Format Validation
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_milestone_format.py milestones/ 2>&1 | tee logs/milestone_validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
+            language: system
+            pass_filenames: false
+            always_run: false
+            files: ^milestones/.*\.md$
+            stages: [pre-commit]
           - id: validate
             name: Full validation suite
             entry: bash
@@ -168,3 +182,4 @@ repos:
                 ]
             language: system
             pass_filenames: false
+            stages: [pre-commit]

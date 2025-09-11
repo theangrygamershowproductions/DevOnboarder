@@ -16,7 +16,7 @@ DevOnboarder uses a comprehensive three-project structure for optimal organizati
 
 | Phase | Timeline | Milestone | Status |
 |-------|----------|-----------|---------|
-| **Phase 1** | Weeks 1-2 | [Foundation Stabilization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1088) | 🔄 Active |
+| **Phase 1** | Weeks 1-2 | [Foundation Stabilization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1088) | ✅ Complete |
 | **Phase 2** | Weeks 3-4 | [Feature Completion](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1089) | ⏳ Planned |
 | **Phase 3** | Weeks 5-6 | [MVP Finalization](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1090) | ⏳ Planned |
 
@@ -164,6 +164,7 @@ This acts as a **"canary in the repository"** - any attempt to expose sensitive 
 <!-- markdownlint-disable MD030 -->
 
 - `config/` – Configuration files, including `devonboarder.config.yml`.
+  See [Configuration Management Policy](docs/CONFIGURATION_MANAGEMENT_POLICY.md) for permanent vs temporary file distinctions.
 - `scripts/` – Helper scripts for bootstrapping and environment setup.
   See [docs/tools-dashboard.md](docs/tools-dashboard.md) for comprehensive maintenance tools reference.
 - `.devcontainer/` – Contains `devcontainer.json` which builds the VS Code development container,

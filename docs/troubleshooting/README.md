@@ -15,6 +15,10 @@ This directory contains troubleshooting guides for common DevOnboarder issues.
 - **[CI MyPy Type Stubs](CI_MYPY_TYPE_STUBS.md)** - MyPy passes locally but fails in CI due to missing type stubs
 - **[Automerge Hanging Indefinitely](AUTOMERGE_HANGING_INDEFINITELY.md)** - CRITICAL: Repository configuration issues blocking all PR merges
 
+### Implementation Guidelines
+
+- **[Documentation as Infrastructure Implementation Guidelines](DOCUMENTATION_AS_INFRASTRUCTURE_IMPLEMENTATION_GUIDELINES.md)** - **CRITICAL**: Required guidelines for any DaI implementation work
+
 ### Common Problems
 
 | Problem | Quick Fix | Documentation |

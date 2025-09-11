@@ -819,6 +819,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 - `scripts/automate_pr_process.sh`: PR automation
 - `scripts/pr_decision_engine.sh`: Strategic decision engine
 - `scripts/assess_pr_health.sh`: PR health assessment
+- `scripts/check_pr_inline_comments.sh`: GitHub Copilot inline comments extraction
 - `scripts/run_tests.sh`: Comprehensive test runner
 - `scripts/check_potato_ignore.sh`: Potato Policy enforcement
 - `scripts/generate_potato_report.sh`: Security audit reporting
@@ -1445,6 +1446,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 - `scripts/manage_ci_failure_issues.sh` - Automated CI failure issue management
 - `scripts/close_resolved_issues.sh` - Automated issue cleanup
 - `scripts/generate_aar.sh` - After Action Report generation for CI failures
+- `scripts/check_pr_inline_comments.sh` - GitHub Copilot inline comments extraction
 
 **Security & Compliance**:
 

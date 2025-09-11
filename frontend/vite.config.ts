@@ -27,6 +27,18 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'lcov', 'json-summary'],
             all: true,
+            include: ['src/**/*.{ts,tsx}'],
+            exclude: [
+                'src/setupTests.ts',
+                'src/**/*.test.{ts,tsx}',
+                'src/**/*.spec.{ts,tsx}',
+                '**/*.config.*',
+                '**/*.d.ts',
+                'node_modules/**',
+                'dist/**',
+                'e2e/**',
+                'config-tests/**'
+            ],
             thresholds: {
                 lines: 95,
                 functions: 94,  // Reduced from 95% to match current 94.87%

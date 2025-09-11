@@ -27,9 +27,11 @@ describe("Login", () => {
         const fetchMock = vi
             .fn()
             .mockResolvedValueOnce({
+                ok: true,
                 json: () => Promise.resolve({ token: "tok" }),
             })
             .mockResolvedValueOnce({
+                ok: true,
                 json: () =>
                     Promise.resolve({
                         id: "1",
@@ -38,9 +40,11 @@ describe("Login", () => {
                     }),
             })
             .mockResolvedValueOnce({
+                ok: true,
                 json: () => Promise.resolve({ level: 3 }),
             })
             .mockResolvedValueOnce({
+                ok: true,
                 json: () => Promise.resolve({ status: "intro" }),
             });
         vi.stubGlobal("fetch", fetchMock);
@@ -59,6 +63,7 @@ describe("Login", () => {
         const fetchMock = vi
             .fn()
             .mockResolvedValueOnce({
+                ok: true,
                 json: () =>
                     Promise.resolve({
                         id: "1",
@@ -67,9 +72,11 @@ describe("Login", () => {
                     }),
             })
             .mockResolvedValueOnce({
+                ok: true,
                 json: () => Promise.resolve({ level: 3 }),
             })
             .mockResolvedValueOnce({
+                ok: true,
                 json: () => Promise.resolve({ status: "intro" }),
             });
         vi.stubGlobal("fetch", fetchMock);
@@ -92,5 +99,53 @@ describe("Login", () => {
         expect(
             screen.getByRole("button", { name: /start onboarding/i }),
         ).toBeInTheDocument();
+    });
+
+    it("handles OAuth callback error", async () => {
+        window.history.replaceState({}, "", "/login/discord/callback?code=abc");
+        const fetchMock = vi.fn().mockRejectedValue(new Error("Auth failed"));
+        vi.stubGlobal("fetch", fetchMock);
+        const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        render(<Login />);
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith("Failed to fetch user info:", expect.any(Error));
+        });
+
+        consoleSpy.mockRestore();
+    });
+
+    it("handles direct token callback", async () => {
+        window.history.replaceState({}, "", "/login/discord/callback?token=direct-token");
+        const fetchMock = vi
+            .fn()
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ id: "1", username: "user", avatar: "img" }),
+            })
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ level: 1 }),
+            })
+            .mockResolvedValueOnce({
+                json: () => Promise.resolve({ status: "welcome" }),
+            });
+        vi.stubGlobal("fetch", fetchMock);
+
+        render(<Login />);
+
+        await waitFor(() => expect(localStorage.getItem("jwt")).toBe("direct-token"));
+        expect(window.location.pathname).toBe("/");
+    });
+
+    it("clears token when API calls fail", async () => {
+        localStorage.setItem("jwt", "invalid-token");
+        const fetchMock = vi.fn().mockRejectedValue(new Error("Unauthorized"));
+        vi.stubGlobal("fetch", fetchMock);
+
+        render(<Login />);
+
+        await waitFor(() => {
+            expect(localStorage.getItem("jwt")).toBeNull();
+        });
     });
 });
