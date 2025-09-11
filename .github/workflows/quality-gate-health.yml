@@ -1,0 +1,168 @@
+name: Quality Gate Health Monitor
+
+on:
+  schedule:
+    # Daily at 12:00 UTC (8:00 AM EST / 7:00 AM EDT)
+    - cron: '0 12 * * *'
+  push:
+    branches: [main, ci-recovery]
+  pull_request:
+    branches: [main, ci-recovery]
+  workflow_dispatch:
+    inputs:
+      force_audit:
+        description: 'Force comprehensive audit'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  quality-gate-health:
+    name: Validate Quality Gate Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          # Fetch full history to enable bypass audit
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Run Quality Gate Health Check
+        id: health-check
+        run: |
+          source .venv/bin/activate
+          ./scripts/validate_quality_gates.sh
+
+      - name: Archive health check logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate-health-${{ github.run_id }}
+          path: logs/quality_gate_health_*.log
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Create critical issue on health check failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = 'CRITICAL: Quality Gate Health Check Failed';
+            const body = `## Quality Gate Health Check Failure
+
+            **Alert Level:** CRITICAL
+            **Time:** ${new Date().toISOString()}
+            **Workflow:** ${context.workflow}
+            **Run ID:** ${context.runId}
+            **Triggered By:** ${context.eventName}
+            **Branch:** ${context.ref}            The automated quality gate health check has detected that DevOnboarder's quality controls are not functioning properly.
+
+            ## Immediate Actions Required
+
+            1. **Check workflow logs** for specific failure details
+            2. **Verify git hooks** are properly installed and configured
+            3. **Ensure core.hooksPath is not set** to /dev/null or other bypass values
+            4. **Run manual health check:** \`bash scripts/validate_quality_gates.sh\`
+            5. **Review recent commits** for accidental quality gate bypasses
+
+            ## CRITICAL WARNING
+
+            Until this is resolved, quality gates may be bypassed, allowing:
+            - Code style violations to enter the repository
+            - Security policy violations to go undetected
+            - Terminal output violations that cause CI hanging
+            - Documentation quality issues
+
+            ## Recovery Steps
+
+            If hooks were accidentally disabled:
+            \`\`\`bash
+            # Check if hooks are disabled
+            git config --get core.hooksPath
+
+            # If set to /dev/null or any path, unset it
+            git config --unset core.hooksPath
+
+            # Reinstall pre-commit hooks
+            source .venv/bin/activate
+            pre-commit install --install-hooks
+
+            # Verify recovery
+            bash scripts/validate_quality_gates.sh
+            \`\`\`
+
+            ## Related Documentation
+
+            - [Quality Gate Protection System](docs/standards/quality-gate-protection-system.md)
+            - [Terminal Output Violations](docs/TERMINAL_OUTPUT_VIOLATIONS.md)
+            - [DevOnboarder Setup Guide](docs/SETUP.md)
+
+            ## Accountability Trail
+
+            This issue was automatically created by the Quality Gate Health Monitor to ensure zero-accountability-loss for quality control failures.
+
+            **Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+            `;
+
+            // Check if a similar issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'critical,quality-gates',
+              per_page: 5
+            });
+
+            const existingIssue = issues.data.find(issue =>
+              issue.title.includes('Quality Gate Health Check Failed')
+            );
+
+            if (existingIssue) {
+              // Update existing issue with new information
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## Additional Quality Gate Failure
+
+                **Time:** ${new Date().toISOString()}
+                **Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+                Quality gate health check failed again. This indicates a persistent issue requiring immediate attention.`
+              });
+            } else {
+              // Create new critical issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['critical', 'infrastructure', 'quality-gates', 'zero-accountability-loss'],
+                assignees: [] // Add repository maintainers if needed
+              });
+            }
+
+      - name: Post success summary
+        if: success()
+        run: |
+          echo "SUCCESS: Quality Gate Health Check PASSED"
+          echo "All quality gates are functional and enforced"
+          echo "DevOnboarder reliability standards maintained"

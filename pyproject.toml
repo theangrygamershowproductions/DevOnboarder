@@ -58,6 +58,7 @@ test = [
     "openapi-spec-validator",
     "ruff",
     "mypy",
+    "types-requests",
     "pip-audit",
     "bandit",
     # Phase 5: Advanced Orchestration dependencies
@@ -116,6 +117,7 @@ addopts = [
     "--cov-fail-under=95"
 ]
 testpaths = ["tests"]
+pythonpath = ["src"]
 asyncio_mode = "auto"
 
 [tool.mypy]

@@ -20,6 +20,7 @@ on:
             - "scripts/potato_violation_reporter.sh"
             - "scripts/generate_potato_report.sh"
             - "docs/enhanced-potato-policy.md"
+            - ".github/workflows/potato-policy-focused.yml"
     push:
         branches: [main, master]
     schedule:

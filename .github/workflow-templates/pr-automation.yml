@@ -1,0 +1,45 @@
+name: PR Automation Template
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+jobs:
+  pr-automation:
+    permissions:
+      contents: read           # Required for checkout
+      pull-requests: write     # Required for PR comments/labels
+      issues: write           # Required if creating linked issues
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Run PR automation checks
+        run: |
+          source .venv/bin/activate
+          # Add PR automation logic
+          echo "Running PR automation..."
+
+      - name: Update PR status
+        run: |
+          source .venv/bin/activate
+          # Add PR status update logic
+          echo "Updating PR status..."

@@ -1,15 +1,17 @@
 # markdownlint-cli2 configuration
 # Uses existing .markdownlint.json for rules and .markdownlintignore for excludes
+# Note: globs removed to allow pre-commit to control which files are checked
 
 config:
     extends: ".markdownlint.json"
 
-globs:
-    - "**/*.md"
+# globs removed - pre-commit will pass only staged markdown files
 
 ignores:
     - "**/node_modules/**"
     - "node_modules/**"
+    - "**/node_modules/**"
+    - "aar/node_modules/**"
     - "frontend/node_modules/**"
     - "bot/node_modules/**"
     - "app/aar-ui/node_modules/**"

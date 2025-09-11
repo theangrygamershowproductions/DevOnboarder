@@ -14,7 +14,8 @@
 # OS files
 # Python artifacts
 # Root pollution block - CI hygiene enforcement
-
+**/node_modules/
+*.db
 *.db-journal
 *.egg-info/
 *.env
@@ -53,10 +54,8 @@
 /config_backups/
 /pytest-of-*/
 /test.db
-*.db
 /vale-*.json
 /vale-results.json
-
 # Cloudflare Tunnel Secrets - NEVER COMMIT
 cloudflared/
 *.tunnel.json
@@ -81,9 +80,11 @@ dist/
 docs/bot-api/
 docs/frontend-api/
 github-tokens.*
+.tokens*
 id_rsa*
 lcov-report/
 logs/
+node_modules/
 pnpm-lock.yaml
 secrets.yaml
 secrets.yml
@@ -94,14 +95,6 @@ vale-*.json
 vale-results.json
 venv/
 webhook-config.json
-
-# Node Modules Directories
-node_modules/
-**/node_modules/
-**node_modules**
-bot/node_modules/
-frontend/node_modules/
-app/aar-ui/node_modules/
 
 # Enhanced Potato Policy v2.0 - Additional Security Patterns
 id_rsa*
@@ -114,7 +107,7 @@ deployment-keys.*
 backup-configs.*
 letsencrypt/acme.json
 traefik/traefik.yml
+.gitignore
 traefik/dynamic.yml
 cloudflared/config.yml
 cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
-work_items

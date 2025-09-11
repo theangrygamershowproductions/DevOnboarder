@@ -29,6 +29,7 @@ jobs:
         if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v5
             - name: Install GitHub CLI
               uses: sersoft-gmbh/setup-gh-cli-action@v2
               with:
@@ -53,3 +54,17 @@ jobs:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   printf -- '%s\n' "$PR_BODY" | grep -oE 'Fixes #[0-9]+' | sed 's/Fixes #//' > issues.txt || true
+
+                  if [ -s issues.txt ]; then
+                      echo "Found Codex issues to close:"
+                      cat issues.txt
+
+                      while read -r issue_number; do
+                          if [ -n "$issue_number" ]; then
+                              echo "Closing issue #$issue_number using approved wrapper"
+                              bash scripts/ci_gh_issue_wrapper.sh close "$issue_number" "Automatically closed by merged PR #${{ github.event.pull_request.number }}"
+                          fi
+                      done < issues.txt
+                  else
+                      echo "No Codex issues referenced in PR body"
+                  fi

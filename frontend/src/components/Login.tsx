@@ -38,8 +38,9 @@ export default function Login() {
                     setToken(data.token);
                     window.history.replaceState({}, "", "/");
                 })
-                .catch((error) => {
-                    console.error("Failed to fetch user info:", error);
+                .catch((_error) => {
+                    // Handle authentication error - redirect to login page
+                    window.location.href = "/login";
                 });
         } else if (stored) {
             setToken(stored);

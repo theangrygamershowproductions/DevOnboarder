@@ -58,6 +58,45 @@ This directory contains automation scripts that support the project's "quiet rel
 
 ### 📊 Quality Assurance
 
+#### `qc_docs.sh`
+
+**Purpose**: Enhanced documentation quality control with automatic markdown formatting
+
+**Usage**:
+
+```bash
+# Check all documentation for formatting issues
+./scripts/qc_docs.sh
+
+# Automatically fix formatting issues
+./scripts/qc_docs.sh --fix
+
+# Process specific file
+./scripts/qc_docs.sh --file docs/ci/document.md --fix
+```
+
+**Features**:
+
+- ✅ **Automatic markdown formatting**: Fixes MD009, MD022, MD032, MD031 violations
+- ✅ **Integrated validation**: Combines markdownlint and Vale checks
+- ✅ **DevOnboarder standards**: Enforces project markdown conventions
+- ✅ **Backup creation**: Preserves original files during fixes
+- ✅ **Batch processing**: Handles all markdown files or specific targets
+- ✅ **Quality reporting**: Comprehensive summary with actionable feedback
+
+#### `fix_markdown_formatting.py`
+
+**Purpose**: Core markdown formatting engine for DevOnboarder documents
+
+**Usage**: `python scripts/fix_markdown_formatting.py <filepath>`
+
+**Features**:
+
+- ✅ **Precise fixes**: Targets specific markdownlint violations
+- ✅ **Safety first**: Creates backups before modifications
+- ✅ **Detailed reporting**: Shows exactly what issues were fixed
+- ✅ **DevOnboarder compliant**: Follows project quality standards
+
 #### `check_docs.sh`
 
 **Purpose**: Documentation quality checks (markdownlint, Vale)
@@ -156,6 +195,47 @@ bash scripts/analyze_logs.sh
 **Features**: Pattern analysis, failure detection, automated reporting
 
 ### 🔄 Git Utilities
+
+#### `check_pr_inline_comments.sh`
+
+**Purpose**: Extract and track GitHub Copilot inline comments with resolution documentation
+
+**Features**:
+
+- Display comments with file/line context and browser integration
+- Interactive resolution annotation system
+- Learning pattern export for documentation
+- Resolution verification for CI integration
+- Enhanced display showing suggestions + resolutions side-by-side
+
+**Usage**:
+
+```bash
+# Basic comment viewing
+./scripts/check_pr_inline_comments.sh --summary PR_NUMBER
+./scripts/check_pr_inline_comments.sh --copilot-only --suggestions PR_NUMBER
+./scripts/check_pr_inline_comments.sh --open-browser PR_NUMBER
+
+# Resolution tracking workflow
+./scripts/check_pr_inline_comments.sh --annotate PR_NUMBER
+./scripts/check_pr_inline_comments.sh --resolution-summary PR_NUMBER
+./scripts/check_pr_inline_comments.sh --learning-export PR_NUMBER
+./scripts/check_pr_inline_comments.sh --verify-resolutions PR_NUMBER
+
+# CI/Automation integration
+./scripts/check_pr_inline_comments.sh --format=json PR_NUMBER
+```
+
+**Resolution Tracking**: Stores resolution annotations in `.devonboarder/pr_resolutions/` with action, reasoning, commit hash, and learning notes for comprehensive Documentation as Infrastructure support.
+
+**Features**:
+
+- ✅ **Copilot Integration**: Efficiently extract GitHub Copilot code suggestions
+- ✅ **Comment Filtering**: Filter by user type, suggestions, or file
+- ✅ **Browser Integration**: One-command opening of all comment URLs
+- ✅ **Automation Ready**: JSON output for CI/CD pipeline integration
+- ✅ **Summary Analytics**: Comment statistics by file and user
+- ✅ **Quick Actions**: Streamlined review workflow for PR feedback
 
 #### `commit_changes.sh`
 

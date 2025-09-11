@@ -1,0 +1,59 @@
+name: Basic CI Template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    permissions:
+      contents: read           # Required for checkout
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12']
+        node-version: [22]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Install Python dependencies
+        run: |
+          source .venv/bin/activate
+          pip install -e .[test]
+
+      - name: Install Node.js dependencies
+        run: |
+          npm ci --prefix bot
+          npm ci --prefix frontend
+
+      - name: Run Python tests
+        run: |
+          source .venv/bin/activate
+          python -m pytest --cov=src --cov-fail-under=95
+
+      - name: Run TypeScript tests
+        run: |
+          npm run test --prefix bot
+          npm run test --prefix frontend
+
+      - name: Validate code quality
+        run: |
+          source .venv/bin/activate
+          ./scripts/qc_pre_push.sh

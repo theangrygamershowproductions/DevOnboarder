@@ -172,8 +172,14 @@ EOF
                 echo "${RED}FAILED: Failed to comment on issue #$issue_number${NC}"
             fi
 
-            # Close the issue
-            if gh issue close "$issue_number" --reason completed; then
+            # Close the issue (check if already closed first)
+            current_state=$(gh issue view "$issue_number" --json state --jq .state 2>/dev/null || echo "unknown")
+            if [[ "$current_state" == "unknown" ]]; then
+                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation${NC}"
+            elif [[ "$current_state" == "CLOSED" ]]; then
+                echo "${YELLOW}INFO:  Issue #$issue_number already closed, skipping${NC}"
+                ((closed_count++))
+            elif gh issue close "$issue_number" --reason completed; then
                 echo "${GREEN}SUCCESS: Closed issue #$issue_number${NC}"
                 ((closed_count++))
             else
@@ -258,3 +264,6 @@ case "$COMMAND" in
 esac
 
 echo "Post-merge cleanup issue operation completed at $(date)"
+
+# Ensure script exits with success code when operations complete successfully
+exit 0

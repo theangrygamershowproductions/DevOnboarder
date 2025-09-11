@@ -49,6 +49,26 @@ describe("FeedbackStatusBoard", () => {
         );
     });
 
+    it("shows an error when initial loading fails", async () => {
+        const fetchMock = vi.fn().mockRejectedValue(new Error("Network error"));
+        vi.stubGlobal("fetch", fetchMock);
+
+        render(<FeedbackStatusBoard />);
+        await waitFor(() =>
+            expect(screen.getByRole("alert")).toHaveTextContent("Failed to load feedback"),
+        );
+    });
+
+    it("shows an error when initial loading returns non-ok response", async () => {
+        const fetchMock = vi.fn().mockResolvedValue({ ok: false });
+        vi.stubGlobal("fetch", fetchMock);
+
+        render(<FeedbackStatusBoard />);
+        await waitFor(() =>
+            expect(screen.getByRole("alert")).toHaveTextContent("Failed to load feedback"),
+        );
+    });
+
     it("shows an error when update fails", async () => {
         const fetchMock = vi
             .fn()
