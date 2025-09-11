@@ -1,0 +1,20 @@
+name: protect-archived-aar
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - 'docs/ci/ci-modernization-2025-09-01-archived.md'
+      - 'docs/ci/**/*-archived.md'
+
+permissions: read-all
+
+jobs:
+  block:
+    # Block unless actor is you AND label is present
+    if: ${{ !(github.actor == 'reesey275' && contains(github.event.pull_request.labels.*.name, 'approved-crit-change')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error ::Archived docs are protected."
+          echo "::error ::Add the 'approved-crit-change' label and have @reesey275 apply it."
+          exit 1
