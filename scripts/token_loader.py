@@ -132,6 +132,20 @@ class TokenLoader:
 
                     # Only load if it's a runtime token
                     if key in self.RUNTIME_TOKENS:
+                        # CI Protection: Don't override GitHub Actions secrets
+                        if (
+                            os.getenv("CI")
+                            and value.startswith("ci_test_")
+                            and key in os.environ
+                        ):
+                            # Skip setting test placeholder if real token already exists
+                            print(
+                                f"🔒 Protecting CI secret: {key} "
+                                "(not overriding with test placeholder)"
+                            )
+                            loaded_tokens[key] = os.environ[key]  # Use existing value
+                            continue
+
                         os.environ[key] = value
                         loaded_tokens[key] = value
 
@@ -188,6 +202,20 @@ class TokenLoader:
                         value = value[1:-1]
                     elif value.startswith("'") and value.endswith("'"):
                         value = value[1:-1]
+
+                    # CI Protection: Don't override GitHub Actions secrets
+                    if (
+                        os.getenv("CI")
+                        and value.startswith("ci_test_")
+                        and key in os.environ
+                    ):
+                        # Skip setting test placeholder if real token already exists
+                        print(
+                            f"🔒 Protecting CI secret: {key} "
+                            "(not overriding with test placeholder)"
+                        )
+                        loaded_tokens[key] = os.environ[key]  # Use existing value
+                        continue
 
                     # Set in environment
                     os.environ[key] = value
