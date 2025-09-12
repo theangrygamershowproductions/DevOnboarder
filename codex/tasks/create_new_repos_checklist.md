@@ -1,18 +1,15 @@
 ---
-
 title: Checklist - Create New Repos for Frontend and Discord Bot
 project: DevOnboarder
-codex\_scope: repo\_split\_phase1
-codex\_role: devops\_lead
-codex\_type: task\_checklist
+codex_scope: repo_split_phase1
+codex_role: devops_lead
+codex_type: task_checklist
 status: draft
-created\_at: 2025-08-03
+created_at: 2025-08-03
 tags:
-
-* codex-task
-* repository-creation
-* phase1
-
+  - codex-task
+  - repository-creation
+  - phase1
 ---
 
 ## Objective
@@ -24,23 +21,31 @@ Create and initialize two standalone repositories from the main DevOnboarder mon
 ### 📦 Repository Creation
 
 * [ ] Create `devonboarder-frontend` GitHub repository under TAGS org
+
 * [ ] Create `devonboarder-discordbot` GitHub repository under TAGS org
+
 * [ ] Add standard README, LICENSE, and `.gitignore` files to each
+
 * [ ] Apply branch protection and enable required CI checks (e.g., `main`, `dev` branches)
 
 ### 🔐 Secrets and CI/CD
 
 * [ ] Configure GitHub Secrets: `CODENAME_BOT_TOKEN`, `DISCORD_BOT_TOKEN`, `FRONTEND_DEPLOY_KEY`, etc.
+
 * [ ] Re-create GitHub Actions workflows (`ci.yml`, `deploy.yml`, etc.)
+
 * [ ] Validate `.venv` or Node.js dependencies as appropriate
 
 ### 🔧 Repo Metadata
 
 * [ ] Populate `docs/README.md` with repo-specific instructions
+
 * [ ] Include metadata block with Codex scope and routing roles
+
 * [ ] Link back to core DevOnboarder orchestration if needed
 
 ---
 
 Prepared by: DevOps Lead
+
 Date: 2025-08-03
