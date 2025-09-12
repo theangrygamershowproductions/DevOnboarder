@@ -42,7 +42,7 @@
 
 ```bash
 # Before any complex CI troubleshooting:
-cd /home/potato/DevOnboarder
+# cd $PROJECT_ROOT  # From DevOnboarder workspace root
 source .venv/bin/activate
 ./scripts/validate_ci_locally.sh
 

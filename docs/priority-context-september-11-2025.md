@@ -27,7 +27,7 @@
 **ALWAYS run FIRST before complex CI debugging**:
 
 ```bash
-cd /home/potato/DevOnboarder
+# cd $DEVONBOARDER_DIR  # From DevOnboarder workspace root
 source .venv/bin/activate
 ./scripts/validate_ci_locally.sh
 
