@@ -41,8 +41,9 @@
 **CRITICAL LESSON**: Always use `./scripts/validate_ci_locally.sh` FIRST when troubleshooting CI issues!
 
 ```bash
+```bash
 # Before any complex CI troubleshooting:
-# cd $PROJECT_ROOT  # From DevOnboarder workspace root
+cd /home/potato/DevOnboarder
 source .venv/bin/activate
 ./scripts/validate_ci_locally.sh
 
