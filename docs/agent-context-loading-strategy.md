@@ -2,7 +2,34 @@
 
 ## 🎯 Purpose
 
-This document provides a systematic approach for AI agents to efficiently load DevOnboarder project context, maintain accuracy, and navigate the complex ecosystem autonomously.
+This document provides a systematic approach for AI agents to efficiently load DevOnboarder project context, maintain accuracy, and navigate the complex ecosystem autonomously. It includes cross-session memory patterns to eliminate the need for temporary session handoff files.
+
+## 🧠 Cross-Session Memory Strategy
+
+### Session Continuity via Existing Infrastructure
+
+DevOnboarder uses a comprehensive frontmatter metadata system instead of temporary session files:
+
+**Agent Registry**: `.codex/agents/index.json` contains 27+ registered agents with complete metadata
+**Schema Validation**: `schema/agent-schema.json` ensures consistent frontmatter structure
+**CI Integration**: `scripts/validate_agents.py` enforces frontmatter compliance
+**100% Coverage**: All agent files include validated codex-agent frontmatter
+
+### Session Context Recovery
+
+When resuming work across sessions, agents should:
+
+1. **Check recent session reports**: `docs/sessions/2025-*-*.md` for latest completed work
+2. **Review current branch context**: `git status` and `git branch --show-current`
+3. **Load agent registry**: Check `.codex/agents/index.json` for agent-specific context
+4. **Validate frontmatter**: Use existing schema rather than creating new documentation
+
+### Memory Anti-Patterns (AVOID)
+
+- ❌ Creating SESSION_HANDOFF.md files in repository root (causes pollution)
+- ❌ Duplicating metadata that exists in frontmatter system
+- ❌ Manual session files that bypass established validation
+- ✅ **USE**: Existing agent registry and session documentation in `docs/sessions/`
 
 ## 📚 Context Loading Sequence (New Conversations)
 
