@@ -1,3 +1,23 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Security policy for DevOnboarder including supported versions, vulnerability reporting process, and response procedures
+document_type: policy
+merge_candidate: false
+project: DevOnboarder
+similarity_group: docs-
+status: active
+tags:
+- security
+- policy
+- vulnerability
+title: Security Policy
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Security Policy
 
 Thanks for helping make DevOnboarder safe for everyone.
@@ -9,7 +29,9 @@ minor versions released in the last six months. The project targets Python 3.12
 and Node.js 22.
 
 | Version | Supported          |
+
 | ------- | ------------------ |
+
 | 0.1.x   | :white_check_mark: |
 | < 0.1   | :x:                |
 
@@ -22,7 +44,9 @@ issues, discussions or pull requests.**
 Please include as much information as possible:
 
 - A description of the issue and its impact
+
 - Steps to reproduce the vulnerability
+
 - Any relevant logs or screenshots
 
 ## Response Timeframe
