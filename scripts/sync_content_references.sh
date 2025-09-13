@@ -149,10 +149,10 @@ EOF
     for file in "${referencing_files[@]}"; do
         {
             echo "- \`$file\`"
+            echo "  - Review content for potential consolidation"
+            echo "  - Consider replacing detailed explanations with policy references"
+            echo
         } >> "$output_file"
-        echo "  - Review content for potential consolidation" >> "$output_file"
-        echo "  - Consider replacing detailed explanations with policy references" >> "$output_file"
-        echo >> "$output_file"
     done
 
     cat >> "$output_file" << EOF
@@ -216,16 +216,15 @@ preview_reference_replacement() {
         if [[ -n "$matching_lines" ]]; then
             {
                 echo "### Current content:"
+                echo '```'
+                echo "$matching_lines"
+                echo '```'
+                echo
+                echo "### Suggested replacement:"
+                echo '```markdown'
+                echo "> **$topic**: See [$topic Policy]($canonical_file) for complete guidance."
+                echo '```'
             } >> "$preview_file"
-            echo '```' >> "$preview_file"
-            echo "$matching_lines" >> "$preview_file"
-            echo '```' >> "$preview_file"
-            echo >> "$preview_file"
-
-            echo "### Suggested replacement:" >> "$preview_file"
-            echo '```markdown' >> "$preview_file"
-            echo "> **$topic**: See [$topic Policy]($canonical_file) for complete guidance." >> "$preview_file"
-            echo '```' >> "$preview_file"
         else
             echo "No matching patterns found" >> "$preview_file"
         fi

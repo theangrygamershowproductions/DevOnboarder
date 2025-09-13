@@ -155,6 +155,6 @@ Both scripts embody the DevOnboarder **"quiet and reliable"** philosophy:
 
 ---
 
-*Created during CI Infrastructure Modernization effort (September 2025)*
+### Created during CI Infrastructure Modernization effort (September 2025)
 
-*Part of multi-PR automation enhancement initiative*
+### Part of multi-PR automation enhancement initiative
