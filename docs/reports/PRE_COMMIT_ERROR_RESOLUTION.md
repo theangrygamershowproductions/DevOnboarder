@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: reports-reports
+status: active
+tags:
+- documentation
+title: Pre Commit Error Resolution
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Pre-commit Error Resolution Summary
 
 ## Issue Identified
@@ -12,7 +30,9 @@ Based on the pre-commit error logs in `logs/pre-commit-errors.log`, there was a 
 
 ```log
 shellcheck...............................................................Failed
+
 - hook id: shellcheck
+
 - exit code: 1
 
 In scripts/verify_and_commit.sh line 3:
@@ -22,6 +42,7 @@ In scripts/verify_and_commit.sh line 3:
 In scripts/verify_and_commit.sh line 13:
     log_and_display ""nboarder
     ^------------------------^ SC2218 (error): This function is only defined later. Move the definition up.
+
 ```
 
 ### Resolution Applied
@@ -31,19 +52,25 @@ In scripts/verify_and_commit.sh line 13:
 **Before:**
 
 ```bash
+
 log_and_display "� Cleaning all test artifacts before validation..."
+
 ```
 
 **After:**
 
 ```bash
+
 log_and_display "🧹 Cleaning all test artifacts before validation..."
+
 ```
 
 ### Verification
 
 1. ✅ **Shellcheck Direct Test**: `shellcheck scripts/verify_and_commit.sh` - **PASSED**
+
 2. ✅ **Pre-commit Hook Test**: `pre-commit run shellcheck --files scripts/verify_and_commit.sh` - **PASSED**
+
 3. ✅ **Full Pre-commit Suite**: `pre-commit run --all-files` - **ALL PASSED**
 
 ### Other Findings from Logs
@@ -51,30 +78,51 @@ log_and_display "🧹 Cleaning all test artifacts before validation..."
 **Good News - Other Components Working:**
 
 - ✅ **All 115 tests passed**
+
 - ✅ **Coverage: 96.14%** (exceeds 95% requirement)
+
 - ✅ **All other pre-commit hooks passed**:
+
     - black formatting ✅
+
     - ruff linting ✅
+
     - prettier ✅
+
     - trim trailing whitespace ✅
+
     - fix end of files ✅
+
     - codespell ✅
+
     - markdownlint-cli2 ✅
+
     - Clean pytest sandbox artifacts ✅
+
     - Docs quality checks ✅
+
     - Potato ignore policy ✅
+
     - Environment docs check ✅
+
     - Validate Codex Agents ✅
+
     - Frontend ESLint ✅
+
     - Bot ESLint ✅
+
     - Python tests ✅
+
     - Full validation suite ✅
 
 ### Impact
 
 - **Pre-commit hooks now pass completely**
+
 - **No functional changes** to the script behavior
+
 - **Character encoding issues resolved**
+
 - **Development workflow unblocked**
 
 ### Prevention
@@ -82,7 +130,9 @@ log_and_display "🧹 Cleaning all test artifacts before validation..."
 This type of Unicode corruption can happen due to:
 
 - Copy/paste from different text editors
+
 - Terminal encoding issues
+
 - File transfer between different systems
 
 **Best Practice**: Always verify emoji and Unicode characters in shell scripts are properly encoded, especially when working across different environments.

@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: CI_PERMISSIONS_SOLUTION.md-docs
+status: active
+tags:
+- documentation
+title: Ci Permissions Solution
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # DevOnboarder CI Permissions Analysis - SOLVED
 
 ## The Systematic Problem: "Why when we add new CI jobs do we always have this issue?"
@@ -52,11 +70,12 @@ All templates follow DevOnboarder standards:
 
 ```yaml
 
-# New developers copy existing workflows and get:
+# New developers copy existing workflows and get
 
 jobs:
   new-job:
     runs-on: ubuntu-latest  # Missing permissions = overly broad defaults
+
     # Triggers CodeQL security warnings
 
 ```
@@ -65,12 +84,13 @@ jobs:
 
 ```yaml
 
-# Developers use our templates and get:
+# Developers use our templates and get
 
 jobs:
   new-job:
     permissions:
       contents: read        # Explicit minimal permissions
+
     runs-on: ubuntu-latest
     # No security warnings, clear security model
 

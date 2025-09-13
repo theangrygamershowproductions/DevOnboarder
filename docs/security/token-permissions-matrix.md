@@ -1,6 +1,25 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: security-security
+status: active
+tags:
+- documentation
+title: Token Permissions Matrix
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # DevOnboarder Token Permissions Matrix
 
 **Version**: 2.0 - Enhanced Token Governance
+
 **Last Updated**: $(date +%Y-%m-%d)
 **Policy**: No Default Token Policy v1.0
 **Classification**: Internal Use - Security Critical
@@ -14,15 +33,21 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 ### Primary Classification Categories
 
 - **CI_AUTOMATION**: Primary CI/CD pipeline automation tokens
+
 - **SPECIALIZED_BOT**: Task-specific automation with defined scopes
+
 - **MONITORING**: Health monitoring and observability tokens
+
 - **SECURITY**: Security audit and compliance enforcement tokens
+
 - **ORCHESTRATION**: Multi-service coordination and deployment tokens
 
 ### Risk Assessment Framework
 
 - **🔴 HIGH**: Full repository access or organization-level permissions
+
 - **🟡 MEDIUM**: Limited repository access with write permissions
+
 - **🟢 LOW**: Read-only or minimal scope permissions
 
 ## 🔐 Primary CI Automation Tokens
@@ -66,6 +91,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 | Token Name | Bot Identity | Environment | GitHub Permissions | Usage Restrictions |
 |------------|--------------|-------------|-------------------|-------------------|
 | `PROD_ORCHESTRATION_BOT_KEY` | `devonboarder-prod-orch` | Production | `actions:write`, `contents:read` | **Production only** - Never use in PR/CI flows |
+
 | `DEV_ORCHESTRATION_BOT_KEY` | `devonboarder-dev-orch` | Development | `actions:write`, `contents:read` | Development workflow coordination only |
 
 ### 🛡️ Security and Quality Tokens
@@ -73,6 +99,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 | Token Name | Bot Identity | GitHub Permissions | Authorized Usage | Security Level |
 |------------|--------------|-------------------|------------------|----------------|
 | `SECURITY_AUDIT_TOKEN` | `devonboarder-security` | `security_events:read`, `issues:write`, `contents:read` | Enhanced Potato Policy enforcement | **High Security** |
+
 | `VALIDATE_PERMISSIONS_TOKEN` | `devonboarder-permissions` | `administration:read`, `issues:write` | Bot permission auditing and validation | **Administrative** |
 
 ### Deprecated

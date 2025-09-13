@@ -1,3 +1,25 @@
+---
+author: DevOnboarder Team
+ci_integration: true
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Standards documentation
+document_type: standards
+merge_candidate: false
+project: DevOnboarder
+similarity_group: standards-standards
+status: active
+tags:
+- standards
+- policy
+- documentation
+title: Readme
+updated_at: '2025-09-12'
+virtual_env_required: true
+visibility: internal
+---
+
 # DevOnboarder Standards Index
 
 This directory contains the standard practices and policies that govern DevOnboarder development and operations.
@@ -9,7 +31,9 @@ This directory contains the standard practices and policies that govern DevOnboa
 | Standard | Document | Status | Last Updated |
 |----------|----------|---------|--------------|
 | **VS Code/CI Integration Framework** | [`vscode-ci-integration-standard.md`](vscode-ci-integration-standard.md) | ✅ ACTIVE | 2025-08-07 |
+
 | **After Actions Report Process** | [`after-actions-report-process.md`](after-actions-report-process.md) | ✅ ACTIVE | 2025-07-30 |
+
 | **Centralized Logging Policy** | [`centralized-logging-policy.md`](centralized-logging-policy.md) | ✅ ACTIVE | TBD |
 
 ## Standard Types
@@ -39,15 +63,21 @@ This directory contains the standard practices and policies that govern DevOnboa
 All standards marked as **✅ ACTIVE** are mandatory for:
 
 - **All team members**: Must follow established practices
+
 - **Code contributions**: Must meet standard requirements
+
 - **Pull requests**: Must demonstrate compliance
+
 - **Onboarding**: Must include standards training
 
 ### Review Cycle
 
 - **Monthly**: Compliance verification and effectiveness assessment
+
 - **Quarterly**: Standard updates and improvement implementation
+
 - **Annual**: Complete governance review and strategic alignment
+
 - **Ad-hoc**: Emergency updates for security or critical issues
 
 ## Standard Development Process
@@ -55,25 +85,33 @@ All standards marked as **✅ ACTIVE** are mandatory for:
 ### 1. **Identification**
 
 - Need identified through AAR process, team feedback, or operational issues
+
 - Impact assessment and priority determination
+
 - Stakeholder review and consensus building
 
 ### 2. **Development**
 
 - Draft standard creation using established template
+
 - Technical validation and feasibility assessment
+
 - Team review and feedback incorporation
 
 ### 3. **Implementation**
 
 - Pilot testing with subset of team or projects
+
 - Training materials development and delivery
+
 - Gradual rollout with success metrics monitoring
 
 ### 4. **Maintenance**
 
 - Regular effectiveness review and metric tracking
+
 - Continuous improvement based on feedback and results
+
 - Version control and change management
 
 ## Quick Reference
@@ -81,21 +119,29 @@ All standards marked as **✅ ACTIVE** are mandatory for:
 ### For Developers
 
 - **Start here**: [`vscode-ci-integration-standard.md`](vscode-ci-integration-standard.md) - Essential development workflow
+
 - **When issues arise**: [`after-actions-report-process.md`](after-actions-report-process.md) - AAR process
+
 - **For operations**: [`centralized-logging-policy.md`](centralized-logging-policy.md) - Logging requirements
 
 ### For Team Leads
 
 - **Standards overview**: This index document
+
 - **Compliance monitoring**: Standard-specific KPIs and metrics
+
 - **Change management**: Standard development and update process
+
 - **Training coordination**: Team onboarding and capability development
 
 ### For Project Management
 
 - **Process governance**: AAR system and continuous improvement
+
 - **Quality assurance**: Standard compliance verification
+
 - **Risk management**: Policy adherence and security practices
+
 - **Strategic alignment**: Standards effectiveness and project goals
 
 ## Integration Points
@@ -109,7 +155,9 @@ Standards are referenced in [`.github/copilot-instructions.md`](../../.github/co
 Standards compliance is enforced through:
 
 - Pre-commit hooks validating standard requirements
+
 - GitHub Actions workflows checking adherence
+
 - Automated quality gates and metrics collection
 
 ### Documentation
@@ -117,12 +165,15 @@ Standards compliance is enforced through:
 Standards are integrated with:
 
 - AAR process for continuous improvement
+
 - Team onboarding materials and training
+
 - Project documentation and troubleshooting guides
 
 ---
 
 **Index Maintained By**: DevOnboarder Team
+
 **Last Updated**: August 7, 2025
 **Next Review**: November 7, 2025
 

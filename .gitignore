@@ -27,6 +27,9 @@
 *.potato.*
 *.py[cod]
 *.sublime-*
+*.bak
+*.backup
+docs-backup/
 .DS_Store
 .Trash-*
 .codex/cache/

@@ -3,14 +3,14 @@ author: DevOnboarder Team
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
-description: Docker Compose V2 compatibility issues and solutions for DevOnboarder environment setup
+description: Docker Compose V2 compatibility issues and solutions for DevOnboarder
+  environment setup
 document_type: troubleshooting
 merge_candidate: false
 project: DevOnboarder
 similarity_group: DOCKER_ENVIRONMENT_COMPATIBILITY.md-docs
 status: active
 tags:
-- documentation
 - documentation
 title: Docker Environment Compatibility
 updated_at: '2025-09-12'

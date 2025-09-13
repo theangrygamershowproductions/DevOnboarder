@@ -20,7 +20,6 @@ similarity_group: ci-monitor.md-agents
 status: active
 tags:
 - documentation
-- documentation
 title: Ci Monitor
 trigger: on_pull_request, on_workflow_run, manual
 updated_at: '2025-09-12'

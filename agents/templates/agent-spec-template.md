@@ -11,7 +11,6 @@ similarity_group: templates-templates
 status: active
 tags:
 - documentation
-- documentation
 title: Agent Spec Template
 updated_at: '2025-09-12'
 visibility: internal

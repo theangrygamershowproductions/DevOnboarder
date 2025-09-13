@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: tools-dashboard.md-docs
+status: active
+tags:
+- documentation
+title: Tools Dashboard
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # 🛠️ DevOnboarder Tools & Maintenance Dashboard
 
 **Last Updated**: 2025-08-01
@@ -35,19 +53,24 @@
 | `scripts/check_pr_inline_comments.sh` | Extract Copilot comments + resolution tracking | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only display, annotation storage) |
 
 ```bash
+
 # Basic comment viewing
+
 ./scripts/check_pr_inline_comments.sh --summary 1330
 ./scripts/check_pr_inline_comments.sh --copilot-only --suggestions 1330
 ./scripts/check_pr_inline_comments.sh --open-browser 1330
 
 # Resolution tracking workflow (NEW)
+
 ./scripts/check_pr_inline_comments.sh --annotate 1330
 ./scripts/check_pr_inline_comments.sh --resolution-summary 1330
 ./scripts/check_pr_inline_comments.sh --learning-export 1330
 
 # CI integration
+
 ./scripts/check_pr_inline_comments.sh --verify-resolutions 1330
 ./scripts/check_pr_inline_comments.sh --format=json 1330
+
 ```### Issue Resolution
 
 | Tool | Purpose | Usage | Safety Level |
@@ -59,7 +82,9 @@
 ### Issue Patterns Resolved Today
 
 - ✅ **CI Failure Issues**: Check for merged PRs → Close automatically
+
 - ✅ **Artifact Pollution**: Run artifact guard → Close if clean
+
 - 🔍 **Dependency Issues**: Review update status → Close if complete
 
 ---
@@ -69,30 +94,41 @@
 ### Daily/Weekly Maintenance
 
 ```bash
+
 # 1. Review and close resolved issues
+
 bash scripts/review_resolved_issues.sh
 
 # 2. Clean up stale branches
+
 bash scripts/quick_branch_cleanup.sh
 
 # 3. Check repository hygiene
+
 bash scripts/enhanced_root_artifact_guard.sh --check
 
 # 4. Review open issues count
+
 gh issue list --state open | wc -l
+
 ```
 
 ### Monthly Deep Cleanup
 
 ```bash
+
 # 1. Comprehensive branch cleanup
+
 bash scripts/comprehensive_branch_cleanup.sh
 
 # 2. Log management
+
 bash scripts/manage_logs.sh clean
 
 # 3. Full validation suite
+
 bash scripts/run_tests.sh
+
 ```
 
 ---
@@ -113,6 +149,7 @@ bash scripts/run_tests.sh
 |------|---------|-------|
 | `scripts/manage_logs.sh list` | List all logs | `bash scripts/manage_logs.sh list` |
 | `scripts/manage_logs.sh clean` | Clean old logs (7+ days) | `bash scripts/manage_logs.sh clean` |
+
 | `scripts/manage_logs.sh archive` | Archive current logs | `bash scripts/manage_logs.sh archive` |
 
 ---
@@ -150,8 +187,11 @@ bash scripts/run_tests.sh
 ### AAR Workflow
 
 1. **CI Failure Occurs** → Automatic issue creation via `codex.ci.yml`
+
 2. **Generate AAR** → `python scripts/generate_aar.py --create-issue`
+
 3. **Security Audit** → `python scripts/aar_security.py audit_token_usage`
+
 4. **Close Issue** → When root cause resolved
 
 ---
@@ -161,34 +201,44 @@ bash scripts/run_tests.sh
 ### Most Common Maintenance Tasks
 
 ```bash
+
 # Weekly cleanup routine
+
 bash scripts/quick_branch_cleanup.sh
 bash scripts/review_resolved_issues.sh
 bash scripts/enhanced_root_artifact_guard.sh --check
 
 # Before major releases
+
 bash scripts/comprehensive_branch_cleanup.sh
 bash scripts/run_tests_with_logging.sh
 bash scripts/manage_logs.sh archive
 
 # Emergency diagnostics
+
 bash scripts/enhanced_ci_failure_analyzer.py
 python scripts/generate_aar.py --workflow-run-id <latest_failure>
+
 ```
 
 ### Issue Management Quick Commands
 
 ```bash
+
 # List open issues by type
+
 gh issue list --label "ci-failure" --state open
 gh issue list --label "dependencies" --state open
 gh issue list --label "artifact-pollution" --state open
 
 # Close resolved issues
+
 gh issue close <number> --comment "Resolved: <description>"
 
 # Bulk review
+
 bash scripts/review_resolved_issues.sh
+
 ```
 
 ---
@@ -198,15 +248,21 @@ bash scripts/review_resolved_issues.sh
 ### Currently Automated
 
 - ✅ **CI Failure Detection**: Automatic issue creation
+
 - ✅ **Artifact Pollution Monitoring**: Scheduled checks
+
 - ✅ **Branch Protection**: Pre-commit hooks enforce standards
+
 - ✅ **Log Centralization**: Mandatory policy enforcement
+
 - ✅ **Security Policy**: Enhanced Potato Policy v2.0
 
 ### Manual Processes (Candidates for Automation)
 
 - 🔧 **Issue Resolution Review**: Could be automated based on status patterns
+
 - 🔧 **Branch Cleanup**: Could be scheduled weekly
+
 - 🔧 **Log Archival**: Could be automated monthly
 
 ---
@@ -214,8 +270,11 @@ bash scripts/review_resolved_issues.sh
 ## 📚 **Related Documentation**
 
 - **CI Status**: [`docs/ci-dashboard.md`](docs/ci-dashboard.md) - Live CI health monitoring
+
 - **Contributing**: [`CONTRIBUTING.md`](CONTRIBUTING.md) - Development guidelines
+
 - **Security**: [`SECURITY.md`](SECURITY.md) - Security policies and procedures
+
 - **Agent System**: [`agents/index.md`](agents/index.md) - Codex agent documentation
 
 ---
@@ -223,11 +282,16 @@ bash scripts/review_resolved_issues.sh
 ## 🆘 **Troubleshooting Quick Links**
 
 | Issue Type | Quick Fix | Tool |
+
 |------------|-----------|------|
 | **CI Failures** | Check [CI Dashboard](docs/ci-dashboard.md) | `scripts/enhanced_ci_failure_analyzer.py` |
+
 | **Branch Conflicts** | Run branch cleanup | `scripts/quick_branch_cleanup.sh` |
+
 | **Artifact Pollution** | Run artifact guard | `scripts/enhanced_root_artifact_guard.sh --auto-clean` |
+
 | **Test Failures** | Enhanced test logging | `scripts/run_tests_with_logging.sh` |
+
 | **Open Issues Backlog** | Issue resolution review | `scripts/review_resolved_issues.sh` |
 
 ---

@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: orchestration.md-docs
+status: active
+tags:
+- documentation
+title: Orchestration
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Multi-Bot Orchestration Guide
 
 This document explains how the Discord bot, Codex automation, and other
@@ -9,8 +27,11 @@ management and how to escalate problems when automation fails.
 Several bots operate together:
 
 - **Codex** – monitors CI jobs, opens issues, and proposes YAML fixes.
+
 - **Discord bot** – provides slash commands and onboarding checks.
+
 - **Orchestrator workflows** – scheduled jobs that manage bot permissions
+
   using `.codex/bot-permissions.yaml`.
 
 Each bot uses a dedicated token stored in GitHub Actions secrets. The
@@ -28,11 +49,17 @@ authentication.
 ## API Key Management
 
 1. Store each bot token as a separate secret in GitHub.
+
 2. Limit the scopes to only the required operations (issue write, pull
+
    requests, etc.).
+
 3. Rotate tokens every quarter and record the rotation date in
+
    `docs/governance/bot_access_governance.md`.
+
 4. Reference tokens in workflows via `${{ secrets.<TOKEN_NAME> }}` so they are
+
    not hard coded in repository files.
 
 ## Escalation Paths
@@ -40,10 +67,17 @@ authentication.
 If automation breaks or a bot is unresponsive:
 
 1. Check workflow run logs for errors and consult
+
    `docs/troubleshooting.md` for common fixes.
+
 2. If the issue persists, mention @project-maintainers in the failing pull
+
    request or issue.
+
 3. For credential problems, escalate to the security team listed in
+
    `docs/governance/bot_access_governance.md`.
+
 4. Document the incident in `docs/CHANGELOG.md` if manual recovery steps were
+
    required.

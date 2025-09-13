@@ -24,7 +24,6 @@ similarity_group: documentation-quality-enforcer.md-agents
 status: active
 tags:
 - documentation
-- documentation
 title: Documentation Quality Enforcer
 trigger: pull_request opened, synchronize
 updated_at: '2025-09-12'

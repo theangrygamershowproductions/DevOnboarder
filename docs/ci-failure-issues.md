@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: ci-failure-issues.md-docs
+status: active
+tags:
+- documentation
+title: Ci Failure Issues
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Managing CI Failure Issues
 
 When the CI workflow fails, it opens or updates an issue titled `CI Failure: PR #<number>`.
@@ -11,7 +29,9 @@ The file offers a quick way to analyze failing runs.
 ## Automatic Cleanup
 
 - `ci.yml` closes every open `ci-failure` issue whenever the pipeline succeeds using the built-in `GITHUB_TOKEN`.
+
 - The workflow uploads a `logs` artifact with the full job log for download after each run.
+
 - The issue number is saved to `ci_failure_issue.txt` and uploaded as a `ci-failure-issue` artifact so later runs update the same issue.
 
 ## Forked Pull Requests
@@ -34,6 +54,7 @@ comment on the failure issue:
 
 ```bash
 GH_TOKEN=your_personal_token gh workflow run ci.yml -F ref=<branch>
+
 ```
 
 Remove the token after the run completes.
@@ -47,6 +68,7 @@ Run the script manually on a downloaded log if you need to dig deeper:
 
 ```bash
 python scripts/ci_failure_diagnoser.py ci.log > audit.md
+
 ```
 
 Attach the `audit.md` output to CI failure issues so maintainers can quickly spot the failing step.
@@ -61,6 +83,7 @@ results to `audit.md`.
 
 The workflow uploads `audit.md` with the job logs and appends its contents to
 the failure issue. The file begins with `# CI Failure Diagnoser` followed by lines
+
 prefixed with `Nx` when a message appears multiple times or `-` if it occurs
 once. Use these counts to find the most frequent errors before opening the full
 log artifact.
@@ -76,6 +99,7 @@ for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | gr
   gh issue close "$n" --reason completed
   echo "Closed CI-failure issue #$n"
 done
+
 ```
 
 ## One-Time Cleanup Workflow
@@ -93,6 +117,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Bulk close all open ci-failure issues
+
               run: |
                   for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]+'); do
                     gh issue close "$n" --reason completed
@@ -100,18 +125,26 @@ jobs:
                   done
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 ```
 
 Trigger the workflow from the **Actions** tab using the **Run workflow** button.
+
 Schedule it with a `schedule:` trigger if you want regular cleanup.
 
 ## Troubleshooting
 
 - The workflow logs `gh auth status` before creating the failure issue so you can
+
   verify the token scopes in `logs/gh_cli.log`.
+
 - Download `logs/gh_cli.log` and `logs/audit.md` from the run's **Artifacts** section to
+
   inspect GitHub CLI output and the log audit summary.
+
 - Downloading workflow run logs with `curl` or `gh run download` requires a
+
   token granted the `actions: read` scope. The built-in `GITHUB_TOKEN` only
   works inside GitHub Actions.
+
 - Duplicate or missing issues are usually caused by insufficient token permissions or leftover issues from earlier runs.

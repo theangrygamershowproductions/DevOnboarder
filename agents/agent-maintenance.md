@@ -20,7 +20,6 @@ similarity_group: documentation-documentation
 status: active
 tags:
 - documentation
-- documentation
 title: Agent Maintenance
 updated_at: '2025-09-12'
 visibility: internal

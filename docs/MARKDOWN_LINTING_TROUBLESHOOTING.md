@@ -11,7 +11,6 @@ similarity_group: MARKDOWN_LINTING_TROUBLESHOOTING.md-docs
 status: active
 tags:
 - documentation
-- documentation
 title: Markdown Linting Troubleshooting
 updated_at: '2025-09-12'
 visibility: internal

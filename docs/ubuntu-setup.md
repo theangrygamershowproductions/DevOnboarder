@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: ubuntu-setup.md-docs
+status: active
+tags:
+- documentation
+title: Ubuntu Setup
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Ubuntu Setup
 
 These commands install Docker, Docker Compose, Node.js 22, and Python 3.12 on Ubuntu 22.04 or newer.
@@ -15,6 +33,7 @@ https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
   | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 ```
 
 ## Install Node.js 22
@@ -23,13 +42,17 @@ Download the setup script first so it can be reviewed before execution.
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+
 # Optional: inspect the script or verify it against the NodeSource repository
+
 sudo bash nodesource_setup.sh
 rm nodesource_setup.sh
 sudo apt-get install -y nodejs
+
 ```
 
 > **Security note:** The repository's policy forbids piping remote scripts
+
 > directly to `bash`. Always download scripts first so you can verify them.
 
 ## Install Python 3.12
@@ -38,9 +61,11 @@ sudo apt-get install -y nodejs
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install -y python3.12 python3.12-venv python3.12-dev
+
 ```
 
 python3 --version # should print Python 3.12.x
+
 Running tests require Python 3.12.
 
 ## Install Project Dependencies
@@ -50,5 +75,7 @@ scripts can run:
 
 ```bash
 pip install -e .  # or `pip install -r requirements.txt` if you created one
+
 pip install -r requirements-dev.txt
+
 ```
