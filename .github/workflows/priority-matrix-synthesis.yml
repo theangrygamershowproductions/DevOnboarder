@@ -27,7 +27,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -118,13 +118,21 @@ jobs:
             printf "Current HEAD: %s\n" "$(git rev-parse HEAD)"
             echo "Available branches:"
             git branch -a
-            exit 1
-          fi
 
-          CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
-          printf "On branch: %s\n" "$CURRENT_BRANCH"
-          printf "Pushing changes to origin/%s\n" "$CURRENT_BRANCH"
-          git push origin "$CURRENT_BRANCH"
+            # For PR events, push to the source branch
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              PR_HEAD_REF="${{ github.head_ref }}"
+              printf "Pushing to PR head branch: %s\n" "$PR_HEAD_REF"
+              git push origin "HEAD:$PR_HEAD_REF"
+            else
+              exit 1
+            fi
+          else
+            CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+            printf "On branch: %s\n" "$CURRENT_BRANCH"
+            printf "Pushing changes to origin/%s\n" "$CURRENT_BRANCH"
+            git push origin "$CURRENT_BRANCH"
+          fi
 
       - name: Comment on PR with synthesis results
         if: github.event_name == 'pull_request'
