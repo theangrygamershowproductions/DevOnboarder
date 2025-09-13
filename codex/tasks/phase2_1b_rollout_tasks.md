@@ -1,8 +1,8 @@
 ---
-title: Codex Task Tracker - DevOnboarder Rollout Phase 2.1B
+title: Phase 2.1B Rollout Task List
 project: DevOnboarder
-codex_scope: rollout_phase2.1b
-codex_role: orchestrator
+codex_scope: rollout-phase2-1b
+codex_role: project_maintainer
 codex_type: task_index
 status: active
 created_at: 2025-08-03

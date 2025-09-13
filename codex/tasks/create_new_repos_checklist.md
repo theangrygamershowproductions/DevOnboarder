@@ -1,8 +1,8 @@
 ---
-title: Checklist - Create New Repos for Frontend and Discord Bot
+title: Checklist - Create New Repositories
 project: DevOnboarder
-codex_scope: repo_split_phase1
-codex_role: devops_lead
+codex_scope: repo-split-phase1
+codex_role: project_maintainer
 codex_type: task_checklist
 status: draft
 created_at: 2025-08-03
