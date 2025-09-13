@@ -3,7 +3,7 @@
     "title": "Codex Agent File Schema",
     "description": "Schema for validating Codex agent frontmatter",
     "type": "object",
-    "oneOf": [
+    "anyOf": [
         {
             "description": "Nested codex-agent format",
             "required": ["codex-agent"],
@@ -45,26 +45,168 @@
                             ]
                         },
                         "permissions": {
-                            "type": "array",
-                            "description": "List of required permissions (can also be at top level)",
-                            "items": {
-                                "type": "string",
-                                "pattern": "^[a-z]+:[a-z]+$"
-                            }
+                            "oneOf": [
+                                {
+                                    "type": "array",
+                                    "description": "Legacy DevOnboarder permissions array format",
+                                    "items": {
+                                        "type": "string",
+                                        "pattern": "^[a-z]+:[a-z]+$"
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "GitHub Actions permissions object format",
+                                    "properties": {
+                                        "actions": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "attestations": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "checks": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "contents": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "deployments": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "discussions": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "id-token": {
+                                            "type": "string",
+                                            "enum": ["write", "none"]
+                                        },
+                                        "issues": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "models": {
+                                            "type": "string",
+                                            "enum": ["read", "none"]
+                                        },
+                                        "packages": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "pages": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "pull-requests": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "repository-projects": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "security-events": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        },
+                                        "statuses": {
+                                            "type": "string",
+                                            "enum": ["read", "write", "none"]
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                }
+                            ]
                         }
                     },
                     "additionalProperties": false
                 },
                 "permissions": {
-                    "type": "array",
-                    "description": "List of required permissions (alternative to codex-agent.permissions)",
-                    "items": {
-                        "type": "string",
-                        "pattern": "^[a-z]+:[a-z]+$"
-                    }
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "description": "Legacy DevOnboarder permissions array format",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^[a-z]+:[a-z]+$"
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "description": "GitHub Actions permissions object format",
+                            "properties": {
+                                "actions": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "attestations": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "checks": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "contents": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "deployments": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "discussions": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "id-token": {
+                                    "type": "string",
+                                    "enum": ["write", "none"]
+                                },
+                                "issues": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "models": {
+                                    "type": "string",
+                                    "enum": ["read", "none"]
+                                },
+                                "packages": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "pages": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "pull-requests": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "repository-projects": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "security-events": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "statuses": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    ]
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         {
             "description": "Flat agent format",
@@ -99,11 +241,82 @@
                     "description": "Where the agent outputs its results"
                 },
                 "permissions": {
-                    "type": "array",
-                    "description": "List of required permissions",
-                    "items": {
-                        "type": "string"
-                    }
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "description": "Legacy DevOnboarder permissions array format",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "description": "GitHub Actions permissions object format",
+                            "properties": {
+                                "actions": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "attestations": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "checks": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "contents": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "deployments": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "discussions": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "id-token": {
+                                    "type": "string",
+                                    "enum": ["write", "none"]
+                                },
+                                "issues": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "models": {
+                                    "type": "string",
+                                    "enum": ["read", "none"]
+                                },
+                                "packages": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "pages": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "pull-requests": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "repository-projects": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "security-events": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                },
+                                "statuses": {
+                                    "type": "string",
+                                    "enum": ["read", "write", "none"]
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    ]
                 },
                 "codex_runtime": {
                     "type": "boolean",
@@ -126,7 +339,33 @@
                     "description": "URL or path to integration logs"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
+        },
+        {
+            "description": "Documentation format (flexible structure for docs, indices, and guides)",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Document title"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Document description"
+                },
+                "document_type": {
+                    "type": "string",
+                    "description": "Type of document"
+                },
+                "author": {
+                    "type": "string",
+                    "description": "Document author"
+                },
+                "project": {
+                    "type": "string",
+                    "description": "Project name"
+                }
+            },
+            "additionalProperties": true
         }
     ]
 }

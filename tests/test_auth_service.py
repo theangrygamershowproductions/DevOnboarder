@@ -1,3 +1,12 @@
+import httpx
+import sqlalchemy
+import time
+import pytest
+import jwt
+from utils import roles as roles_utils
+from fastapi.middleware.cors import CORSMiddleware
+from devonboarder import auth_service
+from fastapi.testclient import TestClient
 import importlib
 import os
 
@@ -5,16 +14,6 @@ import os
 os.environ.setdefault("APP_ENV", "development")
 # Use clear template token for testing - obviously not for production
 os.environ.setdefault("JWT_SECRET_KEY", "this_is_a_template_token_replace_me")
-
-from fastapi.testclient import TestClient
-from devonboarder import auth_service
-from fastapi.middleware.cors import CORSMiddleware
-from utils import roles as roles_utils
-import jwt
-import pytest
-import time
-import sqlalchemy
-import httpx
 
 
 def setup_function(function):
@@ -583,6 +582,10 @@ def test_discord_oauth_redirect_with_state_parameter(monkeypatch):
     app = auth_service.create_app()
     client = TestClient(app)
 
+    # Use CI environment URL instead of hard-coding production URL
+    test_frontend_url = "http://localhost:8081"
+    monkeypatch.setenv("FRONTEND_URL", test_frontend_url)
+
     # Mock Discord OAuth flow
     def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
         return StubResponse(200, {"access_token": "test_token"})
@@ -615,10 +618,9 @@ def test_discord_oauth_redirect_with_state_parameter(monkeypatch):
     from urllib.parse import urlparse
 
     parsed_url = urlparse(location)
-    # Should redirect to safe dev.theangrygamershow.com domain
+    # Should redirect to localhost in CI environment
     assert parsed_url.hostname and (
-        parsed_url.hostname == "dev.theangrygamershow.com"
-        or parsed_url.hostname.endswith(".dev.theangrygamershow.com")
+        parsed_url.hostname == "localhost" or parsed_url.hostname == "127.0.0.1"
     )
     assert not location.startswith(unsafe_redirect)  # Should NOT use unsafe URL
     assert "token=" in location
@@ -628,6 +630,10 @@ def test_discord_oauth_redirect_with_safe_state_parameter(monkeypatch):
     """Test OAuth callback redirect logic with SAFE state parameter."""
     app = auth_service.create_app()
     client = TestClient(app)
+
+    # Use CI environment URL instead of hard-coding production URL
+    test_frontend_url = "http://localhost:8081"
+    monkeypatch.setenv("FRONTEND_URL", test_frontend_url)
 
     # Mock Discord OAuth flow
     def fake_post(url: str, data: dict, headers: dict, *, timeout=None):
@@ -647,7 +653,7 @@ def test_discord_oauth_redirect_with_safe_state_parameter(monkeypatch):
     )
 
     # Test with SAFE state parameter - should use the safe URL
-    safe_redirect = "https://dev.theangrygamershow.com/dashboard"
+    safe_redirect = "http://localhost:8081/dashboard"
     resp = client.get(
         f"/login/discord/callback?code=testcode&state={safe_redirect}",
         follow_redirects=False,
@@ -661,10 +667,9 @@ def test_discord_oauth_redirect_with_safe_state_parameter(monkeypatch):
     from urllib.parse import urlparse
 
     parsed_url = urlparse(location)
-    # Should redirect to safe dev.theangrygamershow.com domain
+    # Should redirect to localhost in CI environment
     assert parsed_url.hostname and (
-        parsed_url.hostname == "dev.theangrygamershow.com"
-        or parsed_url.hostname.endswith(".dev.theangrygamershow.com")
+        parsed_url.hostname == "localhost" or parsed_url.hostname == "127.0.0.1"
     )
     assert "token=" in location
 
@@ -934,8 +939,10 @@ def test_discord_callback_with_unsafe_redirect_state():
         parsed_url = urlparse(location)
         if parsed_url.hostname == "evil.com":
             pytest.fail("Unsafe redirect to evil.com detected")
-        # Should contain the safe fallback domain
-        if "theangrygamershow.com" not in location:
+        # Should contain the safe fallback domain (environment-appropriate)
+        # In CI/development: localhost; in production: theangrygamershow.com
+        safe_hostnames = ["localhost", "127.0.0.1", "theangrygamershow.com"]
+        if not any(hostname in location for hostname in safe_hostnames):
             pytest.fail(f"Expected safe domain in redirect, got: {location}")
 
 

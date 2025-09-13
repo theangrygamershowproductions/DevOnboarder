@@ -1,10 +1,23 @@
 ---
-title: "Token Architecture v2.0 Migration Guide"
-description: "Step-by-step migration from .env token management to dedicated .tokens system"
-author: "DevOnboarder Team"
-created_at: "2025-09-04"
-status: "implementation"
-priority: "high"
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-04'
+description: Step-by-step migration from .env token management to dedicated .tokens
+  system
+document_type: guide
+merge_candidate: false
+priority: high
+project: DevOnboarder
+similarity_group: TOKEN_MIGRATION_GUIDE.md-docs
+status: implementation
+tags:
+- guide
+- migration
+- token-architecture
+title: Token Architecture v2.0 Migration Guide
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 # Token Architecture v2.0 Migration Guide
@@ -22,15 +35,21 @@ The new system includes automatic `.tokens` file creation - missing files are cr
 ### Before (Mixed System)
 
 - Tokens scattered across `.env*` files
+
 - Complex exclusion rules for security
+
 - Configuration and authentication mixed
+
 - Agent confusion about token placement
 
 ### After (Token Architecture v2.0)
 
 - **Clear separation**: Configuration (`.env*`) vs Authentication (`.tokens*`)
+
 - **Enhanced security**: Environment-specific token boundaries
+
 - **Standardized loading**: All services use same token loader
+
 - **DevOnboarder compliance**: Aligns with "quiet reliability" philosophy
 
 ## 📋 Migration Steps
@@ -107,6 +126,7 @@ DEV_ORCHESTRATION_BOT_KEY=your_actual_dev_orchestration_token_here
 PROD_ORCHESTRATION_BOT_KEY=your_actual_prod_orchestration_token_here
 STAGING_ORCHESTRATION_BOT_KEY=your_actual_staging_orchestration_token_here
 EOF
+
 ```bash
 
 ## Step 2.2: Synchronize to Environment Files
@@ -120,6 +140,7 @@ bash scripts/sync_tokens.sh --sync-all
 # Validate synchronization
 
 bash scripts/sync_tokens.sh --validate-only
+
 ```bash
 
 ## Step 2.3: Remove Tokens from .env Files
@@ -181,14 +202,19 @@ load_dotenv()
 
 from scripts.token_loader import load_tokens
 load_tokens()
+
 ```bash
 
 ## Files to update
 
 - `src/devonboarder/api.py`
+
 - `src/xp/api/__init__.py`
+
 - `src/discord_integration/api.py`
+
 - `scripts/generate_aar.py`
+
 - `scripts/aar_security.py`
 
 ### Step 3.2: Update Docker Compose Files
@@ -208,6 +234,7 @@ services:
     env_file:
 
       - .env.dev      # Configuration
+
       - .tokens.dev   # Authentication
 
 ```bash
@@ -215,7 +242,9 @@ services:
 ## Files to update (2)
 
 - `docker-compose.dev.yaml`
+
 - `docker-compose.prod.yaml`
+
 - `docker-compose.ci.yaml`
 
 ### Step 3.3: Update GitHub Actions Workflows
@@ -238,13 +267,17 @@ services:
 
   run: |
     source .env.ci      # Configuration
+
     source .tokens.ci   # Authentication
+
 ```bash
 
 ## Files to update (3)
 
 - `.github/workflows/ci.yml`
+
 - `.github/workflows/auto-fix.yml`
+
 - `.github/workflows/codex.ci.yml`
 
 ### Step 3.4: Update Shell Scripts
@@ -258,12 +291,15 @@ source .env
 # NEW: Use token loading function
 
 source scripts/load_tokens.sh
+
 ```bash
 
 ## Files to update (4)
 
 - `scripts/generate_aar.py` (already uses Python loader)
+
 - `scripts/fix_aar_tokens.sh` (update to use new system)
+
 - Any scripts that need tokens
 
 ### Phase 4: Testing & Validation (30 minutes)
@@ -280,6 +316,7 @@ python scripts/token_loader.py validate AAR_TOKEN CI_ISSUE_AUTOMATION_TOKEN
 # Test token manager
 
 python scripts/token_manager.py
+
 ```bash
 
 ## Step 4.2: Test Service Integration
@@ -293,6 +330,7 @@ cd src/devonboarder && python -c "from scripts.token_loader import load_tokens; 
 # Test Docker Compose
 
 docker compose -f docker-compose.dev.yaml config
+
 ```bash
 
 ## Step 4.3: Test CI Integration
@@ -308,6 +346,7 @@ CI=true python scripts/token_loader.py info
 # Validate CI has test values only
 
 grep -E "(placeholder|test)" .tokens.ci
+
 ```bash
 
 ## Phase 5: Documentation Updates (15 minutes)
@@ -315,7 +354,9 @@ grep -E "(placeholder|test)" .tokens.ci
 ### Update Project Documentation
 
 - Update `docs/env.md` to document new separation
+
 - Update `README.md` setup instructions
+
 - Update `.github/copilot-instructions.md` with new patterns
 
 ## 🔧 Implementation Checklist
@@ -323,31 +364,45 @@ grep -E "(placeholder|test)" .tokens.ci
 ### Core Infrastructure
 
 - [x] Created `scripts/token_loader.py` - Centralized token loading
+
 - [x] Created `scripts/sync_tokens.sh` - Token synchronization system
+
 - [x] Created `.tokens.ci` - CI test tokens (committed)
+
 - [x] Updated Enhanced Potato Policy - Protection for `.tokens*` files
+
 - [ ] Create `.tokens` - Source of truth (manual step)
+
 - [ ] Create `.tokens.dev` - Development tokens (manual step)
 
 ### Service Integration
 
 - [ ] Update Python services to use `token_loader`
+
 - [ ] Update Docker Compose files for dual env_file loading
+
 - [ ] Update GitHub Actions workflows for token/config separation
+
 - [ ] Update shell scripts to use new token loading
 
 ### Testing & Validation
 
 - [x] Test token loader functionality
+
 - [ ] Test service integration
+
 - [ ] Test CI integration
+
 - [ ] Validate security boundaries
 
 ### Documentation
 
 - [x] Created migration guide
+
 - [x] Created architecture documentation
+
 - [ ] Update existing docs
+
 - [ ] Update setup instructions
 
 ## 🚨 Critical Security Notes
@@ -355,14 +410,19 @@ grep -E "(placeholder|test)" .tokens.ci
 ### During Migration
 
 1. **NEVER commit actual tokens** during migration
+
 2. **Test with CI tokens first** before using real tokens
+
 3. **Validate .tokens files are gitignored** before adding real tokens
+
 4. **Double-check CI files only have test values**
 
 ### Post-Migration
 
 1. **Audit token permissions** regularly with `python scripts/token_manager.py`
+
 2. **Keep .tokens synchronized** with `bash scripts/sync_tokens.sh --sync-all`
+
 3. **Monitor for token leaks** in committed files
 
 ## 🎯 Success Criteria
@@ -370,22 +430,31 @@ grep -E "(placeholder|test)" .tokens.ci
 ### Technical Validation
 
 - [ ] All tokens loaded from `.tokens*` files, not `.env*` files
+
 - [ ] CI uses only test token values
+
 - [ ] Production/development tokens properly gitignored
+
 - [ ] All services use standardized token loading
 
 ### Security Validation
 
 - [ ] No production tokens in committed files
+
 - [ ] Enhanced Potato Policy protects all `.tokens*` files
+
 - [ ] Token synchronization respects security boundaries
+
 - [ ] Regular token permission audits working
 
 ### DevOnboarder Compliance
 
 - [ ] "Quiet reliability" - system works without manual intervention
+
 - [ ] Clear separation of concerns - config vs authentication
+
 - [ ] Standardized patterns across all services
+
 - [ ] Comprehensive documentation and error handling
 
 ---
@@ -406,14 +475,19 @@ grep -E "(placeholder|test)" .tokens.ci
 ### Rollback Plan
 
 If migration fails, rollback by:
+
 1. Restore tokens to `.env` files from backup
+
 2. Remove `.tokens*` files
+
 3. Revert service integration changes
+
 4. Continue with old mixed system until issues resolved
 
 ---
 
 **Status**: Ready for Implementation
+
 **Estimated Time**: 3-4 hours for complete migration
 **Risk Level**: Medium (requires careful token handling)
 **Next Step**: Begin Phase 1 - Setup Token Architecture

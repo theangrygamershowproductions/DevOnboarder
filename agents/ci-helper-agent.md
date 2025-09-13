@@ -1,10 +1,25 @@
 ---
+author: DevOnboarder Team
 codex-agent:
-    name: Agent.CIHelperAgent
-    role: Assists with CI troubleshooting and guidance
-    scope: CI workflows
-    triggers: Failed jobs or developer requests
-    output: Diagnostic notes
+  name: Agent.CIHelperAgent
+  output: Diagnostic notes
+  role: Assists with CI troubleshooting and guidance
+  scope: CI workflows
+  triggers: Failed jobs or developer requests
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: core-agents
+similarity_group: documentation-documentation
+status: active
+tags:
+- documentation
+title: Ci Helper Agent
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 # CI Helper Agent

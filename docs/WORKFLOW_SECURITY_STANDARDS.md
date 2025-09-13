@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: WORKFLOW_SECURITY_STANDARDS.md-docs
+status: active
+tags:
+- documentation
+title: Workflow Security Standards
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # DevOnboarder Workflow Security Standards
 
 ## The Recurring Permissions Problem
@@ -25,8 +43,11 @@ jobs:
   example-job:
     permissions:
       contents: read           # Minimal default for checkout
+
       pull-requests: write     # Only if PR comments needed
+
       issues: write           # Only if issue creation needed
+
     runs-on: ubuntu-latest
     steps:
       # ... job steps
@@ -38,9 +59,13 @@ jobs:
 | Use Case | Required Permissions |
 |----------|---------------------|
 | **Basic CI/Testing** | `contents: read` |
+
 | **PR Comments** | `contents: read`, `pull-requests: write` |
+
 | **Issue Creation** | `contents: read`, `issues: write` |
+
 | **Coverage Badge Updates** | `contents: write` (for commits) |
+
 | **Artifact Upload** | `contents: read` (default with upload actions) |
 
 ### Workflow Security Checklist
@@ -103,7 +128,9 @@ jobs:
   validate-milestones:
     permissions:
       contents: read           # For checkout
+
       pull-requests: write     # For validation failure comments
+
     runs-on: ubuntu-latest
 
 ```

@@ -78,6 +78,8 @@ def validate_devonboarder_metadata(
             "template",
             "case_study",
             "documentation",
+            "specification",  # Add specification type used in agent files
+            "guide",  # Add guide type used in agent files
         }
         doc_type = frontmatter["document_type"]
         if doc_type not in valid_types:

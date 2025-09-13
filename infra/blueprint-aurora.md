@@ -1,14 +1,34 @@
 ---
-title: Aurora Blueprint
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Production deployment blueprint using AWS Aurora database with Docker Compose
+document_type: guide
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- guide
+- deployment
+- aws-aurora
+- production
+title: Aurora Deployment Blueprint
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 This blueprint describes the production deployment that relies on
+
 **AWS Aurora** for the backing database. Use `docker-compose.prod.yaml`
+
 when deploying this environment. Ensure the application containers can
 reach the Aurora cluster through the configured security groups and that
 backups are enabled for disaster recovery.
 
 1. Create a `.env.prod` file and set `DATABASE_URL` to the writer
+
    endpoint for your Aurora cluster:
 
     ```bash

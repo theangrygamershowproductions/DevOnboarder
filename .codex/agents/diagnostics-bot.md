@@ -1,12 +1,24 @@
 ---
 agent: diagnostics-bot
-purpose: Collects environment diagnostics and system health info
-trigger: manual or `python -m diagnostics`
+consolidation_priority: P3
+content_uniqueness_score: 4
+description: Collects environment diagnostics and system health info with health checks and environment variable verification
+document_type: specification
 environment: any
+merge_candidate: false
 output: .codex/logs/diagnostics-bot.log
 permissions:
-    - repo:read
-    - actions:read
+- repo:read
+- actions:read
+purpose: Collects environment diagnostics and system health info
+similarity_group: agents-agents
+tags:
+- diagnostics
+- health
+- system
+- environment
+title: Diagnostics Bot
+trigger: manual or `python -m diagnostics`
 ---
 
 # Diagnostics Bot
@@ -24,8 +36,11 @@ permissions:
 **Workflow:**
 
 - Executes diagnostics module
+
 - Aggregates results
+
 - Outputs to `.codex/logs/diagnostics-bot.log`
+
 - Sends alerts via `.github/workflows/notify.yml` if issues are found
 
 **Logging:** Output goes to `.codex/logs/diagnostics-bot.log`
@@ -33,4 +48,5 @@ permissions:
 **Permissions Required:**
 
 - `repo:read` – to inspect the project context
+
 - `actions:read` – to check CI metadata, if invoked from workflow

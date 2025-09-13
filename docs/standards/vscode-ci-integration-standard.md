@@ -1,3 +1,25 @@
+---
+author: DevOnboarder Team
+ci_integration: true
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Standards documentation
+document_type: standards
+merge_candidate: false
+project: DevOnboarder
+similarity_group: standards-standards
+status: active
+tags:
+- standards
+- policy
+- documentation
+title: Vscode Ci Integration Standard
+updated_at: '2025-09-12'
+virtual_env_required: true
+visibility: internal
+---
+
 # Development Standards: VS Code/CI Integration Framework
 
 **Document Type**: Standard Practice
@@ -25,28 +47,39 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 **`.vscode/settings.json`**:
 
 - Python virtual environment integration (`python.defaultInterpreterPath: "./.venv/bin/python"`)
+
 - YAML validation with DevOnboarder `.yamllint` rules
+
 - Terminal environment configuration for consistent tooling
+
 - Testing framework integration (pytest, Jest, Vitest)
 
 **`.vscode/tasks.json`**:
 
 - **DevOnboarder: Quick Validation** - Fast development checks
+
 - **DevOnboarder: Full CI Validation** - Complete local CI simulation
+
 - **DevOnboarder: Targeted Validation** - Section/step-specific testing
+
 - **DevOnboarder: Monitor Validation** - Continuous validation monitoring
 
 **`.vscode/extensions.json`**:
 
 - Required extensions for team consistency
+
 - YAML support, Python tooling, testing frameworks
+
 - Markdown and documentation quality tools
 
 #### Implementation Requirements
 
 - **MANDATORY**: Use VS Code workspace configuration for all development
+
 - **MANDATORY**: Install recommended extensions (auto-prompted by VS Code)
+
 - **MANDATORY**: Access DevOnboarder tools via Command Palette (`Ctrl+Shift+P`)
+
 - **MANDATORY**: Activate integrated virtual environment before development
 
 ### 2. YAML Linting Consistency - 100% ALIGNMENT
@@ -54,6 +87,7 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 #### `.yamllint` Configuration Standards
 
 **Consistent Indentation**: `spaces: consistent` - Supports both 2-space and 4-space styles
+
 **Reasonable Line Length**: 160 characters (vs default 80) for GitHub Actions
 **Truthy Handling**: Allows 'on' as YAML key without warnings
 **Document Start**: Disabled for workflow files
@@ -61,8 +95,11 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 #### YAML Development Requirements
 
 - **ALWAYS**: Test YAML changes using VS Code integrated validation
+
 - **NEVER**: Commit YAML that fails local validation
+
 - **ALWAYS**: Use consistent indentation within each file
+
 - **VERIFICATION**: VS Code shows real-time YAML validation status
 
 ### 3. Local CI Simulation Framework - 90%+ COVERAGE
@@ -74,15 +111,21 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 **Execution Modes**:
 
 - **Full validation**: `./scripts/validate_ci_locally.sh`
+
 - **Targeted validation**: `./scripts/validate_ci_locally.sh --section frontend`
+
 - **Step-specific**: `./scripts/validate_ci_locally.sh --step "Python Tests"`
+
 - **Quick validation**: `./scripts/quick_validate.sh`
 
 #### Local Validation Requirements
 
 - **MANDATORY**: Run local validation before every commit
+
 - **MANDATORY**: Achieve 90%+ local validation success before pushing
+
 - **NEVER**: Push changes that fail local CI simulation
+
 - **ALWAYS**: Use targeted validation for focused development
 
 ### 4. Pre-commit Hook Integration - EXACT CI MIRROR
@@ -97,8 +140,11 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 #### Pre-commit Process Requirements
 
 - **ALWAYS**: Allow pre-commit hooks to run completely
+
 - **NEVER**: Use `--no-verify` to bypass quality gates
+
 - **ALWAYS**: Use `scripts/safe_commit.sh` for commit management
+
 - **ALWAYS**: Address pre-commit failures properly
 
 ## Development Workflow Standards
@@ -108,37 +154,51 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 #### 1. Environment Setup
 
 ```bash
+
 # Required first step for all development
+
 cd /path/to/DevOnboarder
 source .venv/bin/activate
 code .  # Opens VS Code with workspace configuration
+
 ```
 
 #### 2. Development Phase
 
 - **Before coding**: Run "DevOnboarder: Quick Validation" via Command Palette
+
 - **During development**: Use integrated YAML validation and testing tools
+
 - **File changes**: Monitor VS Code integrated validation status
+
 - **Virtual environment**: Always use `.venv` activated through VS Code
 
 #### 3. Pre-commit Validation
 
 ```bash
+
 # MANDATORY: Local CI simulation before commit
+
 ./scripts/validate_ci_locally.sh
 
-# Or via VS Code Command Palette:
+# Or via VS Code Command Palette
+
 # Ctrl+Shift+P → "DevOnboarder: Full CI Validation"
+
 ```
 
 #### 4. Commit Process
 
 ```bash
+
 # MANDATORY: Use safe commit wrapper
+
 ./scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 
 # NEVER bypass quality gates
+
 # git commit --no-verify  # ❌ FORBIDDEN
+
 ```
 
 ### Team Collaboration Standards
@@ -146,15 +206,21 @@ code .  # Opens VS Code with workspace configuration
 #### Code Review Requirements
 
 - **MANDATORY**: Reviewer must verify VS Code workspace compliance
+
 - **MANDATORY**: All changes must pass local CI simulation
+
 - **VERIFICATION**: 90%+ local validation success rate demonstrated
+
 - **DOCUMENTATION**: Update workspace configuration if needed
 
 #### Onboarding Requirements
 
 - **New developers**: Must complete VS Code workspace setup
+
 - **Training**: Command Palette task usage demonstration
+
 - **Validation**: Local CI simulation training and verification
+
 - **Standards**: This document review and acknowledgment
 
 ## Success Metrics & Monitoring
@@ -162,6 +228,7 @@ code .  # Opens VS Code with workspace configuration
 ### Key Performance Indicators
 
 **Local CI Success Rate**: 90%+ validation accuracy (Target: 95%)
+
 **YAML Consistency**: 100% VS Code/CI alignment (Maintained)
 **Developer Experience**: <5 minutes from code to validated commit
 **CI Surprises**: <5% failures that pass local validation
@@ -169,6 +236,7 @@ code .  # Opens VS Code with workspace configuration
 ### Quality Gates
 
 **Pre-commit Success**: 95%+ first-attempt success rate
+
 **Framework Adoption**: 100% team usage of VS Code workspace
 **Tool Integration**: 100% use of Command Palette tasks
 **Documentation Currency**: Monthly review and updates
@@ -221,22 +289,31 @@ code .  # Opens VS Code with workspace configuration
 #### Monthly Reviews
 
 - Analyze CI success rate trends and framework effectiveness
+
 - Collect developer feedback on workflow integration
+
 - Identify process bottlenecks and improvement opportunities
+
 - Update tools and configurations based on lessons learned
 
 #### Quarterly Assessments
 
 - Complete framework evaluation against success metrics
+
 - Team training updates and onboarding process refinement
+
 - Integration of new tools and DevOnboarder capabilities
+
 - Update this standard practice document with improvements
 
 #### Annual Framework Audit
 
 - Comprehensive review of all framework components
+
 - Technology stack updates and compatibility verification
+
 - Process effectiveness measurement against project goals
+
 - Strategic planning for framework enhancements
 
 ### Change Management
@@ -253,6 +330,7 @@ code .  # Opens VS Code with workspace configuration
 **August 7, 2025**: VS Code/CI Integration Framework completed
 **Achievement**: 91% CI success rate, 100% YAML consistency
 **Commit**: `41bfd63` - Complete VS Code/CI consistency integration
+
 **Documentation**: AAR_VSCODE_CI_INTEGRATION_2025-08-07.md
 
 ### Key Milestones
@@ -269,8 +347,11 @@ code .  # Opens VS Code with workspace configuration
 This framework is **MANDATORY** for all DevOnboarder development work:
 
 - **Code contributions**: Must use VS Code workspace configuration
+
 - **Pull requests**: Must demonstrate local CI validation success
+
 - **Team onboarding**: Must include framework training and setup
+
 - **Process deviations**: Require explicit approval and documentation
 
 ### Audit & Verification
@@ -285,26 +366,35 @@ This framework is **MANDATORY** for all DevOnboarder development work:
 ### Documentation
 
 - **AAR Document**: `docs/AAR_VSCODE_CI_INTEGRATION_2025-08-07.md`
+
 - **Implementation Summary**: `docs/AAR_VSCODE_CI_INTEGRATION_SUMMARY.md`
+
 - **GitHub Copilot Instructions**: `.github/copilot-instructions.md` (VS Code section)
+
 - **Targeted Testing Framework**: `docs/TARGETED_TESTING_FRAMEWORK.md`
 
 ### Scripts & Tools
 
 - **Local CI Simulation**: `scripts/validate_ci_locally.sh`
+
 - **Quick Validation**: `scripts/quick_validate.sh`
+
 - **Safe Commit Wrapper**: `scripts/safe_commit.sh`
+
 - **VS Code Setup**: `scripts/setup_vscode_integration.sh`
 
 ### Configuration Files
 
 - **YAML Linting**: `.yamllint`
+
 - **Pre-commit Hooks**: `.pre-commit-config.yaml`
+
 - **VS Code Workspace**: `.vscode/settings.json`, `.vscode/tasks.json`, `.vscode/extensions.json`
 
 ---
 
 **Standard Practice Established**: August 7, 2025
+
 **Based on AAR**: VS Code/CI Integration Framework Success
 **Success Rate**: 91% CI prediction accuracy, 100% YAML consistency
 **Team Impact**: Eliminated "hit and miss" development patterns

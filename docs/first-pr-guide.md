@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: first-pr-guide.md-docs
+status: active
+tags:
+- documentation
+title: First Pr Guide
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # First PR Walkthrough
 
 ![Contribute in 10 minutes](https://example.com/first-pr.gif)
@@ -8,6 +26,7 @@ It assumes you have already set up Docker, Node.js and Python as described in th
 1. **Clone the repository**
 
     ```bash
+
     git clone https://github.com/your-username/DevOnboarder.git
     cd DevOnboarder
     ```
@@ -25,8 +44,11 @@ It assumes you have already set up Docker, Node.js and Python as described in th
     ```
 
 4. **Understand DevOnboarder Quality Standards**:
+
     - **Terminal Output Policy**: No emojis or command substitution in workflows (causes system hanging)
+
     - **Markdown Linting**: Follow MD022 (heading spacing) and MD032 (list spacing) rules
+
     - **Pre-commit Enforcement**: All policies validated before code reaches CI
 
     Review [docs/TERMINAL_OUTPUT_VIOLATIONS.md](TERMINAL_OUTPUT_VIOLATIONS.md) for details.

@@ -1,3 +1,24 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Template for generating After Action Reports (AAR) with standardized formatting
+document_type: template
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- template
+- aar
+- reports
+- automation
+title: After Action Report Template
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # After Action Report (AAR) Template
 
 **Generated**: {timestamp}
@@ -9,15 +30,21 @@
 ### Incident Overview
 
 - **Workflow Run ID**: {workflow_run_id}
+
 - **Trigger**: {trigger_event}
+
 - **Conclusion**: {conclusion}
+
 - **Token Used**: {token_hierarchy_compliant}
+
 - **Duration**: {duration}
 
 ### Impact Assessment
 
 - **Severity**: {severity_level}
+
 - **Services Affected**: {affected_services}
+
 - **User Impact**: {user_impact}
 
 ## Technical Analysis
@@ -53,13 +80,17 @@
 ### Performance Impact
 
 - **Build Time**: {build_time}
+
 - **Test Coverage**: {test_coverage}
+
 - **Success Rate**: {success_rate}
 
 ### Resource Utilization
 
 - **CPU Usage**: {cpu_usage}
+
 - **Memory Usage**: {memory_usage}
+
 - **Storage Impact**: {storage_impact}
 
 ## Lessons Learned
@@ -81,9 +112,13 @@
 ### DevOnboarder Standards
 
 - **Virtual Environment**: ✅ Required and enforced
+
 - **Centralized Logging**: ✅ All outputs in logs/ directory
+
 - **Token Governance**: ✅ No Default Token Policy v1.0 compliant
+
 - **Enhanced Potato Policy**: ✅ Sensitive data protection active
+
 - **Root Artifact Guard**: ✅ Repository hygiene maintained
 
 ### Security Audit

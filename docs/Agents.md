@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: Agents.md-docs
+status: active
+tags:
+- documentation
+title: Agents
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Agents — Service and Integration Roles (Codex-Driven Reference)
 
 > **Note**: The up-to-date agent documentation now lives at
@@ -13,28 +31,51 @@ and Codex automation can keep the platform healthy.
 ## Table of Contents
 
 1. [Agent Service Map](#agent-service-map)
+
 2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
+
 3. [XP API](#xp-api)
+
 4. [Frontend Session Agent](#frontend-session-agent)
+
 5. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
+
 6. [Discord Integration Agent](#discord-integration-agent)
+
 7. [Verification Agent](#verification-agent)
+
 8. [Session/JWT Agent](#sessionjwt-agent)
+
 9. [Database Service (Postgres)](#database-service-postgres)
+
 10. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+
 11. [Planned Agents / Stubs](#planned-agents--stubs)
+
 12. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+
 13. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
+
 14. [CI Wait Example](#ci-wait-example)
+
 15. [Agent Task Checklist](#agent-task-checklist)
+
 16. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
+
 17. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+
 18. [Environment Variable Reference](#environment-variable-reference)
+
 19. [Codex Observability](#codex-observability)
+
 20. [How to Extend/Contribute](#how-to-extendcontribute)
+
 21. [Deprecation & Retirement](#deprecation--retirement)
+
 22. [Glossary](#glossary)
+
 23. [Related Docs](#related-docs)
+
 24. [Revision History](#revision-history)
 
 ---
@@ -43,6 +84,7 @@ and Codex automation can keep the platform healthy.
 
 | Agent Name          | Endpoint(s)         | Port | Healthcheck | Depends On | Status   |
 | ------------------- | ------------------- | ---- | ----------- | ---------- | -------- |
+
 | Auth Server         | `/api/*`, `/health` | 8002 | `/health`   | db         | updating |
 | Discord Integration | `/oauth`, `/roles`  | 8081 | `/health`   | Auth, db   | verify   |
 | Frontend Agent      | `/`, `/session`     | 3000 | N/A         | Auth       | stable   |
@@ -62,7 +104,9 @@ and Codex automation can keep the platform healthy.
 **Typical Workflow:**
 
 1. Receive code from frontend.
+
 2. Exchange it for a Discord token and fetch roles.
+
 3. Issue a JWT and session payload to the frontend.
 
 ## XP API
@@ -148,11 +192,13 @@ Examples include a Discord bot/webhook agent and ID.me integration.
 **Example Docker Compose Healthcheck:**
 
 ```yaml
+
 healthcheck:
     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
     interval: 5s
     timeout: 2s
     retries: 10
+
 ```
 
 ## Healthcheck Implementation Guide
@@ -162,15 +208,19 @@ Add a simple `/health` route in each service so CI and Compose can poll for read
 **Express:**
 
 ```js
+
 app.get("/health", (req, res) => res.status(200).send("OK"));
+
 ```
 
 **FastAPI:**
 
 ```python
+
 @app.get("/health")
 def healthcheck():
     return {"status": "ok"}
+
 ```
 
 ## CI Wait Example
@@ -178,7 +228,9 @@ def healthcheck():
 Use a small loop in your workflow to wait for the auth service before running tests:
 
 ```yaml
+
 - name: Wait for Auth service
+
   run: |
       for i in {1..20}; do
         if curl -sf http://localhost:8002/health; then
@@ -188,6 +240,7 @@ Use a small loop in your workflow to wait for the auth service before running te
         sleep 3
       done
       exit 1
+
 ```
 
 ---
@@ -195,8 +248,11 @@ Use a small loop in your workflow to wait for the auth service before running te
 ## Agent Task Checklist
 
 - [x] Document each agent's purpose, key files, environment, and workflow.
+
 - [x] Update this file and the changelog when an agent changes.
+
 - [x] Ensure healthchecks pass for required services.
+
 - [x] Run `python -m diagnostics` to verify packages, service health, and env vars.
 
 ---
@@ -204,10 +260,15 @@ Use a small loop in your workflow to wait for the auth service before running te
 ## Next Steps / Remediation Timeline
 
 - [x] Implement `/health` in Auth
+
 - [x] Add Docker healthcheck to compose
+
 - [x] CI workflow update to poll `/health`
+
 - [x] Env var audit/cleanup in `.env.dev`
+
 - [x] Doc/Agents.md/Changelog update
+
 - [x] Retire obsolete scripts
 
 ---
@@ -216,6 +277,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 | Agent               | Healthcheck | Required in CI | Required in Prod |
 | ------------------- | ----------- | -------------- | ---------------- |
+
 | Auth Server         | Yes         | Yes            | Yes              |
 | Frontend            | Yes         | Yes            | Yes              |
 | Discord Integration | Yes         | No             | No               |
@@ -229,6 +291,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 | Variable                      | Description                                                                  |
 | ----------------------------- | ---------------------------------------------------------------------------- |
+
 | APP_ENV                       | Application mode (`development`, etc.)                                       |
 | DATABASE_URL                  | Postgres connection string                                                   |
 | TOKEN_EXPIRE_SECONDS          | JWT expiration in seconds                                                    |
@@ -274,8 +337,11 @@ an automated notification and suggested fix via Codex's reporting channel.
 To reduce the attack surface in CI/CD workflows:
 
 - **Do not use Codecov** or any third-party coverage uploaders that execute
+
   remote scripts in CI.
+
 - Avoid integrations that rely on `bash <curl | sh>` style commands.
+
 - Vet all external tools for prior security incidents before adoption.
 
 ---
@@ -283,7 +349,9 @@ To reduce the attack surface in CI/CD workflows:
 ## How to Extend/Contribute
 
 1. Add a new section following the same structure: purpose, key files, environment, typical workflow.
+
 2. Update the environment table and health matrix if needed.
+
 3. Record your changes in the revision history below and in `docs/CHANGELOG.md`.
 
 ---
@@ -298,7 +366,9 @@ Update the health matrix and remove references from code and docs.
 ## Glossary
 
 - **Agent:** Any service, bot, or integration that manages part of the TAGS platform.
+
 - **RBAC:** Role-Based Access Control.
+
 - **Codex:** The automation system that verifies docs and code quality.
 
 ---
@@ -306,8 +376,11 @@ Update the health matrix and remove references from code and docs.
 ## Related Docs
 
 - [Project README](../README.md)
+
 - [Security Policy](../SECURITY.md)
+
 - [Onboarding Guide](../ONBOARDING.md)
+
 - [.env.example](../.env.example)
 
 ---
@@ -316,6 +389,7 @@ Update the health matrix and remove references from code and docs.
 
 | Date        | Version | Author    | Summary                                        |
 | ----------- | ------- | --------- | ---------------------------------------------- |
+
 | 3 Jul 2025  | v0.3.3  | Codex     | Added tests for ci_failure_diagnoser script    |
 | 22 Jun 2025 | v0.3.0  | Codex     | Added service map and healthcheck guide        |
 | 23 Jun 2025 | v0.3.1  | Codex     | Documented `/health` endpoints                 |

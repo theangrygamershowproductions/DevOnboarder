@@ -114,3 +114,24 @@ audit-status:
 audit-clean:
 	@echo "Cleaning old audit reports (older than 365 days)..."
 	@bash scripts/manage_token_audits.sh clean
+
+# Auto-fixer targets
+autofix:
+	@echo "Running DevOnboarder auto-fixers..."
+	@bash -c "source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --all"
+
+autofix-markdown:
+	@echo "Fixing markdown files..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_markdown_formatting.py --all"
+
+autofix-shell:
+	@echo "Fixing shell scripts..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_shell_scripts.py --all"
+
+autofix-frontmatter:
+	@echo "Fixing frontmatter metadata..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_frontmatter.py --all"
+
+autofix-python:
+	@echo "Running Python formatters..."
+	@bash -c "source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --python"

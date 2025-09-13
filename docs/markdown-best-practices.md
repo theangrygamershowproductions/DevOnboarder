@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: markdown-best-practices.md-docs
+status: active
+tags:
+- documentation
+title: Markdown Best Practices
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # 📝 DevOnboarder Markdown Formatting Rules
 
 Golden rules and best practices for writing lint-free markdown documentation in DevOnboarder.
@@ -11,9 +29,13 @@ The key to avoiding markdown linting errors is consistent spacing and structure.
 The most important rules to follow:
 
 1. **Headings:** Always surrounded by blank lines
+
 2. **Lists:** Always surrounded by blank lines
+
 3. **Code Blocks:** Always surrounded by blank lines
+
 4. **Nested Lists:** Use 4 spaces for nesting
+
 5. **No Trailing Spaces:** Except for line breaks (2 spaces)
 
 ### Style Consistency Rules
@@ -21,7 +43,9 @@ The most important rules to follow:
 Additional formatting standards:
 
 - **Emphasis:** Use asterisks, not underscores for _italic_ and **bold**
+
 - **No Emphasis as Headings:** Don't use italics/bold as section headers
+
 - **Reference Links:** Use descriptive text instead of "click here"
 
 ## 🛠️ Quick Fix Commands
@@ -33,17 +57,25 @@ Common markdown linting errors and their solutions.
 The most frequent issues and corrections:
 
 ```bash
+
 # Add blank line before heading
+
 # Change: content\n## Heading
+
 # To: content\n\n## Heading
 
 # Add blank line after heading
+
 # Change: ## Heading\ncontent
+
 # To: ## Heading\n\ncontent
 
 # Fix list spacing
+
 # Change: text\n- item
+
 # To: text\n\n- item\n\nmore text
+
 ```
 
 ### Indentation Fixes
@@ -51,9 +83,13 @@ The most frequent issues and corrections:
 Fix nested list indentation:
 
 ```bash
+
 # Fix nested indentation
+
 # Change: - item\n  - nested (2 spaces)
+
 # To: - item\n    - nested (4 spaces)
+
 ```
 
 ## 🎯 Prevention Strategy
@@ -65,8 +101,11 @@ How to avoid markdown errors from the start.
 Create new documents using the compliant template:
 
 ```bash
+
 # Generate lint-free markdown from template
+
 bash scripts/create_lint_perfect_md.sh "my-doc" "My Title" "Description"
+
 ```
 
 ### Validate While Writing
@@ -74,11 +113,15 @@ bash scripts/create_lint_perfect_md.sh "my-doc" "My Title" "Description"
 Check formatting as you work:
 
 ```bash
+
 # Check current file for errors
+
 markdownlint docs/my-file.md
 
 # Auto-fix simple formatting issues
+
 markdownlint --fix docs/my-file.md
+
 ```
 
 ## 📊 Approach Comparison
@@ -89,7 +132,9 @@ Reactive vs proactive markdown creation analysis.
 
 | Approach      | Time Investment       | Error Rate | Frustration Level |
 | ------------- | --------------------- | ---------- | ----------------- |
+
 | **Reactive**  | Write + 15min fixes   | High       | 😤 High           |
+
 | **Proactive** | Template + validation | Low        | 😌 Low            |
 
 ### Best Practice Workflow
@@ -97,9 +142,13 @@ Reactive vs proactive markdown creation analysis.
 The recommended process for creating markdown:
 
 1. **Start with template:** Use `scripts/create_lint_perfect_md.sh`
+
 2. **Follow spacing rules:** Blank lines around headings, lists, code blocks
+
 3. **Use 4-space indentation:** For all nested list items
+
 4. **Validate frequently:** Run linter during writing process
+
 5. **Fix immediately:** Don't accumulate formatting debt
 
 ## Conclusion

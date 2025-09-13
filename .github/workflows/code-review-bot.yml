@@ -34,7 +34,7 @@ jobs:
             cat changed_workflows.txt
 
             while IFS= read -r file; do
-              printf -- "Checking file: %s\n" "$file"
+              printf "Checking file: %s\n" "$file"
 
               # Check for emojis in ADDED lines only (lines starting with +)
               # Define emoji pattern for detection using Unicode ranges (safe for terminal output policy)
@@ -70,15 +70,15 @@ jobs:
           fi
 
           # Output results to GitHub Actions
-          printf -- "violations=%s\n" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
+          printf "violations=%s\n" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
 
           # Output details to GitHub Actions
           if [ -f violation_details.txt ]; then
-            printf -- "details=\n" >> "$GITHUB_OUTPUT"
+            printf "details=" >> "$GITHUB_OUTPUT"
             cat violation_details.txt >> "$GITHUB_OUTPUT"
-            printf -- "\n" >> "$GITHUB_OUTPUT"
+            printf "\n" >> "$GITHUB_OUTPUT"
           else
-            printf -- "details=\n" >> "$GITHUB_OUTPUT"
+            printf "details=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Auto-reject PR for violations
@@ -89,11 +89,11 @@ jobs:
           echo "BLOCKING PR: Terminal output policy violations detected"
 
           # Create rejection comment using safe file approach
-          printf -- "\*\*AUTOMATED REJECTION: Terminal Output Policy Violations\*\*\n" > rejection_comment.md
-          printf -- "\n" >> rejection_comment.md
-          printf -- "This PR has been automatically rejected due to critical terminal output violations that WILL cause system hanging.\n" >> rejection_comment.md
-          printf -- "\n" >> rejection_comment.md
-          printf -- "**Violations Detected:**\n" >> rejection_comment.md
+          printf "**AUTOMATED REJECTION: Terminal Output Policy Violations**\n" > rejection_comment.md
+          printf "\n" >> rejection_comment.md
+          printf "This PR has been automatically rejected due to critical terminal output violations that WILL cause system hanging.\n" >> rejection_comment.md
+          printf "\n" >> rejection_comment.md
+          printf "**Violations Detected:**\n" >> rejection_comment.md
 
           # Safe violation details output - avoid multi-line expansion
           if [ -f violation_details.txt ]; then
@@ -101,20 +101,20 @@ jobs:
           fi
 
           {
-            printf -- "\n" >> rejection_comment.md
-            printf -- "\*\*Required Before Re-submission:\*\*\n" >> rejection_comment.md
-            printf -- "1. Remove ALL emojis from workflow files\n" >> rejection_comment.md
-            printf -- "2. Replace command substitution in terminal output with separate commands\n" >> rejection_comment.md
-            printf -- "3. Use individual terminal output commands with plain ASCII text only\n" >> rejection_comment.md
-            printf -- "4. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md for approved patterns\n" >> rejection_comment.md
-            printf -- "5. Run local validation: bash scripts/validate_terminal_output.sh\n" >> rejection_comment.md
-            printf -- "\n" >> rejection_comment.md
-            printf -- "\*\*Policy Reminder:\*\* DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.\n" >> rejection_comment.md
-            printf -- "\n" >> rejection_comment.md
-            printf -- "\*\*Next Steps:\*\*\n" >> rejection_comment.md
-            printf -- "- Fix all violations\n" >> rejection_comment.md
-            printf -- "- Validate locally with the enforcement script\n" >> rejection_comment.md
-            printf -- "- Push updates to trigger re-review\n" >> rejection_comment.md
+            printf "\n" >> rejection_comment.md
+            printf "**Required Before Re-submission:**\n" >> rejection_comment.md
+            printf "1. Remove ALL emojis from workflow files\n" >> rejection_comment.md
+            printf "2. Replace command substitution in terminal output with separate commands\n" >> rejection_comment.md
+            printf "3. Use individual terminal output commands with plain ASCII text only\n" >> rejection_comment.md
+            printf "4. Review docs/TERMINAL_OUTPUT_VIOLATIONS.md for approved patterns\n" >> rejection_comment.md
+            printf "5. Run local validation: bash scripts/validate_terminal_output.sh\n" >> rejection_comment.md
+            printf "\n" >> rejection_comment.md
+            printf "**Policy Reminder:** DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.\n" >> rejection_comment.md
+            printf "\n" >> rejection_comment.md
+            printf "**Next Steps:**\n" >> rejection_comment.md
+            printf "%s\n" "- Fix all violations" >> rejection_comment.md
+            printf "%s\n" "- Validate locally with the enforcement script" >> rejection_comment.md
+            printf "%s\n" "- Push updates to trigger re-review" >> rejection_comment.md
           } >> rejection_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file rejection_comment.md
@@ -130,19 +130,19 @@ jobs:
           echo "Adding enforcement checklist to compliant PR"
 
           # Create checklist comment using safe file approach
-          printf -- "\*\*Terminal Output Policy Compliance Verified\*\*\n" > checklist_comment.md
-          printf -- "\n" >> checklist_comment.md
-          printf -- "Automated review confirms this PR follows DevOnboarder terminal output standards.\n" >> checklist_comment.md
-          printf -- "\n" >> checklist_comment.md
-          printf -- "\*\*Automated Compliance Verification:\*\*\n" >> checklist_comment.md
-          printf -- "- [x] No emojis or Unicode characters in terminal output\n" >> checklist_comment.md
-          printf -- "- [x] No command substitution in terminal output\n" >> checklist_comment.md
-          printf -- "- [x] No variable expansion in terminal output\n" >> checklist_comment.md
-          printf -- "- [x] Only individual terminal output commands with plain ASCII text\n" >> checklist_comment.md
-          printf -- "- [x] Complex output uses file-based patterns (individual terminal output commands)\n" >> checklist_comment.md
-          printf -- "\n" >> checklist_comment.md
-          printf -- "\*\*Policy Compliance Status: VERIFIED\*\*\n" >> checklist_comment.md
-          printf -- "This PR has been automatically validated and meets all DevOnboarder terminal output standards.\n" >> checklist_comment.md
+          printf "**Terminal Output Policy Compliance Verified**\n" > checklist_comment.md
+          printf "\n" >> checklist_comment.md
+          printf "Automated review confirms this PR follows DevOnboarder terminal output standards.\n" >> checklist_comment.md
+          printf "\n" >> checklist_comment.md
+          printf "**Automated Compliance Verification:**\n" >> checklist_comment.md
+          printf "%s\n" "- [x] No emojis or Unicode characters in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] No command substitution in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] No variable expansion in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] Only individual terminal output commands with plain ASCII text" >> checklist_comment.md
+          printf "%s\n" "- [x] Complex output uses file-based patterns (individual terminal output commands)" >> checklist_comment.md
+          printf "\n" >> checklist_comment.md
+          printf "**Policy Compliance Status: VERIFIED**\n" >> checklist_comment.md
+          printf "This PR has been automatically validated and meets all DevOnboarder terminal output standards.\n" >> checklist_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file checklist_comment.md
 
@@ -151,7 +151,7 @@ jobs:
           echo "Code review bot results:"
           echo "Violations found:"
           echo "Count:"
-          printf -- "%s\n" "${{ steps.violation-check.outputs.violations }}"
+          printf "%s\n" "${{ steps.violation-check.outputs.violations }}"
           echo "PR action determined:"
           echo "Action:"
           if [ "${{ steps.violation-check.outputs.violations }}" != '0' ]; then

@@ -1,5 +1,6 @@
 ---
 title: Terminal Output Policy Violations - Phased Cleanup Plan
+
 labels: ["codex", "ci-fix", "terminal-policy", "enforcement"]
 assignees: ["@codex-bot", "@claude-dev"]
 priority: high
@@ -18,16 +19,23 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ## 📊 Current Status
 
 - **Starting violations**: 32 (2025-08-03 initial count)
+
 - **Current violations**: 22 (after Session 3 cleanup push)
+
 - **Progress**: 31% reduction achieved (32 → 22)
+
 - **Target**: 0 violations
+
 - **Session 3 Impact**: Fixed 5 violations (27 → 22)
 
 ## 🔧 Established Fix Patterns
 
 1. **Variable Expansion**: `echo "text $VAR"` → `printf "text %s\n" "$VAR"`
+
 2. **Emoji Removal**: Replace Unicode characters with text equivalents
+
 3. **Command Substitution**: Move `$(command)` outside echo statements
+
 4. **Multi-line Variables**: Avoid variable assignments spanning multiple lines
 
 ---
@@ -41,14 +49,19 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ### Phase 1 - Files to Process
 
 - [x] `.github/workflows/code-review-bot.yml` (heredoc patterns fixed, validation may have false positives)
+
 - [x] `.github/workflows/terminal-policy-enforcement.yml` (heredoc patterns fixed, validation may have false positives)
+
 - [ ] `.github/workflows/security-audit.yml` (multi-line string variables)
+
 - [ ] `.github/workflows/pr-automation.yml` (remaining multi-line issues)
 
 ### Phase 1 - Success Criteria
 
 - [ ] All critical enforcement workflows pass validation
+
 - [ ] No violations in security-related workflows
+
 - [ ] Code review automation functions correctly
 
 ---
@@ -62,14 +75,19 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ### Phase 2 - Files to Process
 
 - [ ] `.github/workflows/ci.yml` (emoji cleanup verification)
+
 - [ ] `.github/workflows/aar-generator.yml` (remaining variable expansion)
+
 - [ ] `.github/workflows/post-merge-cleanup.yml` (remaining issues)
+
 - [ ] `.github/workflows/ci-dashboard-generator.yml` (here-doc issues)
 
 ### Phase 2 - Success Criteria
 
 - [ ] All build workflows pass validation
+
 - [ ] CI pipeline runs without terminal hanging
+
 - [ ] Dashboard generation works correctly
 
 ---
@@ -83,14 +101,19 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ### Phase 3 - Files to Process
 
 - [ ] `.github/workflows/ci-monitor.yml` (verified fixed)
+
 - [ ] `.github/workflows/review-known-errors.yml` (verified fixed)
+
 - [ ] `.github/workflows/notify.yml` (pending analysis)
+
 - [ ] `.github/workflows/documentation-quality.yml` (pending analysis)
 
 ### Phase 3 - Success Criteria
 
 - [ ] All monitoring workflows function correctly
+
 - [ ] Notification systems work without hanging
+
 - [ ] Automation scripts execute properly
 
 ---
@@ -104,14 +127,19 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ### Files to Process
 
 - [x] ~~`.github/workflows/potato-policy.yml`~~ (REMOVED - empty file causing CI failures)
+
 - [ ] `.github/workflows/aar-portal.yml` (pending analysis)
+
 - [ ] `.github/workflows/markdownlint.yml` (pending analysis)
+
 - [ ] `.github/workflows/branch-cleanup.yml` (pending analysis)
 
 ### Success Criteria
 
 - [ ] All documentation workflows pass validation
+
 - [ ] Policy enforcement works correctly
+
 - [ ] No terminal hanging in any workflow
 
 ---
@@ -121,28 +149,39 @@ Systematically eliminate all terminal output policy violations across GitHub Act
 ### Pre-Phase Validation
 
 ```bash
+
 # Get current violation count
+
 bash scripts/validation_summary.sh | grep "Total errors"
 
 # Identify specific violations for phase
+
 bash scripts/validate_terminal_output.sh 2>/dev/null | grep "CRITICAL VIOLATION" | head -10
+
 ```
 
 ### Post-Phase Validation
 
 ```bash
+
 # Verify fixes
+
 bash scripts/validation_summary.sh
 
 # Test specific workflows (if applicable)
+
 git diff --name-only | grep "\.github/workflows/" | head -5
+
 ```
 
 ### Success Metrics
 
 - [ ] **Phase 1**: Reduce violations to ≤12 (from current 19)
+
 - [ ] **Phase 2**: Reduce violations to ≤8
+
 - [ ] **Phase 3**: Reduce violations to ≤4
+
 - [ ] **Phase 4**: Achieve 0 violations
 
 **Note**: Metrics updated based on accurate violation count (19) after fixing validation script false positives.
@@ -154,21 +193,29 @@ git diff --name-only | grep "\.github/workflows/" | head -5
 ### File Processing Pattern
 
 1. **Identify violations**: `bash scripts/validate_terminal_output.sh 2>/dev/null | grep -A 5 "filename.yml"`
+
 2. **Apply fix patterns**: Use established patterns above
+
 3. **Validate changes**: Test YAML syntax and functionality
+
 4. **Verify reduction**: Check violation count decreases
 
 ### Quality Assurance
 
 - [ ] Maintain workflow functionality
+
 - [ ] Preserve YAML formatting
+
 - [ ] Test critical paths after changes
+
 - [ ] Document any breaking changes
 
 ### Rollback Plan
 
 - Keep original files as backup
+
 - Test changes in feature branch first
+
 - Have revert commits ready if issues arise
 
 ---
@@ -178,24 +225,39 @@ git diff --name-only | grep "\.github/workflows/" | head -5
 ### Completed Work
 
 - [x] **Session 1** (2025-08-03): Reduced violations from 32 → 27
+
     - Fixed emoji violations in `ci.yml`
+
     - Fixed variable expansion in `ci-monitor.yml`
+
     - Fixed command substitution in `aar-generator.yml`
+
     - Fixed echo violations in `review-known-errors.yml`
+
     - Fixed variable expansion in `security-audit.yml`
 
 - [x] **Session 3** (2025-08-03): Systematic Violation Cleanup Push
+
     - Fixed `post-merge-cleanup.yml`: Removed emojis, fixed command substitution, variable expansion
+
     - Fixed `aar-generator.yml`: Corrected VIRTUAL_ENV variable expansion patterns
+
     - Fixed `ci.yml`: Removed emoji characters, fixed VIRTUAL_ENV patterns
+
     - **Impact**: 5 violations eliminated (27 → 22)
+
     - **Progress**: 31% total reduction achieved (32 → 22 violations)
+
     - **Momentum**: Successfully pushing through systematic cleanup### Next Actions
 
 - [x] Continue systematic cleanup push (Session 3 completed)
+
 - [x] Fixed 5 major violations (27 → 22 violations)
+
 - [ ] Complete remaining violations to reach Phase 1 target (≤12)
+
 - [ ] Focus on files with clear violation patterns
+
 - [ ] Validate Phase 1 completion
 
 **Current Challenge**: Some reported violations may be false positives from validation script patterns. Focus on files with clear, verifiable violations like emoji usage, command substitution in echo, and heredoc patterns.
@@ -207,12 +269,16 @@ git diff --name-only | grep "\.github/workflows/" | head -5
 **Project Complete When:**
 
 1. `bash scripts/validation_summary.sh` shows 0 terminal violations
+
 2. All GitHub Actions workflows run without terminal hanging
+
 3. Terminal output policy fully enforced across codebase
+
 4. Documentation updated to reflect zero-violation status
 
 ---
 
 **Last Updated**: 2025-08-03
+
 **Current Phase**: Phase 1 (Critical Infrastructure)
 **Next Milestone**: Complete Phase 1 with ≤20 violations

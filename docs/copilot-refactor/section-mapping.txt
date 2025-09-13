@@ -1,0 +1,109 @@
+3:## Project Overview
+9:## ⚠️ CRITICAL: Terminal Output Policy - ZERO TOLERANCE
+15:### CRITICAL VIOLATIONS THAT CAUSE HANGING
+33:### SAFE PATTERNS - MANDATORY USAGE
+52:### ENFORCEMENT INFRASTRUCTURE
+78:### AGENT REQUIREMENTS - MANDATORY COMPLIANCE
+100:## ⚠️ CRITICAL: Virtual Environment Requirements
+102:### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
+106:## 🥔 Enhanced Potato Policy
+153:### Mandatory Environment Usage
+160:### Commands Must Use Virtual Environment Context
+176:### Why This Matters
+184:### Developer Setup Requirements
+196:## Architecture & Technology Stack
+198:### TAGS Stack Integration
+212:### Core Services
+224:### Multi-Environment Setup
+229:### Service Discovery Pattern
+253:### Language Version Requirements
+264:## Development Guidelines
+266:### 1. Environment First - ALWAYS
+330:### 2. Centralized Logging Policy - MANDATORY
+354:### 3. Terminal Output Best Practices - MANDATORY
+356:#### CRITICAL PRIORITY: Terminal output rules are ENFORCED with ZERO TOLERANCE for violations
+432:### 4. Workflow Standards
+440:### 3. Code Quality Requirements
+442:### ⚠️ CRITICAL: Linting Rule Policy
+461:### ⚠️ MANDATORY: Markdown Standards Compliance
+481:## Section Title
+492:### Subsection
+499:### ⚠️ CRITICAL: CI Hygiene & Artifact Management
+546:#### Python Standards
+573:#### TypeScript Standards
+581:### 4. Testing Requirements
+583:#### ⚠️ CRITICAL: 95% Quality Control Rule
+609:#### Coverage Thresholds
+615:#### Test Commands (Virtual Environment Required)
+661:### 5. Pre-Commit Requirements - MANDATORY PROCESS
+684:### 6. Commit Message Standards
+708:## File Structure & Conventions
+710:### Directory Layout
+733:### Key Configuration Files
+762:## Service Integration Patterns
+764:### 1. API Conventions
+771:### 2. Discord Bot Patterns
+789:### 3. Database Patterns
+795:## CI/CD & Automation
+797:### GitHub Actions Workflows
+817:### Critical Scripts
+834:### AAR (After Action Report) System
+858:### Automation Ecosystem
+871:### Virtual Environment in CI
+888:### Error Handling Requirements
+899:## Security & Best Practices
+901:### Security Requirements
+912:### Environment Variable Security Model
+936:### Documentation Standards
+943:## Common Integration Points
+945:### 1. Adding New Features
+956:### Key CLI Commands
+975:### 2. Bot Command Development
+1003:### 3. Frontend Integration Patterns
+1023:### 3. API Endpoint Development
+1036:### 4. Key Integration Points
+1078:## Quality Assurance Checklist
+1080:### Pre-Commit Requirements
+1091:### PR Review Checklist
+1101:## Plugin Development
+1103:### Creating Plugins (Virtual Environment Required)
+1124:## Environment Variables
+1126:### Required Variables
+1133:### Development vs Production
+1139:## Troubleshooting
+1141:### Common Issues
+1196:### Dependency Crisis Management
+1224:### Dependabot PR Quick Assessment
+1245:### Environment Variable Management Issues
+1287:### Validation-Driven Resolution Pattern
+1306:### Debugging Tools (Virtual Environment Context)
+1320:### Enhanced Logging and CI Troubleshooting
+1365:### Enhanced CI Troubleshooting Framework
+1400:## DevOnboarder Key Systems & Utilities
+1402:### Phase Framework Navigation
+1414:### Token Architecture v2.1 System
+1430:### Essential Automation Scripts (100+)
+1463:### AAR System (After Action Reports)
+1477:### Quality Control Framework
+1492:### Multi-Environment Architecture
+1505:### Common Student Guidance Patterns
+1513:## Agent-Specific Guidelines
+1515:### For Documentation Creation
+1536:### For Code Generation
+1545:### For Refactoring
+1553:### For Bug Fixes
+1561:### Critical Reminders for Agents
+1578:### ⚠️ NEW: Pre-commit Hook Management for Agents
+1608:### ⚠️ NEW: Environment Variable Management for Agents
+1630:### ⚠️ UPDATED: Shellcheck External Dependencies - Hybrid Approach
+1665:### ⚠️ NEW: Markdown Content Creation Standards
+1689:## Section Title
+1700:### Subsection
+1714:### ⚠️ NEW: Enhanced Debugging and Error Analysis
+1757:### ⚠️ NEW: Multi-Service Docker Architecture Troubleshooting
+1804:### ⚠️ NEW: ES Module Requirements for TypeScript Discord Bots
+1842:## Agent Documentation Standards
+1844:### Codex Agent Requirements
+1858:### Agent Integration Framework
+1867:### CI Integration Patterns
+1883:### Agent Validation System

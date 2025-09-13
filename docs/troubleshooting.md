@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: troubleshooting.md-docs
+status: active
+tags:
+- documentation
+title: Troubleshooting
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Troubleshooting Guide
 
 Development setups and CI runs sometimes fail in surprising ways.
@@ -6,8 +24,11 @@ This page collects quick fixes for the most common problems.
 ## Failed pre-commit hooks
 
 - Ensure you have run `pre-commit install` so git hooks execute automatically.
+
 - If the Node.js download fails during the Prettier hook, see
+
   [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors).
+
 - Missing Python packages? Install dev requirements with:
 
     ```bash
@@ -17,11 +38,15 @@ This page collects quick fixes for the most common problems.
 ## Docker services won't start
 
 - Run `docker compose -f ../archive/docker-compose.dev.yaml --env-file .env.dev up -d` to rebuild containers.
+
 - Check container logs with `docker compose logs` for details.
+
 - If services exit immediately, verify secrets with `./scripts/generate-secrets.sh`.
 
 ## CI pipeline failures
 
 - Use `bash scripts/run_tests.sh` locally to reproduce lint and test failures.
+
 - For network-restricted environments, follow [Offline setup](offline-setup.md) to cache dependencies.
+
 - If CI cannot download tools or packages, review [Network troubleshooting](network-troubleshooting.md) for proxy tips.

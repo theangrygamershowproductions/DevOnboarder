@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: contributing-contributing
+status: active
+tags:
+- documentation
+title: Issue Labeling Guide
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Issue Labeling Guide
 
 ## Overview
@@ -75,17 +93,25 @@ Technology labels identify the primary tech stack involved:
 When creating new issues, apply labels in this order:
 
 1. **Priority** (`priority-high`, `priority-medium`, `priority-low`)
+
 2. **Effort** (`effort-small`, `effort-medium`, `effort-large`)
+
 3. **Component** (one or more: `testing-infrastructure`, `developer-experience`, etc.)
+
 4. **Technology** (`python`, `javascript`, `codex`)
+
 5. **Type** (`enhancement`, `bug`, `documentation`)
 
 **Example**: A new test automation feature would get:
 
 - `priority-medium` (significant dev experience improvement)
+
 - `effort-medium` (3-5 day implementation)
+
 - `testing-infrastructure` (test-related)
+
 - `python` (Python implementation)
+
 - `enhancement` (new feature)
 
 ### 📊 For Project Planning
@@ -93,19 +119,25 @@ When creating new issues, apply labels in this order:
 **Sprint Planning**:
 
 - Filter by `effort-small` for quick wins
+
 - Combine `priority-high` + `effort-medium` for high-impact work
+
 - Use `effort-large` for dedicated sprint themes
 
 **Roadmap Planning**:
 
 - `priority-high` issues for immediate next sprint
+
 - `priority-medium` issues for quarterly planning
+
 - `priority-low` issues for backlog grooming
 
 **Resource Allocation**:
 
 - `developer-experience` issues for frontend developers
+
 - `testing-infrastructure` issues for QA/DevOps engineers
+
 - `security-enhancement` issues for security specialists
 
 ### 🔍 Filter Examples
@@ -113,20 +145,27 @@ When creating new issues, apply labels in this order:
 Common GitHub issue filter combinations:
 
 ```bash
+
 # High priority, quick wins
+
 is:open label:priority-high label:effort-small
 
 # Testing infrastructure improvements
+
 is:open label:testing-infrastructure label:enhancement
 
 # Medium effort developer experience improvements
+
 is:open label:developer-experience label:effort-medium
 
 # Python-related enhancements
+
 is:open label:python label:enhancement
 
 # Security issues requiring immediate attention
+
 is:open label:security-enhancement label:priority-high
+
 ```
 
 ## Strategic Implementation Order
@@ -137,6 +176,7 @@ Based on our labeling system, here's the recommended implementation sequence:
 
 ```bash
 is:open label:priority-medium label:effort-small
+
 ```
 
 Focus on high-impact, low-effort improvements that provide immediate developer experience benefits.
@@ -145,6 +185,7 @@ Focus on high-impact, low-effort improvements that provide immediate developer e
 
 ```bash
 is:open label:priority-medium label:effort-medium label:testing-infrastructure
+
 ```
 
 Systematic improvements to testing and development infrastructure.
@@ -153,6 +194,7 @@ Systematic improvements to testing and development infrastructure.
 
 ```bash
 is:open label:priority-high label:effort-large
+
 ```
 
 Major architectural improvements and complex feature development.
@@ -161,6 +203,7 @@ Major architectural improvements and complex feature development.
 
 ```bash
 is:open label:priority-low label:effort-large label:cross-platform
+
 ```
 
 Broader ecosystem support and platform compatibility.
@@ -170,21 +213,29 @@ Broader ecosystem support and platform compatibility.
 ### Adding Labels to Issues
 
 ```bash
+
 # Add single label
+
 gh issue edit <issue-number> --add-label "priority-high"
 
 # Add multiple labels
+
 gh issue edit <issue-number> --add-label "priority-medium,effort-small,testing-infrastructure"
 
 # Remove labels
+
 gh issue edit <issue-number> --remove-label "priority-low"
+
 ```
 
 ### Creating New Labels
 
 ```bash
+
 # Create a new label
+
 gh label create "new-label" --description "Description" --color "ff6600"
+
 ```
 
 ### Bulk Label Operations
@@ -192,9 +243,12 @@ gh label create "new-label" --description "Description" --color "ff6600"
 For applying labels to multiple issues, use GitHub CLI with issue lists:
 
 ```bash
+
 # Apply performance label to all optimization issues
+
 gh issue list --label enhancement --json number --jq '.[].number' | \
   xargs -I {} gh issue edit {} --add-label "performance"
+
 ```
 
 ## Best Practices
@@ -202,16 +256,23 @@ gh issue list --label enhancement --json number --jq '.[].number' | \
 ### ✅ Do
 
 - **Apply multiple labels** - Issues often span multiple categories
+
 - **Update labels** as requirements change during development
+
 - **Use consistent labeling** across similar issues
+
 - **Review labels** during sprint planning and retrospectives
+
 - **Document label changes** in issue comments when significant
 
 ### ❌ Don't
 
 - **Over-label** - Avoid more than 6-8 labels per issue
+
 - **Use conflicting priorities** - Each issue should have exactly one priority label
+
 - **Ignore effort estimation** - All enhancement issues should have effort labels
+
 - **Create duplicate labels** - Check existing labels before creating new ones
 
 ## Integration with DevOnboarder Workflows
@@ -221,7 +282,9 @@ gh issue list --label enhancement --json number --jq '.[].number' | \
 Labels trigger specific automation:
 
 - `ci-failure` labels automatically create issues for persistent CI problems
+
 - `automated` labels identify bot-generated issues
+
 - `artifact-pollution` labels trigger cleanup workflows
 
 ### GitHub Actions
@@ -229,7 +292,9 @@ Labels trigger specific automation:
 Several workflows use labels for conditional execution:
 
 - Test infrastructure changes (`testing-infrastructure` label)
+
 - Security scanning for security enhancements (`security-enhancement` label)
+
 - Cross-platform testing for compatibility issues (`cross-platform` label)
 
 ### Reporting and Metrics
@@ -237,7 +302,9 @@ Several workflows use labels for conditional execution:
 Labels enable automated reporting:
 
 - Sprint velocity tracking by effort labels
+
 - Component health monitoring by component labels
+
 - Priority distribution analysis for planning
 
 ## Examples from Current Issues
@@ -246,6 +313,7 @@ Labels enable automated reporting:
 
 ```text
 Labels: enhancement, codex, python, priority-low, effort-small, testing-infrastructure
+
 ```
 
 - **Why**: Optional feature (`priority-low`), quick implementation (`effort-small`), improves test infrastructure (`testing-infrastructure`)
@@ -254,6 +322,7 @@ Labels: enhancement, codex, python, priority-low, effort-small, testing-infrastr
 
 ```text
 Labels: enhancement, codex, python, priority-medium, effort-medium, testing-infrastructure, performance
+
 ```
 
 - **Why**: Significant developer impact (`priority-medium`), moderate complexity (`effort-medium`), performance improvement (`performance`)
@@ -262,6 +331,7 @@ Labels: enhancement, codex, python, priority-medium, effort-medium, testing-infr
 
 ```text
 Labels: enhancement, ci-hygiene, automated, priority-high, effort-large
+
 ```
 
 - **Why**: Critical infrastructure (`priority-high`), complex implementation (`effort-large`), CI system improvement (`ci-hygiene`)
@@ -270,6 +340,7 @@ Labels: enhancement, ci-hygiene, automated, priority-high, effort-large
 
 ```text
 Labels: zero-accountability-loss, ci-hygiene, priority-critical, comprehensive
+
 ```
 
 - **Why**: Critical quality gate protection (`zero-accountability-loss`), infrastructure reliability (`ci-hygiene`), prevents accountability loss (`priority-critical`)
@@ -279,8 +350,11 @@ Labels: zero-accountability-loss, ci-hygiene, priority-critical, comprehensive
 This labeling system provides structure for:
 
 - **Strategic planning** through priority and effort estimation
+
 - **Resource allocation** via component and technology categorization
+
 - **Progress tracking** through consistent labeling practices
+
 - **Automation** integration with DevOnboarder workflows
 
 Regular review and maintenance of labels ensures the system remains effective as the project evolves.
@@ -288,5 +362,6 @@ Regular review and maintenance of labels ensures the system remains effective as
 ---
 
 **Last Updated**: 2025-07-30
+
 **Maintained by**: DevOnboarder Team
 **Review Schedule**: Quarterly during retrospectives

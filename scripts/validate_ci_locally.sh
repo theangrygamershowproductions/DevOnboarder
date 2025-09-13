@@ -386,7 +386,8 @@ run_step "Auth Service Health" "bash scripts/wait_for_service.sh http://localhos
 run_step "Verify Services" "docker compose -f docker-compose.ci.yaml --env-file .env.ci ps && ! docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running"
 
 # Run diagnostics
-run_step "Service Diagnostics" "python -m diagnostics"
+# Service diagnostics
+run_step "Service Diagnostics" "python -m devonboarder.diagnostics"
 
 # CORS and security headers check
 run_step "Security Headers" "python scripts/check_headers.py"

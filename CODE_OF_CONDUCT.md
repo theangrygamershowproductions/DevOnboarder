@@ -1,3 +1,23 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Contributor Covenant Code of Conduct establishing community standards, expected behavior, and enforcement procedures for DevOnboarder project
+document_type: policy
+merge_candidate: false
+project: DevOnboarder
+similarity_group: docs-
+status: active
+tags:
+- community
+- conduct
+- policy
+title: Contributor Covenant Code of Conduct
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
@@ -18,22 +38,35 @@ Examples of behavior that contributes to a positive environment for our
 community include:
 
 - Demonstrating empathy and kindness toward other people
+
 - Being respectful of differing opinions, viewpoints, and experiences
+
 - Giving and gracefully accepting constructive feedback
+
 - Accepting responsibility and apologizing to those affected by our mistakes,
+
   and learning from the experience
+
 - Focusing on what is best not just for us as individuals, but for the overall
+
   community
 
 Examples of unacceptable behavior include:
 
 - The use of sexualized language or imagery, and sexual attention or advances of
+
   any kind
+
 - Trolling, insulting or derogatory comments, and personal or political attacks
+
 - Public or private harassment
+
 - Publishing others' private information, such as a physical or email address,
+
   without their explicit permission
+
 - Other conduct which could reasonably be considered inappropriate in a
+
   professional setting
 
 ## Enforcement Responsibilities
