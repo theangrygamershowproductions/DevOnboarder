@@ -27,11 +27,23 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Debug git state
+        run: |
+          echo "Git status after checkout:"
+          git status --porcelain
+          echo "Current branch/ref:"
+          git symbolic-ref HEAD 2>/dev/null || {
+            printf "Detached HEAD: %s\n" "$(git rev-parse HEAD)"
+          }
+          echo "Available branches:"
+          git branch -a
 
       - name: Install dependencies
         run: |
@@ -99,7 +111,20 @@ jobs:
 
       - name: Push changes
         if: steps.synthesis-check.outputs.enhanced_files == 'true' && github.event.inputs.dry_run != 'true'
-        run: git push
+        run: |
+          # Validate git state before push
+          if ! git symbolic-ref HEAD >/dev/null 2>&1; then
+            echo "Error: Not on a branch (detached HEAD state)"
+            printf "Current HEAD: %s\n" "$(git rev-parse HEAD)"
+            echo "Available branches:"
+            git branch -a
+            exit 1
+          fi
+
+          CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+          printf "On branch: %s\n" "$CURRENT_BRANCH"
+          printf "Pushing changes to origin/%s\n" "$CURRENT_BRANCH"
+          git push origin "$CURRENT_BRANCH"
 
       - name: Comment on PR with synthesis results
         if: github.event_name == 'pull_request'
