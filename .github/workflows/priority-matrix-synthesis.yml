@@ -49,16 +49,16 @@ jobs:
 
           # Check if any files would be modified
           MODIFIED_COUNT=$(jq '.modified | length' synthesis_results.json)
-          echo "modified_count=$MODIFIED_COUNT" >> $GITHUB_OUTPUT
+          printf "modified_count=%s\n" "$MODIFIED_COUNT" >> $GITHUB_OUTPUT
 
           if [ "$MODIFIED_COUNT" -gt 0 ]; then
-            echo "enhanced_files=true" >> $GITHUB_OUTPUT
-            echo "synthesis_summary<<EOF" >> $GITHUB_OUTPUT
+            printf "enhanced_files=true\n" >> $GITHUB_OUTPUT
+            printf "synthesis_summary<<EOF\n" >> $GITHUB_OUTPUT
             jq -r '.modified[] | "• \(.path): Priority \(.priority), Uniqueness \(.uniqueness), Confidence \(.confidence)"' synthesis_results.json >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            printf "EOF\n" >> $GITHUB_OUTPUT
           else
-            echo "enhanced_files=false" >> $GITHUB_OUTPUT
-            echo "synthesis_summary=No Priority Matrix enhancements needed" >> $GITHUB_OUTPUT
+            printf "enhanced_files=false\n" >> $GITHUB_OUTPUT
+            printf "synthesis_summary=No Priority Matrix enhancements needed\n" >> $GITHUB_OUTPUT
           fi
 
       - name: Commit Priority Matrix enhancements

@@ -34,7 +34,7 @@ jobs:
             cat changed_workflows.txt
 
             while IFS= read -r file; do
-              printf -- "Checking file: %s\n" "$file"
+              printf "Checking file: %s\n" "$file"
 
               # Check for emojis in ADDED lines only (lines starting with +)
               # Define emoji pattern for detection using Unicode ranges (safe for terminal output policy)
@@ -46,7 +46,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P "$EMOJI_PATTERN" 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf -- "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file"
+                  printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file"
                 } >> violation_details.txt
               fi
 
@@ -54,7 +54,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf -- "- Command substitution in terminal output in %s (causes terminal hanging)\n" "$file"
+                  printf "- Command substitution in terminal output in %s (causes terminal hanging)\n" "$file"
                 } >> violation_details.txt
               fi
 
@@ -62,7 +62,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf -- "- Variable expansion in terminal output in %s (can cause terminal hanging)\n" "$file"
+                  printf "- Variable expansion in terminal output in %s (can cause terminal hanging)\n" "$file"
                 } >> violation_details.txt
               fi
 
@@ -70,7 +70,7 @@ jobs:
           fi
 
           # Output results to GitHub Actions
-          printf -- "violations=%s\n" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
+          printf "violations=%s\n" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
 
           # Output details to GitHub Actions
           if [ -f violation_details.txt ]; then
