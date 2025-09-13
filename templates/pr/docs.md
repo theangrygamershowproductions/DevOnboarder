@@ -1,3 +1,24 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Template for documentation quality control system enhancement pull requests
+document_type: template
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- template
+- pr-template
+- documentation
+- quality-control
+title: Documentation PR Template
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Documentation Quality Control System Enhancement
 
 ## Summary
