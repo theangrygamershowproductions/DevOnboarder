@@ -22,6 +22,18 @@ if [[ ! -f "$PROJECT_ROOT/Makefile" || ! -d "$PROJECT_ROOT/scripts" ]]; then
     exit 1
 fi
 
+# Load DevOnboarder Token Architecture v2.1
+echo "🔑 Loading DevOnboarder Token Architecture v2.1..."
+# shellcheck source=scripts/enhanced_token_loader.sh
+if [[ -f "$PROJECT_ROOT/scripts/enhanced_token_loader.sh" ]]; then
+    source "$PROJECT_ROOT/scripts/enhanced_token_loader.sh"
+elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
+    # Fallback to legacy token loader
+    source "$PROJECT_ROOT/scripts/load_token_environment.sh"
+else
+    echo "⚠️  Warning: Token Architecture scripts not found. Dashboard may have limited functionality."
+fi
+
 # Function to show usage help
 show_help() {
     cat << EOF

@@ -18,6 +18,7 @@ AAR System: scripts/generate_aar.sh, Makefile aar-* targets
 import argparse
 import json
 import logging
+import os
 import subprocess
 import sys
 from datetime import datetime
@@ -41,6 +42,7 @@ logger = logging.getLogger("ci-health-aar-integration")
 class CIHealthAARIntegrator:
     """
     Integrates CI Health Dashboard monitoring data with AAR system
+    Follows DevOnboarder Token Architecture v2.1 for secure token management
     """
 
     def __init__(self):
@@ -48,7 +50,35 @@ class CIHealthAARIntegrator:
         self.aar_reports_dir = self.project_root / "logs" / "aar-reports"
         self.aar_reports_dir.mkdir(exist_ok=True)
 
-    def get_ci_health_logs(self, workflow_id: str = None) -> List[Dict[str, Any]]:
+        # Token Architecture v2.1 compliance
+        self._setup_token_environment()
+
+    def _setup_token_environment(self):
+        """
+        Setup token environment following Token Architecture v2.1 hierarchy
+        CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+        """
+        # Check for CI_ISSUE_AUTOMATION_TOKEN first
+        token = os.getenv("CI_ISSUE_AUTOMATION_TOKEN")
+        if token:
+            os.environ["GITHUB_TOKEN"] = token
+            print("Using CI_ISSUE_AUTOMATION_TOKEN for GitHub operations")
+            return
+
+        token = os.getenv("CI_BOT_TOKEN")
+        if token:
+            os.environ["GITHUB_TOKEN"] = token
+            print("Using CI_BOT_TOKEN for GitHub operations")
+            return
+
+        if os.getenv("GITHUB_TOKEN"):
+            print("Using GITHUB_TOKEN for GitHub operations")
+        else:
+            print("WARNING: No GitHub token available - AAR generation may fail")
+
+    def get_ci_health_logs(
+        self, workflow_id: str | None = None
+    ) -> List[Dict[str, Any]]:
         """Get CI health monitoring logs for analysis"""
         ci_logs = []
         logs_dir = self.project_root / "logs"

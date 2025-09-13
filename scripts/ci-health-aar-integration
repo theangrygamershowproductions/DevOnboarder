@@ -17,6 +17,18 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 echo "DevOnboarder CI Health Dashboard - AAR Integration"
 echo "Project Root: $PROJECT_ROOT"
 
+# Load DevOnboarder Token Architecture v2.1
+echo "🔑 Loading DevOnboarder Token Architecture v2.1..."
+# shellcheck source=scripts/enhanced_token_loader.sh
+if [[ -f "$PROJECT_ROOT/scripts/enhanced_token_loader.sh" ]]; then
+    source "$PROJECT_ROOT/scripts/enhanced_token_loader.sh"
+elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
+    # Fallback to legacy token loader
+    source "$PROJECT_ROOT/scripts/load_token_environment.sh"
+else
+    echo "⚠️  Warning: Token Architecture scripts not found. AAR integration may have limited functionality."
+fi
+
 # Check for virtual environment
 if [[ ! -d "$PROJECT_ROOT/.venv" ]]; then
     echo "ERROR: Virtual environment not found at $PROJECT_ROOT/.venv"
