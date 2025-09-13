@@ -1,3 +1,22 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Docker Compose V2 compatibility issues and solutions for DevOnboarder environment setup
+document_type: troubleshooting
+merge_candidate: false
+project: DevOnboarder
+similarity_group: DOCKER_ENVIRONMENT_COMPATIBILITY.md-docs
+status: active
+tags:
+- documentation
+- documentation
+title: Docker Environment Compatibility
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Docker Environment Compatibility Guide
 
 ## Docker Compose V2 vs Legacy Compatibility
@@ -12,15 +31,20 @@
 Test command availability:
 
 ```bash
+
 # Check Docker Compose availability
+
 docker compose version 2>/dev/null || echo "Modern Docker Compose not available"
 which docker-compose 2>/dev/null || echo "Legacy docker-compose not found"
+
 ```
 
 Alternative detection:
 
 ```bash
+
 # Environment detection for scripts
+
 if command -v docker compose &> /dev/null; then
     COMPOSE_CMD="docker compose"
 elif command -v docker-compose &> /dev/null; then
@@ -29,6 +53,7 @@ else
     echo "Error: Neither docker compose nor docker-compose available"
     exit 1
 fi
+
 ```
 
 ### Quick Resolution
@@ -38,13 +63,16 @@ fi
 1. **Enable WSL Integration** (Recommended):
 
    - Open Docker Desktop → Settings → Resources → WSL Integration
+
    - Enable integration with your WSL distro
+
    - Apply & Restart Docker Desktop
 
 1. **Install Legacy Compatibility**:
 
    ```bash
    # Install docker-compose binary for legacy script compatibility
+
    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
    sudo chmod +x /usr/local/bin/docker-compose
    ```
@@ -53,6 +81,7 @@ fi
 
    ```bash
    # Use modern Docker Compose syntax directly
+
    docker compose -f docker-compose.dev.yaml --profile tunnel up -d
    docker compose -f docker-compose.dev.yaml ps
    docker compose -f docker-compose.dev.yaml logs cloudflare-tunnel
@@ -67,13 +96,19 @@ fi
 ### Environment Validation
 
 ```bash
+
 # Verify Docker environment before running DevOnboarder scripts
+
 docker --version                    # Docker Engine version
+
 docker compose version             # Docker Compose V2
+
 docker-compose --version 2>/dev/null || echo "Legacy docker-compose not available"
 
 # Test DevOnboarder Docker configuration
+
 docker compose -f docker-compose.dev.yaml config --quiet
+
 ```
 
 ### Troubleshooting
