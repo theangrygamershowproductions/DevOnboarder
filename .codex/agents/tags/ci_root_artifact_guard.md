@@ -25,15 +25,13 @@ permissions:
 - workflows:write
 purpose: Prevents repository pollution by enforcing clean root directory hygiene in
   CI/CD pipeline
-similarity_group: agents-agents
+similarity_group: agents-tags
 tags:
 - ci
 - hygiene
 - guard
 - artifacts
 title: CI Root Artifact Guard
-trigger: manual
-similarity_group: agents-tags
 trigger: pre-commit run, CI hygiene scan, file detected in repo root matching artifact
   patterns
 ---

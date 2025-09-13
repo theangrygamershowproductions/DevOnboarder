@@ -10,13 +10,12 @@ project: core-aar
 similarity_group: aar-documentation
 status: active
 tags:
-
-* aar
-* frontmatter
-* documentation
-* validation
-* project-completion
-* quality-improvement
+  - aar
+  - frontmatter
+  - documentation
+  - validation
+  - project-completion
+  - quality-improvement
 
 title: 'After Actions Report: DevOnboarder Frontmatter Validation Cleanup Project'
 updated_at: '2025-09-13'
