@@ -1,3 +1,9 @@
+---
+similarity_group: CI_DASHBOARD_DEPLOYMENT_GUIDE.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # CI Dashboard Integration - Complete Deployment Guide
 
 ## Overview
