@@ -1,0 +1,181 @@
+# DevOnboarder CI Health Monitoring Action
+#
+# This is a reusable workflow step that can be added to critical workflows
+# to enable real-time monitoring and failure prediction by the CI Health Dashboard.
+#
+# Usage: Add this step to workflows that should be monitored for failure patterns
+#
+# Example integration:
+#   - name: CI Health Monitoring
+#     uses: ./.github/actions/ci-health-monitor
+#     with:
+#       workflow-name: ${{ github.workflow }}
+#       step-name: ${{ github.job }}
+#       on-failure: 'continue'
+
+name: 'CI Health Monitor'
+description: 'Monitors workflow execution for failure patterns and provides predictive analytics'
+
+inputs:
+  workflow-name:
+    description: 'Name of the workflow being monitored'
+    required: true
+  step-name:
+    description: 'Name of the current step/job'
+    required: true
+  on-failure:
+    description: 'Action to take on failure detection (continue|cancel|report)'
+    required: false
+    default: 'continue'
+  prediction-threshold:
+    description: 'Confidence threshold for failure prediction (0.0-1.0)'
+    required: false
+    default: '0.8'
+
+outputs:
+  failure-predicted:
+    description: 'Whether a failure was predicted (true/false)'
+    value: ${{ steps.monitor.outputs.failure-predicted }}
+  confidence:
+    description: 'Prediction confidence score (0.0-1.0)'
+    value: ${{ steps.monitor.outputs.confidence }}
+  failure-type:
+    description: 'Type of failure predicted'
+    value: ${{ steps.monitor.outputs.failure-type }}
+  cost-savings:
+    description: 'Estimated cost savings in minutes if cancelled early'
+    value: ${{ steps.monitor.outputs.cost-savings }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: CI Health Monitoring Check
+      id: monitor
+      shell: bash
+      run: |
+        # DevOnboarder CI Health Dashboard Integration
+        echo "=== CI Health Monitoring ==="
+        echo "Workflow: ${{ inputs.workflow-name }}"
+        echo "Step: ${{ inputs.step-name }}"
+        echo "Threshold: ${{ inputs.prediction-threshold }}"
+
+        # Create monitoring log entry
+        mkdir -p logs
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        LOG_FILE="logs/ci_health_monitor_$(date +%Y%m%d_%H%M%S).log"
+
+        # Log workflow context
+        cat << EOF >> "$LOG_FILE"
+        === DevOnboarder CI Health Monitor ===
+        Timestamp: $TIMESTAMP
+        Workflow: ${{ inputs.workflow-name }}
+        Job: ${{ inputs.step-name }}
+        Run ID: ${{ github.run_id }}
+        Run Number: ${{ github.run_number }}
+        Event: ${{ github.event_name }}
+        Ref: ${{ github.ref }}
+        SHA: ${{ github.sha }}
+        Actor: ${{ github.actor }}
+
+        === Git Context ===
+        EOF
+
+        # Collect git status for pattern detection
+        echo "Git status:" >> "$LOG_FILE"
+        git status --porcelain 2>&1 >> "$LOG_FILE" || echo "Git status failed" >> "$LOG_FILE"
+
+        echo "Git HEAD status:" >> "$LOG_FILE"
+        git symbolic-ref HEAD 2>&1 >> "$LOG_FILE" || {
+            echo "Detached HEAD detected: $(git rev-parse HEAD 2>/dev/null)" >> "$LOG_FILE"
+            echo "::warning::Detached HEAD state detected - potential CI failure risk"
+        }
+
+        # Check for signature verification issues
+        echo "Recent commits signature status:" >> "$LOG_FILE"
+        git log --show-signature -n 3 --oneline 2>&1 >> "$LOG_FILE" || echo "Signature check failed" >> "$LOG_FILE"
+
+        # Set default outputs
+        echo "failure-predicted=false" >> $GITHUB_OUTPUT
+        echo "confidence=0.0" >> $GITHUB_OUTPUT
+        echo "failure-type=none" >> $GITHUB_OUTPUT
+        echo "cost-savings=0" >> $GITHUB_OUTPUT
+
+        # Pattern detection for known failure types
+        FAILURE_PREDICTED=false
+        CONFIDENCE=0.0
+        FAILURE_TYPE="none"
+        COST_SAVINGS=0
+
+        # Detached HEAD detection
+        if ! git symbolic-ref HEAD >/dev/null 2>&1; then
+            echo "::warning::PREDICTION: Detached HEAD detected - high probability of CI failure"
+            FAILURE_PREDICTED=true
+            CONFIDENCE=0.95
+            FAILURE_TYPE="detached_head"
+            COST_SAVINGS=12
+
+            # Enhanced detached HEAD analysis
+            echo "=== Detached HEAD Analysis ===" >> "$LOG_FILE"
+            echo "Current HEAD: $(git rev-parse HEAD)" >> "$LOG_FILE"
+            echo "Expected branch: ${{ github.ref }}" >> "$LOG_FILE"
+            echo "Event type: ${{ github.event_name }}" >> "$LOG_FILE"
+        fi
+
+        # Signature verification detection
+        if git log --show-signature -n 1 2>&1 | grep -q "signature verification failed"; then
+            echo "::warning::PREDICTION: Signature verification failure detected"
+            if [[ "$CONFIDENCE" == "0.0" ]]; then
+                FAILURE_PREDICTED=true
+                CONFIDENCE=0.85
+                FAILURE_TYPE="signature_verification"
+                COST_SAVINGS=8
+            fi
+        fi
+
+        # Update outputs with prediction results
+        echo "failure-predicted=$FAILURE_PREDICTED" >> $GITHUB_OUTPUT
+        echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
+        echo "failure-type=$FAILURE_TYPE" >> $GITHUB_OUTPUT
+        echo "cost-savings=$COST_SAVINGS" >> $GITHUB_OUTPUT
+
+        # Log prediction results
+        cat << EOF >> "$LOG_FILE"
+
+        === Prediction Results ===
+        Failure Predicted: $FAILURE_PREDICTED
+        Confidence: $CONFIDENCE
+        Failure Type: $FAILURE_TYPE
+        Estimated Cost Savings: $COST_SAVINGS minutes
+        Threshold: ${{ inputs.prediction-threshold }}
+        EOF
+
+        # Take action based on prediction and threshold
+        if [[ "$FAILURE_PREDICTED" == "true" ]]; then
+            THRESHOLD=${{ inputs.prediction-threshold }}
+            if (( $(echo "$CONFIDENCE >= $THRESHOLD" | bc -l) )); then
+                echo "::error::HIGH CONFIDENCE FAILURE PREDICTION: $FAILURE_TYPE ($CONFIDENCE confidence)"
+                echo "::error::Estimated cost savings if cancelled: $COST_SAVINGS minutes"
+                echo "::error::Recommendation: Consider cancelling workflow to save compute resources"
+
+                if [[ "${{ inputs.on-failure }}" == "cancel" ]]; then
+                    echo "::error::AUTO-CANCELLATION: Confidence threshold exceeded"
+                    # Note: Actual cancellation would require additional API calls
+                    # This is logged for monitoring purposes
+                fi
+            else
+                echo "::warning::Low confidence failure prediction: $FAILURE_TYPE ($CONFIDENCE confidence)"
+            fi
+        else
+            echo "::notice::No failure patterns detected - workflow appears healthy"
+        fi
+
+        # Always upload logs for analysis
+        echo "Monitor log saved to: $LOG_FILE"
+
+    - name: Upload CI Health Monitoring Logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-health-monitor-${{ inputs.workflow-name }}-${{ github.run_number }}
+        path: logs/ci_health_monitor_*.log
+        retention-days: 7

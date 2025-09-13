@@ -1,0 +1,17 @@
+#!/bin/bash
+# gh-ci-health - DevOnboarder CI Health Quick Check
+#
+# This is an alias for the DevOnboarder CI Health Dashboard that provides
+# a quick status check compatible with the existing CLI shortcuts system.
+#
+# Usage: gh-ci-health [options]
+#
+# Integration: docs/cli-shortcuts.md
+
+set -euo pipefail
+
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Call the main devonboarder-ci-health script
+exec "$SCRIPT_DIR/devonboarder-ci-health" "$@"
