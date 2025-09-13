@@ -1,10 +1,26 @@
 ---
+author: DevOnboarder Team
 codex-agent:
-    name: Agent.EnvVarManager
-    role: Audits and synchronizes environment variables across projects
-    scope: repo-wide
-    triggers: Workflow runs, scheduled checks, or manual dispatch
-    output: Updated `.env.example` files or issues for misaligned variables
+  name: Agent.EnvVarManager
+  output: Updated `.env.example` files or issues for misaligned variables
+  role: Audits and synchronizes environment variables across projects
+  scope: repo-wide
+  triggers: Workflow runs, scheduled checks, or manual dispatch
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: core-agents
+similarity_group: documentation-documentation
+status: active
+tags:
+- documentation
+- documentation
+title: Envvar Manager
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 # EnvVar Manager Agent
@@ -17,12 +33,15 @@ Ensure every project directory maintains an up-to-date `.env.example` file that 
 **Inputs:**
 
 - Source code and workflow YAML files
+
 - Existing `.env.example` files
+
 - `agents/index.md` for the authoritative variable list
 
 **Outputs:**
 
 - Updated `.env.example` files for each project directory
+
 - GitHub issues summarizing missing or redundant variables
 
 **Environment:**
@@ -31,8 +50,11 @@ Requires read access to the repository and write/PR permissions to update exampl
 **Workflow:**
 
 1. Parse environment variable references in code and workflows.
+
 2. Map each variable to the directories that use it.
+
 3. Update or generate `.env.example` files so that each directory reflects the variables it requires.
+
 4. Open a PR (or issue) when variables are missing, unused, or duplicated.
 
 **Notification:**
@@ -44,8 +66,11 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 ## \U0001F4CC Markdown Standards
 
 - We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38+ to enforce style and consistency.
+
 - Configured via `.markdownlint.json` with all rules enabled by default.
+
 - File-specific rule overrides are applied using inline comments.
+
 - CI automatically runs linting via `markdownlint-cli2-action`.
 
 ### Customizations
@@ -55,10 +80,12 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
     "MD013": false,
     "MD007": { "indent": 4 }
 }
+
 ```
 
 - To disable rules in a file, add:
 
     ```markdown
     <!-- markdownlint-disable-file MD### -->
+
     ```

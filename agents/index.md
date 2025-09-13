@@ -1,19 +1,37 @@
----
-agent: "documentation_index"
-purpose: "Documentation index and overview for all DevOnboarder agents"
-trigger: "documentation updates and agent additions"
-environment: "any"
-output: ".codex/logs/documentation.log"
-permissions:
-    - "repo:read"
-codex_runtime: false
-codex_dry_run: false
-discord_role_required: ""
-authentication_required: false
-integration_log: "Agent index and documentation overview"
----
-
 # Agents Overview
+
+---
+title: "Agents Overview"
+description: "Index and documentation overview for all DevOnboarder agents with service descriptions and workflow integration details"
+document_type: "documentation"
+tags: ["agents", "index", "overview", "documentation", "services"]
+project: "core-agents"
+agent: documentation_index
+authentication_required: false
+author: DevOnboarder Team
+codex_dry_run: false
+codex_runtime: false
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+updated_at: '2025-09-13'
+discord_role_required: ''
+environment: any
+integration_log: Agent index and documentation overview
+merge_candidate: false
+output: .codex/logs/documentation.log
+permissions:
+
+- repo:read
+
+purpose: Documentation index and overview for all DevOnboarder agents
+similarity_group: index.md-agents
+status: active
+trigger: documentation updates and agent additions
+
+visibility: internal
+
+---
 
 This directory documents the services and integrations that make up the
 DevOnboarder platform. Each agent has its own page describing the purpose and
@@ -23,19 +41,33 @@ See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agen
 ## Available Agents
 
 - [Discord Integration](discord-integration.md)
+
 - [MS Teams Integration](ms-teams-integration.md)
+
 - [ID.me Verification](idme-verification.md)
+
 - [AI Mentor](ai-mentor.md)
+
 - [Llama2 Agile Helper](llama2-agile-helper.md)
+
 - [Prod Orchestrator](prod-orchestrator.md)
+
 - [Documentation Quality Enforcer](documentation-quality-enforcer.md)
+
 - [Dev Orchestrator](dev-orchestrator.md)
+
 - [Staging Orchestrator](staging-orchestrator.md)
+
 - [Onboarding Agent](onboarding-agent.md)
+
 - [CI Helper Agent](ci-helper-agent.md)
+
 - [CI Bot](ci-bot.md)
+
 - [Diagnostics Bot](diagnostics-bot.md)
+
 - [EnvVar Manager](envvar-manager.md)
+
 - [Branch Cleanup](branch-cleanup.md)
 
 Use the [template](templates/agent-spec-template.md) when documenting a new agent.
@@ -46,6 +78,7 @@ The table below lists environment variables used across DevOnboarder agents. Kee
 
 | Variable                      | Description |
 | ----------------------------- | ----------- |
+
 | ADMINISTRATOR_ROLE_ID         | Discord role for administrators |
 | ADMIN_SERVER_GUILD_ID         | Discord guild ID used for admin checks |
 | API_BASE_URL                  | XP API URL for the bot |

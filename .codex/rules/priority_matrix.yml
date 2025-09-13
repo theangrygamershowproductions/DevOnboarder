@@ -1,0 +1,88 @@
+# Priority Matrix Rules Configuration v2.1
+# Tunable configuration for automated Priority Matrix field generation
+
+version: "2.1"
+merge_threshold: 0.88
+
+# Group assignment overrides based on content tags
+group_overrides:
+  - tags: ["environment", "config", "setup"]
+    group: "environment-config"
+
+  - tags: ["ci", "github-actions", "automation"]
+    group: "ci-automation"
+
+  - tags: ["security", "auth", "permissions"]
+    group: "security-framework"
+
+  - tags: ["api", "backend", "services"]
+    group: "api-services"
+
+  - tags: ["frontend", "react", "ui"]
+    group: "frontend-ui"
+
+  - tags: ["documentation", "guides", "tutorials"]
+    group: "documentation-guides"
+
+  - tags: ["troubleshooting", "debugging", "errors"]
+    group: "troubleshooting-debug"
+
+  - tags: ["architecture", "design", "patterns"]
+    group: "architecture-design"
+
+# Priority assignment rules (P1 = immediate, P2 = soon, P3 = later)
+priority_rules:
+  P1:
+    conditions:
+      - "merge_candidate && uniqueness <= 2"
+      - "status == 'superseded'"
+    description: "Immediate consolidation needed"
+
+  P2:
+    conditions:
+      - "merge_candidate && uniqueness == 3"
+      - "status in ['draft', 'deprecated']"
+      - "similarity > 0.85"
+    description: "Consolidation recommended soon"
+
+  P3:
+    conditions:
+      - "uniqueness >= 4"
+      - "similarity < 0.75"
+    description: "Review later or keep separate"
+
+# Directory-based group mappings
+group_mappings:
+  agents: "agent-documentation"
+  scripts: "automation-scripts"
+  docs: "general-documentation"
+  codex: "agent-codex"
+  config: "configuration"
+  tests: "testing-framework"
+  src: "source-code"
+  examples: "example-code"
+  templates: "template-library"
+  ".github": "ci-configuration"
+  archive: "archived-content"
+  backup: "backup-content"
+  reference: "reference"
+
+# Special handling rules
+special_cases:
+  backup_locations:
+    paths:
+      - "docs-backup/"
+      - "archive/"
+    confidence_penalty: 0.2
+
+  deprecated_status:
+    values:
+      - "draft"
+      - "deprecated"
+      - "superseded"
+    priority_boost: "P2"
+
+  high_churn_files:
+    min_commits: 10
+    confidence_penalty: 0.1
+    merge_boost: true
