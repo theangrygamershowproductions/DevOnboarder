@@ -34,6 +34,8 @@ This directory contains the standard practices and policies that govern DevOnboa
 
 | **After Actions Report Process** | [`after-actions-report-process.md`](after-actions-report-process.md) | ✅ ACTIVE | 2025-07-30 |
 
+| **Debug Protocol Macro v1.2** | [`debug-protocol-macro.md`](debug-protocol-macro.md) | ✅ ACTIVE | 2025-09-13 |
+
 | **Centralized Logging Policy** | [`centralized-logging-policy.md`](centralized-logging-policy.md) | ✅ ACTIVE | TBD |
 
 ## Standard Types
@@ -120,6 +122,8 @@ All standards marked as **✅ ACTIVE** are mandatory for:
 
 - **Start here**: [`vscode-ci-integration-standard.md`](vscode-ci-integration-standard.md) - Essential development workflow
 
+- **When debugging**: [`debug-protocol-macro.md`](debug-protocol-macro.md) - Structured problem resolution framework
+
 - **When issues arise**: [`after-actions-report-process.md`](after-actions-report-process.md) - AAR process
 
 - **For operations**: [`centralized-logging-policy.md`](centralized-logging-policy.md) - Logging requirements
@@ -174,7 +178,7 @@ Standards are integrated with:
 
 **Index Maintained By**: DevOnboarder Team
 
-**Last Updated**: August 7, 2025
+**Last Updated**: September 13, 2025
 **Next Review**: November 7, 2025
 
 *This index follows DevOnboarder's philosophy of "quiet reliability" through systematic documentation and process standardization.*
