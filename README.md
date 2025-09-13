@@ -1,25 +1,29 @@
 ---
 title: "DevOnboarder"
-description: "Multi-service onboarding auto************📚 Documentation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
-
-## Why This Project Existsform with Discord bot, web interface, and comprehensive CI/CD pipeline designed to work quietly and reliably."
+description: "Multi-service onboarding auto************📚 Documentation**: DevOnboarder
+  uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsation**:
+  DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsation**:
+  DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsation**:
+  DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsation**:
+  DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsation**:
+  DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md)
+  for the complete guide to all specialized modules.\n## Why This Project Existsform
+  with Discord bot, web interface, and comprehensive CI/CD pipeline designed to work
+  quietly and reliably."
 document_type: "documentation"
 tags: ["devonboarder", "platform", "automation", "onboarding", "discord", "ci-cd"]
 project: "DevOnboarder"
 author: "DevOnboarder Team"
 consolidation_priority: "P3"
+similarity_group: "ci-automation"
+content_uniqueness_score: 4
+merge_candidate: false
 ---
-
 # DevOnboarder
 
 ## 🔧 **Project Statement**

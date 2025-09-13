@@ -41,14 +41,19 @@
     },
     "jest": {
         "preset": "ts-jest/presets/default-esm",
-        "extensionsToTreatAsEsm": [".ts"],
+        "extensionsToTreatAsEsm": [
+            ".ts"
+        ],
         "testEnvironment": "node",
         "collectCoverage": true,
         "testTimeout": 30000,
-        "globals": {
-            "ts-jest": {
-                "useESM": true
-            }
+        "transform": {
+            "^.+\\.ts$": [
+                "ts-jest",
+                {
+                    "useESM": true
+                }
+            ]
         },
         "moduleNameMapper": {
             "^(\\.{1,2}/.*)\\.js$": "$1"
