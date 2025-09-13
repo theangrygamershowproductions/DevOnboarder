@@ -79,7 +79,8 @@ jobs:
           # Re-run synthesis to apply changes
           python scripts/synthesize_priority_matrix.py > /dev/null
 
-          git add docs/
+          # Add all directories that Priority Matrix synthesis modifies
+          git add docs/ agents/ .codex/agents/ *.md
           git commit -m "FEAT(docs): auto-synthesize Priority Matrix fields
 
           Enhanced ${{ steps.synthesis-check.outputs.modified_count }} documents with:
