@@ -145,8 +145,9 @@ class CIHealthAARIntegrator:
                 try:
                     confidence_str = line.split(":", 1)[1].strip()
                     log_data["prediction_results"]["confidence"] = float(confidence_str)
-                except ValueError:
-                    pass
+                except ValueError as e:
+                    logging.warning(f"Failed to parse confidence from '{line}': {e}")
+                    log_data["prediction_results"]["confidence"] = None
             elif line.startswith("Failure Type:"):
                 failure_type = line.split(":", 1)[1].strip()
                 log_data["prediction_results"]["failure_type"] = failure_type
@@ -154,8 +155,9 @@ class CIHealthAARIntegrator:
                 try:
                     cost_str = line.split(":", 1)[1].strip().split()[0]
                     log_data["prediction_results"]["cost_savings"] = int(cost_str)
-                except (ValueError, IndexError):
-                    pass
+                except (ValueError, IndexError) as e:
+                    logging.warning(f"Failed to parse cost savings from '{line}': {e}")
+                    log_data["prediction_results"]["cost_savings"] = None
 
             # Detect pattern indicators
             elif "detached head" in line.lower():
@@ -259,13 +261,16 @@ class CIHealthAARIntegrator:
     ) -> Dict[str, Any]:
         """Generate base AAR using existing DevOnboarder AAR system"""
         try:
-            # Use make command to generate AAR
+            # Use make command to generate AAR with proper variable passing
             cmd = ["make", "aar-generate", f"WORKFLOW_ID={workflow_id}"]
+
+            # Set CREATE_ISSUE as environment variable for proper Makefile handling
+            env = os.environ.copy()
             if create_issue:
-                cmd.append("CREATE_ISSUE=true")
+                env["CREATE_ISSUE"] = "true"
 
             result = subprocess.run(
-                cmd, cwd=self.project_root, capture_output=True, text=True
+                cmd, cwd=self.project_root, capture_output=True, text=True, env=env
             )
 
             return {

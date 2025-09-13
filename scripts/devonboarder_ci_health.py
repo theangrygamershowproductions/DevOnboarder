@@ -14,6 +14,7 @@ Based on: scripts/prototype_detached_head_predictor.py
 import argparse
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -53,8 +54,6 @@ class TokenLoader:
         token_hierarchy = ["CI_ISSUE_AUTOMATION_TOKEN", "CI_BOT_TOKEN", "GITHUB_TOKEN"]
 
         # First try environment variables
-        import os
-
         for token_env in token_hierarchy:
             token = os.getenv(token_env)
             if token:
@@ -97,13 +96,226 @@ class TokenLoader:
         return None
 
 
+class PRCommentAnalyzer:
+    """
+    Integration between PR inline comments and CI health analysis
+    Correlates Copilot suggestions with CI failures for targeted recommendations
+    """
+
+    def __init__(self, project_root: Path):
+        self.project_root = project_root
+        self.comments_script = project_root / "scripts" / "check_pr_inline_comments.sh"
+
+    def get_pr_comments(self, pr_number: int) -> Dict[str, Any]:
+        """Get PR inline comments using existing DevOnboarder infrastructure"""
+        try:
+            # Use existing script to get JSON output
+            result = subprocess.run(
+                ["bash", str(self.comments_script), "--format=json", str(pr_number)],
+                capture_output=True,
+                text=True,
+                cwd=self.project_root,
+            )
+
+            if result.returncode == 0:
+                comments_data = json.loads(result.stdout)
+                return self._process_comments_data(comments_data)
+            else:
+                logger.warning(f"Failed to get PR comments: {result.stderr}")
+                return {
+                    "total_comments": 0,
+                    "copilot_suggestions": [],
+                    "error": result.stderr,
+                }
+
+        except Exception as e:
+            logger.error(f"Error analyzing PR comments: {e}")
+            return {"total_comments": 0, "copilot_suggestions": [], "error": str(e)}
+
+    def _process_comments_data(self, comments_data: List[Dict]) -> Dict[str, Any]:
+        """Process raw comments data into structured analysis"""
+        copilot_suggestions = []
+        suggestion_patterns = []
+
+        for comment in comments_data:
+            if comment.get("user", {}).get("login") == "Copilot":
+                # Extract code suggestions and patterns
+                body = comment.get("body", "")
+                if "```suggestion" in body:
+                    suggestion = self._extract_suggestion(body)
+                    if suggestion:
+                        copilot_suggestions.append(
+                            {
+                                "file": comment.get("path", ""),
+                                "line": comment.get("line", 0),
+                                "suggestion": suggestion,
+                                "original_comment": body,
+                                "url": comment.get("html_url", ""),
+                                "created_at": comment.get("created_at", ""),
+                            }
+                        )
+
+                        # Identify patterns that might relate to CI failures
+                        patterns = self._identify_failure_patterns(body, suggestion)
+                        suggestion_patterns.extend(patterns)
+
+        copilot_count = len(
+            [c for c in comments_data if c.get("user", {}).get("login") == "Copilot"]
+        )
+
+        return {
+            "total_comments": len(comments_data),
+            "copilot_comments": copilot_count,
+            "copilot_suggestions": copilot_suggestions,
+            "failure_patterns": list(set(suggestion_patterns)),
+            "analysis_timestamp": datetime.now().isoformat(),
+        }
+
+    def _extract_suggestion(self, comment_body: str) -> Optional[str]:
+        """Extract code suggestion from comment body"""
+        lines = comment_body.split("\n")
+        in_suggestion = False
+        suggestion_lines = []
+
+        for line in lines:
+            if line.strip() == "```suggestion":
+                in_suggestion = True
+                continue
+            elif line.strip() == "```" and in_suggestion:
+                break
+            elif in_suggestion:
+                suggestion_lines.append(line)
+
+        return "\n".join(suggestion_lines) if suggestion_lines else None
+
+    def _identify_failure_patterns(self, comment: str, suggestion: str) -> List[str]:
+        """Identify patterns in comments that might correlate with CI failures"""
+        patterns = []
+
+        # Check for common CI failure indicators in comments
+        failure_indicators = {
+            "syntax_error": ["syntax", "parse", "invalid", "malformed"],
+            "dependency_issue": ["import", "module", "package", "dependency"],
+            "type_error": ["type", "typing", "annotation"],
+            "linting": ["lint", "format", "style", "whitespace"],
+            "security": ["security", "vulnerability", "unsafe"],
+            "performance": ["performance", "efficiency", "optimization"],
+            "compatibility": ["compatibility", "version", "deprecated"],
+        }
+
+        comment_lower = comment.lower()
+        suggestion_lower = suggestion.lower() if suggestion else ""
+
+        for pattern_type, keywords in failure_indicators.items():
+            keyword_match = any(
+                keyword in comment_lower or keyword in suggestion_lower
+                for keyword in keywords
+            )
+            if keyword_match:
+                patterns.append(pattern_type)
+
+        return patterns
+
+    def correlate_with_ci_failures(
+        self, pr_comments: Dict[str, Any], ci_status: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Correlate PR comment suggestions with actual CI failures"""
+        correlations = []
+
+        # Get failed CI checks
+        failed_checks = [
+            check
+            for check in ci_status.get("checks", [])
+            if check.get("conclusion") == "failure"
+        ]
+
+        for suggestion in pr_comments.get("copilot_suggestions", []):
+            suggestion_file = suggestion.get("file", "")
+
+            # Look for correlations with failed checks
+            for failed_check in failed_checks:
+                correlation_strength = self._calculate_correlation_strength(
+                    suggestion, failed_check, suggestion_file
+                )
+
+                if correlation_strength > 0.3:  # 30% correlation threshold
+                    correlations.append(
+                        {
+                            "suggestion": suggestion,
+                            "failed_check": failed_check,
+                            "correlation_strength": correlation_strength,
+                            "recommended_action": self._generate_recommendation(
+                                suggestion, failed_check
+                            ),
+                        }
+                    )
+
+        high_confidence_count = len(
+            [c for c in correlations if c["correlation_strength"] > 0.7]
+        )
+
+        return {
+            "correlations": correlations,
+            "total_correlations": len(correlations),
+            "high_confidence_correlations": high_confidence_count,
+        }
+
+    def _calculate_correlation_strength(
+        self, suggestion: Dict, failed_check: Dict, file_path: str
+    ) -> float:
+        """Calculate correlation strength between suggestion and CI failure"""
+        strength = 0.0
+
+        check_name = failed_check.get("name", "").lower()
+        suggestion_comment = suggestion.get("original_comment", "").lower()
+
+        # File-based correlation
+        file_in_check = file_path in check_name
+        path_parts_match = any(part in check_name for part in file_path.split("/"))
+        if file_in_check or path_parts_match:
+            strength += 0.3
+
+        # Pattern-based correlation
+        correlation_patterns = {
+            "lint": ["format", "style", "whitespace", "ruff", "black"],
+            "test": ["test", "pytest", "coverage"],
+            "type": ["type", "mypy", "annotation"],
+            "syntax": ["syntax", "parse", "compile"],
+            "security": ["security", "bandit", "vulnerability"],
+        }
+
+        for pattern, keywords in correlation_patterns.items():
+            if pattern in check_name:
+                if any(keyword in suggestion_comment for keyword in keywords):
+                    strength += 0.4
+
+        return min(strength, 1.0)  # Cap at 100%
+
+    def _generate_recommendation(self, suggestion: Dict, failed_check: Dict) -> str:
+        """Generate actionable recommendation based on suggestion and failure"""
+        file_path = suggestion.get("file", "")
+        line_number = suggestion.get("line", 0)
+        suggestion_text = suggestion.get("suggestion", "")
+
+        check_name = failed_check.get("name", "check failure")
+        suggestion_preview = suggestion_text[:100]
+
+        return (
+            f"Apply Copilot suggestion in {file_path}:{line_number} "
+            f"to resolve {check_name}: {suggestion_preview}..."
+        )
+
+
 class DetachedHeadPredictor:
     """
     Advanced CI failure prediction with pattern recognition for detached HEAD issues
     Based on real 2025-09-13 failure analysis with 95% confidence detection
     """
 
-    def __init__(self):
+    def __init__(self, config_file: Optional[Path] = None):
+        # Load configurable critical workflows
+        self.critical_workflows = self._load_critical_workflows(config_file)
+
         self.patterns = {
             "detached_head": [
                 r"fatal: You are in 'detached HEAD' state",
@@ -130,6 +342,25 @@ class DetachedHeadPredictor:
                 r"ImportError: No module named",
             ],
         }
+
+    def _load_critical_workflows(self, config_file: Optional[Path] = None) -> List[str]:
+        """Load critical workflows from configuration file or environment variable"""
+        # Try environment variable first
+        env_workflows = os.getenv("DEVONBOARDER_CRITICAL_WORKFLOWS")
+        if env_workflows:
+            return [w.strip() for w in env_workflows.split(",")]
+
+        # Try configuration file
+        if config_file and config_file.exists():
+            try:
+                with open(config_file, "r") as f:
+                    config = json.load(f)
+                    return config.get("critical_workflows", ["ci.yml", "auto-fix.yml"])
+            except Exception as e:
+                logger.warning(f"Failed to load config from {config_file}: {e}")
+
+        # Default fallback
+        return ["ci.yml", "auto-fix.yml"]
 
     def predict_failure(self, workflow_logs: str, workflow_name: str) -> Dict[str, Any]:
         """
@@ -166,10 +397,9 @@ class DetachedHeadPredictor:
                 base_confidence = len(matches) / len(patterns)
 
                 # Boost confidence for known high-risk patterns
-                critical_workflows = ["ci.yml", "auto-fix.yml"]
                 if (
                     failure_type == "detached_head"
-                    and workflow_name in critical_workflows
+                    and workflow_name in self.critical_workflows
                 ):
                     base_confidence *= 1.5
                 elif (
@@ -266,6 +496,8 @@ class CIHealthDashboard:
         self.token_loader = TokenLoader()
         self.predictor = DetachedHeadPredictor()
         self.github_token = self.token_loader.load_token()
+        self.project_root = Path(__file__).parent.parent
+        self.pr_analyzer = PRCommentAnalyzer(self.project_root)
 
     def get_workflow_runs(
         self, branch: Optional[str] = None, limit: int = 10
@@ -278,7 +510,7 @@ class CIHealthDashboard:
             "--limit",
             str(limit),
             "--json",
-            "name,status,conclusion,createdAt,updatedAt,url,workflowName",
+            "name,status,conclusion,createdAt,updatedAt,url,workflowName,databaseId",
         ]
 
         if branch:
@@ -330,7 +562,7 @@ class CIHealthDashboard:
             }
 
             # Get logs for prediction (if available yet)
-            logs = self.get_workflow_logs(workflow["url"].split("/")[-1])
+            logs = self.get_workflow_logs(str(workflow["databaseId"]))
 
             if logs:
                 prediction = self.predictor.predict_failure(
@@ -364,6 +596,177 @@ class CIHealthDashboard:
             )
 
         return analysis
+
+    def analyze_pr_with_ci_integration(self, pr_number: int) -> Dict[str, Any]:
+        """
+        Integrated PR analysis combining comment review with CI health diagnosis
+        This is the main integration point between PR comments and CI failures
+        """
+        logger.info(f"Starting integrated analysis for PR #{pr_number}")
+
+        # Step 1: Get PR comments and suggestions
+        pr_comments = self.pr_analyzer.get_pr_comments(pr_number)
+        logger.info(
+            f"Found {pr_comments.get('total_comments', 0)} comments, "
+            f"{len(pr_comments.get('copilot_suggestions', []))} suggestions"
+        )
+
+        # Step 2: Get current CI status for the PR
+        ci_status = self._get_pr_ci_status(pr_number)
+
+        # Step 3: Correlate comments with CI failures
+        correlations = self.pr_analyzer.correlate_with_ci_failures(
+            pr_comments, ci_status
+        )
+
+        # Step 4: Generate integrated analysis
+        analysis = {
+            "pr_number": pr_number,
+            "timestamp": datetime.now().isoformat(),
+            "pr_comments": pr_comments,
+            "ci_status": ci_status,
+            "correlations": correlations,
+            "recommendations": self._generate_integrated_recommendations(
+                pr_comments, ci_status, correlations
+            ),
+            "priority_score": self._calculate_priority_score(
+                pr_comments, ci_status, correlations
+            ),
+        }
+
+        logger.info(
+            f"Analysis complete: {correlations.get('total_correlations', 0)} "
+            f"correlations found, priority score: {analysis['priority_score']}"
+        )
+
+        return analysis
+
+    def _get_pr_ci_status(self, pr_number: int) -> Dict[str, Any]:
+        """Get CI status for a specific PR"""
+        try:
+            # Fields for pr checks command
+            json_fields = (
+                "bucket,completedAt,description,event,link,"
+                "name,startedAt,state,workflow"
+            )
+            result = subprocess.run(
+                ["gh", "pr", "checks", str(pr_number), "--json", json_fields],
+                capture_output=True,
+                text=True,
+                cwd=self.project_root,
+            )
+
+            if result.returncode == 0:
+                checks_data = json.loads(result.stdout)
+
+                # Process checks data into structured format
+                failed_checks = []
+                passed_checks = []
+                pending_checks = []
+
+                for check in checks_data:
+                    if check.get("conclusion") == "failure":
+                        failed_checks.append(check)
+                    elif check.get("conclusion") == "success":
+                        passed_checks.append(check)
+                    elif check.get("state") == "pending":
+                        pending_checks.append(check)
+
+                return {
+                    "total_checks": len(checks_data),
+                    "failed_checks": failed_checks,
+                    "passed_checks": passed_checks,
+                    "pending_checks": pending_checks,
+                    "checks": checks_data,
+                }
+            else:
+                logger.warning(
+                    f"Failed to get CI status for PR {pr_number}: {result.stderr}"
+                )
+                return {"error": result.stderr, "checks": []}
+
+        except Exception as e:
+            logger.error(f"Error getting CI status for PR {pr_number}: {e}")
+            return {"error": str(e), "checks": []}
+
+    def _generate_integrated_recommendations(
+        self, pr_comments: Dict, ci_status: Dict, correlations: Dict
+    ) -> List[str]:
+        """Generate integrated recommendations based on PR comments + CI status"""
+        recommendations = []
+
+        # High-confidence correlations get priority
+        high_conf_correlations = correlations.get("high_confidence_correlations", 0)
+        if high_conf_correlations > 0:
+            recommendations.append(
+                f"🎯 HIGH PRIORITY: {high_conf_correlations} Copilot suggestions "
+                f"directly address current CI failures"
+            )
+
+        # Copilot suggestions for pending checks
+        copilot_suggestions = len(pr_comments.get("copilot_suggestions", []))
+        pending_checks = len(ci_status.get("pending_checks", []))
+        if copilot_suggestions > 0 and pending_checks > 0:
+            recommendations.append(
+                f"🔄 PROACTIVE: Apply {copilot_suggestions} Copilot suggestions "
+                f"before {pending_checks} checks complete"
+            )
+
+        # Pattern-based recommendations
+        failure_patterns = pr_comments.get("failure_patterns", [])
+        if "linting" in failure_patterns:
+            recommendations.append(
+                "🔧 QUICK FIX: Copilot identified linting issues - "
+                "apply suggestions to prevent CI failures"
+            )
+
+        if "security" in failure_patterns:
+            recommendations.append(
+                "🛡️ SECURITY: Address security-related suggestions immediately"
+            )
+
+        # Failed check recommendations
+        failed_checks = len(ci_status.get("failed_checks", []))
+        if failed_checks > 0:
+            recommendations.append(
+                f"❌ FAILURES: {failed_checks} CI checks failed - "
+                f"review correlations with comments"
+            )
+
+        if not recommendations:
+            recommendations.append(
+                "✅ STATUS: No immediate issues detected - "
+                "PR appears ready for review"
+            )
+
+        return recommendations
+
+    def _calculate_priority_score(
+        self, pr_comments: Dict, ci_status: Dict, correlations: Dict
+    ) -> float:
+        """Calculate priority score (0-1) for the PR based on integrated analysis"""
+        score = 0.0
+
+        # High-confidence correlations significantly increase priority
+        high_conf = correlations.get("high_confidence_correlations", 0)
+        score += min(high_conf * 0.3, 0.6)  # Max 0.6 from correlations
+
+        # Failed CI checks increase priority
+        failed_checks = len(ci_status.get("failed_checks", []))
+        score += min(failed_checks * 0.1, 0.3)  # Max 0.3 from failures
+
+        # Security-related patterns increase priority
+        patterns = pr_comments.get("failure_patterns", [])
+        if "security" in patterns:
+            score += 0.2
+        if "syntax_error" in patterns:
+            score += 0.15
+
+        # Multiple Copilot suggestions increase urgency
+        suggestions_count = len(pr_comments.get("copilot_suggestions", []))
+        score += min(suggestions_count * 0.05, 0.2)  # Max 0.2
+
+        return min(score, 1.0)  # Cap at 1.0
 
     def display_dashboard(self, branch: Optional[str] = None, live_mode: bool = False):
         """Display real-time CI health dashboard"""
@@ -503,6 +906,12 @@ Examples:
     parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose logging output"
     )
+    parser.add_argument(
+        "--diagnose-pr",
+        type=int,
+        metavar="PR_NUMBER",
+        help="Integrated PR diagnosis: analyze comments + CI failures for specific PR",
+    )
 
     args = parser.parse_args()
 
@@ -522,7 +931,61 @@ Examples:
         print()
 
     try:
-        if args.predict:
+        if args.diagnose_pr:
+            # Integrated PR diagnosis mode
+            results = dashboard.analyze_pr_with_ci_integration(args.diagnose_pr)
+
+            if args.json:
+                print(json.dumps(results, indent=2))
+            else:
+                print(f"🔍 Integrated PR Analysis: #{results['pr_number']}")
+                print("=" * 60)
+
+                # PR Comments Summary
+                pr_comments = results["pr_comments"]
+                print(f"📝 PR Comments: {pr_comments.get('total_comments', 0)} total")
+                print(f"🤖 Copilot Comments: {pr_comments.get('copilot_comments', 0)}")
+                suggestions_count = len(pr_comments.get("copilot_suggestions", []))
+                print(f"💡 Code Suggestions: {suggestions_count}")
+                print()
+
+                # CI Status Summary
+                ci_status = results["ci_status"]
+                print(f"🏗️ CI Status: {ci_status.get('total_checks', 0)} total checks")
+                print(f"✅ Passed: {len(ci_status.get('passed_checks', []))}")
+                print(f"❌ Failed: {len(ci_status.get('failed_checks', []))}")
+                print(f"⏳ Pending: {len(ci_status.get('pending_checks', []))}")
+                print()
+
+                # Correlations
+                correlations = results["correlations"]
+                total_corr = correlations.get("total_correlations", 0)
+                high_conf_corr = correlations.get("high_confidence_correlations", 0)
+                print(f"🔗 Comment-CI Correlations: {total_corr} found")
+                print(f"🎯 High Confidence: {high_conf_corr}")
+                print(f"🚨 Priority Score: {results['priority_score']:.2f}/1.0")
+                print()
+
+                # Recommendations
+                print("💡 Integrated Recommendations:")
+                print("-" * 40)
+                for i, rec in enumerate(results["recommendations"], 1):
+                    print(f"{i}. {rec}")
+
+                # Show high-confidence correlations
+                if high_conf_corr > 0:
+                    print("\n🔍 High-Confidence Correlations:")
+                    print("-" * 40)
+                    for corr in correlations.get("correlations", []):
+                        if corr["correlation_strength"] > 0.7:
+                            suggestion = corr["suggestion"]
+                            print(f"📁 {suggestion.get('file', 'Unknown')}")
+                            print(f"📍 Line {suggestion.get('line', 'Unknown')}")
+                            print(f"🔗 {corr['correlation_strength']:.1%} correlation")
+                            print(f"💬 {corr['recommended_action']}")
+                            print()
+
+        elif args.predict:
             # Prediction only mode
             results = dashboard.predict_only(branch=args.branch)
 

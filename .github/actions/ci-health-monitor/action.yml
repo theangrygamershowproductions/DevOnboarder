@@ -152,7 +152,7 @@ runs:
         # Take action based on prediction and threshold
         if [[ "$FAILURE_PREDICTED" == "true" ]]; then
             THRESHOLD=${{ inputs.prediction-threshold }}
-            if (( $(echo "$CONFIDENCE >= $THRESHOLD" | bc -l) )); then
+            if awk "BEGIN {exit !($CONFIDENCE >= $THRESHOLD)}"; then
                 echo "::error::HIGH CONFIDENCE FAILURE PREDICTION: $FAILURE_TYPE ($CONFIDENCE confidence)"
                 echo "::error::Estimated cost savings if cancelled: $COST_SAVINGS minutes"
                 echo "::error::Recommendation: Consider cancelling workflow to save compute resources"
