@@ -1,0 +1,45 @@
+#!/bin/bash
+# DevOnboarder CI Health Dashboard - AAR Integration CLI Wrapper
+# Provides convenient access to CI health AAR integration features
+
+set -euo pipefail
+
+# DevOnboarder centralized logging pattern
+LOG_DIR="$(dirname "$0")/../logs"
+mkdir -p "$LOG_DIR"
+LOG_FILE="$LOG_DIR/ci_health_aar_wrapper_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Virtual environment activation pattern
+SCRIPT_DIR="$(dirname "$0")"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+echo "DevOnboarder CI Health Dashboard - AAR Integration"
+echo "Project Root: $PROJECT_ROOT"
+
+# Check for virtual environment
+if [[ ! -d "$PROJECT_ROOT/.venv" ]]; then
+    echo "ERROR: Virtual environment not found at $PROJECT_ROOT/.venv"
+    echo "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
+    exit 1
+fi
+
+# Activate virtual environment
+source "$PROJECT_ROOT/.venv/bin/activate"
+
+# Verify Python dependencies
+if ! python -c "import json, subprocess" 2>/dev/null; then
+    echo "ERROR: Missing Python dependencies"
+    echo "Run: pip install -e .[test]"
+    exit 1
+fi
+
+# Enhanced token loading for AAR system integration
+if [[ -f "$PROJECT_ROOT/scripts/enhanced_token_loader.sh" ]]; then
+    source "$PROJECT_ROOT/scripts/enhanced_token_loader.sh"
+elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
+    source "$PROJECT_ROOT/scripts/load_token_environment.sh"
+fi
+
+# Execute CI health AAR integration
+python "$PROJECT_ROOT/scripts/ci_health_aar_integration.py" "$@"
