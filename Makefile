@@ -135,4 +135,3 @@ autofix-frontmatter:
 autofix-python:
 	@echo "Running Python formatters..."
 	@bash -c "source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --python"
-

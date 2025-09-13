@@ -48,14 +48,14 @@ fi
 # Run auto-fixers if requested
 if [[ "$RUN_AUTOFIX" == true ]]; then
     echo "Running auto-fixers..."
-    
+
     if [[ "$DRY_RUN" == true ]]; then
         echo "DRY RUN: Would run auto-fixers"
         python scripts/comprehensive_auto_fixer.py --all --dry-run
     else
         echo "Applying auto-fixes..."
         python scripts/comprehensive_auto_fixer.py --all
-        
+
         # Check if any files were modified
         if ! git diff --quiet; then
             echo "Auto-fixes applied. Files modified:"

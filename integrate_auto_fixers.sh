@@ -100,14 +100,14 @@ fi
 # Run auto-fixers if requested
 if [[ "$RUN_AUTOFIX" == true ]]; then
     echo "Running auto-fixers..."
-    
+
     if [[ "$DRY_RUN" == true ]]; then
         echo "DRY RUN: Would run auto-fixers"
         python scripts/comprehensive_auto_fixer.py --all --dry-run
     else
         echo "Applying auto-fixes..."
         python scripts/comprehensive_auto_fixer.py --all
-        
+
         # Check if any files were modified
         if ! git diff --quiet; then
             echo "Auto-fixes applied. Files modified:"
@@ -150,7 +150,7 @@ if [[ -f "README.md" ]] && ! grep -q "auto-fixer" README.md; then
     echo "\`\`\`" >> README.md
     echo "" >> README.md
     echo "See [docs/tools/auto-fixers.md](docs/tools/auto-fixers.md) for complete documentation." >> README.md
-    
+
     echo "✅ Updated README.md with auto-fixer information"
 else
     echo "ℹ️  README.md already contains auto-fixer information or doesn't exist"
@@ -162,7 +162,7 @@ echo ""
 echo "Available commands:"
 echo "  make autofix                     # Fix all file types"
 echo "  make autofix-markdown            # Fix markdown files only"
-echo "  make autofix-shell               # Fix shell scripts only"  
+echo "  make autofix-shell               # Fix shell scripts only"
 echo "  make autofix-python              # Run Python formatters"
 echo "  ./scripts/qc_with_autofix.sh     # QC only"
 echo "  ./scripts/qc_with_autofix.sh --fix # Auto-fix then QC"

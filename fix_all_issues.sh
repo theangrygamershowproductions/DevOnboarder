@@ -70,17 +70,17 @@ import re
 def fix_heading_style(filename):
     with open(filename, 'r') as f:
         content = f.read()
-    
+
     # Convert ATX headings to setext style for h2 and h3
     # H2: ## Title -> Title\n========
     content = re.sub(r'^## (.+)$', r'\1\n' + '=' * 50, content, flags=re.MULTILINE)
-    
+
     # H3: ### Title -> Title\n--------
     content = re.sub(r'^### (.+)$', r'\1\n' + '-' * 30, content, flags=re.MULTILINE)
-    
+
     with open(filename, 'w') as f:
         f.write(content)
-    
+
     print(f"Fixed heading styles in {filename}")
 
 fix_heading_style('docs/policies/quality-control-policy.md')

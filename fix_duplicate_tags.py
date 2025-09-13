@@ -8,15 +8,15 @@ import yaml
 def fix_duplicate_tags_in_file(file_path):
     """Remove duplicate tags from a markdown file's frontmatter."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         # Check if file has frontmatter
-        if not content.startswith('---'):
+        if not content.startswith("---"):
             return False
 
         # Split frontmatter and content
-        parts = content.split('---', 2)
+        parts = content.split("---", 2)
         if len(parts) < 3:
             return False
 
@@ -34,8 +34,8 @@ def fix_duplicate_tags_in_file(file_path):
             return False
 
         # Fix duplicate tags
-        if 'tags' in frontmatter and isinstance(frontmatter['tags'], list):
-            original_tags = frontmatter['tags']
+        if "tags" in frontmatter and isinstance(frontmatter["tags"], list):
+            original_tags = frontmatter["tags"]
             # Remove duplicates while preserving order
             unique_tags = []
             seen = set()
@@ -46,7 +46,7 @@ def fix_duplicate_tags_in_file(file_path):
 
             if len(unique_tags) != len(original_tags):
                 print(f"Fixing duplicate tags in: {file_path}")
-                frontmatter['tags'] = unique_tags
+                frontmatter["tags"] = unique_tags
 
                 # Write back to file
                 new_frontmatter = yaml.dump(
@@ -54,7 +54,7 @@ def fix_duplicate_tags_in_file(file_path):
                 ).strip()
                 new_content = f"---\n{new_frontmatter}\n---{body}"
 
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(new_content)
                 return True
 
@@ -69,15 +69,14 @@ def main():
     fixed_count = 0
     processed_count = 0
 
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk("."):
         # Skip node_modules and other irrelevant directories
         dirs[:] = [
-            d for d in dirs
-            if d not in ['.git', 'node_modules', '.venv', '__pycache__']
+            d for d in dirs if d not in [".git", "node_modules", ".venv", "__pycache__"]
         ]
 
         for file in files:
-            if file.endswith('.md'):
+            if file.endswith(".md"):
                 file_path = os.path.join(root, file)
                 processed_count += 1
 
@@ -88,5 +87,5 @@ def main():
     print(f"Fixed duplicate tags in {fixed_count} files")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
