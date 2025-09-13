@@ -1,3 +1,9 @@
+---
+similarity_group: security-audit-2025-09-13.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Security Audit - 2025-09-13
 
 We ran dependency audits for Python and Node packages and scanned the code with Bandit.
