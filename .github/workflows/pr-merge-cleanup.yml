@@ -57,11 +57,28 @@ jobs:
                   # Search for tracking issue with PR number in title using wrapper script
                   ISSUE_SEARCH=$(bash scripts/ci_gh_issue_wrapper.sh list "Track PR #$PR_NUMBER" "open" "number,title,labels")
 
+                  # Enhanced JSON parsing with error handling
                   if [[ "$ISSUE_SEARCH" != "[]" ]]; then
-                    ISSUE_NUMBER=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].number')
-                    ISSUE_TITLE=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].title')
+                    # Validate JSON before parsing
+                    if ! echo "$ISSUE_SEARCH" | jq empty 2>/dev/null; then
+                        echo "ERROR: Invalid JSON response from GitHub API"
+                        printf "Response content: %s\n" "$ISSUE_SEARCH"
+                        exit 1
+                    fi
 
-                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
+                    # Parse issue number with error handling
+                    if ! ISSUE_NUMBER=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].number' 2>/dev/null); then
+                        echo "ERROR: Failed to parse issue number from search results"
+                        printf "Search results: %s\n" "$ISSUE_SEARCH"
+                        exit 1
+                    fi
+
+                    # Parse issue title with error handling
+                    if ! ISSUE_TITLE=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].title' 2>/dev/null); then
+                        echo "ERROR: Failed to parse issue title from search results"
+                        printf "Search results: %s\n" "$ISSUE_SEARCH"
+                        exit 1
+                    fi                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
 
                       # Add completion comment before closing using wrapper script
                       bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \

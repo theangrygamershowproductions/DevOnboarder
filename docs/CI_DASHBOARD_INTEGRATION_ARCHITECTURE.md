@@ -1,7 +1,7 @@
 ---
 author: DevOnboarder Team
 created_at: '2025-09-13'
-description: Comprehensive CI Dashboard Integration architecture for real-time 
+description: Comprehensive CI Dashboard Integration architecture for real-time
   workflow monitoring and failure prediction
 document_type: technical_design
 project: DevOnboarder
@@ -32,6 +32,7 @@ The CI Dashboard Integration provides real-time monitoring, failure prediction, 
 
 - Real-time workflow monitoring across all 45+ workflows
 - Failure pattern detection and prediction
+- **PR Comment Analysis Integration**: Correlates Copilot suggestions with CI failures
 - Integration with Token Architecture v2.1 for authentication
 - Automated remediation recommendations
 - AAR system integration for failure analysis
@@ -40,8 +41,23 @@ The CI Dashboard Integration provides real-time monitoring, failure prediction, 
 
 - **Detached HEAD Detection**: Based on real 2025-09-13 failure analysis
 - **Signature Verification Monitoring**: Prevents merge-blocking issues
+- **PR-CI Correlation Engine**: Links reviewer comments to CI failure patterns
 - **Resource Cost Optimization**: Early cancellation saves compute time
 - **Pattern Learning**: ML-style pattern recognition for recurring issues
+
+**Documentation & Process Integration:**
+
+- **Process Guide**: Complete workflow documentation at `docs/processes/pr-ci-integration-guide.md`
+- **Agent Integration**: CI Helper Agent (`agents/ci-helper-agent.md`) with PR-CI capabilities
+- **Automation Examples**: GitHub Actions workflow for automated analysis
+
+**PR Analysis Capabilities:**
+
+- **Comment Extraction**: Analyzes Copilot and reviewer inline comments
+- **Suggestion Categorization**: Identifies code suggestions vs general feedback
+- **CI Correlation**: Links suggestions to current CI check failures
+- **Priority Scoring**: Calculates urgency based on comment-CI relationships
+- **Integrated Recommendations**: Provides unified feedback for developers
 
 ### 2. CLI Integration (`devonboarder-ci-health` command)
 
@@ -53,6 +69,10 @@ devonboarder-ci-health                    # Full dashboard view
 devonboarder-ci-health --branch BRANCH   # Branch-specific analysis
 devonboarder-ci-health --live             # Live monitoring mode
 devonboarder-ci-health --predict          # Failure prediction only
+
+# PR Analysis Integration (NEW)
+devonboarder-ci-health --diagnose-pr PR_NUM  # Integrated PR comment + CI analysis
+devonboarder-ci-health --diagnose-pr 1397    # Example: analyze PR 1397
 
 # Quick status checks
 gh-ci-health                             # CLI shortcut (existing)
@@ -94,7 +114,8 @@ source scripts/enhanced_token_loader.sh
 - `actions:read` - Workflow run analysis
 - `contents:read` - Repository access for log analysis
 - `issues:write` - Auto-issue creation for persistent failures
-- `pull_requests:read` - PR-specific workflow analysis
+- `pull_requests:read` - PR-specific workflow analysis and comment extraction
+- `pull_requests:write` - PR comment creation for integrated analysis results
 
 ### 5. AAR System Integration
 
@@ -110,6 +131,53 @@ source scripts/enhanced_token_loader.sh
 - Include prediction accuracy metrics
 - Document prevented failures and cost savings
 - Pattern analysis for proactive improvements
+
+### 6. PR-CI Integration System (NEW)
+
+**Unified Analysis Workflow:**
+
+The `--diagnose-pr` command provides comprehensive analysis combining:
+
+1. **PR Comment Extraction** (`scripts/check_pr_inline_comments.sh`)
+   - Copilot code suggestions
+   - Reviewer feedback and concerns
+   - Resolution tracking and patterns
+
+2. **CI Status Analysis** (GitHub CLI integration)
+   - Real-time check status (passed/failed/pending)
+   - Failure pattern detection
+   - Resource usage optimization
+
+3. **Correlation Engine** (Python integration)
+   - Links Copilot suggestions to CI failures
+   - Calculates confidence scores for correlations
+   - Generates priority-based recommendations
+
+**Integration Benefits:**
+
+- **Faster PR Review**: Combines human and automated feedback in single view
+- **Targeted Fixes**: Identifies which Copilot suggestions address current CI failures
+- **Developer Efficiency**: Reduces context switching between PR comments and CI logs
+- **Pattern Recognition**: Learns from comment-CI relationships over time
+
+**Usage Patterns:**
+
+```bash
+# Before starting PR review
+devonboarder-ci-health --diagnose-pr 1397
+
+# During CI failure investigation
+devonboarder-ci-health --diagnose-pr 1397 | grep -A5 "HIGH PRIORITY"
+
+# For automated analysis in workflows
+scripts/devonboarder_ci_health.py --diagnose-pr $PR_NUMBER --format json
+```
+
+**Agent Integration Points:**
+
+- **PR Review Agent**: Can use integrated analysis for smarter review comments
+- **CI Helper Agent**: Enhanced with PR context for better failure resolution guidance
+- **Automation Workflows**: Can trigger based on correlation confidence scores
 
 ## Implementation Plan
 

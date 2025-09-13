@@ -49,6 +49,7 @@ OPTIONS:
     -p, --predict       Run failure prediction only
     -j, --json          Output results in JSON format
     -v, --verbose       Verbose logging output
+    --diagnose-pr PR    Integrated PR diagnosis: analyze comments + CI failures
 
 EXAMPLES:
     devonboarder-ci-health                    # Full dashboard view
@@ -56,6 +57,7 @@ EXAMPLES:
     devonboarder-ci-health --live             # Live monitoring mode
     devonboarder-ci-health --predict          # Failure prediction only
     devonboarder-ci-health --json             # JSON output for automation
+    devonboarder-ci-health --diagnose-pr 1397 # Analyze PR comments + CI status
 
 INTEGRATION:
     This command integrates with DevOnboarder's Token Architecture v2.1
