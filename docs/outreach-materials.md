@@ -24,7 +24,7 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 > **Found DevOnboarder useful?**
 > If this helped you speed up onboarding, save time, or avoid headaches — please
-
+>
 > [⭐️ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder),
 > or [open an issue](https://github.com/theangrygamershowproductions/DevOnboarder/issues/new/choose)
 > with your feedback or suggestions.
@@ -72,18 +72,14 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 > 🚀 **Built a better onboarding flow for devs — sharing for feedback**
 >
-
 > Just open-sourced [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder)
 > after getting tired of repeating myself onboarding folks (and myself) for new projects.
 >
 > It hooks into VSCode, Discord, and GitHub.
 >
 > - Instant answers (`ask`)
-
 > - Fast docs drop-ins (`drop`)
-
 > - Automatic journaling for repeat questions
-
 >
 > If onboarding sucks where you are, maybe this fixes it. Feedback or test drives welcome!
 

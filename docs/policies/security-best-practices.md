@@ -39,10 +39,11 @@ enforcement: "mandatory"
 related_modules: ["potato-policy.md", "quality-control-policy.md"]
 ---
 
-# DevOnboarder Security & Best Practices
+DevOnboarder Security & Best Practices
+=======================================
 
 Security Requirements
-==================================================
+=====================
 
 - **No system installation**: All tools in virtual environments
 

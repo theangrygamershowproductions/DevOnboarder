@@ -109,6 +109,8 @@ node_modules/tmp
   Depends on vulnerable versions of tmp
   node_modules/@lhci/cli
   external-editor  >=1.1.1
+
+```console
   Depends on vulnerable versions of tmp
   node_modules/external-editor
     inquirer  3.0.0 - 8.2.6 || 9.0.0 - 9.3.7
@@ -120,6 +122,7 @@ node_modules/tmp
 
 To address all issues (including breaking changes), run:
   npm audit fix --force
+```
 
 ### bot
 

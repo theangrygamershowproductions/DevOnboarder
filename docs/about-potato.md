@@ -113,7 +113,7 @@ For the full story of how this policy was born from real-world security incident
 ---
 
 > **🥔 Potato Policy Certified**
-
+>
 > Built with scars. Hardened with automation.
 
 _For the full origin story and philosophy behind this security framework, see [potato-policy-aar.md](potato-policy-aar.md)._

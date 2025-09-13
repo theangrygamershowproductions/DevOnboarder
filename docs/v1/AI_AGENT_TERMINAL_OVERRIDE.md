@@ -139,7 +139,7 @@ DevOnboarder's terminal output policy exists because:
 **Every AI agent must acknowledge:**
 
 > "I understand DevOnboarder enforces ZERO TOLERANCE for terminal output violations.
-
+>
 > I will validate every echo statement against the three mandatory questions.
 > I will use ONLY individual echo commands with plain ASCII text.
 > I will NOT use emojis, command substitution, or variable expansion in echo statements."

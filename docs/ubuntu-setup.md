@@ -52,7 +52,6 @@ sudo apt-get install -y nodejs
 ```
 
 > **Security note:** The repository's policy forbids piping remote scripts
-
 > directly to `bash`. Always download scripts first so you can verify them.
 
 ## Install Python 3.12
