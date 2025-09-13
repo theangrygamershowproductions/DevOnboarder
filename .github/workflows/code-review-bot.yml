@@ -112,9 +112,9 @@ jobs:
             printf "**Policy Reminder:** DevOnboarder has ZERO TOLERANCE for these violations because they cause immediate system failures.\n" >> rejection_comment.md
             printf "\n" >> rejection_comment.md
             printf "**Next Steps:**\n" >> rejection_comment.md
-            printf "- Fix all violations\n" >> rejection_comment.md
-            printf "- Validate locally with the enforcement script\n" >> rejection_comment.md
-            printf "- Push updates to trigger re-review\n" >> rejection_comment.md
+            printf "%s\n" "- Fix all violations" >> rejection_comment.md
+            printf "%s\n" "- Validate locally with the enforcement script" >> rejection_comment.md
+            printf "%s\n" "- Push updates to trigger re-review" >> rejection_comment.md
           } >> rejection_comment.md
 
           gh pr comment ${{ github.event.pull_request.number }} --body-file rejection_comment.md
@@ -135,11 +135,11 @@ jobs:
           printf "Automated review confirms this PR follows DevOnboarder terminal output standards.\n" >> checklist_comment.md
           printf "\n" >> checklist_comment.md
           printf "**Automated Compliance Verification:**\n" >> checklist_comment.md
-          printf "- [x] No emojis or Unicode characters in terminal output\n" >> checklist_comment.md
-          printf "- [x] No command substitution in terminal output\n" >> checklist_comment.md
-          printf "- [x] No variable expansion in terminal output\n" >> checklist_comment.md
-          printf "- [x] Only individual terminal output commands with plain ASCII text\n" >> checklist_comment.md
-          printf "- [x] Complex output uses file-based patterns (individual terminal output commands)\n" >> checklist_comment.md
+          printf "%s\n" "- [x] No emojis or Unicode characters in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] No command substitution in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] No variable expansion in terminal output" >> checklist_comment.md
+          printf "%s\n" "- [x] Only individual terminal output commands with plain ASCII text" >> checklist_comment.md
+          printf "%s\n" "- [x] Complex output uses file-based patterns (individual terminal output commands)" >> checklist_comment.md
           printf "\n" >> checklist_comment.md
           printf "**Policy Compliance Status: VERIFIED**\n" >> checklist_comment.md
           printf "This PR has been automatically validated and meets all DevOnboarder terminal output standards.\n" >> checklist_comment.md
