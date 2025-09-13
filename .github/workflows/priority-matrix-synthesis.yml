@@ -67,6 +67,15 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Priority Matrix Bot"
 
+          # Check for unstaged changes and stash them if necessary
+          if [ -n "$(git diff --name-only)" ] || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+            echo "Stashing unstaged changes to allow Priority Matrix commit"
+            git stash push -u -m "Priority Matrix Auto-Synthesis: temporary stash"
+            STASHED_CHANGES=true
+          else
+            STASHED_CHANGES=false
+          fi
+
           # Re-run synthesis to apply changes
           python scripts/synthesize_priority_matrix.py > /dev/null
 
@@ -80,6 +89,12 @@ jobs:
           - consolidation_priority (P1/P2/P3)
 
           Automated by Priority Matrix synthesis v2.1"
+
+          # Restore stashed changes if we stashed them
+          if [ "$STASHED_CHANGES" = "true" ]; then
+            echo "Restoring previously stashed changes"
+            git stash pop || echo "Warning: Could not restore stashed changes - they remain in stash"
+          fi
 
       - name: Push changes
         if: steps.synthesis-check.outputs.enhanced_files == 'true' && github.event.inputs.dry_run != 'true'
