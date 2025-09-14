@@ -3,7 +3,7 @@ title: PR-CI Integration Process Guide
 author: DevOnboarder Team
 created_at: '2025-09-13'
 updated_at: '2025-09-13'
-description: Process documentation for using the integrated PR comment and CI 
+description: Process documentation for using the integrated PR comment and CI
   analysis system
 document_type: process_guide
 project: DevOnboarder
