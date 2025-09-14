@@ -45,24 +45,56 @@ jobs:
 
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P "$EMOJI_PATTERN" 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details
+                VIOLATION_LINES=$(git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -P "$EMOJI_PATTERN" | head -3)
                 {
                   printf "%s\n" "- Emoji/Unicode in $file (causes terminal hanging)"
+                  printf "  Specific violations:\n"
+                  printf "%s\n" "$VIOLATION_LINES" | while IFS= read -r line; do
+                    printf "  Line: %s\n" "$line"
+                  done
                 } >> violation_details.txt
               fi
 
               # Check for command substitution in echo in ADDED lines only
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details
+                VIOLATION_LINES=$(git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'echo.*\$\(' | head -3)
                 {
                   printf "%s\n" "- Command substitution in terminal output in $file (causes terminal hanging)"
+                  printf "  Specific violations:\n"
+                  printf "%s\n" "$VIOLATION_LINES" | while IFS= read -r line; do
+                    printf "  Line: %s\n" "$line"
+                  done
                 } >> violation_details.txt
               fi
 
               # Check for variable expansion in echo in ADDED lines only
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details
+                VIOLATION_LINES=$(git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' | head -3)
                 {
                   printf "%s\n" "- Variable expansion in terminal output in $file (can cause terminal hanging)"
+                  printf "  Specific violations:\n"
+                  printf "%s\n" "$VIOLATION_LINES" | while IFS= read -r line; do
+                    printf "  Line: %s\n" "$line"
+                  done
+                } >> violation_details.txt
+              fi
+
+              # Check for printf with variable expansion in ADDED lines only
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
+                VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details
+                VIOLATION_LINES=$(git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | head -3)
+                {
+                  printf "%s\n" "- Variable expansion in printf terminal output in $file (can cause terminal hanging)"
+                  printf "  Specific violations:\n"
+                  printf "%s\n" "$VIOLATION_LINES" | while IFS= read -r line; do
+                    printf "  Line: %s\n" "$line"
+                  done
                 } >> violation_details.txt
               fi
 

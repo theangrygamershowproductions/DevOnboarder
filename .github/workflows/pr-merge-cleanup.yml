@@ -78,7 +78,10 @@ jobs:
                         echo "ERROR: Failed to parse issue title from search results"
                         printf "Search results: %s\n" "$ISSUE_SEARCH"
                         exit 1
-                    fi                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
+                    fi
+
+                    echo "Found tracking issue"
+                    printf "Issue title: %s\n" "$ISSUE_TITLE"
 
                       # Add completion comment before closing using wrapper script
                       bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \
