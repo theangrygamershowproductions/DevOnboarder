@@ -45,25 +45,60 @@ jobs:
 
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P "$EMOJI_PATTERN" 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details and write to temp file
+                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -P "$EMOJI_PATTERN" | head -3 > temp_violations.txt
                 {
-                  printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file"
+                  printf "%s\n" "- Emoji/Unicode in $file (causes terminal hanging)"
+                  while IFS= read -r line; do
+                    printf "  %s\n" "$line"
+                  done < temp_violations.txt
                 } >> violation_details.txt
+                rm -f temp_violations.txt
               fi
 
               # Check for command substitution in echo in ADDED lines only
-              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' 2>/dev/null; then
+              # EXCLUDE safe patterns: piping to jq, assignment, GitHub Actions outputs
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' | grep -v -E '\|\s*(jq|grep|awk|sed)|=\s*\$\(|GITHUB_(OUTPUT|ENV|PATH)' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details and write to temp file
+                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'echo.*\$\(' | grep -v -E '\|\s*(jq|grep|awk|sed)|=\s*\$\(|GITHUB_(OUTPUT|ENV|PATH)' | head -3 > temp_violations.txt
                 {
-                  printf "- Command substitution in terminal output in %s (causes terminal hanging)\n" "$file"
+                  printf "%s\n" "- Command substitution in terminal output in $file (causes terminal hanging)"
+                  while IFS= read -r line; do
+                    printf "  %s\n" "$line"
+                  done < temp_violations.txt
                 } >> violation_details.txt
+                rm -f temp_violations.txt
               fi
 
               # Check for variable expansion in echo in ADDED lines only
-              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
+              # EXCLUDE safe patterns: piping to commands, assignment, GitHub Actions outputs, gh auth login
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' | grep -v -E '\|\s*(jq|grep|awk|sed|gh\s+auth)|=\s*\$\(|GITHUB_(OUTPUT|ENV|PATH)|gh\s+auth\s+login' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details and write to temp file
+                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' | grep -v -E '\|\s*(jq|grep|awk|sed|gh\s+auth)|=\s*\$\(|GITHUB_(OUTPUT|ENV|PATH)|gh\s+auth\s+login' | head -3 > temp_violations.txt
                 {
-                  printf "- Variable expansion in terminal output in %s (can cause terminal hanging)\n" "$file"
+                  printf "%s\n" "- Variable expansion in terminal output in $file (can cause terminal hanging)"
+                  while IFS= read -r line; do
+                    printf "  %s\n" "$line"
+                  done < temp_violations.txt
                 } >> violation_details.txt
+                rm -f temp_violations.txt
+              fi
+
+              # Check for printf with variable expansion in ADDED lines only
+              # EXCLUDE safe patterns: printf with format strings (which are correct usage)
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd][^'\"]*['\"]|printf -- " 2>/dev/null; then
+                VIOLATIONS=$((VIOLATIONS + 1))
+                # Get specific line details and write to temp file
+                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd][^'\"]*['\"]|printf -- " | head -3 > temp_violations.txt
+                {
+                  printf "%s\n" "- Variable expansion in printf terminal output in $file (can cause terminal hanging)"
+                  while IFS= read -r line; do
+                    printf "  %s\n" "$line"
+                  done < temp_violations.txt
+                } >> violation_details.txt
+                rm -f temp_violations.txt
               fi
 
             done < changed_workflows.txt

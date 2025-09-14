@@ -24,6 +24,7 @@ Part of DevOnboarder's automated quality control system.
 """
 
 import argparse
+import logging
 import sys
 import yaml
 from datetime import datetime
@@ -31,9 +32,8 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 
-def setup_logging() -> None:
+def setup_logging() -> logging.Logger:
     """Set up centralized logging per DevOnboarder standards."""
-    import logging
 
     # Create logs directory if it doesn't exist
     logs_dir = Path("logs")

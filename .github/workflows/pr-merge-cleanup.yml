@@ -37,7 +37,7 @@ jobs:
 
             - name: Authenticate with GitHub
               run: |
-                printf -- '%s\n' "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+                echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
             - name: Close PR tracking issue
               env:
@@ -57,11 +57,37 @@ jobs:
                   # Search for tracking issue with PR number in title using wrapper script
                   ISSUE_SEARCH=$(bash scripts/ci_gh_issue_wrapper.sh list "Track PR #$PR_NUMBER" "open" "number,title,labels")
 
+                  # Enhanced JSON parsing with error handling
                   if [[ "$ISSUE_SEARCH" != "[]" ]]; then
-                    ISSUE_NUMBER=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].number')
-                    ISSUE_TITLE=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].title')
+                    # Validate JSON before parsing
+                    if ! echo "$ISSUE_SEARCH" | jq empty 2>/dev/null; then
+                        echo "ERROR: Invalid JSON response from GitHub API"
+                        echo "Response content follows in next line"
+                        printf '%s\n' "$ISSUE_SEARCH"
+                        exit 1
+                    fi
 
-                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
+                    # Parse issue number with error handling
+                    ISSUE_NUMBER=$(echo "$ISSUE_SEARCH" | jq -r '.[0].number' 2>/dev/null)
+                    if [ -z "$ISSUE_NUMBER" ] || [ "$ISSUE_NUMBER" = "null" ]; then
+                        echo "ERROR: Failed to parse issue number from search results"
+                        echo "Search results follow in next line"
+                        printf '%s\n' "$ISSUE_SEARCH"
+                        exit 1
+                    fi
+
+                    # Parse issue title with error handling
+                    ISSUE_TITLE=$(echo "$ISSUE_SEARCH" | jq -r '.[0].title' 2>/dev/null)
+                    if [ -z "$ISSUE_TITLE" ] || [ "$ISSUE_TITLE" = "null" ]; then
+                        echo "ERROR: Failed to parse issue title from search results"
+                        echo "Search results follow in next line"
+                        printf '%s\n' "$ISSUE_SEARCH"
+                        exit 1
+                    fi
+
+                    echo "Found tracking issue"
+                    echo "Issue title follows in next line"
+                    printf '%s\n' "$ISSUE_TITLE"
 
                       # Add completion comment before closing using wrapper script
                       bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \

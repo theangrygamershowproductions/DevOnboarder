@@ -68,6 +68,10 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
 - [`common-integration-points.md`](integration/common-integration-points.md) - Feature development workflows
 
+#### 📋 Development Processes (`docs/processes/`)
+
+- [`pr-ci-integration-guide.md`](processes/pr-ci-integration-guide.md) - PR comment analysis and CI correlation workflows
+
 #### 🤖 Agent Requirements (`docs/agents/`)
 
 - [`agent-requirements.md`](agents/agent-requirements.md) - AI agent guidelines and compliance requirements

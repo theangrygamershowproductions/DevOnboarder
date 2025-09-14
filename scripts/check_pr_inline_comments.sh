@@ -175,10 +175,6 @@ get_resolution() {
     fi
 }
 
-echo "Fetching inline comments for PR #$PR_NUMBER..."
-echo "Repository: $OWNER/$REPO"
-echo ""
-
 # Fetch inline comments
 COMMENTS_JSON=$(gh api "/repos/$OWNER/$REPO/pulls/$PR_NUMBER/comments" 2>/dev/null || {
     echo "Error: Failed to fetch comments for PR #$PR_NUMBER"
@@ -188,14 +184,20 @@ COMMENTS_JSON=$(gh api "/repos/$OWNER/$REPO/pulls/$PR_NUMBER/comments" 2>/dev/nu
 
 # Check if no comments found
 COMMENT_COUNT=$(echo "$COMMENTS_JSON" | jq length)
-if [[ "$COMMENT_COUNT" -eq 0 ]]; then
-    echo "No inline comments found for PR #$PR_NUMBER"
+
+# Output raw JSON if requested (no headers)
+if [[ "$OUTPUT_FORMAT" == "json" ]]; then
+    echo "$COMMENTS_JSON"
     exit 0
 fi
 
-# Output raw JSON if requested
-if [[ "$OUTPUT_FORMAT" == "json" ]]; then
-    echo "$COMMENTS_JSON"
+# For human output, show headers
+echo "Fetching inline comments for PR #$PR_NUMBER..."
+echo "Repository: $OWNER/$REPO"
+echo ""
+
+if [[ "$COMMENT_COUNT" -eq 0 ]]; then
+    echo "No inline comments found for PR #$PR_NUMBER"
     exit 0
 fi
 
