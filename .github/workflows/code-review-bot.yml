@@ -46,7 +46,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -P "$EMOJI_PATTERN" 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf "- Emoji/Unicode in %s (causes terminal hanging)\n" "$file"
+                  printf "%s\n" "- Emoji/Unicode in $file (causes terminal hanging)"
                 } >> violation_details.txt
               fi
 
@@ -54,7 +54,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$\(' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf "- Command substitution in terminal output in %s (causes terminal hanging)\n" "$file"
+                  printf "%s\n" "- Command substitution in terminal output in $file (causes terminal hanging)"
                 } >> violation_details.txt
               fi
 
@@ -62,7 +62,7 @@ jobs:
               if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'echo.*\$[A-Z_][A-Z0-9_]*' 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 {
-                  printf "- Variable expansion in terminal output in %s (can cause terminal hanging)\n" "$file"
+                  printf "%s\n" "- Variable expansion in terminal output in $file (can cause terminal hanging)"
                 } >> violation_details.txt
               fi
 
