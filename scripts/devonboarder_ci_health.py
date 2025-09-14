@@ -421,12 +421,20 @@ class DetachedHeadPredictor:
             prediction["failure_predicted"] = True
             prediction["confidence"] = max_confidence
             prediction["failure_type"] = primary_failure_type
-            prediction["recommended_actions"] = self._get_recommended_actions(
-                primary_failure_type
-            )
-            prediction["cost_savings_minutes"] = self._estimate_cost_savings(
-                primary_failure_type, workflow_name
-            )
+
+            # Only call helper functions if we have a valid failure type
+            if primary_failure_type is not None:
+                prediction["recommended_actions"] = self._get_recommended_actions(
+                    primary_failure_type
+                )
+                prediction["cost_savings_minutes"] = self._estimate_cost_savings(
+                    primary_failure_type, workflow_name
+                )
+            else:
+                prediction["recommended_actions"] = [
+                    "Review workflow logs for specific error patterns"
+                ]
+                prediction["cost_savings_minutes"] = 0
 
         return prediction
 
