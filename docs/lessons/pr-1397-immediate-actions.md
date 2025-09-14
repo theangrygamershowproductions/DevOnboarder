@@ -1,3 +1,9 @@
+---
+similarity_group: lessons-lessons
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Immediate Action Items: PR #1397 Lessons Learned
 
 ## Critical Issues to Fix (Priority 1)
