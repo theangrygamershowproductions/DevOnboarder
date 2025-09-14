@@ -88,10 +88,10 @@ jobs:
 
               # Check for printf with variable expansion in ADDED lines only
               # EXCLUDE safe patterns: printf with format strings (which are correct usage)
-              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd]['\"]|printf -- " 2>/dev/null; then
+              if git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd][^'\"]*['\"]|printf -- " 2>/dev/null; then
                 VIOLATIONS=$((VIOLATIONS + 1))
                 # Get specific line details and write to temp file
-                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd]['\"]|printf -- " | head -3 > temp_violations.txt
+                git diff origin/main...HEAD -- "$file" | grep -n '^+' | grep -E 'printf.*\$[A-Z_][A-Z0-9_]*' | grep -v -E "printf ['\"][^'\"]*%[sd][^'\"]*['\"]|printf -- " | head -3 > temp_violations.txt
                 {
                   printf "%s\n" "- Variable expansion in printf terminal output in $file (can cause terminal hanging)"
                   while IFS= read -r line; do
