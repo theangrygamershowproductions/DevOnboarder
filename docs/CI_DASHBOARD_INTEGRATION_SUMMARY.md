@@ -1,3 +1,9 @@
+---
+similarity_group: CI_DASHBOARD_INTEGRATION_SUMMARY.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # CI Dashboard Integration - Implementation Summary
 
 ## Overview
