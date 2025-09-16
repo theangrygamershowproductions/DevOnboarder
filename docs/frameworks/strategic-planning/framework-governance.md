@@ -47,6 +47,27 @@ methodology-status: active
 4. **Version Planning**: Determine if changes require major/minor/patch version
 5. **Documentation Update**: Update framework docs with version increment
 6. **Migration Guide**: Create upgrade guidance for existing initiatives
+7. **Agent Requirements Integration**: Ensure AI agent infrastructure compliance validation
+
+#### **Framework Enhancement: Agent Requirements Prevention (v1.0.1 Candidate)**
+
+**Context**: September 2025 - Agent Critical Requirements Oversight Incident
+
+**Enhancement Scope**:
+
+- **Agent Validation Integration**: All framework applications must include agent infrastructure compliance
+- **Critical Requirements Checklist**: Mandatory checklist for AI agents working on framework initiatives
+- **Schema Enhancement**: Updated agent validation schema with ZERO TOLERANCE policy acknowledgment
+- **Prevention Documentation**: Comprehensive lesson learned integration and prevention measures
+
+**Implementation Files**:
+
+- `docs/agent-onboarding/critical-requirements-checklist.md` - Mandatory agent checklist
+- `docs/lessons/agent-critical-requirements-oversight.md` - Complete incident documentation
+- `schema/agent-schema.json` - Enhanced validation with critical requirements acknowledgment
+- Quality control integration with `scripts/qc_pre_push.sh` validation
+
+**Rationale**: Ensures all future framework applications include systematic agent infrastructure compliance, preventing critical violations of DevOnboarder's ZERO TOLERANCE policies (terminal output, virtual environment, Potato policy, CI hygiene).
 
 #### **Maintenance Schedule**
 
@@ -68,21 +89,15 @@ initiative:
   completion-date: "TBD"
   scope: "58 GitHub issues analysis and roadmap"
   framework-components-used:
-
     - issue-analysis-methodology
     - sprint-planning-approach
     - conversation-continuity-protocols
-
   customizations:
-
     - "Adapted for GitHub API integration"
     - "Enhanced with statistical analysis"
-
   outcomes:
-
     - "Comprehensive 3-document strategic framework"
     - "90-day sprint roadmap"
-
   lessons-learned: "TBD - to be captured at completion"
   framework-feedback: "TBD - methodology effectiveness assessment"
 ```

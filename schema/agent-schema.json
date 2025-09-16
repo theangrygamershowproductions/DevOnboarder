@@ -122,6 +122,48 @@
                                     "additionalProperties": false
                                 }
                             ]
+                        },
+                        "critical-requirements-acknowledgment": {
+                            "type": "object",
+                            "description": "MANDATORY acknowledgment of DevOnboarder ZERO TOLERANCE policies",
+                            "required": [
+                                "terminal-output-policy",
+                                "virtual-environment-policy",
+                                "potato-policy",
+                                "ci-hygiene-policy"
+                            ],
+                            "properties": {
+                                "terminal-output-policy": {
+                                    "type": "string",
+                                    "enum": ["confirmed"],
+                                    "description": "Acknowledgment of ZERO TOLERANCE terminal output policy (no emojis, Unicode, or hanging patterns)"
+                                },
+                                "virtual-environment-policy": {
+                                    "type": "string",
+                                    "enum": ["confirmed"],
+                                    "description": "Acknowledgment of MANDATORY virtual environment usage for all Python tooling"
+                                },
+                                "potato-policy": {
+                                    "type": "string",
+                                    "enum": ["confirmed"],
+                                    "description": "Acknowledgment of Enhanced Potato Policy for sensitive file protection"
+                                },
+                                "ci-hygiene-policy": {
+                                    "type": "string",
+                                    "enum": ["confirmed"],
+                                    "description": "Acknowledgment of CI hygiene standards and Root Artifact Guard enforcement"
+                                },
+                                "checklist-completed": {
+                                    "type": "boolean",
+                                    "description": "Confirmation that docs/agent-onboarding/critical-requirements-checklist.md was completed"
+                                },
+                                "checklist-date": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "description": "Date when critical requirements checklist was completed (YYYY-MM-DD format)"
+                                }
+                            },
+                            "additionalProperties": false
                         }
                     },
                     "additionalProperties": false
