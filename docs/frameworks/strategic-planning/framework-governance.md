@@ -22,16 +22,17 @@ consolidation_priority: P3
 
 ```markdown
 
+#### **Version Documentation Requirements**
+
+```markdown
 # Framework Version Header (Required in all framework docs)
 
 ---
 framework-version: v1.0.0
 last-updated: 2025-09-16
 methodology-status: active
-breaking-changes: none
-backward-compatibility: n/a (initial version)
 ---
-```bash
+```
 
 ## **Documentation Maintenance Strategy**
 
@@ -39,10 +40,10 @@ backward-compatibility: n/a (initial version)
 
 - **Framework Owner**: Development Team Lead
 - **Update Triggers**:
-  - After each initiative using the framework
-  - Quarterly review cycles
-  - When methodology gaps identified
-  - When new DevOnboarder patterns emerge
+    - After each initiative using the framework
+    - Quarterly review cycles
+    - When methodology gaps identified
+    - When new DevOnboarder patterns emerge
 
 #### **Evolution Process**
 
@@ -90,7 +91,7 @@ initiative:
 
   lessons-learned: "TBD - to be captured at completion"
   framework-feedback: "TBD - methodology effectiveness assessment"
-```bash
+```
 
 #### **Registry Location**
 
@@ -115,7 +116,7 @@ framework-compatibility:
     breaking-changes: ["major methodology changes"]
     migration-required: true
     migration-guide: "docs/frameworks/strategic-planning/migration-v1-to-v2.md"
-```bash
+```
 
 ## Scope Appropriateness Guidelines
 
