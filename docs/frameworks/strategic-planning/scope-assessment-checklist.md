@@ -8,7 +8,7 @@ consolidation_priority: P3
 
 ## Framework Applicability Checklist
 
-## Use this checklist BEFORE applying the Strategic Planning Framework to determine if it's appropriate for your initiative
+**Use this checklist BEFORE applying the Strategic Planning Framework to determine if it's appropriate for your initiative.**
 
 ### Initiative Information
 
