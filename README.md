@@ -1,6 +1,6 @@
 ---
 title: "DevOnboarder"
-description: "Multi-service onboarding automation platform with Discord bot, web interface, and comprehensive CI/CD pipeline designed to work quietly and reliably."
+description: "Multi-service on-boarding automation platform with Discord bot, web interface, and comprehensive CI/CD pipeline designed to work quietly and reliably."
 document_type: "documentation"
 tags: ["devonboarder", "platform", "automation", "onboarding", "discord", "ci-cd"]
 project: "DevOnboarder"
