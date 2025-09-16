@@ -87,7 +87,6 @@ initiative:
 
   lessons-learned: "TBD - to be captured at completion"
   framework-feedback: "TBD - methodology effectiveness assessment"
-```
 
 #### **Registry Location**
 
@@ -112,7 +111,6 @@ framework-compatibility:
     breaking-changes: ["major methodology changes"]
     migration-required: true
     migration-guide: "docs/frameworks/strategic-planning/migration-v1-to-v2.md"
-```
 
 ## Scope Appropriateness Guidelines
 
