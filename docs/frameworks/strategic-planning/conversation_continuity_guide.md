@@ -40,6 +40,30 @@ consolidation_priority: P3
 3. **Check Issue States**: Use `gh issue list` to see any status changes
 4. **Review Framework**: Reference analysis documents for context
 
+### **Critical PR Workflow Requirements**
+
+#### **Mandatory Copilot Inline Comment Review**
+
+**🚨 CRITICAL CHECKPOINT**: Before declaring any PR "ready to merge" or "CI passing"
+
+1. **Always Check for Copilot Comments**: Use `bash scripts/check_pr_inline_comments.sh <PR_NUMBER>`
+2. **Address ALL Inline Comments**: Copilot comments can block clean CI and cause rendering issues
+3. **Verify Fixes**: Re-run the script after fixes to confirm all comments resolved
+4. **Document Resolution**: Include comment IDs in commit messages when fixing
+
+**Why This Matters**:
+
+- Copilot inline comments often identify critical markdown rendering issues
+- Unresolved comments can prevent clean CI completion
+- Missing this step creates process gaps and workflow delays
+- Quality assurance requires comprehensive review of all automated feedback
+
+**Required Tools**:
+
+- `scripts/check_pr_inline_comments.sh` - DevOnboarder's Copilot comment extraction tool
+- Proper commit message format when addressing comments
+- Manual verification that all comments have been addressed
+
 #### **For New Initiatives Building on This Work**
 
 1. **Framework Reuse**: Apply same analytical approach to new problem sets
