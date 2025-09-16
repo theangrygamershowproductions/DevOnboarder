@@ -1,3 +1,25 @@
+---
+author: DevOnboarder Team
+ci_integration: true
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Standards documentation
+document_type: standards
+merge_candidate: false
+project: DevOnboarder
+similarity_group: standards-standards
+status: active
+tags:
+- standards
+- policy
+- documentation
+title: Github Actions Versions
+updated_at: '2025-09-12'
+virtual_env_required: true
+visibility: internal
+---
+
 # GitHub Actions Version Requirements
 
 **Document Type**: Technical Standard
@@ -237,6 +259,7 @@ find .github/workflows/ -name "*.yml" -exec grep -H "uses:" {} \; | \
 ---
 
 **Established**: September 7, 2025
+
 **Authority**: DevOnboarder CI Modernization Framework
 **Compliance**: Mandatory for all DevOnboarder workflows
 **Enforcement**: Pre-commit hooks + CI validation + Template system

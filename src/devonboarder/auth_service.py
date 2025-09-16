@@ -416,13 +416,36 @@ def discord_callback(
             # Fallback if somehow not in allowlist (should never happen)
             redirect_url = "/dashboard"
     else:
-        fallback_url = os.getenv("FRONTEND_URL") or os.getenv(
-            "DEV_TUNNEL_FRONTEND_URL", "https://dev.theangrygamershow.com"
-        )
-        redirect_url = fallback_url or "https://dev.theangrygamershow.com"
-        logger.info(f"Using fallback redirect: {redirect_url}")
+        # Environment-based service discovery - never hard-code production URLs
+        fallback_url = os.getenv("FRONTEND_URL") or os.getenv("DEV_TUNNEL_FRONTEND_URL")
+        if not fallback_url:
+            # Use environment-appropriate defaults based on runtime context
+            app_env = os.getenv("APP_ENV", "development")
+            is_ci = os.getenv("CI", "false").lower() == "true"
+            is_docker = os.path.exists("/.dockerenv")  # Standard Docker indicator
 
-    # Compose the final redirect URL with the token
+            if is_ci:
+                # CI environment - always use localhost
+                fallback_url = "http://localhost:8081"
+            elif is_docker and app_env == "production":
+                # Production Docker - use service name
+                fallback_url = "http://frontend:8081"
+            elif is_docker:
+                # Development Docker - use service name
+                fallback_url = "http://frontend:8081"
+            elif app_env == "production":
+                # Production without Docker - use production URL
+                fallback_url = "https://dev.theangrygamershow.com"
+            else:
+                # Local development - use localhost
+                fallback_url = "http://localhost:8081"
+
+        redirect_url = fallback_url
+        logger.info(
+            f"Using environment-based redirect: {redirect_url} "
+            f"(CI={os.getenv('CI')}, Docker={os.path.exists('/.dockerenv')}, "
+            f"APP_ENV={os.getenv('APP_ENV')})"
+        )  # Compose the final redirect URL with the token
     final_redirect = f"{redirect_url}?token={token}"
     logger.info(f"Final redirect: {final_redirect[:100]}...")
 

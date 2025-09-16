@@ -1,3 +1,24 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Template for generating security audit reports with standardized formatting
+document_type: template
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- template
+- security
+- audit
+- reports
+title: Security Report Template
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # AAR Security Report Template
 
 **Generated**: {timestamp}
@@ -9,8 +30,11 @@
 ### Token Governance
 
 - **Primary Token**: {primary_token_used}
+
 - **Token Hierarchy Followed**: {hierarchy_compliance}
+
 - **Default Token Avoided**: {default_token_avoided}
+
 - **Registry Validation**: {registry_validated}
 
 ### Policy Violations
@@ -20,7 +44,9 @@
 ### Risk Assessment
 
 - **Severity Level**: {risk_level}
+
 - **Exposure Potential**: {exposure_potential}
+
 - **Mitigation Status**: {mitigation_status}
 
 ## DevOnboarder Standards Compliance
@@ -28,19 +54,25 @@
 ### Virtual Environment
 
 - **Status**: {venv_status}
+
 - **Path**: {venv_path}
+
 - **Validation**: {venv_validation}
 
 ### Centralized Logging
 
 - **Directory**: {logging_directory}
+
 - **Permissions**: {logging_permissions}
+
 - **Compliance**: {logging_compliance}
 
 ### Enhanced Potato Policy
 
 - **Sensitive Data Protection**: {potato_protection}
+
 - **File Pattern Compliance**: {file_pattern_compliance}
+
 - **Access Control**: {access_control}
 
 ## Security Recommendations

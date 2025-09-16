@@ -91,6 +91,52 @@ class TokenLoader:
         # Default to source of truth
         return ".env"
 
+    def _should_protect_ci_secret(self, key: str, value: str) -> bool:
+        """Check if a CI secret should be protected from override.
+
+        Parameters
+        ----------
+        key : str
+            Environment variable key
+        value : str
+            Environment variable value
+
+        Returns
+        -------
+        bool
+            True if this is a CI test placeholder that should not override real secret
+        """
+        return (
+            bool(os.getenv("CI")) and value.startswith("ci_test_") and key in os.environ
+        )
+
+    def _apply_ci_protection(self, key: str, value: str, loaded_tokens: dict) -> bool:
+        """Apply CI protection logic and update loaded_tokens.
+
+        Parameters
+        ----------
+        key : str
+            Environment variable key
+        value : str
+            Environment variable value
+        loaded_tokens : dict
+            Dictionary to update with protected values
+
+        Returns
+        -------
+        bool
+            True if protection was applied (should skip normal processing)
+        """
+        if self._should_protect_ci_secret(key, value):
+            # Skip setting test placeholder if real token already exists
+            print(
+                f"🔒 Protecting CI secret: {key} "
+                "(not overriding with test placeholder)"
+            )
+            loaded_tokens[key] = os.environ[key]  # Use existing value
+            return True
+        return False
+
     def _load_env_tokens(self) -> dict[str, str]:
         """Load runtime tokens from appropriate .env file.
 
@@ -132,6 +178,10 @@ class TokenLoader:
 
                     # Only load if it's a runtime token
                     if key in self.RUNTIME_TOKENS:
+                        # Apply CI protection logic
+                        if self._apply_ci_protection(key, value, loaded_tokens):
+                            continue
+
                         os.environ[key] = value
                         loaded_tokens[key] = value
 
@@ -188,6 +238,10 @@ class TokenLoader:
                         value = value[1:-1]
                     elif value.startswith("'") and value.endswith("'"):
                         value = value[1:-1]
+
+                    # Apply CI protection logic
+                    if self._apply_ci_protection(key, value, loaded_tokens):
+                        continue
 
                     # Set in environment
                     os.environ[key] = value

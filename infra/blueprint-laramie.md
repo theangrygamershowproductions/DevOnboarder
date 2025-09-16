@@ -1,11 +1,30 @@
 ---
-title: Laramie Blueprint
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Local development deployment blueprint with setup and configuration instructions
+document_type: guide
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- guide
+- deployment
+- development
+- local-setup
+title: Laramie Development Blueprint
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 This blueprint sets up a local development stack.
 
 1. Run `scripts/setup-env.sh` to install dependencies.
+
 2. Copy `.env.example` to `.env.dev` and adjust the variables. A typical
+
    development file might contain:
 
     ```bash

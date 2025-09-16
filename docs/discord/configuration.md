@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: discord-discord
+status: active
+tags:
+- documentation
+title: Configuration
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Discord Server Configuration
 
 This guide explains how to configure the Discord server used by the project.
@@ -5,8 +23,11 @@ This guide explains how to configure the Discord server used by the project.
 ## Steps
 
 1. Create a new Discord server or choose an existing one.
+
 2. Invite the DevOnboarder bot and grant it the permissions described in the README.
+
 3. Configure channels and roles as needed for your community.
+
 4. **Enable the Widget** in the server settings so the website can display the server's online status.
 
 With the Widget enabled, the marketing site and other tools can show who is

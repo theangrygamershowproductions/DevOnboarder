@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: ci-env-vars.md-docs
+status: active
+tags:
+- documentation
+title: Ci Env Vars
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # CI Environment Variables
 
 This page summarizes variables referenced in GitHub Actions workflows. Use these
@@ -5,6 +23,7 @@ values when running CI jobs locally or configuring new workflows.
 
 | Variable                        | Where to set                               | Required scopes                                                           | Purpose                                                              | Notes                                                                      |
 | ------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+
 | `AUTH_URL`                      | Workflow `env` block                       | n/a                                                                       | Base URL for auth service during E2E tests                           | Set to `http://localhost:8002` in CI                                       |
 | `CHECK_HEADERS_URL`             | Workflow `env` block                       | n/a                                                                       | Endpoint checked by `scripts/check_headers.py`                       | Defaults to the auth user endpoint                                         |
 | `CI_BOT_USERNAME`               | GitHub Actions variable                    | n/a                                                                       | GitHub username used to assign CI failure issues                     |                                                                            |

@@ -1,0 +1,347 @@
+{
+    "workbench.startupEditor": "none",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu (WSL)": {
+            "path": "C:\\WINDOWS\\System32\\wsl.exe",
+            "args": ["-d", "Ubuntu"]
+        },
+        "Potato": {
+            "path": "C:\\WINDOWS\\System32\\wsl.exe",
+            "args": ["-d", "Potato"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.accessibilitySupport": "off",
+    "editor.guides.bracketPairs": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "explorer.confirmDragAndDrop": false,
+    "git.autofetch": true,
+    "workbench.colorCustomizations": {
+        "editorBracketPairGuide.background1": "#F8B46C",
+        "editorBracketPairGuide.background2": "#FB78B5",
+        "editorBracketPairGuide.background3": "#4AACFB",
+        "editorBracketPairGuide.background4": "#B98BF5",
+        "editorBracketPairGuide.background5": "#DAD8D8",
+        "editorBracketPairGuide.background6": "#18EECE",
+        "editorBracketPairGuide.activeBackground1": "#F367C9",
+        "editorBracketPairGuide.activeBackground2": "#FD70B2",
+        "editorBracketPairGuide.activeBackground3": "#41A7FA",
+        "editorBracketPairGuide.activeBackground4": "#B084EB",
+        "editorBracketPairGuide.activeBackground5": "#DBDADA",
+        "editorBracketPairGuide.activeBackground6": "#16FAD8"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.openRepositoryInParentFolders": "always",
+    "commentAnchors.tags.anchors": {
+        "ANCHOR": {
+            "iconColor": "default",
+            "highlightColor": "#A8C023",
+            "scope": "file"
+        },
+        "TODO": {
+            "iconColor": "blue",
+            "highlightColor": "#3ea8ff",
+            "scope": "workspace"
+        },
+        "FIXME": {
+            "iconColor": "red",
+            "highlightColor": "#F44336",
+            "scope": "workspace"
+        },
+        "STUB": {
+            "iconColor": "purple",
+            "highlightColor": "#BA68C8",
+            "scope": "file"
+        },
+        "NOTE": {
+            "iconColor": "orange",
+            "highlightColor": "#FFB300",
+            "scope": "file"
+        },
+        "REVIEW": {
+            "iconColor": "green",
+            "highlightColor": "#64DD17",
+            "scope": "workspace"
+        },
+        "SECTION": {
+            "iconColor": "blurple",
+            "highlightColor": "#896afc",
+            "scope": "workspace",
+            "behavior": "region"
+        },
+        "LINK": {
+            "iconColor": "#2ecc71",
+            "highlightColor": "#2ecc71",
+            "scope": "workspace",
+            "behavior": "link"
+        }
+    },
+    "files.autoSave": "onFocusChange",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.wordWrap": "on",
+    "editor.fontSize": 16,
+    "vscode-edge-devtools.browserFlavor": "Stable",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "redhat.telemetry.enabled": true,
+    "workbench.iconTheme": "vscode-icons",
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "FEATURE",
+        "FUNCTION"
+    ],
+    "todohighlight.keywordsPattern": "(~~.+?~~)|(✔.+?\n)|(\\[x\\].+\n)",
+    "todohighlight.defaultStyle": {
+        "color": "none",
+        "backgroundColor": "none",
+        "textDecoration": "line-through"
+    },
+    "yaml.customTags": [
+        "!And",
+        "!And sequence",
+        "!If",
+        "!If sequence",
+        "!Not",
+        "!Not sequence",
+        "!Equals",
+        "!Equals sequence",
+        "!Or",
+        "!Or sequence",
+        "!FindInMap",
+        "!FindInMap sequence",
+        "!Base64",
+        "!Join",
+        "!Join sequence",
+        "!Cidr",
+        "!Ref",
+        "!Sub",
+        "!Sub sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!ImportValue sequence",
+        "!Select",
+        "!Select sequence",
+        "!Split",
+        "!Split sequence"
+    ],
+    "remote.SSH.remotePlatform": {
+        "main": "linux",
+        "192.168.1.97": "linux",
+        "dev.thenagrygamershow.com": "linux",
+        "Development": "linux",
+        "Testing": "linux",
+        "ROOT": "linux"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "terminal.integrated.allowChords": false,
+    "terminal.external.windowsExec": "",
+    "github.copilot.enable": {
+        "plaintext": true,
+        "markdown": true,
+        "scminput": false,
+        "yaml": true,
+        "json": true,
+        "jsonc": true,
+        "javascript": true,
+        "typescript": true,
+        "shellscript": true,
+        "*": false,
+        "dockerfile": true,
+        "dockercompose": true,
+        "dotenv": true
+    },
+    "git.enableSmartCommit": true,
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "css.format.spaceAroundSelectorSeparator": true,
+    "vscode-edge-devtools.webhint": false,
+    "prettier.requirePragma": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "livePreview.portNumber": 3500,
+    "workbench.sash.size": 6,
+    "debug.console.fontSize": 16,
+    "scm.inputFontSize": 16,
+    "chat.editor.fontSize": 16,
+    "markdown.preview.fontSize": 16,
+    "explorer.confirmDelete": false,
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "[ini]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[hosts]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "github.copilot.editor.enableAutoCompletions": true,
+    "terminal.explorerKind": "both",
+    "[xslt]": {
+        "editor.semanticHighlighting.enabled": true
+    },
+    "hediet.vscode-drawio.resizeImages": null,
+    "chat.editing.alwaysSaveWithGeneratedChanges": true,
+    "makefile.configureOnOpen": true,
+    "editor.tabSize": 3,
+    "editor.semanticTokenColorCustomizations": {
+        "enabled": true,
+        "rules": {
+            "variable": {
+                "foreground": "#9CDCFE"
+            },
+            "string": {
+                "foreground": "#CE9178"
+            },
+            "keyword": {
+                "foreground": "#569CD6"
+            },
+            "comment": {
+                "foreground": "#6A9955"
+            },
+            "function": {
+                "foreground": "#5e43d3"
+            },
+            "class": {
+                "foreground": "#4EC9B0"
+            },
+            "number": {
+                "foreground": "#B5CEA8"
+            },
+            "builtinFunction": {
+                "foreground": "#FF69B4"
+            }
+        }
+    },
+    "gitlab.duoCodeSuggestions.additionalLanguages": ["markdown"],
+    "jupyter.interactiveWindow.creationMode": "perFile",
+    "[markdown]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "extensions.experimental.affinity": {
+        "ms-toolsai.jupyter": 1,
+        "ms-toolsai.jupyter-renderers": 1,
+        "ms-python.python": 1,
+        "ms-python.vscode-pylance": 1
+    },
+    "remote.autoForwardPortsSource": "hybrid",
+    "vs-kubernetes": {
+        "vscode-kubernetes.kubectl-path-linux": "/home/admin/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path-linux": "/home/admin/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube",
+        "vscode-kubernetes.helm-path-linux": "/home/admin/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.fontFamily": "\"Hack Nerd Font Mono\"",
+    "terminal.integrated.fontLigatures.enabled": true,
+    "[dockercompose]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-containers"
+    },
+    "[properties]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[nginx]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[ignore]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "editor.fontFamily": "\"Hack Nerd Font Mono\"",
+    "editor.inlayHints.fontFamily": "\"Hack Nerd Font Mono\"",
+    "editor.inlineSuggest.fontFamily": "\"Hack Nerd Font Mono\"",
+    "debug.console.fontFamily": "\"Hack Nerd Font Mono\"",
+    "editor.minimap.enabled": false,
+    "python.analysis.typeCheckingMode": "basic",
+    "editor.dropIntoEditor.preferences": [],
+    "docker.extension.enableComposeLanguageServer": false,
+    "githubPullRequests.pullBranch": "never",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "chat.instructionsFilesLocations": {
+        ".github/instructions": true,
+        "/tmp/postman-http-request-post-response.instructions.md": true,
+        "/tmp/postman-http-request-pre-request.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-http-request-post-response.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-http-request-pre-request.instructions.md": true,
+        "/tmp/postman-collections-post-response.instructions.md": true,
+        "/tmp/postman-collections-pre-request.instructions.md": true,
+        "/tmp/postman-folder-post-response.instructions.md": true,
+        "/tmp/postman-folder-pre-request.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-collections-post-response.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-collections-pre-request.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-folder-post-response.instructions.md": true,
+        "C:\\Users\\ChadR\\AppData\\Local\\Temp\\postman-folder-pre-request.instructions.md": true
+    },
+    "editor.largeFileOptimizations": false,
+    "editor.experimentalGpuAcceleration": "off",
+    "terminal.integrated.gpuAcceleration": "off",
+    "terminal.integrated.rendererType": "canvas",
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.enableImages": true,
+    "github.copilot.chat.scopeSelection": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "chat.agent.maxRequests": 100,
+    "editor.indentSize": "tabSize",
+    "git.ignoreRebaseWarning": true,
+    "files.associations": {
+        "*.md": "markdown"
+    },
+    "security.promptForLocalFileProtocolHandling": false,
+    "githubIssues.alwaysPromptForNewIssueRepo": true,
+    "go.toolsManagement.autoUpdate": true,
+    "testing.followRunningTest": true,
+    "testing.showAllMessages": true,
+    "chat.mcp.autostart": "newAndOutdated",
+    "cSpell.userWords": [
+        "desynchronized",
+        "desyncs",
+        "Elgato",
+        "setlocal",
+        "streamdeck"
+    ],
+    "postman.mcp.notifications.postmanMCP": false,
+    "editor.codeLensFontFamily": "\"Hack Nerd Font Mono\"",
+    "editor.codeActionsOnSave": {}
+}

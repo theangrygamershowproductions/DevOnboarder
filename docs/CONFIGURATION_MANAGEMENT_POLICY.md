@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: CONFIGURATION_MANAGEMENT_POLICY.md-docs
+status: active
+tags:
+- documentation
+title: Configuration Management Policy
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Configuration Management Policy
 
 ## Overview
@@ -22,9 +40,13 @@ These files are **NEVER** cleaned up by automation scripts and are essential for
 ### Project Structure Configuration
 
 - `.github/workflows/*.yml` - CI/CD pipeline definitions
+
 - `pyproject.toml` - Python project dependencies and tool settings
+
 - `package.json` files - Node.js service configurations
+
 - `docker-compose.*.yaml` - Container orchestration
+
 - `.tool-versions` - Language version requirements
 
 ## Temporary/Backup Configuration Files
@@ -34,14 +56,19 @@ These files are **safe to clean up** and are generated during operations:
 ### Test & CI Artifacts
 
 - `config_backups/` - Temporary directory created during testing
+
 - `logs/*.config` - Configuration snapshots
+
 - `test-results/config-*` - Test-generated copies
+
 - `*.backup` files - Backup copies during updates
 
 ### Runtime Generated
 
 - `.env.ci` - CI-specific environment (regenerated)
+
 - Temporary coverage configs in pytest cache
+
 - Any config files with timestamps
 
 ## Cleanup Script Protection
@@ -49,11 +76,15 @@ These files are **safe to clean up** and are generated during operations:
 The `scripts/clean_pytest_artifacts.sh` script implements these protections:
 
 ```bash
+
 # PROTECTS permanent configs in config/ directory
+
 find . -name ".coverage*" -not -path "./config/*" -delete
 
 # REMOVES temporary backup directory only
+
 rm -rf config_backups/
+
 ```
 
 ## Critical Protection: Coverage Masking Solution
@@ -63,21 +94,29 @@ rm -rf config_backups/
 ## Validation Commands
 
 ```bash
+
 # Check protected files exist
+
 ls -la config/.coveragerc.*
 
 # Test cleanup protection (dry run)
+
 bash scripts/clean_pytest_artifacts.sh --dry-run
 
 # Verify config directory integrity
+
 ls -la config/
+
 ```
 
 ## Developer Guidelines
 
 1. **Adding new permanent configs**: Place in `config/` directory and update this documentation
+
 2. **Creating temporary configs**: Use timestamped names or place in `logs/` directory
+
 3. **Testing config changes**: Use `config_backups/` for temporary copies
+
 4. **Never bypass protections**: Don't modify cleanup script exclusions without review
 
 ## Emergency Recovery
@@ -85,14 +124,19 @@ ls -la config/
 If permanent configuration files are accidentally deleted:
 
 ```bash
+
 # Restore from git
+
 git checkout HEAD -- config/
 
 # Regenerate coverage configs if needed
+
 # (See docs/COVERAGE_MASKING_SOLUTION.md)
+
 ```
 
 ---
 
 **Last Updated**: September 5, 2025
+
 **Related Documentation**: `docs/COVERAGE_MASKING_SOLUTION.md`

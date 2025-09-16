@@ -6,8 +6,11 @@ Node.js 22 is required. Run `mise install` to use the version defined in `.tool-
 ## Setup
 
 1. Install dependencies with `npm install` (or `pnpm install` if you prefer). Commit the generated `package-lock.json`.
+
 2. Start the development server with `npm run dev`.
+
 3. Run `npm run lint` to check code style and `npm run format` to apply Prettier formatting.
+
 4. Environment variables are defined in `.env.example`.
 
 ## Login Flow
@@ -24,6 +27,7 @@ Generate a coverage report with:
 
 ```bash
 npm run coverage
+
 ```
 
 The CI workflow requires every suite to maintain **95%** coverage.

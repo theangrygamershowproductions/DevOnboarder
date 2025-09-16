@@ -114,3 +114,62 @@ audit-status:
 audit-clean:
 	@echo "Cleaning old audit reports (older than 365 days)..."
 	@bash scripts/manage_token_audits.sh clean
+
+# Auto-fixer targets
+autofix:
+	@echo "Running DevOnboarder auto-fixers..."
+	@bash -c "source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --all"
+
+autofix-markdown:
+	@echo "Fixing markdown files..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_markdown_formatting.py --all"
+
+autofix-shell:
+	@echo "Fixing shell scripts..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_shell_scripts.py --all"
+
+autofix-frontmatter:
+	@echo "Fixing frontmatter metadata..."
+	@bash -c "source .venv/bin/activate && python scripts/fix_frontmatter.py --all"
+
+autofix-python:
+	@echo "Running Python formatters..."
+	@bash -c "source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --python"
+
+# CI Health Dashboard AAR Integration Commands
+ci-health-aar-analyze:
+	@echo "Analyzing CI health patterns across all logs..."
+	@bash scripts/ci-health-aar-integration --analyze-patterns
+
+ci-health-aar-generate:
+	@if [ -z "$(WORKFLOW_ID)" ]; then \
+		echo "ERROR: WORKFLOW_ID required"; \
+		echo "Usage: make ci-health-aar-generate WORKFLOW_ID=12345"; \
+		echo "       make ci-health-aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true"; \
+		exit 1; \
+	fi
+	@echo "Generating enhanced AAR with CI health integration for workflow $(WORKFLOW_ID)..."
+	@if [ "$(CREATE_ISSUE)" = "true" ]; then \
+		bash scripts/ci-health-aar-integration --workflow-id $(WORKFLOW_ID) --create-issue; \
+	else \
+		bash scripts/ci-health-aar-integration --workflow-id $(WORKFLOW_ID); \
+	fi
+
+ci-health-aar-help:
+	@echo "DevOnboarder CI Health Dashboard - AAR Integration Commands"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  ci-health-aar-analyze               - Analyze CI health patterns across all logs"
+	@echo "  ci-health-aar-generate              - Generate enhanced AAR for workflow"
+	@echo "  ci-health-aar-help                  - Show this help message"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make ci-health-aar-generate WORKFLOW_ID=12345"
+	@echo "  make ci-health-aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true"
+	@echo "  make ci-health-aar-analyze"
+	@echo ""
+	@echo "Integration Features:"
+	@echo "  - Automatic AAR generation with CI health predictions"
+	@echo "  - Pattern analysis for proactive improvements"
+	@echo "  - Cost savings tracking and reporting"
+	@echo "  - GitHub issue creation for persistent failures"

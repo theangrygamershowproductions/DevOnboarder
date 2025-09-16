@@ -1,10 +1,25 @@
 ---
+author: DevOnboarder Team
 codex-agent:
-    name: Agent.DiscordIntegration
-    role: Handles Discord OAuth flows and role lookups
-    scope: auth service
-    triggers: User Discord login or role sync request
-    output: Discord role mapping
+  name: Agent.DiscordIntegration
+  output: Discord role mapping
+  role: Handles Discord OAuth flows and role lookups
+  scope: auth service
+  triggers: User Discord login or role sync request
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: core-agents
+similarity_group: documentation-documentation
+status: active
+tags:
+- documentation
+title: Discord Integration
+updated_at: '2025-09-12'
+visibility: internal
 ---
 
 # Discord Integration Agent

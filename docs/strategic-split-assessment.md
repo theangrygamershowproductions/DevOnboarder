@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: strategic-split-assessment.md-docs
+status: active
+tags:
+- documentation
+title: Strategic Split Assessment
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Strategic Split Risk Assessment
 
 ## Executive Summary
@@ -13,10 +31,15 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 | Service | API Stability | Test Coverage | Database Coupling | Infrastructure Dependencies | Split Risk |
 |---------|---------------|---------------|-------------------|----------------------------|------------|
 | **Discord Bot** | ✅ Stable | ✅ 100% | ❌ None | 🟡 Discord API only | **VERY LOW** |
+
 | **Auth Service** | ✅ Stable | ✅ 96%+ | 🔴 High (Shared DB) | 🔴 Core dependency | **MEDIUM** |
+
 | **Frontend** | ⚠️ Evolving | ✅ 100% | ❌ None | 🟡 Build-only | **LOW-MEDIUM** |
+
 | **XP System** | ⚠️ New | ✅ 95%+ | 🔴 High (Shared DB) | 🔴 Cross-service API | **HIGH** |
+
 | **Discord Integration** | ✅ Stable | ✅ 95%+ | 🟡 Medium | 🟡 OAuth flow | **MEDIUM** |
+
 | **Feedback Service** | ⚠️ New | ✅ 95%+ | 🟡 Medium | 🟡 Analytics deps | **MEDIUM-HIGH** |
 
 ### Risk Level Definitions
@@ -286,16 +309,21 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 **Target**: Discord Bot (VERY LOW RISK)
 
 ```bash
+
 # Week 1: Repository Creation and Migration
+
 mkdir ../devonboarder-bot
 cp -r bot/* ../devonboarder-bot/
+
 cp .github/workflows/bot-ci.yml ../devonboarder-bot/.github/workflows/ci.yml
 cp scripts/qc_pre_push.sh ../devonboarder-bot/scripts/
 
 # Week 2: Testing and Validation
+
 cd ../devonboarder-bot
 npm ci && npm test
 bash scripts/qc_pre_push.sh
+
 ```
 
 **Success Criteria**:
@@ -415,8 +443,11 @@ bash scripts/qc_pre_push.sh
 ### Rollback Procedure
 
 1. **Immediate**: Revert DNS/load balancer to monorepo deployment
+
 2. **Short-term**: Merge split service changes back to main repository
+
 3. **Long-term**: Reassess split strategy with lessons learned
+
 4. **Documentation**: Update risk assessment with failure analysis
 
 ## Implementation Recommendation
@@ -424,8 +455,11 @@ bash scripts/qc_pre_push.sh
 **Strategic Approach**: **Gradual Risk-Based Extraction**
 
 1. **Start Small**: Begin with Discord Bot (VERY LOW RISK)
+
 2. **Learn and Adapt**: Use initial split to refine processes
+
 3. **Gradual Progression**: Move to higher-risk services with proven patterns
+
 4. **Defer Complex Splits**: Wait for API maturity on high-risk services
 
 **Key Success Factors**:

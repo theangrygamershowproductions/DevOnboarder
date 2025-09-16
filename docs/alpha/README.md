@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: alpha-alpha
+status: active
+tags:
+- documentation
+title: Readme
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Invite-Only Alpha Onboarding
 
 This template outlines how to onboard early testers who receive special access.
@@ -5,19 +23,28 @@ This template outlines how to onboard early testers who receive special access.
 ## Objectives
 
 - Exercise the system in real conditions.
+
 - Gather bug reports and user experience feedback.
+
 - Prepare for a broader release after issues are addressed.
 
 ## Steps for Participants
 
 1. Accept your invitation and join the private communication channel.
+
 2. Follow [docs/README.md](../README.md) to set up the project locally.
+
 3. Use the app and note any problems or confusing areas.
+
 4. Submit feedback through the issue tracker for bugs. For general impressions
+
    or anonymous comments, fill out
    [feedback-form.md](feedback-form.md).
+
 5. Expect occasional downtime or breaking changes while we iterate.
+
 6. Update [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md) with your feedback status.
+
 7. Track progress in [feedback-template.md](feedback-template.md) as issues are addressed.
 
 Use the form for quick thoughts or private comments. Open an issue when you
@@ -51,4 +78,5 @@ Share this link with prospective testers who want a quick overview.
 
 The steps in [docs/README.md](../README.md) were verified on Windows 11
 (using WSL&nbsp;2), macOS Ventura, and Ubuntu&nbsp;22.04. If you run into
+
 platform-specific issues, open an issue so we can update the guide.

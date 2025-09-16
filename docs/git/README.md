@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: git-git
+status: active
+tags:
+- documentation
+title: Readme
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Project Git Workflow Reference
 
 > � For advanced Git workflows and configuration (e.g. `.gitignore`, SSH,
@@ -16,12 +34,14 @@ members perform common Git tasks correctly.
 ```bash
 git stash push -m "WIP: unsaved changes"
 git switch target-branch
+
 ```
 
 To restore later:
 
 ```bash
 git stash pop
+
 ```
 
 ### Option 2: Temporary WIP Commit
@@ -30,18 +50,21 @@ git stash pop
 git add .
 git commit -m "WIP(feature): partial changes"
 git switch target-branch
+
 ```
 
 To undo:
 
 ```bash
 git reset HEAD~1
+
 ```
 
 ### Option 3: `git switch` (If no conflicts)
 
 ```bash
 git switch target-branch
+
 ```
 
 ---
@@ -53,36 +76,42 @@ git switch target-branch
 ```bash
 git add .
 git commit -m "FEAT(feature): complete implementation"
+
 ```
 
 1. Switch to `development`:
 
 ```bash
 git switch development
+
 ```
 
 1. Pull latest development branch:
 
 ```bash
 git pull origin development
+
 ```
 
 1. Merge your feature branch:
 
 ```bash
 git merge your-branch-name
+
 ```
 
 1. Push updated development:
 
 ```bash
 git push origin development
+
 ```
 
 1. (Optional) Clean up:
 
 ```bash
 git branch -d your-branch-name
+
 ```
 
 ---
@@ -93,30 +122,35 @@ git branch -d your-branch-name
 
 ```bash
 git remote add working git@github.com:your-org/project-working.git
+
 ```
 
 Push to it:
 
 ```bash
 git push working development
+
 ```
 
 ### Make a Remote Fetch-Only
 
 ```bash
 git remote set-url --push origin no_push
+
 ```
 
 Re-enable pushing:
 
 ```bash
 git remote set-url --push origin git@github.com:your-org/project.git
+
 ```
 
 ### Rename a Remote
 
 ```bash
 git remote rename origin source
+
 ```
 
 ---
@@ -127,28 +161,34 @@ git remote rename origin source
 
 ```bash
 git remote -v
+
 ```
 
 - View stashes:
 
 ```bash
 git stash list
+
 ```
 
 - Apply a specific stash:
 
 ```bash
 git stash apply stash@{0}
+
 ```
 
 - Push via SSH:
 
 ```bash
+
 # Start the agent and add key (one-time per session)
+
 eval $(ssh-agent -s)
 ssh-add /path/to/private_key
 
 git push
+
 ```
 
 - Reminder: pre-commit hooks and `.gitignore` are enforced—see `Git.md` for setup steps.

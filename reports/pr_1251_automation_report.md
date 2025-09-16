@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-documentation
+status: active
+tags:
+- documentation
+title: Pr 1251 Automation Report
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # PR #1251 Automation Report
 
 **Generated:** 2025-09-05 01:54:03
@@ -11,17 +29,21 @@
 ### Health Assessment
 
 - **Score:** 88%
+
 - **Status:** Healthy
 
 ### Strategic Recommendation
 
 - **Decision:** ANALYZE_MANUALLY
+
 - **Confidence:** Unknown
 
 ### Automated Actions Taken
 
 - **Fixes Applied:** 0 categories
+
 - **Commits Created:** 0
+
 - **Auto-Merge:** Not attempted
 
 ## 🎯 Next Steps
@@ -31,7 +53,9 @@
 ## 📁 Artifacts
 
 - **Full Log:** `logs/pr_automation_1251_20250905_015403.log`
+
 - **Health Analysis:** Available in automation logs
+
 - **Pattern Analysis:** Available in automation logs
 
 ---

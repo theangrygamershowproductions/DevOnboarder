@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: POTATO_POLICY_WORKFLOW_CLARIFICATION.md-docs
+status: active
+tags:
+- documentation
+title: Potato Policy Workflow Clarification
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Enhanced Potato Policy: Workflow File Clarification
 
 ## Documentation Clarification - September 10, 2025
@@ -63,6 +81,7 @@ This document clarifies the confusion around Potato Policy workflow files that l
 name: Enhanced Potato Policy Enforcement
 
 # 279 lines of comprehensive security automation
+
 # Features: Virtual env enforcement, violation reporting, audit trails
 
 ```
@@ -72,6 +91,7 @@ name: Enhanced Potato Policy Enforcement
 ```yaml
 
 # REFERENCE: config/potato-policy.yml (mentioned in docs)
+
 # This is a CONFIGURATION file, not a workflow file
 
 policy_version: "2.0"
@@ -135,6 +155,7 @@ Any references to `.github/workflows/potato-policy.yml` are outdated and should 
 ---
 
 **Created**: September 10, 2025
+
 **Purpose**: Resolve documentation confusion around Potato Policy workflow files
 **Authority**: Enhanced Potato Policy v2.0 Framework
 **Status**: Documentation clarification complete

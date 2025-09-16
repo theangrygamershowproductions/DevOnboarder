@@ -2,6 +2,7 @@
 
 This service implements a simple Discord bot using `discord.js` v14.
 It loads slash commands and events dynamically on startup and authenticates
+
 using the token provided in `.env`.
 
 Node.js 22 is required. Run `mise install` to use the version defined in `.tool-versions`.
@@ -9,6 +10,7 @@ Node.js 22 is required. Run `mise install` to use the version defined in `.tool-
 ## Setup
 
 1. Use Node.js 22 as specified in `.tool-versions` (run `mise use`).
+
 2. Copy the example environment file and add your credentials:
 
     ```bash
@@ -50,9 +52,12 @@ bot:
     build: ./bot
     env_file:
         - ./bot/.env
+
     volumes:
         - ./bot:/usr/src/app
+
     command: ['npm', 'start']
+
 ```
 
 ## Tests
@@ -61,6 +66,7 @@ Generate a coverage report with:
 
 ```bash
 npm run coverage
+
 ```
 
 The CI workflow requires every suite to maintain **95%** coverage.
@@ -74,15 +80,21 @@ loaded automatically when the bot starts.
 The repository provides the following built-in commands:
 
 - `/ping` – simple health check returning `Pong!`.
+
 - `/verify` – show your onboarding status from the XP API.
+
 - `/profile` – display your current XP level.
+
 - `/contribute` – record a contribution description.
+
 - `/qa_checklist` – show the documentation and QA checklist.
 
 ## Future Work
 
 - Sync verified roles back to the auth database.
+
 - Award XP for community participation.
+
 - Log quiz completion via slash commands.
 
 For a comparison of this bot and Codex agents, see [../docs/bot-types.md](../docs/bot-types.md).

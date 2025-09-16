@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: tags_integration.md-docs
+status: active
+tags:
+- documentation
+title: Tags Integration
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Integrating with TAGS
 
 The TAGS stack uses dedicated Compose files to coordinate each service.
@@ -5,7 +23,9 @@ Templates are tracked in the repository root and under `archive/`:
 
 ```yaml
 docker-compose.tags.dev.yaml    # or archive/docker-compose.tags.dev.yaml
+
 docker-compose.tags.prod.yaml   # or archive/docker-compose.tags.prod.yaml
+
 ```
 
 Copies of these templates are provided in the repository root. If they are
@@ -16,6 +36,7 @@ versions. Start a local stack with:
 
 ```bash
 docker compose -f docker-compose.tags.dev.yaml up
+
 ```
 
 Production deployments rely on `docker-compose.tags.prod.yaml`. Both files
@@ -29,6 +50,7 @@ running against the TAGS stack:
 TAGS_MODE=true
 IS_ALPHA_USER=true
 IS_FOUNDER=true
+
 ```
 
 `TAGS_MODE` tells the diagnostics script to verify the XP API and

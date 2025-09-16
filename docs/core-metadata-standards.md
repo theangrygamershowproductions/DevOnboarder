@@ -1,21 +1,31 @@
 ---
-title: "Core Instructions Metadata Standards"
-description: "Standardized YAML frontmatter structure for all prompt files and documentation"
-author: "DevOnboarder Team"
-created_at: "2025-07-28"
-updated_at: "2025-07-28"
-tags: ["codex", "metadata", "standards", "yaml", "frontmatter", "documentation"]
-project: "DevOnboarder"
-document_type: "standards"
-status: "active"
-visibility: "internal"
-codex_scope: "DEVOPS"
-codex_role: "Engineering"
-codex_type: "STANDARDS"
-codex_runtime: true
-integration_status: "production_ready"
-virtual_env_required: true
+author: DevOnboarder Team
 ci_integration: true
+codex_role: Engineering
+codex_runtime: true
+codex_scope: DEVOPS
+codex_type: STANDARDS
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-07-28'
+description: Standardized YAML frontmatter structure for all prompt files and documentation
+document_type: standards
+integration_status: production_ready
+merge_candidate: false
+project: DevOnboarder
+similarity_group: documentation-guides
+status: active
+tags:
+- codex
+- metadata
+- standards
+- yaml
+- frontmatter
+- documentation
+title: Core Instructions Metadata Standards
+updated_at: '2025-07-28'
+virtual_env_required: true
+visibility: internal
 ---
 
 # Core Instructions Metadata Standards
@@ -29,8 +39,11 @@ This document defines the standardized YAML frontmatter structure that must be u
 Following DevOnboarder's **"quiet reliability"** philosophy, these metadata standards ensure:
 
 - **Virtual Environment Compatibility**: All validation tools run in `.venv` context
+
 - **CI Integration**: Automated validation via GitHub Actions workflows
+
 - **Agent Discovery**: Consistent patterns for `.codex/agents/index.json`
+
 - **Quality Assurance**: Enforced via pre-commit hooks and markdown linting
 
 ## Required Fields for All Files
@@ -43,6 +56,7 @@ description: "Clear, concise description of the file's purpose"
 author: "DevOnboarder Team"
 created_at: "YYYY-MM-DD"
 updated_at: "YYYY-MM-DD"
+
 ```
 
 ### Categorization
@@ -53,6 +67,7 @@ project: "DevOnboarder"
 document_type: "agent|charter|checklist|handoff|standards|guide|status"
 status: "active|draft|deprecated|production_ready"
 visibility: "internal|public|restricted"
+
 ```
 
 ### Codex Integration
@@ -62,6 +77,7 @@ codex_scope: "DEVOPS|CI|MONITORING|QUALITY"
 codex_role: "CI_Monitor|Auto_Fix|DevSecOps_Manager|Engineering"
 codex_type: "AGENT|CHARTER|CHECKLIST|HANDOFF|STANDARDS|GUIDE"
 codex_runtime: true|false
+
 ```
 
 ### DevOnboarder-Specific Fields
@@ -70,6 +86,7 @@ codex_runtime: true|false
 integration_status: "production_ready|draft_mode|pending_authentication"
 virtual_env_required: true
 ci_integration: true
+
 ```
 
 ## Agent-Specific Requirements
@@ -79,6 +96,7 @@ ci_integration: true
 ```yaml
 ---
 codex-agent: true
+
 name: "ci-monitor"
 type: "monitoring"
 permissions: ["read", "issues"]
@@ -88,6 +106,7 @@ environment: "CI|development"
 output: "logs/ci-monitor.log"
 virtual_env_required: true
 ---
+
 ```
 
 ### Auto-Fix Agents
@@ -95,6 +114,7 @@ virtual_env_required: true
 ```yaml
 ---
 codex-agent: true
+
 name: "code-quality-auto-fix"
 type: "automation"
 permissions: ["read", "write", "issues"]
@@ -104,6 +124,7 @@ environment: "CI|development"
 output: "logs/auto-fix.log"
 virtual_env_required: true
 ---
+
 ```
 
 ## Field Definitions (DevOnboarder Extensions)
@@ -111,29 +132,41 @@ virtual_env_required: true
 ### integration_status
 
 - **Type**: String
+
 - **Required**: For integration documents
+
 - **Values**: "production_ready", "draft_mode", "pending_authentication"
+
 - **Purpose**: DevOnboarder deployment status tracking
 
 ### virtual_env_required
 
 - **Type**: Boolean
+
 - **Required**: For technical documents
+
 - **Value**: true (following DevOnboarder's mandatory virtual environment policy)
+
 - **Purpose**: Environment requirement enforcement
 
 ### ci_integration
 
 - **Type**: Boolean
+
 - **Required**: For CI-related documents
+
 - **Value**: true
+
 - **Purpose**: GitHub Actions workflow integration flag
 
 ### codex-agent
 
 - **Type**: Boolean
+
 - **Required**: For agent files
+
 - **Value**: true
+
 - **Purpose**: Agent discovery system compatibility
 
 ## Validation Framework
@@ -141,31 +174,42 @@ virtual_env_required: true
 ### Virtual Environment Setup
 
 ```bash
+
 # CRITICAL: All validation must run in virtual environment
+
 source .venv/bin/activate
 pip install -e .[test]
+
 ```
 
 ### Validation Commands
 
 ```bash
+
 # Validate agent metadata (DevOnboarder pattern)
+
 python scripts/validate_agents.py
 
 # Check Codex agent index consistency
+
 python scripts/validate-bot-permissions.sh
 
 # Markdown compliance (mandatory)
+
 npx markdownlint-cli2 "**/*.md" --config .markdownlint.json
 
 # YAML structure validation
+
 python -c "import yaml; yaml.safe_load(open('docs/example.md').read().split('---')[1])"
+
 ```
 
 ### CI Integration
 
 ```yaml
+
 # .github/workflows/metadata-validation.yml
+
 name: Metadata Validation
 on: [push, pull_request]
 
@@ -176,20 +220,24 @@ jobs:
             - uses: actions/checkout@v4
 
             - name: Setup Python Virtual Environment
+
               run: |
                   python -m venv .venv
                   source .venv/bin/activate
                   pip install -e .[test]
 
             - name: Validate Agent Files
+
               run: |
                   source .venv/bin/activate
                   python scripts/validate_agents.py
 
             - name: Check Markdown Compliance
+
               run: |
                   npm ci --prefix . --no-save
                   npx markdownlint-cli2 "**/*.md"
+
 ```
 
 ## DevOnboarder Document Types
@@ -197,10 +245,15 @@ jobs:
 ### Extended Document Types
 
 - **agent**: Codex agent specifications with YAML frontmatter
+
 - **guide**: Comprehensive how-to documentation
+
 - **status**: Integration and deployment status reports
+
 - **framework**: System architecture and component documentation
+
 - **standards**: Quality and compliance requirements
+
 - **handoff**: Cross-team integration documentation
 
 ### Example: CI Monitoring Framework Documentation
@@ -208,6 +261,7 @@ jobs:
 ```yaml
 ---
 title: "CI Monitoring Framework"
+
 description: "Automated CI status monitoring and reporting tools"
 tags: ["ci", "monitoring", "automation", "devops"]
 author: "DevOnboarder Team"
@@ -225,6 +279,7 @@ integration_status: "production_ready"
 virtual_env_required: true
 ci_integration: true
 ---
+
 ```
 
 ## Quality Assurance Integration
@@ -232,16 +287,21 @@ ci_integration: true
 ### Pre-commit Hook Validation
 
 ```yaml
+
 # .pre-commit-config.yaml integration
+
 repos:
     - repo: local
+
       hooks:
           - id: validate-metadata
+
             name: Validate YAML Frontmatter
             entry: python scripts/validate_agents.py
             language: system
             pass_filenames: false
             always_run: true
+
 ```
 
 ### Markdown Compliance Requirements
@@ -249,9 +309,13 @@ repos:
 Following DevOnboarder's **mandatory markdown standards**:
 
 - **MD022**: Headings surrounded by blank lines
+
 - **MD032**: Lists surrounded by blank lines
+
 - **MD031**: Fenced code blocks surrounded by blank lines
+
 - **MD007**: Proper list indentation (4 spaces for nested items)
+
 - **MD009**: No trailing spaces
 
 **Pre-creation Requirement**: All metadata documentation must pass `markdownlint-cli2` validation before commit.
@@ -261,18 +325,24 @@ Following DevOnboarder's **mandatory markdown standards**:
 ### Authentication Integration
 
 ```yaml
+
 # For authenticated agent files
+
 discord_role_required: "CEO|CTO|CFO|CMO|COO"
 authentication_required: true
 integration_guards_active: true
 live_triggers_enabled: false # During draft mode
+
 ```
 
 ### DevOnboarder Security Standards
 
 - **Enhanced Potato Policy**: Sensitive files automatically protected
+
 - **Virtual Environment Isolation**: All tools run in `.venv` context
+
 - **Root Artifact Guard**: Prevents repository pollution
+
 - **CI Triage Guard**: Automated failure detection and issue creation
 
 ## Integration with Existing Systems
@@ -292,6 +362,7 @@ live_triggers_enabled: false # During draft mode
         }
     ]
 }
+
 ```
 
 ### GitHub Actions Integration
@@ -299,9 +370,13 @@ live_triggers_enabled: false # During draft mode
 The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workflows**:
 
 - **ci.yml**: Main test pipeline with metadata validation
+
 - **markdownlint.yml**: Enforces markdown compliance
+
 - **validate-permissions.yml**: Bot permissions validation
+
 - **auto-fix.yml**: Automatic quality fixes
+
 - **ci-monitor.yml**: Continuous CI health monitoring
 
 ## Troubleshooting
@@ -312,6 +387,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 
     ```bash
     # ✅ Solution
+
     source .venv/bin/activate
     pip install -e .[test]
     python scripts/validate_agents.py
@@ -321,6 +397,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 
     ```bash
     # ✅ Check and fix
+
     npx markdownlint-cli2 "docs/your-file.md" --fix
     ```
 
@@ -328,21 +405,27 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 
     ```bash
     # ✅ Validate YAML structure
+
     python -c "import yaml; yaml.safe_load(open('docs/file.md').read().split('---')[1])"
     ```
 
 ### Integration Status Checking
 
 ```bash
+
 # Check current integration status
+
 source .venv/bin/activate
 python scripts/ci-monitor.py --health-check
 
 # Validate all agent files
+
 python scripts/validate_agents.py
 
 # Generate integration status report
+
 python scripts/ci-monitor.py --integration-status
+
 ```
 
 ## Benefits
@@ -366,10 +449,12 @@ python scripts/ci-monitor.py --integration-status
 ---
 
 **Prepared by**: DevOnboarder Team
+
 **Review Required by**: DevSecOps Manager
 **Approval Required for**: New file creation and metadata updates
 **Next Review Date**: Monthly metadata standards review
 **Document Classification**: Internal - DevOnboarder Engineering
+
 **Virtual Environment**: Required for all validation commands
 **CI Integration**: Active via GitHub Actions workflows
 **Quality Assurance**: Enforced via pre-commit hooks and markdown linting

@@ -1,3 +1,21 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P3
+content_uniqueness_score: 4
+created_at: '2025-09-12'
+description: Documentation description needed
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: offline-setup.md-docs
+status: active
+tags:
+- documentation
+title: Offline Setup
+updated_at: '2025-09-12'
+visibility: internal
+---
+
 # Offline Setup
 
 Some environments block direct access to package registries. Use another
@@ -103,6 +121,7 @@ command works offline:
 
 ```bash
 sudo install -m 755 /path/to/devonboarder-offline/trivy/trivy /usr/local/bin/trivy
+
 ```
 
 Use `scripts/trivy_scan.sh` to scan the images built with `docker-compose.ci.yaml`.
