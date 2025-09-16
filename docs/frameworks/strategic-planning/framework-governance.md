@@ -20,11 +20,7 @@ consolidation_priority: P3
 
 #### **Version Documentation Requirements**
 
-```markdown
-
-#### **Version Documentation Requirements**
-
-```markdown
+```yaml
 # Framework Version Header (Required in all framework docs)
 
 ---
