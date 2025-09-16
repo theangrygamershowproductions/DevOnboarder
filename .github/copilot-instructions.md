@@ -289,6 +289,27 @@ npm ci --prefix frontend
 ./scripts/qc_pre_push.sh  # 95% quality threshold
 ```
 
+### Essential Quick Start Commands
+
+```bash
+# Complete development setup (Docker-based)
+make deps && make up              # Build and start all services
+make test                         # Run comprehensive test suite
+
+# Individual service testing (helpful for debugging)
+devonboarder-api         # Start main API (port 8001)
+devonboarder-auth        # Start auth service (port 8002)
+devonboarder-integration # Start Discord integration (port 8081)
+
+# Quality control (MANDATORY before commits)
+./scripts/qc_pre_push.sh         # 95% quality validation (8 metrics)
+./scripts/safe_commit.sh "message"  # Safe commit wrapper (NEVER use git commit directly)
+
+# Test execution with enhanced logging
+./scripts/run_tests.sh           # Standard test runner with hints
+./scripts/run_tests_with_logging.sh  # Enhanced logging for CI troubleshooting
+```
+
 **Branch Naming Conventions:**
 
 - `feat/feature-description` - New features
@@ -301,25 +322,32 @@ npm ci --prefix frontend
 **Essential Development Commands**:
 
 ```bash
-# Development workflow
+# Complete development setup
 make deps && make up              # Build and start all services
 make test                         # Run comprehensive test suite
-make aar-setup                    # Set up CI failure analysis
-./scripts/run_tests.sh           # Alternative test runner with hints
+make aar-setup                    # Set up CI failure analysis system
 
-# Quality control (MANDATORY before push)
-./scripts/qc_pre_push.sh         # Validates 8 quality metrics
-source .venv/bin/activate        # Always activate venv first
-
-# Documentation quality control (NEW)
-./scripts/qc_docs.sh             # Check all documentation formatting
-./scripts/qc_docs.sh --fix       # Fix markdown formatting issues
-./scripts/qc_docs.sh --file docs/README.md --fix  # Fix specific file
-
-# Service APIs (individual service testing)
+# Individual service testing (helpful for multi-service debugging)
 devonboarder-api         # Start main API (port 8001)
 devonboarder-auth        # Start auth service (port 8002)
 devonboarder-integration # Start Discord integration (port 8081)
+
+# Quality control (MANDATORY before push)
+./scripts/qc_pre_push.sh         # Validates 8 quality metrics (95% threshold)
+./scripts/safe_commit.sh "message"  # NEVER use git commit directly
+
+# Test execution with enhanced capabilities
+./scripts/run_tests.sh           # Standard test runner with dependency hints
+./scripts/run_tests_with_logging.sh  # Enhanced logging for troubleshooting
+
+# Documentation quality control
+./scripts/qc_docs.sh             # Check all documentation formatting
+./scripts/qc_docs.sh --fix       # Fix markdown formatting issues
+
+# Docker-based multi-service debugging
+docker compose -f docker-compose.dev.yaml ps    # Check service health
+docker compose -f docker-compose.dev.yaml logs <service>  # Service logs
+bash scripts/smart_env_sync.sh --validate-only  # Environment consistency
 
 # Optional CLI shortcuts (if .zshrc integration enabled)
 devonboarder-activate            # Auto-setup environment
@@ -758,6 +786,47 @@ PYTHON_ENV=test
 - **AAR (After Action Report) System**: Automated CI failure analysis with `make aar-*` commands
 - **QC Pre-Push Script**: `./scripts/qc_pre_push.sh` validates 8 quality metrics (95% threshold)
 - **CLI Shortcuts**: Optional `.zshrc` integration with `devonboarder-activate`, `gh-dashboard`
+
+### Makefile Targets for Development
+
+DevOnboarder provides sophisticated Make targets for streamlined development:
+
+**Core Development**:
+
+```bash
+make deps                        # Build Docker containers for all services
+make up                          # Start all services with Docker Compose
+make test                        # Run comprehensive test suite with coverage validation
+make openapi                     # Generate OpenAPI specification
+```
+
+**AAR (After Action Report) System**:
+
+```bash
+make aar-env-template            # Create/update .env file with AAR environment variables
+make aar-setup                   # Complete AAR system setup with token validation
+make aar-check                   # Validate AAR system status and configuration
+make aar-validate                # Check AAR templates for markdown compliance
+make aar-generate WORKFLOW_ID=12345                    # Generate AAR for specific workflow run
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR and create GitHub issue
+```
+
+**Auto-Fixer System**:
+
+```bash
+make autofix                     # Run all auto-fixers for code quality
+make autofix-markdown            # Fix markdown files specifically
+make autofix-shell               # Fix shell script formatting
+make autofix-python              # Run Python formatters and linters
+```
+
+**Token Audit System**:
+
+```bash
+make audit-tokens                # Generate comprehensive token audit report
+make audit-status                # Check token audit system status
+make audit-clean                 # Clean old audit reports
+```
 
 ## Service Integration Patterns
 
@@ -1429,13 +1498,15 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 
 ### Essential Automation Scripts (100+)
 
-**Quality Control**:
+DevOnboarder includes an extensive automation ecosystem in `scripts/` for all aspects of development:
+
+**Quality Control & Validation**:
 
 - `scripts/qc_pre_push.sh` - 95% quality validation (8 metrics: YAML linting, Python linting, formatting, type checking, test coverage, documentation quality, commit messages, security scanning)
 - `scripts/validation_summary.sh` - Terminal output violation summary
 - `scripts/validate_terminal_output.sh` - Terminal compliance validation
 
-**Environment Management**:
+**Environment & Configuration Management**:
 
 - `scripts/smart_env_sync.sh` - Centralized environment variable synchronization
 - `scripts/env_security_audit.sh` - Environment variable security validation
@@ -1454,11 +1525,17 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 - `scripts/enforce_output_location.sh` - Root Artifact Guard validation
 - `scripts/security_audit.sh` - Comprehensive security scanning
 
-**Testing & Validation**:
+**Testing & Debugging**:
 
 - `scripts/run_tests.sh` - Comprehensive test runner with dependency hints
 - `scripts/run_tests_with_logging.sh` - Enhanced test runner with persistent logging
 - `scripts/manage_logs.sh` - Advanced log management system
+
+**Docker & Multi-Service Operations**:
+
+- `scripts/orchestrate-dev.sh` - Development environment orchestration
+- `scripts/orchestrate-prod.sh` - Production environment orchestration
+- `scripts/wait_for_service.sh` - Service dependency management
 
 ### AAR System (After Action Reports)
 
