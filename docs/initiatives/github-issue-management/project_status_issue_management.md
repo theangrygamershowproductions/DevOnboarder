@@ -1,3 +1,9 @@
+---
+similarity_group: initiatives-github-issue-management
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # DevOnboarder Project Status: Issue Management Initiative
 
 ## Current Session Context (September 16, 2025)

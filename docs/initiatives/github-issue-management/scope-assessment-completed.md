@@ -1,3 +1,9 @@
+---
+similarity_group: initiatives-github-issue-management
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # GitHub Issue Management Initiative: Scope Assessment
 
 Framework Version: v1.0.0

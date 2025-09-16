@@ -1,3 +1,9 @@
+---
+similarity_group: initiatives-github-issue-management
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # DevOnboarder Issue Roadmap: 90-Day Action Plan
 
 ## Sprint 1: Foundation Fixes (Week 1-2) - IMMEDIATE
