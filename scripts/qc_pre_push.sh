@@ -6,6 +6,21 @@ set -euo pipefail
 
 echo "🔍 Running 95% QC Pre-Push Validation..."
 
+# CRITICAL: Branch workflow validation to prevent main branch commits
+current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
+if [[ "$current_branch" == "main" ]]; then
+    echo
+    echo "🚨 WARNING: You're about to commit to main branch!"
+    echo "   DevOnboarder requires feature branch workflow"
+    echo "   Consider: git checkout -b feat/your-feature-name"
+    echo
+    read -r -p "Continue anyway? [y/N]: " continue_main
+    if [[ ! "$continue_main" =~ ^[Yy]$ ]]; then
+        echo "Aborted. Create feature branch first."
+        exit 1
+    fi
+fi
+
 # Ensure we're in virtual environment
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
