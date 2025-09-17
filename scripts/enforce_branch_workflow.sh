@@ -26,7 +26,7 @@ enforce_branch_workflow() {
     if [[ "$PRE_COMMIT_MODE" == "true" ]]; then
         # Silent check for pre-commit hooks - just exit with error code
         if [[ "$current_branch" == "main" ]]; then
-            echo "ERROR: Cannot commit to main branch. Use feature branch workflow."
+            echo "ERROR: Cannot commit to main branch. Create a feature branch first."
             exit 1
         fi
         return 0

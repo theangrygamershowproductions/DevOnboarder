@@ -10,7 +10,7 @@ echo "🔍 Running 95% QC Pre-Push Validation..."
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
     echo
-    echo "🚨 WARNING: You're about to commit to main branch!"
+    echo "🚨 WARNING: You're about to push to main branch!"
     echo "   DevOnboarder requires feature branch workflow"
     echo "   Consider: git checkout -b feat/your-feature-name"
     echo

@@ -13,6 +13,7 @@ LOGS_DIR="${SCRIPT_DIR}/../logs"
 
 # Create logs directory if it doesn't exist
 mkdir -p "${LOGS_DIR}"
+chmod 755 "${LOGS_DIR}"
 
 # Navigation session logging
 SESSION_LOG="${LOGS_DIR}/navigation_session_$(date +%Y%m%d_%H%M%S).log"

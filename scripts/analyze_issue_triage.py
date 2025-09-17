@@ -5,14 +5,19 @@ Categorizes remaining GitHub issues for systematic labeling and organization.
 """
 
 import json
+import os
 import sys
 from datetime import datetime
 
 
 def load_issues():
     """Load issues from JSON file."""
+    # Use environment variable if set, else default to relative path
+    issues_path = os.environ.get(
+        "ISSUES_JSON_PATH", os.path.join("logs", "remaining_issues.json")
+    )
     try:
-        with open("/home/potato/DevOnboarder/logs/remaining_issues.json", "r") as f:
+        with open(issues_path, "r", encoding="utf-8") as f:
             # Handle JSON objects separated by newlines
             content = f.read().strip()
             issues = []
