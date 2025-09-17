@@ -25,7 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
 
@@ -76,8 +76,12 @@ jobs:
       - name: Commit Priority Matrix enhancements
         if: steps.synthesis-check.outputs.enhanced_files == 'true' && github.event.inputs.dry_run != 'true'
         run: |
+          # Configure git with token-based authentication
           git config --local user.email "action@github.com"
           git config --local user.name "Priority Matrix Bot"
+
+          # Configure git to use the token for authentication
+          git config --local url."https://${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
           # Check for unstaged changes and stash them if necessary
           if [ -n "$(git diff --name-only)" ] || [ -n "$(git ls-files --others --exclude-standard)" ]; then
