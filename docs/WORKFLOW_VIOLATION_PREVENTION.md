@@ -1,3 +1,9 @@
+---
+similarity_group: WORKFLOW_VIOLATION_PREVENTION.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # DevOnboarder Workflow Violation Prevention System
 
 ## Overview

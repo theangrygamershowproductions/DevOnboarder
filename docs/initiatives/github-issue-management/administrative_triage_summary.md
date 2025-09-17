@@ -1,3 +1,9 @@
+---
+similarity_group: initiatives-github-issue-management
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Administrative Triage Summary: Issue Management Initiative
 
 **Date**: September 17, 2025
