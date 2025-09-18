@@ -137,6 +137,7 @@ Environment secrets only override Repository secrets when:
 
 - ✅ Workflow updated to use base64 decoding
 - ✅ Base64-encoded secret content generated
+- 🔄 GitHub Secret updated - testing base64 decode validation
 - 🔄 Ready for GitHub Secret update and testing
 
 This approach eliminates shell variable corruption while maintaining DevOnboarder Terminal Output Policy compliance.
