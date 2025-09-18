@@ -34,14 +34,31 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
           persist-credentials: false
 
-      - name: Setup GPG signing
+      - name: Setup SSH commit signing
+        shell: bash
         env:
-          PMBOT_GPG_PRIVATE: ${{ secrets.PMBOT_GPG_PRIVATE }}
-          PMBOT_GPG_PASSPHRASE: ${{ secrets.PMBOT_GPG_PASSPHRASE }}
-          PMBOT_GPG_KEYID: ${{ secrets.PMBOT_GPG_KEYID }}
+          PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
           PMBOT_NAME: ${{ secrets.PMBOT_NAME }}
           PMBOT_EMAIL: ${{ secrets.PMBOT_EMAIL }}
-        run: .github/scripts/setup-gpg-signing.sh
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          # Write SSH private key safely (avoiding variable expansion in echo)
+          printf "%s\n" "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+          chmod 600 ~/.ssh/ci_signing_key
+
+          # Git: use SSH signing
+          git config --global user.name  "$PMBOT_NAME"
+          git config --global user.email "$PMBOT_EMAIL"
+          git config --global gpg.format ssh
+          git config --global user.signingkey ~/.ssh/ci_signing_key
+
+          # Create public key file from private key for git reference
+          ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub
+
+          # Enable commit signing by default
+          git config --global commit.gpgsign true
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -211,7 +228,7 @@ jobs:
             const body = [
               "🤖 **Priority Matrix Bot** - Signed commit failed",
               "",
-              "GPG signing or push was rejected. To apply Priority Matrix enhancements manually:",
+              "SSH signing or push was rejected. To apply Priority Matrix enhancements manually:",
               "",
               "```bash",
               "# Run Priority Matrix synthesis locally",
@@ -222,7 +239,7 @@ jobs:
               "git commit -S -m 'FEAT(docs): manual Priority Matrix field synthesis'",
               "```",
               "",
-              "**Failure context**: Automated GPG signing failed - may need secret rotation or key updates.",
+              "**Failure context**: Automated SSH signing failed - may need key rotation or secret updates.",
               "",
               "*This is a fallback notification - no separate PR will be created.*"
             ].join("\n");
