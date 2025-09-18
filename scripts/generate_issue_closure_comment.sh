@@ -217,7 +217,6 @@ cp "$TEMPLATE_FILE" "$OUTPUT_FILE"
 TEMP_SCRIPT=$(mktemp)
 cat > "$TEMP_SCRIPT" << 'EOF'
 import sys
-import re
 
 # Read the template
 with open(sys.argv[1], 'r') as f:
@@ -233,7 +232,25 @@ replacements = {
     '{CLOSURE_DATE}': sys.argv[7],
     '{RESOLVER}': sys.argv[8],
     '{IMPACT_DESCRIPTION}': sys.argv[9],
-    '{NEXT_STEPS}': sys.argv[10]
+    '{NEXT_STEPS}': sys.argv[10],
+    '{ROOT_CAUSE}': sys.argv[11] if len(sys.argv) > 11 else '',
+    '{FIX_DESCRIPTION}': sys.argv[12] if len(sys.argv) > 12 else '',
+    '{FEATURE_NAME}': sys.argv[13] if len(sys.argv) > 13 else '',
+    '{IMPLEMENTATION_APPROACH}': sys.argv[14] if len(sys.argv) > 14 else '',
+    '{KEY_COMPONENTS}': sys.argv[15] if len(sys.argv) > 15 else '',
+    '{ACCEPTANCE_CRITERIA_STATUS}': sys.argv[16] if len(sys.argv) > 16 else '',
+    '{DEPLOYMENT_DETAILS}': sys.argv[17] if len(sys.argv) > 17 else '',
+    '{BUILD_SYSTEM}': sys.argv[18] if len(sys.argv) > 18 else '',
+    '{FAILURE_TYPE}': sys.argv[19] if len(sys.argv) > 19 else '',
+    '{ERROR_DETAILS}': sys.argv[20] if len(sys.argv) > 20 else '',
+    '{ROOT_CAUSE_ANALYSIS}': sys.argv[21] if len(sys.argv) > 21 else '',
+    '{RESOLUTION_DESCRIPTION}': sys.argv[22] if len(sys.argv) > 22 else '',
+    '{CHANGES_MADE}': sys.argv[23] if len(sys.argv) > 23 else '',
+    '{PREVENTION_MEASURES}': sys.argv[24] if len(sys.argv) > 24 else '',
+    '{AFFECTED_COMPONENTS}': sys.argv[25] if len(sys.argv) > 25 else '',
+    '{RESOLUTION_STEPS}': sys.argv[26] if len(sys.argv) > 26 else '',
+    '{TEST_RESULTS}': sys.argv[27] if len(sys.argv) > 27 else '',
+    '{VERIFICATION_METHOD}': sys.argv[28] if len(sys.argv) > 28 else ''
 }
 
 for placeholder, value in replacements.items():
@@ -245,7 +262,7 @@ with open(sys.argv[1], 'w') as f:
 EOF
 
 # Use Python for safe string replacement
-python3 "$TEMP_SCRIPT" "$OUTPUT_FILE" "$PR_NUMBER" "$PR_TITLE" "$BRANCH_NAME" "$MERGE_DATE" "$COMMIT_COUNT" "$CLOSURE_DATE" "$RESOLVER" "$IMPACT_DESCRIPTION" "$NEXT_STEPS"
+python3 "$TEMP_SCRIPT" "$OUTPUT_FILE" "$PR_NUMBER" "$PR_TITLE" "$BRANCH_NAME" "$MERGE_DATE" "$COMMIT_COUNT" "$CLOSURE_DATE" "$RESOLVER" "$IMPACT_DESCRIPTION" "$NEXT_STEPS" "$ROOT_CAUSE" "$FIX_DESCRIPTION" "$FEATURE_NAME" "$IMPLEMENTATION_APPROACH" "$KEY_COMPONENTS" "$ACCEPTANCE_CRITERIA_STATUS" "$DEPLOYMENT_DETAILS" "$BUILD_SYSTEM" "$FAILURE_TYPE" "$ERROR_DETAILS" "$ROOT_CAUSE_ANALYSIS" "$RESOLUTION_DESCRIPTION" "$CHANGES_MADE" "$PREVENTION_MEASURES" "$AFFECTED_COMPONENTS" "$RESOLUTION_STEPS" "$TEST_RESULTS" "$VERIFICATION_METHOD"
 
 # Clean up
 rm -f "$TEMP_SCRIPT"
