@@ -119,6 +119,13 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 asyncio_mode = "auto"
 
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "build", "dist"]
+skips = ["B101", "B105", "B106"]
+
+[tool.bandit.assert_used]
+skips = ["**/test_*.py", "**/tests/**/*.py"]
+
 [tool.mypy]
 cache_dir = "logs/.mypy_cache"
 show_error_codes = true

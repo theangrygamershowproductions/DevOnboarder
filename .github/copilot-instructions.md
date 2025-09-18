@@ -1788,7 +1788,68 @@ Final paragraph after code block.
 
 **AGENT RESPONSIBILITY**: Treat markdown linting rules as **requirements**, not **suggestions**. Creating non-compliant content violates DevOnboarder's "quiet reliability" philosophy.
 
-### ⚠️ NEW: Enhanced Debugging and Error Analysis
+### ⚠️ NEW: Priority Matrix Bot GPG Signing
+
+**CRITICAL UNDERSTANDING**: DevOnboarder implements automated Priority Matrix synthesis with SSH GPG-signed commits.
+
+**GPG Signing Architecture**:
+
+```yaml
+# SSH signing configuration for automated bots
+- name: Setup SSH commit signing (bot)
+  env:
+    PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
+    PMBOT_NAME: ${{ vars.PMBOT_NAME }}
+    PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
+  run: |
+    umask 077
+    printf '%s\n' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+    chmod 600 ~/.ssh/ci_signing_key
+
+    git config --global gpg.format ssh
+    git config --global user.signingkey ~/.ssh/ci_signing_key.pub
+    git config --global commit.gpgsign true
+```
+
+**Agent Requirements for Bot Development**:
+
+- **ALWAYS verify SSH key format** in GPG signing workflows
+- **ALWAYS validate private key** before attempting commits
+- **NEVER bypass signature verification** for automated commits
+- **UNDERSTAND**: Bot commits require proper authentication token hierarchy
+- **REMEMBER**: Signed commits prove authenticity and maintain audit trail
+
+**Priority Matrix Auto-Synthesis System**:
+
+- **Automated enhancement**: Documents receive similarity_group, content_uniqueness_score, merge_candidate flags
+- **Quality metrics**: 100% similarity detection accuracy with confidence scoring
+- **Signed commits**: All automated changes are cryptographically signed
+- **PR integration**: Automatic comments with synthesis results and quality metrics
+
+### ⚠️ NEW: Traefik Reverse Proxy Architecture
+
+**CRITICAL UNDERSTANDING**: DevOnboarder uses Traefik reverse proxy with dual routing (subdomain + path-based).
+
+**Service Routing Architecture**:
+
+```yaml
+# Subdomain routing (primary)
+- "traefik.http.routers.auth-host.rule=Host(`auth.theangrygamershow.com`)"
+- "traefik.http.routers.api-host.rule=Host(`api.theangrygamershow.com`)"
+
+# Path-based routing (legacy fallback)
+- "traefik.http.routers.auth-dev.rule=PathPrefix(`/auth`)"
+- "traefik.http.routers.xp-dev.rule=PathPrefix(`/api`)"
+```
+
+**Agent Requirements for Service Development**:
+
+- **ALWAYS configure both routing patterns** for new services
+- **ALWAYS use subdomain routing** as primary with higher priority (200)
+- **ALWAYS include path-based fallback** with lower priority (100)
+- **ALWAYS configure CORS middleware** via `cors-header@file`
+- **UNDERSTAND**: Services expose internal ports, Traefik handles external routing
+- **REMEMBER**: Health checks use internal container networking
 
 **AUTOMATIC LOG ANALYSIS**: DevOnboarder's enhanced `safe_commit.sh` script now provides comprehensive error diagnostics when pre-commit fails on the second attempt:
 
@@ -1995,13 +2056,14 @@ bash scripts/validate-bot-permissions.sh
 
 ---
 
-**Last Updated**: 2025-08-06 (Multi-Service Docker Architecture, ES Modules & Environment Management Troubleshooting)
+**Last Updated**: 2025-09-18 (Priority Matrix Bot GPG Signing & Current Architecture Analysis)
 **Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
-**Active Environments**: Development + Production Discord integration
+**Active Environments**: Development + Production Discord integration (Guild IDs: 1386935663139749998, 1065367728992571444)
 **CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
-**Security**: Enhanced Potato Policy + Root Artifact Guard active
+**Security**: Enhanced Potato Policy + Root Artifact Guard + SSH GPG signing active
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
 **Enhanced Debugging**: safe_commit.sh with automatic log analysis and error diagnostics
-**Review Required**: Follow PR template and maintain quality standards
+**Current Branch**: fix/priority-matrix-bot-gpg-signing (GPG signing implementation)
+**Architecture**: Traefik reverse proxy + multi-service Docker Compose with subdomain routing
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution

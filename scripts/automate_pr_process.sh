@@ -175,7 +175,7 @@ if [ "$ACTION_MODE" = "full-auto" ]; then
 fi
 
 # Step 6: Generate Automation Report
-echo -e "${YELLOW}📋 STEP 6: Automation Report${NC}"
+echo "STEP 6: Automation Report"
 
 cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 # PR #$PR_NUMBER Automation Report
@@ -186,7 +186,7 @@ cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 
 **Controller:** PR Automation Framework v1.0
 
-## 📊 Analysis Results
+## Analysis Results
 
 ### Health Assessment
 
@@ -204,16 +204,16 @@ cat > "reports/pr_${PR_NUMBER}_automation_report.md" << EOF
 - **Commits Created:** $([ $FIXES_APPLIED -gt 0 ] && echo "1 (automated fixes)" || echo "0")
 - **Auto-Merge:** $([ "$ACTION_MODE" = "full-auto" ] && echo "Evaluated" || echo "Not attempted")
 
-## 🎯 Next Steps
+## Next Steps
 
 $(case "$RECOMMENDATION" in
-    *"MERGE"*) echo "- ✅ Ready for human review and merge approval";;
-    *"EVALUATE"*) echo "- 🤔 Manual evaluation of core mission completion needed";;
-    *"FRESH START"*) echo "- 🔄 Consider creating new PR with focused scope";;
-    *) echo "- 🔧 Continue with targeted fixes as recommended";;
+    *"MERGE"*) echo "- Ready for human review and merge approval";;
+    *"EVALUATE"*) echo "- Manual evaluation of core mission completion needed";;
+    *"FRESH START"*) echo "- Consider creating new PR with focused scope";;
+    *) echo "- Continue with targeted fixes as recommended";;
 esac)
 
-## 📁 Artifacts
+## Artifacts
 
 - **Full Log:** \`$LOG_FILE\`
 - **Health Analysis:** Available in automation logs
