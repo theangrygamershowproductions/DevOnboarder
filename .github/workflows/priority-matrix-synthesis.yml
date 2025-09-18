@@ -34,31 +34,50 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
           persist-credentials: false
 
-      - name: Setup SSH commit signing
-        shell: bash
-        env:
-          PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
-          PMBOT_NAME: ${{ secrets.PMBOT_NAME }}
-          PMBOT_EMAIL: ${{ secrets.PMBOT_EMAIL }}
+      - name: Configure SSH and commit priority matrix
         run: |
-          set -euo pipefail
+          echo "Starting SSH configuration and commit process..."
+
+          # Set bot identity with fallbacks
+          PMBOT_NAME_FINAL="${PMBOT_NAME:-Priority Matrix Bot}"
+          PMBOT_EMAIL_FINAL="${PMBOT_EMAIL:-bot+priority-matrix@theangrygamershow.com}"
+
+          # Configure SSH directory and permissions
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          # Write SSH private key safely (avoiding variable expansion in echo)
-          printf "%s\n" "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+
+          # Write SSH private key with secure permissions
+          printf '%s\n' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
           chmod 600 ~/.ssh/ci_signing_key
 
-          # Git: use SSH signing
-          git config --global user.name  "$PMBOT_NAME"
-          git config --global user.email "$PMBOT_EMAIL"
-          git config --global gpg.format ssh
-          git config --global user.signingkey ~/.ssh/ci_signing_key
+          # Configure Git with bot identity and SSH signing
+          git config user.name "$PMBOT_NAME_FINAL"
+          git config user.email "$PMBOT_EMAIL_FINAL"
+          git config user.signingkey ~/.ssh/ci_signing_key
+          git config gpg.format ssh
+          git config commit.gpgsign true
 
-          # Create public key file from private key for git reference
-          ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub
+          # Generate and commit priority matrix if analysis file exists
+          if [[ -f "ci_failure_analysis.json" ]]; then
+            echo "Analysis file found - generating priority matrix"
+            python scripts/generate_priority_matrix.py --input ci_failure_analysis.json --output PRIORITY_MATRIX.md
 
-          # Enable commit signing by default
-          git config --global commit.gpgsign true
+            if [[ -f "PRIORITY_MATRIX.md" ]]; then
+              echo "Priority matrix generated successfully"
+              git add PRIORITY_MATRIX.md
+              git commit -m "AUTOMATION(priority-matrix): update failure priority analysis - Generated priority matrix from CI failure patterns - Signed-off-by: $PMBOT_NAME_FINAL <$PMBOT_EMAIL_FINAL>"
+              echo "Priority matrix committed with SSH signature"
+            else
+              echo "Priority matrix generation failed"
+              exit 1
+            fi
+          else
+            echo "No analysis file found - skipping matrix generation"
+          fi
+        env:
+          PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
+          PMBOT_NAME: ${{ vars.PMBOT_NAME }}
+          PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -106,12 +125,6 @@ jobs:
 
       - name: Commit Priority Matrix enhancements
         if: steps.synthesis-check.outputs.enhanced_files == 'true' && github.event.inputs.dry_run != 'true'
-        env:
-          GIT_AUTHOR_NAME: ${{ secrets.PMBOT_NAME }}
-          GIT_AUTHOR_EMAIL: ${{ secrets.PMBOT_EMAIL }}
-          GIT_COMMITTER_NAME: ${{ secrets.PMBOT_NAME }}
-          GIT_COMMITTER_EMAIL: ${{ secrets.PMBOT_EMAIL }}
-          GPG_TTY: ${{ env.GPG_TTY }}
         run: |
           # Configure git to use the token for authentication
           git config --local url."https://${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
