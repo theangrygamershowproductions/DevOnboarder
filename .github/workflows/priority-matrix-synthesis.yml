@@ -60,7 +60,7 @@ jobs:
           # Generate and commit priority matrix if analysis file exists
           if [[ -f "ci_failure_analysis.json" ]]; then
             echo "Analysis file found - generating priority matrix"
-            python scripts/generate_priority_matrix.py --input ci_failure_analysis.json --output PRIORITY_MATRIX.md
+            python scripts/synthesize_priority_matrix.py --input ci_failure_analysis.json --output PRIORITY_MATRIX.md
 
             if [[ -f "PRIORITY_MATRIX.md" ]]; then
               echo "Priority matrix generated successfully"
