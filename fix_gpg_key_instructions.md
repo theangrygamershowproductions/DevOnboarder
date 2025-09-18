@@ -38,3 +38,5 @@ ssh-keygen -t ed25519 -C "priority-matrix-bot" -f ~/.ssh/pmbot -N ""
 cat ~/.ssh/pmbot  # Copy this to PMBOT_SSH_PRIVATE secret
 cat ~/.ssh/pmbot.pub  # Add this to GitHub account SSH keys
 ```
+
+Testing SSH key fix with Environment Secrets
