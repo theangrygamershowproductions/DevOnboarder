@@ -42,12 +42,12 @@ echo "==================================="
 
 if [[ -d "$REPORTS_DIR" ]]; then
     echo "Processing $REPORTS_DIR..."
-    find "$REPORTS_DIR" -name "*.md" -type f | while read -r file; do
+    while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
         if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
-    done
+    done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
 fi
 
 echo ""
@@ -56,12 +56,12 @@ echo "================================"
 
 if [[ -d "$AAR_DIR" ]]; then
     echo "Processing $AAR_DIR..."
-    find "$AAR_DIR" -name "*.md" -type f | while read -r file; do
+    while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
         if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
-    done
+    done < <(find "$AAR_DIR" -name "*.md" -type f -print0)
 fi
 
 echo ""

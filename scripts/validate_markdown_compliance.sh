@@ -27,13 +27,12 @@ check_emoji_violations() {
 
     for emoji in "${emoji_patterns[@]}"; do
         if grep -q "$emoji" "$file" 2>/dev/null; then
-            echo "VIOLATION: $file contains emoji: $emoji"
+            echo "VIOLATION: $file contains emoji: $emoji" >&2
             file_violations=$((file_violations + 1))
-            VIOLATIONS=$((VIOLATIONS + 1))
         fi
     done
 
-    return $file_violations
+    echo $file_violations
 }
 
 # Check for markdown generation violations in scripts
@@ -52,16 +51,15 @@ check_script_violations() {
         local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
         for emoji in "${emoji_patterns[@]}"; do
             if grep -q "$emoji" "$temp_file" 2>/dev/null; then
-                echo "SCRIPT VIOLATION: $script generates markdown with emoji: $emoji"
+                echo "SCRIPT VIOLATION: $script generates markdown with emoji: $emoji" >&2
                 script_violations=$((script_violations + 1))
-                VIOLATIONS=$((VIOLATIONS + 1))
             fi
         done
 
         rm -f "$temp_file"
     fi
 
-    return $script_violations
+    echo $script_violations
 }
 
 echo "Phase 1: Scanning generated markdown files"
@@ -70,21 +68,25 @@ echo "=========================================="
 # Scan reports directory
 if [[ -d "$REPORTS_DIR" ]]; then
     echo "Scanning $REPORTS_DIR for markdown violations..."
-    find "$REPORTS_DIR" -name "*.md" -type f | while read -r file; do
-        if check_emoji_violations "$file"; then
+    while IFS= read -r -d '' file; do
+        local_violations=$(check_emoji_violations "$file")
+        if [[ $local_violations -gt 0 ]]; then
             echo "  Found violations in: $file"
+            VIOLATIONS=$((VIOLATIONS + local_violations))
         fi
-    done
+    done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
 fi
 
 # Scan AAR directory
 if [[ -d "$AAR_DIR" ]]; then
     echo "Scanning $AAR_DIR for markdown violations..."
-    find "$AAR_DIR" -name "*.md" -type f | while read -r file; do
-        if check_emoji_violations "$file"; then
+    while IFS= read -r -d '' file; do
+        local_violations=$(check_emoji_violations "$file")
+        if [[ $local_violations -gt 0 ]]; then
             echo "  Found violations in: $file"
+            VIOLATIONS=$((VIOLATIONS + local_violations))
         fi
-    done
+    done < <(find "$AAR_DIR" -name "*.md" -type f -print0)
 fi
 
 echo ""
@@ -102,7 +104,10 @@ MARKDOWN_SCRIPTS=(
 for script in "${MARKDOWN_SCRIPTS[@]}"; do
     if [[ -f "$script" ]]; then
         echo "Checking script: $script"
-        check_script_violations "$script" || true
+        script_violations=$(check_script_violations "$script")
+        if [[ $script_violations -gt 0 ]]; then
+            VIOLATIONS=$((VIOLATIONS + script_violations))
+        fi
     else
         echo "Script not found: $script"
     fi
