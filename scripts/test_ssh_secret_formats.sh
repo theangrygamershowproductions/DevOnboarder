@@ -9,7 +9,7 @@ echo "Testing SSH Secret Format Handling Methods"
 echo "=========================================="
 
 # Load the persistent key for testing
-SSH_KEY_PATH="$HOME/.devonboarder-keys/pmbot_ssh_key"
+SSH_KEY_PATH="$HOME/.devonboarder-keys/pmbot_ed25519"
 
 if [[ ! -f "$SSH_KEY_PATH" ]]; then
     echo "ERROR: SSH key not found at $SSH_KEY_PATH"
