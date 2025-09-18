@@ -59,17 +59,17 @@ jobs:
 
           # Generate and commit priority matrix if analysis file exists
           if [[ -f "ci_failure_analysis.json" ]]; then
-            echo "Analysis file found - generating priority matrix"
-            python scripts/synthesize_priority_matrix.py --input ci_failure_analysis.json --output PRIORITY_MATRIX.md
+            echo "Analysis file found - running priority matrix synthesis"
+            python scripts/synthesize_priority_matrix.py
 
-            if [[ -f "PRIORITY_MATRIX.md" ]]; then
-              echo "Priority matrix generated successfully"
-              git add PRIORITY_MATRIX.md
-              git commit -m "AUTOMATION(priority-matrix): update failure priority analysis - Generated priority matrix from CI failure patterns - Signed-off-by: $PMBOT_NAME_FINAL <$PMBOT_EMAIL_FINAL>"
-              echo "Priority matrix committed with SSH signature"
+            # Check if any files were modified
+            if git diff --exit-code --quiet; then
+              echo "No files were modified by priority matrix synthesis"
             else
-              echo "Priority matrix generation failed"
-              exit 1
+              echo "Priority matrix synthesis completed - files were enhanced"
+              git add docs/ agents/ .codex/agents/ *.md
+              git commit -m "AUTOMATION(priority-matrix): update failure priority analysis - Generated priority matrix from CI failure patterns - Signed-off-by: $PMBOT_NAME_FINAL <$PMBOT_EMAIL_FINAL>"
+              echo "Priority matrix changes committed with SSH signature"
             fi
           else
             echo "No analysis file found - skipping matrix generation"
