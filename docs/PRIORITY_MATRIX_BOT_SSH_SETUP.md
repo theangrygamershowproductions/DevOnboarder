@@ -43,15 +43,29 @@ ssh-keygen -t ed25519 -C "Priority Matrix Bot <bot+priority-matrix@theangrygamer
    - Add machine user as collaborator with **Write** permissions
    - Or add to appropriate team with **Write** access
 
-## Required GitHub Actions Secrets
+## Required GitHub Configuration
 
-Add these secrets to your repository (**Settings → Secrets and variables → Actions**):
+### Repository Secrets
+
+Add this secret to your repository (**Settings → Secrets and variables → Actions → Secrets**):
 
 | Secret Name | Description | Value |
 |-------------|-------------|-------|
 | `PMBOT_SSH_PRIVATE` | Complete private key | Contents of `pmbot_signing_key` file |
+
+### Repository Variables
+
+Add these variables to your repository (**Settings → Secrets and variables → Actions → Variables**):
+
+| Variable Name | Description | Value |
+|---------------|-------------|-------|
 | `PMBOT_NAME` | Bot display name for commits | `Priority Matrix Bot` |
 | `PMBOT_EMAIL` | Bot email for commits | `bot+priority-matrix@theangrygamershow.com` |
+
+**Why Different Types?**:
+
+- **Secrets**: For sensitive data (private keys) - encrypted and hidden
+- **Variables**: For non-sensitive config (names, emails) - visible to collaborators
 
 **Note**: The email must be associated with the machine user account for verification to work.
 
@@ -97,8 +111,8 @@ The workflow automatically sets up SSH signing:
   shell: bash
   env:
     PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
-    PMBOT_NAME: ${{ secrets.PMBOT_NAME }}
-    PMBOT_EMAIL: ${{ secrets.PMBOT_EMAIL }}
+    PMBOT_NAME: ${{ vars.PMBOT_NAME }}
+    PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
   run: |
     set -euo pipefail
     mkdir -p ~/.ssh
