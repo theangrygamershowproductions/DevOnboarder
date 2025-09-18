@@ -56,7 +56,7 @@ jobs:
           mkdir -p ~/.ssh
 
           # Write SSH private key with safe handling (no variable expansion in echo)
-          printf '%s' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+          printf '%s\n' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
           chmod 600 ~/.ssh/ci_signing_key
 
           # Debug: Check key format and validate
