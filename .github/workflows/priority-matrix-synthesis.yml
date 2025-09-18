@@ -55,22 +55,50 @@ jobs:
           umask 077
           mkdir -p ~/.ssh
 
-          # Write SSH private key with proper newline handling
-          printf '%s\n' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+          # Write SSH private key with safe handling (no variable expansion in echo)
+          printf '%s' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
           chmod 600 ~/.ssh/ci_signing_key
 
           # Debug: Check key format and validate
           echo "Checking SSH key format..."
+          echo "First line:"
           head -1 ~/.ssh/ci_signing_key
+          echo "Last line:"
           tail -1 ~/.ssh/ci_signing_key
+          echo "Line count:"
+          wc -l < ~/.ssh/ci_signing_key
 
           # Generate public key and validate private key
-          if ! ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub; then
+          if ! ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub 2>/dev/null; then
             echo "ERROR: Invalid SSH private key format"
-            echo "Please check the PMBOT_SSH_PRIVATE secret content"
-            echo "Key should start with -----BEGIN OPENSSH PRIVATE KEY-----"
-            echo "Key should end with -----END OPENSSH PRIVATE KEY-----"
-            exit 1
+            echo "Debug information:"
+            echo "Key file size:"
+            stat -c%s ~/.ssh/ci_signing_key
+            echo "bytes"
+            echo "Key file permissions:"
+            stat -c%a ~/.ssh/ci_signing_key
+
+            # Try alternative key writing methods
+            echo "Attempting alternative key format handling..."
+
+            # Method 1: Write with cat and heredoc
+            cat > ~/.ssh/ci_signing_key_alt1 << 'EOF'
+          ${{ secrets.PMBOT_SSH_PRIVATE }}
+          EOF
+            chmod 600 ~/.ssh/ci_signing_key_alt1
+
+            if ssh-keygen -y -f ~/.ssh/ci_signing_key_alt1 > ~/.ssh/ci_signing_key.pub 2>/dev/null; then
+              echo "SUCCESS: Alternative method 1 worked"
+              cp ~/.ssh/ci_signing_key_alt1 ~/.ssh/ci_signing_key
+            else
+              echo "FAILED: All key format methods failed"
+              echo "Please check the PMBOT_SSH_PRIVATE secret content"
+              echo "Key should start with: -----BEGIN OPENSSH PRIVATE KEY-----"
+              echo "Key should end with: -----END OPENSSH PRIVATE KEY-----"
+              exit 1
+            fi
+          else
+            echo "SUCCESS: SSH key validation passed"
           fi
 
           git config --global user.name  "$PMBOT_NAME"
