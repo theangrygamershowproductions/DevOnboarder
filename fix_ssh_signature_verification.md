@@ -111,7 +111,7 @@ The Priority Matrix workflow (`priority-matrix-synthesis.yml`) includes:
 - ✅ SSH signature verification configured (`git config --get gpg.ssh.allowedSignersFile`)
 - ✅ .gitsigners file created with correct public key format
 - ✅ Scripts created for SSH key management and verification
-- ⏳ GitHub Secret updated with current SSH key (manual step required)
-- ⏳ New Priority Matrix commits properly verified without "No principal matched"
+- ✅ GitHub Secret updated with current SSH key (Environment and Repository secrets)
+- 🔄 Testing new Priority Matrix commits for proper signature verification
 
 This fix resolves the "minor issue with a commit not being signed" by ensuring proper SSH signature verification for all Priority Matrix Bot automated commits.
