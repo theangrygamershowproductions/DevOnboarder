@@ -1,0 +1,57 @@
+# DevOnboarder Navigation Framework - Phase 1 (MVN)
+# Constrained to Issue Management + CI Troubleshooting only
+
+project_name: "DevOnboarder"
+framework_version: "1.0.0-mvn"
+phase: "experiment"
+
+# Phase 1: Only Issue Management + CI domains
+navigation_domains:
+  issue_management:
+    name: "Issue Management"
+    description: "GitHub issue operations, sprint management, administrative triage"
+    context_files:
+      - "docs/initiatives/github-issue-management/administrative_triage_summary.md"
+      - "logs/administrative_triage_analysis.md"
+      - "scripts/analyze_issue_triage.py"
+    quick_context: |
+      Current State: 63 issues, 100% priority labeled, strategic milestones assigned
+      Active Sprint: Issue Management Initiative Sprint 1 COMPLETE
+      Framework: Strategic Planning Framework v1.0.0
+    common_tasks:
+      - "Sprint execution"
+      - "Issue triage operations"
+      - "Administrative tasks"
+      - "Priority labeling"
+      - "Milestone management"
+
+  ci_troubleshooting:
+    name: "CI/CD Troubleshooting"
+    description: "Pipeline failures, GitHub Actions, service issues, quality gates"
+    context_files:
+      - "scripts/qc_pre_push.sh"
+      - "scripts/run_tests.sh"
+      - ".github/workflows/ci.yml"
+      - "docs/troubleshooting/"
+    quick_context: |
+      Quality Standard: 95% threshold across 8 metrics
+      Test Coverage: Backend 96%+, Bot 100%, Frontend 100%
+      Services: 8 total (ports 8000-8081, 5432)
+    common_tasks:
+      - "CI pipeline failures"
+      - "Test coverage issues"
+      - "Service connectivity"
+      - "Quality gate failures"
+      - "GitHub Actions debugging"
+
+# Measurement tracking for Phase 1 validation
+metrics:
+  context_reset_conversations: 0
+  successful_focused_sessions: 0
+  average_iterations_per_task: 0
+
+# Phase 1 constraints
+constraints:
+  max_domains: 2
+  max_context_files_per_domain: 4
+  focus: "prove_value_before_expansion"
