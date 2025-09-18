@@ -80,6 +80,9 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Priority Matrix Bot"
 
+          # Disable GPG signing for automated bot commits
+          git config --local commit.gpgsign false
+
           # Configure git to use the token for authentication
           git config --local url."https://${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
