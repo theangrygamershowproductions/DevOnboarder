@@ -2,7 +2,7 @@
 
 This document provides instructions for configuring SSH-based commit signing for the Priority Matrix Bot, ensuring compliance with DevOnboarder's branch protection requirements using a simpler approach than GPG.
 
-**Status**: Ready for testing with GitHub secrets configured.
+**Status**: Testing with corrected repository variables configuration.
 
 ## Overview
 
