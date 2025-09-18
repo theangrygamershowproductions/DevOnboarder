@@ -130,7 +130,8 @@
                                 "terminal-output-policy",
                                 "virtual-environment-policy",
                                 "potato-policy",
-                                "ci-hygiene-policy"
+                                "ci-hygiene-policy",
+                                "checklist-completed"
                             ],
                             "properties": {
                                 "terminal-output-policy": {
