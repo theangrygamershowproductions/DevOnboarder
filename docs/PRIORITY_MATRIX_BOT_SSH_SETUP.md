@@ -1,3 +1,9 @@
+---
+similarity_group: PRIORITY_MATRIX_BOT_SSH_SETUP.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Priority Matrix Bot SSH Signing Setup Guide
 
 This document provides instructions for configuring SSH-based commit signing for the Priority Matrix Bot, ensuring compliance with DevOnboarder's branch protection requirements using a simpler approach than GPG.

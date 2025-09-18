@@ -34,9 +34,19 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
           persist-credentials: false
 
-      - name: Configure SSH and commit priority matrix
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
         run: |
-          echo "Starting SSH configuration and commit process..."
+          python -m pip install --upgrade pip
+          pip install ruamel.yaml
+
+      - name: Configure SSH signing for bot commits
+        run: |
+          echo "Starting SSH configuration for Priority Matrix Bot..."
 
           # Set bot identity with fallbacks
           PMBOT_NAME_FINAL="${PMBOT_NAME:-Priority Matrix Bot}"
@@ -57,32 +67,11 @@ jobs:
           git config gpg.format ssh
           git config commit.gpgsign true
 
-          # Generate and commit priority matrix if analysis file exists
-          if [[ -f "ci_failure_analysis.json" ]]; then
-            echo "Analysis file found - running priority matrix synthesis"
-            python scripts/synthesize_priority_matrix.py
-
-            # Check if any files were modified
-            if git diff --exit-code --quiet; then
-              echo "No files were modified by priority matrix synthesis"
-            else
-              echo "Priority matrix synthesis completed - files were enhanced"
-              git add docs/ agents/ .codex/agents/ *.md
-              git commit -m "AUTOMATION(priority-matrix): update failure priority analysis - Generated priority matrix from CI failure patterns - Signed-off-by: $PMBOT_NAME_FINAL <$PMBOT_EMAIL_FINAL>"
-              echo "Priority matrix changes committed with SSH signature"
-            fi
-          else
-            echo "No analysis file found - skipping matrix generation"
-          fi
+          echo "SSH signing configuration complete"
         env:
           PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
           PMBOT_NAME: ${{ vars.PMBOT_NAME }}
           PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
 
       - name: Debug git state
         run: |
@@ -94,11 +83,6 @@ jobs:
           }
           echo "Available branches:"
           git branch -a
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ruamel.yaml
 
       - name: Make script executable
         run: chmod +x scripts/synthesize_priority_matrix.py
@@ -144,7 +128,7 @@ jobs:
           # Add all directories that Priority Matrix synthesis modifies
           git add docs/ agents/ .codex/agents/ *.md
 
-          # Commit with GPG signature (enabled by setup-gpg-signing.sh)
+          # Commit with SSH signature (enabled by SSH signing configuration)
           git commit -m "FEAT(docs): auto-synthesize Priority Matrix fields [signed]
 
           Enhanced ${{ steps.synthesis-check.outputs.modified_count }} documents with:
