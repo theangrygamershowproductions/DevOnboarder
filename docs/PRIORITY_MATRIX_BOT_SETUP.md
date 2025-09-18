@@ -1,3 +1,9 @@
+---
+similarity_group: PRIORITY_MATRIX_BOT_SETUP.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Priority Matrix Bot GPG Setup Guide
 
 This document provides comprehensive instructions for configuring GPG-signed commits for the Priority Matrix Bot, ensuring compliance with DevOnboarder's branch protection requirements.
