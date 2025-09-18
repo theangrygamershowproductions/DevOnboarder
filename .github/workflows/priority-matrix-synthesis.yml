@@ -54,15 +54,32 @@ jobs:
           set -euo pipefail
           umask 077
           mkdir -p ~/.ssh
-          printf '%s' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
+
+          # Write SSH private key with proper newline handling
+          printf '%s\n' "$PMBOT_SSH_PRIVATE" > ~/.ssh/ci_signing_key
           chmod 600 ~/.ssh/ci_signing_key
-          ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub
+
+          # Debug: Check key format and validate
+          echo "Checking SSH key format..."
+          head -1 ~/.ssh/ci_signing_key
+          tail -1 ~/.ssh/ci_signing_key
+
+          # Generate public key and validate private key
+          if ! ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub; then
+            echo "ERROR: Invalid SSH private key format"
+            echo "Please check the PMBOT_SSH_PRIVATE secret content"
+            echo "Key should start with -----BEGIN OPENSSH PRIVATE KEY-----"
+            echo "Key should end with -----END OPENSSH PRIVATE KEY-----"
+            exit 1
+          fi
 
           git config --global user.name  "$PMBOT_NAME"
           git config --global user.email "$PMBOT_EMAIL"
           git config --global gpg.format ssh
           git config --global user.signingkey ~/.ssh/ci_signing_key.pub
           git config --global commit.gpgsign true
+
+          echo "SSH signing setup completed successfully"
 
       - name: Debug git state
         run: |
