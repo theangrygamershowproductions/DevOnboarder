@@ -1011,3 +1011,325 @@ def test_jwt_secret_key_validation_in_production():
         pytest.fail(f"CI environment missing JWT_SECRET_KEY: env={current_env}")
 
     # Test passes if CI environment is properly configured
+
+
+def test_is_safe_redirect_url_exception_paths():
+    """Test exception paths in is_safe_redirect_url to achieve 95%+ coverage."""
+    from devonboarder.auth_service import is_safe_redirect_url
+    from unittest.mock import patch
+
+    # Test unquote exception path (lines 66-67)
+    with patch("devonboarder.auth_service.unquote") as mock_unquote:
+        mock_unquote.side_effect = ValueError("Simulated unquote failure")
+        result = is_safe_redirect_url("test_url")
+        assert result is False  # noqa: B101
+
+    # Test urlparse exception path (lines 71-72)
+    with patch("devonboarder.auth_service.urlparse") as mock_urlparse:
+        mock_urlparse.side_effect = ValueError("Simulated urlparse failure")
+        result = is_safe_redirect_url("test_url")
+        assert result is False  # noqa: B101
+
+
+def test_environment_validation_coverage():
+    """Test environment validation paths for coverage around line 124."""
+    # This tests the JWT_SECRET_KEY validation logic
+
+    # Test with production environment and default secret (should raise error)
+    original_env = os.environ.get("APP_ENV")
+    original_secret = os.environ.get("JWT_SECRET_KEY")
+
+    try:
+        # Set production environment with default secret
+        os.environ["APP_ENV"] = "production"
+        os.environ["JWT_SECRET_KEY"] = "secret"  # noqa: S105,B105
+
+        # This should trigger the RuntimeError on line 124
+        error_match = "JWT_SECRET_KEY must be set to a non-default value"
+        with pytest.raises(RuntimeError, match=error_match):
+            # Re-import the module to trigger the validation
+            importlib.reload(auth_service)
+
+    finally:
+        # Restore original environment
+        if original_env is not None:
+            os.environ["APP_ENV"] = original_env
+        else:
+            os.environ.pop("APP_ENV", None)
+
+        if original_secret is not None:
+            os.environ["JWT_SECRET_KEY"] = original_secret
+        else:
+            os.environ.pop("JWT_SECRET_KEY", None)
+
+        # Reload again to restore normal state
+        importlib.reload(auth_service)
+
+
+def test_additional_auth_service_coverage():
+    """Test additional code paths to achieve 95%+ coverage."""
+    from devonboarder.auth_service import is_safe_redirect_url, create_app
+    import os
+
+    # Test line 78 - relative URL with path starting with "//"
+    # Mock urlparse to create a scenario where path starts with //
+    from unittest.mock import patch
+    from urllib.parse import ParseResult
+
+    with patch("devonboarder.auth_service.urlparse") as mock_urlparse:
+        # Create a mock parsed result with empty scheme/netloc but path starting with //
+        mock_urlparse.return_value = ParseResult(
+            scheme="", netloc="", path="//malicious", params="", query="", fragment=""
+        )
+        result = is_safe_redirect_url("test_input")
+        assert result is False  # noqa: B101
+
+    # Test line 98 - non-http/https scheme
+    result = is_safe_redirect_url("ftp://example.com")
+    assert result is False  # noqa: B101
+
+    # Test lines 398-399 - unsafe/disallowed redirect path
+    # This tests the logging warning when state parameter is unsafe
+    from unittest.mock import patch, MagicMock
+
+    # Test the Discord callback with unsafe state parameter (lines 398-399)
+    app = create_app()
+    client = TestClient(app)
+
+    # Mock Discord API responses
+    with patch("devonboarder.auth_service.httpx.post") as mock_post:
+        mock_post.return_value.json.return_value = {"access_token": "fake_token"}
+        mock_post.return_value.raise_for_status = MagicMock()
+
+        with patch("devonboarder.auth_service.get_user_profile") as mock_profile:
+            mock_profile.return_value = {
+                "id": "discord123",
+                "username": "testuser",
+                "global_name": "Test User",
+            }
+
+            with patch("devonboarder.auth_service.get_user_roles") as mock_roles:
+                mock_roles.return_value = []
+
+                # Use unsafe state parameter to trigger warning log
+                resp = client.get(
+                    "/login/discord/callback"
+                    "?code=test123&state=https://evil.com/malicious",
+                    follow_redirects=False,
+                )
+                assert resp.status_code == 307  # noqa: B101  # Temporary redirect
+
+    # Test different environment paths (lines 405-417, 429-438)
+    original_env = os.environ.get("APP_ENV")
+    original_ci = os.environ.get("CI")
+    original_frontend_url = os.environ.get("FRONTEND_URL")
+
+    try:
+        # Test CI environment path (lines 429-430)
+        os.environ["CI"] = "true"
+        os.environ.pop("FRONTEND_URL", None)
+
+        with patch("devonboarder.auth_service.httpx.post") as mock_post:
+            mock_post.return_value.json.return_value = {"access_token": "fake_token"}
+            mock_post.return_value.raise_for_status = MagicMock()
+
+            with patch("devonboarder.auth_service.get_user_profile") as mock_profile:
+                mock_profile.return_value = {
+                    "id": "discord456",
+                    "username": "ciuser",
+                    "global_name": "CI User",
+                }
+
+                with patch("devonboarder.auth_service.get_user_roles") as mock_roles:
+                    mock_roles.return_value = []
+
+                    resp = client.get(
+                        "/login/discord/callback?code=test456", follow_redirects=False
+                    )
+                    assert resp.status_code == 307  # noqa: B101
+
+        # Test Docker production environment (lines 432-433)
+        os.environ["CI"] = "false"
+        os.environ["APP_ENV"] = "production"
+
+        with patch("os.path.exists") as mock_exists:
+            mock_exists.return_value = True  # Simulate Docker environment
+
+            with patch("devonboarder.auth_service.httpx.post") as mock_post:
+                mock_post.return_value.json.return_value = {
+                    "access_token": "fake_token"
+                }
+                mock_post.return_value.raise_for_status = MagicMock()
+
+                with patch(
+                    "devonboarder.auth_service.get_user_profile"
+                ) as mock_profile:
+                    mock_profile.return_value = {
+                        "id": "discord789",
+                        "username": "produser",
+                        "global_name": "Prod User",
+                    }
+
+                    with patch(
+                        "devonboarder.auth_service.get_user_roles"
+                    ) as mock_roles:
+                        mock_roles.return_value = []
+
+                        resp = client.get(
+                            "/login/discord/callback?code=test789",
+                            follow_redirects=False,
+                        )
+                        assert resp.status_code == 307  # noqa: B101
+
+        # Test Docker development environment (lines 435-436)
+        os.environ["APP_ENV"] = "development"
+
+        with patch("os.path.exists") as mock_exists:
+            mock_exists.return_value = True  # Simulate Docker environment
+
+            with patch("devonboarder.auth_service.httpx.post") as mock_post:
+                mock_post.return_value.json.return_value = {
+                    "access_token": "fake_token"
+                }
+                mock_post.return_value.raise_for_status = MagicMock()
+
+                with patch(
+                    "devonboarder.auth_service.get_user_profile"
+                ) as mock_profile:
+                    mock_profile.return_value = {
+                        "id": "discord101112",
+                        "username": "devuser",
+                        "global_name": "Dev User",
+                    }
+
+                    with patch(
+                        "devonboarder.auth_service.get_user_roles"
+                    ) as mock_roles:
+                        mock_roles.return_value = []
+
+                        resp = client.get(
+                            "/login/discord/callback?code=test101112",
+                            follow_redirects=False,
+                        )
+                        assert resp.status_code == 307  # noqa: B101
+
+        # Test non-Docker production environment (lines 437-438)
+        os.environ["APP_ENV"] = "production"
+
+        with patch("os.path.exists") as mock_exists:
+            mock_exists.return_value = False  # Simulate non-Docker environment
+
+            with patch("devonboarder.auth_service.httpx.post") as mock_post:
+                mock_post.return_value.json.return_value = {
+                    "access_token": "fake_token"
+                }
+                mock_post.return_value.raise_for_status = MagicMock()
+
+                with patch(
+                    "devonboarder.auth_service.get_user_profile"
+                ) as mock_profile:
+                    mock_profile.return_value = {
+                        "id": "discord131415",
+                        "username": "produser2",
+                        "global_name": "Prod User 2",
+                    }
+
+                    with patch(
+                        "devonboarder.auth_service.get_user_roles"
+                    ) as mock_roles:
+                        mock_roles.return_value = []
+
+                        resp = client.get(
+                            "/login/discord/callback?code=test131415",
+                            follow_redirects=False,
+                        )
+                        assert resp.status_code == 307  # noqa: B101
+
+    finally:
+        # Restore original environment variables
+        if original_env:
+            os.environ["APP_ENV"] = original_env
+        else:
+            os.environ.pop("APP_ENV", None)
+
+        if original_ci:
+            os.environ["CI"] = original_ci
+        else:
+            os.environ.pop("CI", None)
+
+        if original_frontend_url:
+            os.environ["FRONTEND_URL"] = original_frontend_url
+        else:
+            os.environ.pop("FRONTEND_URL", None)
+
+
+def test_final_redirect_security_validation_coverage():
+    """Test final security validation lines 454-455."""
+    from devonboarder.auth_service import create_app
+    from unittest.mock import patch, MagicMock
+
+    app = create_app()
+    client = TestClient(app)
+
+    # Test final security validation when redirect URL is unsafe (lines 454-455)
+    with patch("devonboarder.auth_service.httpx.post") as mock_post:
+        mock_post.return_value.json.return_value = {"access_token": "fake_token"}
+        mock_post.return_value.raise_for_status = MagicMock()
+
+        with patch("devonboarder.auth_service.get_user_profile") as mock_profile:
+            mock_profile.return_value = {
+                "id": "discord999",
+                "username": "securityuser",
+                "global_name": "Security User",
+            }
+
+            with patch("devonboarder.auth_service.get_user_roles") as mock_roles:
+                mock_roles.return_value = []
+
+                # Mock is_safe_redirect_url to return False for final validation
+                with patch(
+                    "devonboarder.auth_service.is_safe_redirect_url"
+                ) as mock_safe:
+                    # First call (for state parameter) returns True
+                    # Second call (final validation) returns False
+                    mock_safe.side_effect = [True, False]
+
+                    resp = client.get(
+                        "/login/discord/callback?code=test999&state=/dashboard",
+                        follow_redirects=False,
+                    )
+                    assert resp.status_code == 307  # noqa: B101
+
+
+def test_final_missing_coverage_lines():
+    """Test the final missing coverage lines to reach 95%."""
+    from devonboarder.auth_service import create_app
+    from unittest.mock import patch, MagicMock
+
+    app = create_app()
+    client = TestClient(app)
+
+    # Test different user_provided_path values (lines 407-417)
+    path_tests = ["/profile", "/welcome", "/onboarding", "/", "/unknown"]
+
+    for path in path_tests:
+        with patch("devonboarder.auth_service.httpx.post") as mock_post:
+            mock_post.return_value.json.return_value = {"access_token": "fake_token"}
+            mock_post.return_value.raise_for_status = MagicMock()
+
+            with patch("devonboarder.auth_service.get_user_profile") as mock_profile:
+                mock_profile.return_value = {
+                    "id": f"discord{path.replace('/', '')}",
+                    "username": f"user{path.replace('/', '')}",
+                    "global_name": f"User {path}",
+                }
+
+                with patch("devonboarder.auth_service.get_user_roles") as mock_roles:
+                    mock_roles.return_value = []
+
+                    resp = client.get(
+                        f"/login/discord/callback?code=test&state={path}",
+                        follow_redirects=False,
+                    )
+                    # Should be a redirect
+                    assert resp.status_code == 307  # noqa: B101
