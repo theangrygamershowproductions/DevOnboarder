@@ -273,7 +273,7 @@ EOF
 
     # If GitHub CLI is available, add comment to issue
     if command -v gh >/dev/null 2>&1; then
-        gh issue comment "$issue_num" --body "## 📋 After Actions Report Generated
+        gh issue comment "$issue_num" --body "## After Actions Report Generated
 
 **AAR Location**: \`$aar_file\`
 **Generated**: $(date +%Y-%m-%d)
@@ -389,7 +389,7 @@ EOF
     # Add GitHub comment if CLI is available
     if command -v gh >/dev/null 2>&1; then
         gh pr comment "$pr_num" --body "
-📋 **After Actions Report Generated**
+**After Actions Report Generated**
 
 An AAR has been created for this PR to capture lessons learned and action items.
 
