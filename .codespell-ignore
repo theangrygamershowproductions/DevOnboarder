@@ -28,12 +28,6 @@ id_rsa*
 logs/
 webhook-config.json
 # Enhanced Potato Policy v3.0 - Comprehensive Protection
-*[Pp]otato*
-*[Pp]OTATO*
-HEY_POTATO_*
-*_POTATO_*
-Potato
-Potato.md
 **/*[Pp]otato*
 **/*[Pp]OTATO*
 **/HEY_POTATO_*

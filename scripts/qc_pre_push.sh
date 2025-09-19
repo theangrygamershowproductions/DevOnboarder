@@ -1,4 +1,3 @@
-#!/bin/bash
 #!/usr/bin/env bash
 # DevOnboarder Quality Control Pre-Push Script
 # Validates 95% quality threshold across 8 metrics
@@ -8,10 +7,6 @@ set -euo pipefail
 
 echo "Running 95% QC Pre-Push Validation..."
 # This script ensures all code meets DevOnboarder quality standards before pushing
-
-set -euo pipefail
-
-echo "🔍 Running 95% QC Pre-Push Validation..."
 
 # CRITICAL: Branch workflow validation to prevent main branch commits
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
