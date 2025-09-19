@@ -14,7 +14,7 @@ fi
 
 # Extract all variables used in templates
 echo "Extracting variables from templates..."
-USED_VARS=$(find "$TEMPLATE_DIR" -name "*.md" -exec grep -ho '{[A-Z_]*}' {} \; | sort -u | sed 's/[{}]//g')
+USED_VARS=$(find "$TEMPLATE_DIR" -name "*.md" -exec grep -ho '{[A-Z0-9_]*}' {} \; | sort -u | sed 's/[{}]//g')
 
 echo "Variables used in templates:"
 echo "$USED_VARS" | while read -r var; do
@@ -27,12 +27,12 @@ if [[ -f "$SCRIPT_FILE" ]]; then
     echo "Checking script variable declarations..."
     MISSING_VARS=""
 
-    echo "$USED_VARS" | while read -r var; do
+    while read -r var; do
         if ! grep -q "$var=" "$SCRIPT_FILE"; then
             echo "WARNING: Variable $var used in templates but not declared in script"
             MISSING_VARS="$MISSING_VARS $var"
         fi
-    done
+    done < <(echo "$USED_VARS")
 
     if [[ -n "$MISSING_VARS" ]]; then
         echo "VALIDATION FAILED: Missing variable declarations"

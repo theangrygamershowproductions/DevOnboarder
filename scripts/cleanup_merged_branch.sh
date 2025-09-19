@@ -6,13 +6,18 @@ set -euo pipefail
 echo "🧹 DevOnboarder Post-Merge Cleanup"
 echo "================================="
 
+# Helper function to get merged branches
+get_merged_branches() {
+    git branch --merged main | grep -v "main" | grep -v "\*" | xargs
+}
+
 # Function to detect merged branches
 detect_merged_branches() {
     echo "🔍 Detecting merged branches..."
 
     # Get branches that have been merged to main
     local merged_branches
-    merged_branches=$(git branch --merged main | grep -v "main" | grep -v "\*" | xargs)
+    merged_branches=$(get_merged_branches)
 
     if [[ -n "$merged_branches" ]]; then
         echo "📋 Merged branches found:"
@@ -31,7 +36,7 @@ cleanup_local_branches() {
     echo "🗑️  Cleaning up local merged branches..."
 
     local merged_branches
-    merged_branches=$(git branch --merged main | grep -v "main" | grep -v "\*" | xargs)
+    merged_branches=$(get_merged_branches)
 
     if [[ -n "$merged_branches" ]]; then
         echo "$merged_branches" | tr ' ' '\n' | while read -r branch; do

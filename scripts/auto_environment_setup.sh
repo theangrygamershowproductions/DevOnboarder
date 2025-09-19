@@ -35,6 +35,8 @@ setup_venv() {
     pip install -e ".[test]"
 
     echo "✅ Virtual environment setup complete"
+    echo "⚠️  Note: Virtual environment activation is only active within this script"
+    echo "   You'll need to activate it manually: source .venv/bin/activate"
 }
 
 # Function to setup Node.js dependencies
@@ -74,8 +76,14 @@ main() {
 
     echo "======================================"
     echo "🎉 DevOnboarder environment ready!"
-    echo "   Run: source .venv/bin/activate"
-    echo "   Then: ./scripts/qc_pre_push.sh"
+    echo ""
+    echo "📋 IMPORTANT: Activate virtual environment manually:"
+    echo "   source .venv/bin/activate"
+    echo ""
+    echo "🚀 Then run quality validation:"
+    echo "   ./scripts/qc_pre_push.sh"
+    echo ""
+    echo "💡 Tip: Virtual environment must be activated in each terminal session"
 }
 
 main "$@"

@@ -21,7 +21,7 @@ echo "🔍 Validating documentation structure: $FILE"
 check_duplicate_headings() {
     echo "📋 Checking for duplicate headings..."
     local duplicates
-    duplicates=$(grep -h "^###" "$FILE" | sort | uniq -d)
+    duplicates=$(grep -h "^##\+ " "$FILE" | sort | uniq -d)
     if [[ -n "$duplicates" ]]; then
         echo "❌ Duplicate headings found:"
         echo "$duplicates" | while IFS= read -r line; do
@@ -40,7 +40,7 @@ check_generic_patterns() {
 
     for pattern in "${generic_patterns[@]}"; do
         local count
-        count=$(grep -c "### $pattern" "$FILE" || true)
+        count=$(grep -c "^##\+ $pattern" "$FILE" || true)
         if [[ "$count" -gt 1 ]]; then
             echo "⚠️  Generic pattern '$pattern' used $count times (likely to duplicate)"
             found_generic=true

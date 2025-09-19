@@ -47,7 +47,14 @@ create_clean_branch() {
     # Configure branch for clean signatures
     echo "   Configuring branch for clean commits..."
     git config --local commit.gpgsign true
-    git config --local user.signingkey ~/.ssh/ci_signing_key.pub || true
+
+    # Allow configurable signing key path via GIT_SIGNING_KEY, fallback to default
+    SIGNING_KEY_PATH="${GIT_SIGNING_KEY:-$HOME/.ssh/ci_signing_key.pub}"
+    if [[ -f "$SIGNING_KEY_PATH" ]]; then
+        git config --local user.signingkey "$SIGNING_KEY_PATH"
+    else
+        echo "⚠️  Signing key not found at $SIGNING_KEY_PATH; skipping user.signingkey config."
+    fi
 
     echo "✅ Branch $branch_name created and ready"
     echo "   Current branch: $(git branch --show-current)"

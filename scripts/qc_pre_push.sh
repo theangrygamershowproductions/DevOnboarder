@@ -38,7 +38,7 @@ if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
     done
     read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
     if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
-        echo "$UNTRACKED_IMPORTANT" | xargs git add
+        while IFS= read -r file; do git add "$file"; done <<< "$UNTRACKED_IMPORTANT"
         echo "✅ Files tracked - validation will include all files"
     else
         echo "⚠️  Continuing with validation blind spots present"
