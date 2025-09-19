@@ -25,7 +25,7 @@ setup_venv() {
     fi
 
     echo "   Activating virtual environment..."
-    # shellcheck source=/dev/null
+    # shellcheck disable=SC1091
     source .venv/bin/activate
 
     echo "   Upgrading pip..."

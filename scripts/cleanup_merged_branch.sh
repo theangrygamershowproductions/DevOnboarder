@@ -8,7 +8,7 @@ echo "================================="
 
 # Helper function to get merged branches
 get_merged_branches() {
-    git branch --merged main | grep -v "main" | grep -v "\*" | xargs
+    git branch --merged main | grep -v "main" | grep -v "\*"
 }
 
 # Function to detect merged branches

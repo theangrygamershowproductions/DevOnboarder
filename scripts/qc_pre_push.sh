@@ -39,7 +39,7 @@ if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
     done
     read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
     if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
-        while IFS= read -r file; do git add "$file"; done <<< "$UNTRACKED_IMPORTANT"
+        git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
         echo "✅ Files tracked - validation will include all files"
     else
         echo "⚠️  Continuing with validation blind spots present"

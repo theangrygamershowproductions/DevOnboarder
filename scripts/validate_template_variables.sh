@@ -14,7 +14,7 @@ fi
 
 # Extract all variables used in templates
 echo "Extracting variables from templates..."
-USED_VARS=$(find "$TEMPLATE_DIR" -name "*.md" -exec grep -ho '{[A-Z0-9_]*}' {} \; | sort -u | sed 's/[{}]//g')
+USED_VARS=$(find "$TEMPLATE_DIR" -name "*.md" -print0 | xargs -0 grep -ho '{[A-Z0-9_]*}' | sort -u | sed 's/[{}]//g')
 
 echo "Variables used in templates:"
 echo "$USED_VARS" | while read -r var; do

@@ -49,7 +49,7 @@ create_clean_branch() {
     git config --local commit.gpgsign true
 
     # Allow configurable signing key path via GIT_SIGNING_KEY, fallback to default
-    SIGNING_KEY_PATH="${GIT_SIGNING_KEY:-$HOME/.ssh/ci_signing_key.pub}"
+    SIGNING_KEY_PATH="${GIT_SIGNING_KEY:-$HOME/.ssh/ci_signing_key}"
     if [[ -f "$SIGNING_KEY_PATH" ]]; then
         git config --local user.signingkey "$SIGNING_KEY_PATH"
     else
