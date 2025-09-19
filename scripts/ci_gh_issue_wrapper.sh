@@ -161,10 +161,11 @@ handle_issue_comment() {
     fi
 }
 
-# Function to handle issue closing operations
+# Function to handle issue closing operations with template support
 handle_issue_close() {
     local issue_number="$1"
     local close_comment="$2"
+    local template_file="$3"
 
     if [[ -z "$issue_number" ]]; then
         echo "ERROR: Issue close requires issue number"
@@ -173,7 +174,27 @@ handle_issue_close() {
 
     echo "Closing issue #$issue_number"
 
-    if [[ -n "$close_comment" ]]; then
+    # Enhanced two-step process for DevOnboarder terminal output policy compliance
+    if [[ -n "$template_file" && -f "$template_file" ]]; then
+        echo "Using template file for detailed comment: $template_file"
+        # Step 1: Add detailed comment from template file
+        if gh issue comment "$issue_number" --body-file "$template_file"; then
+            echo "Successfully added detailed comment from template"
+            # Step 2: Simple closure
+            if gh issue close "$issue_number" --reason completed; then
+                echo "Successfully closed issue #$issue_number with template comment"
+                return 0
+            else
+                echo "ERROR: Failed to close issue #$issue_number after adding comment"
+                return 1
+            fi
+        else
+            echo "ERROR: Failed to add comment from template file"
+            return 1
+        fi
+    elif [[ -n "$close_comment" ]]; then
+        # Legacy single-step process (for simple comments only)
+        echo "Using simple comment closure (legacy mode)"
         if gh issue close "$issue_number" --comment "$close_comment"; then
             echo "Successfully closed issue #$issue_number with comment"
             return 0
@@ -182,7 +203,8 @@ handle_issue_close() {
             return 1
         fi
     else
-        if gh issue close "$issue_number"; then
+        # Simple closure without comment
+        if gh issue close "$issue_number" --reason completed; then
             echo "Successfully closed issue #$issue_number"
             return 0
         else
