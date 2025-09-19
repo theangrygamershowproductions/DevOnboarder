@@ -12,7 +12,7 @@ This CI/build failure has been diagnosed and resolved.
 
 ## Root Cause
 
-{ROOT_CAUSE_ANALYSIS}
+{ROOT_CAUSE}
 
 ## Resolution
 

@@ -56,6 +56,9 @@ shift 2
 PR_NUMBER=""
 PR_TITLE=""
 BRANCH_NAME=""
+MERGE_DATE=""
+COMMIT_COUNT=""
+CLOSURE_DATE=""
 IMPACT_DESCRIPTION=""
 NEXT_STEPS=""
 ROOT_CAUSE=""
@@ -66,6 +69,28 @@ IMPLEMENTATION_APPROACH=""
 KEY_COMPONENTS=""
 ACCEPTANCE_CRITERIA_STATUS=""
 DEPLOYMENT_DETAILS=""
+
+# Template-specific variables (used by bug-fix and ci-failure-fix templates)
+# shellcheck disable=SC2034
+AFFECTED_COMPONENTS=""
+# shellcheck disable=SC2034
+RESOLUTION_STEPS=""
+# shellcheck disable=SC2034
+TEST_RESULTS=""
+# shellcheck disable=SC2034
+VERIFICATION_METHOD=""
+# shellcheck disable=SC2034
+PREVENTION_MEASURES=""
+# shellcheck disable=SC2034
+BUILD_SYSTEM=""
+# shellcheck disable=SC2034
+FAILURE_TYPE=""
+# shellcheck disable=SC2034
+ERROR_DETAILS=""
+# shellcheck disable=SC2034
+RESOLUTION_DESCRIPTION=""
+# shellcheck disable=SC2034
+CHANGES_MADE=""
 
 # Parse options
 while [[ $# -gt 0 ]]; do
@@ -127,6 +152,56 @@ while [[ $# -gt 0 ]]; do
         --deployment-details)
             # shellcheck disable=SC2034
             DEPLOYMENT_DETAILS="$2"
+            shift 2
+            ;;
+        --affected-components)
+            # shellcheck disable=SC2034
+            AFFECTED_COMPONENTS="$2"
+            shift 2
+            ;;
+        --resolution-steps)
+            # shellcheck disable=SC2034
+            RESOLUTION_STEPS="$2"
+            shift 2
+            ;;
+        --test-results)
+            # shellcheck disable=SC2034
+            TEST_RESULTS="$2"
+            shift 2
+            ;;
+        --verification-method)
+            # shellcheck disable=SC2034
+            VERIFICATION_METHOD="$2"
+            shift 2
+            ;;
+        --prevention-measures)
+            # shellcheck disable=SC2034
+            PREVENTION_MEASURES="$2"
+            shift 2
+            ;;
+        --build-system)
+            # shellcheck disable=SC2034
+            BUILD_SYSTEM="$2"
+            shift 2
+            ;;
+        --failure-type)
+            # shellcheck disable=SC2034
+            FAILURE_TYPE="$2"
+            shift 2
+            ;;
+        --error-details)
+            # shellcheck disable=SC2034
+            ERROR_DETAILS="$2"
+            shift 2
+            ;;
+        --resolution-description)
+            # shellcheck disable=SC2034
+            RESOLUTION_DESCRIPTION="$2"
+            shift 2
+            ;;
+        --changes-made)
+            # shellcheck disable=SC2034
+            CHANGES_MADE="$2"
             shift 2
             ;;
         *)
@@ -208,7 +283,17 @@ cat > "$TEMP_CONFIG" << EOF
   "IMPLEMENTATION_APPROACH": "$IMPLEMENTATION_APPROACH",
   "KEY_COMPONENTS": "$KEY_COMPONENTS",
   "ACCEPTANCE_CRITERIA_STATUS": "$ACCEPTANCE_CRITERIA_STATUS",
-  "DEPLOYMENT_DETAILS": "$DEPLOYMENT_DETAILS"
+  "DEPLOYMENT_DETAILS": "$DEPLOYMENT_DETAILS",
+  "AFFECTED_COMPONENTS": "$AFFECTED_COMPONENTS",
+  "RESOLUTION_STEPS": "$RESOLUTION_STEPS",
+  "TEST_RESULTS": "$TEST_RESULTS",
+  "VERIFICATION_METHOD": "$VERIFICATION_METHOD",
+  "PREVENTION_MEASURES": "$PREVENTION_MEASURES",
+  "BUILD_SYSTEM": "$BUILD_SYSTEM",
+  "FAILURE_TYPE": "$FAILURE_TYPE",
+  "ERROR_DETAILS": "$ERROR_DETAILS",
+  "RESOLUTION_DESCRIPTION": "$RESOLUTION_DESCRIPTION",
+  "CHANGES_MADE": "$CHANGES_MADE"
 }
 EOF
 
