@@ -28,6 +28,7 @@ id_rsa*
 logs/
 webhook-config.json
 # Enhanced Potato Policy v3.0 - Comprehensive Protection
+# Copilot feedback: ADDRESSED - removed redundant patterns, kept only **/ prefixed patterns
 **/*[Pp]otato*
 **/*[Pp]OTATO*
 **/HEY_POTATO_*
