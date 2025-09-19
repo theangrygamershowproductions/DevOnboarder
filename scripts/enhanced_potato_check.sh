@@ -113,12 +113,20 @@ check_pattern_in_file() {
         return 1
     fi
 
-    # Use exact match for simple patterns, regex for complex ones
+    # Use exact match for simple patterns
     if grep -Fxq "$pattern" "$file" 2>/dev/null; then
         return 0
-    else
-        return 1
     fi
+
+    # Check if wildcard patterns cover this specific pattern
+    # Special case: Potato.md is covered by **/*[Pp]otato* patterns
+    if [[ "$pattern" == "Potato.md" ]]; then
+        if grep -q '\*\*/\*\[Pp\]otato\*' "$file" 2>/dev/null; then
+            return 0  # Covered by wildcard pattern
+        fi
+    fi
+
+    return 1
 }
 
 # Add pattern to ignore file

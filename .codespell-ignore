@@ -1,42 +1,34 @@
-# DevOnboarder Codespell Ignore List
-# This file contains project-specific terms and file patterns
-# Last updated: 2025-07-29 05:29:32
 #
+# Copilot feedback: RESOLVED - removed all redundant Potato patterns (lines 92-93)
+# DevOnboarder Codespell Ignore List
+# Enhanced Potato Policy v3.0 - Comprehensive Protection
+# Last updated: 2025-07-29 05:29:32
+# Only comprehensive wildcard patterns retained for complete coverage
 # Protected file patterns (Enhanced Potato Policy v3.0 compliance)
+# Technical terms and project-specific words
+# This file contains project-specific terms and file patterns
+# Enhanced Potato Policy v3.0 - Comprehensive Protection
+# Copilot feedback: RESOLVED - removed all redundant Potato patterns
+# Wildcard patterns **/*[Pp]otato* cover Potato.md, Potato, and all variants
+# Only comprehensive wildcard patterns retained for complete coverage
+**/*[Pp]otato*
+**/*[Pp]OTATO*
+**/HEY_POTATO_*
+**/*_POTATO_*
 *.env
 *.key
 *.p12
 *.pem
-.codex/
-cloudflared/
 *.tunnel.json
-tunnel-credentials.json
+.codex/
 .codex/cache/
 .codex/cache/*
 .codex/private/
 .codex/private/*
 .env.*
-backup-configs.*
-ci-secrets.*
-config/secrets.*
-config/secrets.json
-deployment-keys.*
-discord-tokens.*
-.tokens*
-github-tokens.*
-id_rsa*
-logs/
-webhook-config.json
-# Enhanced Potato Policy v3.0 - Comprehensive Protection
-# Copilot feedback: ADDRESSED - removed redundant patterns, kept only **/ prefixed patterns
-**/*[Pp]otato*
-**/*[Pp]OTATO*
-**/HEY_POTATO_*
-**/*_POTATO_*
-#
-# Technical terms and project-specific words
 .env.local
 .env.production
+.tokens*
 2FA
 ACL
 API
@@ -89,8 +81,6 @@ OAuth
 PR
 PRs
 PostgreSQL
-Potato
-Potato.md
 Prettier
 QA
 RBAC
@@ -134,21 +124,28 @@ auth
 auth.db
 await
 backend
+backup-configs.*
 bool
 bot
 bots
 changelog
 changelogs
+ci-secrets.*
+cloudflared/
 codebase
 codespell
+config/secrets.*
+config/secrets.json
 configuration
 configurations
 containerization
+deployment-keys.*
 deps
 dev
 devcontainer
 devcontainers
 dict
+discord-tokens.*
 dockerfile
 dockerignore
 endpoint
@@ -164,8 +161,10 @@ formatters
 frontend
 fullstack
 gamification
+github-tokens.*
 gitignore
 guilds
+id_rsa*
 int
 js
 json
@@ -179,6 +178,7 @@ linters
 linting
 list
 localhost
+logs/
 makefile
 markdownlint
 md
@@ -217,6 +217,7 @@ theangrygamershowproductions
 toml
 ts
 tsx
+tunnel-credentials.json
 tuple
 unauth
 unauthorized
@@ -225,6 +226,7 @@ utils
 venv
 virtualenv
 webhook
+webhook-config.json
 webhooks
 workflow
 workflows
