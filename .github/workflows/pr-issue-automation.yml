@@ -62,10 +62,8 @@ jobs:
             - name: Setup GitHub CLI
               run: |
                   gh --version
-
-            - name: Authenticate GitHub CLI
-              run: |
-                  echo "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
+                  # GitHub CLI will automatically use GITHUB_TOKEN environment variable
+                  # No explicit authentication needed when token is in environment
 
             - name: Create PR tracking issue
               env:

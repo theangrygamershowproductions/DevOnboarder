@@ -75,6 +75,7 @@ ci-secrets.*
 codeql-*
 config/secrets.*
 config/secrets.json
+build/
 coverage/
 dependency_inventory.xlsx
 deployment-keys.*
