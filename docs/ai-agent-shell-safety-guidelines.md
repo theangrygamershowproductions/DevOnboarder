@@ -1,3 +1,9 @@
+---
+similarity_group: ai-agent-shell-safety-guidelines.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # AI Agent Shell Safety Guidelines - Post-Incident Enhancement
 
 ## 📋 Overview
