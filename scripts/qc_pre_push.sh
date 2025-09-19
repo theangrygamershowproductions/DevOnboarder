@@ -21,6 +21,30 @@ if [[ "$current_branch" == "main" ]]; then
     fi
 fi
 
+# Template variable validation (before other checks)
+if [[ -f "scripts/validate_template_variables.sh" ]]; then
+    echo "📋 Validating template variables..."
+    bash scripts/validate_template_variables.sh
+    echo "✅ Template variable validation passed"
+fi
+
+# Validation blind spot detection
+echo "🔍 Checking for validation blind spots..."
+UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' || true)
+if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
+    echo "⚠️  VALIDATION BLIND SPOT: Untracked files bypass quality checks"
+    echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
+        echo "   - $file"
+    done
+    read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
+    if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
+        echo "$UNTRACKED_IMPORTANT" | xargs git add
+        echo "✅ Files tracked - validation will include all files"
+    else
+        echo "⚠️  Continuing with validation blind spots present"
+    fi
+fi
+
 # Ensure we're in virtual environment
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
