@@ -2,7 +2,7 @@
 # This file contains project-specific terms and file patterns
 # Last updated: 2025-07-29 05:29:32
 #
-# Protected file patterns (Potato Policy compliance)
+# Protected file patterns (Enhanced Potato Policy v3.0 compliance)
 *.env
 *.key
 *.p12
@@ -27,6 +27,17 @@ github-tokens.*
 id_rsa*
 logs/
 webhook-config.json
+# Enhanced Potato Policy v3.0 - Comprehensive Protection
+*[Pp]otato*
+*[Pp]OTATO*
+HEY_POTATO_*
+*_POTATO_*
+Potato
+Potato.md
+**/*[Pp]otato*
+**/*[Pp]OTATO*
+**/HEY_POTATO_*
+**/*_POTATO_*
 #
 # Technical terms and project-specific words
 .env.local

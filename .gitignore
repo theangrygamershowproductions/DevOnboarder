@@ -64,9 +64,19 @@ cloudflared/
 *.tunnel.json
 tunnel-credentials.json
 
-# Potato Policy Protected Files
+# Enhanced Potato Policy v3.0 - Comprehensive Protection
+# Protect any files with "Potato" in their names (case-insensitive)
+*[Pp]otato*
+*[Pp]OTATO*
+HEY_POTATO_*
+*_POTATO_*
 Potato
 Potato.md
+# Additional Potato Policy patterns
+**/*[Pp]otato*
+**/*[Pp]OTATO*
+**/HEY_POTATO_*
+**/*_POTATO_*
 Thumbs.db
 __pycache__/
 auth.db
