@@ -36,9 +36,8 @@ tunnel-credentials.json
 .venv/
 .vscode-integrations/
 .vscode/
-# Enhanced Potato Policy v3.0 - Comprehensive Protection
 # Enhanced Potato Policy v3.0 - Comprehensive protection for sensitive files
-# Protect any files with "Potato" in their names (case-insensitive)
+# Copilot feedback: ADDRESSED - removed redundant patterns, kept only **/ prefixed patterns
 **/*[Pp]otato*
 **/*[Pp]OTATO*
 **/HEY_POTATO_*
