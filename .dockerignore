@@ -1,5 +1,7 @@
 
 !.env.example
+# Copilot feedback: ADDRESSED - removed redundant patterns, kept only **/ prefixed patterns
+# Enhanced Potato Policy v3.0 - Comprehensive protection for sensitive files
 # Environment files
 # Ignore version control directory
 # Local caches and logs
@@ -7,21 +9,23 @@
 # Node artifacts
 # Python artifacts
 # Tests and coverage reports
+**/*[Pp]OTATO*
+**/*[Pp]otato*
+**/*_POTATO_*
+**/HEY_POTATO_*
 *.env
 *.key
 *.log
 *.p12
 *.pem
 *.py[cod]
+*.tunnel.json
 .DS_Store
 .Trash-*
 .codex/cache/
 .codex/cache/*
 .codex/private/
 .codex/private/*
-cloudflared/
-*.tunnel.json
-tunnel-credentials.json
 .coverage
 .env*
 .env.*
@@ -33,27 +37,23 @@ tunnel-credentials.json
 .pytest_cache/
 .ruff_cache/
 .terraform/
+.tokens*
 .venv/
 .vscode-integrations/
 .vscode/
-# Enhanced Potato Policy v3.0 - Comprehensive protection for sensitive files
-# Copilot feedback: ADDRESSED - removed redundant patterns, kept only **/ prefixed patterns
-**/*[Pp]otato*
-**/*[Pp]OTATO*
-**/HEY_POTATO_*
-**/*_POTATO_*
+Potato.md
 Thumbs.db
 __pycache__/
 auth.db
 backup-configs.*
 ci-secrets.*
+cloudflared/
 codeql-*
 config/secrets.*
 config/secrets.json
 coverage/
 deployment-keys.*
 discord-tokens.*
-.tokens*
 dist/
 github-tokens.*
 id_rsa*
@@ -65,5 +65,6 @@ secrets.yaml
 secrets.yml
 test-results/
 tests/
+tunnel-credentials.json
 venv/
 webhook-config.json
