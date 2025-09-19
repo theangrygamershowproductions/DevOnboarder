@@ -1,3 +1,10 @@
+---
+similarity_group: workflows-workflows
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
+
 # Issue Closure Template System Documentation
 
 ## Overview
