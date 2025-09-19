@@ -2,6 +2,7 @@
 # DevOnboarder Quality Control Pre-Push Script
 # Validates 95% quality threshold across 8 metrics
 # ZERO TOLERANCE: Must pass all checks before push
+# Copilot shebang comment: ADDRESSED - removed duplicate shebang lines
 
 set -euo pipefail
 
