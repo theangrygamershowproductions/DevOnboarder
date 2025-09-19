@@ -25,6 +25,7 @@ fi
 if [[ -f "scripts/validate_template_variables.sh" ]]; then
     echo "📋 Validating template variables..."
     bash scripts/validate_template_variables.sh
+
     echo "✅ Template variable validation passed"
 fi
 
