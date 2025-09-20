@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -9,8 +10,11 @@ merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+
 tags:
+
 - documentation
+
 title: Quickstart
 updated_at: '2025-09-12'
 visibility: internal

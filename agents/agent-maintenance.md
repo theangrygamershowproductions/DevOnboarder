@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.AgentMaintenance
   output: .codex/logs/agent-maintenance.log
@@ -13,13 +14,18 @@ description: Documentation description needed
 document_type: documentation
 merge_candidate: false
 permissions:
+
 - repo:write
+
 - contents:read
+
 project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Agent Maintenance
 updated_at: '2025-09-12'
 visibility: internal

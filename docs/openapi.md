@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: cto
 codex_scope: tags
 codex_type: documentation
@@ -13,9 +14,13 @@ project: DevOnboarder
 similarity_group: openapi.md-guide
 status: draft
 tags:
+
 - docs
+
 - openapi
+
 - contracts
+
 title: OpenAPI in DevOnboarder
 updated_at: '2025-09-04'
 visibility: internal

@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-04'
@@ -12,9 +13,13 @@ project: DevOnboarder
 similarity_group: TOKEN_MIGRATION_GUIDE.md-docs
 status: implementation
 tags:
+
 - guide
+
 - migration
+
 - token-architecture
+
 title: Token Architecture v2.0 Migration Guide
 updated_at: '2025-09-12'
 visibility: internal

@@ -1,5 +1,6 @@
 ---
 consolidation_priority: P3
+
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: troubleshooting-troubleshooting
@@ -319,9 +320,11 @@ bash scripts/validate_token_architecture.sh
 ❌ **Using emojis or Unicode in terminal output (causes hanging)**
 
 ❌ **Bypassing Token Architecture v2.1 system**
+
 ❌ **Creating all workflows at once without testing**
 
 ❌ **Ignoring YAML quality standards**
+
 ❌ **Missing virtual environment requirements**
 
 ## Documentation Standards

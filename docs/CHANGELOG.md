@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,9 +11,13 @@ project: DevOnboarder
 similarity_group: CHANGELOG.md-docs
 status: active
 tags:
+
 - changelog
+
 - release-notes
+
 - project-history
+
 title: DevOnboarder Changelog
 updated_at: '2025-09-12'
 visibility: internal
@@ -1595,6 +1600,7 @@ dev`.
 - Documented the requirement to pass lint and tests, update documentation and the changelog, and added a reviewer sign-
 
   off section to the pull request template.
+
   [#26](https://github.com/theangrygamershowproductions/DevOnboarder/pull/26)
 
 - Added `codex.ci.yml` to automate CI monitoring and fix failing builds.

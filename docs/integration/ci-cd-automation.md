@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - quality-control-policy.md
+
 - common-integration-points.md
+
 similarity_group: ci-automation
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - ci-cd
+
 - github-actions
+
 - automation
+
 - workflows
+
 title: DevOnboarder CI/CD Automation
 updated_at: '2025-09-11'
 visibility: internal

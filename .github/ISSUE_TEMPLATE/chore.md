@@ -1,5 +1,6 @@
 ---
 name: Chore
+
 description: For maintenance, refactoring, or non-feature/non-bug work.
 title: "CHORE: "
 labels: ["chore"]
@@ -8,6 +9,7 @@ labels: ["chore"]
 body:
 
 - type: textarea
+
   id: description
   attributes:
     label: Description

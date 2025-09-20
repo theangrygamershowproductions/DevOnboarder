@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: v1-v1
 status: active
 tags:
+
 - documentation
+
 title: Ai Agent Terminal Override
 updated_at: '2025-09-12'
 visibility: internal
@@ -139,7 +142,6 @@ DevOnboarder's terminal output policy exists because:
 **Every AI agent must acknowledge:**
 
 > "I understand DevOnboarder enforces ZERO TOLERANCE for terminal output violations.
->
 > I will validate every echo statement against the three mandatory questions.
 > I will use ONLY individual echo commands with plain ASCII text.
 > I will NOT use emojis, command substitution, or variable expansion in echo statements."

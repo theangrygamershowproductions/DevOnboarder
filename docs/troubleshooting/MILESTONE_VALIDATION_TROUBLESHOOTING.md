@@ -1,5 +1,6 @@
 ---
 title: "Milestone Validation Troubleshooting"
+
 description: "Troubleshooting guide for milestone validation issues in DevOnboarder"
 document_type: "troubleshooting"
 tags: ["troubleshooting", "milestones", "validation", "devonboarder"]
@@ -18,16 +19,21 @@ This guide provides troubleshooting steps for milestone validation issues in Dev
 ## Common Issues
 
 - Milestone format validation failures
+
 - Missing required milestone fields
+
 - Invalid milestone dates
 
 ## Solutions
 
 - Check milestone documentation standards
+
 - Verify required field presence
+
 - Validate date formats
 
 ## Related Documentation
 
 - Milestone tracking framework
+
 - Quality control standards

@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -14,12 +15,19 @@ project: DevOnboarder
 similarity_group: security-framework
 status: active
 tags:
+
 - environment-variables
+
 - security
+
 - ci-cd
+
 - lessons-learned
+
 - best-practices
+
 title: Environment Variable Management & Security - Lessons Learned
+
 updated_at: '2025-08-06'
 virtual_env_required: true
 visibility: internal

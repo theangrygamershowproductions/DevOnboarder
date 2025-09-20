@@ -1,9 +1,11 @@
 ---
 similarity_group: guides-guides
+
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3
 ---
+
 # DevOnboarder Friction Prevention Guide
 
 ## Overview
@@ -21,10 +23,13 @@ GitHub Copilot inline comments persist based on commit hashes and diff contexts,
 #### A. Comment Tracking System
 
 ```bash
+
 # Track comment resolution status
+
 scripts/track_copilot_comments.sh <PR_NUMBER>
 
 # Generate resolution report
+
 gh pr view <PR_NUMBER> --json comments --jq '.comments[] | select(.body | contains("Copilot"))'
 
 ```
@@ -34,6 +39,7 @@ gh pr view <PR_NUMBER> --json comments --jq '.comments[] | select(.body | contai
 Always include in PR descriptions:
 
 ```markdown
+
 ## ✅ Copilot Feedback Resolution Status
 
 - [x] Comment 1: Issue description → Resolution method + commit hash
@@ -67,10 +73,13 @@ Template cleanup operations can accidentally remove variables still needed by de
 #### A. Pre-Cleanup Validation
 
 ```bash
+
 # Always validate before template changes
+
 scripts/validate_template_variables.sh
 
 # Integrated into QC pipeline
+
 scripts/qc_pre_push.sh  # Now includes template validation
 
 ```
@@ -106,10 +115,13 @@ DevOnboarder requires strict virtual environment usage, but inconsistent activat
 #### A. Environment Validation
 
 ```bash
+
 # Check environment consistency
+
 scripts/check_environment_consistency.sh
 
 # Auto-setup environment
+
 scripts/auto_environment_setup.sh
 
 ```
@@ -127,14 +139,17 @@ scripts/auto_environment_setup.sh
 #### C. Script Patterns
 
 ```bash
+
 # Standard DevOnboarder script header
 #!/bin/bash
 set -euo pipefail
 
 # Ensure virtual environment
+
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
         # shellcheck source=/dev/null
+
         source .venv/bin/activate
     else
         echo "Virtual environment required. Run: python -m venv .venv"
@@ -155,10 +170,13 @@ Complex branch workflows with signature verification requirements create frictio
 #### A. Smart Branch Creation
 
 ```bash
+
 # Create feature branch with proper setup
+
 scripts/create_smart_branch.sh feat "Issue Closure Template System"
 
 # Show DevOnboarder workflow
+
 scripts/create_smart_branch.sh workflow
 
 ```
@@ -202,20 +220,27 @@ Pre-commit hooks and validation systems only process **tracked files** in Git, c
 #### A. Early File Tracking Protocol
 
 ```bash
+
 # Add files to Git tracking immediately after creation
+
 git add new-file.md
 
 # Run validation on newly tracked files
+
 pre-commit run --files new-file.md
 
 # Alternative: Track all new files before validation
+
 git add . && pre-commit run --all-files
+
 ```
 
 #### B. Untracked File Detection
 
 ```bash
+
 # Check for untracked files before QC validation
+
 echo "Checking for untracked files that need validation..."
 UNTRACKED=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$')
 if [[ -n "$UNTRACKED" ]]; then
@@ -223,6 +248,7 @@ if [[ -n "$UNTRACKED" ]]; then
     echo "$UNTRACKED"
     echo "Consider: git add . before running validation"
 fi
+
 ```
 
 #### C. Enhanced QC Integration
@@ -230,7 +256,9 @@ fi
 Updated QC pipeline to detect validation blind spots:
 
 ```bash
+
 # In scripts/qc_pre_push.sh - add untracked file detection
+
 echo "🔍 Checking for validation blind spots..."
 UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh)$')
 if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
@@ -240,15 +268,80 @@ if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
     if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
         git add "$UNTRACKED_IMPORTANT"
         echo "✅ Files tracked - re-run QC for complete validation"
+
     fi
 fi
+
 ```
+
+### D. Repository Scripting Standards
+
+**CRITICAL**: Always use git-aware commands instead of disk-based file discovery to prevent repository pollution.
+
+#### Problem Pattern: `find` Command Pollution
+
+Scripts using `find` search ALL files, including ignored directories like `node_modules/`:
+
+```bash
+
+# ❌ PROBLEM: Searches ignored directories causing pollution
+
+find . -name "*.md" | while read -r file; do
+    process_file "$file"  # Processes files in node_modules/, .venv/, etc.
+done
+
+# Result: Script processes 1000+ irrelevant files, fails on binary content
+
+```
+
+#### Solution: Git-Aware File Discovery
+
+Use `git ls-files` to respect repository boundaries and `.gitignore` rules:
+
+```bash
+
+# ✅ SOLUTION: Respects .gitignore and repository scope
+
+git ls-files '*.md' | while read -r file; do
+    process_file "$file"  # Only processes tracked markdown files
+done
+
+# Result: Script processes only relevant repository files
+
+```
+
+#### Implementation Examples
+
+```bash
+
+# Process all Python files in repository
+git ls-files '*.py' | while read -r file; do
+    python -m pylint "$file"
+done
+
+# Find configuration files in specific directories
+git ls-files 'config/*.yml' 'config/*.yaml'
+
+# Check for specific patterns in tracked files only
+git ls-files src/ | grep '\.py$' | xargs grep -l "import requests"
+
+```
+
+#### Prevention Impact
+
+- **Performance**: 10x faster on repositories with large `node_modules/`
+- **Reliability**: No failures on binary files or irrelevant content
+- **Scope**: Only processes files that should be in repository
+- **Consistency**: Behaves same across development environments
 
 ### Prevention Principles
 
 1. **Track Early**: Add files to Git immediately after creation
+
 2. **Validate Scope**: Explicitly check what validation covers
+
 3. **Question Assumptions**: "Why wasn't this caught?" leads to system improvements
+
 4. **Document Blind Spots**: Capture validation gaps for future prevention
 
 ### Success Impact
@@ -266,9 +359,13 @@ This discovery prevented accumulation of quality issues in untracked work and en
 #### **Structure Template**
 
 ```markdown
+
 ## N. [Domain] [Purpose]
+
 ### [Domain]: [Specific-Type]
+
 #### [Domain] [Action/Detail]
+
 ```
 
 #### **Controlled Vocabulary**
@@ -276,19 +373,25 @@ This discovery prevented accumulation of quality issues in untracked work and en
 **Problem Analysis Types**:
 
 - `### [Domain]: Challenge Analysis`
+
 - `### [Domain]: Issue Assessment`
+
 - `### [Domain]: Friction Points`
 
 **Solution Implementation Types**:
 
 - `### [Domain]: Solution Framework`
+
 - `### [Domain]: Implementation Tools`
+
 - `### [Domain]: Mitigation Strategies`
 
 **Process Integration Types**:
 
 - `### [Domain]: Workflow Integration`
+
 - `### [Domain]: Prevention Measures`
+
 - `### [Domain]: Success Metrics`
 
 #### **Example Application**
@@ -296,25 +399,37 @@ This discovery prevented accumulation of quality issues in untracked work and en
 **Before (Duplicate-Prone)**:
 
 ```markdown
+
 ## 2. Template Variable Validation
+
 ### Challenge Description          # Generic - will duplicate
+
 ### Implementation Solutions       # Generic - will duplicate
 
 ## 4. Git Branch Management
+
 ### Challenge Description          # DUPLICATE!
+
 ### Implementation Solutions       # DUPLICATE!
+
 ```
 
 **After (Systematic Prevention)**:
 
 ```markdown
+
 ## 2. Template Variable Validation
+
 ### Template: Challenge Analysis    # Domain-prefixed
+
 ### Template: Solution Framework   # Domain-prefixed
 
 ## 4. Git Branch Management
+
 ### Branch: Challenge Analysis      # Domain-prefixed
+
 ### Branch: Solution Framework     # Domain-prefixed
+
 ```
 
 #### **Alternative Patterns**
@@ -322,33 +437,49 @@ This discovery prevented accumulation of quality issues in untracked work and en
 **Numbered Approach**:
 
 ```markdown
+
 ### 2.1 Problem Analysis
+
 ### 2.2 Solution Implementation
+
 ### 4.1 Problem Analysis
+
 ### 4.2 Solution Implementation
+
 ```
 
 **Action-Oriented Approach**:
 
 ```markdown
+
 ### Analyzing Template Dependencies
+
 ### Implementing Template Validation
+
 ### Analyzing Branch Complexity
+
 ### Implementing Workflow Tools
+
 ```
 
 ### Implementation Guidelines
 
 1. **Choose One Pattern**: Consistency across document more important than perfect pattern
+
 2. **Domain Prefixes**: Use clear, short domain identifiers (`Template:`, `Branch:`, `Copilot:`)
+
 3. **Controlled Vocabulary**: Limit heading types to prevent confusion
+
 4. **Section Context**: Include section reference in complex documents
+
 5. **Validation Integration**: Add heading pattern checks to QC pipeline
 
 ### Quality Control Enhancement
 
 ```bash
+
 # Add to scripts/validate_documentation_structure.sh
+
 check_duplicate_headings() {
     echo "Checking for duplicate headings..."
     DUPLICATES=$(grep -h "^###" "$1" | sort | uniq -d)
@@ -359,6 +490,7 @@ check_duplicate_headings() {
     fi
     echo "✅ No duplicate headings found"
 }
+
 ```
 
 ## 7. Process Integration
@@ -366,22 +498,29 @@ check_duplicate_headings() {
 ### Comprehensive Workflow
 
 ```bash
+
 # 1. Setup environment
+
 scripts/auto_environment_setup.sh
 
 # 2. Create feature branch
+
 scripts/create_smart_branch.sh feat "Your Feature"
 
 # 3. Develop with validation
+
 scripts/qc_pre_push.sh  # Includes template validation
 
 # 4. Commit safely
+
 scripts/safe_commit.sh "FEAT(component): descriptive message"
 
 # 5. Address Copilot feedback with documentation
+
 # Add resolution status to PR description
 
 # 6. Merge and cleanup
+
 scripts/cleanup_merged_branch.sh
 
 ```

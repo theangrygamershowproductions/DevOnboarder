@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - security-best-practices.md
+
 - quality-control-policy.md
+
 similarity_group: ci-automation
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - potato-policy
+
 - security
+
 - file-protection
+
 - automation
+
 title: DevOnboarder Enhanced Potato Policy
 updated_at: '2025-09-11'
 visibility: internal

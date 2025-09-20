@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -14,11 +15,17 @@ project: core-instructions
 similarity_group: quick-reference-quick-reference
 status: active
 tags:
+
 - devonboarder
+
 - new-developer
+
 - onboarding
+
 - quick-start
+
 title: New Developer Quick Start - DevOnboarder
+
 updated_at: '2025-09-11'
 visibility: internal
 ---

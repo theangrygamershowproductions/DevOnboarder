@@ -1,5 +1,6 @@
 ---
 title: "PR Status Report Template"
+
 description: "Standardized template for generating comprehensive CI pipeline status reports for pull requests with detailed check analysis"
 document_type: "template"
 tags: ["pr", "ci", "status", "template", "automation", "pipeline"]

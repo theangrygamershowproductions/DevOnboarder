@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: AAR_VSCODE_CI_INTEGRATION_2025-08-07.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Aar Vscode Ci Integration 2025 08 07
 updated_at: '2025-09-12'
 visibility: internal

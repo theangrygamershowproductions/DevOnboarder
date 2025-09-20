@@ -1,5 +1,6 @@
 ---
 title: "Review Known Errors Agent"
+
 description: "Placeholder agent for automated review and analysis of known error patterns"
 document_type: "agent"
 tags: ["agent", "error-review", "placeholder", "stub", "future-implementation"]

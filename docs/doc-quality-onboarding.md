@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: doc-quality-onboarding.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Doc Quality Onboarding
 updated_at: '2025-09-12'
 visibility: internal
@@ -223,6 +226,7 @@ and commit the change with your documentation update.
 - **LanguageTool Skips Large Files:**
 
   When a Markdown file exceeds LanguageTool's request size limit, grammar checks
+
   are skipped. Spelling and style are still enforced via Codespell and Vale.
   Run LanguageTool manually on smaller sections or split the file if you need a
   full grammar review.
@@ -230,6 +234,7 @@ and commit the change with your documentation update.
 - **Suppressing False Positives:**
 
   Add valid project terms to `.codespell-ignore` and use Vale suppression
+
   comments (`<!-- vale off -->` ... `<!-- vale on -->`) for persistent warnings
 
   in code blocks or technical docs.

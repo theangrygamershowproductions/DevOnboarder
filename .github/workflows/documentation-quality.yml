@@ -72,7 +72,7 @@ jobs:
         run: |
           source .venv/bin/activate
           echo "Running Vale documentation quality checks..."
-          python -m vale docs/ > logs/vale-results.log 2>&1 || true
+          python -c "import vale.main; vale.main.main()" docs/ > logs/vale-results.log 2>&1 || true
           cat logs/vale-results.log
         continue-on-error: true
 
