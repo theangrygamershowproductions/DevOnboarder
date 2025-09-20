@@ -2,22 +2,28 @@
 # Quick CI Dashboard - Get immediate CI insights
 # This script provides instant CI troubleshooting information
 
-echo "TOOLS: DevOnboarder Quick CI Dashboard"
-echo "=================================="
-echo ""
-
-# Check if we're in the right directory
+# Validate we're in the correct DevOnboarder project BEFORE announcing the script
 if [ ! -f "pyproject.toml" ]; then
     echo "ERROR: Not in DevOnboarder project root. Run from the repository root directory."
     exit 1
 fi
 
-# Validate this is the correct DevOnboarder project
+# Comprehensive DevOnboarder project validation
 if ! grep -q "name = \"devonboarder\"" pyproject.toml 2>/dev/null; then
     echo "ERROR: Not in the DevOnboarder project directory. Found pyproject.toml but project name mismatch."
     echo "Expected: name = \"devonboarder\" in pyproject.toml"
     exit 1
 fi
+
+# Additional validation: Check for DevOnboarder-specific files
+if [ ! -d "frameworks" ] || [ ! -f "scripts/qc_pre_push.sh" ]; then
+    echo "ERROR: Missing DevOnboarder-specific directories/files. Ensure you're in the correct repository."
+    exit 1
+fi
+
+echo "TOOLS: DevOnboarder Quick CI Dashboard"
+echo "=================================="
+echo ""
 
 # Create logs directory if it doesn't exist
 mkdir -p logs
