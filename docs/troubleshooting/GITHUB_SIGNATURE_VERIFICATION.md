@@ -1,3 +1,9 @@
+---
+similarity_group: troubleshooting-troubleshooting
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # GitHub Signature Verification Troubleshooting
 
 ## Overview
