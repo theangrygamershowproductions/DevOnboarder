@@ -5,8 +5,11 @@ cd /home/potato/DevOnboarder || exit
 
 echo "Fixing remaining emojis in Phase 3 framework..."
 
+# Target directory (configurable)
+TARGET_DIR="${TARGET_DIR:-frameworks/monitoring_automation/}"
+
 # More comprehensive emoji fixes
-find frameworks/monitoring_automation/ -name "*.sh" -exec sed -i '
+find "$TARGET_DIR" -name "*.sh" -exec sed -i '
 s/🏥/HEALTH:/g
 s/🚨/ALERT:/g
 s/⏰/TIME:/g

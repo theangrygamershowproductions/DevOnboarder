@@ -34,8 +34,8 @@ test_github_token() {
 
     TOTAL_TOKENS=$((TOTAL_TOKENS + 1))
 
-    printf "Value: %s\n" "$"
-    printf "Value: %s\n" "$"
+    printf "Token: %s\n" "$token_name"
+    printf "Test: %s\n" "$test_description"
 
     if [ -z "$token_value" ]; then
         echo "   Status: Error: NOT FOUND in environment"
@@ -44,7 +44,7 @@ test_github_token() {
         return 1
     fi
 
-    printf "Value: %s\n" "$"
+    printf "Status: %s\n" "Present"
 
     # Test the token
     # shellcheck disable=SC2034

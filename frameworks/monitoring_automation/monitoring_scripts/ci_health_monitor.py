@@ -4,16 +4,11 @@ CI Health Monitor v1.0
 Part of DevOnboarder Phase 4: CI Triage Guard Enhancement
 
 Real-time CI pipeline health monitoring with predictive analytics.
-Integrates with Enhanced Potato Policy v2.0 and                message = (
-                    f"CI success rate ({success_rate:.1%}) below "
-                    f"threshold "
-                    f"({self.metrics_config['success_rate_threshold']:.1%})"
-                )Hub Actions.
+Integrates with Enhanced Potato Policy v2.0 and GitHub Actions.
 """
 
 import json
 import os
-import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -53,15 +48,16 @@ class CIHealthMonitor:
     def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
-            print("❌ Virtual environment not detected")
-            print("💡 DevOnboarder requires virtual environment isolation")
-            print("🔧 Run: python -m venv .venv && source .venv/bin/activate")
-            sys.exit(1)
+            error_msg = (
+                "Virtual environment not detected. "
+                "DevOnboarder requires virtual environment isolation. "
+                "Run: python -m venv .venv && source .venv/bin/activate"
+            )
+            raise EnvironmentError(error_msg)
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
-            print(f"❌ Virtual environment invalid: {self.venv_path}")
-            sys.exit(1)
+            raise EnvironmentError(f"Virtual environment invalid: {self.venv_path}")
 
         print(f"✅ Virtual environment validated: {self.venv_path}")
 
