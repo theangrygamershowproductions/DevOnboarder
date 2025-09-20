@@ -57,15 +57,15 @@ test_github_token() {
         return 0
     else
         # Analyze the error
-        if printf "Value: %s\n" "$"; then
-            echo "   Status: ⏳ PROPAGATION DELAY (normal for updated tokens)"
-            echo "   Issue: GitHub API permissions still propagating"
-        elif printf "Value: %s\n" "$"; then
+        if echo "$error_output" | grep -q "Bad credentials"; then
             echo "   Status: Error: INVALID TOKEN"
             echo "   Issue: Invalid or expired token"
-        elif printf "Value: %s\n" "$"; then
+        elif echo "$error_output" | grep -q "rate limit"; then
             echo "   Status: Warning: RATE LIMITED"
             echo "   Issue: API rate limit exceeded"
+        elif echo "$error_output" | grep -q "Not Found"; then
+            echo "   Status: PROPAGATION DELAY (normal for updated tokens)"
+            echo "   Issue: GitHub API permissions still propagating"
         else
             echo "   Status: Error: PERMISSION ERROR"
             echo "   Issue: Missing required permissions"
