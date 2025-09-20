@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,18 +14,28 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - virtual-environment-policy.md
+
 - terminal-output-policy.md
+
 - ci-cd-automation.md
+
 similarity_group: troubleshooting-debug
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - troubleshooting
+
 - debugging
+
 - issues
+
 - resolution
+
 title: DevOnboarder Common Issues Resolution
 updated_at: '2025-09-11'
 visibility: internal
@@ -39,6 +50,27 @@ visibility: internal
 - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
 
 - ❌ **NOT**: Install to system Python
+
+### 2. GitHub CLI PR Creation Fails on zsh
+
+- ✅ **Symptom**: `zsh: command not found: ├──` and similar errors when creating PRs
+
+- ✅ **Root Cause**: zsh interprets markdown special characters in PR body as shell commands
+
+- ✅ **Solution**: Use `scripts/create_pr_safe.sh` or `--body-file` flag
+
+- ✅ **Safe Pattern**:
+
+  ```bash
+  # Create PR body file first
+  echo "## PR Title\nContent here" > pr_body.md
+  gh pr create --title "Title" --body-file pr_body.md
+  rm pr_body.md
+  ```
+
+- ✅ **DevOnboarder Utility**: `bash scripts/create_pr_safe.sh "Title" "body.md"`
+
+- ❌ **NOT**: Use `--body "complex markdown"` directly with zsh
 
 ### 2. Command not found (black, pytest, etc.)
 
