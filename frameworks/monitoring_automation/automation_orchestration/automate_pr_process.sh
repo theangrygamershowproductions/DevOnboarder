@@ -25,7 +25,7 @@ if [ -z "$PR_NUMBER" ]; then
     exit 1
 fi
 
-echo -e "${BLUE}🤖 AUTOMATED PR PROCESS CONTROLLER${NC}"
+echo -e "${BLUE}BOT: AUTOMATED PR PROCESS CONTROLLER${NC}"
 echo "========================================"
 echo -e "${BLUE}PR: #$PR_NUMBER | Mode: $ACTION_MODE${NC}"
 echo ""

@@ -18,7 +18,7 @@ mkdir -p "$LOG_DIR"
 # Initialize logging
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "👁️ DevOnboarder Content Duplication Monitoring"
+echo "MONITOR: DevOnboarder Content Duplication Monitoring"
 echo "================================================"
 echo "Timestamp: $(date)"
 echo "Phase: 2 - Automation Opportunities"

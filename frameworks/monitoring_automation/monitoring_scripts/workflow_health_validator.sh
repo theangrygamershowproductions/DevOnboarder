@@ -497,16 +497,16 @@ generate_health_report() {
 
     # Health status determination
     if [[ $pass_rate -ge 90 ]]; then
-        echo "🟢 System Status: HEALTHY"
+        echo "SUCCESS: System Status: HEALTHY"
         echo "   All critical systems operational"
     elif [[ $pass_rate -ge 75 ]]; then
-        echo "🟡 System Status: WARNING"
+        echo "WARNING: System Status: WARNING"
         echo "   Some issues detected, monitoring required"
     elif [[ $pass_rate -ge 50 ]]; then
-        echo "🟠 System Status: DEGRADED"
+        echo "DEGRADED: System Status: DEGRADED"
         echo "   Multiple issues detected, intervention needed"
     else
-        echo "🔴 System Status: CRITICAL"
+        echo "ERROR: System Status: CRITICAL"
         echo "   System integrity compromised, immediate action required"
     fi
 

@@ -26,7 +26,7 @@ if pgrep -f "validate_ci_locally.sh" >/dev/null; then
     echo
     tail -f "$LATEST_LOG"
 else
-    echo "🔴 Validation is NOT running"
+    echo "[NOT RUNNING] Validation is NOT running"
     echo "STATS: Final results from last run:"
     echo
 

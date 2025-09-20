@@ -12,6 +12,13 @@ if [ ! -f "pyproject.toml" ]; then
     exit 1
 fi
 
+# Validate this is the correct DevOnboarder project
+if ! grep -q "name = \"devonboarder\"" pyproject.toml 2>/dev/null; then
+    echo "ERROR: Not in the DevOnboarder project directory. Found pyproject.toml but project name mismatch."
+    echo "Expected: name = \"devonboarder\" in pyproject.toml"
+    exit 1
+fi
+
 # Create logs directory if it doesn't exist
 mkdir -p logs
 

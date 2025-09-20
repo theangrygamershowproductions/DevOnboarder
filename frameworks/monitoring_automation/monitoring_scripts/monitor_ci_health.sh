@@ -66,7 +66,7 @@ if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,sta
 
         # Show recent runs
         echo ""
-        echo "🕒 Recent Runs:"
+        echo "TIME: Recent Runs:"
         echo "$runs" | jq -r '.[] | "\(.createdAt[0:19]) \(.workflowName): \(.conclusion // .status)"' | head -10
 
         # Show failed runs detail if available
