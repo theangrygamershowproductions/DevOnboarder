@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.DocumentationQuality
   output: .codex/logs/documentation-quality.log
@@ -13,13 +14,18 @@ description: Documentation description needed
 document_type: documentation
 merge_candidate: false
 permissions:
+
 - repo:read
+
 - repo:write
+
 project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Documentation Quality
 updated_at: '2025-09-12'
 visibility: internal

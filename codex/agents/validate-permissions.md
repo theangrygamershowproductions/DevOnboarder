@@ -1,5 +1,6 @@
 ---
 title: "Validate Permissions Agent"
+
 description: "Placeholder agent for automated validation of permission configurations and access controls"
 document_type: "agent"
 tags: ["agent", "permissions", "validation", "placeholder", "stub", "future-implementation"]

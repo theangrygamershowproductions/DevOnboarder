@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: first-pr-guide.md-docs
 status: active
 tags:
+
 - documentation
+
 title: First Pr Guide
 updated_at: '2025-09-12'
 visibility: internal

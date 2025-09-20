@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -15,11 +16,17 @@ project: core-instructions
 similarity_group: documentation-guides
 status: active
 tags:
+
 - devonboarder
+
 - documentation
+
 - modular
+
 - navigation
+
 - index
+
 title: DevOnboarder Modular Documentation Index
 updated_at: '2025-09-11'
 visibility: internal

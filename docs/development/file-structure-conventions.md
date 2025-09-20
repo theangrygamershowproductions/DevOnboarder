@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - architecture-overview.md
+
 - plugin-development.md
+
 similarity_group: development-standards
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - file-structure
+
 - directory-layout
+
 - configuration
+
 - organization
+
 title: DevOnboarder File Structure Conventions
 updated_at: '2025-09-11'
 visibility: internal

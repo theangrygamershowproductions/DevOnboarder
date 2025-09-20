@@ -78,7 +78,5 @@ Begin implementation of DevOnboarder Phase 2 rollout based on the August 2025 re
 ---
 
 > Please commit staged changes under:
->
 > **Branch:** `phase2/devonboarder-readiness`
->
 > **Prefix Commits:** `PHASE2:`

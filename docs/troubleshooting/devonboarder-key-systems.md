@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,18 +14,28 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - architecture-overview.md
+
 - quality-control-policy.md
+
 - agent-requirements.md
+
 similarity_group: troubleshooting-standards
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - key-systems
+
 - utilities
+
 - frameworks
+
 - guidance
+
 title: DevOnboarder Key Systems & Utilities
 updated_at: '2025-09-11'
 visibility: internal

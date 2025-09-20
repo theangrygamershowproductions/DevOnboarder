@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.StagingOrchestrator
   output: Deployment job logs
@@ -16,7 +17,9 @@ project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Staging Orchestrator
 updated_at: '2025-09-12'
 visibility: internal

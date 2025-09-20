@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: security-audit-2025-07-30.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Security Audit 2025 07 30
 updated_at: '2025-09-12'
 visibility: internal
@@ -35,11 +38,13 @@ The following vulnerabilities are currently ignored:
 # due to upstream maintainer decisions or lack of available patches
 
 #
+
 # CRITICAL: All ignored vulnerabilities must be documented in
 
 # docs/security-ignore-registry.md with quarterly review schedules
 
 #
+
 # GHSA-wj6h-64fc-37mp: Timing attack in python-ecdsa on P-256 curve
 
 # - Affects: ecdsa 0.19.1 (required by python-jose for JWT functionality)
@@ -67,6 +72,7 @@ Name  Version ID                  Fix Versions
 ----- ------- ------------------- ------------
 
 ecdsa 0.19.1  GHSA-wj6h-64fc-37mp
+
 Name         Skip Reason
 ------------ ---------------------------------------------------------------------------
 

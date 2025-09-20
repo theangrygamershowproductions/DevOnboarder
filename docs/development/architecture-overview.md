@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - service-integration-patterns.md
+
 - file-structure-conventions.md
+
 similarity_group: architecture-design
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - architecture
+
 - tags-stack
+
 - microservices
+
 - integration
+
 title: DevOnboarder Architecture Overview
 updated_at: '2025-09-11'
 visibility: internal

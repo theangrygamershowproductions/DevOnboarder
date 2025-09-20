@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.AiMentor
   output: .codex/logs/ai-mentor.log
@@ -13,12 +14,16 @@ description: Documentation description needed
 document_type: documentation
 merge_candidate: false
 permissions:
+
 - repo:read
+
 project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Ai Mentor
 updated_at: '2025-09-12'
 visibility: internal

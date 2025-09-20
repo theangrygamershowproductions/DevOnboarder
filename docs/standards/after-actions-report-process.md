@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -11,9 +12,13 @@ project: DevOnboarder
 similarity_group: standards-standards
 status: active
 tags:
+
 - standards
+
 - policy
+
 - documentation
+
 title: After Actions Report Process
 updated_at: '2025-09-12'
 virtual_env_required: true

@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 complexity: simple|moderate|complex|very-complex
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -17,10 +18,15 @@ project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - template
+
 - milestone
+
 - tracking
+
 - project-management
+
 title: Milestone Documentation Template
 type: enhancement|feature|bugfix|infrastructure|process
 updated_at: '2025-09-12'

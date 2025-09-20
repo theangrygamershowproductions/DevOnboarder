@@ -1,5 +1,6 @@
 ---
 title: "ID.me Verification Agent"
+
 description: "Agent for verifying users through ID.me OAuth integration during onboarding process"
 document_type: "agent"
 tags: ["agent", "idme", "verification", "oauth", "onboarding"]

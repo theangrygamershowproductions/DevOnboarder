@@ -1,5 +1,6 @@
 ---
 agent: management-ingest
+
 authentication_required: true
 codex_dry_run: true
 codex_runtime: false
@@ -13,16 +14,24 @@ integration_log: https://codex.theangrygamershow.com/docs/devonboarder/ci-integr
 merge_candidate: false
 output: .codex/logs/management-ingest.log
 permissions:
+
 - discord:write
+
 - routing:read
+
 purpose: Processes executive commands and routes them to appropriate Discord servers
   based on environment
 similarity_group: agents-agents
 tags:
+
 - management
+
 - discord
+
 - routing
+
 - executive
+
 title: Management Ingest Agent
 trigger: executive commands
 ---

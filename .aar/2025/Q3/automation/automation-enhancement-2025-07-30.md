@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,9 +11,13 @@ project: DevOnboarder
 similarity_group: aar-aar
 status: active
 tags:
+
 - aar
+
 - retrospective
+
 - lessons-learned
+
 title: 'AAR: Automation Enhancement 2025 07 30'
 updated_at: '2025-09-12'
 visibility: internal

@@ -1,5 +1,6 @@
 ---
 title: "CI TRIAGE REPORT – Root Artifact Pollution"
+
 description: "CI triage analysis of root artifact pollution issues, documenting test validation artifacts accumulation and automated cleanup solutions"
 document_type: "triage-report"
 category: ci-hygiene
@@ -12,11 +13,17 @@ severity: medium
 similarity_group: codex-codex
 status: documented
 tags:
+
 - ci
+
 - artifacts
+
 - pollution
+
 - hygiene
+
 - validation
+
 ---
 
 # 🔍 CI TRIAGE REPORT: Root Artifact Pollution

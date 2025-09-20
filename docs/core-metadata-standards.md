@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 ci_integration: true
 codex_role: Engineering
 codex_runtime: true
@@ -16,12 +17,19 @@ project: DevOnboarder
 similarity_group: documentation-guides
 status: active
 tags:
+
 - codex
+
 - metadata
+
 - standards
+
 - yaml
+
 - frontmatter
+
 - documentation
+
 title: Core Instructions Metadata Standards
 updated_at: '2025-07-28'
 virtual_env_required: true

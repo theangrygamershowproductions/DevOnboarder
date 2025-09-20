@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: COVERAGE_MASKING_SOLUTION.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Coverage Masking Solution
 updated_at: '2025-09-12'
 visibility: internal
@@ -97,9 +100,11 @@ omit =
     src/discord_integration/*
 
     src/feedback_service/*
+
     src/llama2_agile_helper/*
 
     src/routes/*
+
     src/utils/*
 
 [report]
@@ -134,9 +139,11 @@ omit =
     src/discord_integration/*
 
     src/feedback_service/*
+
     src/llama2_agile_helper/*
 
     src/routes/*
+
     src/utils/*
 
 [html]
@@ -158,9 +165,11 @@ omit =
     src/xp/*
 
     src/feedback_service/*
+
     src/llama2_agile_helper/*
 
     src/routes/*
+
     src/utils/*
 
 [html]

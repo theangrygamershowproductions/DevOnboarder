@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: about-potato.md-docs
 status: active
 tags:
+
 - documentation
+
 title: About Potato
 updated_at: '2025-09-12'
 visibility: internal
@@ -30,17 +33,20 @@ every phase of the workflow: immortalized in `.gitignore`, `.dockerignore`,
 - **A Running Joke**
 
   What started as an inside joke soon became a symbol of creativity, humility,
+
   and perseverance in our engineering culture.
 
 - **A Guardian**
 
   The presence of "Potato" and `Potato.md` in our ignore files reminds us never
+
   to take ourselves too seriously—and that every line of code carries a bit of
   our team's story.
 
 - **A Security Check**
 
   Our CI pipeline and pre-commit hooks protect Potato's legacy, ensuring it is
+
   never accidentally removed and continues to travel with every branch, PR, and
   release.
 
@@ -113,7 +119,6 @@ For the full story of how this policy was born from real-world security incident
 ---
 
 > **🥔 Potato Policy Certified**
->
 > Built with scars. Hardened with automation.
 
 _For the full origin story and philosophy behind this security framework, see [potato-policy-aar.md](potato-policy-aar.md)._

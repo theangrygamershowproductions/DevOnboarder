@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: cli-shortcuts.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Cli Shortcuts
 updated_at: '2025-09-12'
 visibility: internal
@@ -166,24 +169,35 @@ Enhanced CI Health Dashboard with real-time monitoring, failure prediction, and 
 **Usage:**
 
 ```bash
+
 gh-ci-health                    # Full dashboard view
+
 gh-ci-health --branch main      # Branch-specific analysis
+
 gh-ci-health --live             # Live monitoring mode
+
 gh-ci-health --predict          # Failure prediction only
+
 gh-ci-health --json             # JSON output for automation
+
 ```
 
 **Features:**
 
 - Real-time workflow monitoring across all 45+ workflows
+
 - Failure pattern detection and prediction (95% confidence)
+
 - Cost optimization through early cancellation recommendations
+
 - Integration with Token Architecture v2.1 and AAR system
+
 - Detached HEAD detection and signature verification monitoring
 
 **Output:**
 
 ```text
+
 🏥 DevOnboarder CI Health Dashboard
 ========================================
 Timestamp: 2025-09-13 14:54:26
@@ -196,17 +210,20 @@ Potential Cost Savings: 0 minutes
 📊 Active Workflow Status:
 ----------------------------------------
 🟡 ci.yml
+
 🟡 documentation-quality.yml
 
 🔮 Failure Predictions:
 ----------------------------------------
 ⚡ ci.yml: detached_head
+
    Confidence: [████████  ] 85%
    Actions: Cancel workflow immediately to save compute time
 
 💡 Recommendations:
 ----------------------------------------
 • Consider cancelling 1 workflows with >80% failure confidence
+
 ```
 
 #### `devonboarder-ci-health`
@@ -216,14 +233,19 @@ Direct access to the enhanced CI Health Dashboard engine with full feature set.
 **Usage:**
 
 ```bash
+
 devonboarder-ci-health [OPTIONS]
+
 ```
 
 **Advanced Options:**
 
 - `--verbose` - Detailed logging output
+
 - `--json` - Machine-readable JSON output
+
 - Integration with centralized logging system
+
 - Comprehensive error handling and token management
 
 #### `gh-dashboard`
@@ -297,31 +319,45 @@ Enhanced After Action Report (AAR) generation with CI health dashboard integrati
 **Usage:**
 
 ```bash
+
 ci-health-aar-integration --analyze-patterns           # Analyze all CI health patterns
+
 ci-health-aar-integration --workflow-id 12345          # Generate enhanced AAR
+
 ci-health-aar-integration --workflow-id 12345 --create-issue  # Generate AAR + GitHub issue
+
 ```
 
 **Features:**
 
 - Automatic AAR generation with CI health predictions
+
 - Pattern frequency analysis across all logs
+
 - Cost savings tracking and optimization recommendations
+
 - Integration with existing make aar-* targets
+
 - GitHub issue creation for persistent failures
 
 **Makefile Integration:**
 
 ```bash
+
 make ci-health-aar-analyze                              # Quick pattern analysis
+
 make ci-health-aar-generate WORKFLOW_ID=12345          # Enhanced AAR generation
+
 make ci-health-aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # With issue creation
+
 make ci-health-aar-help                                 # Show all AAR commands
+
 ```
 
 **Sample Output:**
 
 ```text
+
 📊 CI Health Pattern Analysis
 ========================================
 Total Logs Analyzed: 15
@@ -339,6 +375,7 @@ Recommendations:
   • Consider adding branch protection rules to prevent detached HEAD issues
   • Review commit signing setup and key availability in CI environment
   • Implement auto-cancellation for high-confidence predictions (potential savings: 245 minutes)
+
 ```
 
 ### Workflow Automation

@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created: 2025-07-05
@@ -11,7 +12,9 @@ project: DevOnboarder
 similarity_group: origin.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Project Origin & Recovery Story
 updated_at: '2025-09-12'
 version: v1.0.0

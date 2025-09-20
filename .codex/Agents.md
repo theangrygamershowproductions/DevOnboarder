@@ -1,5 +1,6 @@
 ---
 title: "Codex Agent Policy"
+
 description: "Documentation requirements and standards for Codex agent files including YAML headers, index registration, and notification workflows"
 document_type: "policy"
 project: "DevOnboarder"
@@ -9,9 +10,13 @@ merge_candidate: false
 similarity_group: codex-codex
 tags:
   - codex
+
   - agents
+
   - policy
+
   - documentation
+
 ---
 
 # Codex Agent Policy

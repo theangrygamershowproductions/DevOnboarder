@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,18 +14,28 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - architecture-overview.md
+
 - code-quality-requirements.md
+
 - file-structure-conventions.md
+
 similarity_group: environment-config
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - development
+
 - workflow
+
 - environment
+
 - quality-control
+
 title: DevOnboarder Development Workflow
 updated_at: '2025-09-11'
 visibility: internal

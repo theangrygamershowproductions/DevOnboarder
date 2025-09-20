@@ -1,5 +1,6 @@
 ---
 audience: developers
+
 author: TAGS Engineering
 consolidation_priority: P2
 consolidation_strategy: merge_sections
@@ -15,16 +16,24 @@ merge_candidate: true
 parent_document: core-policies.md
 project: core-instructions|automation|security|documentation
 related_documents:
+
 - terminal-output-policy.md
+
 - potato-policy.md
+
 review_frequency: quarterly
 similarity_group: environment-policies
 status: active|draft|deprecated|archived
 tags:
+
 - devonboarder
+
 - topic1
+
 - topic2
+
 - document-type
+
 technical_depth: comprehensive
 title: Document Title
 updated_at: '2025-09-12'

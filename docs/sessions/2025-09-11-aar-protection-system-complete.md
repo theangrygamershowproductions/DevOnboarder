@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: sessions-sessions
 status: active
 tags:
+
 - documentation
+
 title: 2025 09 11 Aar Protection System Complete
 updated_at: '2025-09-12'
 visibility: internal
@@ -73,16 +76,23 @@ visibility: internal
 **CRITICAL LESSON**: Always use `./scripts/validate_ci_locally.sh` FIRST when troubleshooting CI issues!
 
 ```bash
-# Before any complex CI troubleshooting:
+
+# Before any complex CI troubleshooting
+
 cd /home/potato/DevOnboarder
 source .venv/bin/activate
 ./scripts/validate_ci_locally.sh
 
-# This script provides:
+# This script provides
+
 # - 48 comprehensive validation steps
+
 # - Individual log files for each step
+
 # - ~77%+ success rate visibility before push
+
 # - Actionable failure diagnosis
+
 ```
 
 **Evidence**: The script revealed 11 failures before push, allowing precise understanding of required fixes versus unrelated issues, preventing multiple CI failure cycles.

@@ -1,5 +1,6 @@
 ---
 title: "Codex Agents Documentation"
+
 description: "Documentation for the Codex agents directory structure and metadata format including index.json structure"
 document_type: "guide"
 tags: ["agents", "codex", "automation", "documentation", "metadata"]
@@ -14,6 +15,7 @@ environment: "any"
 output: "codex/agents/index.json"
 permissions:
     - "repo:read"
+
 codex_runtime: false
 codex_dry_run: false
 discord_role_required: ""

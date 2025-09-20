@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - service-integration-patterns.md
+
 - development-workflow.md
+
 similarity_group: integration-standards
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - integration-points
+
 - feature-development
+
 - api-endpoints
+
 - workflows
+
 title: DevOnboarder Common Integration Points
 updated_at: '2025-09-11'
 visibility: internal

@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,9 +11,13 @@ project: core-aar
 similarity_group: aar-aar
 status: active
 tags:
+
 - aar
+
 - retrospective
+
 - lessons-learned
+
 title: 'After Actions Report: [PR Title] (#[PR Number])'
 updated_at: '2025-09-12'
 visibility: internal
