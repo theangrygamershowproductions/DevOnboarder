@@ -31,7 +31,7 @@ elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
     # Fallback to legacy token loader
     source "$PROJECT_ROOT/scripts/load_token_environment.sh"
 else
-    echo "⚠️  Warning: Token Architecture scripts not found. Dashboard may have limited functionality."
+    echo "WARNING: Token Architecture scripts not found. Dashboard may have limited functionality."
 fi
 
 # Function to show usage help
