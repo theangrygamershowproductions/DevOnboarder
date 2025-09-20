@@ -163,7 +163,7 @@ fi
 
 # 7. Commit Message Quality
 echo "📝 Checking commit messages..."
-if bash scripts/check_commit_messages.sh >/dev/null 2>&1; then
+if bash frameworks/quality-assurance/checking/check_commit_messages.sh >/dev/null 2>&1; then
     CHECKS+=("SUCCESS: Commit messages")
 else
     CHECKS+=("FAILED: Commit messages")
