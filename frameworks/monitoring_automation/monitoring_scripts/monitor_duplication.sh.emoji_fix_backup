@@ -228,7 +228,7 @@ EOF
 
 # Function: GitHub Actions integration
 create_github_actions_integration() {
-    echo "BOT: Creating GitHub Actions integration..."
+    echo "🤖 Creating GitHub Actions integration..."
 
     local workflow_file=".github/workflows/duplication-monitoring.yml"
     local workflow_dir
@@ -312,7 +312,7 @@ jobs:
 EOF
 
     echo "   SUCCESS: GitHub Actions workflow created: $workflow_file"
-    echo "   BOT: Automated monitoring will run on docs changes and daily"
+    echo "   🤖 Automated monitoring will run on docs changes and daily"
 }
 
 # Function: Display usage information

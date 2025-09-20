@@ -354,12 +354,12 @@ class CIHealthAARIntegrator:
                 # Write base AAR information
                 f.write("## Base AAR Results\n\n")
                 if enhanced_aar["base_aar"]["success"]:
-                    f.write("SUCCESS: Base AAR generated successfully\n\n")
+                    f.write("✅ Base AAR generated successfully\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"]["stdout"])
                     f.write("\n```\n")
                 else:
-                    f.write("ERROR: Base AAR generation failed\n\n")
+                    f.write("❌ Base AAR generation failed\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"].get("stderr", "Unknown error"))
                     f.write("\n```\n")
@@ -419,7 +419,7 @@ Examples:
                 args.workflow_id, args.create_issue
             )
 
-            print("SUCCESS: Enhanced AAR generated successfully")
+            print("✅ Enhanced AAR generated successfully")
             print(f"Workflow ID: {result['workflow_id']}")
             print(
                 f"CI Health Predictions: "
@@ -441,7 +441,7 @@ Examples:
             ci_logs = integrator.get_ci_health_logs()
             analysis = integrator._analyze_ci_health_patterns(ci_logs)
 
-            print("STATS: CI Health Pattern Analysis")
+            print("📊 CI Health Pattern Analysis")
             print("=" * 40)
             print(f"Total Logs Analyzed: {analysis['total_predictions']}")
             print(f"Failure Predictions: {analysis['failure_predictions']}")

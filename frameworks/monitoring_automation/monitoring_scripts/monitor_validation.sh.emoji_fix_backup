@@ -21,7 +21,7 @@ echo "════════════════════════�
 
 # Show current progress if validation is running
 if pgrep -f "validate_ci_locally.sh" >/dev/null; then
-    echo "SUCCESS: Validation is currently RUNNING"
+    echo "🟢 Validation is currently RUNNING"
     echo "STATS: Real-time progress:"
     echo
     tail -f "$LATEST_LOG"

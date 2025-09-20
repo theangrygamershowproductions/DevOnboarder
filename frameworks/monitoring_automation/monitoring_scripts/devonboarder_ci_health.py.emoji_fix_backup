@@ -707,7 +707,7 @@ class CIHealthDashboard:
         high_conf_correlations = correlations.get("high_confidence_correlations", 0)
         if high_conf_correlations > 0:
             recommendations.append(
-                f"TARGET: HIGH PRIORITY: {high_conf_correlations} Copilot suggestions "
+                f"🎯 HIGH PRIORITY: {high_conf_correlations} Copilot suggestions "
                 f"directly address current CI failures"
             )
 
@@ -730,20 +730,20 @@ class CIHealthDashboard:
 
         if "security" in failure_patterns:
             recommendations.append(
-                "SECURITY: SECURITY: Address security-related suggestions immediately"
+                "🛡️ SECURITY: Address security-related suggestions immediately"
             )
 
         # Failed check recommendations
         failed_checks = len(ci_status.get("failed_checks", []))
         if failed_checks > 0:
             recommendations.append(
-                f"ERROR: FAILURES: {failed_checks} CI checks failed - "
+                f"❌ FAILURES: {failed_checks} CI checks failed - "
                 f"review correlations with comments"
             )
 
         if not recommendations:
             recommendations.append(
-                "SUCCESS: STATUS: No immediate issues detected - "
+                "✅ STATUS: No immediate issues detected - "
                 "PR appears ready for review"
             )
 
@@ -809,13 +809,11 @@ class CIHealthDashboard:
 
                 # Display active workflows
                 if analysis["active_workflows"]:
-                    print("STATS: Active Workflow Status:")
+                    print("📊 Active Workflow Status:")
                     print("-" * 40)
                     for workflow in analysis["active_workflows"]:
                         status_icon = (
-                            "WARNING:"
-                            if workflow["status"] == "in_progress"
-                            else "ERROR:"
+                            "🟡" if workflow["status"] == "in_progress" else "🔴"
                         )
                         print(f"{status_icon} {workflow['name']}")
 
@@ -824,9 +822,7 @@ class CIHealthDashboard:
                             and workflow["prediction"]["failure_predicted"]
                         ):
                             pred = workflow["prediction"]
-                            confidence_icon = (
-                                "ALERT:" if pred["confidence"] > 0.8 else "WARNING:"
-                            )
+                            confidence_icon = "🚨" if pred["confidence"] > 0.8 else "⚠️"
                             print(
                                 f"   {confidence_icon} {pred['failure_type']} "
                                 f"({pred['confidence']:.1%} confidence)"
@@ -839,7 +835,7 @@ class CIHealthDashboard:
                     print("-" * 40)
                     for pred in analysis["predictions"]:
                         confidence_bar = "█" * int(pred["confidence"] * 10)
-                        print(f"QUICK: {pred['workflow']}: {pred['failure_type']}")
+                        print(f"⚡ {pred['workflow']}: {pred['failure_type']}")
                         print(
                             f"   Confidence: [{confidence_bar:<10}] "
                             f"{pred['confidence']:.1%}"
@@ -849,7 +845,7 @@ class CIHealthDashboard:
 
                 # Display recommendations
                 if analysis["recommendations"]:
-                    print("TIP: Recommendations:")
+                    print("💡 Recommendations:")
                     print("-" * 40)
                     for rec in analysis["recommendations"]:
                         print(f"• {rec}")
@@ -936,7 +932,7 @@ Examples:
 
     if not dashboard.github_token:
         print(
-            "WARNING:  Warning: No GitHub token available. Dashboard will "
+            "⚠️  Warning: No GitHub token available. Dashboard will "
             "have limited functionality."
         )
         print("   Please ensure TOKEN_ARCHITECTURE_V2.1 is properly configured.")
@@ -950,28 +946,22 @@ Examples:
             if args.json:
                 print(json.dumps(results, indent=2))
             else:
-                print(f"INFO: Integrated PR Analysis: #{results['pr_number']}")
+                print(f"🔍 Integrated PR Analysis: #{results['pr_number']}")
                 print("=" * 60)
 
                 # PR Comments Summary
                 pr_comments = results["pr_comments"]
-                print(
-                    f"NOTE: PR Comments: {pr_comments.get('total_comments', 0)} total"
-                )
-                print(
-                    f"BOT: Copilot Comments: {pr_comments.get('copilot_comments', 0)}"
-                )
+                print(f"📝 PR Comments: {pr_comments.get('total_comments', 0)} total")
+                print(f"🤖 Copilot Comments: {pr_comments.get('copilot_comments', 0)}")
                 suggestions_count = len(pr_comments.get("copilot_suggestions", []))
-                print(f"TIP: Code Suggestions: {suggestions_count}")
+                print(f"💡 Code Suggestions: {suggestions_count}")
                 print()
 
                 # CI Status Summary
                 ci_status = results["ci_status"]
-                print(
-                    f"BUILD: CI Status: {ci_status.get('total_checks', 0)} total checks"
-                )
-                print(f"SUCCESS: Passed: {len(ci_status.get('passed_checks', []))}")
-                print(f"ERROR: Failed: {len(ci_status.get('failed_checks', []))}")
+                print(f"🏗️ CI Status: {ci_status.get('total_checks', 0)} total checks")
+                print(f"✅ Passed: {len(ci_status.get('passed_checks', []))}")
+                print(f"❌ Failed: {len(ci_status.get('failed_checks', []))}")
                 print(f"⏳ Pending: {len(ci_status.get('pending_checks', []))}")
                 print()
 
@@ -979,29 +969,27 @@ Examples:
                 correlations = results["correlations"]
                 total_corr = correlations.get("total_correlations", 0)
                 high_conf_corr = correlations.get("high_confidence_correlations", 0)
-                print(f"LINK: Comment-CI Correlations: {total_corr} found")
-                print(f"TARGET: High Confidence: {high_conf_corr}")
-                print(f"ALERT: Priority Score: {results['priority_score']:.2f}/1.0")
+                print(f"🔗 Comment-CI Correlations: {total_corr} found")
+                print(f"🎯 High Confidence: {high_conf_corr}")
+                print(f"🚨 Priority Score: {results['priority_score']:.2f}/1.0")
                 print()
 
                 # Recommendations
-                print("TIP: Integrated Recommendations:")
+                print("💡 Integrated Recommendations:")
                 print("-" * 40)
                 for i, rec in enumerate(results["recommendations"], 1):
                     print(f"{i}. {rec}")
 
                 # Show high-confidence correlations
                 if high_conf_corr > 0:
-                    print("\nINFO: High-Confidence Correlations:")
+                    print("\n🔍 High-Confidence Correlations:")
                     print("-" * 40)
                     for corr in correlations.get("correlations", []):
                         if corr["correlation_strength"] > 0.7:
                             suggestion = corr["suggestion"]
                             print(f"📁 {suggestion.get('file', 'Unknown')}")
                             print(f"📍 Line {suggestion.get('line', 'Unknown')}")
-                            print(
-                                f"LINK: {corr['correlation_strength']:.1%} correlation"
-                            )
+                            print(f"🔗 {corr['correlation_strength']:.1%} correlation")
                             print(f"💬 {corr['recommended_action']}")
                             print()
 

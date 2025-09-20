@@ -57,7 +57,7 @@ echo "================================================"
 if ! gh auth status >/dev/null 2>&1; then
     echo "WARNING:  GitHub CLI not authenticated, using basic analysis"
     echo "SUCCESS: Proceeding with simplified pattern analysis"
-    echo "BOT: Pattern Analysis Complete (simplified mode)"
+    echo "🤖 Pattern Analysis Complete (simplified mode)"
     exit 0
 fi
 
@@ -148,4 +148,4 @@ else
 fi
 
 echo
-echo "BOT: Pattern Analysis Complete"
+echo "🤖 Pattern Analysis Complete"

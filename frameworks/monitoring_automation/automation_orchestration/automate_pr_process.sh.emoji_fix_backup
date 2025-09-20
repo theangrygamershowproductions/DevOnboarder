@@ -138,7 +138,7 @@ Applied by PR Automation Controller:
 
             log "Applied $FIXES_APPLIED automated fixes"
         else
-            echo "INFO:  No changes to commit after fixes"
+            echo "ℹ️  No changes to commit after fixes"
         fi
     fi
 fi
@@ -241,7 +241,7 @@ if [ "$ACTION_MODE" = "analyze" ]; then
     echo -e "${BLUE}ACTION: To execute automated fixes:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER execute"
     echo ""
-    echo -e "${BLUE}BOT: For full automation:${NC}"
+    echo -e "${BLUE}🤖 For full automation:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER full-auto"
 fi
 

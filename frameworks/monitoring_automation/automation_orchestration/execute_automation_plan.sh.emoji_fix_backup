@@ -96,7 +96,7 @@ elif [[ "$MODE" == "execute" ]]; then
     echo "   SUCCESS: Automated fixes applied"
 
 elif [[ "$MODE" == "full-auto" ]]; then
-    echo "BOT: FULL-AUTO MODE: Complete automation"
+    echo "🤖 FULL-AUTO MODE: Complete automation"
     echo "WARNING:  This would apply fixes AND potentially auto-merge"
     echo "SHIELD:  Safety check: Potato.md protection active"
 

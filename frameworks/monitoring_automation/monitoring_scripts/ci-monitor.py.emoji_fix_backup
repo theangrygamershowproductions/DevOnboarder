@@ -39,10 +39,10 @@ class CIMonitor:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return {"failed_runs": json.loads(result.stdout)}
         except subprocess.CalledProcessError as e:
-            print(f"WARNING:  Failed to fetch failed workflow runs: {e}")
+            print(f"⚠️  Failed to fetch failed workflow runs: {e}")
             return {"failed_runs": []}
         except json.JSONDecodeError as e:
-            print(f"ERROR: Error parsing failed workflow runs: {e}")
+            print(f"❌ Error parsing failed workflow runs: {e}")
             return {"failed_runs": []}
 
     def get_pr_data(self) -> Dict[str, Any]:
@@ -59,12 +59,12 @@ class CIMonitor:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
-            print(f"WARNING:  GitHub CLI error for PR #{self.pr_number}")
+            print(f"⚠️  GitHub CLI error for PR #{self.pr_number}")
             print(f"   Error: {e}")
             # Try alternative approach with less data
             return self._try_fallback_pr_data()
         except json.JSONDecodeError as e:
-            print(f"ERROR: Error parsing PR data: {e}")
+            print(f"❌ Error parsing PR data: {e}")
             return self._create_minimal_pr_data()
 
     def _try_fallback_pr_data(self) -> Dict[str, Any]:
@@ -161,14 +161,14 @@ class CIMonitor:
 
         # Build and deployment
         if any(term in name for term in ["build", "compile", "deploy"]):
-            return "BUILD: Build"
+            return "🏗️ Build"
 
         # Security
         security_terms = ["security", "audit", "policy", "permissions"]
         if any(term in name for term in security_terms):
             return "🔒 Security"
 
-        return "CONFIG: Other"
+        return "⚙️ Other"
 
     def analyze_ci_status(self, checks: list) -> Dict[str, Any]:
         """Analyze CI status and provide insights."""
@@ -245,15 +245,15 @@ class CIMonitor:
         # Overall status
         status_emoji = {
             "success": "SUCCESS:",
-            "failed": "ERROR:",
-            "pending": "WARNING:",
+            "failed": "❌",
+            "pending": "🟡",
             "no_checks": "⚪",
         }.get(analysis["status"], "❓")
 
         report += f"## {status_emoji} Overall Status\n\n"
 
         if analysis["status"] == "no_checks":
-            report += "WARNING:  **No CI checks data available**\n\n"
+            report += "⚠️  **No CI checks data available**\n\n"
             report += "This could mean:\n"
             report += "- GitHub CLI authentication issues\n"
             report += "- Repository access permissions\n"
@@ -298,9 +298,9 @@ class CIMonitor:
                 if conclusion == "SUCCESS":
                     icon = "SUCCESS:"
                 elif conclusion in ["FAILURE", "CANCELLED"]:
-                    icon = "ERROR:"
+                    icon = "❌"
                 elif status == "IN_PROGRESS":
-                    icon = "WARNING:"
+                    icon = "🟡"
                 else:
                     icon = "⚪"
 
@@ -320,7 +320,7 @@ class CIMonitor:
 
             # Add recent failed workflow context if available
             if failed_workflows.get("failed_runs"):
-                report += "### ALERT: Recent Failed Workflow Runs\n\n"
+                report += "### 🚨 Recent Failed Workflow Runs\n\n"
                 for run in failed_workflows["failed_runs"][:5]:  # Show top 5
                     workflow_name = run.get("workflowName", "Unknown")
                     display_title = run.get("displayTitle", "No title")
@@ -346,7 +346,7 @@ class CIMonitor:
                         time_str = ""
 
                     report += (
-                        f"- ERROR: **{workflow_name}**: " f"{display_title}{time_str}\n"
+                        f"- ❌ **{workflow_name}**: " f"{display_title}{time_str}\n"
                     )
                     if url:
                         report += f"  [View Run]({url})\n"
@@ -385,7 +385,7 @@ class CIMonitor:
             subprocess.run(cmd, check=True)  # nosec B603
             print(f"SUCCESS: Posted status comment to PR #{self.pr_number}")
         except subprocess.CalledProcessError as e:
-            print(f"ERROR: Failed to post comment: {e}")
+            print(f"❌ Failed to post comment: {e}")
 
 
 def get_current_pr_number() -> Optional[int]:
@@ -426,13 +426,13 @@ def prompt_for_pr_number() -> int:
                     print("👋 Monitoring cancelled")
                     sys.exit(0)
                 else:
-                    print("ERROR: Please enter 1, 2, or 3")
+                    print("❌ Please enter 1, 2, or 3")
             except KeyboardInterrupt:
                 print("\n👋 Monitoring cancelled")
                 sys.exit(0)
 
     # List recent PRs for reference
-    print("\nINFO: Recent Pull Requests:")
+    print("\n📋 Recent Pull Requests:")
     try:
         cmd = ["gh", "pr", "list", "--limit", "5", "--json", "number,title,state"]
         result = subprocess.run(  # nosec B603
@@ -441,7 +441,7 @@ def prompt_for_pr_number() -> int:
         prs = json.loads(result.stdout)
         if prs:
             for pr in prs:
-                state_emoji = "SUCCESS:" if pr["state"] == "OPEN" else "ERROR:"
+                state_emoji = "🟢" if pr["state"] == "OPEN" else "🔴"
                 title = pr["title"][:50]
                 print(f"   {state_emoji} #{pr['number']}: {title}...")
         else:
@@ -450,21 +450,21 @@ def prompt_for_pr_number() -> int:
         print("   (Unable to fetch recent PRs)")
 
     # Prompt for PR number with better guidance
-    print("\nTIP: Tip: You can also run this script with:")
+    print("\n💡 Tip: You can also run this script with:")
     print("   python ci-monitor.py <PR_NUMBER>")
     while True:
         try:
-            pr_input = input("\nTARGET: Enter PR number to monitor: ").strip()
+            pr_input = input("\n🎯 Enter PR number to monitor: ").strip()
             if not pr_input:
-                print("ERROR: PR number is required")
+                print("❌ PR number is required")
                 continue
             pr_number = int(pr_input)
             if pr_number <= 0:
-                print("ERROR: PR number must be positive")
+                print("❌ PR number must be positive")
                 continue
             return pr_number
         except ValueError:
-            print("ERROR: Please enter a valid number")
+            print("❌ Please enter a valid number")
         except KeyboardInterrupt:
             print("\n👋 Monitoring cancelled")
             sys.exit(0)
@@ -521,10 +521,10 @@ def main():
             monitor.post_status_comment(report)
 
     except KeyboardInterrupt:
-        print("\nERROR: Monitoring interrupted")
+        print("\n❌ Monitoring interrupted")
         sys.exit(1)
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(f"ERROR: Error: {e}")
+        print(f"❌ Error: {e}")
         sys.exit(1)
 
 

@@ -105,4 +105,4 @@ if [ "$ADDITIONS" -gt 1000 ]; then
 fi
 
 echo
-echo "BOT: Automated Assessment Complete"
+echo "🤖 Automated Assessment Complete"

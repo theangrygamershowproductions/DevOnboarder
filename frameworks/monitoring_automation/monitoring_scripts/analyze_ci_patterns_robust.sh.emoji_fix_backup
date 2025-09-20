@@ -133,13 +133,13 @@ for pattern in "${PATTERNS[@]}"; do
 done
 
 echo ""
-echo "BOT: Auto-fix Potential Assessment:"
+echo "🤖 Auto-fix Potential Assessment:"
 if [[ " ${PATTERNS[*]} " =~ " CODE_QUALITY " ]] || [[ " ${PATTERNS[*]} " =~ " DOCUMENTATION " ]]; then
-    echo "  SUCCESS: HIGH: Code quality and documentation issues are auto-fixable"
+    echo "  🟢 HIGH: Code quality and documentation issues are auto-fixable"
 elif [[ " ${PATTERNS[*]} " =~ " TESTING " ]] && [[ " ${PATTERNS[*]} " =~ " BUILD " ]]; then
-    echo "  WARNING: MEDIUM: Mixed issues - some auto-fixable, some require manual intervention"
+    echo "  🟡 MEDIUM: Mixed issues - some auto-fixable, some require manual intervention"
 else
-    echo "  ERROR: LOW: Manual intervention likely required for most issues"
+    echo "  🔴 LOW: Manual intervention likely required for most issues"
 fi
 
 echo ""
