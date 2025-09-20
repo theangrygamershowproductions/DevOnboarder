@@ -99,6 +99,17 @@ vale-results.json
 venv/
 webhook-config.json
 
+# Enhanced Potato Policy v3.0 - Comprehensive Protection
+# Protect standalone Potato files (case-insensitive)
+[Pp]otato
+[Pp]otato.*
+HEY_POTATO_*
+# But allow scripts that contain "potato" in legitimate automation names
+!scripts/*potato*
+!frameworks/**/*/potato*
+!**/check_potato*
+!**/enhanced_potato*
+
 # Enhanced Potato Policy v2.0 - Additional Security Patterns
 id_rsa*
 *.p12
