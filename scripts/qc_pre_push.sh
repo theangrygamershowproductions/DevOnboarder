@@ -150,8 +150,8 @@ fi
 
 # 6. Documentation Quality
 echo "📚 Checking documentation..."
-if [[ -x "scripts/check_docs.sh" ]]; then
-    if bash scripts/check_docs.sh >/dev/null 2>&1; then
+if [[ -x "frameworks/quality-assurance/checking/check_docs.sh" ]]; then
+    if bash frameworks/quality-assurance/checking/check_docs.sh >/dev/null 2>&1; then
         CHECKS+=("SUCCESS: Documentation")
     else
         CHECKS+=("FAILED: Documentation")
