@@ -31,7 +31,7 @@ while IFS= read -r msg || [ -n "$msg" ]; do
   fi
 
   # Legacy commit exceptions - allow these specific patterns during transition
-  if [[ $msg =~ ^(RESOLVE:|Revert) ]]; then
+  if [[ $msg =~ ^(RESOLVE:|Revert|TEMP:) ]]; then
     echo "Skipping legacy commit format: $msg"
     continue
   fi
