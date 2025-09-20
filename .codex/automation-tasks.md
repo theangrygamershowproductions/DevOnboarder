@@ -1,5 +1,6 @@
 ---
 title: "CI Enforcement Tasks"
+
 description: "Comprehensive guide to automation checks and CI workflow enforcement for maintaining consistent build quality and standards"
 document_type: "guide"
 tags: ["ci", "automation", "enforcement", "workflow", "quality-control"]

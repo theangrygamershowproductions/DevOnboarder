@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - terminal-output-policy.md
+
 - plugin-development.md
+
 similarity_group: policies-standards
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - virtual-environment
+
 - policy
+
 - development
+
 - isolation
+
 title: DevOnboarder Virtual Environment Policy
 updated_at: '2025-09-11'
 visibility: internal

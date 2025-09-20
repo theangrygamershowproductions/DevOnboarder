@@ -1,5 +1,6 @@
 ---
 name: Triage
+
 description: For issues that need review or further classification.
 title: "TRIAGE: "
 labels: ["triage"]
@@ -8,6 +9,7 @@ labels: ["triage"]
 body:
 
 - type: textarea
+
   id: description
   attributes:
     label: Description

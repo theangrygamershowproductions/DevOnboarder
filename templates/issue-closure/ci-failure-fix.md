@@ -7,7 +7,9 @@ This CI/build failure has been diagnosed and resolved.
 ## Failure Analysis
 
 - **Build System**: {BUILD_SYSTEM}
+
 - **Failure Type**: {FAILURE_TYPE}
+
 - **Error Details**: {ERROR_DETAILS}
 
 ## Root Cause
@@ -21,8 +23,11 @@ This CI/build failure has been diagnosed and resolved.
 ## Verification
 
 - [ ] Build passing locally
+
 - [ ] CI pipeline green
+
 - [ ] No regression in other builds
+
 - [ ] Related tests updated if needed
 
 ## Changes Made
@@ -36,5 +41,6 @@ This CI/build failure has been diagnosed and resolved.
 ---
 
 **Resolution Type**: CI/Build Fix
+
 **Closure Date**: {CLOSURE_DATE}
 **Resolved By**: {RESOLVER}

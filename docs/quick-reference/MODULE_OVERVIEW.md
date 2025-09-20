@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -14,11 +15,17 @@ project: core-instructions
 similarity_group: quick-reference-reference
 status: active
 tags:
+
 - devonboarder
+
 - quick-reference
+
 - navigation
+
 - modules
+
 title: DevOnboarder Modular Documentation - Quick Reference
+
 updated_at: '2025-09-11'
 visibility: internal
 ---

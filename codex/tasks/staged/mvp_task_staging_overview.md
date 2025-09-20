@@ -1,5 +1,6 @@
 ---
 title: "DevOnboarder MVP Task Staging Overview"
+
 description: "Staged implementation tasks and system enhancements required for DevOnboarder Phase 2 and MVP readiness."
 project: DevOnboarder
 status: staged
@@ -7,16 +8,26 @@ created_at: 2025-08-04
 author: TAGS CTO
 tags:
   - staging
+
   - codex
+
   - ci
+
   - devsecops
+
   - validation
+
   - modularization
+
   - agent-validation
+
   - task-tracking
+
   - rollout
+
 ---
   visibility: internal
+
   document\_type: milestone\_tasks
   codex\_scope: tags/devonboarder
   codex\_type: rollout

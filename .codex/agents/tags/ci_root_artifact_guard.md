@@ -1,14 +1,20 @@
 ---
 agent: ci-root-artifact-guard
+
 codex_owner: DevOps CI Team
 codex_role: ci_root_artifact_guard
 codex_scope: tags
 codex_status: active
 codex_trigger:
+
 - pre-commit run
+
 - CI hygiene scan
+
 - file detected in repo root matching artifact patterns
+
 - vale-results.json, test.db, .coverage in root
+
 codex_type: agent
 codex_visibility: internal
 consolidation_priority: P3
@@ -20,17 +26,26 @@ environment: CI
 merge_candidate: false
 output: .codex/logs/ci_root_artifact_guard.log
 permissions:
+
 - repo:read
+
 - repo:write
+
 - workflows:write
+
 purpose: Prevents repository pollution by enforcing clean root directory hygiene in
   CI/CD pipeline
 similarity_group: agents-tags
 tags:
+
 - ci
+
 - hygiene
+
 - guard
+
 - artifacts
+
 title: CI Root Artifact Guard
 trigger: pre-commit run, CI hygiene scan, file detected in repo root matching artifact
   patterns

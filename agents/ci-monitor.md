@@ -1,5 +1,6 @@
 ---
 agent: ci-monitor
+
 author: DevOnboarder Team
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -10,16 +11,23 @@ environment: CI
 merge_candidate: false
 output: .codex/logs/ci-monitor.log
 permissions:
+
 - repo:read
+
 - actions:read
+
 - issues:write
+
 - pull_requests:write
+
 project: core-agents
 purpose: Automated real-time CI status monitoring and reporting for all PRs
 similarity_group: ci-monitor.md-agents
 status: active
 tags:
+
 - documentation
+
 title: Ci Monitor
 trigger: on_pull_request, on_workflow_run, manual
 updated_at: '2025-09-12'

@@ -100,7 +100,9 @@ jobs:
   my-secure-job:
     permissions:
       contents: read           # Required for checkout
+
       pull-requests: write     # Only if commenting on PRs
+
     runs-on: ubuntu-latest
     steps:
       # ... job steps

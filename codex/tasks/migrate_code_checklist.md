@@ -1,5 +1,6 @@
 ---
 title: Checklist - Migrate Code to Extracted Repos
+
 project: DevOnboarder
 codex_scope: repo-split-phase1
 codex_role: project_maintainer
@@ -8,8 +9,11 @@ status: draft
 created_at: 2025-08-03
 tags:
   - codex-task
+
   - code-migration
+
   - repo-split
+
 ---
 
 ## Objective

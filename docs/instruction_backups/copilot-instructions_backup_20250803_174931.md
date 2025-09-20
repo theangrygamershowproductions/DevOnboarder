@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: instruction_backups-instruction-backups
 status: active
 tags:
+
 - documentation
+
 title: Copilot Instructions Backup 20250803 174931
 updated_at: '2025-09-12'
 visibility: internal

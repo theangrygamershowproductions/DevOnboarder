@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: AAR_MAKEFILE_INTEGRATION.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Aar Makefile Integration
 updated_at: '2025-09-12'
 visibility: internal
@@ -140,9 +143,11 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true
 ✅ **DevOnboarder compliance enforced**
 
 ✅ **Virtual environment managed automatically**
+
 ✅ **Smart .env file management**
 
 ✅ **No duplicate variable creation**
+
 ✅ **Clear usage instructions**
 
 ✅ **Token hierarchy respected**

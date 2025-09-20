@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.OnboardingAgent
   output: Onboarding guidance
@@ -16,7 +17,9 @@ project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Onboarding Agent
 updated_at: '2025-09-12'
 visibility: internal

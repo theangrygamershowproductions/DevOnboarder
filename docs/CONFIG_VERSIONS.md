@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,10 +11,15 @@ project: DevOnboarder
 similarity_group: CONFIG_VERSIONS.md-docs
 status: active
 tags:
+
 - reference
+
 - configuration
+
 - versioning
+
 - file-tracking
+
 title: Configuration File Version Registry
 updated_at: '2025-09-12'
 visibility: internal
