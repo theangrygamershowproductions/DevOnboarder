@@ -133,10 +133,25 @@ validate_environment() {
         exit 1
     fi
 
-    # Test GitHub CLI authentication
-    if ! gh auth status >/dev/null 2>&1; then
-        echo "ERROR: GitHub CLI not authenticated"
-        exit 1
+    # Test GitHub CLI authentication - enhanced for CI environments
+    if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]]; then
+        # In CI environments, GITHUB_TOKEN should work automatically
+        echo "CI environment detected - verifying token works with basic API call"
+        if ! gh api user >/dev/null 2>&1; then
+            echo "ERROR: GitHub CLI cannot authenticate in CI environment"
+            echo "GITHUB_TOKEN is set but gh API calls fail"
+            echo "This may indicate token permission issues"
+            exit 1
+        else
+            echo "GitHub CLI authentication verified in CI environment"
+        fi
+    else
+        # In local environments, check traditional auth status
+        if ! gh auth status >/dev/null 2>&1; then
+            echo "ERROR: GitHub CLI not authenticated"
+            echo "Run 'gh auth login' or set GITHUB_TOKEN environment variable"
+            exit 1
+        fi
     fi
 }
 
