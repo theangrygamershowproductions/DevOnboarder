@@ -1,10 +1,13 @@
-#!/bin/bash
-# 95% Quality Control Pre-Push Validation Script
-# This script ensures all code meets DevOnboarder quality standards before pushing
+#!/usr/bin/env bash
+# DevOnboarder Quality Control Pre-Push Script
+# Validates 95% quality threshold across 8 metrics
+# ZERO TOLERANCE: Must pass all checks before push
+# Copilot shebang comment: ADDRESSED - removed duplicate shebang lines
 
 set -euo pipefail
 
-echo "🔍 Running 95% QC Pre-Push Validation..."
+echo "Running 95% QC Pre-Push Validation..."
+# This script ensures all code meets DevOnboarder quality standards before pushing
 
 # CRITICAL: Branch workflow validation to prevent main branch commits
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
@@ -23,26 +26,26 @@ fi
 
 # Template variable validation (before other checks)
 if [[ -f "scripts/validate_template_variables.sh" ]]; then
-    echo "📋 Validating template variables..."
+    echo "Validating template variables..."
     bash scripts/validate_template_variables.sh
 
-    echo "✅ Template variable validation passed"
+    echo "Template variable validation passed"
 fi
 
 # Validation blind spot detection
-echo "🔍 Checking for validation blind spots..."
+echo "Checking for validation blind spots..."
 UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' || true)
 if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
-    echo "⚠️  VALIDATION BLIND SPOT: Untracked files bypass quality checks"
+    echo "WARNING: Untracked files bypass quality checks"
     echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
         echo "   - $file"
     done
     read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
     if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
         git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
-        echo "✅ Files tracked - validation will include all files"
+        echo "Files tracked - validation will include all files"
     else
-        echo "⚠️  Continuing with validation blind spots present"
+        echo "Continuing with validation blind spots present"
     fi
 fi
 

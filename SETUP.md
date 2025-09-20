@@ -128,6 +128,10 @@ source .venv/bin/activate
 
 pip install -e .[test]
 
+# Setup GitHub GPG keys for signature verification
+
+bash scripts/setup_github_gpg_keys.sh
+
 # Verify installation
 
 python -c "import devonboarder; print('✅ DevOnboarder package installed')"

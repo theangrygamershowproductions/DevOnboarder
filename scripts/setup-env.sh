@@ -93,5 +93,15 @@ EOF
     fi
     PYTHONPATH="$(pwd)"
     export PYTHONPATH
+
+    # Setup GitHub GPG keys for signature verification (non-blocking)
+    if [ -x "$SCRIPT_DIR/setup_github_gpg_keys.sh" ]; then
+        echo "Setting up GitHub GPG keys..."
+        "$SCRIPT_DIR/setup_github_gpg_keys.sh" || {
+            echo "WARNING: GitHub GPG key setup failed, but continuing..."
+            echo "This is non-critical for CI operation"
+        }
+    fi
+
     echo "Local environment ready ✅"
 fi
