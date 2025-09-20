@@ -194,4 +194,4 @@ repos:
             language: system
             pass_filenames: false
             stages: [pre-commit]
-            entry: bash ./scripts/enforce_branch_workflow.sh --pre-commit
+            entry: bash ./frameworks/ci-cd-automation/workflows/enforce_branch_workflow.sh --pre-commit
