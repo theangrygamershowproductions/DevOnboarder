@@ -246,7 +246,7 @@ jobs:
         with:
           script: |
             const body = [
-              "🤖 **Priority Matrix Bot** - Signed commit failed",
+              "**Priority Matrix Bot** - Signed commit failed",
               "",
               "SSH signing or push was rejected. To apply Priority Matrix enhancements manually:",
               "",
