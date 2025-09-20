@@ -5,7 +5,7 @@ set -euo pipefail
 # CRITICAL: Validates that ALL logs use centralized logs/ directory
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 # Ensure logs directory exists
 mkdir -p "$PROJECT_ROOT/logs"

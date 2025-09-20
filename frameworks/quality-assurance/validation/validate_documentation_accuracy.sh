@@ -16,7 +16,7 @@ readonly NC='\033[0m' # No Color
 readonly SCRIPT_DIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly PROJECT_ROOT
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 readonly README_FILE="$PROJECT_ROOT/README.md"
 
 # GitHub Configuration Constants

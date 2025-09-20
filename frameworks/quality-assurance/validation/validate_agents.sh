@@ -5,7 +5,7 @@ set -euo pipefail
 # Validates frontmatter against agent-schema.json
 
 SCRIPT_DIR="$(dirname "$0")"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 SCHEMA_FILE="$PROJECT_ROOT/schema/agent-schema.json"
 
 # Colors for output

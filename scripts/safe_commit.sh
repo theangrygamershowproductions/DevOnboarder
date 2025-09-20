@@ -23,10 +23,10 @@ echo "Commit message: $COMMIT_MSG"
 
 # CRITICAL: Validate quality gates are functional before proceeding
 echo "Validating quality gate health..."
-if ! ./scripts/validate_quality_gates.sh > /dev/null 2>&1; then
+if ! ./frameworks/quality-assurance/validation/validate_quality_gates.sh > /dev/null 2>&1; then
     echo "CRITICAL: Quality gates are not functional!"
     echo "Running full health check for details..."
-    ./scripts/validate_quality_gates.sh
+    ./frameworks/quality-assurance/validation/validate_quality_gates.sh
     echo ""
     echo "COMMIT BLOCKED: Quality gates must be functional before commits"
     echo "Fix the issues above and try again"
