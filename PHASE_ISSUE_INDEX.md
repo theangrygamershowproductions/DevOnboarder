@@ -71,7 +71,7 @@ This document provides **single pane of glass visibility** into the relationship
 
     - **Labels**: `critical`, `infrastructure`, `quality-gates`
 
-### � Phase 3 Monitoring & Automation Framework (✅ COMPLETE)
+### 🤖 Phase 3 Monitoring & Automation Framework (✅ COMPLETE)
 
 **Canonical Documentation**: Framework implementation in `frameworks/monitoring_automation/`
 
@@ -97,7 +97,7 @@ This document provides **single pane of glass visibility** into the relationship
 
     - **Compliance**: Zero violations in framework files achieved
 
-### �🚀 MVP 3-Phase Development Timeline
+### 🚀 MVP 3-Phase Development Timeline
 
 **Canonical Documentation**: `codex/mvp/MVP_PROJECT_PLAN.md`
 
