@@ -1,4 +1,3 @@
 #!/bin/bash
-# Placeholder script - to be implemented
-echo "batch_close_ci_noise.sh: Not yet implemented"
-exit 0
+echo "ERROR: batch_close_ci_noise.sh is not implemented." >&2
+exit 1

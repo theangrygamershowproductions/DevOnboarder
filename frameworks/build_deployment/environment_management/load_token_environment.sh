@@ -37,7 +37,7 @@ except Exception as e:
 "
 
     # Source the exported tokens if successful
-    if python3 -c "$PYTHON_SCRIPT" && [ -f "$TOKEN_EXPORT_FILE" ]; then
+    if [ -f "$TOKEN_EXPORT_FILE" ]; then
         # shellcheck disable=SC1090
         source "$TOKEN_EXPORT_FILE"
         rm -f "$TOKEN_EXPORT_FILE"
