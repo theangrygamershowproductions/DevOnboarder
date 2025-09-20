@@ -64,7 +64,7 @@ repos:
             pass_filenames: false
           - id: clean-pytest-artifacts
             name: Clean pytest sandbox artifacts
-            entry: scripts/clean_pytest_artifacts.sh
+            entry: frameworks/maintenance-operations/cleanup/clean_pytest_artifacts.sh
             language: script
             always_run: true
             pass_filenames: false
