@@ -6,6 +6,12 @@ set -e
 
 echo "🔧 Setting up DevOnboarder VS Code Integration..."
 
+# Verify required scripts exist
+if [[ ! -f "./scripts/quick_validate.sh" ]]; then
+    echo "⚠️  Warning: ./scripts/quick_validate.sh not found - VS Code tasks may not work"
+    echo "   Quick validation task will be skipped in VS Code configuration"
+fi
+
 # Create .vscode directory if it doesn't exist
 mkdir -p .vscode
 
@@ -60,8 +66,8 @@ cat > .vscode/tasks.json << 'EOF'
         {
             "label": "DevOnboarder: Quick Validation",
             "type": "shell",
-            "command": "./scripts/quick_validate.sh",
-            "args": ["${input:validationType}"],
+            "command": "bash",
+            "args": ["./scripts/quick_validate.sh", "${input:validationType}"],
             "group": "test",
             "presentation": {
                 "echo": true,
