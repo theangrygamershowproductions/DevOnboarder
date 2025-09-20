@@ -42,7 +42,7 @@ DevOnboarder uses a **layered phase architecture** where multiple phase systems 
 
 **Evidence**: [Milestone Documentation](milestones/2025-09/2025-09-19-infrastructure-phase2-terminal-output-compliance-complete.md) | [PR #1516](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1516)
 
-### � Phase 3 Monitoring & Automation Framework (✅ COMPLETE)
+### ⚙️ Phase 3 Monitoring & Automation Framework (✅ COMPLETE)
 
 **Canonical Documentation**: Framework implementation in `frameworks/monitoring_automation/`
 
@@ -68,7 +68,7 @@ DevOnboarder uses a **layered phase architecture** where multiple phase systems 
 
 **Evidence**: [PR #1545](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1545) - Framework implementation merged September 20, 2025
 
-### �🚀 MVP 3-Phase Development Timeline
+### 🚀 MVP 3-Phase Development Timeline
 
 **Canonical Documentation**: Multiple files in `codex/mvp/` directory
 
