@@ -60,6 +60,7 @@ test = [
     "types-requests",
     "pip-audit",
     "bandit",
+    "vale",  # Documentation linting (Python wrapper for Vale binary)
     # Phase 5: Advanced Orchestration dependencies
     "aiohttp",
     "psutil",
