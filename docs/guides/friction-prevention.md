@@ -274,6 +274,66 @@ fi
 
 ```
 
+### D. Repository Scripting Standards
+
+**CRITICAL**: Always use git-aware commands instead of disk-based file discovery to prevent repository pollution.
+
+#### Problem Pattern: `find` Command Pollution
+
+Scripts using `find` search ALL files, including ignored directories like `node_modules/`:
+
+```bash
+
+# ❌ PROBLEM: Searches ignored directories causing pollution
+
+find . -name "*.md" | while read -r file; do
+    process_file "$file"  # Processes files in node_modules/, .venv/, etc.
+done
+
+# Result: Script processes 1000+ irrelevant files, fails on binary content
+
+```
+
+#### Solution: Git-Aware File Discovery
+
+Use `git ls-files` to respect repository boundaries and `.gitignore` rules:
+
+```bash
+
+# ✅ SOLUTION: Respects .gitignore and repository scope
+
+git ls-files '*.md' | while read -r file; do
+    process_file "$file"  # Only processes tracked markdown files
+done
+
+# Result: Script processes only relevant repository files
+
+```
+
+#### Implementation Examples
+
+```bash
+
+# Process all Python files in repository
+git ls-files '*.py' | while read -r file; do
+    python -m pylint "$file"
+done
+
+# Find configuration files in specific directories
+git ls-files 'config/*.yml' 'config/*.yaml'
+
+# Check for specific patterns in tracked files only
+git ls-files src/ | grep '\.py$' | xargs grep -l "import requests"
+
+```
+
+#### Prevention Impact
+
+- **Performance**: 10x faster on repositories with large `node_modules/`
+- **Reliability**: No failures on binary files or irrelevant content
+- **Scope**: Only processes files that should be in repository
+- **Consistency**: Behaves same across development environments
+
 ### Prevention Principles
 
 1. **Track Early**: Add files to Git immediately after creation
