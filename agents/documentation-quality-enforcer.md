@@ -1,5 +1,6 @@
 ---
 agent: documentation-quality-enforcer
+
 authentication_required: true
 author: DevOnboarder Team
 codex_dry_run: false
@@ -15,15 +16,21 @@ integration_log: Documentation quality enforcement and validation
 merge_candidate: false
 output: .codex/logs/documentation-quality.log
 permissions:
+
 - repo:read
+
 - workflows:write
+
 - pull_requests:write
+
 project: core-agents
 purpose: Enforce documentation quality standards on all PR submissions
 similarity_group: documentation-quality-enforcer.md-agents
 status: active
 tags:
+
 - documentation
+
 title: Documentation Quality Enforcer
 trigger: pull_request opened, synchronize
 updated_at: '2025-09-12'

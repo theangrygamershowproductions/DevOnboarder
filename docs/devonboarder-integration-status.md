@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -12,11 +13,17 @@ project: DevOnboarder
 similarity_group: devonboarder-integration-status.md-status
 status: draft_mode
 tags:
+
 - integration
+
 - status
+
 - discord
+
 - authentication
+
 - deployment
+
 title: DevOnboarder Integration Status
 updated_at: '2025-07-28'
 virtual_env_required: true

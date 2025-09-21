@@ -1,5 +1,6 @@
 ---
 title: "Notify Agent"
+
 description: "Placeholder agent for future notification system implementation"
 document_type: "agent"
 tags: ["agent", "notify", "placeholder", "stub", "future-implementation"]

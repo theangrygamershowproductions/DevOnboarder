@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
@@ -13,12 +14,19 @@ project: DevOnboarder
 similarity_group: ci-automation
 status: active
 tags:
+
 - security
+
 - automation
+
 - potato-policy
+
 - enforcement
+
 - devops
+
 title: Enhanced Potato Policy - Comprehensive Security Framework
+
 updated_at: '2025-07-28'
 virtual_env_required: true
 visibility: internal

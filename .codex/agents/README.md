@@ -1,5 +1,6 @@
 ---
 agent: README
+
 codex-agent:
   environment: any
   name: Agent.AgentsDocumentation
@@ -15,14 +16,21 @@ environment: any
 merge_candidate: false
 output: .codex/logs/README.log
 permissions:
+
 - repo:read
+
 purpose: Agent purpose description needed
 similarity_group: agent-agent
 tags:
+
 - codex
+
 - infrastructure
+
 - automation
+
 - agents
+
 title: Codex Integration Infrastructure
 trigger: manual
 ---

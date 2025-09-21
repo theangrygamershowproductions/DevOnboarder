@@ -1,5 +1,6 @@
 ---
 name: Secret Alignment
+
 about: Verify secrets align with expected variables
 title: "[Secret]"
 labels: ''

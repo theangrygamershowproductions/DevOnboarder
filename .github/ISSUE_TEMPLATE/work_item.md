@@ -9,6 +9,7 @@ assignees: []
 body:
 
 - type: markdown
+
   attributes:
     value: |
       ## Summary Description
@@ -16,18 +17,23 @@ body:
       Please provide a short summary of the task or request.
 
 - type: textarea
+
   id: steps
   attributes:
     label: Steps to Reproduce
     description: Describe how to reproduce the issue, if applicable.
     placeholder: |
       1. Go to ...
+
       2. Click on ...
+
       3. Observe ...
+
   validations:
     required: false
 
 - type: textarea
+
   id: outcome
   attributes:
     label: Expected Outcome
@@ -37,6 +43,7 @@ body:
     required: false
 
 - type: textarea
+
   id: criteria
   attributes:
     label: Acceptance Criteria

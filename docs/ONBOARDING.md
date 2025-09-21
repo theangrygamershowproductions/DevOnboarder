@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,10 +11,15 @@ project: DevOnboarder
 similarity_group: ONBOARDING.md-docs
 status: active
 tags:
+
 - guide
+
 - onboarding
+
 - contributors
+
 - setup
+
 title: Project Onboarding Guide
 updated_at: '2025-09-12'
 visibility: internal

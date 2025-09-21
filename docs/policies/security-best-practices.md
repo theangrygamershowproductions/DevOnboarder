@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,17 +14,26 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - potato-policy.md
+
 - virtual-environment-policy.md
+
 similarity_group: security-framework
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - security
+
 - environment-variables
+
 - best-practices
+
 - access-control
+
 title: DevOnboarder Security Best Practices
 updated_at: '2025-09-11'
 visibility: internal
@@ -40,6 +50,7 @@ related_modules: ["potato-policy.md", "quality-control-policy.md"]
 ---
 
 DevOnboarder Security & Best Practices
+
 =======================================
 
 Security Requirements

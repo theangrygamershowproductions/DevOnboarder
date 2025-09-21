@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 codex-agent:
   name: Agent.MsTeamsIntegration
   output: Teams channel messages
@@ -16,7 +17,9 @@ project: core-agents
 similarity_group: documentation-documentation
 status: active
 tags:
+
 - documentation
+
 title: Ms Teams Integration
 updated_at: '2025-09-12'
 visibility: internal

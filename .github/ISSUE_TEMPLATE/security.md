@@ -1,5 +1,6 @@
 ---
 name: Security
+
 description: For reporting vulnerabilities, dependency risks, or policy enforcement.
 title: "SECURITY: "
 labels: ["security"]
@@ -8,6 +9,7 @@ labels: ["security"]
 body:
 
 - type: textarea
+
   id: description
   attributes:
     label: Description

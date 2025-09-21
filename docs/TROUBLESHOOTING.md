@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,10 +11,15 @@ project: DevOnboarder
 similarity_group: TROUBLESHOOTING.md-docs
 status: active
 tags:
+
 - troubleshooting
+
 - devonboarder
+
 - support
+
 - documentation
+
 title: Troubleshooting
 updated_at: '2025-09-12'
 visibility: internal
@@ -28,23 +34,31 @@ This document provides general troubleshooting guidance for DevOnboarder platfor
 ### Environment Setup
 
 - Virtual environment activation problems
+
 - Dependency installation failures
+
 - Configuration mismatches
 
 ### CI/CD Pipeline
 
 - Build failures
+
 - Test execution issues
+
 - Deployment problems
 
 ### Discord Bot
 
 - Authentication errors
+
 - Permission issues
+
 - Connection timeouts
 
 ## Getting Help
 
 - Check specific troubleshooting guides in `/docs/troubleshooting/`
+
 - Review error logs for detailed diagnostics
+
 - Consult the comprehensive troubleshooting documentation

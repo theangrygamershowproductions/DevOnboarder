@@ -1,5 +1,6 @@
 ---
 agent: code_quality_agent
+
 codex-agent:
   environment: CI
   name: Agent.CodeQuality
@@ -16,15 +17,23 @@ environment: any
 merge_candidate: false
 output: .codex/logs/code_quality_agent.log
 permissions:
+
 - repo:write
+
 - workflows:write
+
 purpose: Agent purpose description needed
 similarity_group: agent-agent
 tags:
+
 - code-quality
+
 - automation
+
 - linting
+
 - ci
+
 title: Code Quality Auto-Fix Agent
 trigger: manual
 ---

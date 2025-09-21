@@ -1,13 +1,16 @@
 ---
 similarity_group: index.md-agents
+
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3
 ---
+
 # Agents Overview
 
 ---
 title: "Agents Overview"
+
 description: "Index and documentation overview for all DevOnboarder agents with service descriptions and workflow integration details"
 document_type: "documentation"
 tags: ["agents", "index", "overview", "documentation", "services"]
@@ -40,6 +43,7 @@ visibility: internal
 ---
 
 This directory documents the services and integrations that make up the
+
 DevOnboarder platform. Each agent has its own page describing the purpose and
 how it fits into the workflow.
 See [../.codex/Agents.md](../.codex/Agents.md) for header guidelines; every agent file must start with a `codex-agent` YAML header.

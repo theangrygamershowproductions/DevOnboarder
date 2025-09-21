@@ -1,5 +1,6 @@
 ---
 author: Chad Reesey
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -13,11 +14,17 @@ project: DevOnboarder
 similarity_group: ci-automation
 status: active
 tags:
+
 - dashboard
+
 - codex
+
 - contributors
+
 - roadmap
+
 - automation
+
 title: Codex Contributor Dashboard
 updated: 21 June 2025 08:25 (EST)
 updated_at: '2025-09-12'

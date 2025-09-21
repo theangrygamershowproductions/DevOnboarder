@@ -1,5 +1,6 @@
 ---
 author: DevOnboarder Team
+
 consolidation_priority: P3
 content_uniqueness_score: 4
 created_at: '2025-09-12'
@@ -10,7 +11,9 @@ project: DevOnboarder
 similarity_group: TOKEN_AUTO_CREATION.md-docs
 status: active
 tags:
+
 - documentation
+
 title: Token Auto Creation
 updated_at: '2025-09-12'
 visibility: internal
@@ -213,6 +216,7 @@ The created template includes comprehensive setup instructions:
 # 3. Test: python scripts/token_loader.py validate <TOKEN_NAMES>
 
 #
+
 # For token acquisition guidance, see
 
 # - docs/token-setup-guide.md

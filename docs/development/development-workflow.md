@@ -1,5 +1,6 @@
 ---
 author: TAGS Engineering
+
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
@@ -13,18 +14,28 @@ document_type: standards
 merge_candidate: false
 project: core-instructions
 related_modules:
+
 - architecture-overview.md
+
 - code-quality-requirements.md
+
 - file-structure-conventions.md
+
 similarity_group: environment-config
 source: .github/copilot-instructions.md
 status: active
 tags:
+
 - devonboarder
+
 - development
+
 - workflow
+
 - environment
+
 - quality-control
+
 title: DevOnboarder Development Workflow
 updated_at: '2025-09-11'
 visibility: internal
@@ -109,6 +120,8 @@ source .venv/bin/activate        # Always activate venv first
 ./scripts/qc_docs.sh --fix       # Fix markdown formatting issues
 
 ./scripts/qc_docs.sh --file docs/README.md --fix  # Fix specific file
+
+./scripts/run_vale.sh docs/      # Run Vale documentation linting (virtual environment)
 
 # Service APIs (individual service testing)
 
@@ -264,7 +277,68 @@ echo "Deployment complete"
 
 - Violations will cause immediate cancellation of commands
 
-## 4. Workflow Standards
+### 4. Repository Scripting Standards - MANDATORY
+
+#### CRITICAL REQUIREMENT: Always use git-aware commands for repository file operations
+
+DevOnboarder enforces strict git-aware scripting practices to prevent pollution from ignored files:
+
+```bash
+
+# ✅ CORRECT - Git-aware file discovery (respects .gitignore)
+
+git ls-files '*.md'                          # List tracked markdown files
+git ls-files --others --exclude-standard     # List untracked files (respects .gitignore)
+git ls-files src/ | grep '\.py$'            # Find Python files in src/
+
+# ❌ FORBIDDEN - Disk-based discovery (ignores .gitignore)
+
+find . -name '*.md'                          # Searches ALL files including node_modules/
+find . -type f -name '*.py'                  # Bypasses .gitignore completely
+ls -la **/*.md                               # Shell globbing ignores .gitignore
+
+```
+
+**Policy Enforcement**:
+
+- **Root Artifact Guard**: Automatically detects and blocks repository pollution
+- **Script validation**: All automation scripts must use git-aware commands
+- **CI enforcement**: Pre-commit hooks validate script methodology
+
+**Why This Matters**:
+
+- **Prevents node_modules pollution**: Scripts won't search ignored directories
+- **Respects .gitignore**: Only processes files that should be in repository
+- **Performance**: Git index searches are faster than disk traversal
+- **Reliability**: Consistent behavior across development environments
+
+**Common Patterns**:
+
+```bash
+
+# Process all markdown files in repository
+for file in $(git ls-files '*.md'); do
+    echo "Processing: $file"
+done
+
+# Find Python files with specific patterns
+git ls-files src/ | grep '\.py$' | while read -r file; do
+    python -m pylint "$file"
+done
+
+# Validate configuration files only in tracked directories
+git ls-files 'config/*.yml' 'config/*.yaml'
+
+```
+
+**MANDATORY Agent Requirements**:
+
+- AI agents MUST use `git ls-files` instead of `find` for repository operations
+- Scripts MUST respect repository boundaries and ignore patterns
+- Any disk-based file discovery MUST include explicit .gitignore handling
+- Repository pollution via ignored file processing is a CRITICAL VIOLATION
+
+## 5. Workflow Standards
 
 - **Trunk-based development**: All work branches from `main`, short-lived feature branches
 
