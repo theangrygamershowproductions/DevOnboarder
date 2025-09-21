@@ -10,9 +10,21 @@ import hashlib
 import json
 import subprocess  # noqa: S404
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities
+# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization
+# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+# Date: 2025-09-21
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    # Fallback for standalone script execution
+    def get_utc_display_timestamp() -> str:
+        """Fallback UTC timestamp function."""
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 
 class FileVersionTracker:
@@ -115,7 +127,9 @@ class FileVersionTracker:
             ]
 
         current_snapshot = {
-            "timestamp": datetime.now().isoformat(),
+            # INFRASTRUCTURE CHANGE: Use proper UTC timestamp for accuracy
+            # Purpose: Maintain consistency with GitHub API timestamp sync fix
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "files": {},
             "git_info": self._get_git_info(),
         }
@@ -409,7 +423,12 @@ class FileVersionTracker:
         report_lines = [
             "# File Change Analysis Report",
             "",
-            f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            # INFRASTRUCTURE CHANGE: Fixed critical timestamp mislabeling issue
+            # Was: datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC') - claimed UTC
+            # but used local time
+            # Now: get_utc_display_timestamp() - actual UTC for GitHub API sync
+            # Evidence: 3-minute discrepancies in diagnostic timeline analysis
+            f"**Generated**: {get_utc_display_timestamp()}",
             "",
         ]
 

@@ -14,6 +14,20 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from urllib.parse import urlparse
 
+# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities
+# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization
+# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+# Date: 2025-09-21
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    # Fallback for standalone script execution
+    from datetime import timezone
+
+    def get_utc_display_timestamp() -> str:
+        """Fallback UTC timestamp function."""
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
 
 class CIMonitor:
     """Enhanced CI monitoring for DevOnboarder pull requests."""
@@ -235,7 +249,13 @@ class CIMonitor:
         failed_workflows = self.get_failed_workflow_runs()
 
         # Header
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        # INFRASTRUCTURE CHANGE: Use proper UTC timestamp instead of
+        # mislabeled local time
+        # Before: datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        #         Claims UTC but uses local time
+        # After: get_utc_display_timestamp()  # Actually uses UTC
+        # Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+        timestamp = get_utc_display_timestamp()
         report = f"# 🔍 CI Status Report - PR #{self.pr_number}\n\n"
         report += f"**Title**: {title}\n"
         report += f"**State**: {state}\n"
