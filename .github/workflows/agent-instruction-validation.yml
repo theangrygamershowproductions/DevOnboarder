@@ -12,6 +12,8 @@ jobs:
   validate_agent_instructions:
     runs-on: ubuntu-latest
     name: Validate Agent Instructions
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
