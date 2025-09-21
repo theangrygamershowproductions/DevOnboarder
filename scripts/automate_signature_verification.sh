@@ -58,10 +58,14 @@ check_signature_status() {
 import_github_keys() {
     echo "Importing GitHub GPG keys to resolve U status signatures"
 
-    local github_keys=(
-        "B5690EEEBB952194"  # GitHub main signing key
-        "4AEE18F83AFDEB23"  # GitHub secondary key
-    )
+    # Allow GPG key IDs to be provided via the GITHUB_GPG_KEYS environment variable (space or comma separated)
+    local github_keys
+    if [[ -n "${GITHUB_GPG_KEYS:-}" ]]; then
+        # Support both space and comma as separators
+        IFS=', ' read -r -a github_keys <<< "${GITHUB_GPG_KEYS//,/ }"
+    else
+        github_keys=("B5690EEEBB952194" "4AEE18F83AFDEB23")
+    fi
 
     for key in "${github_keys[@]}"; do
         echo "Importing GitHub key: $key"
@@ -90,7 +94,7 @@ analyze_problematic_signatures() {
         echo "Bad signatures (BAD): $bad_signatures commits"
 
         echo "Detailed analysis of problematic commits:"
-        git log --show-signature --oneline HEAD~10..HEAD 2>&1 | grep -A2 -B1 "BAD\|^[a-f0-9]\{7,\}" || true
+        git log --show-signature --oneline HEAD~10..HEAD 2>&1 | grep -A2 -B1 -E "BAD|^[a-f0-9]{7,40}\b" || true
 
         echo "RECOMMENDED ACTIONS:"
         if [[ "$bad_signatures" -gt 0 ]]; then

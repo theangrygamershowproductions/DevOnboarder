@@ -141,7 +141,7 @@ cleanup_local_branch() {
     # Find and delete merged branches related to PR
     echo "Looking for merged branches related to PR #$pr_number"
     local merged_branches
-    merged_branches=$(git branch --merged main | grep -v "main" | grep -v "^\*" | xargs -n1 | tr -d ' ' || true)
+    merged_branches=$(git for-each-ref --format='%(refname:short)' --merged=main refs/heads/ | grep -v "^main$" || true)
 
     if [[ -n "$merged_branches" ]]; then
         echo "Found merged branches to clean up:"
@@ -173,7 +173,7 @@ verify_cleanup() {
 
     # Check for any remaining local branches
     local local_branches
-    local_branches=$(git branch | grep -v "main" | grep -v "^\*" | grep -c .)
+    local_branches=$(git branch | grep -v "main" | grep -v "^\*" | grep -c . || true)
     echo "VERIFICATION: $local_branches non-main local branches remaining"
 
     # Check git status

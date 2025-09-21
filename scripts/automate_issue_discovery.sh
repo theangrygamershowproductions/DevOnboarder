@@ -125,8 +125,15 @@ discover_stale_issues() {
             thirty_days_ago=$(date -v-30d +%Y-%m-%d)
         fi
     else
-        echo "WARNING: Date command not available, using approximate date"
-        thirty_days_ago="2024-01-01"
+        echo "WARNING: Date command not available, attempting to use Python for date calculation"
+        if command -v python3 >/dev/null 2>&1; then
+            thirty_days_ago=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
+        elif command -v python >/dev/null 2>&1; then
+            thirty_days_ago=$(python -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
+        else
+            echo "WARNING: Neither date nor Python available, using today's date as fallback"
+            thirty_days_ago=$(date +%Y-%m-%d 2>/dev/null || echo "1970-01-01")
+        fi
     fi
 
     echo "Looking for issues not updated since: $thirty_days_ago"
