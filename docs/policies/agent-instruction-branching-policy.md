@@ -135,7 +135,7 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
   ```
 
 - Keep private notes/scripts untracked via `.git/info/exclude`.
-- For ephemeral edits you don't want in history, use `git stash` or `git commit --no-verify` on a sandbox branch you never push.
+- For ephemeral edits you don't want in history, use `git stash` (preferred) or emergency-only `git commit --no-verify` with Potato Approval on sandbox branches that are never pushed.
 
 ---
 
