@@ -1,0 +1,155 @@
+name: Agent Instruction Validation
+
+on:
+  pull_request:
+    paths:
+      - '.codex/agents/**'
+      - '.codex/orchestration/**'
+      - '.codex/policies/**'
+      - '.github/copilot-instructions.md'
+
+jobs:
+  validate_agent_instructions:
+    runs-on: ubuntu-latest
+    name: Validate Agent Instructions
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml jsonschema
+
+      - name: Check for agent instruction changes
+        id: agent_changes
+        run: |
+          echo "Checking for agent instruction changes..."
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+          printf "Changed files: %s\n" "$CHANGED_FILES"
+
+          AGENT_CHANGES=$(echo "$CHANGED_FILES" | grep -E '^\.codex/(agents|orchestration|policies)/' || echo "none")
+          printf "agent_changes=%s\n" "$AGENT_CHANGES" >> $GITHUB_OUTPUT
+
+          if [ "$AGENT_CHANGES" != "none" ]; then
+            echo "Agent instruction changes detected"
+            echo "has_agent_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "No agent instruction changes detected"
+            echo "has_agent_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate YAML frontmatter
+        if: steps.agent_changes.outputs.has_agent_changes == 'true'
+        run: |
+          echo "Validating YAML frontmatter in agent files..."
+          python << 'EOF'
+          import os
+          import yaml
+          import sys
+          from pathlib import Path
+
+          required_fields = [
+              'title', 'description', 'author', 'created_at', 'updated_at',
+              'tags', 'project', 'related_components', 'document_type',
+              'status', 'visibility', 'canonical_url', 'codex_scope',
+              'codex_role', 'codex_type', 'codex_runtime'
+          ]
+
+          errors = []
+
+          # Check all .codex agent files
+          for agent_file in Path('.codex/agents').rglob('*.md'):
+              if agent_file.name == 'README.md':
+                  continue
+
+              try:
+                  with open(agent_file, 'r') as f:
+                      content = f.read()
+
+                  if content.startswith('---'):
+                      yaml_end = content.find('---', 3)
+                      if yaml_end == -1:
+                          errors.append(f"{agent_file}: No closing YAML frontmatter delimiter")
+                          continue
+
+                      yaml_content = content[3:yaml_end].strip()
+                      try:
+                          metadata = yaml.safe_load(yaml_content)
+                          if not isinstance(metadata, dict):
+                              errors.append(f"{agent_file}: YAML frontmatter is not a dictionary")
+                              continue
+
+                          # Check required fields
+                          missing_fields = [field for field in required_fields if field not in metadata]
+                          if missing_fields:
+                              errors.append(f"{agent_file}: Missing required fields: {', '.join(missing_fields)}")
+
+                          # Check updated_at is recent for changed files
+                          if 'updated_at' in metadata:
+                              updated_date = str(metadata['updated_at'])
+                              if '2025-09-21' not in updated_date:
+                                  print(f"Warning: {agent_file} may need updated_at field updated")
+
+                      except yaml.YAMLError as e:
+                          errors.append(f"{agent_file}: Invalid YAML: {e}")
+                  else:
+                      errors.append(f"{agent_file}: Missing YAML frontmatter")
+
+              except Exception as e:
+                  errors.append(f"{agent_file}: Error reading file: {e}")
+
+          if errors:
+              print("FAILED: Agent instruction validation failed:")
+              for error in errors:
+                  print(f"  {error}")
+              sys.exit(1)
+          else:
+              print("SUCCESS: All agent instructions have valid YAML frontmatter")
+          EOF
+
+      - name: Check branch policy compliance
+        if: steps.agent_changes.outputs.has_agent_changes == 'true'
+        run: |
+          echo "Checking branch policy compliance..."
+          BRANCH_NAME="${{ github.head_ref }}"
+          printf "Current branch: %s\n" "$BRANCH_NAME"
+
+          if [[ "$BRANCH_NAME" == sandbox/* ]]; then
+            if [[ "${{ github.base_ref }}" == "main" ]]; then
+              echo "FAILED: Direct PR from sandbox branch to main is not allowed"
+              echo "Please promote via staging branch first"
+              exit 1
+            fi
+          fi
+
+          echo "SUCCESS: Branch policy compliance check passed"
+
+      - name: Validate file naming conventions
+        if: steps.agent_changes.outputs.has_agent_changes == 'true'
+        run: |
+          echo "Validating file naming conventions..."
+
+          # Check for proper agent file naming
+          find .codex/agents -name "*.md" -not -name "README.md" | while read file; do
+            basename_file=$(basename "$file")
+            if [[ ! "$basename_file" =~ ^(agent_|charter_|checklist_) ]]; then
+              printf "Warning: %s does not follow naming convention (should start with agent_, charter_, or checklist_)\n" "$file"
+            fi
+          done
+
+          echo "SUCCESS: File naming validation completed"
+
+      - name: Generate validation report
+        if: steps.agent_changes.outputs.has_agent_changes == 'true'
+        run: |
+          echo "Agent instruction validation completed successfully"
+          echo "All checks passed for agent instruction changes"
