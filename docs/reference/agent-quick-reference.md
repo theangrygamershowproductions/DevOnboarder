@@ -1,6 +1,7 @@
 ---
 title: "DevOnboarder Agent Quick Reference"
-description: "Quick reference guide for common AI agent tasks and commands in DevOnboarder development workflow"
+description: "Quick reference guide for common AI agent tasks and commands in DevOnboarder
+  development workflow"
 author: "TAGS DevSecOps Manager"
 project: "DevOnboarder"
 version: "v1.0.0"
@@ -10,18 +11,21 @@ created_at: "2025-09-21"
 updated_at: "2025-09-21"
 canonical_url: "https://codex.theangrygamershow.com/docs/devonboarder/agent-quick-reference"
 related_components:
-  - development_workflow
-  - testing
-  - quality_control
-  - virtual_environment
+- development_workflow
+- testing
+- quality_control
+- virtual_environment
 codex_scope: "DevOnboarder"
 codex_role: "reference"
 codex_type: "documentation"
 codex_runtime: "development"
 tags: ["reference", "quick-guide", "development", "testing", "commands"]
 document_type: "reference"
+similarity_group: reference-reference
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
 ---
-
 # DevOnboarder Agent Quick Reference
 
 ## Most Common Agent Tasks

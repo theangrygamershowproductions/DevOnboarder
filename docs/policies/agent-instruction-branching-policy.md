@@ -1,6 +1,8 @@
 ---
 title: "Agent Instruction Branching & Staging Policy"
-description: "A disciplined Git and orchestration policy for developing, testing, and promoting Codex/AI agent instructions within the DevOnboarder project without impacting production."
+description: "A disciplined Git and orchestration policy for developing, testing,
+  and promoting Codex/AI agent instructions within the DevOnboarder project without
+  impacting production."
 author: "TAGS DevSecOps Manager"
 project: "DevOnboarder"
 version: "v1.0.0"
@@ -10,19 +12,22 @@ created_at: "2025-09-21"
 updated_at: "2025-09-21"
 canonical_url: "https://codex.theangrygamershow.com/docs/devonboarder/agent-instruction-branching-policy"
 related_components:
-  - codex
-  - github_ci
-  - azure_devops
-  - discord_bots
-  - mcp_server
+- codex
+- github_ci
+- azure_devops
+- discord_bots
+- mcp_server
 codex_scope: "DevOnboarder"
 codex_role: "devsecops_manager"
 codex_type: "policy"
 codex_runtime: "github_actions"
 tags: ["automation", "codex", "agents", "branching", "devsecops", "gitops", "ci-guard"]
 document_type: "policy"
+similarity_group: "ci-automation"
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
 ---
-
 # Agent Instruction Branching & Staging Policy
 
 ## Purpose
