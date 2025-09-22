@@ -16,9 +16,9 @@ red() { printf "\033[31m%s\033[0m\n" "$1"; }
 green() { printf "\033[32m%s\033[0m\n" "$1"; }
 yellow() { printf "\033[33m%s\033[0m\n" "$1"; }
 blue() { printf "\033[34m%s\033[0m\n" "$1"; }
-cyan() { printf "\033[36m%s\033[0m" "$1"; }
+cyan() { printf "\033[36m%s\033[0m\n" "$1"; }
 purple() { printf "\033[35m%s\033[0m\n" "$1"; }
-bold() { printf "\033[1m%s\033[0m" "$1"; }
+bold() { printf "\033[1m%s\033[0m\n" "$1"; }
 
 # Error reporting with consistent format
 error() {

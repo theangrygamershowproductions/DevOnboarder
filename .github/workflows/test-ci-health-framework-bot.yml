@@ -13,6 +13,11 @@ on:
           - health-monitoring
           - full-validation
 
+permissions:
+  contents: write
+  pull-requests: read
+  issues: read
+
 jobs:
   test-ci-health-bot:
     runs-on: ubuntu-latest
