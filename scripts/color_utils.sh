@@ -2,6 +2,8 @@
 # DevOnboarder Terminal Color Functions
 # Centralized color utilities following DevOnboarder terminal output policy
 #
+# Documentation: docs/TERMINAL_OUTPUT_VIOLATIONS.md (Centralized Color Utilities section)
+#
 # Usage: Source this file in your script, then use color functions
 #   source scripts/color_utils.sh
 #   green "Success message"
