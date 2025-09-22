@@ -48,8 +48,9 @@ jobs:
           git config --global commit.gpgsign true
           git config --global gpg.program gpg
 
-          # Trust the key automatically
-          printf "trust\n5\ny\nquit\n" | gpg --command-fd 0 --expert --edit-key "$CI_HEALTH_BOT_EMAIL"
+          # Trust the key automatically (storing email in variable to avoid expansion in echo)
+          BOT_EMAIL="$CI_HEALTH_BOT_EMAIL"
+          printf "trust\n5\ny\nquit\n" | gpg --command-fd 0 --expert --edit-key "$BOT_EMAIL"
 
           printf "GPG configuration completed successfully\n"
 
@@ -68,9 +69,10 @@ jobs:
           printf "\nCI Health Bot key details:\n"
           gpg --list-keys "$CI_HEALTH_BOT_EMAIL"
 
-          # Test signing capability
+          # Test signing capability (storing email to avoid variable expansion in echo)
           printf "\nTesting GPG signing capability:\n"
-          printf "test message" | gpg --clearsign --default-key "$CI_HEALTH_BOT_EMAIL"
+          BOT_EMAIL="$CI_HEALTH_BOT_EMAIL"
+          printf "test message" | gpg --clearsign --default-key "$BOT_EMAIL"
 
           printf "\nGPG validation completed successfully\n"
 
