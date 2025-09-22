@@ -44,7 +44,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruamel.yaml
 
-      - name: Setup GPG commit signing (bot)
+      - name: Setup GPG commit signing (Priority Matrix Bot)
         shell: bash
         env:
           PMBOT_GPG_PRIVATE: ${{ secrets.PMBOT_GPG_PRIVATE }}

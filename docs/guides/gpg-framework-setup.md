@@ -6,12 +6,24 @@ DevOnboarder implements unified GPG signing across all automation workflows that
 
 ## Framework Architecture
 
+### Unified Bot Account Strategy
+
+DevOnboarder uses a unified GitHub account with separate bot email identities:
+
+- **GitHub Account**: `developer@theangrygamershow.com` (scarabofthespudheap)
+- **Security Benefits**: Privilege separation from main user accounts
+- **Safety Kill Switch**: Independent account for emergency access control
+- **Email Separation**: Each bot uses distinct email addresses for clear identification
+- **GPG Key Management**: All bot GPG keys added to the unified GitHub account
+
 ### Bot Infrastructure
 
-| Bot | Key ID | Purpose | Workflows |
-|-----|--------|---------|-----------|
-| Priority Matrix Bot | `AB78428FE3A090D3` | Priority matrix synthesis and document enhancement | `priority-matrix-synthesis.yml` |
-| AAR Bot | `99CA270AD84AE20C` | After Action Report generation and portal automation | `aar-automation.yml`, `aar-portal.yml` |
+| Bot | Email | Key ID | Purpose | Workflows |
+|-----|-------|--------|---------|-----------|
+| Priority Matrix Bot | `pmbot@theangrygamershow.com` | `AB78428FE3A090D3` | Priority matrix synthesis and document enhancement | `priority-matrix-synthesis.yml` |
+| AAR Bot | `aarbot@theangrygamershow.com` | `99CA270AD84AE20C` | After Action Report generation and portal automation | `aar-automation.yml`, `aar-portal.yml` |
+
+**Strategy**: Each bot has its own email identity for commit attribution, but all GPG keys are managed through the unified `scarabofthespudheap` GitHub account for centralized security control.
 
 ### Security Features
 
@@ -57,11 +69,11 @@ cp docs/templates/gpg-automation-workflow.yml .github/workflows/your-automation.
 #### GitHub Variables (Repository Level)
 
 - `AARBOT_GPG_KEY_ID` - AAR Bot GPG key ID (99CA270AD84AE20C)
-- `AARBOT_NAME` - AAR Bot display name
-- `AARBOT_EMAIL` - AAR Bot email address
+- `AARBOT_NAME` - AAR Bot display name (DevOnboarder AAR Bot)
+- `AARBOT_EMAIL` - AAR Bot email address (`aarbot@theangrygamershow.com`)
 - `PMBOT_GPG_KEY_ID` - Priority Matrix Bot GPG key ID (AB78428FE3A090D3)
-- `PMBOT_NAME` - Priority Matrix Bot display name
-- `PMBOT_EMAIL` - Priority Matrix Bot email address
+- `PMBOT_NAME` - Priority Matrix Bot display name (Priority Matrix Bot)
+- `PMBOT_EMAIL` - Priority Matrix Bot email address (`pmbot@theangrygamershow.com`)
 
 ### 4. Template Pattern
 

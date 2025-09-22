@@ -8,7 +8,7 @@ echo "Setting up GPG key for Priority Matrix Bot..."
 
 # Bot configuration
 BOT_NAME="Priority Matrix Bot"
-BOT_EMAIL="developer@theangrygamershow.com"
+BOT_EMAIL="pmbot@theangrygamershow.com"
 BOT_COMMENT="DevOnboarder Automation Bot"
 
 # Create temporary GPG batch file for key generation
