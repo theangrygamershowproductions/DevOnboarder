@@ -62,8 +62,13 @@ jobs:
           git config --global commit.gpgsign true
           git config --global gpg.program gpg
 
-          # Trust the key for signing (avoid interactive prompts)
-          printf '5\ny\n' | gpg --command-fd 0 --expert --edit-key "$PMBOT_GPG_KEY_ID" trust quit
+          # Trust the key for signing (CI-compatible, non-interactive)
+          gpg --batch --no-tty --command-fd 0 --edit-key "$PMBOT_GPG_KEY_ID" <<EOF
+          trust
+          5
+          y
+          quit
+          EOF
 
       - name: Debug git state
         run: |
