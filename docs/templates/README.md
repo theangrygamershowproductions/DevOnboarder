@@ -1,3 +1,9 @@
+---
+similarity_group: templates-templates
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # DevOnboarder Automation Framework
 
 This directory contains templates and documentation for creating new automated workflows with unified GPG signing in DevOnboarder.

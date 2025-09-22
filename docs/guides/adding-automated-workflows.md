@@ -1,3 +1,9 @@
+---
+similarity_group: guides-guides
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # Adding New Automated Workflows with GPG Signing
 
 This guide provides a standardized process for creating new automated workflows in DevOnboarder that use GPG signing for commit verification.
