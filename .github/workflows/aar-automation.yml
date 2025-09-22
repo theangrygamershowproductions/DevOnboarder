@@ -1,5 +1,8 @@
 ---
-name: AAR Automation
+name: AAR Automation (GPG Signed)
+# Automated After Action Report generation with cryptographic signature verification
+# Triggers: Issue closure, PR merge, manual dispatch
+# Bot: DevOnboarder AAR Bot with GPG signing for commit authenticity
 
 on:
   issues:
@@ -48,17 +51,18 @@ jobs:
       github.event_name == 'workflow_dispatch'
 
     permissions:
-      # Minimal permissions for AAR automation
+      # Enhanced permissions for AAR automation with GPG signing
       contents: write        # Required for git commits and push
       issues: write          # Required for creating follow-up issues
-      pull-requests: read    # Required for PR data access
+      pull-requests: write   # Required for PR comments and data access
       actions: read          # Required for workflow metadata access
+      # gpg-signing: Required for commit verification
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Setup Python environment
@@ -66,6 +70,33 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           pip install --upgrade pip
+
+      - name: Setup GPG commit signing (AAR Bot)
+        env:
+          AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
+          AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
+          AARBOT_NAME: ${{ vars.AARBOT_NAME }}
+          AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+        run: |
+          # Import GPG private key (using printf to avoid terminal output violations)
+          printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+
+          # Configure git to use GPG signing
+          git config --global user.name "$AARBOT_NAME"
+          git config --global user.email "$AARBOT_EMAIL"
+          git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+          git config --global commit.gpgsign true
+          git config --global gpg.format openpgp
+
+          # Set up non-interactive GPG trust for automation
+          gpg --batch --no-tty --command-fd 0 --edit-key "$AARBOT_GPG_KEY_ID" <<EOF
+          trust
+          5
+          y
+          quit
+          EOF
+
+          echo "GPG signing configured for AAR Bot automation"
 
       - name: Install GitHub CLI
         run: |
@@ -117,24 +148,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit AAR files
+      - name: Commit AAR files (GPG signed)
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           git add .aar/
           if git diff --staged --quiet; then
             echo "No AAR files to commit"
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              printf 'DOCS(aar): add after actions report for %s\n' "${{ github.event.issue.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for issue #%s [signed]\n\n- Generated AAR for issue resolution analysis\n- Captured lessons learned and process improvements\n- AAR Bot automation: cryptographically signed\n\nIssue: #%s\nAAR Type: Issue closure analysis' "${{ github.event.issue.number }}" "${{ github.event.issue.number }}" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              printf 'DOCS(aar): add after actions report for PR#%s\n' "${{ github.event.pull_request.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for PR #%s [signed]\n\n- Generated AAR for pull request analysis\n- Captured development insights and learnings\n- AAR Bot automation: cryptographically signed\n\nPR: #%s\nAAR Type: Pull request development analysis' "${{ github.event.pull_request.number }}" "${{ github.event.pull_request.number }}" > commit_msg.txt
             else
-              printf 'DOCS(aar): add after actions report for %s\n' "${{ github.event.inputs.aar_type }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for %s [signed]\n\n- Generated AAR for %s analysis\n- Manual AAR generation via workflow dispatch\n- AAR Bot automation: cryptographically signed\n\nAAR Type: %s' "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" > commit_msg.txt
             fi
+
+            # Commit with GPG signature
             git commit -F commit_msg.txt
+
+            # Push using token hierarchy (CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN)
             git push
+
+            echo "AAR files committed and pushed with GPG signature"
           fi
 
       - name: Create follow-up issue for action items
