@@ -1,3 +1,9 @@
+---
+similarity_group: guides-guides
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # GPG Signing Troubleshooting Guide
 
 This guide helps diagnose and resolve common issues with GPG signing in DevOnboarder automated workflows.
