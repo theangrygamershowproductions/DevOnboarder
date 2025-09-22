@@ -8,13 +8,31 @@ DevOnboarder implements unified GPG signing across all automation workflows that
 
 ### Unified Bot Account Strategy
 
-DevOnboarder uses a unified GitHub account with separate bot email identities:
+**CRITICAL SECURITY REQUIREMENT**: DevOnboarder implements a secondary GitHub account strategy for bot and agent token management:
 
-- **GitHub Account**: `developer@theangrygamershow.com` (scarabofthespudheap)
-- **Security Benefits**: Privilege separation from main user accounts
-- **Safety Kill Switch**: Independent account for emergency access control
+- **Secondary GitHub Account**: `developer@theangrygamershow.com` (scarabofthespudheap)
+- **Corporate Governance**: Account MUST be owned and managed within your corporate structure
+- **Access Control**: Separate from personal developer accounts to prevent privilege escalation
+- **Security Oversight**: Centralized management enables proper audit trails and access reviews
+- **Safety Kill Switch**: Independent account provides emergency revocation capabilities
+
+### Security Benefits
+
+- **Privilege Separation**: Bot operations isolated from main user accounts
+- **Corporate Control**: Account management within established corporate governance
+- **Audit Trail**: Clear separation of automated vs. human activities
+- **Emergency Response**: Rapid token/key revocation via account suspension
+- **Compliance**: Meets security standards for automated system access
 - **Email Separation**: Each bot uses distinct email addresses for clear identification
-- **GPG Key Management**: All bot GPG keys added to the unified GitHub account
+- **GPG Key Management**: All bot GPG keys centrally managed through corporate-controlled account
+
+### Account Management Requirements
+
+1. **Corporate Ownership**: Secondary account MUST be created and owned by corporate entity
+2. **Access Controls**: Multi-factor authentication and corporate security policies applied
+3. **Documentation**: Account purpose and access documented in corporate security records
+4. **Regular Review**: Periodic access reviews as part of corporate security audits
+5. **Emergency Procedures**: Established protocols for account suspension/recovery
 
 ### Bot Infrastructure
 

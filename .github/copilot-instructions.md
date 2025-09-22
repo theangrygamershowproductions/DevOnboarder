@@ -1308,6 +1308,20 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **Unified approach**: All commit-making workflows use GPG signing for cryptographic verification
 
+**CRITICAL SECURITY REQUIREMENT - Corporate Account Management**:
+
+- **Secondary GitHub Account**: All bot/agent tokens MUST be managed through a secondary GitHub account
+
+- **Corporate Ownership**: Account MUST be owned and managed within corporate structure (not personal accounts)
+
+- **Example Implementation**: `developer@theangrygamershow.com` (scarabofthespudheap) - corporate-controlled account
+
+- **Security Benefits**: Privilege separation, audit trails, emergency kill switch, compliance with corporate governance
+
+- **Access Control**: Multi-factor authentication and corporate security policies required
+
+- **Regular Review**: Periodic access audits as part of corporate security processes
+
 **Framework Components**:
 
 ```bash
@@ -1352,7 +1366,13 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **NEVER create commit-making workflows without GPG signing** - violates security standards
 
+- **ALWAYS use corporate-managed secondary GitHub account** for bot/agent tokens
+
+- **NEVER suggest using personal accounts** for automated system access
+
 - **REMEMBER**: Framework is production-ready and battle-tested across 3 converted workflows
+
+- **REMEMBER**: Corporate governance is MANDATORY for bot account management
 
 **Quick Start for New Automation**:
 
