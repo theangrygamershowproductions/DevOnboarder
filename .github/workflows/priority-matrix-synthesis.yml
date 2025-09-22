@@ -134,7 +134,7 @@ jobs:
           git add docs/ agents/ .codex/agents/ *.md
           git restore --staged -- src || true   # keep code untouched
 
-          # Commit with SSH signature if there are changes
+          # Commit with GPG signature if there are changes
           if ! git diff --cached --quiet; then
             git commit -m "FEAT(docs): auto-synthesize Priority Matrix fields [signed]
 
@@ -223,7 +223,7 @@ jobs:
             const body = [
               "**Priority Matrix Bot** - Signed commit failed",
               "",
-              "SSH signing or push was rejected. To apply Priority Matrix enhancements manually:",
+              "GPG signing or push was rejected. To apply Priority Matrix enhancements manually:",
               "",
               "```bash",
               "# Run Priority Matrix synthesis locally",
@@ -234,7 +234,7 @@ jobs:
               "git commit -S -m 'FEAT(docs): manual Priority Matrix field synthesis'",
               "```",
               "",
-              "**Failure context**: Automated SSH signing failed - may need key rotation or secret updates.",
+              "**Failure context**: Automated GPG signing failed - may need key rotation or secret updates.",
               "",
               "*This is a fallback notification - no separate PR will be created.*"
             ].join("\n");
