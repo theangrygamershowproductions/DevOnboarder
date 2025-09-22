@@ -386,6 +386,43 @@ npm ci --prefix frontend
 
 ```
 
+### 2. UTC Timestamp Standards - MANDATORY
+
+**CRITICAL INFRASTRUCTURE REQUIREMENT**: All timestamp usage MUST follow UTC standards to maintain diagnostic accuracy across DevOnboarder automation.
+
+**Root Cause**: Inconsistent datetime.now() usage claiming "UTC" but using local time caused critical diagnostic "whack" behavior and 3-minute discrepancies with GitHub API timestamps.
+
+**Required Patterns**:
+
+```python
+
+# ✅ CORRECT - Use standardized UTC utilities
+
+from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp
+
+# For display and logging (replaces datetime.now().strftime(...UTC...))
+timestamp = get_utc_display_timestamp()  # "2025-09-21 19:06:26 UTC"
+
+# For GitHub API compatibility
+api_timestamp = get_utc_timestamp()  # "2025-09-21T19:06:26Z"
+
+# For GitHub API timestamp parsing
+github_time = parse_github_timestamp("2025-09-21T19:06:26Z")
+
+# ❌ FORBIDDEN - Misleading patterns that caused infrastructure issues
+
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")  # WRONG - uses local time
+api_call_time = datetime.now().isoformat()  # WRONG - timezone naive
+
+```
+
+**Agent Requirements**:
+
+- **ALWAYS use src.utils.timestamps utilities** for all timestamp operations
+- **NEVER use datetime.now() with "UTC" labels** - causes diagnostic synchronization issues
+- **VALIDATE with QC system** - scripts/qc_pre_push.sh includes UTC compliance check
+- **REMEMBER**: Timestamp accuracy is critical for DevOnboarder's 50+ automation scripts
+
 ### Essential Quick Start Commands
 
 ```bash
