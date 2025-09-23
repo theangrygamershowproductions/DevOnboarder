@@ -1302,7 +1302,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 **GPG Infrastructure**:
 
-- **Priority Matrix Bot**: Key ID `AB78428FE3A090D3` - For priority matrix synthesis automation
+- **Priority Matrix Bot**: Key ID `9BA7DCDBF5D4DEDD` - For priority matrix synthesis automation
 
 - **AAR Bot**: Key ID `99CA270AD84AE20C` - For AAR generation and portal automation
 
@@ -2376,7 +2376,7 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 
    - Start with `docs/templates/gpg-automation-workflow.yml`
 
-   - Choose appropriate bot: Priority Matrix Bot (AB78428FE3A090D3) or AAR Bot (99CA270AD84AE20C)
+   - Choose appropriate bot: Priority Matrix Bot (9BA7DCDBF5D4DEDD) or AAR Bot (99CA270AD84AE20C)
 
    - Apply DevOnboarder quality standards from the start
 

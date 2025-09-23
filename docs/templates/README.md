@@ -71,7 +71,7 @@ Study the Priority Matrix Bot as a reference implementation:
 
 - **Workflow**: `.github/workflows/priority-matrix-synthesis.yml`
 - **Setup Script**: `scripts/setup_bot_gpg_key.sh`
-- **GPG Key**: Successfully generated and configured (AB78428FE3A090D3)
+- **GPG Key**: Successfully generated and configured (9BA7DCDBF5D4DEDD)
 
 ### Common Automation Types
 

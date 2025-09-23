@@ -26,7 +26,7 @@ consolidation_priority: P3
 #### Priority Matrix Synthesis (`priority-matrix-synthesis.yml`)
 
 - **Status**: 100% GPG compliant
-- **Implementation**: Complete with passphrase-free key (AB78428FE3A090D3)
+- **Implementation**: Complete with passphrase-free key (9BA7DCDBF5D4DEDD)
 - **Features**: Non-interactive trust setup, comprehensive error handling
 - **Documentation**: Fully documented with troubleshooting guides
 
@@ -149,7 +149,7 @@ git commit -m "DOCS(aar): update AAR portal..."
 
 **Current Assets**:
 
-- Priority Matrix Bot GPG key (AB78428FE3A090D3) in production
+- Priority Matrix Bot GPG key (9BA7DCDBF5D4DEDD) in production
 - Complete GPG setup scripts and templates
 - GitHub secrets/variables configured
 
