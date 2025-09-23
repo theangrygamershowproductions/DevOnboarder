@@ -186,7 +186,7 @@ fi
 # 9. UTC Timestamp Validation
 echo "🕐 Validating UTC timestamp compliance..."
 if [[ -x "scripts/validate_utc_compliance.sh" ]]; then
-    if bash scripts/validate_utc_compliance.sh --quiet 2>/dev/null; then
+    if bash scripts/validate_utc_compliance.sh 2>/dev/null; then
         CHECKS+=("SUCCESS: UTC compliance")
     else
         CHECKS+=("FAILED: UTC compliance")

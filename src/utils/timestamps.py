@@ -80,7 +80,7 @@ def get_utc_timestamp_with_milliseconds() -> str:
         >>> print(timestamp)
         "2025-09-21T19:06:26.456Z"
     """
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")[:-3] + "Z"
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")[:-4] + "Z"
 
 
 def parse_github_timestamp(github_ts: str) -> datetime:

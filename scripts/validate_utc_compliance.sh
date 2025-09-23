@@ -7,8 +7,8 @@
 
 echo "=== QC Extension: UTC Timestamp Validation ==="
 
-# Check for dangerous patterns that claim UTC but use local time
-dangerous_patterns=$(grep -r "UTC.*datetime\.now()" scripts/ 2>/dev/null | grep -v "# INFRASTRUCTURE CHANGE" || true)
+# Improved pattern: match lines with both 'UTC' (or 'utc') and 'datetime.now()', in any order, and other problematic patterns
+dangerous_patterns=$(grep -r -E "(UTC|utc).*datetime\.now\(\)|datetime\.now\(\).*(UTC|utc)|datetime\.now\(\)\.astimezone\(\s*timezone\.utc\s*\)|datetime\.now\(\)\.replace\(\s*tzinfo\s*=\s*timezone\.utc\s*\)|datetime\.now\(\)\.isoformat\(\)\s*\+\s*['\"]\s*UTC\s*['\"]" scripts/ 2>/dev/null | grep -v "# INFRASTRUCTURE CHANGE" || true)
 
 if [ -n "$dangerous_patterns" ]; then
     echo "❌ CRITICAL: Found scripts claiming UTC but using local time:"
