@@ -438,7 +438,7 @@ class FileVersionTracker:
             "# File Change Analysis Report",
             "",
             # INFRASTRUCTURE CHANGE: Fixed critical timestamp mislabeling issue
-            # Was: datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC') - claimed UTC
+            # INFRASTRUCTURE CHANGE: Was: datetime.now() with UTC label
             # but used local time
             # Now: get_utc_display_timestamp() - actual UTC for GitHub API sync
             # Evidence: 3-minute discrepancies in diagnostic timeline analysis

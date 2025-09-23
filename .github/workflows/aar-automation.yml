@@ -156,11 +156,14 @@ jobs:
           else
             # Determine AAR type for commit message
             if [ "${{ github.event_name }}" = "issues" ]; then
-              printf 'DOCS(aar): add after actions report for issue #%s [signed]\n\n- Generated AAR for issue resolution analysis\n- Captured lessons learned and process improvements\n- AAR Bot automation: cryptographically signed\n\nIssue: #%s\nAAR Type: Issue closure analysis' "${{ github.event.issue.number }}" "${{ github.event.issue.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for issue #%s [signed]\n\n- Generated AAR for issue resolution analysis\n- Captured lessons learned and process improvements\n- AAR Bot automation: cryptographically signed\n\nIssue: #%s\nAAR Type: Issue closure analysis' \
+                "${{ github.event.issue.number }}" "${{ github.event.issue.number }}" > commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
-              printf 'DOCS(aar): add after actions report for PR #%s [signed]\n\n- Generated AAR for pull request analysis\n- Captured development insights and learnings\n- AAR Bot automation: cryptographically signed\n\nPR: #%s\nAAR Type: Pull request development analysis' "${{ github.event.pull_request.number }}" "${{ github.event.pull_request.number }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for PR #%s [signed]\n\n- Generated AAR for pull request analysis\n- Captured development insights and learnings\n- AAR Bot automation: cryptographically signed\n\nPR: #%s\nAAR Type: Pull request development analysis' \
+                "${{ github.event.pull_request.number }}" "${{ github.event.pull_request.number }}" > commit_msg.txt
             else
-              printf 'DOCS(aar): add after actions report for %s [signed]\n\n- Generated AAR for %s analysis\n- Manual AAR generation via workflow dispatch\n- AAR Bot automation: cryptographically signed\n\nAAR Type: %s' "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" > commit_msg.txt
+              printf 'DOCS(aar): add after actions report for %s [signed]\n\n- Generated AAR for %s analysis\n- Manual AAR generation via workflow dispatch\n- AAR Bot automation: cryptographically signed\n\nAAR Type: %s' \
+                "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" "${{ github.event.inputs.aar_type }}" > commit_msg.txt
             fi
 
             # Commit with GPG signature

@@ -252,7 +252,7 @@ class CIMonitor:
         # Header
         # INFRASTRUCTURE CHANGE: Use proper UTC timestamp instead of
         # mislabeled local time
-        # Before: datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        # INFRASTRUCTURE CHANGE: Before: datetime.now() with UTC label
         #         Claims UTC but uses local time
         # After: get_utc_display_timestamp()  # Actually uses UTC
         # Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md

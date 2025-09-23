@@ -68,7 +68,7 @@ fix_python_script() {
     # Create a temporary file for the replacement
     temp_file="${script_path}.tmp"
 
-    # Replace datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC") with get_utc_display_timestamp()
+    # INFRASTRUCTURE CHANGE: Replace datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC") with get_utc_display_timestamp()
     # Add infrastructure change comment before the replacement
     python3 << 'EOF' > "$temp_file"
 import sys
@@ -79,7 +79,7 @@ script_path = sys.argv[1]
 with open(script_path, 'r') as f:
     content = f.read()
 
-# Pattern to match datetime.now().strftime with UTC in format string
+# INFRASTRUCTURE CHANGE: Pattern to match datetime.now().strftime with UTC in format string
 pattern = r'datetime\.now\(\)\.strftime\(["\'][^"\']*UTC[^"\']*["\']\)'
 
 # Find all matches
@@ -93,7 +93,7 @@ for match in reversed(list(matches)):
 
     # Add infrastructure change comment and replacement
     replacement = '''# INFRASTRUCTURE CHANGE: Use proper UTC timestamp instead of local time
-        # Before: datetime.now().strftime("...UTC...")  # Claims UTC but uses local time
+        # INFRASTRUCTURE CHANGE: Before: datetime.now().strftime("...UTC...")  # Claims UTC but uses local time
         # After: get_utc_display_timestamp()  # Actually uses UTC
         # Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
         get_utc_display_timestamp()'''
