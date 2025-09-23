@@ -36,7 +36,7 @@ jobs:
           CI_HEALTH_BOT_NAME: ${{ vars.CI_HEALTH_BOT_NAME }}
           CI_HEALTH_BOT_EMAIL: ${{ vars.CI_HEALTH_BOT_EMAIL }}
         run: |
-          printf "Setting up CI Health Framework Bot GPG signing...\n"
+          echo "Setting up CI Health Framework Bot GPG signing"
 
           # Import the private key
           printf '%s\n' "$CI_HEALTH_BOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
@@ -50,37 +50,42 @@ jobs:
 
           # Trust the key automatically (storing email in variable to avoid expansion in echo)
           BOT_EMAIL="$CI_HEALTH_BOT_EMAIL"
-          printf "trust\n5\ny\nquit\n" | gpg --command-fd 0 --expert --edit-key "$BOT_EMAIL"
+          gpg --batch --no-tty --command-fd 0 --edit-key "$BOT_EMAIL" <<EOF
+          trust
+          5
+          y
+          quit
+          EOF
 
-          printf "GPG configuration completed successfully\n"
+          echo "GPG configuration completed successfully"
 
       - name: Validate GPG key configuration
         env:
           CI_HEALTH_BOT_EMAIL: ${{ vars.CI_HEALTH_BOT_EMAIL }}
           CI_HEALTH_BOT_GPG_KEY_ID: ${{ vars.CI_HEALTH_BOT_GPG_KEY_ID }}
         run: |
-          printf "Validating GPG key configuration...\n"
+          echo "Validating GPG key configuration"
 
           # List keys to verify import
-          printf "Available GPG keys:\n"
+          echo "Available GPG keys:"
           gpg --list-keys
 
           # Verify the specific bot key
-          printf "\nCI Health Bot key details:\n"
+          echo "CI Health Bot key details:"
           gpg --list-keys "$CI_HEALTH_BOT_EMAIL"
 
           # Test signing capability (storing email to avoid variable expansion in echo)
-          printf "\nTesting GPG signing capability:\n"
+          echo "Testing GPG signing capability:"
           BOT_EMAIL="$CI_HEALTH_BOT_EMAIL"
           printf "test message" | gpg --clearsign --default-key "$BOT_EMAIL"
 
-          printf "\nGPG validation completed successfully\n"
+          echo "GPG validation completed successfully"
 
       - name: Create test CI health report
         env:
           CI_HEALTH_BOT_NAME: ${{ vars.CI_HEALTH_BOT_NAME }}
         run: |
-          printf "Creating test CI health report...\n"
+          echo "Creating test CI health report"
 
           # Create logs directory following DevOnboarder standards
           mkdir -p logs
@@ -122,14 +127,14 @@ jobs:
           *This report demonstrates successful GPG signing framework for DevOnboarder automation.*
           EOF
 
-          printf "CI health report created successfully\n"
+          echo "CI health report created successfully"
 
       - name: Test commit with GPG signing
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_HEALTH_BOT_NAME: ${{ vars.CI_HEALTH_BOT_NAME }}
         run: |
-          printf "Testing GPG-signed commit...\n"
+          echo "Testing GPG-signed commit"
 
           # Configure branch for testing
           BRANCH_NAME="test/ci-health-bot-$(date +%Y%m%d-%H%M%S)"
@@ -151,35 +156,40 @@ jobs:
           Bot: $CI_HEALTH_BOT_NAME"
 
           # Verify the commit signature
-          printf "\nVerifying commit signature:\n"
+          echo "Verifying commit signature:"
           git log --show-signature -1
 
-          printf "\nGPG-signed commit test completed successfully\n"
+          echo "GPG-signed commit test completed successfully"
 
       - name: Validate framework isolation
         env:
           CI_HEALTH_BOT_EMAIL: ${{ vars.CI_HEALTH_BOT_EMAIL }}
           CI_HEALTH_BOT_GPG_KEY_ID: ${{ vars.CI_HEALTH_BOT_GPG_KEY_ID }}
         run: |
-          printf "Validating framework isolation...\n"
+          echo "Validating framework isolation"
 
           # Check git configuration matches bot identity
           CONFIGURED_NAME=$(git config user.name)
           CONFIGURED_EMAIL=$(git config user.email)
           CONFIGURED_KEY=$(git config user.signingkey)
 
-          printf "Git Configuration Validation:\n"
+          # Compare configuration to ensure framework isolation
+          CONFIGURED_NAME=$(git config --global user.name)
+          CONFIGURED_EMAIL=$(git config --global user.email)
+          CONFIGURED_KEY=$(git config --global user.signingkey)
+
+          echo "Git Configuration Validation:"
           printf "  Name: %s\n" "$CONFIGURED_NAME"
           printf "  Email: %s\n" "$CONFIGURED_EMAIL"
           printf "  Signing Key: %s\n" "$CONFIGURED_KEY"
 
           # Verify isolation from other bots
           if [[ "$CONFIGURED_EMAIL" == "$CI_HEALTH_BOT_EMAIL" ]] && [[ "$CONFIGURED_KEY" == "$CI_HEALTH_BOT_GPG_KEY_ID" ]]; then
-            printf "\nFramework isolation validated successfully\n"
-            printf "CI Health Bot operates independently\n"
-            printf "Corporate governance compliance confirmed\n"
+            echo "Framework isolation validated successfully"
+            echo "CI Health Bot operates independently"
+            echo "Corporate governance compliance confirmed"
           else
-            printf "\nFramework isolation validation failed\n"
+            echo "Framework isolation validation failed"
             exit 1
           fi
 
@@ -188,24 +198,20 @@ jobs:
         env:
           CI_HEALTH_BOT_GPG_KEY_ID: ${{ vars.CI_HEALTH_BOT_GPG_KEY_ID }}
         run: |
-          printf "=== CI HEALTH FRAMEWORK BOT VALIDATION SUMMARY ===\n"
-          printf "\n"
-          printf "Test Results:\n"
-          printf "  GPG Key Import: Success\n"
-          printf "  Git Configuration: Success\n"
-          printf "  Signing Capability: Success\n"
-          printf "  Framework Isolation: Success\n"
-          printf "  Corporate Governance: Success\n"
-          printf "\n"
-          printf "Key Information:\n"
+          echo "=== CI HEALTH FRAMEWORK BOT VALIDATION SUMMARY ==="
+          echo "Test Results:"
+          echo "  GPG Key Import: Success"
+          echo "  Git Configuration: Success"
+          echo "  Signing Capability: Success"
+          echo "  Framework Isolation: Success"
+          echo "  Corporate Governance: Success"
+          echo "Key Information:"
           printf "  Key ID: %s\n" "$CI_HEALTH_BOT_GPG_KEY_ID"
-          printf "  Email: ci-health@theangrygamershow.com\n"
-          printf "  Management: Corporate governance (scarabofthespudheap)\n"
-          printf "\n"
-          printf "Framework Status:\n"
-          printf "  Architecture: Framework-based bot system\n"
-          printf "  Security: GPG-signed commits\n"
-          printf "  Integration: DevOnboarder automation ready\n"
-          printf "\n"
-          printf "CI Health Framework Bot validation completed successfully!\n"
-          printf "Ready for CI health monitoring automation workflows\n"
+          echo "  Email: ci-health@theangrygamershow.com"
+          echo "  Management: Corporate governance (scarabofthespudheap)"
+          echo "Framework Status:"
+          echo "  Architecture: Framework-based bot system"
+          echo "  Security: GPG-signed commits"
+          echo "  Integration: DevOnboarder automation ready"
+          echo "CI Health Framework Bot validation completed successfully!"
+          echo "Ready for CI health monitoring automation workflows"

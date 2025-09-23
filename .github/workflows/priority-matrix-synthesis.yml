@@ -53,14 +53,14 @@ jobs:
           PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
         run: |
           umask 077
-          printf '%s\n' "$PMBOT_GPG_PRIVATE" | gpg --batch --import --quiet
+          printf '%s\n' "$PMBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
 
           # Configure git to use GPG signing
           git config --global user.name "$PMBOT_NAME"
           git config --global user.email "$PMBOT_EMAIL"
           git config --global user.signingkey "$PMBOT_GPG_KEY_ID"
           git config --global commit.gpgsign true
-          git config --global gpg.program gpg
+          git config --global gpg.format openpgp
 
           # Trust the key for signing (CI-compatible, non-interactive)
           gpg --batch --no-tty --command-fd 0 --edit-key "$PMBOT_GPG_KEY_ID" <<EOF
