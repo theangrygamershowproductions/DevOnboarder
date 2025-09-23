@@ -99,6 +99,54 @@ echo "Next step: review results"
 
 ```
 
+## Centralized Color Utilities
+
+DevOnboarder provides standardized color functions to replace raw ANSI escape sequences:
+
+### Usage Pattern
+
+```bash
+# Source the centralized utilities
+source scripts/color_utils.sh
+
+# Use semantic color functions
+red "Error message"           # For errors and failures
+green "Success message"       # For success and completion
+yellow "Warning message"      # For warnings and cautions
+blue "Info message"           # For general information
+cyan "Debug message"          # For debug output (if DEBUG=1)
+purple "Special message"      # For special cases
+bold "Section header"         # For emphasis and headers
+
+# High-level semantic functions
+error "Something went wrong"      # Formatted with ERROR: prefix
+success "Operation completed"     # Formatted with SUCCESS: prefix
+warn "Potential issue detected"   # Formatted with WARNING: prefix
+info "Processing step 1"          # Formatted with INFO: prefix
+section "Main Configuration"      # Formatted section header
+```
+
+### Migration from Raw ANSI
+
+```bash
+# ❌ FORBIDDEN - Raw ANSI variables
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+echo -e "${RED}Error occurred${NC}"
+
+# ✅ APPROVED - Centralized color functions
+source scripts/color_utils.sh
+error "Error occurred"
+```
+
+### Benefits
+
+- **Consistency**: Standardized colors across all scripts
+- **Maintenance**: Single point of control for color definitions
+- **Compliance**: Built-in terminal output policy adherence
+- **Semantics**: Clear meaning through function names
+
 ## Enforcement Mechanisms
 
 ### 1. Pre-commit Validation

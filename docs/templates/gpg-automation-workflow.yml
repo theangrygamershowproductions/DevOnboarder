@@ -1,0 +1,167 @@
+# Template for creating new automated workflows with GPG signing
+# Copy this template and customize for your automation needs
+#
+# Required GitHub Secrets/Variables:
+# - {BOT_NAME}_GPG_PRIVATE: Base64-encoded GPG private key
+# - {BOT_NAME}_GPG_KEY_ID: GPG key ID for signing
+# - {BOT_NAME}_NAME: Bot name for git config
+# - {BOT_NAME}_EMAIL: Bot email for git config
+#
+# Example: For "MyBot", create secrets MYBOT_GPG_PRIVATE, MYBOT_GPG_KEY_ID, etc.
+
+name: {WORKFLOW_NAME}
+
+on:
+  # Customize triggers as needed
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'  # Adjust paths for your automation scope
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  automated-task:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false  # Skip drafts unless needed
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Setup GPG commit signing (bot)
+        env:
+          # Replace {BOT_NAME} with your bot's name (uppercase)
+          BOT_GPG_PRIVATE: ${{ secrets.{BOT_NAME}_GPG_PRIVATE }}
+          BOT_GPG_KEY_ID: ${{ vars.{BOT_NAME}_GPG_KEY_ID }}
+          BOT_NAME: ${{ vars.{BOT_NAME}_NAME }}
+          BOT_EMAIL: ${{ vars.{BOT_NAME}_EMAIL }}
+        run: |
+          # Import GPG private key
+          echo "$BOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+
+          # Configure git to use GPG signing
+          git config --global user.name "$BOT_NAME"
+          git config --global user.email "$BOT_EMAIL"
+          git config --global user.signingkey "$BOT_GPG_KEY_ID"
+          git config --global commit.gpgsign true
+          git config --global gpg.format openpgp
+
+          # Set trust level for the key (non-interactive)
+          echo -e "5\ny\n" | gpg --batch --command-fd 0 --expert --edit-key "$BOT_GPG_KEY_ID" trust quit || true
+
+      - name: Setup Python environment (if needed)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies (customize as needed)
+        run: |
+          # Example: Install project dependencies
+          python -m pip install --upgrade pip
+          pip install -e .[test]
+
+      - name: Run automation task
+        id: automation-task
+        run: |
+          # Replace this section with your automation logic
+          echo "Running automated task..."
+
+          # Example: Run a Python script
+          # python scripts/your_automation_script.py
+
+          # Example: Modify files programmatically
+          # Find files that need processing
+          # Process and update them
+
+          # Set outputs for later steps
+          echo "modified_count=0" >> $GITHUB_OUTPUT
+          echo "changes_made=false" >> $GITHUB_OUTPUT
+
+      - name: Commit changes with GPG signature
+        id: commit-changes
+        run: |
+          # Stage only the files your automation should modify
+          git add docs/ # Customize paths as needed
+
+          # Keep code untouched (example)
+          git restore --staged -- src || true
+
+          # Commit with GPG signature if there are changes
+          if ! git diff --cached --quiet; then
+            git commit -m "FEAT({scope}): automated {task_description} [signed]
+
+          Enhanced ${{ steps.automation-task.outputs.modified_count }} files with:
+          - {enhancement_1}
+          - {enhancement_2}
+          - {enhancement_3}
+
+          Automated by {Bot_Name} v1.0"
+
+            # Verify signature worked
+            git -c log.showSignature=true log -1 --show-signature
+            echo "changes_committed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes to commit."
+            echo "changes_committed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push changes
+        if: steps.commit-changes.outputs.changes_committed == 'true'
+        run: |
+          # Push with retry logic
+          for i in {1..3}; do
+            if git push origin ${{ github.head_ref || github.ref_name }}; then
+              echo "Push successful on attempt $i"
+              break
+            else
+              echo "Push failed on attempt $i, retrying..."
+              sleep 2
+            fi
+          done
+
+      - name: Create fallback comment on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              "**{Bot_Name}** - Automated task failed",
+              "",
+              "GPG signing or push was rejected. To apply enhancements manually:",
+              "",
+              "```bash",
+              "# Run automation locally",
+              "python scripts/your_automation_script.py",
+              "",
+              "# Review and commit changes",
+              "git add {files_to_add}",
+              "git commit -S -m 'FEAT({scope}): manual {task_description}'",
+              "```",
+              "",
+              "**Failure context**: Automated GPG signing failed - may need key rotation or secret updates.",
+              "",
+              "*This is a fallback notification - no separate PR will be created.*"
+            ].join("\n");
+
+            // Only comment on PRs, not direct pushes
+            if (context.payload.pull_request) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }

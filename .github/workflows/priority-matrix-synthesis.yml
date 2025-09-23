@@ -44,56 +44,31 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruamel.yaml
 
-      - name: Setup SSH commit signing (bot)
+      - name: Setup GPG commit signing (Priority Matrix Bot)
         shell: bash
         env:
-          PMBOT_SSH_PRIVATE: ${{ secrets.PMBOT_SSH_PRIVATE }}
+          PMBOT_GPG_PRIVATE: ${{ secrets.PMBOT_GPG_PRIVATE }}
+          PMBOT_GPG_KEY_ID: ${{ vars.PMBOT_GPG_KEY_ID }}
           PMBOT_NAME: ${{ vars.PMBOT_NAME }}
           PMBOT_EMAIL: ${{ vars.PMBOT_EMAIL }}
         run: |
-          set -euo pipefail
           umask 077
-          mkdir -p ~/.ssh
+          printf '%s\n' "$PMBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
 
-          # Write SSH private key using base64 decoding to avoid shell variable corruption
-          # GitHub Secrets should contain the base64-encoded key
-          printf '%s' "$PMBOT_SSH_PRIVATE" | base64 -d > ~/.ssh/ci_signing_key
-          chmod 600 ~/.ssh/ci_signing_key
-
-          # Debug: Check key format and validate
-          echo "Checking SSH key format..."
-          echo "First line:"
-          head -1 ~/.ssh/ci_signing_key
-          echo "Last line:"
-          tail -1 ~/.ssh/ci_signing_key
-          echo "Line count:"
-          wc -l < ~/.ssh/ci_signing_key
-
-          # Generate public key and validate private key
-          if ! ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub 2>/dev/null; then
-            echo "ERROR: Invalid SSH private key format"
-            echo "Debug information:"
-            echo "Key file size:"
-            stat -c%s ~/.ssh/ci_signing_key
-            echo "bytes"
-            echo "Key file permissions:"
-            stat -c%a ~/.ssh/ci_signing_key
-
-            echo "TROUBLESHOOTING: The key appears to be corrupted."
-            echo "Please ensure PMBOT_SSH_PRIVATE contains the base64-encoded SSH key."
-            echo "Generate it with: base64 -w 0 path/to/ssh/key"
-            exit 1
-          else
-            echo "SUCCESS: SSH key validation passed"
-          fi
-
-          git config --global user.name  "$PMBOT_NAME"
+          # Configure git to use GPG signing
+          git config --global user.name "$PMBOT_NAME"
           git config --global user.email "$PMBOT_EMAIL"
-          git config --global gpg.format ssh
-          git config --global user.signingkey ~/.ssh/ci_signing_key.pub
+          git config --global user.signingkey "$PMBOT_GPG_KEY_ID"
           git config --global commit.gpgsign true
+          git config --global gpg.format openpgp
 
-          echo "SSH signing setup completed successfully"
+          # Trust the key for signing (CI-compatible, non-interactive)
+          gpg --batch --no-tty --command-fd 0 --edit-key "$PMBOT_GPG_KEY_ID" <<EOF
+          trust
+          5
+          y
+          quit
+          EOF
 
       - name: Debug git state
         run: |
@@ -159,7 +134,7 @@ jobs:
           git add docs/ agents/ .codex/agents/ *.md
           git restore --staged -- src || true   # keep code untouched
 
-          # Commit with SSH signature if there are changes
+          # Commit with GPG signature if there are changes
           if ! git diff --cached --quiet; then
             git commit -m "FEAT(docs): auto-synthesize Priority Matrix fields [signed]
 
@@ -248,7 +223,7 @@ jobs:
             const body = [
               "**Priority Matrix Bot** - Signed commit failed",
               "",
-              "SSH signing or push was rejected. To apply Priority Matrix enhancements manually:",
+              "GPG signing or push was rejected. To apply Priority Matrix enhancements manually:",
               "",
               "```bash",
               "# Run Priority Matrix synthesis locally",
@@ -259,7 +234,7 @@ jobs:
               "git commit -S -m 'FEAT(docs): manual Priority Matrix field synthesis'",
               "```",
               "",
-              "**Failure context**: Automated SSH signing failed - may need key rotation or secret updates.",
+              "**Failure context**: Automated GPG signing failed - may need key rotation or secret updates.",
               "",
               "*This is a fallback notification - no separate PR will be created.*"
             ].join("\n");
