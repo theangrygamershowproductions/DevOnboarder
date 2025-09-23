@@ -21,7 +21,12 @@ from typing import Any, Dict, List, Optional
 try:
     from src.utils.timestamps import get_utc_display_timestamp
 except ImportError:
-    from src.utils.timestamp_fallback import get_utc_display_timestamp
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from utils.timestamp_fallback import get_utc_display_timestamp
 
 
 class FileVersionTracker:

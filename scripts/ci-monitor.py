@@ -11,6 +11,7 @@ import json
 import subprocess
 import sys
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, Optional
 from urllib.parse import urlparse
 
@@ -21,7 +22,12 @@ from urllib.parse import urlparse
 try:
     from src.utils.timestamps import get_utc_display_timestamp
 except ImportError:
-    from src.utils.timestamp_fallback import get_utc_display_timestamp
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from utils.timestamp_fallback import get_utc_display_timestamp
 
 
 class CIMonitor:
