@@ -423,6 +423,86 @@ api_call_time = datetime.now().isoformat()  # WRONG - timezone naive
 - **VALIDATE with QC system** - scripts/qc_pre_push.sh includes UTC compliance check
 - **REMEMBER**: Timestamp accuracy is critical for DevOnboarder's 50+ automation scripts
 
+### 3. Import Pattern Guidelines - MANDATORY
+
+**CRITICAL ARCHITECTURAL REQUIREMENT**: Follow centralized utility patterns to eliminate code duplication and ensure consistency across DevOnboarder automation.
+
+**Centralized vs Direct Import Decision Matrix**:
+
+```python
+
+# ✅ PREFERRED - Centralized timestamp functions
+from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp, get_local_timestamp_for_filename
+
+# ✅ LEGITIMATE - Specific datetime operations only
+from datetime import datetime  # For fromtimestamp(), fromisoformat(), type annotations
+
+# ❌ AVOIDED - Direct datetime for new timestamp generation
+from datetime import datetime, timezone  # Use centralized functions instead
+
+```
+
+**Standalone Script Pattern** (for scripts that may run outside DevOnboarder environment):
+
+```python
+
+# MANDATORY pattern for standalone execution capability
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from utils.timestamp_fallback import get_utc_display_timestamp
+
+```
+
+**Agent Requirements**:
+
+- **ALWAYS use centralized utilities** for timestamp generation, logging, and common operations
+- **AVOID direct datetime imports** unless for legitimate operations (fromtimestamp, parsing, type hints)
+- **FOLLOW standalone script pattern** for any script that may run outside virtual environment
+- **DOCUMENT architectural decisions** when creating new utility patterns
+
+### 4. AI Code Review Integration - MANDATORY
+
+**CRITICAL PROCESS REQUIREMENT**: Systematically address all AI feedback (GitHub Copilot inline comments) to improve code architecture and eliminate technical debt.
+
+**Copilot Feedback Resolution Process**:
+
+1. **Comprehensive Review**: Use `scripts/check_pr_inline_comments.sh` to extract all Copilot feedback
+2. **Systematic Resolution**: Address ALL comments, including "missed" ones - they often reveal deeper architectural issues
+3. **Root Cause Analysis**: Don't just fix symptoms - understand why duplication or issues occurred
+4. **Documentation Update**: Add guidelines to prevent similar issues in future development
+
+**Types of Copilot Feedback and Response Patterns**:
+
+```python
+
+# Code Duplication Feedback → Centralized Utilities
+# Before: Multiple scripts with identical patterns
+# After: Centralized module with fallback support
+
+# Import Pattern Feedback → Architectural Guidelines
+# Before: Inconsistent import approaches
+# After: Clear guidelines with examples in copilot-instructions.md
+
+# Error Handling Feedback → Validation-Driven Resolution
+# Before: Ad-hoc error handling
+# After: Use DevOnboarder's diagnostic scripts and patterns
+
+```
+
+**Agent Requirements**:
+
+- **NEVER ignore Copilot feedback** - treat as architectural improvement opportunities
+- **ADDRESS all comments systematically** - including ones discovered later in the process
+- **CREATE centralized solutions** for duplicated patterns identified by AI
+- **UPDATE documentation** to prevent future similar issues
+- **REMEMBER**: AI feedback often reveals deeper architectural issues beyond surface fixes
+
 ### Essential Quick Start Commands
 
 ```bash
@@ -1875,7 +1955,41 @@ python -m pytest plugins/example_plugin/
 
     - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
-9. **Jest Test Timeouts in CI**:
+### Validation-Driven Resolution Framework
+
+DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
+
+```bash
+
+# Step 1: Run validation to identify issues
+
+bash scripts/validate_cache_centralization.sh
+
+# Output: "Solution: Run cache cleanup with: bash scripts/manage_logs.sh cache clean"
+
+# Step 2: Follow the provided solution exactly
+
+bash scripts/manage_logs.sh cache clean
+
+# Step 3: Re-validate to confirm resolution
+
+bash scripts/validate_cache_centralization.sh
+
+# Output: "SUCCESS: No cache pollution found in repository root"
+
+```
+
+**Key Principle**: When validation scripts suggest specific commands, use those commands rather than manual fixes. This ensures compliance with DevOnboarder's automated quality gates.
+
+**Agent Requirements**:
+
+- **ALWAYS run diagnostic scripts first** before making assumptions about problems
+- **FOLLOW suggested commands exactly** when validation scripts provide specific solutions
+- **RE-VALIDATE after fixes** to confirm issues are resolved
+- **USE DevOnboarder's automation** rather than manual troubleshooting approaches
+- **REMEMBER**: Validation-driven approach prevents future similar issues through systematic compliance
+
+1. **Jest Test Timeouts in CI**:
 
     - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
 
@@ -1885,7 +1999,7 @@ python -m pytest plugins/example_plugin/
 
     - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
 
-10. **Dependency Update Failures**:
+2. **Dependency Update Failures**:
 
     - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
 
