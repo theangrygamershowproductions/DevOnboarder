@@ -22,12 +22,7 @@ from typing import Any, Dict, List, Optional
 try:
     from src.utils.timestamps import get_utc_display_timestamp
 except ImportError:
-    # Fallback for standalone script execution
-    from datetime import timezone
-
-    def get_utc_display_timestamp() -> str:
-        """Fallback UTC timestamp function."""
-        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    from src.utils.timestamp_fallback import get_utc_display_timestamp
 
 
 # Import DevOnboarder-compliant token management

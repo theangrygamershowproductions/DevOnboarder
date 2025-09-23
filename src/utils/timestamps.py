@@ -19,6 +19,17 @@ BEFORE (problematic pattern found in 20+ scripts):
 AFTER (standardized approach):
     from src.utils.timestamps import get_utc_display_timestamp
     timestamp = get_utc_display_timestamp()  # Actually uses UTC
+
+STANDALONE SCRIPT PATTERN:
+    Scripts that may run outside the DevOnboarder environment should use:
+
+    try:
+        from src.utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from src.utils.timestamp_fallback import get_utc_display_timestamp
+
+    This pattern reduces code duplication while maintaining standalone capability.
+    The timestamp_fallback module centralizes fallback implementations.
 """
 
 from datetime import datetime, timezone
