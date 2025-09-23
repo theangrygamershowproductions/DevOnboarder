@@ -24,7 +24,7 @@ Create a GitHub machine user account specifically for the Priority Matrix Bot:
 
 - **Recommended username**: `tags-priority-matrix-bot`
 
-- **Email**: `bot+priority-matrix@theangrygamershow.com`
+- **Email**: `priority-matrix@theangrygamershow.com`
 
 - **Purpose**: Dedicated service account for automated Priority Matrix enhancements
 
@@ -36,7 +36,7 @@ On a trusted, secure machine, generate a dedicated SSH key for commit signing:
 
 # Generate Ed25519 SSH key for commit signing
 
-ssh-keygen -t ed25519 -C "Priority Matrix Bot <bot+priority-matrix@theangrygamershow.com>" -f pmbot_signing_key
+ssh-keygen -t ed25519 -C "Priority Matrix Bot <priority-matrix@theangrygamershow.com>" -f pmbot_signing_key
 
 # This creates
 
@@ -81,7 +81,7 @@ Add these variables to your repository (**Settings → Secrets and variables →
 | Variable Name | Description | Value |
 |---------------|-------------|-------|
 | `PMBOT_NAME` | Bot display name for commits | `Priority Matrix Bot` |
-| `PMBOT_EMAIL` | Bot email for commits | `bot+priority-matrix@theangrygamershow.com` |
+| `PMBOT_EMAIL` | Bot email for commits | `priority-matrix@theangrygamershow.com` |
 
 **Why Different Types?**:
 
