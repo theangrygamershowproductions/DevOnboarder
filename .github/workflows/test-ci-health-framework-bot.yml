@@ -77,7 +77,7 @@ jobs:
           # Test signing capability (storing email to avoid variable expansion in echo)
           echo "Testing GPG signing capability:"
           BOT_EMAIL="$CI_HEALTH_BOT_EMAIL"
-          printf "test message" | gpg --clearsign --default-key "$BOT_EMAIL"
+          gpg --clearsign --default-key "$BOT_EMAIL" <<< "test message"
 
           echo "GPG validation completed successfully"
 
