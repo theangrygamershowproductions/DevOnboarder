@@ -183,6 +183,19 @@ else
     FAILURES+=("Security vulnerabilities detected")
 fi
 
+# 9. UTC Timestamp Validation
+echo "🕐 Validating UTC timestamp compliance..."
+if [[ -x "scripts/validate_utc_compliance.sh" ]]; then
+    if bash scripts/validate_utc_compliance.sh 2>/dev/null; then
+        CHECKS+=("SUCCESS: UTC compliance")
+    else
+        CHECKS+=("FAILED: UTC compliance")
+        FAILURES+=("Mixed timezone usage detected - use src.utils.timestamps")
+    fi
+else
+    CHECKS+=("WARNING: UTC compliance check skipped (validator not found)")
+fi
+
 # Calculate success rate
 TOTAL_CHECKS=${#CHECKS[@]}
 SUCCESS_COUNT=$(printf '%s\n' "${CHECKS[@]}" | grep -c "SUCCESS:" || echo "0")
@@ -217,5 +230,6 @@ else
     echo "  • Run: python -m mypy src/devonboarder"
     echo "  • Run: yamllint -c .github/.yamllint-config .github/workflows/"
     echo "  • Run: python -m pytest --cov=src --cov-fail-under=95"
+    echo "  • Run: bash scripts/validate_utc_compliance.sh (use src.utils.timestamps)"
     exit 1
 fi
