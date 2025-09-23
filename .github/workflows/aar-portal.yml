@@ -1,4 +1,7 @@
-name: Generate AAR Portal
+name: Generate AAR Portal (GPG Signed)
+# Automated AAR portal generation with cryptographic signature verification
+# Triggers: AAR file changes, daily schedule, manual dispatch
+# Bot: DevOnboarder AAR Bot with GPG signing for commit authenticity
 
 on:
   push:
@@ -33,6 +36,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
+          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -46,20 +50,44 @@ jobs:
           python -m pip install --upgrade pip
           pip install jinja2
 
+      - name: Setup GPG commit signing (AAR Bot)
+        env:
+          AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
+          AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
+          AARBOT_NAME: ${{ vars.AARBOT_NAME }}
+          AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+        run: |
+          # Import GPG private key (using printf to avoid terminal output violations)
+          printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+
+          # Configure git to use GPG signing
+          git config --global user.name "$AARBOT_NAME"
+          git config --global user.email "$AARBOT_EMAIL"
+          git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+          git config --global commit.gpgsign true
+          git config --global gpg.format openpgp
+
+          # Set up non-interactive GPG trust for automation
+          gpg --batch --no-tty --command-fd 0 --edit-key "$AARBOT_GPG_KEY_ID" <<EOF
+          trust
+          5
+          y
+          quit
+          EOF
+
+          echo "GPG signing configured for AAR Bot automation"
+
       - name: Generate AAR Portal
         run: |
           python scripts/generate_aar_portal.py \
             --aar-dir .aar \
             --output-dir docs/aar-portal
 
-      - name: Create Pull Request for portal updates
+      - name: Create Pull Request for portal updates (GPG signed)
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
           # Check if there are changes
           if git diff --quiet docs/aar-portal/; then
             echo "No changes to AAR portal"
@@ -70,31 +98,48 @@ jobs:
           BRANCH="automated/aar-portal-update-$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH"
 
-          # Stage and commit changes
+          # Stage and commit changes with GPG signature
           git add docs/aar-portal/
-          git commit -m "DOCS(aar): update AAR portal
+          git commit -m "DOCS(aar): update AAR portal [signed]
 
           - Regenerated HTML portal from AAR data
           - Updated trend analysis and metrics
-          - Automated via GitHub Actions
+          - AAR Bot automation: cryptographically signed
+
+          Portal Features:
+          - Interactive AAR dashboard
+          - Trend analysis and metrics
+          - Searchable AAR archive
+          - Quality metrics tracking
 
           [skip ci]"
 
           # Push the branch
           git push origin "$BRANCH"
 
-          # Create pull request
+          # Create pull request with enhanced description
           gh pr create \
-            --title "DOCS(aar): automated AAR portal update" \
-            --body "Automated update of AAR portal with latest data.
+            --title "DOCS(aar): automated AAR portal update [GPG signed]" \
+            --body "Automated update of AAR portal with latest data - cryptographically signed by AAR Bot.
 
           **Changes:**
           - Regenerated HTML portal from AAR data
           - Updated trend analysis and metrics
-          - Automated via GitHub Actions
+          - GPG-signed commits for authenticity verification
 
-          This PR was automatically created by the AAR Portal workflow." \
-            --label "automated,docs,aar-system" \
+          **Security:**
+          - All commits cryptographically signed by DevOnboarder AAR Bot
+          - Signature verification available via GitHub commit interface
+          - Bot identity: $(git config user.name) <$(git config user.email)>
+
+          **Automation Details:**
+          - Generated via AAR Portal workflow
+          - Triggered by: ${{ github.event_name }}
+          - Branch: $BRANCH
+          - Commit verification: GPG signature required
+
+          This PR was automatically created by the AAR Portal workflow with GPG signing." \
+            --label "automated,docs,aar-system,gpg-signed" \
             --head "$BRANCH" \
             --base main
 
