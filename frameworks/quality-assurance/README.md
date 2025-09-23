@@ -138,21 +138,29 @@ DevOnboarder enforces comprehensive quality standards through 8 critical metrics
 
 ## Usage Patterns
 
+**CRITICAL**: All framework scripts must be executed from the repository root directory, not from within the framework directory. The scripts depend on relative paths that assume repository root execution context.
+
+```bash
+# ✅ CORRECT - Run from repository root
+cd /path/to/DevOnboarder
+bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
+
+# ❌ WRONG - Running from framework directory will fail
+cd frameworks/quality-assurance/quality-control
+bash qc_pre_push.sh  # Path resolution will fail
+```
+
 ### Comprehensive Quality Validation
 
 ```bash
-
 # Run complete quality validation suite
-
-frameworks/quality-assurance/quality-control/qc_pre_push.sh
+bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 # Validate documentation quality
-
-frameworks/quality-assurance/quality-control/qc_docs.sh
+bash frameworks/quality-assurance/quality-control/qc_docs.sh
 
 # Generate quality validation summary
-
-frameworks/quality-assurance/quality-control/validation_summary.sh
+bash frameworks/quality-assurance/quality-control/validation_summary.sh
 ```bash
 
 ## Standards Compliance Assessment
