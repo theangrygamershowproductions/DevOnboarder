@@ -150,6 +150,26 @@ cd frameworks/quality-assurance/quality-control
 bash qc_pre_push.sh  # Path resolution will fail
 ```
 
+### Backward Compatibility
+
+**All migrated scripts maintain backward compatibility through symlinks in the `scripts/` directory.** This ensures existing CI/CD pipelines, Docker containers, and other automation continue to work without modification.
+
+```bash
+# ✅ Existing CI/CD and automation continues to work
+./scripts/qc_pre_push.sh          # Symlink to framework version
+./scripts/run_tests.sh            # Symlink to framework version
+./scripts/fix_markdown_comprehensive.py  # Symlink to framework version
+
+# ✅ New framework-aware usage
+bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
+```
+
+**Benefits:**
+
+- **Zero Breaking Changes**: All existing automation continues to work
+- **Single Source of Truth**: Framework versions are authoritative
+- **Gradual Migration**: New code can use framework paths while legacy code continues working
+
 ### Comprehensive Quality Validation
 
 ```bash
