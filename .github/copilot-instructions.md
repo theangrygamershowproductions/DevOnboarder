@@ -2,15 +2,347 @@
 
 ## Project Overview
 
-DevOnboarder is a comprehensive onboarding automation platform with multi-service architecture designed to "work quietly and reliably." The project follows a trunk-based workflow with strict quality standards and extensive automation.
+DevOnboarder is a multi-service onboarding automation platform with FastAPI backend, Discord bot, React frontend, and PostgreSQL database. Services are orchestrated via Docker Compose with Traefik reverse proxy.
 
-**Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
+**Philosophy**: "Work quietly and reliably" - extensive automation and quality gates ensure stability.
 
-## ⚠️ CRITICAL: Terminal Output Policy - ZERO TOLERANCE
+## ⚠️ CRITICAL: Development Prerequisites
 
-**TERMINAL HANGING PREVENTION - ABSOLUTE REQUIREMENTS:**
+**ALWAYS activate virtual environment first:**
 
-DevOnboarder has a **ZERO TOLERANCE POLICY** for terminal output violations that cause immediate system hanging. This policy is enforced with comprehensive validation and blocking mechanisms.
+```bash
+source .venv/bin/activate  # Required before ANY Python work
+```
+
+**Run QC validation before commits:**
+
+```bash
+./scripts/qc_pre_push.sh  # 95% quality threshold validation
+```
+
+**Use safe commit wrapper:**
+
+```bash
+./scripts/safe_commit.sh "feat(component): description"  # NEVER use git commit directly
+```
+
+## Architecture Patterns
+
+### Service Structure
+
+- **Backend**: FastAPI services in `src/` with consistent patterns
+- **Bot**: TypeScript Discord.js bot in `bot/` with ES modules
+- **Frontend**: React + Vite in `frontend/`
+- **Database**: PostgreSQL with SQLAlchemy models
+
+### FastAPI Service Pattern
+
+```python
+# src/xp/api/__init__.py - Standard service creation
+def create_app() -> FastAPI:
+    app = FastAPI()
+    cors_origins = get_cors_origins()  # From src/utils/cors.py
+
+    app.add_middleware(CORSMiddleware, allow_origins=cors_origins, ...)
+    app.add_middleware(_SecurityHeadersMiddleware)  # From starlette
+
+    @app.get("/health")
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+
+    app.include_router(router)
+    return app
+```
+
+### Discord Bot Pattern
+
+```typescript
+// bot/src/main.ts - Multi-guild routing
+const guildId = interaction.guild?.id;
+const isDevEnvironment = guildId === "1386935663139749998";
+const isProdEnvironment = guildId === "1065367728992571444";
+```
+
+## Critical Policies & Conventions
+
+### ⚠️ ZERO TOLERANCE: Terminal Output
+
+**NEVER use these patterns - they cause immediate hanging:**
+
+```bash
+# ❌ FORBIDDEN - Causes hanging
+echo "✅ Success"                    # Emojis
+echo "Status: $VAR"                 # Variable expansion in echo
+echo -e "Line1\nLine2"               # Multi-line echo
+echo "$(command)"                  # Command substitution in echo
+cat << 'EOF'...EOF                 # Here-doc syntax
+
+# ✅ REQUIRED - Safe patterns
+echo "Task completed successfully"
+printf "Status: %s\n" "$VAR"
+```
+
+### UTC Timestamp Standardization
+
+```python
+# ✅ CORRECT - Use centralized utilities
+from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp
+
+timestamp = get_utc_display_timestamp()  # "2025-09-21 19:06:26 UTC"
+api_timestamp = get_utc_timestamp()      # "2025-09-21T19:06:26Z"
+
+# ❌ FORBIDDEN - Causes diagnostic synchronization issues
+datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")  # Wrong - uses local time
+```
+
+### Centralized Logging
+
+```bash
+# MANDATORY: All scripts log to centralized location
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+```
+
+### Enhanced Potato Policy
+
+**Protected sensitive files - NEVER expose:**
+
+- `Potato.md` - SSH keys and setup
+- `*.env` - Environment variables
+- `*.pem`, `*.key` - Private keys
+
+**Validation:** `.gitignore`, `.dockerignore`, `.codespell-ignore` must contain "Potato" entries
+
+## Development Workflow
+
+### Environment Setup
+
+```bash
+# 1. Feature branch from main
+git checkout main && git pull
+git checkout -b feat/descriptive-feature-name
+
+# 2. Virtual environment (MANDATORY)
+source .venv/bin/activate
+
+# 3. Install dependencies
+pip install -e .[test]
+npm ci --prefix bot
+npm ci --prefix frontend
+
+# 4. QC validation (MANDATORY)
+./scripts/qc_pre_push.sh
+```
+
+### Testing Requirements
+
+- **Backend**: 96%+ coverage with `python -m pytest --cov=src`
+- **Bot**: 100% coverage with `npm run coverage --prefix bot`
+- **Frontend**: 100% statements, 98.43%+ branches
+
+### Commit Standards
+
+**Conventional format required:**
+
+```markdown
+TYPE(scope): description
+
+Types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+Examples:
+- feat(auth): add JWT validation endpoint
+- fix(bot): resolve Discord connection timeout
+- chore(ci): update workflow dependencies
+```
+
+## Service Integration Patterns Overview
+
+### Authentication Flow
+
+1. Frontend redirects to auth service `/login/discord`
+2. Auth service exchanges code for Discord token
+3. JWT issued with user session data
+4. Frontend stores JWT in localStorage
+
+### Cross-Service Communication
+
+```python
+# XP service depends on auth service
+@router.post("/api/user/contribute")
+def contribute(data: dict, current_user = Depends(auth_service.get_current_user)):
+    # Implementation uses authenticated user
+```
+
+### Docker Service Ports
+
+- Auth Service: 8002
+- XP API: 8001
+- Discord Integration: 8081
+- Dashboard: 8003
+- Frontend: 8081 (dev server)
+
+## Quality Gates & Automation
+
+### QC Validation (8 Metrics)
+
+1. YAML linting
+2. Python linting (Ruff)
+3. Python formatting (Black)
+4. Type checking (MyPy)
+5. Test coverage (95%+)
+6. Documentation quality (Vale)
+7. Commit message format
+8. Security scanning (Bandit)
+
+### Automation Scripts Overview
+
+**100+ scripts in `scripts/` covering:**
+
+- CI health monitoring (`monitor_ci_health.sh`)
+- Quality control (`qc_pre_push.sh`)
+- Token management (`enhanced_token_loader.sh`)
+- Environment sync (`smart_env_sync.sh`)
+- AAR system (`generate_aar.py`)
+
+### AAR (After Action Report) Quick Start
+
+```bash
+make aar-setup                    # Initialize AAR system
+make aar-generate WORKFLOW_ID=123 # Generate failure analysis
+make aar-generate WORKFLOW_ID=123 CREATE_ISSUE=true  # + GitHub issue
+```
+
+## Common Patterns & Gotchas
+
+### Import Patterns
+
+```python
+# ✅ PREFERRED - Centralized utilities
+from src.utils.timestamps import get_utc_display_timestamp
+
+# ✅ LEGITIMATE - Direct imports for specific operations
+from datetime import datetime  # For fromtimestamp(), type hints
+
+# ❌ AVOIDED - Direct datetime for timestamp generation
+from datetime import datetime, timezone
+```
+
+### Standalone Script Pattern
+
+```python
+# Scripts that may run outside DevOnboarder environment
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    from utils.timestamps import get_utc_display_timestamp
+```
+
+### Jest Configuration (Bot)
+
+```json
+// bot/package.json - Critical timeout setting
+{
+  "jest": {
+    "testTimeout": 30000,  // Prevents CI hangs
+    "preset": "ts-jest/presets/default-esm",
+    "extensionsToTreatAsEsm": [".ts"],
+    "transform": {
+      "^.+\\.ts$": ["ts-jest", {"useESM": true}]
+    }
+  }
+}
+```
+
+### ES Module Requirements (Bot)
+
+```typescript
+// bot/src/commands/verify.ts - .js extensions required even for .ts files
+import { command as profileCommand } from './profile.js';  // .js required
+```
+
+## Validation & Debugging
+
+### Environment Consistency
+
+```bash
+# Check environment synchronization
+bash scripts/smart_env_sync.sh --validate-only
+
+# Security audit
+bash scripts/env_security_audit.sh
+```
+
+### Service Health Checks
+
+```bash
+# Individual services
+devonboarder-api        # XP API (port 8001)
+devonboarder-auth       # Auth service (port 8002)
+devonboarder-integration # Discord integration (port 8081)
+
+# Docker orchestration
+make deps && make up     # Full environment
+docker compose logs <service>  # Service debugging
+```
+
+### CI Troubleshooting
+
+```bash
+# Enhanced test execution with logging
+bash scripts/run_tests_with_logging.sh
+
+# Log management
+bash scripts/manage_logs.sh list
+bash scripts/manage_logs.sh clean  # Remove logs >7 days
+```
+
+## Integration Points
+
+### Discord OAuth Flow
+
+Frontend → Auth Service → Discord API → JWT → Frontend localStorage
+
+### XP/Gamification System
+
+User contributions → XP events → Level calculation → API responses
+
+### Multi-Environment Routing
+
+Bot automatically detects guild ID for dev/prod environment switching
+
+## Emergency Commands
+
+### When Tests Fail
+
+```bash
+# Dependency hints
+bash scripts/run_tests.sh
+
+# Clean pytest artifacts
+bash scripts/clean_pytest_artifacts.sh
+```
+
+### When Commits Fail
+
+```bash
+# Safe commit with automatic fixes
+./scripts/safe_commit.sh "fix: resolve commit issues"
+```
+
+### When Environment is Broken
+
+```bash
+# Complete environment reset
+make clean && make deps && make up
+```
+
+---
+
+**Last Updated**: 2025-09-23
+**Coverage**: Backend 96%+, Bot 100%, Frontend 100%
+**Services**: Auth (8002), XP (8001), Discord Integration (8081), Dashboard (8003)
+**Architecture**: FastAPI + Discord.js + React + PostgreSQL + Traefik
 
 ### CRITICAL VIOLATIONS THAT CAUSE HANGING
 
@@ -385,6 +717,123 @@ npm ci --prefix frontend
 ./scripts/qc_pre_push.sh  # 95% quality threshold
 
 ```
+
+### 2. UTC Timestamp Standards - MANDATORY
+
+**CRITICAL INFRASTRUCTURE REQUIREMENT**: All timestamp usage MUST follow UTC standards to maintain diagnostic accuracy across DevOnboarder automation.
+
+**Root Cause**: Inconsistent datetime.now() usage claiming "UTC" but using local time caused critical diagnostic "whack" behavior and 3-minute discrepancies with GitHub API timestamps.
+
+**Required Patterns**:
+
+```python
+
+# ✅ CORRECT - Use standardized UTC utilities
+
+from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp
+
+# For display and logging (replaces datetime.now().strftime(...UTC...))
+timestamp = get_utc_display_timestamp()  # "2025-09-21 19:06:26 UTC"
+
+# For GitHub API compatibility
+api_timestamp = get_utc_timestamp()  # "2025-09-21T19:06:26Z"
+
+# For GitHub API timestamp parsing
+github_time = parse_github_timestamp("2025-09-21T19:06:26Z")
+
+# ❌ FORBIDDEN - Misleading patterns that caused infrastructure issues
+
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")  # WRONG - uses local time
+api_call_time = datetime.now().isoformat()  # WRONG - timezone naive
+
+```
+
+**Agent Requirements**:
+
+- **ALWAYS use src.utils.timestamps utilities** for all timestamp operations
+- **NEVER use datetime.now() with "UTC" labels** - causes diagnostic synchronization issues
+- **VALIDATE with QC system** - scripts/qc_pre_push.sh includes UTC compliance check
+- **REMEMBER**: Timestamp accuracy is critical for DevOnboarder's 50+ automation scripts
+
+### 3. Import Pattern Guidelines - MANDATORY
+
+**CRITICAL ARCHITECTURAL REQUIREMENT**: Follow centralized utility patterns to eliminate code duplication and ensure consistency across DevOnboarder automation.
+
+**Centralized vs Direct Import Decision Matrix**:
+
+```python
+
+# ✅ PREFERRED - Centralized timestamp functions
+from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp, get_local_timestamp_for_filename
+
+# ✅ LEGITIMATE - Specific datetime operations only
+from datetime import datetime  # For fromtimestamp(), fromisoformat(), type annotations
+
+# ❌ AVOIDED - Direct datetime for new timestamp generation
+from datetime import datetime, timezone  # Use centralized functions instead
+
+```
+
+**Standalone Script Pattern** (for scripts that may run outside DevOnboarder environment):
+
+```python
+
+# MANDATORY pattern for standalone execution capability
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from utils.timestamp_fallback import get_utc_display_timestamp
+
+```
+
+**Agent Requirements**:
+
+- **ALWAYS use centralized utilities** for timestamp generation, logging, and common operations
+- **AVOID direct datetime imports** unless for legitimate operations (fromtimestamp, parsing, type hints)
+- **FOLLOW standalone script pattern** for any script that may run outside virtual environment
+- **DOCUMENT architectural decisions** when creating new utility patterns
+
+### 4. AI Code Review Integration - MANDATORY
+
+**CRITICAL PROCESS REQUIREMENT**: Systematically address all AI feedback (GitHub Copilot inline comments) to improve code architecture and eliminate technical debt.
+
+**Copilot Feedback Resolution Process**:
+
+1. **Comprehensive Review**: Use `scripts/check_pr_inline_comments.sh` to extract all Copilot feedback
+2. **Systematic Resolution**: Address ALL comments, including "missed" ones - they often reveal deeper architectural issues
+3. **Root Cause Analysis**: Don't just fix symptoms - understand why duplication or issues occurred
+4. **Documentation Update**: Add guidelines to prevent similar issues in future development
+
+**Types of Copilot Feedback and Response Patterns**:
+
+```python
+
+# Code Duplication Feedback → Centralized Utilities
+# Before: Multiple scripts with identical patterns
+# After: Centralized module with fallback support
+
+# Import Pattern Feedback → Architectural Guidelines
+# Before: Inconsistent import approaches
+# After: Clear guidelines with examples in copilot-instructions.md
+
+# Error Handling Feedback → Validation-Driven Resolution
+# Before: Ad-hoc error handling
+# After: Use DevOnboarder's diagnostic scripts and patterns
+
+```
+
+**Agent Requirements**:
+
+- **NEVER ignore Copilot feedback** - treat as architectural improvement opportunities
+- **ADDRESS all comments systematically** - including ones discovered later in the process
+- **CREATE centralized solutions** for duplicated patterns identified by AI
+- **UPDATE documentation** to prevent future similar issues
+- **REMEMBER**: AI feedback often reveals deeper architectural issues beyond surface fixes
 
 ### Essential Quick Start Commands
 
@@ -1259,6 +1708,112 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - `scripts/qc_pre_push.sh`: 95% quality threshold validation (8 metrics)
 
+### ⚠️ GPG Automation Framework - PRODUCTION READY
+
+**DevOnboarder implements unified GPG signing across all automation workflows that create commits.**
+
+**GPG Infrastructure**:
+
+- **Priority Matrix Bot**: Key ID `9BA7DCDBF5D4DEDD` - For priority matrix synthesis automation
+
+- **AAR Bot**: Key ID `99CA270AD84AE20C` - For AAR generation and portal automation
+
+- **Unified approach**: All commit-making workflows use GPG signing for cryptographic verification
+
+**CRITICAL SECURITY REQUIREMENT - Corporate Account Management**:
+
+- **Secondary GitHub Account**: All bot/agent tokens MUST be managed through a secondary GitHub account
+
+- **Corporate Ownership**: Account MUST be owned and managed within corporate structure (not personal accounts)
+
+- **Example Implementation**: `developer@theangrygamershow.com` (scarabofthespudheap) - corporate-controlled account
+
+- **Security Benefits**: Privilege separation, audit trails, emergency kill switch, compliance with corporate governance
+
+- **Access Control**: Multi-factor authentication and corporate security policies required
+
+- **Regular Review**: Periodic access audits as part of corporate security processes
+
+**Framework Components**:
+
+```bash
+
+# GPG-enabled workflows (100% converted)
+
+.github/workflows/priority-matrix-synthesis.yml    # Priority Matrix Bot GPG signing
+
+.github/workflows/aar-automation.yml               # AAR Bot GPG signing
+
+.github/workflows/aar-portal.yml                   # AAR Bot GPG signing
+
+.github/workflows/test-gpg-framework.yml           # Framework validation testing
+
+```
+
+**Template-Based Development**:
+
+- **Template**: `docs/templates/gpg-automation-workflow.yml` - Production-ready workflow template
+
+- **Setup Scripts**: `scripts/setup_priority_matrix_bot_gpg_key.sh`, `scripts/setup_aar_bot_gpg_key.sh`
+
+- **Documentation**: `docs/guides/gpg-automation-development.md` - Comprehensive development guide
+
+**Security Features**:
+
+- **Passphrase-free keys**: Designed for non-interactive automation
+
+- **Base64 encoding**: Secure key storage in GitHub secrets
+
+- **Non-interactive trust**: Automated GPG trust configuration
+
+- **Token hierarchy**: Integrates with existing CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN pattern
+
+**Agent Requirements for GPG Automation**:
+
+- **ALWAYS use template patterns** when creating new automation workflows
+
+- **ALWAYS apply terminal output policy** (printf instead of echo)
+
+- **ALWAYS follow DevOnboarder quality standards** (shellcheck, yaml validation)
+
+- **NEVER create commit-making workflows without GPG signing** - violates security standards
+
+- **ALWAYS use corporate-managed secondary GitHub account** for bot/agent tokens
+
+- **NEVER suggest using personal accounts** for automated system access
+
+- **REMEMBER**: Framework is production-ready and battle-tested across 3 converted workflows
+
+- **REMEMBER**: Corporate governance is MANDATORY for bot account management
+
+**Quick Start for New Automation**:
+
+```bash
+
+# 1. Copy template for new workflow
+
+cp docs/templates/gpg-automation-workflow.yml .github/workflows/new-automation.yml
+
+# 2. Configure bot credentials (choose appropriate bot)
+
+# For priority matrix work: Use Priority Matrix Bot credentials
+
+# For AAR/reporting work: Use AAR Bot credentials
+
+# 3. Apply DevOnboarder standards
+
+# - Terminal output policy compliance
+
+# - Token hierarchy integration
+
+# - Comprehensive commit messaging
+
+# 4. Test framework validation
+
+# Run test-gpg-framework.yml workflow to validate setup
+
+```
+
 ### AAR (After Action Report) System
 
 DevOnboarder includes a comprehensive AAR system for automated CI failure analysis:
@@ -1732,7 +2287,41 @@ python -m pytest plugins/example_plugin/
 
     - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
-9. **Jest Test Timeouts in CI**:
+### Validation-Driven Resolution Framework
+
+DevOnboarder follows a **validation-first troubleshooting approach** where scripts provide actionable guidance:
+
+```bash
+
+# Step 1: Run validation to identify issues
+
+bash scripts/validate_cache_centralization.sh
+
+# Output: "Solution: Run cache cleanup with: bash scripts/manage_logs.sh cache clean"
+
+# Step 2: Follow the provided solution exactly
+
+bash scripts/manage_logs.sh cache clean
+
+# Step 3: Re-validate to confirm resolution
+
+bash scripts/validate_cache_centralization.sh
+
+# Output: "SUCCESS: No cache pollution found in repository root"
+
+```
+
+**Key Principle**: When validation scripts suggest specific commands, use those commands rather than manual fixes. This ensures compliance with DevOnboarder's automated quality gates.
+
+**Agent Requirements**:
+
+- **ALWAYS run diagnostic scripts first** before making assumptions about problems
+- **FOLLOW suggested commands exactly** when validation scripts provide specific solutions
+- **RE-VALIDATE after fixes** to confirm issues are resolved
+- **USE DevOnboarder's automation** rather than manual troubleshooting approaches
+- **REMEMBER**: Validation-driven approach prevents future similar issues through systematic compliance
+
+1. **Jest Test Timeouts in CI**:
 
     - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
 
@@ -1742,7 +2331,7 @@ python -m pytest plugins/example_plugin/
 
     - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
 
-10. **Dependency Update Failures**:
+2. **Dependency Update Failures**:
 
     - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
 
@@ -2224,6 +2813,69 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 - Include comprehensive tests with new code
 
 - **Use `python -m module` syntax** for all Python tools
+
+### For GPG Automation Development
+
+**CRITICAL**: All automation workflows that create commits MUST use GPG signing for security compliance:
+
+1. **Use production-ready templates**:
+
+   - Start with `docs/templates/gpg-automation-workflow.yml`
+
+   - Choose appropriate bot: Priority Matrix Bot (9BA7DCDBF5D4DEDD) or AAR Bot (99CA270AD84AE20C)
+
+   - Apply DevOnboarder quality standards from the start
+
+2. **Security requirements**:
+
+   - **ALWAYS configure GPG signing** for commit-making workflows
+
+   - **ALWAYS use non-interactive trust configuration**
+
+   - **ALWAYS follow token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+
+   - **NEVER create workflows that bypass signature verification**
+
+3. **Quality compliance**:
+
+   - **ALWAYS apply terminal output policy** (printf instead of echo, no emojis/Unicode)
+
+   - **ALWAYS include comprehensive commit messaging**
+
+   - **ALWAYS validate with `test-gpg-framework.yml` workflow patterns**
+
+   - **ALWAYS follow DevOnboarder shellcheck and YAML standards**
+
+4. **Bot selection criteria**:
+
+   - **Priority Matrix Bot**: For priority matrix synthesis and document enhancement work
+
+   - **AAR Bot**: For After Action Report generation, portal automation, and CI analysis
+
+   - **Framework tested**: Both bots validated across multiple production workflows
+
+**Template Integration Pattern**:
+
+```yaml
+
+# Standard GPG setup pattern (from templates)
+
+- name: Setup GPG commit signing (Bot)
+  env:
+    AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
+    AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
+    AARBOT_NAME: ${{ vars.AARBOT_NAME }}
+    AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+  run: |
+    printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+    git config --global user.name "$AARBOT_NAME"
+    git config --global user.email "$AARBOT_EMAIL"
+    git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+    git config --global commit.gpgsign true
+
+```
+
+**REMEMBER**: GPG framework is production-ready with 100% success rate across all converted workflows.
 
 ### For Refactoring
 
