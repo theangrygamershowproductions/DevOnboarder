@@ -30,6 +30,21 @@ STANDALONE SCRIPT PATTERN:
 
     This pattern reduces code duplication while maintaining standalone capability.
     The timestamp_fallback module centralizes fallback implementations.
+
+DIRECT DATETIME IMPORT GUIDELINES:
+    Scripts should AVOID direct datetime imports for timestamp generation:
+    ❌ from datetime import datetime, timezone  # Avoid for new timestamp creation
+    ❌ datetime.now().strftime(format)  # Use get_utc_display_timestamp()
+    ❌ datetime.now(timezone.utc).isoformat()  # Use get_utc_timestamp()
+
+    Direct datetime imports are ONLY appropriate for:
+    ✅ Converting existing timestamps: datetime.fromtimestamp(file_stat.st_mtime)
+    ✅ Parsing timestamp strings: datetime.fromisoformat(timestamp_str)
+    ✅ Type annotations: def func() -> datetime
+    ✅ Datetime arithmetic: timedelta calculations
+
+    This approach eliminates the import pattern duplication that was causing
+    inconsistent timestamp generation across automation scripts.
 """
 
 from datetime import datetime, timezone
@@ -156,6 +171,31 @@ def calculate_duration_from_github(
 
     duration = end_time - start_time
     return duration.total_seconds()
+
+
+def get_local_timestamp_for_filename() -> str:
+    """
+    Get local timestamp suitable for filename generation.
+
+    Returns:
+        str: Local timestamp for filenames (e.g., "20250921_190626")
+
+    Use this for:
+        - Generating unique local filenames
+        - Local snapshot identification
+        - Filesystem organization
+
+    Note:
+        Uses local time intentionally for filename uniqueness on local machine.
+        This is NOT for UTC synchronization - use get_utc_timestamp() for that.
+
+    Example:
+        >>> timestamp = get_local_timestamp_for_filename()
+        >>> filename = f"snapshot_{timestamp}.json"
+        >>> print(filename)
+        "snapshot_20250921_190626.json"
+    """
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def validate_timestamp_format(timestamp: str) -> bool:

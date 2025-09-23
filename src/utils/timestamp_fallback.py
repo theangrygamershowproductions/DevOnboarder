@@ -46,3 +46,17 @@ def get_utc_timestamp() -> str:
         is available.
     """
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def get_local_timestamp_for_filename() -> str:
+    """
+    Get local timestamp suitable for filename generation.
+
+    Returns:
+        str: Local timestamp for filenames (e.g., "20250921_190626")
+
+    Note:
+        Uses local time intentionally for filename uniqueness on local machine.
+        This is NOT for UTC synchronization - use get_utc_timestamp() for that.
+    """
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
