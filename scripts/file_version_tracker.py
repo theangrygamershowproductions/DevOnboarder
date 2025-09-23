@@ -10,9 +10,35 @@ import hashlib
 import json
 import subprocess  # noqa: S404
 import sys
-from datetime import datetime
+from datetime import datetime  # For file timestamp conversion only
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities
+# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization
+# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+# Date: 2025-09-21
+try:
+    from src.utils.timestamps import (
+        get_utc_display_timestamp,
+        get_utc_timestamp,
+        get_local_timestamp_for_filename,
+    )
+except ImportError:
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import (
+            get_utc_display_timestamp,
+            get_utc_timestamp,
+            get_local_timestamp_for_filename,
+        )
+    except ImportError:
+        from utils.timestamp_fallback import (
+            get_utc_display_timestamp,
+            get_utc_timestamp,
+            get_local_timestamp_for_filename,
+        )
 
 
 class FileVersionTracker:
@@ -115,7 +141,9 @@ class FileVersionTracker:
             ]
 
         current_snapshot = {
-            "timestamp": datetime.now().isoformat(),
+            # INFRASTRUCTURE CHANGE: Use centralized UTC timestamp for accuracy
+            # Purpose: Maintain consistency with GitHub API timestamp sync fix
+            "timestamp": get_utc_timestamp(),
             "files": {},
             "git_info": self._get_git_info(),
         }
@@ -240,7 +268,7 @@ class FileVersionTracker:
             Snapshot ID.
         """
         snapshot = self.scan_workspace_files()
-        snapshot_id = f"{snapshot_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        snapshot_id = f"{snapshot_name}_{get_local_timestamp_for_filename()}"
 
         self.version_data["snapshots"][snapshot_id] = snapshot
         self._save_version_data()
@@ -409,7 +437,12 @@ class FileVersionTracker:
         report_lines = [
             "# File Change Analysis Report",
             "",
-            f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}",
+            # INFRASTRUCTURE CHANGE: Fixed critical timestamp mislabeling issue
+            # INFRASTRUCTURE CHANGE: Was: datetime.now() with UTC label
+            # but used local time
+            # Now: get_utc_display_timestamp() - actual UTC for GitHub API sync
+            # Evidence: 3-minute discrepancies in diagnostic timeline analysis
+            f"**Generated**: {get_utc_display_timestamp()}",
             "",
         ]
 

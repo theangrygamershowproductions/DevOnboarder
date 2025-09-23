@@ -22,7 +22,7 @@ Create a GitHub machine user account specifically for the Priority Matrix Bot:
 
 - **Recommended username**: `tags-priority-matrix-bot`
 
-- **Email**: `bot+priority-matrix@theangrygamershow.com`
+- **Email**: `priority-matrix@theangrygamershow.com`
 
 - **Purpose**: Dedicated service account for automated Priority Matrix enhancements
 
@@ -34,7 +34,7 @@ On a trusted, secure machine, generate a dedicated GPG key:
 
 # Generate RSA 4096-bit key with 2-year expiry
 
-gpg --quick-generate-key "Priority Matrix Bot <bot+priority-matrix@theangrygamershow.com>" rsa4096 sign 2y
+gpg --quick-generate-key "Priority Matrix Bot <priority-matrix@theangrygamershow.com>" rsa4096 sign 2y
 
 # List keys to get the key ID
 
@@ -87,7 +87,7 @@ Add these secrets to your repository (**Settings → Secrets and variables → A
 | `PMBOT_GPG_PASSPHRASE` | GPG key passphrase | `secure-randomly-generated-passphrase` |
 | `PMBOT_GPG_KEYID` | GPG key ID (long format) | `ABCDEF1234567890` |
 | `PMBOT_NAME` | Bot display name for commits | `Priority Matrix Bot` |
-| `PMBOT_EMAIL` | Bot email for commits | `bot+priority-matrix@theangrygamershow.com` |
+| `PMBOT_EMAIL` | Bot email for commits | `priority-matrix@theangrygamershow.com` |
 
 ### Optional Authentication (Recommended)
 
