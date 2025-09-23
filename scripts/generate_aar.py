@@ -15,6 +15,21 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities
+# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization
+# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+# Date: 2025-09-21
+try:
+    from src.utils.timestamps import get_utc_display_timestamp
+except ImportError:
+    # Add repository root to path for standalone execution
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    try:
+        from utils.timestamps import get_utc_display_timestamp
+    except ImportError:
+        from utils.timestamp_fallback import get_utc_display_timestamp
+
+
 # Import DevOnboarder-compliant token management
 from aar_security import AARTokenManager
 
@@ -408,7 +423,12 @@ class AARGenerator:
         self.logger.info("Generating AAR report")
 
         # Create AAR report content
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+        # INFRASTRUCTURE CHANGE: Use proper UTC timestamp instead of local time
+        # INFRASTRUCTURE CHANGE: Before: datetime.now() with UTC label
+        #         Claims UTC but uses local time
+        # After: get_utc_display_timestamp()  # Actually uses UTC
+        # Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
+        timestamp = get_utc_display_timestamp()
 
         report_content = f"""# After Action Report (AAR)
 

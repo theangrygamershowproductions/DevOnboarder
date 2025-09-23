@@ -1,4 +1,7 @@
-name: Extract Bot SSH Public Key
+name: Extract Bot SSH Public Key (DEPRECATED - Use GPG Signing)
+# DEPRECATED: This workflow is no longer needed as DevOnboarder has migrated to unified GPG signing.
+# See: scripts/setup_bot_gpg_key.sh for the new GPG-based automation setup.
+# Priority Matrix Bot now uses GPG signing instead of SSH for consistent signature verification.
 
 on:
   workflow_dispatch:
@@ -24,16 +27,14 @@ jobs:
           # Generate public key
           ssh-keygen -y -f ~/.ssh/ci_signing_key > ~/.ssh/ci_signing_key.pub
 
-          echo "Bot SSH Public Key (copy this to GitHub):"
+          echo "WARNING: DEPRECATED - SSH signing has been replaced with GPG signing"
           echo "=============================================="
+          echo "Bot SSH Public Key (LEGACY - NO LONGER USED):"
           cat ~/.ssh/ci_signing_key.pub
           echo "=============================================="
           echo ""
-          echo "Steps to fix verification:"
-          echo "1. Copy the public key above"
-          echo "2. Go to: https://github.com/settings/keys"
-          echo "3. Click 'New SSH key'"
-          echo "4. Title: 'Priority Matrix Bot Signing Key'"
-          echo "5. Key type: 'Signing Key'"
-          echo "6. Paste the public key"
-          echo "7. Click 'Add SSH key'"
+          echo "MIGRATION: Use GPG signing instead:"
+          echo "1. Run: bash scripts/setup_bot_gpg_key.sh"
+          echo "2. GPG keys are now managed via GitHub secrets"
+          echo "3. Priority Matrix Bot uses unified GPG signing"
+          echo "4. See GitHub issue #1575 for migration details"
