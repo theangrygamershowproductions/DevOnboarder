@@ -179,7 +179,6 @@ bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 ### Comprehensive Quality Validation
 
 ```bash
-
 # Run complete quality validation suite
 
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
@@ -187,8 +186,6 @@ bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 # Validate documentation quality
 
 # Run quality control checks
-
-```bash
 
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
@@ -199,23 +196,19 @@ bash frameworks/quality-assurance/quality-control/qc_docs.sh
 # Generate quality validation summary
 
 bash frameworks/quality-assurance/quality-control/validation_summary.sh
-
-```bash
+```
 
 ## Standards Compliance Assessment
 
 ```bash
-
 # Check development standards compliance
 
 frameworks/quality-assurance/code-standards/standards_enforcement_assessment.sh
-
-```bash
+```
 
 ## Test Execution with Quality Assurance
 
 ```bash
-
 # Run comprehensive test suite
 
 frameworks/quality-assurance/testing/run_tests.sh
@@ -223,18 +216,15 @@ frameworks/quality-assurance/testing/run_tests.sh
 # Run tests with enhanced logging for CI troubleshooting
 
 frameworks/quality-assurance/testing/run_tests_with_logging.sh
-
-```bash
+```
 
 ## Automated Formatting and Quality Fixes
 
 ```bash
-
 # Fix markdown formatting and compliance issues
 
 python frameworks/quality-assurance/formatting/fix_markdown_comprehensive.py
-
-```bash
+```
 
 ## Quality Standards & Policies
 
