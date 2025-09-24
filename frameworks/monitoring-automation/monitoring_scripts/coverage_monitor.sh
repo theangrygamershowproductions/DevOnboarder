@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 # Coverage monitoring script to ensure 95% threshold is maintained
+
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 echo "INFO: DevOnboarder Coverage Monitor"

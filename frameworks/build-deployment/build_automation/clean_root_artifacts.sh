@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 # Establish PROJECT_ROOT for reliable operation
@@ -11,9 +17,6 @@ if [ -z "${PROJECT_ROOT:-}" ] || [ ! -d "$PROJECT_ROOT" ]; then
     exit 1
 fi
 cd "$PROJECT_ROOT"
-
-# Create logs directory for centralized output
-mkdir -p logs/ci
 
 # Clean root artifacts safely
 find . -maxdepth 1 \( \

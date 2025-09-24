@@ -2,6 +2,11 @@
 # Check for automerge hanging issues
 # Usage: bash scripts/check_automerge_health.sh
 
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 # Color output functions

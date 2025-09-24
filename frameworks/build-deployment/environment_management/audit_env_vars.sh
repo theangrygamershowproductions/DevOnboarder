@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 # Gather required variable names from example files

@@ -2,6 +2,11 @@
 # Comprehensive Token Health Check System
 # Tests all 11 tokens from Token Architecture v2.1 for proper functionality
 
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit

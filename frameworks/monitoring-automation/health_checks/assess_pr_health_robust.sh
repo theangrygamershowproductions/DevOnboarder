@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Robust PR Health Assessment - Fixes terminal communication and JSON issues
 
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 PR_NUMBER="$1"

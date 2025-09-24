@@ -2,6 +2,11 @@
 # CI Failure Pattern Recognition Agent
 # Analyzes CI failures and categorizes them for better decision making
 
+# Centralized logging for troubleshooting and repository health
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 set -euo pipefail
 
 # Load tokens using Token Architecture v2.1 with developer guidance
