@@ -967,3 +967,17 @@ jobs:
             - name: Root Artifact Guard
               if: always()
               run: bash scripts/enforce_output_location.sh
+    frameworks-validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v5
+            - run: chmod +x scripts/audit_frameworks.sh
+            - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
+            - name: Fail on mismatches
+              run: |
+                  grep -q 'X' frameworks_audit.md && { echo "Framework mismatches found"; cat frameworks_audit.md; exit 1; } || true
+            - name: Attach audit
+              uses: actions/upload-artifact@v4
+              with:
+                  name: frameworks-audit
+                  path: frameworks_audit.md
