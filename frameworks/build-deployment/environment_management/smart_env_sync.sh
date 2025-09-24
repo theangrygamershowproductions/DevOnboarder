@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# File: frameworks/build_deployment/environment_management/smart_env_sync.sh - Variables that should remain environment-specific (never synchronized)
+# File: frameworks/build-deployment/environment_management/smart_env_sync.sh - Variables that should remain environment-specific (never synchronized)
 ENVIRONMENT_SPECIFIC_VARS=(
     "JWT_SECRET_KEY"
     "AUTH_SECRET_KEY"
