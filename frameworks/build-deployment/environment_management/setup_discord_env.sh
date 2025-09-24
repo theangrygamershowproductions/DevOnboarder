@@ -3,7 +3,12 @@
 # Description: Setup Discord multi-environment routing for DevOnboarder
 set -euo pipefail
 
-echo "🎮 DevOnboarder Discord Environment Setup"
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "DevOnboarder Discord Environment Setup"
 echo "========================================="
 
 # Configuration
@@ -18,7 +23,7 @@ DISCORD_PROD_GUILD_ID="1065367728992571444" # TAGS: C2C
 DISCORD_DEV_WEBHOOK="https://discord.com/api/webhooks/1364500164127100969/i_drFE3cZypXFW6740J21Ii3dMZnJdgZ8qov5XtKDGTzyBg37s2pXu4fMdxkIcLY2Ej1/slack"
 DISCORD_PROD_WEBHOOK="https://discord.com/api/webhooks/1364501968764276779/_y22MC-c8rwyl3Hpox52ylog2UwWAOURuNKapC0Eq1PlV5yIn8GJl89nkPr9J70Cy4UD/slack"
 
-echo "🔧 Environment: $DEPLOY_ENV"
+echo "Environment: $DEPLOY_ENV"
 echo ""
 
 # Function to create environment file
@@ -28,7 +33,7 @@ create_env_file() {
     local webhook_url="$3"
     local env_file="${BOT_DIR}/.env.${env_name}"
 
-    echo "📝 Creating $env_file..."
+    echo "Creating $env_file..."
 
     cat > "$env_file" << EOF
 # Discord Bot Configuration - $env_name Environment
@@ -66,28 +71,28 @@ DISCORD_DEV_GUILD_ID=$DISCORD_DEV_GUILD_ID
 DISCORD_PROD_GUILD_ID=$DISCORD_PROD_GUILD_ID
 EOF
 
-    echo "✅ Environment file created: $env_file"
+    echo "Environment file created: $env_file"
 }
 
 # Function to setup bot configuration
 setup_bot_config() {
-    echo "🤖 Setting up bot configuration..."
+    echo "Setting up bot configuration..."
 
     # Ensure bot directory exists
     if [[ ! -d "$BOT_DIR" ]]; then
-        echo "❌ Bot directory not found: $BOT_DIR"
+        echo "Bot directory not found: $BOT_DIR"
         exit 1
     fi
 
     # Create environment-specific configurations
     if [[ "$DEPLOY_ENV" == "dev" ]]; then
         create_env_file "dev" "$DISCORD_DEV_GUILD_ID" "$DISCORD_DEV_WEBHOOK"
-        echo "🔗 Development Discord Server: TAGS: DevOnboarder ($DISCORD_DEV_GUILD_ID)"
+        echo "Development Discord Server: TAGS: DevOnboarder ($DISCORD_DEV_GUILD_ID)"
     elif [[ "$DEPLOY_ENV" == "prod" ]]; then
         create_env_file "prod" "$DISCORD_PROD_GUILD_ID" "$DISCORD_PROD_WEBHOOK"
-        echo "🔗 Production Discord Server: TAGS: C2C ($DISCORD_PROD_GUILD_ID)"
+        echo "Production Discord Server: TAGS: C2C ($DISCORD_PROD_GUILD_ID)"
     else
-        echo "⚠️  Unknown environment: $DEPLOY_ENV"
+        echo "Unknown environment: $DEPLOY_ENV"
         echo "   Supported environments: dev, prod"
         echo "   Creating both configurations..."
         create_env_file "dev" "$DISCORD_DEV_GUILD_ID" "$DISCORD_DEV_WEBHOOK"
@@ -97,19 +102,19 @@ setup_bot_config() {
     # Create main .env file pointing to current environment
     local main_env_file="${BOT_DIR}/.env"
     if [[ "$DEPLOY_ENV" == "dev" || "$DEPLOY_ENV" == "prod" ]]; then
-        echo "🔗 Creating main .env file for $DEPLOY_ENV environment..."
+        echo "Creating main .env file for $DEPLOY_ENV environment..."
         cp "${BOT_DIR}/.env.${DEPLOY_ENV}" "$main_env_file"
-        echo "✅ Main .env file updated for $DEPLOY_ENV environment"
+        echo "Main .env file updated for $DEPLOY_ENV environment"
     fi
 }
 
 # Function to validate configuration
 validate_config() {
-    echo "🔍 Validating Discord configuration..."
+    echo "Validating Discord configuration..."
 
     local env_file="${BOT_DIR}/.env"
     if [[ ! -f "$env_file" ]]; then
-        echo "❌ Main .env file not found: $env_file"
+        echo "Main .env file not found: $env_file"
         return 1
     fi
 
@@ -124,15 +129,15 @@ validate_config() {
     done
 
     if [[ ${#missing_vars[@]} -gt 0 ]]; then
-        echo "❌ Missing required variables: ${missing_vars[*]}"
+        echo "Missing required variables: ${missing_vars[*]}"
         return 1
     fi
 
-    echo "✅ Configuration validation passed"
+    echo "Configuration validation passed"
 
     # Display current configuration
     echo ""
-    echo "📋 Current Configuration:"
+    echo "Current Configuration:"
     echo "   Environment: $(grep '^ENVIRONMENT=' "$env_file" | cut -d'=' -f2)"
     echo "   Guild ID: $(grep '^DISCORD_GUILD_ID=' "$env_file" | cut -d'=' -f2)"
     echo "   API Base URL: $(grep '^API_BASE_URL=' "$env_file" | cut -d'=' -f2)"
@@ -141,7 +146,7 @@ validate_config() {
 
 # Function to setup Discord role mapping
 setup_role_mapping() {
-    echo "🎭 Setting up Discord role mapping..."
+    echo "Setting up Discord role mapping..."
 
     # Create role mapping configuration
     local roles_config="${BOT_DIR}/config/roles.json"
@@ -192,19 +197,19 @@ setup_role_mapping() {
 }
 EOF
 
-    echo "✅ Role mapping configuration created: $roles_config"
+    echo "Role mapping configuration created: $roles_config"
 }
 
 # Function to create deployment scripts
 create_deployment_scripts() {
-    echo "🚀 Creating deployment scripts..."
+    echo "Creating deployment scripts..."
 
     # Bot start script for development
     cat > "${BOT_DIR}/start-dev.sh" << 'EOF'
 #!/bin/bash
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Development Environment"
+echo "Starting Discord Bot - Development Environment"
 echo "================================================"
 
 # Load development environment
@@ -213,7 +218,7 @@ export ENVIRONMENT=dev
 
 # Check if .env.dev exists
 if [[ ! -f ".env.dev" ]]; then
-    echo "❌ Development environment file not found: .env.dev"
+    echo "Development environment file not found: .env.dev"
     echo "   Run: bash ../scripts/setup_discord_env.sh dev"
     exit 1
 fi
@@ -223,17 +228,17 @@ cp .env.dev .env
 
 # Install bot dependencies if needed
 if [[ ! -d "node_modules" ]]; then
-    echo "📦 Installing bot dependencies..."
+    echo "Installing bot dependencies..."
     npm install
 fi
 
 # Build if needed
 if [[ ! -d "dist" ]] || [[ "src/" -nt "dist/" ]]; then
-    echo "🔨 Building bot..."
+    echo "Building bot..."
     npm run build
 fi
 
-echo "🚀 Starting bot in development mode..."
+echo "Starting bot in development mode..."
 npm start
 EOF
 
@@ -242,7 +247,7 @@ EOF
 #!/bin/bash
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Production Environment"
+echo "Starting Discord Bot - Production Environment"
 echo "==============================================="
 
 # Load production environment
@@ -251,7 +256,7 @@ export ENVIRONMENT=prod
 
 # Check if .env.prod exists
 if [[ ! -f ".env.prod" ]]; then
-    echo "❌ Production environment file not found: .env.prod"
+    echo "Production environment file not found: .env.prod"
     echo "   Run: bash ../scripts/setup_discord_env.sh prod"
     exit 1
 fi
@@ -265,7 +270,7 @@ npm ci --only=production
 # Build for production
 npm run build
 
-echo "🚀 Starting bot in production mode..."
+echo "Starting bot in production mode..."
 npm start
 EOF
 
@@ -273,23 +278,23 @@ EOF
     chmod +x "${BOT_DIR}/start-dev.sh"
     chmod +x "${BOT_DIR}/start-prod.sh"
 
-    echo "✅ Deployment scripts created:"
+    echo "Deployment scripts created:"
     echo "   ${BOT_DIR}/start-dev.sh"
     echo "   ${BOT_DIR}/start-prod.sh"
 }
 
 # Function to test Discord connection
 test_discord_connection() {
-    echo "🧪 Testing Discord configuration..."
+    echo "Testing Discord configuration..."
 
     # Check if bot token is configured
     local env_file="${BOT_DIR}/.env"
     if grep -q "DISCORD_BOT_TOKEN=changeme" "$env_file"; then
-        echo "⚠️  Discord bot token not configured"
+        echo "Discord bot token not configured"
         echo "   Please set DISCORD_BOT_TOKEN in $env_file"
         echo "   Or set environment variable: export DISCORD_BOT_TOKEN=your_token_here"
     else
-        echo "✅ Discord bot token appears to be configured"
+        echo "Discord bot token appears to be configured"
     fi
 
     # Check webhook connectivity (if in live mode)
@@ -298,25 +303,25 @@ test_discord_connection() {
         webhook_url=$(grep '^DISCORD_WEBHOOK_URL=' "$env_file" | cut -d'=' -f2)
 
         if [[ -n "$webhook_url" ]] && [[ "$webhook_url" != "changeme" ]]; then
-            echo "🔗 Testing webhook connectivity..."
+            echo "Testing webhook connectivity..."
             if curl -s -o /dev/null -w "%{http_code}" "$webhook_url" | grep -q "2[0-9][0-9]"; then
-                echo "✅ Webhook connectivity test passed"
+                echo "Webhook connectivity test passed"
             else
-                echo "⚠️  Webhook connectivity test failed (may be expected in dry-run mode)"
+                echo "Webhook connectivity test failed (may be expected in dry-run mode)"
             fi
         fi
     else
-        echo "🧪 Skipping webhook test (dry-run mode active)"
+        echo "Skipping webhook test (dry-run mode active)"
     fi
 }
 
 # Function to display setup summary
 display_summary() {
     echo ""
-    echo "🎯 Discord Environment Setup Complete!"
+    echo "Discord Environment Setup Complete!"
     echo "======================================"
     echo ""
-    echo "📋 Configuration Summary:"
+    echo "Configuration Summary:"
     echo "   Environment: $DEPLOY_ENV"
 
     if [[ "$DEPLOY_ENV" == "dev" ]]; then
@@ -334,7 +339,7 @@ display_summary() {
     fi
 
     echo ""
-    echo "🔧 Next Steps:"
+    echo "Next Steps:"
     echo "   1. Set your Discord bot token:"
     echo "      export DISCORD_BOT_TOKEN=your_token_here"
     echo ""
@@ -345,16 +350,16 @@ display_summary() {
     echo "      export DISCORD_BOT_READY=true"
     echo "      export LIVE_TRIGGERS_ENABLED=true"
     echo ""
-    echo "🔗 Integration Status:"
-    echo "   - Environment Setup: ✅ Complete"
-    echo "   - Role Mapping: ✅ Configured"
-    echo "   - Deployment Scripts: ✅ Ready"
+    echo "Integration Status:"
+    echo "   - Environment Setup: Complete"
+    echo "   - Role Mapping: Configured"
+    echo "   - Deployment Scripts: Ready"
     echo "   - Bot Connection: ⏸️ Awaiting token configuration"
 }
 
 # Main execution
 main() {
-    echo "🎮 Starting Discord environment setup for: $DEPLOY_ENV"
+    echo "Starting Discord environment setup for: $DEPLOY_ENV"
     echo ""
 
     # Execute setup steps
@@ -366,7 +371,7 @@ main() {
     display_summary
 
     echo ""
-    echo "✅ Discord environment setup completed successfully!"
+    echo "Discord environment setup completed successfully!"
 }
 
 # Execute main function

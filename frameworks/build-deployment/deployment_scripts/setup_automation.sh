@@ -3,16 +3,21 @@
 
 set -euo pipefail
 
-echo "🤖 Setting up PR Automation Framework"
-echo "====================================="
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "Setting up PR Automation Framework"
+echo "==================================="
 
 # Create required directories
 mkdir -p {logs,reports,tmp}
-echo "✅ Created directories: logs, reports, tmp"
+echo "Created directories: logs, reports, tmp"
 
 # Make all scripts executable
 find scripts/ -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
-echo "✅ Made all scripts executable"
+echo "Made all scripts executable"
 
 # Create automation configuration
 cat > .automation-config.json << 'EOF'
@@ -36,7 +41,7 @@ cat > .automation-config.json << 'EOF'
   }
 }
 EOF
-echo "✅ Created automation configuration"
+echo "Created automation configuration"
 
 # Create automation alias
 cat > scripts/pr-auto << 'EOF'
@@ -45,34 +50,34 @@ cat > scripts/pr-auto << 'EOF'
 bash scripts/automate_pr_process.sh "$@"
 EOF
 chmod +x scripts/pr-auto
-echo "✅ Created pr-auto alias"
+echo "Created pr-auto alias"
 
 # Test basic dependencies
 echo ""
-echo "🔍 Checking dependencies..."
+echo "Checking dependencies..."
 
 if command -v gh >/dev/null 2>&1; then
-    echo "✅ GitHub CLI: Available"
+    echo "GitHub CLI: Available"
 else
-    echo "⚠️  GitHub CLI: Not found - may need installation"
+    echo "GitHub CLI: Not found - may need installation"
 fi
 
 if command -v jq >/dev/null 2>&1; then
-    echo "✅ jq: Available"
+    echo "jq: Available"
 else
-    echo "⚠️  jq: Not found - may need installation"
+    echo "jq: Not found - may need installation"
 fi
 
 if command -v markdownlint >/dev/null 2>&1; then
-    echo "✅ markdownlint: Available"
+    echo "markdownlint: Available"
 else
-    echo "⚠️  markdownlint: Not found - formatting fixes will be skipped"
+    echo "markdownlint: Not found - formatting fixes will be skipped"
 fi
 
 echo ""
-echo "✅ PR Automation Framework setup complete!"
+echo "PR Automation Framework setup complete!"
 echo ""
-echo "🚀 Usage Examples:"
+echo "Usage Examples:"
 echo "  # Analyze PR #966"
 echo "  bash scripts/automate_pr_process.sh 966 analyze"
 echo ""

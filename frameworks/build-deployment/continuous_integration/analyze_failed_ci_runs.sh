@@ -10,29 +10,29 @@ set -euo pipefail
 # Enhanced CI Failure Analysis Tool
 # Uses --status failure filter to focus on relevant failures only
 
-echo "🔍 Analyzing Failed CI Runs (conclusion: FAILURE)"
+echo "Analyzing Failed CI Runs (conclusion: FAILURE)"
 echo "=================================================="
 echo ""
 
 # Check GitHub CLI availability
 if ! command -v gh >/dev/null 2>&1; then
-    echo "❌ GitHub CLI not available"
+    echo "GitHub CLI not available"
     echo "   Install with: https://cli.github.com/"
     exit 1
 fi
 
 # Get failed workflow runs with detailed information
-echo "📊 Fetching recent failed workflow runs..."
+echo "Fetching recent failed workflow runs..."
 if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,createdAt,url,displayTitle,event --status failure 2>/dev/null); then
-    echo "✅ Retrieved failed run data"
+    echo "Retrieved failed run data"
 
     # Count failed runs
     total_failed=$(echo "$failed_runs" | jq length)
-    echo "📈 Total failed runs (last 15): $total_failed"
+    echo "Total failed runs (last 15): $total_failed"
     echo ""
 
     if [ "$total_failed" -gt 0 ]; then
-        echo "🚨 Recent Failed Runs:"
+        echo "Recent Failed Runs:"
         echo ""
 
         # Group by workflow name for better analysis
@@ -57,7 +57,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         '
 
         echo ""
-        echo "📋 Workflow Failure Summary:"
+        echo "Workflow Failure Summary:"
         echo "$failed_runs" | jq -r '
             group_by(.workflowName) |
             map({workflow: .[0].workflowName, count: length}) |
@@ -67,7 +67,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         '
 
         echo ""
-        echo "🔧 Quick Analysis Commands:"
+        echo "Quick Analysis Commands:"
         echo ""
         echo "# Download logs from most recent failure:"
         latest_run_id=$(echo "$failed_runs" | jq -r '.[0].url' | grep -o '[0-9]*$' || echo "")
@@ -82,19 +82,19 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         echo "gh run list -w 'workflow-name' --status failure"
 
     else
-        echo "🎉 No recent failed runs found!"
+        echo "No recent failed runs found!"
         echo "   All workflows are currently passing."
     fi
 
 else
-    echo "❌ Failed to fetch workflow run data"
+    echo "Failed to fetch workflow run data"
     echo "   Check GitHub CLI authentication: gh auth status"
     exit 1
 fi
 
 echo ""
 echo "=================================================================="
-echo "💡 Tip: Use this script to focus only on failed runs and avoid"
+echo "Tip: Use this script to focus only on failed runs and avoid"
 echo "   analyzing successful or pending runs that aren't relevant"
 echo "   for troubleshooting."
 echo "=================================================================="

@@ -2,6 +2,11 @@
 # Poll a URL until it returns success or retry limit is reached
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 URL=${1:?"usage: $0 URL [retries] [sleep] [service]"}
 RETRIES=${2:-30}
 SLEEP=${3:-2}

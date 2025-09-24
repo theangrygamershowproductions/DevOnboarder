@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Configuration
-LOG_FILE="logs/ci_recovery_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
 readonly LOG_FILE
 readonly RECOVERY_REPORT="milestones/2025-09/2025-09-09-ci-recovery-report.md"
 
@@ -52,10 +52,10 @@ echo "Total failures today: $TOTAL_FAILURES"
 echo "Recent successes (last 15 min): $RECENT_SUCCESS_COUNT"
 
 if [[ $RECENT_SUCCESS_COUNT -gt 5 ]]; then
-    echo "✅ CI Health: RECOVERED - Recent runs succeeding"
+    echo "CI Health: RECOVERED - Recent runs succeeding"
     RECOVERY_STATUS="RECOVERED"
 else
-    echo "⚠️  CI Health: UNSTABLE - Issues may persist"
+    echo "CI Health: UNSTABLE - Issues may persist"
     RECOVERY_STATUS="UNSTABLE"
 fi
 
@@ -126,7 +126,7 @@ The DevOnboarder CI system has successfully recovered from token propagation del
 All workflows are now operating normally with clean status indicators.
 EOF
 
-echo "✅ Recovery report generated: $RECOVERY_REPORT"
+echo "Recovery report generated: $RECOVERY_REPORT"
 
 # Step 3: Validation Test
 echo ""
@@ -135,9 +135,9 @@ echo "=========================="
 
 echo "Testing workflow dispatch capability..."
 if gh workflow list --limit 1 >/dev/null 2>&1; then
-    echo "✅ GitHub API access: WORKING"
+    echo "GitHub API access: WORKING"
 else
-    echo "❌ GitHub API access: FAILED"
+    echo "GitHub API access: FAILED"
 fi
 
 # Step 4: Summary
@@ -152,10 +152,10 @@ echo "Timestamp: $(date)"
 echo ""
 
 if [[ "$RECOVERY_STATUS" == "RECOVERED" ]]; then
-    echo "🎉 SUCCESS: DevOnboarder CI infrastructure is healthy!"
+    echo "SUCCESS: DevOnboarder CI infrastructure is healthy!"
     echo "   • Clean status indicators restored"
     echo "   • Professional reputation maintained"
     echo "   • All systems operating normally"
 else
-    echo "⚠️  PARTIAL: Some issues may remain - manual investigation recommended"
+    echo "PARTIAL: Some issues may remain - manual investigation recommended"
 fi

@@ -2,6 +2,11 @@
 # Log management utility for DevOnboarder
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 LOGS_DIR="logs"
 DAYS_TO_KEEP=7
 DRY_RUN=false
@@ -95,7 +100,7 @@ list_logs() {
 }
 
 clean_pytest_artifacts() {
-    echo "🧪 Cleaning pytest temporary directories and test artifacts..."
+    echo "Cleaning pytest temporary directories and test artifacts..."
 
     if [ ! -d "$LOGS_DIR" ]; then
         return 0
@@ -105,7 +110,7 @@ clean_pytest_artifacts() {
     if [ -d "$LOGS_DIR/pytest-of-creesey" ]; then
         echo "   Removing: $LOGS_DIR/pytest-of-creesey/"
         rm -rf "$LOGS_DIR/pytest-of-creesey"
-        echo "   ✅ pytest-of-creesey cleaned"
+        echo "   pytest-of-creesey cleaned"
     fi
 
     # Find pytest temporary directories (pytest-of-*)
@@ -119,12 +124,12 @@ clean_pytest_artifacts() {
 
         if [ "$DRY_RUN" = "false" ]; then
             echo "$pytest_dirs" | xargs rm -rf
-            echo "   ✅ Cleaned $(echo "$pytest_dirs" | wc -l) pytest directories"
+            echo "   Cleaned $(echo "$pytest_dirs" | wc -l) pytest directories"
         else
-            echo "   🔍 DRY RUN: Would remove $(echo "$pytest_dirs" | wc -l) pytest directories"
+            echo "   DRY RUN: Would remove $(echo "$pytest_dirs" | wc -l) pytest directories"
         fi
     else
-        echo "   ✅ No pytest directories found"
+        echo "   No pytest directories found"
     fi
 
     # Clean ALL previous test artifacts for clean diagnosis (not just old ones)
@@ -141,9 +146,9 @@ clean_pytest_artifacts() {
         # Remove temporary database files
         find "$LOGS_DIR" -name "tmp*.db" -delete 2>/dev/null || true
         remaining_files=$(find "$LOGS_DIR" -type f 2>/dev/null | wc -l)
-        echo "   ✅ ALL test artifacts cleaned ($remaining_files files remaining)"
+        echo "   ALL test artifacts cleaned ($remaining_files files remaining)"
     else
-        echo "   🔍 DRY RUN: Would clean ALL test artifacts"
+        echo "   DRY RUN: Would clean ALL test artifacts"
     fi
 }
 
@@ -152,7 +157,7 @@ clean_pytest_artifacts() {
 # This function is typically used in CI pipelines to ensure a clean build environment.
 # Respects the DRY_RUN flag to show actions without performing them.
 clean_build_artifacts() {
-    echo "🏗️ Cleaning build-specific artifacts for CI..."
+    echo "Cleaning build-specific artifacts for CI..."
 
     if [ ! -d "$LOGS_DIR" ]; then
         echo "   No logs directory found"
@@ -165,9 +170,9 @@ clean_build_artifacts() {
         echo "   Removing $dashboard_count dashboard execution logs..."
         if [ "$DRY_RUN" = "false" ]; then
             find "$LOGS_DIR" -name "dashboard_execution_*.log" -delete 2>/dev/null || true
-            echo "   ✅ Dashboard execution logs cleaned"
+            echo "   Dashboard execution logs cleaned"
         else
-            echo "   🔍 DRY RUN: Would remove $dashboard_count dashboard execution logs"
+            echo "   DRY RUN: Would remove $dashboard_count dashboard execution logs"
         fi
     fi
 
@@ -179,9 +184,9 @@ clean_build_artifacts() {
             find "$LOGS_DIR" -name ".coverage*" -delete 2>/dev/null || true
             find "$LOGS_DIR" -name "coverage.xml" -delete 2>/dev/null || true
             rm -rf "$LOGS_DIR/htmlcov/" 2>/dev/null || true
-            echo "   ✅ Coverage artifacts cleaned"
+            echo "   Coverage artifacts cleaned"
         else
-            echo "   🔍 DRY RUN: Would remove $coverage_count coverage artifacts"
+            echo "   DRY RUN: Would remove $coverage_count coverage artifacts"
         fi
     fi
 
@@ -192,9 +197,9 @@ clean_build_artifacts() {
         if [ "$DRY_RUN" = "false" ]; then
             find "$LOGS_DIR" -name "tmp*.db" -delete 2>/dev/null || true
             find "$LOGS_DIR" -name "test.db" -delete 2>/dev/null || true
-            echo "   ✅ Temporary database files cleaned"
+            echo "   Temporary database files cleaned"
         else
-            echo "   🔍 DRY RUN: Would remove $temp_db_count temporary database files"
+            echo "   DRY RUN: Would remove $temp_db_count temporary database files"
         fi
     fi
 
@@ -204,15 +209,15 @@ clean_build_artifacts() {
         echo "   Removing $pytest_count pytest directories..."
         if [ "$DRY_RUN" = "false" ]; then
             find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {} + 2>/dev/null || true
-            echo "   ✅ Pytest directories cleaned"
+            echo "   Pytest directories cleaned"
         else
-            echo "   🔍 DRY RUN: Would remove $pytest_count pytest directories"
+            echo "   DRY RUN: Would remove $pytest_count pytest directories"
         fi
     fi
 
     if [ "$DRY_RUN" = "false" ]; then
         remaining_files=$(find "$LOGS_DIR" -type f 2>/dev/null | wc -l)
-        echo "   ✅ Build artifacts cleaned ($remaining_files files remaining)"
+        echo "   Build artifacts cleaned ($remaining_files files remaining)"
     fi
 }
 
@@ -222,7 +227,7 @@ clean_build_artifacts() {
 # Unlike regular cleanup, which may remove all logs older than a certain age, smart cleanup is selective:
 # it targets only files that are safe to delete and keeps logs that are likely to be important.
 smart_clean_logs() {
-    echo "🧠 Smart cleanup: Removing temporary artifacts, preserving important logs..."
+    echo "Smart cleanup: Removing temporary artifacts, preserving important logs..."
 
     if [ ! -d "$LOGS_DIR" ]; then
         echo "   No logs directory found"
@@ -262,13 +267,13 @@ smart_clean_logs() {
             count_after=$(find "$LOGS_DIR" -name "$pattern" 2>/dev/null | wc -l)
             cleaned=$((count_before - count_after))
             if [ "$cleaned" -gt 0 ]; then
-                echo "   ✅ Cleaned $cleaned files matching: $pattern"
+                echo "   Cleaned $cleaned files matching: $pattern"
                 total_cleaned=$((total_cleaned + cleaned))
             fi
         else
             count=$(find "$LOGS_DIR" -name "$pattern" 2>/dev/null | wc -l)
             if [ "$count" -gt 0 ]; then
-                echo "   🔍 DRY RUN: Would clean $count files matching: $pattern"
+                echo "   DRY RUN: Would clean $count files matching: $pattern"
                 total_cleaned=$((total_cleaned + count))
             fi
         fi
@@ -279,24 +284,24 @@ smart_clean_logs() {
         pytest_count=$(find "$LOGS_DIR" -type d -name "pytest-of-*" 2>/dev/null | wc -l)
         if [ "$pytest_count" -gt 0 ]; then
             find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {} + 2>/dev/null || true
-            echo "   ✅ Cleaned $pytest_count pytest directories"
+            echo "   Cleaned $pytest_count pytest directories"
             total_cleaned=$((total_cleaned + pytest_count))
         fi
 
         cache_count=$(find "$LOGS_DIR" -type d -name "*cache*" 2>/dev/null | wc -l)
         if [ "$cache_count" -gt 0 ]; then
             find "$LOGS_DIR" -type d -name "*cache*" -exec rm -rf {} + 2>/dev/null || true
-            echo "   ✅ Cleaned $cache_count cache directories"
+            echo "   Cleaned $cache_count cache directories"
         fi
     else
         pytest_count=$(find "$LOGS_DIR" -type d -name "pytest-of-*" 2>/dev/null | wc -l)
         cache_count=$(find "$LOGS_DIR" -type d -name "*cache*" 2>/dev/null | wc -l)
-        echo "   🔍 DRY RUN: Would clean $pytest_count pytest directories and $cache_count cache directories"
+        echo "   DRY RUN: Would clean $pytest_count pytest directories and $cache_count cache directories"
     fi
 
     # Report on preserved important logs
     preserved_count=0
-    echo "   📋 Important logs preserved:"
+    echo "   Important logs preserved:"
     for pattern in "${important_patterns[@]}"; do
         count=$(find "$LOGS_DIR" -name "$pattern" 2>/dev/null | wc -l)
         if [ "$count" -gt 0 ]; then
@@ -311,14 +316,14 @@ smart_clean_logs() {
 
     if [ "$DRY_RUN" = "false" ]; then
         remaining_files=$(find "$LOGS_DIR" -type f 2>/dev/null | wc -l)
-        echo "   ✅ Smart cleanup complete: $total_cleaned artifacts removed, $remaining_files files remaining"
+        echo "   Smart cleanup complete: $total_cleaned artifacts removed, $remaining_files files remaining"
     else
-        echo "   🔍 DRY RUN: Would remove $total_cleaned artifacts"
+        echo "   DRY RUN: Would remove $total_cleaned artifacts"
     fi
 }
 
 clean_logs() {
-    echo "🧹 Cleaning logs older than $DAYS_TO_KEEP days..."
+    echo "Cleaning logs older than $DAYS_TO_KEEP days..."
 
     # Clean pytest artifacts first
     clean_pytest_artifacts
@@ -343,14 +348,14 @@ clean_logs() {
 
     if [ "$DRY_RUN" = "false" ]; then
         echo "$old_files" | xargs rm -f
-        echo "   ✅ Cleaned $(echo "$old_files" | wc -l) files"
+        echo "   Cleaned $(echo "$old_files" | wc -l) files"
     else
-        echo "   🔍 DRY RUN: Would remove $(echo "$old_files" | wc -l) files"
+        echo "   DRY RUN: Would remove $(echo "$old_files" | wc -l) files"
     fi
 }
 
 purge_logs() {
-    echo "💥 Purging ALL log files..."
+    echo "Purging ALL log files..."
 
     # Clean pytest artifacts first
     clean_pytest_artifacts
@@ -367,13 +372,13 @@ purge_logs() {
         return 0
     fi
 
-    echo "   ⚠️  This will remove $log_count log files"
+    echo "   This will remove $log_count log files"
 
     if [ "$DRY_RUN" = "false" ]; then
         find "$LOGS_DIR" -type f -delete
-        echo "   ✅ Purged all log files"
+        echo "   Purged all log files"
     else
-        echo "   🔍 DRY RUN: Would remove $log_count files"
+        echo "   DRY RUN: Would remove $log_count files"
     fi
 }
 
@@ -381,7 +386,7 @@ archive_logs() {
     timestamp=$(date +"%Y%m%d_%H%M%S")
     archive_name="logs_archive_${timestamp}.tar.gz"
 
-    echo "📦 Creating log archive: $archive_name"
+    echo "Creating log archive: $archive_name"
 
     if [ ! -d "$LOGS_DIR" ] || [ -z "$(ls -A "$LOGS_DIR" 2>/dev/null)" ]; then
         echo "   No logs to archive"
@@ -390,10 +395,10 @@ archive_logs() {
 
     if [ "$DRY_RUN" = "false" ]; then
         tar -czf "$archive_name" "$LOGS_DIR"
-        echo "   ✅ Created archive: $archive_name"
-        echo "   📊 Archive size: $(du -sh "$archive_name" | cut -f1)"
+        echo "   Created archive: $archive_name"
+        echo "   Archive size: $(du -sh "$archive_name" | cut -f1)"
     else
-        echo "   🔍 DRY RUN: Would create archive with $(find "$LOGS_DIR" -type f | wc -l) files"
+        echo "   DRY RUN: Would create archive with $(find "$LOGS_DIR" -type f | wc -l) files"
     fi
 }
 
@@ -402,7 +407,7 @@ manage_cache_logs() {
 
     case "$action" in
         "list")
-            echo "📂 Cache directories in logs:"
+            echo "Cache directories in logs:"
             if [ ! -d "$LOGS_DIR" ]; then
                 echo "   No logs directory found"
                 return 0
@@ -419,7 +424,7 @@ manage_cache_logs() {
             fi
             ;;
         "clean")
-            echo "🧹 Cleaning cache directories older than $DAYS_TO_KEEP days..."
+            echo "Cleaning cache directories older than $DAYS_TO_KEEP days..."
             if [ ! -d "$LOGS_DIR" ]; then
                 echo "   No logs directory found"
                 return 0
@@ -435,16 +440,16 @@ manage_cache_logs() {
 
                 if [ "$DRY_RUN" = "false" ]; then
                     echo "$old_caches" | xargs rm -rf
-                    echo "   ✅ Cleaned $(echo "$old_caches" | wc -l) cache directories"
+                    echo "   Cleaned $(echo "$old_caches" | wc -l) cache directories"
                 else
-                    echo "   🔍 DRY RUN: Would remove $(echo "$old_caches" | wc -l) cache directories"
+                    echo "   DRY RUN: Would remove $(echo "$old_caches" | wc -l) cache directories"
                 fi
             else
-                echo "   ✅ No old cache directories found"
+                echo "   No old cache directories found"
             fi
             ;;
         "size")
-            echo "📊 Cache size analysis:"
+            echo "Cache size analysis:"
             if [ ! -d "$LOGS_DIR" ]; then
                 echo "   No logs directory found"
                 return 0
@@ -463,7 +468,7 @@ manage_cache_logs() {
             echo "   Total logs directory: $total_cache_size"
             ;;
         "purge")
-            echo "🗑️  Purging all cache directories..."
+            echo "Purging all cache directories..."
             if [ ! -d "$LOGS_DIR" ]; then
                 echo "   No logs directory found"
                 return 0
@@ -474,12 +479,12 @@ manage_cache_logs() {
                 echo "   Found $(echo "$cache_dirs" | wc -l) cache directories to remove"
                 if [ "$DRY_RUN" = "false" ]; then
                     echo "$cache_dirs" | xargs rm -rf
-                    echo "   ✅ Purged all cache directories"
+                    echo "   Purged all cache directories"
                 else
-                    echo "   🔍 DRY RUN: Would purge all cache directories"
+                    echo "   DRY RUN: Would purge all cache directories"
                 fi
             else
-                echo "   ✅ No cache directories found"
+                echo "   No cache directories found"
             fi
             ;;
         *)
@@ -499,26 +504,26 @@ case "$COMMAND" in
         clean_logs
         ;;
     smart-clean)
-        echo "🧠 Smart cleanup: Removing temporary artifacts while preserving important logs..."
+        echo "Smart cleanup: Removing temporary artifacts while preserving important logs..."
         smart_clean_logs
-        echo "✅ Smart cleanup complete - temporary artifacts removed, important logs preserved"
+        echo "Smart cleanup complete - temporary artifacts removed, important logs preserved"
         ;;
     pre-build)
-        echo "🏗️ Pre-build cleanup: Removing build artifacts for CI..."
+        echo "Pre-build cleanup: Removing build artifacts for CI..."
         clean_build_artifacts
-        echo "✅ Pre-build cleanup complete - logs directory ready for CI"
+        echo "Pre-build cleanup complete - logs directory ready for CI"
         ;;
     pre-run)
-        echo "🧹 Pre-run cleanup: Removing ALL test artifacts for fresh diagnosis..."
+        echo "Pre-run cleanup: Removing ALL test artifacts for fresh diagnosis..."
         clean_pytest_artifacts
-        echo "✅ Pre-run cleanup complete - logs directory ready for fresh run"
+        echo "Pre-run cleanup complete - logs directory ready for fresh run"
         ;;
     purge)
         if [ "$DRY_RUN" = "false" ]; then
-            echo "⚠️  Are you sure you want to purge ALL logs? This cannot be undone."
+            echo "Are you sure you want to purge ALL logs? This cannot be undone."
             read -r -p "Type 'yes' to confirm: " confirm
             if [ "$confirm" != "yes" ]; then
-                echo "❌ Purge cancelled"
+                echo "Purge cancelled"
                 exit 1
             fi
         fi

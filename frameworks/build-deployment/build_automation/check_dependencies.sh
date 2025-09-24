@@ -2,6 +2,11 @@
 # Verify optional tools are installed
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 missing=0
 
 check_npx_tool() {
@@ -53,7 +58,7 @@ check_python_module requests "Run 'pip install -r requirements-dev.txt'."
 check_python_module yaml "Run 'pip install -r requirements-dev.txt'."
 
 if [ "$missing" -eq 0 ]; then
-    echo "All optional dependencies installed ✅"
+    echo "All optional dependencies installed"
 else
     exit 1
 fi

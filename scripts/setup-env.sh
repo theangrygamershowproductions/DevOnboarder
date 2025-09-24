@@ -3,6 +3,11 @@
 
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 # Ensure required domains are reachable before continuing
 SCRIPT_DIR="$(dirname "$0")"
 if [ -x "$SCRIPT_DIR/check_network_access.sh" ]; then
@@ -18,13 +23,13 @@ elif docker info >/dev/null 2>&1; then
 fi
 
 if [ "$docker_ok" = true ]; then
-    echo "Docker is available ✅"
+    echo "Docker is available"
     echo "Pulling Codex image..."
     docker pull ghcr.io/openai/codex-universal
     echo "Running universal setup..."
     docker run --rm -v "$(pwd)":/workspace \
         ghcr.io/openai/codex-universal /opt/codex/setup_universal.sh
-    echo "Docker-based setup complete ✅"
+    echo "Docker-based setup complete"
 else
     if [ -z "${CI:-}" ]; then
         echo "Docker not usable, falling back to local setup"
@@ -103,5 +108,5 @@ EOF
         }
     fi
 
-    echo "Local environment ready ✅"
+    echo "Local environment ready"
 fi

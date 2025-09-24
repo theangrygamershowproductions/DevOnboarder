@@ -4,12 +4,17 @@
 
 set -e
 
-echo "🔧 Setting up DevOnboarder VS Code Integration..."
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "Setting up DevOnboarder VS Code Integration..."
 
 # Verify required scripts exist
 if [[ ! -f "./scripts/quick_validate.sh" ]]; then
-    echo "⚠️  Warning: ./scripts/quick_validate.sh not found - VS Code tasks may not work"
-    echo "   Quick validation task will be skipped in VS Code configuration"
+    echo "Warning: ./scripts/quick_validate.sh not found - VS Code tasks may not work"
+    echo "Quick validation task will be skipped in VS Code configuration"
 fi
 
 # Create .vscode directory if it doesn't exist
@@ -155,15 +160,15 @@ cat > .vscode/extensions.json << 'EOF'
 }
 EOF
 
-echo "✅ VS Code integration setup complete!"
-echo "📋 Files created:"
-echo "   • .vscode/settings.json - Enhanced workspace settings"
-echo "   • .vscode/tasks.json - DevOnboarder validation commands"
-echo "   • .vscode/extensions.json - Recommended extensions"
+echo "VS Code integration setup complete!"
+echo "Files created:"
+echo "   .vscode/settings.json - Enhanced workspace settings"
+echo "   .vscode/tasks.json - DevOnboarder validation commands"
+echo "   .vscode/extensions.json - Recommended extensions"
 echo ""
-echo "🎯 Usage:"
-echo "   • Ctrl+Shift+P → 'Tasks: Run Task' → Select DevOnboarder validation"
-echo "   • Install recommended extensions when prompted"
-echo "   • YAML files now have consistent linting with CI"
+echo "Usage:"
+echo "   Ctrl+Shift+P → 'Tasks: Run Task' → Select DevOnboarder validation"
+echo "   Install recommended extensions when prompted"
+echo "   YAML files now have consistent linting with CI"
 echo ""
-echo "🚀 VS Code now matches CI validation exactly!"
+echo "VS Code now matches CI validation exactly!"

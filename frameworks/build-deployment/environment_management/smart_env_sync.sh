@@ -41,7 +41,7 @@ TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci")
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/smart_env_sync_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Command line options

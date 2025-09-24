@@ -3,6 +3,11 @@
 # Loads tokens from Token Architecture and exports to environment
 # Usage: source scripts/load_token_environment.sh
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 # Check if we're in DevOnboarder project
 if [ ! -f "scripts/token_loader.py" ]; then
     echo "Warning: Not in DevOnboarder project root"

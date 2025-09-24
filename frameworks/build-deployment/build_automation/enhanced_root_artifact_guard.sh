@@ -1,6 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 # Enhanced Root Artifact Guard - Phase 3.1 Advanced Detection Engine
 # Part of DevOnboarder Enhanced Potato Policy Phase 3 implementation
 
@@ -37,7 +42,7 @@ detect_context() {
     else
         CONTEXT_MODE="LOCAL"
     fi
-    log_message "$BLUE" "🔍 $SCRIPT_NAME: Running in $CONTEXT_MODE context"
+    log_message "$BLUE" "$SCRIPT_NAME: Running in $CONTEXT_MODE context"
 }
 
 # Enhanced artifact pattern definitions
@@ -90,7 +95,7 @@ check_artifact_pattern() {
                     size_mb=$(du -sm "$file" 2>/dev/null | cut -f1 || echo "0")
                 fi
 
-                log_message "$RED" "❌ VIOLATION [$pattern_name]: $file"
+                log_message "$RED" "VIOLATION [$pattern_name]: $file"
                 if [[ "$size_mb" -gt 0 ]]; then
                     echo "   Size: ${size_mb}MB"
                 fi
@@ -142,12 +147,12 @@ add_cleanup_suggestion() {
 
 # Function to check virtual environment compliance
 check_venv_compliance() {
-    log_message "$BLUE" "🐍 Checking virtual environment compliance..."
+    log_message "$BLUE" "Checking virtual environment compliance..."
 
     # Check if virtual environment exists
     if [[ ! -d ".venv" ]]; then
         if [[ "$CONTEXT_MODE" == "LOCAL" ]]; then
-            log_message "$YELLOW" "⚠️  No .venv directory found"
+            log_message "$YELLOW" "No .venv directory found"
             echo "   DevOnboarder requires virtual environment usage"
             echo "   Run: python -m venv .venv && source .venv/bin/activate"
         fi
@@ -156,24 +161,24 @@ check_venv_compliance() {
 
     # Check for Python artifacts that might indicate non-venv usage
     if [[ -d "__pycache__" ]] && [[ "$CONTEXT_MODE" == "LOCAL" ]]; then
-        log_message "$YELLOW" "⚠️  Root __pycache__ detected - ensure using virtual environment"
+        log_message "$YELLOW" "Root __pycache__ detected - ensure using virtual environment"
         return 1
     fi
 
-    log_message "$GREEN" "✅ Virtual environment compliance OK"
+    log_message "$GREEN" "Virtual environment compliance OK"
     return 0
 }
 
 # Enhanced main pollution check with pattern-based detection
 check_root_pollution() {
-    log_message "$GREEN" "🔍 $SCRIPT_NAME: Scanning repository root for pollution artifacts..."
+    log_message "$GREEN" "$SCRIPT_NAME: Scanning repository root for pollution artifacts..."
     detect_context
 
     local total_violations=0
 
     # Check each artifact pattern category
     for pattern_name in "${!ARTIFACT_PATTERNS[@]}"; do
-        log_message "$BLUE" "📋 Checking $pattern_name artifacts..."
+        log_message "$BLUE" "Checking $pattern_name artifacts..."
 
         if check_artifact_pattern "$pattern_name"; then
             violations=$?
@@ -196,14 +201,14 @@ check_root_pollution() {
 
 # Function to check CI-specific artifacts
 check_ci_specific_artifacts() {
-    log_message "$BLUE" "🔧 Checking CI-specific artifacts..."
+    log_message "$BLUE" "Checking CI-specific artifacts..."
 
     # Check for CI cache pollution
     if [[ -d ".github/workflows" ]]; then
         # Look for workflow artifacts in root
         for artifact in "test-results" "coverage-reports" "build-logs"; do
             if [[ -e "$artifact" ]]; then
-                log_message "$RED" "❌ CI VIOLATION: $artifact should be in logs/ or removed"
+                log_message "$RED" "CI VIOLATION: $artifact should be in logs/ or removed"
                 VIOLATION_FILES+=("$artifact")
                 VIOLATIONS=$((VIOLATIONS + 1))
             fi
@@ -213,16 +218,16 @@ check_ci_specific_artifacts() {
 
 # Enhanced cleanup suggestions with categorization
 suggest_enhanced_cleanup() {
-    log_message "$YELLOW" "🔧 $SCRIPT_NAME: Enhanced cleanup suggestions:"
+    log_message "$YELLOW" "$SCRIPT_NAME: Enhanced cleanup suggestions:"
     echo ""
 
     if [[ ${#CLEANUP_SUGGESTIONS[@]} -gt 0 ]]; then
-        log_message "$BLUE" "📋 Specific cleanup commands:"
+        log_message "$BLUE" "Specific cleanup commands:"
         printf '%s\n' "${CLEANUP_SUGGESTIONS[@]}"
         echo ""
     fi
 
-    log_message "$BLUE" "🚀 Automated cleanup options:"
+    log_message "$BLUE" "Automated cleanup options:"
     echo "   # Safe automated cleanup"
     echo "   bash scripts/enhanced_root_artifact_guard.sh --auto-clean"
     echo ""
@@ -234,7 +239,7 @@ suggest_enhanced_cleanup() {
     echo ""
 
     if [[ "$CONTEXT_MODE" == "LOCAL" ]]; then
-        log_message "$PURPLE" "💡 DevOnboarder best practices:"
+        log_message "$PURPLE" "DevOnboarder best practices:"
         echo "   • Always use virtual environment: source .venv/bin/activate"
         echo "   • Direct test outputs to logs/: pytest --cov=src --cov-report=html:logs/htmlcov"
         echo "   • Use proper npm install locations: cd frontend && npm ci"
@@ -244,13 +249,13 @@ suggest_enhanced_cleanup() {
 
 # Function for automated cleanup (Phase 3.2 preview)
 auto_cleanup() {
-    log_message "$YELLOW" "🤖 Starting automated cleanup..."
+    log_message "$YELLOW" "Starting automated cleanup..."
 
     # Create backup timestamp
     backup_dir="logs/artifact_backups/$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$backup_dir"
 
-    log_message "$BLUE" "💾 Creating backup in $backup_dir"
+    log_message "$BLUE" "Creating backup in $backup_dir"
 
     # Safe cleanup with backup
     for file in "${VIOLATION_FILES[@]}"; do
@@ -258,24 +263,24 @@ auto_cleanup() {
             if [[ -f "$file" ]] && [[ $(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo 0) -gt 1048576 ]]; then
                 # Backup files larger than 1MB
                 cp -r "$file" "$backup_dir/" 2>/dev/null || true
-                log_message "$BLUE" "💾 Backed up large file: $file"
+                log_message "$BLUE" "Backed up large file: $file"
             fi
 
             rm -rf "$file"
-            log_message "$GREEN" "🗑️  Removed: $file"
+            log_message "$GREEN" "Removed: $file"
         fi
     done
 
-    log_message "$GREEN" "✅ Automated cleanup complete"
+    log_message "$GREEN" "Automated cleanup complete"
 }
 
 # Interactive cleanup wizard (Phase 3.4 preview)
 cleanup_wizard() {
-    log_message "$PURPLE" "🧙 Interactive Cleanup Wizard"
+    log_message "$PURPLE" "Interactive Cleanup Wizard"
     echo ""
 
     if [[ ${#VIOLATION_FILES[@]} -eq 0 ]]; then
-        log_message "$GREEN" "✅ No artifacts found to clean!"
+        log_message "$GREEN" "No artifacts found to clean!"
         return 0
     fi
 
@@ -297,7 +302,7 @@ cleanup_wizard() {
         case "$response" in
             [Yy]*)
                 rm -rf "$file"
-                log_message "$GREEN" "✅ Removed: $file"
+                log_message "$GREEN" "Removed: $file"
                 ;;
             [Qq]*)
                 echo "Wizard cancelled"
@@ -310,7 +315,7 @@ cleanup_wizard() {
         echo ""
     done
 
-    log_message "$GREEN" "🎉 Cleanup wizard complete!"
+    log_message "$GREEN" "Cleanup wizard complete!"
 }
 
 # Enhanced main execution
@@ -321,7 +326,7 @@ main() {
     violations_found=$?
 
     if [[ $violations_found -eq 0 ]]; then
-        log_message "$GREEN" "✅ $SCRIPT_NAME: Repository root is clean!"
+        log_message "$GREEN" "$SCRIPT_NAME: Repository root is clean!"
         log_message "$GREEN" "   No pollution artifacts detected"
 
         # Still check virtual environment compliance
@@ -331,11 +336,11 @@ main() {
 
         exit 0
     else
-        log_message "$RED" "❌ $SCRIPT_NAME: Found $VIOLATIONS types of root pollution"
+        log_message "$RED" "$SCRIPT_NAME: Found $VIOLATIONS types of root pollution"
         log_message "$RED" "   ${#VIOLATION_FILES[@]} total artifacts detected"
         echo ""
 
-        log_message "$YELLOW" "📋 Root pollution violates DevOnboarder Enhanced Potato Policy:"
+        log_message "$YELLOW" "Root pollution violates DevOnboarder Enhanced Potato Policy:"
         echo "   • Artifacts must be contained in designated directories"
         echo "   • Test outputs should go to logs/ directory"
         echo "   • Virtual environment usage is mandatory"
@@ -344,7 +349,7 @@ main() {
 
         suggest_enhanced_cleanup
         echo ""
-        log_message "$RED" "🛑 Fix root pollution before proceeding"
+        log_message "$RED" "Fix root pollution before proceeding"
         exit 1
     fi
 }
@@ -361,7 +366,7 @@ case "${1:-check}" in
             auto_cleanup
             main  # Re-check after cleanup
         else
-            log_message "$GREEN" "✅ No cleanup needed"
+            log_message "$GREEN" "No cleanup needed"
         fi
         ;;
     --wizard|wizard)
@@ -371,11 +376,11 @@ case "${1:-check}" in
             cleanup_wizard
             main  # Re-check after wizard
         else
-            log_message "$GREEN" "✅ Repository is already clean"
+            log_message "$GREEN" "Repository is already clean"
         fi
         ;;
     --patterns|patterns)
-        log_message "$BLUE" "📋 Enhanced artifact detection patterns:"
+        log_message "$BLUE" "Enhanced artifact detection patterns:"
         for pattern_name in "${!ARTIFACT_PATTERNS[@]}"; do
             echo "  $pattern_name: ${ARTIFACT_PATTERNS[$pattern_name]}"
         done
@@ -397,7 +402,7 @@ case "${1:-check}" in
         echo "and intelligent cleanup automation."
         ;;
     *)
-        log_message "$RED" "❌ Unknown command: $1"
+        log_message "$RED" "Unknown command: $1"
         echo "Use '$0 help' for usage information"
         exit 1
         ;;

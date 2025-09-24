@@ -3,6 +3,11 @@
 # Integrates system misalignment detection into CI failure reporting
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 LOG_DIR="${PROJECT_ROOT}/logs"
@@ -139,7 +144,7 @@ try:
             output.append(f'   - Expected Value: \`{expected_val}\`')
             output.append('')
     else:
-        output.append('✅ No system misalignments detected.')
+        output.append('No system misalignments detected.')
         output.append('')
 
     if recommendations:
@@ -154,18 +159,18 @@ try:
 
 except Exception as e:
     with open('$temp_output', 'w') as f:
-        f.write(f'❌ Error analyzing misalignment report: {e}')
-" 2>/dev/null || echo "❌ Failed to analyze misalignment data" > "$temp_output"
+        f.write(f'Error analyzing misalignment report: {e}')
+" 2>/dev/null || echo "Failed to analyze misalignment data" > "$temp_output"
 
             if [[ -f "$temp_output" ]]; then
                 misalignment_content=$(cat "$temp_output")
                 rm -f "$temp_output"
             fi
         else
-            misalignment_content="❌ Misalignment detection failed - no report generated"
+            misalignment_content="Misalignment detection failed - no report generated"
         fi
     else
-        misalignment_content="⚠️ Misalignment detection script not available"
+        misalignment_content="Misalignment detection script not available"
     fi
 
     safe_replace "$ANALYSIS_FILE" "MISALIGNMENT_PLACEHOLDER" "$misalignment_content"
@@ -192,27 +197,27 @@ analyze_qc_failure() {
         # Check for specific failure patterns
         if grep -q "coverage.*failed\|coverage.*below" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
-❌ **Coverage Issue**: Test coverage below threshold"
+Coverage Issue: Test coverage below threshold"
         fi
 
         if grep -q "timeout\|timed out\|killed" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
-⏱️ **Timeout Issue**: Process exceeded time limit"
+Timeout Issue: Process exceeded time limit"
         fi
 
         if grep -q "memory\|out of memory\|OOM" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
-💾 **Memory Issue**: Insufficient memory available"
+Memory Issue: Insufficient memory available"
         fi
 
         if grep -q "permission denied\|not permitted" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
-🔒 **Permission Issue**: Access denied to required resources"
+Permission Issue: Access denied to required resources"
         fi
 
         if grep -q "No module named\|ModuleNotFoundError" "$latest_qc_log" 2>/dev/null; then
             qc_content+="
-📦 **Dependency Issue**: Missing Python modules"
+Dependency Issue: Missing Python modules"
         fi
 
         # Add last few lines of QC log for context
@@ -223,7 +228,7 @@ analyze_qc_failure() {
 $(tail -10 "$latest_qc_log" 2>/dev/null || echo "Could not read log file")
 \`\`\`"
     else
-        qc_content="❌ No QC log found for analysis"
+        qc_content="No QC log found for analysis"
     fi
 
     safe_replace "$ANALYSIS_FILE" "QC_ANALYSIS_PLACEHOLDER" "$qc_content"
@@ -325,7 +330,7 @@ main() {
         echo "=== SUMMARY ==="
         grep -E "(Timestamp|Environment|Severity|Misalignments Found)" "$ANALYSIS_FILE" || true
         echo
-        echo "📋 Full report: $ANALYSIS_FILE"
+        echo "Full report: $ANALYSIS_FILE"
     fi
 
     # Return exit code based on severity
