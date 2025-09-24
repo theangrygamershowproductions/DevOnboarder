@@ -88,8 +88,13 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ github.head_ref }}
             - name: Fetch base branch
-              if: github.event_name == 'pull_request'
-              run: git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
+              run: |
+                  if [ "${{ github.event_name }}" = "pull_request" ]; then
+                      git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
+                  else
+                      # For push events, fetch main as base
+                      git fetch origin main:main
+                  fi
             - name: Install shellcheck
               run: pip install shellcheck-py
             - name: Lint shell scripts
