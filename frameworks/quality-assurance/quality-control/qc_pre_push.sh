@@ -6,6 +6,10 @@
 
 set -euo pipefail
 
+# Calculate repository root for reliable path resolution
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../../" && pwd)"
+
 echo "Running 95% QC Pre-Push Validation..."
 # This script ensures all code meets DevOnboarder quality standards before pushing
 
@@ -151,8 +155,8 @@ fi
 
 # 6. Documentation Quality
 echo "📚 Checking documentation..."
-if [[ -x "scripts/check_docs.sh" ]]; then
-    if bash scripts/check_docs.sh >/dev/null 2>&1; then
+if [[ -x "$REPO_ROOT/scripts/check_docs.sh" ]]; then
+    if bash "$REPO_ROOT/scripts/check_docs.sh" >/dev/null 2>&1; then
         CHECKS+=("SUCCESS: Documentation")
     else
         CHECKS+=("FAILED: Documentation")
@@ -164,7 +168,7 @@ fi
 
 # 7. Commit Message Quality
 echo "📝 Checking commit messages..."
-if bash scripts/check_commit_messages.sh >/dev/null 2>&1; then
+if bash "$REPO_ROOT/scripts/check_commit_messages.sh" >/dev/null 2>&1; then
     CHECKS+=("SUCCESS: Commit messages")
 else
     CHECKS+=("FAILED: Commit messages")
@@ -182,8 +186,8 @@ fi
 
 # 9. UTC Timestamp Validation
 echo "🕐 Validating UTC timestamp compliance..."
-if [[ -x "scripts/validate_utc_compliance.sh" ]]; then
-    if bash scripts/validate_utc_compliance.sh 2>/dev/null; then
+if [[ -x "$REPO_ROOT/scripts/validate_utc_compliance.sh" ]]; then
+    if bash "$REPO_ROOT/scripts/validate_utc_compliance.sh" 2>/dev/null; then
         CHECKS+=("SUCCESS: UTC compliance")
     else
         CHECKS+=("FAILED: UTC compliance")
@@ -227,6 +231,6 @@ else
     echo "  • Run: python -m mypy src/devonboarder"
     echo "  • Run: yamllint -c .github/.yamllint-config .github/workflows/"
     echo "  • Run: python -m pytest --cov=src --cov-fail-under=95"
-    echo "  • Run: bash ../../../scripts/validate_utc_compliance.sh (use src.utils.timestamps)"
+    echo "  • Run: bash $REPO_ROOT/scripts/validate_utc_compliance.sh (use src.utils.timestamps)"
     exit 1
 fi

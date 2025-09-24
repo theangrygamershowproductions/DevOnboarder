@@ -5,7 +5,7 @@ set -euo pipefail
 # Provides clear, scannable output for all validation errors
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 echo "=== DevOnboarder Validation Summary ==="
 echo "Date: $(date '+%Y-%m-%d %H:%M:%S')"

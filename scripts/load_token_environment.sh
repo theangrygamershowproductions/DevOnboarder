@@ -15,8 +15,8 @@ if command -v python3 >/dev/null 2>&1; then
     # Create temporary file for token export
     TOKEN_EXPORT_FILE=$(mktemp)
 
-    # Use Python to safely export tokens
-    PYTHON_SCRIPT="
+    # Use Python to safely export tokens via here document
+    if python3 << 'EOF' "$TOKEN_EXPORT_FILE" && [ -f "$TOKEN_EXPORT_FILE" ]; then
 import sys
 import os
 sys.path.insert(0, '.')
@@ -29,17 +29,14 @@ try:
     with open(export_file, 'w') as f:
         for key, value in tokens.items():
             # Safely escape token values for shell
-            escaped_value = value.replace('\\\\', '\\\\\\\\').replace('\"', '\\\\\"').replace('\$', '\\\\\$').replace('\`', '\\\\\`')
-            f.write(f'export {key}=\"{escaped_value}\"\\n')
+            escaped_value = value.replace('\\', '\\\\').replace('"', '\\"').replace('$', '\\$').replace('`', '\\`')
+            f.write(f'export {key}="{escaped_value}"\n')
 
     print(f'Loaded {len(tokens)} tokens from Token Architecture v2.1')
 except Exception as e:
     print(f'Error loading tokens: {e}', file=sys.stderr)
     sys.exit(1)
-"
-
-    # Source the exported tokens if successful
-    if python3 -c "$PYTHON_SCRIPT" "$TOKEN_EXPORT_FILE" && [ -f "$TOKEN_EXPORT_FILE" ]; then
+EOF
         # shellcheck disable=SC1090
         source "$TOKEN_EXPORT_FILE"
         rm -f "$TOKEN_EXPORT_FILE"

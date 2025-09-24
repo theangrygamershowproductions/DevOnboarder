@@ -113,7 +113,7 @@ for file in "${FILES[@]}"; do
 
     if [[ "$FIX_MODE" = true ]]; then
         # Run formatting fix
-        if python "$SCRIPT_DIR/fix_markdown_formatting.py" "$file" >/dev/null 2>&1; then
+        if python "$SCRIPT_DIR/../../../fix_markdown_comprehensive.py" "$file" >/dev/null 2>&1; then
             echo "FIXED"
             FORMATTED_FILES=$((FORMATTED_FILES + 1))
         else
@@ -126,7 +126,7 @@ for file in "${FILES[@]}"; do
         TEMP_FILE=$(mktemp)
         cp "$file" "$TEMP_FILE"
 
-        if python "$SCRIPT_DIR/fix_markdown_formatting.py" "$TEMP_FILE" >/dev/null 2>&1; then
+        if python "$SCRIPT_DIR/../../../fix_markdown_comprehensive.py" "$TEMP_FILE" >/dev/null 2>&1; then
             if ! cmp -s "$file" "$TEMP_FILE"; then
                 echo "NEEDS FORMATTING"
                 FORMATTED_FILES=$((FORMATTED_FILES + 1))
