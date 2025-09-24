@@ -107,7 +107,7 @@ The Build & Deployment Framework encompasses all aspects of building, packaging,
 
 ```bash
 # Example integration pattern
-source frameworks/quality_assurance/validation/validate_log_centralization.sh
+source frameworks/quality-assurance/validation/validate_log_centralization.sh
 source frameworks/build_deployment/deployment_scripts/deploy_to_staging.sh
 
 # Validate logs before deployment

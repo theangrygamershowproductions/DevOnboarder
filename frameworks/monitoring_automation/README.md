@@ -111,7 +111,7 @@ The Monitoring & Automation Framework provides comprehensive system monitoring, 
 
 ```bash
 # Example integration pattern
-source frameworks/quality_assurance/validation/validate_log_centralization.sh
+source frameworks/quality-assurance/validation/validate_log_centralization.sh
 source frameworks/build_deployment/deployment_scripts/deploy_to_staging.sh
 source frameworks/monitoring_automation/monitoring_scripts/monitor_ci_health.sh
 
