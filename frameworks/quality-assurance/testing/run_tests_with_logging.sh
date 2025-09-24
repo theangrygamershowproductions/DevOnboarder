@@ -2,6 +2,11 @@
 # Enhanced test runner with comprehensive logging for CI troubleshooting
 set -euo pipefail
 
+# Centralized logging setup
+mkdir -p logs
+LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 # Establish PROJECT_ROOT for reliable operation
 if [ -z "${PROJECT_ROOT:-}" ]; then
     export PROJECT_ROOT="${PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
