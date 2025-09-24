@@ -33,4 +33,3 @@ If any archived content needs to be restored for reference or troubleshooting:
 ## Contact
 
 For questions about archived content, reference the Quality Assurance Framework implementation in PR #1642 or consult the framework documentation.
-
