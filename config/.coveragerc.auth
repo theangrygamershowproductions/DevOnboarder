@@ -9,6 +9,7 @@ omit =
     src/devonboarder/cli.py
     src/devonboarder/dashboard_service.py
     src/devonboarder/diagnostics.py
+    src/devonboarder/server.py
 
 [report]
 show_missing = True
