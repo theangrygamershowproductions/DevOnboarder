@@ -177,10 +177,16 @@ bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 # Validate documentation quality
+# Run quality control checks
+```bash
+bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
+
+# Check documentation quality
 bash frameworks/quality-assurance/quality-control/qc_docs.sh
 
 # Generate quality validation summary
 bash frameworks/quality-assurance/quality-control/validation_summary.sh
+```
 
 ## Standards Compliance Assessment
 
