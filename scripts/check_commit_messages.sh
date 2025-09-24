@@ -9,7 +9,7 @@ set -euo pipefail
 # The <scope> section is optional, matching the commit-msg hook
 regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
 
-messages=$(git log --format=%s origin/main..HEAD)
+messages=$(git log --format=%s main..HEAD 2>/dev/null || git log --format=%s -10)
 if [ -z "$messages" ]; then
   echo "No new commits to lint"
   exit 0
