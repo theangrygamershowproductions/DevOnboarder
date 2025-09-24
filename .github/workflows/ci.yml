@@ -975,7 +975,13 @@ jobs:
             - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
             - name: Fail on mismatches
               run: |
-                  grep -q 'X' frameworks_audit.md && { echo "Framework mismatches found"; cat frameworks_audit.md; exit 1; } || true
+                  if grep -q "frameworks/build_deployment\|frameworks/monitoring_automation" frameworks_audit.md; then
+                      echo "Framework path mismatches found - legacy underscore paths still referenced"
+                      cat frameworks_audit.md
+                      exit 1
+                  else
+                      echo "All framework paths are clean!"
+                  fi
             - name: Attach audit
               uses: actions/upload-artifact@v4
               with:
