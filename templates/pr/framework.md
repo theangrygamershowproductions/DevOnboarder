@@ -50,7 +50,7 @@ Complete implementation of Phase 2 Build & Deployment Framework with 100% script
 ```bash
 # Cross-framework integration pattern
 source frameworks/quality-assurance/validation/validate_log_centralization.sh
-source frameworks/build_deployment/deployment_scripts/deploy_to_staging.sh
+source frameworks/build-deployment/deployment_scripts/deploy_to_staging.sh
 
 validate_centralized_logging
 deploy_application_to_staging
@@ -75,7 +75,7 @@ deploy_application_to_staging
 ### Framework Structure
 
 ```text
-frameworks/build_deployment/
+frameworks/build-deployment/
 ├── README.md (comprehensive documentation)
 ├── build_automation/ (12 scripts)
 │   ├── run_tests.sh

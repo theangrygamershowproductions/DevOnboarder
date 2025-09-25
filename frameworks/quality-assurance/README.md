@@ -141,30 +141,36 @@ DevOnboarder enforces comprehensive quality standards through 8 critical metrics
 **CRITICAL**: All framework scripts must be executed from the repository root directory, not from within the framework directory. The scripts depend on relative paths that assume repository root execution context.
 
 ```bash
+
 # ✅ CORRECT - Run from repository root
+
 cd /path/to/DevOnboarder
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 # ❌ WRONG - Running from framework directory will fail
+
 cd frameworks/quality-assurance/quality-control
 bash qc_pre_push.sh  # Path resolution will fail
-```
+```bash
 
-### Backward Compatibility
+## Backward Compatibility
 
 **All migrated scripts maintain backward compatibility through symlinks in the `scripts/` directory.** This ensures existing CI/CD pipelines, Docker containers, and other automation continue to work without modification.
 
 ```bash
+
 # ✅ Existing CI/CD and automation continues to work
+
 ./scripts/qc_pre_push.sh          # Symlink to framework version
 ./scripts/run_tests.sh            # Symlink to framework version
 ./scripts/fix_markdown_comprehensive.py  # Symlink to framework version
 
 # ✅ New framework-aware usage
-bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
-```
 
-**Benefits:**
+bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
+```bash
+
+## Benefits
 
 - **Zero Breaking Changes**: All existing automation continues to work
 - **Single Source of Truth**: Framework versions are authoritative
@@ -174,17 +180,21 @@ bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 ```bash
 # Run complete quality validation suite
+
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 # Validate documentation quality
+
 # Run quality control checks
-```bash
+
 bash frameworks/quality-assurance/quality-control/qc_pre_push.sh
 
 # Check documentation quality
+
 bash frameworks/quality-assurance/quality-control/qc_docs.sh
 
 # Generate quality validation summary
+
 bash frameworks/quality-assurance/quality-control/validation_summary.sh
 ```
 
@@ -192,6 +202,7 @@ bash frameworks/quality-assurance/quality-control/validation_summary.sh
 
 ```bash
 # Check development standards compliance
+
 frameworks/quality-assurance/code-standards/standards_enforcement_assessment.sh
 ```
 
@@ -199,9 +210,11 @@ frameworks/quality-assurance/code-standards/standards_enforcement_assessment.sh
 
 ```bash
 # Run comprehensive test suite
+
 frameworks/quality-assurance/testing/run_tests.sh
 
 # Run tests with enhanced logging for CI troubleshooting
+
 frameworks/quality-assurance/testing/run_tests_with_logging.sh
 ```
 
@@ -209,6 +222,7 @@ frameworks/quality-assurance/testing/run_tests_with_logging.sh
 
 ```bash
 # Fix markdown formatting and compliance issues
+
 python frameworks/quality-assurance/formatting/fix_markdown_comprehensive.py
 ```
 
@@ -309,6 +323,7 @@ python frameworks/quality-assurance/formatting/fix_markdown_comprehensive.py
 # Debug quality validation issues
 
 frameworks/quality-assurance/quality-control/validation_summary.sh --debug
+
 ```bash
 
 **Test Execution Problems**:
@@ -318,6 +333,7 @@ frameworks/quality-assurance/quality-control/validation_summary.sh --debug
 # Run tests with enhanced logging
 
 frameworks/quality-assurance/testing/run_tests_with_logging.sh --verbose
+
 ```bash
 
 **Formatting Issues**:
@@ -327,6 +343,7 @@ frameworks/quality-assurance/testing/run_tests_with_logging.sh --verbose
 # Check markdown compliance
 
 python frameworks/quality-assurance/formatting/fix_markdown_comprehensive.py --check-only
+
 ```bash
 
 ## Emergency Procedures

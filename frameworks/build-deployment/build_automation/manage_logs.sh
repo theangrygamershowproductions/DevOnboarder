@@ -88,12 +88,12 @@ fi
 mkdir -p "$LOGS_DIR"
 
 list_logs() {
-    echo "Log files in $LOGS_DIR:"
+    echo "📂 Log files in $LOGS_DIR:"
     if [ -d "$LOGS_DIR" ] && [ "$(ls -A "$LOGS_DIR" 2>/dev/null)" ]; then
         # Use find instead of ls | grep to avoid shellcheck warning
         find "$LOGS_DIR" -maxdepth 1 -type f -exec ls -lah {} \;
         echo ""
-        echo "Total size: $(du -sh "$LOGS_DIR" | cut -f1)"
+        echo "📊 Total size: $(du -sh "$LOGS_DIR" | cut -f1)"
     else
         echo "   (no log files found)"
     fi

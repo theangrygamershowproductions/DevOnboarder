@@ -23,30 +23,9 @@ cd "$PROJECT_ROOT"
 mkdir -p logs
 mkdir -p test-results
 
-# CRITICAL: Configure cache directories to use logs/ (centralized cache management)
-export PYTEST_CACHE_DIR="logs/.pytest_cache"
-export MYPY_CACHE_DIR="logs/.mypy_cache"
-
-# Ensure cache directories exist in logs/
-mkdir -p logs/.pytest_cache logs/.mypy_cache
-
-# Generate timestamp for log files
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-TEST_LOG="logs/test_run_${TIMESTAMP}.log"
-COVERAGE_LOG="logs/coverage_${TIMESTAMP}.log"
-
-echo "DevOnboarder Test Suite with Centralized Cache Management"
-echo "==========================================================="
-echo "Timestamp: $(date)"
-echo "Log file: $TEST_LOG"
-echo "Cache locations:"
-echo "  Pytest cache: logs/.pytest_cache"
-echo "  MyPy cache: logs/.mypy_cache"
-echo "" | tee "$TEST_LOG"
-
 # Function to log and display
 log_and_display() {
-    echo "$1" | tee -a "$TEST_LOG"
+    echo "$1"
 }
 
 # Check if we're in CI or if dependencies are already installed
@@ -56,7 +35,7 @@ if [ "${CI:-false}" = "true" ] || [ -n "${VIRTUAL_ENV:-}" ]; then
     log_and_display "CI environment: ${CI:-false}"
 else
     log_and_display "Installing development requirements..."
-    if ! pip install -e ".[test]" 2>&1 | tee -a "$TEST_LOG"; then
+    if ! pip install -e ".[test]" 2>&1; then
         log_and_display "FAILED to install development requirements"
         exit 1
     fi
@@ -64,7 +43,7 @@ fi
 
 log_and_display "Checking pip dependencies..."
 if command -v pip >/dev/null 2>&1; then
-    if ! pip check 2>&1 | tee -a "$TEST_LOG"; then
+    if ! pip check 2>&1; then
         log_and_display "WARNING: Pip dependency check failed"
     fi
 else
@@ -73,7 +52,7 @@ fi
 
 log_and_display "Running ruff linting..."
 if command -v ruff >/dev/null 2>&1; then
-    if ! ruff check . 2>&1 | tee -a "$TEST_LOG"; then
+    if ! ruff check . 2>&1; then
         log_and_display "WARNING: Ruff linting found issues"
     fi
 else
@@ -82,7 +61,7 @@ fi
 
 log_and_display "Running Python tests with centralized cache configuration..."
 set +e
-pytest --junitxml=test-results/pytest-results.xml -v 2>&1 | tee -a "$TEST_LOG"
+pytest --junitxml=test-results/pytest-results.xml -v 2>&1
 pytest_exit=${PIPESTATUS[0]}
 set -e
 
@@ -111,7 +90,7 @@ fi
 
 # Save detailed coverage report
 if command -v coverage > /dev/null 2>&1; then
-    coverage report 2>&1 | tee "$COVERAGE_LOG"
+    coverage report 2>&1
     log_and_display "Coverage report saved to $COVERAGE_LOG"
 fi
 
@@ -139,8 +118,8 @@ fi
 # Run bot tests if available
 if [ -d bot ] && [ -f bot/package.json ]; then
     log_and_display "Running bot tests..."
-    if npm ci --prefix bot 2>&1 | tee -a "$TEST_LOG"; then
-        if (cd bot && npm run coverage 2>&1 | tee -a "$TEST_LOG"); then
+    if npm ci --prefix bot 2>&1; then
+        if (cd bot && npm run coverage 2>&1); then
             log_and_display "SUCCESS: Bot tests passed!"
         else
             log_and_display "FAILED: Bot tests failed"
@@ -156,8 +135,8 @@ fi
 if [ -d frontend ] && [ -f frontend/package.json ]; then
     if grep -q "\"test\"" frontend/package.json; then
         log_and_display "Running frontend tests..."
-        if npm ci --prefix frontend 2>&1 | tee -a "$TEST_LOG"; then
-            if (cd frontend && npm run coverage 2>&1 | tee -a "$TEST_LOG"); then
+        if npm ci --prefix frontend 2>&1; then
+            if (cd frontend && npm run coverage 2>&1); then
                 log_and_display "SUCCESS: Frontend tests passed!"
             else
                 log_and_display "FAILED: Frontend tests failed"

@@ -967,3 +967,41 @@ jobs:
             - name: Root Artifact Guard
               if: always()
               run: bash scripts/enforce_output_location.sh
+    frameworks-validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v5
+            - run: chmod +x scripts/audit_frameworks.sh
+            - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
+            - name: Fail on legacy path references
+              run: |
+                  if grep -q "frameworks/build_deployment\|frameworks/monitoring_automation" frameworks_audit.md; then
+                      echo "Framework path mismatches found - legacy underscore paths still referenced"
+                      cat frameworks_audit.md
+                      exit 1
+                  else
+                      echo "All framework paths are clean!"
+                  fi
+            - name: Fail on script quality issues
+              run: |
+                  if grep -q "FAIL\|BLOCKED\|SECURE\|WARNING\|NOTE" frameworks_audit.md; then
+                      echo "Script quality or security issues found in frameworks"
+                      cat frameworks_audit.md
+                      exit 1
+                  else
+                      echo "All framework scripts pass quality checks!"
+                  fi
+            - name: Fail on documentation issues
+              run: |
+                  if grep -q "ERROR Missing\|LINK Broken\|NOTE Missing space" frameworks_audit.md; then
+                      echo "Documentation quality issues found in frameworks"
+                      cat frameworks_audit.md
+                      exit 1
+                  else
+                      echo "All framework documentation passes quality checks!"
+                  fi
+            - name: Attach audit
+              uses: actions/upload-artifact@v4
+              with:
+                  name: frameworks-audit
+                  path: frameworks_audit.md
