@@ -58,8 +58,11 @@ fi
 
 # Check for prohibited log directories
 echo "2️⃣ Checking for prohibited log directories..."
-PROHIBITED_DIRS=$(find "$PROJECT_ROOT" -type d -name "*log*" \
-    -not -path "$PROJECT_ROOT/logs" \
+# Prune the centralized logs/ directory so nested log-like dirs under logs/ are allowed.
+# This lets workflows and analysis artifacts live under logs/ without being flagged.
+PROHIBITED_DIRS=$(find "$PROJECT_ROOT" \
+    \( -path "$PROJECT_ROOT/logs" -o -path "$PROJECT_ROOT/logs/*" \) -prune -o \
+    -type d -name "*log*" \
     -not -path "$PROJECT_ROOT/.git/*" \
     -not -path "$PROJECT_ROOT/.venv/*" \
     -not -path "$PROJECT_ROOT/venv/*" \
@@ -69,7 +72,7 @@ PROHIBITED_DIRS=$(find "$PROJECT_ROOT" -type d -name "*log*" \
     -not -path "$PROJECT_ROOT/logs/.mypy_cache/*" \
     -not -path "$PROJECT_ROOT/*/.mypy_cache/*" \
     -not -path "$PROJECT_ROOT/.codex/logs" \
-    2>/dev/null || true)
+    -print 2>/dev/null || true)
 
 if [ -n "$PROHIBITED_DIRS" ]; then
     echo "❌ VIOLATION: Prohibited log directories found:"
