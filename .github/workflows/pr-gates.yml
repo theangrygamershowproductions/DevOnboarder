@@ -1,14 +1,13 @@
 name: PR Gates
 on: [pull_request]
 
-# Minimal permissions required by this workflow. Keep conservative scopes only.
-permissions:
-   contents: read
-   checks: write
-   pull-requests: write
-
 jobs:
    enforce-bom:
+      # Job-level permissions (explicit per docs). Minimal scopes only.
+      permissions:
+         contents: read
+         checks: write
+         pull-requests: write
       runs-on: ubuntu-latest
       steps:
          - name: Checkout repository
