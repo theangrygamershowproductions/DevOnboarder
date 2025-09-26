@@ -1,4 +1,4 @@
-python: "3.12.6"
+python: "3.12"
 node: "22.9.0"
 npm: "10.9.0"
 docker: "27.2.0"

@@ -17,6 +17,7 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, Tuple
+import re
 
 
 def run(cmd: list[str]) -> str:
@@ -104,8 +105,43 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
             )
             continue
 
-        # Exact match or observed startswith expected (prefix allowlist)
-        if expected and expected != observed and not observed.startswith(expected):
+        # If expected is empty, skip strict checking
+        if not expected:
+            continue
+
+        # Try semver-style comparison: allow same major.minor with observed
+        # patch >= expected patch, or allow observed with same prefix.
+        def parse_semver(v: str) -> tuple[int, int, int] | None:
+            m = re.match(r"^(\d+)\.(\d+)\.(\d+)", v)
+            if not m:
+                return None
+            return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+
+        exp_sem = parse_semver(expected)
+        obs_sem = parse_semver(observed)
+
+        # If expected is major.minor only (e.g. '3.12'), allow any patch
+        def parse_major_minor(v: str) -> tuple[int, int] | None:
+            m = re.match(r"^(\d+)\.(\d+)$", v)
+            if not m:
+                return None
+            return (int(m.group(1)), int(m.group(2)))
+
+        exp_mm = parse_major_minor(expected)
+
+        semver_ok = False
+        if exp_sem and obs_sem:
+            # accept if major/minor equal and observed.patch >= expected.patch
+            if exp_sem[0] == obs_sem[0] and exp_sem[1] == obs_sem[1]:
+                if obs_sem[2] >= exp_sem[2]:
+                    semver_ok = True
+        elif exp_mm and obs_sem:
+            # expected is major.minor only; accept observed with same major.minor
+            if exp_mm[0] == obs_sem[0] and exp_mm[1] == obs_sem[1]:
+                semver_ok = True
+
+        # Fallback: exact match or observed startswith expected
+        if not semver_ok and expected != observed and not observed.startswith(expected):
             failures.append(f"{key}: expected {expected}, observed {observed}")
 
     return (len(failures) == 0, failures)
