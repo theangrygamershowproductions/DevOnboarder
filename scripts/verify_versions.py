@@ -109,35 +109,79 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
         if not expected:
             continue
 
-        # Try semver-style comparison: allow same major.minor with observed
-        # patch >= expected patch, or allow observed with same prefix.
+        # Support a small set of version spec forms in the BOM:
+        #  - exact: "x.y.z"
+        #  - major.minor: "x.y" (accept any patch)
+        #  - major: "x" (accept any minor/patch)
+        #  - simple range: ">=x.y.z,<X.Y.Z"
         def parse_semver(v: str) -> tuple[int, int, int] | None:
             m = re.match(r"^(\d+)\.(\d+)\.(\d+)", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
 
-        exp_sem = parse_semver(expected)
-        obs_sem = parse_semver(observed)
-
-        # If expected is major.minor only (e.g. '3.12'), allow any patch
         def parse_major_minor(v: str) -> tuple[int, int] | None:
             m = re.match(r"^(\d+)\.(\d+)$", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)))
 
+        def parse_major(v: str) -> int | None:
+            m = re.match(r"^(\d+)$", v)
+            if not m:
+                return None
+            return int(m.group(1))
+
+        def satisfies_range(spec_str: str, obs: tuple[int, int, int] | None) -> bool:
+            """Support simple range like '>=x.y.z,<X.Y.Z'."""
+            if not obs:
+                return False
+            parts = [p.strip() for p in spec_str.split(",") if p.strip()]
+            for p in parts:
+                if p.startswith(">="):
+                    m = re.match(r">=(\d+)\.(\d+)\.(\d+)$", p)
+                    if not m:
+                        return False
+                    lower = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                    if obs < lower:
+                        return False
+                elif p.startswith("<"):
+                    m = re.match(r"<(\d+)\.(\d+)\.(\d+)$", p)
+                    if not m:
+                        return False
+                    upper = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                    if obs >= upper:
+                        return False
+                else:
+                    # unsupported comparator in range
+                    return False
+            return True
+
+        exp_sem = parse_semver(expected)
+        obs_sem = parse_semver(observed)
         exp_mm = parse_major_minor(expected)
+        exp_m = parse_major(expected)
 
         semver_ok = False
+        # exact semver success path
         if exp_sem and obs_sem:
-            # accept if major/minor equal and observed.patch >= expected.patch
-            if exp_sem[0] == obs_sem[0] and exp_sem[1] == obs_sem[1]:
-                if obs_sem[2] >= exp_sem[2]:
-                    semver_ok = True
+            if (obs_sem[0], obs_sem[1], obs_sem[2]) >= (
+                exp_sem[0],
+                exp_sem[1],
+                exp_sem[2],
+            ):
+                semver_ok = True
         elif exp_mm and obs_sem:
-            # expected is major.minor only; accept observed with same major.minor
+            # expected major.minor -> accept observed with same major/minor
             if exp_mm[0] == obs_sem[0] and exp_mm[1] == obs_sem[1]:
+                semver_ok = True
+        elif exp_m and obs_sem:
+            # expected major only -> accept same major
+            if exp_m == obs_sem[0]:
+                semver_ok = True
+        elif "," in expected:
+            # support simple ranged spec
+            if satisfies_range(expected, obs_sem):
                 semver_ok = True
 
         # Fallback: exact match or observed startswith expected
