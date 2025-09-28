@@ -83,6 +83,22 @@ if [ -n "${AAR_TOKEN:-}" ]; then
             printf '      %s\n' "$_line"
         done <<<"$auth_check_output"
         echo "   Please rotate AAR_TOKEN or ensure token has 'repo' and 'workflow' permissions."
+        # Attempt to discover token scopes (if the token is present but rejected, a simple curl to the API
+        # can surface the X-OAuth-Scopes header which lists granted scopes).
+        if command -v curl >/dev/null 2>&1; then
+            echo "   Attempting to inspect token scopes via GitHub API headers..."
+            set +e
+            scopes_header=$(curl -sI -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ 2>/dev/null | tr -d '\r' | grep -i '^x-oauth-scopes:' || true)
+            set -e
+            if [ -n "$scopes_header" ]; then
+                echo "   Token scopes: $scopes_header"
+            else
+                echo "   Could not determine scopes (token likely invalid or missing header)."
+            fi
+            echo "   Required scopes for AAR_TOKEN: repo, workflow"
+        else
+            echo "   Note: 'curl' not available to inspect token scopes locally."
+        fi
         # Fall back to local gh CLI as before
     fi
     raw_runs=$(get_runs_with_token "${AAR_TOKEN}" || true)
