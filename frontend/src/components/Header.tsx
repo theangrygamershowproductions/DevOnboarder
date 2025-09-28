@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 interface User {
     username: string;
@@ -15,6 +16,8 @@ interface HeaderProps {
 export default function Header({ className = "" }: HeaderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const { theme, toggleTheme } = useTheme();
+
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -101,6 +104,15 @@ export default function Header({ className = "" }: HeaderProps) {
                                 Source
                             </a>
                         </nav>
+
+                         <button
+                             type="button"
+                             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                             className="p-2 rounded-lg transition-colors text-gray-600 hover:text-yellow-400"
+                             onClick={toggleTheme}
+                             >
+                             {theme === "light" ? "🌙" : "☀️"}
+                         </button>
 
                         {/* Authentication State */}
                         <div className="flex items-center space-x-3">
