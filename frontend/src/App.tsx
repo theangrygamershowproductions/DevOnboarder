@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import PublicLandingPage from "./components/PublicLandingPage";
 import ProtectedDashboard from "./components/ProtectedDashboard";
+import "./styles/themes.css";
 
 export default function App() {
     return (
