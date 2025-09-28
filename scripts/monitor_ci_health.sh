@@ -36,14 +36,29 @@ echo ""
 echo "🔄 CI Performance Analysis:"
 
 # Get recent workflow runs with error handling using proper token
-if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
-    echo "✅ Retrieved recent CI run data"
-
-    # Also get failed runs specifically for detailed analysis
-    if failed_runs_detailed=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
-        echo "✅ Retrieved detailed failed run data"
+# If AAR_TOKEN is provided by the token loader, use it for GH_TOKEN; otherwise
+# allow the gh CLI to use its configured authentication (do not override GH_TOKEN
+# with an empty value which disables auth).
+if [ -n "${AAR_TOKEN:-}" ]; then
+    if runs=$(GH_TOKEN="${AAR_TOKEN}" gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
+        echo "✅ Retrieved recent CI run data (using AAR_TOKEN)"
     fi
 
+    # Also get failed runs specifically for detailed analysis
+    if failed_runs_detailed=$(GH_TOKEN="${AAR_TOKEN}" gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
+        echo "✅ Retrieved detailed failed run data (using AAR_TOKEN)"
+    fi
+else
+    if runs=$(gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
+        echo "✅ Retrieved recent CI run data (using gh CLI auth)"
+    fi
+
+    if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
+        echo "✅ Retrieved detailed failed run data (using gh CLI auth)"
+    fi
+fi
+
+if [ -n "${runs:-}" ]; then
     # Calculate success metrics
     total_runs=$(echo "$runs" | jq length)
     successful_runs=$(echo "$runs" | jq '[.[] | select(.conclusion == "success")] | length')
@@ -75,7 +90,7 @@ if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,sta
             if [ "$failed_count" -gt 0 ]; then
                 echo ""
                 echo "🚨 Recent Failed Runs (detailed):"
-                echo "$failed_runs_detailed" | jq -r '.[] | "  ❌ \(.workflowName): \(.displayTitle // "No title") (\(.createdAt[0:19]))"' | head -5
+                echo "$failed_runs_detailed" | jq -r '.[] | "  ❌ \(.workflowName): \(.displayTitle // \"No title\") (\(.createdAt[0:19]))"' | head -5
                 echo "   💡 Use: bash scripts/analyze_failed_ci_runs.sh for detailed failure analysis"
             fi
         fi
