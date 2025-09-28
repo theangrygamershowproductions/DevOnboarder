@@ -1,0 +1,215 @@
+:root {
+  /* Light theme colors */
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-surface-elevated: #ffffff;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-secondary: #64748b;
+  --color-accent: #0ea5e9;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Header specific colors */
+  --color-header-bg: #ffffff;
+  --color-header-border: #e2e8f0;
+  --color-header-text: #1f2937;
+  --color-header-text-hover: #2563eb;
+
+  /* Navigation colors */
+  --color-nav-text: #6b7280;
+  --color-nav-text-hover: #111827;
+
+  /* Button colors */
+  --color-button-primary: #2563eb;
+  --color-button-primary-hover: #1d4ed8;
+  --color-button-primary-text: #ffffff;
+
+  /* Shadow colors */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.dark {
+  /* Dark theme colors */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-elevated: #334155;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-secondary: #64748b;
+  --color-accent: #06b6d4;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-border-light: #475569;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Header specific colors for dark mode */
+  --color-header-bg: #1e293b;
+  --color-header-border: #334155;
+  --color-header-text: #f1f5f9;
+  --color-header-text-hover: #60a5fa;
+
+  /* Navigation colors for dark mode */
+  --color-nav-text: #94a3b8;
+  --color-nav-text-hover: #f1f5f9;
+
+  /* Button colors for dark mode */
+  --color-button-primary: #3b82f6;
+  --color-button-primary-hover: #2563eb;
+  --color-button-primary-text: #ffffff;
+
+  /* Shadow colors for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Base styling using CSS variables */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* Theme-aware component classes */
+.theme-bg {
+  background-color: var(--color-background);
+}
+
+.theme-surface {
+  background-color: var(--color-surface);
+}
+
+.theme-surface-elevated {
+  background-color: var(--color-surface-elevated);
+}
+
+.theme-text {
+  color: var(--color-text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--color-text-muted);
+}
+
+.theme-border {
+  border-color: var(--color-border);
+}
+
+.theme-button-primary {
+  background-color: var(--color-button-primary);
+  color: var(--color-button-primary-text);
+}
+
+.theme-button-primary:hover {
+  background-color: var(--color-button-primary-hover);
+}
+
+/* Header specific theme classes */
+.theme-header {
+  background-color: var(--color-header-bg);
+  border-color: var(--color-header-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-header-text {
+  color: var(--color-header-text);
+}
+
+.theme-header-text:hover {
+  color: var(--color-header-text-hover);
+}
+
+.theme-nav-text {
+  color: var(--color-nav-text);
+}
+
+.theme-nav-text:hover {
+  color: var(--color-nav-text-hover);
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface-elevated);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+/* Icon rotation animation */
+.theme-toggle .icon-rotate {
+  transform: rotate(0deg);
+}
+
+.dark .theme-toggle .icon-rotate {
+  transform: rotate(180deg);
+}
+
+/* Loading spinner for dark mode */
+.theme-spinner {
+  border-color: var(--color-border) var(--color-border) var(--color-primary) var(--color-primary);
+}
+
+/* Focus styles for accessibility */
+.theme-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .theme-toggle svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
