@@ -144,6 +144,30 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def _validate_password_for_bcrypt(password: Optional[str]) -> None:
+    """Validate that the given password will not exceed bcrypt's 72-byte limit.
+
+    bcrypt operates on the first 72 bytes of the password. Rejecting overly
+    long passwords is the safest option: it avoids silent entropy loss and
+    forces callers/clients to choose a shorter password or follow a client-side
+    policy. This function raises HTTPException(400) when the password is
+    too long or missing.
+    """
+    if password is None:
+        raise HTTPException(status_code=400, detail="Password required")
+    try:
+        b = str(password).encode("utf-8")
+    except Exception:
+        # Coerce to string and encode ignoring errors as a last resort
+        b = str(password).encode("utf-8", "ignore")
+    if len(b) > 72:
+        # Be explicit: rejecting the request is more secure than truncating
+        raise HTTPException(
+            status_code=400,
+            detail="Password too long. Maximum allowed length is 72 bytes (UTF-8).",
+        )
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -272,6 +296,9 @@ def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     discord_token = data.get("discord_token")
     if db.query(User).filter_by(username=username).first():
         raise HTTPException(status_code=400, detail="Username exists")
+    # Validate password length before hashing to avoid bcrypt errors and
+    # to prevent silent entropy loss from truncation.
+    _validate_password_for_bcrypt(password)
     user = User(
         username=username,
         password_hash=pwd_context.hash(password),
@@ -289,6 +316,9 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     username = data["username"]
     password = data["password"]
     discord_token = data.get("discord_token")
+    # For login, validate length first. If the client sends a too-long
+    # password, treat it as invalid credentials (400) to avoid hashing errors.
+    _validate_password_for_bcrypt(password)
     user = db.query(User).filter_by(username=username).first()
     if not user or not pwd_context.verify(password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid credentials")
@@ -354,6 +384,9 @@ def discord_callback(
     username = profile["id"]
     user = db.query(User).filter_by(username=username).first()
     if not user:
+        # Discord-created accounts have an empty local password. This is
+        # recorded as a bcrypt hash for an empty string which is always <=72
+        # bytes, so no validation is necessary here.
         user = User(
             username=username,
             password_hash=pwd_context.hash(""),
