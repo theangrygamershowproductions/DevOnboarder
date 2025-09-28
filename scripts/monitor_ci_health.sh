@@ -71,6 +71,20 @@ get_failed_runs_with_token() {
 }
 
 if [ -n "${AAR_TOKEN:-}" ]; then
+    # Early token validity check: verify that AAR_TOKEN is usable before attempting run list queries.
+    set +e
+    auth_check_output=$(GH_TOKEN="${AAR_TOKEN}" gh api user --jq '{login: .login, id: .id}' 2>&1)
+    auth_check_rc=$?
+    set -e
+    if [ $auth_check_rc -ne 0 ]; then
+        echo "⚠️  AAR_TOKEN appears invalid or expired (gh api user failed)."
+        echo "   GH output:";
+        while IFS= read -r _line; do
+            printf '      %s\n' "$_line"
+        done <<<"$auth_check_output"
+        echo "   Please rotate AAR_TOKEN or ensure token has 'repo' and 'workflow' permissions."
+        # Fall back to local gh CLI as before
+    fi
     raw_runs=$(get_runs_with_token "${AAR_TOKEN}" || true)
     if echo "$raw_runs" | grep -q '^__MONITOR_GH_ERROR__:'; then
         rc=$(echo "$raw_runs" | sed -n 's/^__MONITOR_GH_ERROR__:\([0-9]*\):.*$/\1/p')
