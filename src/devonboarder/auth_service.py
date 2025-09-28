@@ -320,7 +320,14 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     # password, treat it as invalid credentials (400) to avoid hashing errors.
     _validate_password_for_bcrypt(password)
     user = db.query(User).filter_by(username=username).first()
-    if not user or not pwd_context.verify(password, user.password_hash):
+    # If user does not exist, or the stored password_hash is empty (Discord-only
+    # account), treat as invalid credentials for password-based login.
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not user.password_hash:
+        # No local password set (Discord-only account)
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not pwd_context.verify(password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     if discord_token is not None:
         user.discord_token = discord_token
