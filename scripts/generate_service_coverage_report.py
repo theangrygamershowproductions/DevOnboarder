@@ -72,9 +72,9 @@ def get_service_info() -> Dict[str, Dict[str, Any]]:
             "description": "Shared utilities",
             "priority": "critical",
         },
-        "xp": {"threshold": 90, "description": "XP/gamification", "priority": "high"},
+        "xp": {"threshold": 95, "description": "XP/gamification", "priority": "high"},
         "discord_integration": {
-            "threshold": 90,
+            "threshold": 95,
             "description": "Discord OAuth/roles",
             "priority": "high",
         },
