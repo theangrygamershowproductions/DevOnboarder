@@ -10,998 +10,998 @@
 name: CI
 
 on:
-    push:
-    pull_request:
+  push:
+  pull_request:
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
-    contents: write  # Required for coverage badge commits
-    issues: write  # Required for issue creation
-    pull-requests: write  # Required for PR comments
+  contents: write # Required for coverage badge commits
+  issues: write # Required for issue creation
+  pull-requests: write # Required for PR comments
 
 jobs:
-    validate-yaml:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
-              with:
-                  file_or_dir: ".github/workflows/**/*.yml"
-                  config_file: .github/.yamllint-config
-    filter:
-        needs: validate-yaml
-        runs-on: ubuntu-latest
-        outputs:
-            code: ${{ steps.filter.outputs.code }}
-            docs: ${{ steps.filter.outputs.docs }}
-        steps:
-            - uses: actions/checkout@v5
-              with:
-                  fetch-depth: 0
-            - name: Filter paths
-              id: filter
-              uses: dorny/paths-filter@v2
-              with:
-                  filters: |
-                      code:
-                          - 'src/**'
-                          - 'bot/**'
-                          - 'frontend/**'
-                          - 'auth/**'
-                          - 'tests/**'
-                          - 'scripts/**'
-                          - 'config/**'
-                          - '.github/workflows/**'
-                          - 'pyproject.toml'
-                          - 'package*.json'
-                          - '.tool-versions'
-                          - 'docker-compose*.yaml'
-                          - '.env*'
-                          - 'Makefile'
-                          - 'plugins/**'
-                      docs:
-                          - 'docs/**'
-                          - '**/*.md'
-                          - '.github/copilot-instructions.md'
-    test:
-        needs: filter
-        if: |
-            github.event_name == 'pull_request' ||
-            (github.event_name == 'push' &&
-             !contains(join(github.event.head_commit.message), '[no-ci]'))
-        runs-on: ubuntu-latest
-        environment: ci
-        strategy:
-            matrix:
-                python-version: ["3.12"]
-                node-version: ["22"]
-        timeout-minutes: 60
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
+          config_file: .github/.yamllint-config
+  filter:
+    needs: validate-yaml
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            code:
+                - 'src/**'
+                - 'bot/**'
+                - 'frontend/**'
+                - 'auth/**'
+                - 'tests/**'
+                - 'scripts/**'
+                - 'config/**'
+                - '.github/workflows/**'
+                - 'pyproject.toml'
+                - 'package*.json'
+                - '.tool-versions'
+                - 'docker-compose*.yaml'
+                - '.env*'
+                - 'Makefile'
+                - 'plugins/**'
+            docs:
+                - 'docs/**'
+                - '**/*.md'
+                - '.github/copilot-instructions.md'
+  test:
+    needs: filter
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' &&
+       !contains(join(github.event.head_commit.message), '[no-ci]'))
+    runs-on: ubuntu-latest
+    environment: ci
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+        node-version: ["22"]
+    timeout-minutes: 60
+    env:
+      VALE_VERSION: 3.12.0
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - name: Fetch base branch
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+              git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
+          else
+              # For push events, fetch main as base
+              git fetch origin main:main
+          fi
+      - name: Install shellcheck
+        run: pip install shellcheck-py
+      - name: Lint shell scripts
+        run: shellcheck --severity=warning scripts/*.sh
+      - name: Lint commit messages
+        run: bash scripts/check_commit_messages.sh
+      - name: Verify GitHub CLI availability
+        run: |
+          # GitHub CLI is pre-installed on GitHub Actions runners
+          if ! command -v gh >/dev/null 2>&1; then
+              echo "::error::GitHub CLI not found. Installing..."
+              # Install GitHub CLI if not available
+              curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+              ARCH=$(dpkg --print-architecture)
+              printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" \
+                  "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+              sudo apt update
+              sudo apt install gh
+          fi
+          GH_VERSION=$(gh --version | head -n1)
+          printf "GitHub CLI version: %s\n" "$GH_VERSION"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Verify language versions
+        run: bash scripts/check_versions.sh
+      - name: Cache pip downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-py${{ matrix.python-version }}-
+      - name: Cache frontend node modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
+      - name: Cache bot node modules
+        uses: actions/cache@v4
+        with:
+          path: bot/node_modules
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ matrix.node-version }}-bot-
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Prepare CI log directory
+        run: mkdir -p logs
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
+          printf "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
+      - name: Install dev dependencies
+        run: |
+          source .venv/bin/activate
+          pip install ".[test]" 2>&1 | tee logs/pip-install.log || {
+              echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
+              exit 1
+          }
+      - name: Check Python dependencies
+        run: |
+          source .venv/bin/activate
+          pip check
+      - name: Python dependency audit
+        run: |
+          source .venv/bin/activate
+          if ! pip-audit; then
+            code=$?
+            if [ "$code" -eq 1 ]; then
+              exit 1
+            else
+              echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
+            fi
+          fi
+      - name: Install yamllint
+        run: |
+          source .venv/bin/activate
+          pip install yamllint
+      - name: Lint and validate bot permissions
+        run: bash scripts/validate-bot-permissions.sh
+      - name: Run Black
+        run: |
+          source .venv/bin/activate
+          black --check .
+      - name: Regenerate env docs
+        run: |
+          source .venv/bin/activate
+          python scripts/regenerate_env_docs.py
+      - name: Validate env docs
+        run: |
+          source .venv/bin/activate
+          python scripts/check_env_docs.py
+      - name: Validate Codex Agents
+        run: |
+          source .venv/bin/activate
+          python scripts/validate_agents.py
+      - name: Setup environment
+        run: ./scripts/setup-env.sh
+      - name: Install package
+        run: |
+          source .venv/bin/activate
+          pip install -e ".[test]" 2>&1 | tee logs/pip-install-editable.log
+      - name: Load CI environment variables
+        run: |
+          # Load .env.ci file and export variables for subsequent steps
+          if [ -f .env.ci ]; then
+              echo "Loading CI environment variables from .env.ci"
+              set -a
+              source .env.ci
+              set +a
+              # Export key variables to GitHub environment
+              {
+                printf "APP_ENV=%s\n" "$APP_ENV"
+                printf "JWT_SECRET_KEY=%s\n" "$JWT_SECRET_KEY"
+                printf "DATABASE_URL=%s\n" "$DATABASE_URL"
+                printf "JWT_ALGORITHM=%s\n" "$JWT_ALGORITHM"
+                printf "TOKEN_EXPIRE_SECONDS=%s\n" "$TOKEN_EXPIRE_SECONDS"
+                printf "DISCORD_API_TIMEOUT=%s\n" "$DISCORD_API_TIMEOUT"
+              } >> "$GITHUB_ENV"
+              echo "Environment variables loaded for CI:"
+              printf "  APP_ENV: %s\n" "$APP_ENV"
+              printf "  DATABASE_URL: %s...\n" "${DATABASE_URL:0:50}"
+          else
+              echo "::error::.env.ci file not found"
+              exit 1
+          fi
+      - name: Enforce Potato ignore policy
+        run: bash scripts/check_potato_ignore.sh
+      - name: Validate PR Summary
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ ! -f "PR_SUMMARY.md" ]; then
+              echo "::error::PR_SUMMARY.md is required for all pull requests"
+              echo "TIP: Use the template: .github/PR_SUMMARY_TEMPLATE.md"
+              echo "COPY: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
+              exit 1
+          fi
+
+          # Validate required sections and content
+          source .venv/bin/activate
+          python scripts/validate_pr_summary.py PR_SUMMARY.md
+
+      - name: Quality Control Gate
+        run: |
+          echo "Running comprehensive Quality Control validation..."
+          source .venv/bin/activate
+
+          if ./scripts/qc_pre_push.sh; then
+            echo "Quality Control Gate: PASSED"
+          else
+            echo "Quality Control Gate: FAILED"
+            echo "Running enhanced failure analysis..."
+
+            # Run misalignment detection
+            if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
+              echo "Executing system misalignment detection..."
+              ./scripts/detect_system_misalignment.sh || true
+            fi
+
+            # Run enhanced CI failure analysis
+            if [[ -x "./scripts/enhanced_ci_failure_analysis.sh" ]]; then
+              echo "Executing enhanced CI failure analysis..."
+              ./scripts/enhanced_ci_failure_analysis.sh || true
+            fi
+
+            # Upload analysis artifacts
+            echo "Uploading diagnostic artifacts..."
+            mkdir -p analysis-artifacts
+            find logs/ -name "*$(date +%Y%m%d)*" -type f 2>/dev/null | head -10 | while read -r file; do
+              cp "$file" analysis-artifacts/ 2>/dev/null || true
+            done
+
+            echo "Analysis complete. Check artifacts for detailed diagnostics."
+            exit 1
+          fi
+
+      - name: Upload Analysis Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-failure-analysis
+          path: |
+            logs/
+            analysis-artifacts/
+          retention-days: 7
+      - name: Generate OpenAPI spec
+        run: |
+          source .venv/bin/activate
+          python scripts/generate_openapi.py
+      - name: Check committed OpenAPI spec
+        run: |
+          git diff --quiet src/devonboarder/openapi.json || {
+              echo "::error::openapi.json is outdated. Run 'make openapi' and commit the changes.";
+              exit 1;
+          }
+      - name: Validate OpenAPI contract
+        run: |
+          source .venv/bin/activate
+          python -c "
+          import json
+          from openapi_spec_validator import validate_spec
+
+          with open('src/devonboarder/openapi.json') as f:
+              spec = json.load(f)
+
+          try:
+              validate_spec(spec)
+              print('PASS: OpenAPI spec is valid')
+          except Exception as e:
+              print(f'FAIL: OpenAPI spec validation failed: {e}')
+              exit(1)
+          "
+      - name: Alembic migration lint
+        run: ./scripts/alembic_migration_check.sh
+      - name: Doc coverage check
+        run: |
+          source .venv/bin/activate
+          python scripts/check_docstrings.py src/devonboarder
+      - name: Run linter
+        run: |
+          source .venv/bin/activate
+          ruff check --output-format=github .
+      - name: Run mypy
+        run: |
+          source .venv/bin/activate
+          mypy --cache-dir=logs/.mypy_cache src/devonboarder
+      - name: Install Vale
+        run: |
+          # Download and install Vale 3.12.0 to /usr/local/bin
+          VALE_VERSION=3.12.0
+          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+          TMP_DIR=$(mktemp -d)
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
+          sudo install -m 755 "$TMP_DIR/vale" /usr/local/bin/vale
+          # Verify installation
+          vale --version
+      - name: Documentation style check
+        run: ./scripts/check_docs.sh
+      - name: Upload Vale results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vale-results
+          path: logs/vale-results.json
+          retention-days: 7
+      - name: Generate secrets
+        run: ./scripts/generate-secrets.sh
+      - name: Audit environment variables
+        run: |
+          mkdir -p logs
+          env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' > logs/env_audit.log
+          cat logs/env_audit.log
+          cat logs/env_audit.json
+          missing=$(python -c 'import json,sys;print("".join(json.load(open("logs/env_audit.json")).get("missing", [])))')
+          extras=$(python -c 'import json,sys;d=json.load(open("logs/env_audit.json"));print("".join(e for e in d.get("extra", []) if e not in ("PATH","PWD","SHLVL","_")))')
+          if [ -n "$missing" ] || [ -n "$extras" ]; then
+              echo "::error::Environment variable mismatch detected"
+              exit 1
+          fi
+      - name: Upload env audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-audit
+          path: |
+            logs/env_audit.log
+            logs/env_audit.json
+          retention-days: 7
+      - name: Build containers
+        run: docker compose -f docker-compose.ci.yaml --env-file .env.ci build 2>&1 | tee logs/docker-build.log
+      - name: Scan images with Trivy
         env:
-            VALE_VERSION: 3.12.0
+          TRIVY_VERSION: 0.47.0
+        run: bash scripts/trivy_scan.sh docker-compose.ci.yaml
+      - name: Start docker compose
+        run: docker compose -f docker-compose.ci.yaml --env-file .env.ci up -d
+      - name: Verify compose services
+        run: |
+          docker compose -f docker-compose.ci.yaml --env-file .env.ci ps
+          failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
+          if [ -n "$failed" ]; then
+              docker compose logs
+              exit 1
+          fi
+      - name: Wait for auth service
+        run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
+      - name: Run diagnostics
+        run: |
+          mkdir -p logs
+          source .venv/bin/activate
+          PYTHONPATH=src python -m devonboarder.diagnostics > logs/diagnostics.log
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics
+          path: logs/diagnostics.log
+          retention-days: 7
+      - name: Prepare test-results directory
+        run: mkdir -p test-results logs
+      - name: Run per-service coverage tests
+        run: |
+          source .venv/bin/activate
+          echo "=========================================="
+          echo "DevOnboarder Per-Service Coverage Analysis"
+          echo "=========================================="
+          echo
 
-        steps:
-            - uses: actions/checkout@v5
-              with:
-                  fetch-depth: 0
-                  ref: ${{ github.head_ref }}
-            - name: Fetch base branch
-              run: |
-                  if [ "${{ github.event_name }}" = "pull_request" ]; then
-                      git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
-                  else
-                      # For push events, fetch main as base
-                      git fetch origin main:main
-                  fi
-            - name: Install shellcheck
-              run: pip install shellcheck-py
-            - name: Lint shell scripts
-              run: shellcheck --severity=warning scripts/*.sh
-            - name: Lint commit messages
-              run: bash scripts/check_commit_messages.sh
-            - name: Verify GitHub CLI availability
-              run: |
-                  # GitHub CLI is pre-installed on GitHub Actions runners
-                  if ! command -v gh >/dev/null 2>&1; then
-                      echo "::error::GitHub CLI not found. Installing..."
-                      # Install GitHub CLI if not available
-                      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                      ARCH=$(dpkg --print-architecture)
-                      printf "deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n" \
-                          "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                      sudo apt update
-                      sudo apt install gh
-                  fi
-                  GH_VERSION=$(gh --version | head -n1)
-                  printf "GitHub CLI version: %s\n" "$GH_VERSION"
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: ${{ matrix.python-version }}
-            - name: Set up Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: Verify language versions
-              run: bash scripts/check_versions.sh
-            - name: Cache pip downloads
-              uses: actions/cache@v4
-              with:
-                  path: ~/.cache/pip
-                  key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-py${{ matrix.python-version }}-
-            - name: Cache frontend node modules
-              uses: actions/cache@v4
-              with:
-                  path: frontend/node_modules
-                  key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
-            - name: Cache bot node modules
-              uses: actions/cache@v4
-              with:
-                  path: bot/node_modules
-                  key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node${{ matrix.node-version }}-bot-
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v3
-            - name: Prepare CI log directory
-              run: mkdir -p logs
-            - name: Create virtual environment
-              run: |
-                  python -m venv .venv
-                  source .venv/bin/activate
-                  printf "VIRTUAL_ENV=%s\n" "$VIRTUAL_ENV" >> "$GITHUB_ENV"
-                  printf "%s/bin\n" "$VIRTUAL_ENV" >> "$GITHUB_PATH"
-            - name: Install dev dependencies
-              run: |
-                  source .venv/bin/activate
-                  pip install ".[test]" 2>&1 | tee logs/pip-install.log || {
-                      echo "Pip install failed. See docs/offline-setup.md for offline instructions." >&2
-                      exit 1
-                  }
-            - name: Check Python dependencies
-              run: |
-                  source .venv/bin/activate
-                  pip check
-            - name: Python dependency audit
-              run: |
-                  source .venv/bin/activate
-                  if ! pip-audit; then
-                    code=$?
-                    if [ "$code" -eq 1 ]; then
-                      exit 1
-                    else
-                      echo "pip-audit failed. See docs/offline-setup.md for offline instructions." >&2
-                    fi
-                  fi
-            - name: Install yamllint
-              run: |
-                  source .venv/bin/activate
-                  pip install yamllint
-            - name: Lint and validate bot permissions
-              run: bash scripts/validate-bot-permissions.sh
-            - name: Run Black
-              run: |
-                  source .venv/bin/activate
-                  black --check .
-            - name: Regenerate env docs
-              run: |
-                  source .venv/bin/activate
-                  python scripts/regenerate_env_docs.py
-            - name: Validate env docs
-              run: |
-                  source .venv/bin/activate
-                  python scripts/check_env_docs.py
-            - name: Validate Codex Agents
-              run: |
-                  source .venv/bin/activate
-                  python scripts/validate_agents.py
-            - name: Setup environment
-              run: ./scripts/setup-env.sh
-            - name: Install package
-              run: |
-                  source .venv/bin/activate
-                  pip install -e ".[test]" 2>&1 | tee logs/pip-install-editable.log
-            - name: Load CI environment variables
-              run: |
-                  # Load .env.ci file and export variables for subsequent steps
-                  if [ -f .env.ci ]; then
-                      echo "Loading CI environment variables from .env.ci"
-                      set -a
-                      source .env.ci
-                      set +a
-                      # Export key variables to GitHub environment
-                      {
-                        printf "APP_ENV=%s\n" "$APP_ENV"
-                        printf "JWT_SECRET_KEY=%s\n" "$JWT_SECRET_KEY"
-                        printf "DATABASE_URL=%s\n" "$DATABASE_URL"
-                        printf "JWT_ALGORITHM=%s\n" "$JWT_ALGORITHM"
-                        printf "TOKEN_EXPIRE_SECONDS=%s\n" "$TOKEN_EXPIRE_SECONDS"
-                        printf "DISCORD_API_TIMEOUT=%s\n" "$DISCORD_API_TIMEOUT"
-                      } >> "$GITHUB_ENV"
-                      echo "Environment variables loaded for CI:"
-                      printf "  APP_ENV: %s\n" "$APP_ENV"
-                      printf "  DATABASE_URL: %s...\n" "${DATABASE_URL:0:50}"
-                  else
-                      echo "::error::.env.ci file not found"
-                      exit 1
-                  fi
-            - name: Enforce Potato ignore policy
-              run: bash scripts/check_potato_ignore.sh
-            - name: Validate PR Summary
-              if: github.event_name == 'pull_request'
-              run: |
-                  if [ ! -f "PR_SUMMARY.md" ]; then
-                      echo "::error::PR_SUMMARY.md is required for all pull requests"
-                      echo "TIP: Use the template: .github/PR_SUMMARY_TEMPLATE.md"
-                      echo "COPY: cp .github/PR_SUMMARY_TEMPLATE.md PR_SUMMARY.md"
-                      exit 1
-                  fi
+          # Initialize coverage tracking
+          OVERALL_SUCCESS=true
 
-                  # Validate required sections and content
-                  source .venv/bin/activate
-                  python scripts/validate_pr_summary.py PR_SUMMARY.md
+          # Core authentication service - highest standard
+          echo "Testing devonboarder service (95% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_auth pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov --cov-config=config/.coveragerc.auth \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_auth.xml \
+              --cov-fail-under=95 \
+              --junitxml=test-results/pytest-auth.xml \
+              tests/test_auth_service.py \
+              2>&1 | tee logs/pytest_auth.log; then
+              echo "PASS devonboarder: Coverage above 95% threshold"
+          else
+              echo "FAIL devonboarder: Coverage below 95% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-            - name: Quality Control Gate
-              run: |
-                echo "Running comprehensive Quality Control validation..."
-                source .venv/bin/activate
+          # XP/gamification service - high standard
+          echo "Testing xp service (95% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_xp pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov --cov-config=config/.coveragerc.xp \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_xp.xml \
+              --cov-fail-under=95 \
+              --junitxml=test-results/pytest-xp.xml \
+              tests/test_xp_api.py \
+              2>&1 | tee logs/pytest_xp.log; then
+              echo "PASS xp: Coverage above 95% threshold"
+          else
+              echo "FAIL xp: Coverage below 95% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-                if ./scripts/qc_pre_push.sh; then
-                  echo "Quality Control Gate: PASSED"
-                else
-                  echo "Quality Control Gate: FAILED"
-                  echo "Running enhanced failure analysis..."
+          # Discord integration - high standard (critical OAuth)
+          echo "Testing discord_integration service (95% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_discord pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov --cov-config=config/.coveragerc.discord \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_discord.xml \
+              --cov-fail-under=95 \
+              --junitxml=test-results/pytest-discord.xml \
+              tests/test_discord_integration.py \
+              2>&1 | tee logs/pytest_discord.log; then
+              echo "PASS discord_integration: Coverage above 95% threshold"
+          else
+              echo "FAIL discord_integration: Coverage below 95% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-                  # Run misalignment detection
-                  if [[ -x "./scripts/detect_system_misalignment.sh" ]]; then
-                    echo "Executing system misalignment detection..."
-                    ./scripts/detect_system_misalignment.sh || true
-                  fi
+          # Feedback service - moderate standard
+          echo "Testing feedback_service (85% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_feedback pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov=src/feedback_service \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_feedback.xml \
+              --cov-fail-under=85 \
+              --junitxml=test-results/pytest-feedback.xml \
+              2>&1 | tee logs/pytest_feedback.log; then
+              echo "PASS feedback_service: Coverage above 85% threshold"
+          else
+              echo "FAIL feedback_service: Coverage below 85% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-                  # Run enhanced CI failure analysis
-                  if [[ -x "./scripts/enhanced_ci_failure_analysis.sh" ]]; then
-                    echo "Executing enhanced CI failure analysis..."
-                    ./scripts/enhanced_ci_failure_analysis.sh || true
-                  fi
+          # Routes - moderate standard
+          echo "Testing routes (85% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_routes pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov=src/routes \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_routes.xml \
+              --cov-fail-under=85 \
+              --junitxml=test-results/pytest-routes.xml \
+              2>&1 | tee logs/pytest_routes.log; then
+              echo "PASS routes: Coverage above 85% threshold"
+          else
+              echo "FAIL routes: Coverage below 85% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-                  # Upload analysis artifacts
-                  echo "Uploading diagnostic artifacts..."
-                  mkdir -p analysis-artifacts
-                  find logs/ -name "*$(date +%Y%m%d)*" -type f 2>/dev/null | head -10 | while read -r file; do
-                    cp "$file" analysis-artifacts/ 2>/dev/null || true
-                  done
+          # LLM helper service - moderate standard
+          echo "Testing llama2_agile_helper (85% threshold)..."
+          if COVERAGE_FILE=logs/.coverage_llama pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov=src/llama2_agile_helper \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_llama.xml \
+              --cov-fail-under=85 \
+              --junitxml=test-results/pytest-llama.xml \
+              2>&1 | tee logs/pytest_llama.log; then
+              echo "PASS llama2_agile_helper: Coverage above 85% threshold"
+          else
+              echo "FAIL llama2_agile_helper: Coverage below 85% threshold"
+              OVERALL_SUCCESS=false
+          fi
+          echo
 
-                  echo "Analysis complete. Check artifacts for detailed diagnostics."
-                  exit 1
-                fi
+          # Generate combined coverage report
+          echo "Generating combined coverage report..."
+          COVERAGE_FILE=logs/.coverage pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov=src \
+              --cov-report=xml:logs/coverage.xml \
+              --cov-report=term \
+              --junitxml=test-results/pytest-results.xml \
+              2>&1 | tee logs/pytest.log
 
-            - name: Upload Analysis Artifacts
-              if: failure()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ci-failure-analysis
-                  path: |
-                    logs/
-                    analysis-artifacts/
-                  retention-days: 7
-            - name: Generate OpenAPI spec
-              run: |
-                  source .venv/bin/activate
-                  python scripts/generate_openapi.py
-            - name: Check committed OpenAPI spec
-              run: |
-                  git diff --quiet src/devonboarder/openapi.json || {
-                      echo "::error::openapi.json is outdated. Run 'make openapi' and commit the changes.";
-                      exit 1;
-                  }
-            - name: Validate OpenAPI contract
-              run: |
-                  source .venv/bin/activate
-                  python -c "
-                  import json
-                  from openapi_spec_validator import validate_spec
+          echo
+          echo "=========================================="
+          echo "Per-Service Coverage Summary"
+          echo "=========================================="
 
-                  with open('src/devonboarder/openapi.json') as f:
-                      spec = json.load(f)
+          # Check overall result
+          if [ "$OVERALL_SUCCESS" = "true" ]; then
+              echo "SUCCESS: ALL SERVICES PASSED their coverage thresholds"
+              echo "DevOnboarder maintains high quality across all services"
+          else
+              echo "WARNING: Some services failed coverage thresholds"
+              echo "Review individual service logs for improvement opportunities"
+              echo "Focus testing efforts on failed services for maximum ROI"
+              exit 1
+          fi
+      - name: Upload pytest results
+        if: always() && hashFiles('test-results/pytest-*.xml') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: |
+            test-results/pytest-results.xml
+            test-results/pytest-devonboarder.xml
+            test-results/pytest-utils.xml
+            test-results/pytest-xp.xml
+            test-results/pytest-discord.xml
+            test-results/pytest-feedback.xml
+            test-results/pytest-routes.xml
+            test-results/pytest-llama.xml
+          retention-days: 7
+      - name: Annotate pytest failures
+        if: failure() && hashFiles('test-results/pytest-results.xml') != ''
+        run: |
+          line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
+          echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
+      - name: Install frontend dependencies
+        run: |
+          npm ci || {
+              echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+              exit 1
+          }
+        working-directory: frontend
+      - name: Run frontend lint
+        run: npm run lint
+        working-directory: frontend
+      - name: Run frontend tests with coverage
+        run: npm test 2>&1 | tee vitest.log
+        working-directory: frontend
+      - name: Upload vitest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-log
+          path: frontend/vitest.log
+          retention-days: 7
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ matrix.node-version }}-playwright-
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+        working-directory: frontend
+      - name: Run E2E tests
+        run: npm run test:e2e 2>&1 | tee playwright.log
+        working-directory: frontend
+        env:
+          AUTH_URL: http://localhost:8002
+      - name: Run performance tests
+        run: npm run perf 2>&1 | tee lhci.log
+        working-directory: frontend
+      - name: Run accessibility tests
+        run: npm run test:a11y 2>&1 | tee a11y.log
+        working-directory: frontend
+      - name: Upload playwright log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-log
+          path: frontend/playwright.log
+          retention-days: 7
+      - name: Upload accessibility log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-log
+          path: frontend/a11y.log
+          retention-days: 7
+      - name: Upload Lighthouse log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-log
+          path: frontend/lhci.log
+          retention-days: 7
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: frontend/lhci-report
+          retention-days: 7
+      - name: Install bot dependencies
+        run: |
+          npm ci || {
+              echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
+              exit 1
+          }
+        working-directory: bot
+      - name: Run bot lint
+        run: npm run lint
+        working-directory: bot
+      - name: Run bot tests with coverage
+        run: npm test 2>&1 | tee jest.log
+        working-directory: bot
+      - name: Upload jest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-log
+          path: bot/jest.log
+          retention-days: 7
+      - name: Generate coverage summary
+        env:
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          source .venv/bin/activate
+          echo "Generating per-service coverage report..."
+          python scripts/generate_service_coverage_report.py
+          echo "Generating traditional coverage summary..."
+          python scripts/post_coverage_comment.py coverage-summary.md
+          bash scripts/append_coverage_summary.sh coverage-summary.md
+      - name: Upload coverage summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-summary
+          path: coverage-summary.md
+          retention-days: 7
+      - name: Upload coverage data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data
+          path: |
+            bot/coverage
+            frontend/coverage
+            logs/.coverage*
+            logs/coverage*.xml
+            logs/pytest*.log
+          retention-days: 7
+      - name: Post coverage comment
+        if: github.event_name == 'pull_request'
+        run: |
+          gh_bin=$(which gh)
+          "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Update coverage badge
+        run: |
+          source .venv/bin/activate
+          python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
+      # Disabled: Coverage badge commit causes signature verification issues
+      # - name: Commit coverage badge
+      #   if: github.event_name != 'pull_request'
+      #   env:
+      #       # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
+      #       CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #       # Ensure we're in virtual environment context for any Python tools
+      #       source .venv/bin/activate
+      #
+      #       git config user.name "${{ github.actor }}"
+      #       git config user.email "${{ github.actor }}@users.noreply.github.com"
+      #
+      #       # Check if coverage badge file exists and has changes
+      #       if [ -f "coverage.svg" ]; then
+      #           git add coverage.svg
+      #
+      #           # Only commit if there are changes
+      #           if git diff --staged --quiet; then
+      #               echo "No changes to coverage badge"
+      #           else
+      #               git commit -m "CHORE(ci): update coverage badge"
+      #               # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
+      #               if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
+      #                   echo "Attempting push with CI_BOT_TOKEN..."
+      #                   git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+      #                       echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
+      #                       git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+      #                           echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
+      #                           exit 1  # Trigger failure condition for artifact upload
+      #                       }
+      #                   }
+      #               else
+      #                   echo "Using GITHUB_TOKEN for push..."
+      #                   git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
+      #                       echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
+      #                       exit 1  # Trigger failure condition for artifact upload
+      #                   }
+      #               fi
+      #           fi
+      #       else
+      #           echo "Coverage badge file not found"
+      #       fi
 
-                  try:
-                      validate_spec(spec)
-                      print('PASS: OpenAPI spec is valid')
-                  except Exception as e:
-                      print(f'FAIL: OpenAPI spec validation failed: {e}')
-                      exit(1)
-                  "
-            - name: Alembic migration lint
-              run: ./scripts/alembic_migration_check.sh
-            - name: Doc coverage check
-              run: |
-                  source .venv/bin/activate
-                  python scripts/check_docstrings.py src/devonboarder
-            - name: Run linter
-              run: |
-                  source .venv/bin/activate
-                  ruff check --output-format=github .
-            - name: Run mypy
-              run: |
-                  source .venv/bin/activate
-                  mypy --cache-dir=logs/.mypy_cache src/devonboarder
-            - name: Install Vale
-              run: |
-                  # Download and install Vale 3.12.0 to /usr/local/bin
-                  VALE_VERSION=3.12.0
-                  VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
-                  TMP_DIR=$(mktemp -d)
-                  trap 'rm -rf "$TMP_DIR"' EXIT
-                  curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
-                  sudo install -m 755 "$TMP_DIR/vale" /usr/local/bin/vale
-                  # Verify installation
-                  vale --version
-            - name: Documentation style check
-              run: ./scripts/check_docs.sh
-            - name: Upload Vale results
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: vale-results
-                  path: logs/vale-results.json
-                  retention-days: 7
-            - name: Generate secrets
-              run: ./scripts/generate-secrets.sh
-            - name: Audit environment variables
-              run: |
-                  mkdir -p logs
-                  env -i PATH="$PATH" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' > logs/env_audit.log
-                  cat logs/env_audit.log
-                  cat logs/env_audit.json
-                  missing=$(python -c 'import json,sys;print("".join(json.load(open("logs/env_audit.json")).get("missing", [])))')
-                  extras=$(python -c 'import json,sys;d=json.load(open("logs/env_audit.json"));print("".join(e for e in d.get("extra", []) if e not in ("PATH","PWD","SHLVL","_")))')
-                  if [ -n "$missing" ] || [ -n "$extras" ]; then
-                      echo "::error::Environment variable mismatch detected"
-                      exit 1
-                  fi
-            - name: Upload env audit
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: env-audit
-                  path: |
-                      logs/env_audit.log
-                      logs/env_audit.json
-                  retention-days: 7
-            - name: Build containers
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.ci build 2>&1 | tee logs/docker-build.log
-            - name: Scan images with Trivy
-              env:
-                  TRIVY_VERSION: 0.47.0
-              run: bash scripts/trivy_scan.sh docker-compose.ci.yaml
-            - name: Start docker compose
-              run: docker compose -f docker-compose.ci.yaml --env-file .env.ci up -d
-            - name: Verify compose services
-              run: |
-                  docker compose -f docker-compose.ci.yaml --env-file .env.ci ps
-                  failed=$(docker compose -f docker-compose.ci.yaml --env-file .env.ci ps -q | xargs -r docker inspect -f '{{.State.Status}}' | grep -v running || true)
-                  if [ -n "$failed" ]; then
-                      docker compose logs
-                      exit 1
-                  fi
-            - name: Wait for auth service
-              run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
-            - name: Run diagnostics
-              run: |
-                  mkdir -p logs
-                  source .venv/bin/activate
-                  PYTHONPATH=src python -m devonboarder.diagnostics > logs/diagnostics.log
-            - name: Upload diagnostics
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: diagnostics
-                  path: logs/diagnostics.log
-                  retention-days: 7
-            - name: Prepare test-results directory
-              run: mkdir -p test-results logs
-            - name: Run per-service coverage tests
-              run: |
-                  source .venv/bin/activate
-                  echo "=========================================="
-                  echo "DevOnboarder Per-Service Coverage Analysis"
-                  echo "=========================================="
-                  echo
+      # Upload coverage badge as artifact if git push failed
+      - name: Upload coverage badge as artifact (fallback)
+        if: failure() || github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge-fallback
+          path: coverage.svg
+          retention-days: 30
+      - name: Clean test artifacts
+        if: always()
+        run: bash scripts/clean_pytest_artifacts.sh
+      - name: Post-success log cleanup
+        if: success()
+        run: |
+          echo "CI completed successfully - smart cleaning temporary artifacts"
+          bash scripts/manage_logs.sh smart-clean
+          echo "SUCCESS: Temporary artifacts cleaned, important logs preserved for next run"
 
-                  # Initialize coverage tracking
-                  OVERALL_SUCCESS=true
+      - name: Wait for auth service
+        run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
+      - name: Check CORS & security headers
+        run: ./scripts/check_headers.py
+        env:
+          CHECK_HEADERS_URL: http://localhost:8002/api/user
+      - name: Run security audit
+        run: bash scripts/security_audit.sh
+      - name: Bandit Security Scan
+        run: bandit -r src -ll
+      - name: NPM Audit (high severity)
+        run: npm audit --audit-level=high
+        working-directory: frontend
+      - name: NPM Audit (bot)
+        run: npm audit --audit-level=high
+        working-directory: bot
+      - name: Stop docker compose
+        if: always()
+        run: |
+          if [ -f .env.ci ]; then
+              docker compose -f docker-compose.ci.yaml --env-file .env.ci down
+          else
+              docker compose -f docker-compose.ci.yaml down
+          fi
+      - name: Label Codex PR
+        if: github.actor == 'codex[bot]'
+        run: |
+          gh_bin=$(which gh)
+          if ! "$gh_bin" api user >/dev/null 2>&1; then
+              echo "::warning::GitHub CLI authentication failed. Skipping PR labeling."
+              exit 0
+          fi
+          if ! "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "Codex"; then
+              echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Summarize CI failures
+        if: always()
+        run: |
+          # Ensure virtual environment exists before activating
+          if [ ! -d ".venv" ]; then
+              echo "Virtual environment not found, creating minimal environment..."
+              python -m venv .venv
+              source .venv/bin/activate
+              # Install minimal dependencies if needed
+              pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
+          else
+              source .venv/bin/activate
+          fi
+          python scripts/summarize_ci_failures.py
+      - name: Run CI failure diagnoser
+        if: always()
+        run: |
+          # Ensure virtual environment exists before activating
+          if [ ! -d ".venv" ]; then
+              echo "Virtual environment not found, creating minimal environment..."
+              python -m venv .venv
+              source .venv/bin/activate
+              # Install minimal dependencies needed for diagnoser
+              pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
+          else
+              source .venv/bin/activate
+          fi
 
-                  # Core authentication service - highest standard
-                  echo "Testing devonboarder service (95% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_auth pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov --cov-config=config/.coveragerc.auth \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_auth.xml \
-                      --cov-fail-under=95 \
-                      --junitxml=test-results/pytest-auth.xml \
-                      tests/test_auth_service.py \
-                      2>&1 | tee logs/pytest_auth.log; then
-                      echo "PASS devonboarder: Coverage above 95% threshold"
-                  else
-                      echo "FAIL devonboarder: Coverage below 95% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
+          # Create audit.md even if diagnoser fails
+          if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
+              echo "CI failure diagnoser completed successfully"
+          else
+              {
+                echo "# CI Failure Analysis"
+                echo ""
+                echo "CI failure diagnoser encountered an issue:"
+                echo "- Log files may not be available at expected location"
+                echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`"
+                echo ""
+                echo "Please check the workflow logs for detailed error information."
+              } > audit.md
+          fi
+          # Ensure audit.md exists and has content
+          if [ ! -f audit.md ] || [ ! -s audit.md ]; then
+              echo "# CI Status" > audit.md
+              echo "No failure patterns detected in available logs." >> audit.md
+          fi
+      - name: Download previous CI failure issue
+        if: always()
+        run: bash scripts/download_ci_failure_issue.sh
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Create or update CI failure issue
+        if: always() && github.event_name == 'pull_request'
+        id: ci_failure
+        run: |
+          set -euo pipefail
+          printf -- "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
 
-                  # XP/gamification service - high standard
-                  echo "Testing xp service (90% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_xp pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov --cov-config=config/.coveragerc.xp \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_xp.xml \
-                      --cov-fail-under=90 \
-                      --junitxml=test-results/pytest-xp.xml \
-                      tests/test_xp_api.py \
-                      2>&1 | tee logs/pytest_xp.log; then
-                      echo "PASS xp: Coverage above 90% threshold"
-                  else
-                      echo "FAIL xp: Coverage below 90% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
+          # Ensure audit.md exists before trying to read it
+          if [ -f audit.md ]; then
+              cat audit.md >> summary.md
+          else
+              echo "# CI Analysis" >> summary.md
+              echo "Audit file not available." >> summary.md
+          fi
 
-                  # Discord integration - high standard (critical OAuth)
-                  echo "Testing discord_integration service (90% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_discord pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov --cov-config=config/.coveragerc.discord \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_discord.xml \
-                      --cov-fail-under=90 \
-                      --junitxml=test-results/pytest-discord.xml \
-                      tests/test_discord_integration.py \
-                      2>&1 | tee logs/pytest_discord.log; then
-                      echo "PASS discord_integration: Coverage above 90% threshold"
-                  else
-                      echo "FAIL discord_integration: Coverage below 90% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
+          gh_bin=$(which gh)
+          "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
 
-                  # Feedback service - moderate standard
-                  echo "Testing feedback_service (85% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_feedback pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov=src/feedback_service \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_feedback.xml \
-                      --cov-fail-under=85 \
-                      --junitxml=test-results/pytest-feedback.xml \
-                      2>&1 | tee logs/pytest_feedback.log; then
-                      echo "PASS feedback_service: Coverage above 85% threshold"
-                  else
-                      echo "FAIL feedback_service: Coverage below 85% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
+          # Check if we have sufficient permissions
+          if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
+              echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
+              echo "Auth check output:" | tee -a gh_cli.log
+              echo "$gh_bin_check" | tee -a gh_cli.log
+              exit 0
+          fi
 
-                  # Routes - moderate standard
-                  echo "Testing routes (85% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_routes pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov=src/routes \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_routes.xml \
-                      --cov-fail-under=85 \
-                      --junitxml=test-results/pytest-routes.xml \
-                      2>&1 | tee logs/pytest_routes.log; then
-                      echo "PASS routes: Coverage above 85% threshold"
-                  else
-                      echo "FAIL routes: Coverage below 85% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
-
-                  # LLM helper service - moderate standard
-                  echo "Testing llama2_agile_helper (85% threshold)..."
-                  if COVERAGE_FILE=logs/.coverage_llama pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov=src/llama2_agile_helper \
-                      --cov-report=term-missing \
-                      --cov-report=xml:logs/coverage_llama.xml \
-                      --cov-fail-under=85 \
-                      --junitxml=test-results/pytest-llama.xml \
-                      2>&1 | tee logs/pytest_llama.log; then
-                      echo "PASS llama2_agile_helper: Coverage above 85% threshold"
-                  else
-                      echo "FAIL llama2_agile_helper: Coverage below 85% threshold"
-                      OVERALL_SUCCESS=false
-                  fi
-                  echo
-
-                  # Generate combined coverage report
-                  echo "Generating combined coverage report..."
-                  COVERAGE_FILE=logs/.coverage pytest \
-                      -o cache_dir=logs/.pytest_cache \
-                      --cov=src \
-                      --cov-report=xml:logs/coverage.xml \
-                      --cov-report=term \
-                      --junitxml=test-results/pytest-results.xml \
-                      2>&1 | tee logs/pytest.log
-
-                  echo
-                  echo "=========================================="
-                  echo "Per-Service Coverage Summary"
-                  echo "=========================================="
-
-                  # Check overall result
-                  if [ "$OVERALL_SUCCESS" = "true" ]; then
-                      echo "SUCCESS: ALL SERVICES PASSED their coverage thresholds"
-                      echo "DevOnboarder maintains high quality across all services"
-                  else
-                      echo "WARNING: Some services failed coverage thresholds"
-                      echo "Review individual service logs for improvement opportunities"
-                      echo "Focus testing efforts on failed services for maximum ROI"
-                      exit 1
-                  fi
-            - name: Upload pytest results
-              if: always() && hashFiles('test-results/pytest-*.xml') != ''
-              uses: actions/upload-artifact@v4
-              with:
-                  name: pytest-results
-                  path: |
-                      test-results/pytest-results.xml
-                      test-results/pytest-devonboarder.xml
-                      test-results/pytest-utils.xml
-                      test-results/pytest-xp.xml
-                      test-results/pytest-discord.xml
-                      test-results/pytest-feedback.xml
-                      test-results/pytest-routes.xml
-                      test-results/pytest-llama.xml
-                  retention-days: 7
-            - name: Annotate pytest failures
-              if: failure() && hashFiles('test-results/pytest-results.xml') != ''
-              run: |
-                  line=$(grep -n -m 1 '<failure' test-results/pytest-results.xml | cut -d: -f1)
-                  echo "::error file=test-results/pytest-results.xml,line=${line}::Test failures detected"
-            - name: Install frontend dependencies
-              run: |
-                  npm ci || {
-                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
-                      exit 1
-                  }
-              working-directory: frontend
-            - name: Run frontend lint
-              run: npm run lint
-              working-directory: frontend
-            - name: Run frontend tests with coverage
-              run: npm test 2>&1 | tee vitest.log
-              working-directory: frontend
-            - name: Upload vitest log
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: vitest-log
-                  path: frontend/vitest.log
-                  retention-days: 7
-            - name: Cache Playwright browsers
-              uses: actions/cache@v4
-              with:
-                  path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node${{ matrix.node-version }}-playwright-
-            - name: Install Playwright browsers
-              run: npx playwright install --with-deps
-              working-directory: frontend
-            - name: Run E2E tests
-              run: npm run test:e2e 2>&1 | tee playwright.log
-              working-directory: frontend
-              env:
-                  AUTH_URL: http://localhost:8002
-            - name: Run performance tests
-              run: npm run perf 2>&1 | tee lhci.log
-              working-directory: frontend
-            - name: Run accessibility tests
-              run: npm run test:a11y 2>&1 | tee a11y.log
-              working-directory: frontend
-            - name: Upload playwright log
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: playwright-log
-                  path: frontend/playwright.log
-                  retention-days: 7
-            - name: Upload accessibility log
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: a11y-log
-                  path: frontend/a11y.log
-                  retention-days: 7
-            - name: Upload Lighthouse log
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: lighthouse-log
-                  path: frontend/lhci.log
-                  retention-days: 7
-            - name: Upload Lighthouse report
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: lighthouse-report
-                  path: frontend/lhci-report
-                  retention-days: 7
-            - name: Install bot dependencies
-              run: |
-                  npm ci || {
-                      echo "npm install failed. See docs/offline-setup.md for offline instructions." >&2
-                      exit 1
-                  }
-              working-directory: bot
-            - name: Run bot lint
-              run: npm run lint
-              working-directory: bot
-            - name: Run bot tests with coverage
-              run: npm test 2>&1 | tee jest.log
-              working-directory: bot
-            - name: Upload jest log
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: jest-log
-                  path: bot/jest.log
-                  retention-days: 7
-            - name: Generate coverage summary
-              env:
-                  GITHUB_SERVER_URL: ${{ github.server_url }}
-                  GITHUB_REPOSITORY: ${{ github.repository }}
-                  GITHUB_RUN_ID: ${{ github.run_id }}
-              run: |
-                  source .venv/bin/activate
-                  echo "Generating per-service coverage report..."
-                  python scripts/generate_service_coverage_report.py
-                  echo "Generating traditional coverage summary..."
-                  python scripts/post_coverage_comment.py coverage-summary.md
-                  bash scripts/append_coverage_summary.sh coverage-summary.md
-            - name: Upload coverage summary
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: coverage-summary
-                  path: coverage-summary.md
-                  retention-days: 7
-            - name: Upload coverage data
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: coverage-data
-                  path: |
-                      bot/coverage
-                      frontend/coverage
-                      logs/.coverage*
-                      logs/coverage*.xml
-                      logs/pytest*.log
-                  retention-days: 7
-            - name: Post coverage comment
-              if: github.event_name == 'pull_request'
-              run: |
-                  gh_bin=$(which gh)
-                  "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
-              env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            - name: Update coverage badge
-              run: |
-                  source .venv/bin/activate
-                  python scripts/update_coverage_badge.py coverage-summary.md coverage.svg
-            # Disabled: Coverage badge commit causes signature verification issues
-            # - name: Commit coverage badge
-            #   if: github.event_name != 'pull_request'
-            #   env:
-            #       # Use DevOnboarder CI token hierarchy: CI_ISSUE_AUTOMATION_TOKEN -> CI_BOT_TOKEN -> GITHUB_TOKEN
-            #       CI_BOT_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   run: |
-            #       # Ensure we're in virtual environment context for any Python tools
-            #       source .venv/bin/activate
-            #
-            #       git config user.name "${{ github.actor }}"
-            #       git config user.email "${{ github.actor }}@users.noreply.github.com"
-            #
-            #       # Check if coverage badge file exists and has changes
-            #       if [ -f "coverage.svg" ]; then
-            #           git add coverage.svg
-            #
-            #           # Only commit if there are changes
-            #           if git diff --staged --quiet; then
-            #               echo "No changes to coverage badge"
-            #           else
-            #               git commit -m "CHORE(ci): update coverage badge"
-            #               # Try CI token first, fallback to GITHUB_TOKEN with proper authentication
-            #               if [ -n "$CI_BOT_TOKEN" ] && [ "$CI_BOT_TOKEN" != "$GITHUB_TOKEN" ]; then
-            #                   echo "Attempting push with CI_BOT_TOKEN..."
-            #                   git push "https://$CI_BOT_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-            #                       echo "CI_BOT_TOKEN failed, falling back to GITHUB_TOKEN..."
-            #                       git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-            #                           echo "FAIL: All git push attempts failed - coverage badge will be uploaded as artifact"
-            #                           exit 1  # Trigger failure condition for artifact upload
-            #                       }
-            #                   }
-            #               else
-            #                   echo "Using GITHUB_TOKEN for push..."
-            #                   git push "https://$GITHUB_TOKEN@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref }}" || {
-            #                       echo "FAIL: GITHUB_TOKEN push failed - coverage badge will be uploaded as artifact"
-            #                       exit 1  # Trigger failure condition for artifact upload
-            #                   }
-            #               fi
-            #           fi
-            #       else
-            #           echo "Coverage badge file not found"
-            #       fi
-
-            # Upload coverage badge as artifact if git push failed
-            - name: Upload coverage badge as artifact (fallback)
-              if: failure() || github.event_name == 'pull_request'
-              uses: actions/upload-artifact@v4
-              with:
-                  name: coverage-badge-fallback
-                  path: coverage.svg
-                  retention-days: 30
-            - name: Clean test artifacts
-              if: always()
-              run: bash scripts/clean_pytest_artifacts.sh
-            - name: Post-success log cleanup
-              if: success()
-              run: |
-                  echo "CI completed successfully - smart cleaning temporary artifacts"
-                  bash scripts/manage_logs.sh smart-clean
-                  echo "SUCCESS: Temporary artifacts cleaned, important logs preserved for next run"
-
-            - name: Wait for auth service
-              run: bash scripts/wait_for_service.sh http://localhost:8002/health 30 2 auth
-            - name: Check CORS & security headers
-              run: ./scripts/check_headers.py
-              env:
-                  CHECK_HEADERS_URL: http://localhost:8002/api/user
-            - name: Run security audit
-              run: bash scripts/security_audit.sh
-            - name: Bandit Security Scan
-              run: bandit -r src -ll
-            - name: NPM Audit (high severity)
-              run: npm audit --audit-level=high
-              working-directory: frontend
-            - name: NPM Audit (bot)
-              run: npm audit --audit-level=high
-              working-directory: bot
-            - name: Stop docker compose
-              if: always()
-              run: |
-                  if [ -f .env.ci ]; then
-                      docker compose -f docker-compose.ci.yaml --env-file .env.ci down
-                  else
-                      docker compose -f docker-compose.ci.yaml down
-                  fi
-            - name: Label Codex PR
-              if: github.actor == 'codex[bot]'
-              run: |
-                  gh_bin=$(which gh)
-                  if ! "$gh_bin" api user >/dev/null 2>&1; then
-                      echo "::warning::GitHub CLI authentication failed. Skipping PR labeling."
-                      exit 0
-                  fi
-                  if ! "$gh_bin" pr edit ${{ github.event.pull_request.number }} --add-label "Codex"; then
-                      echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
-                  fi
-              env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            - name: Summarize CI failures
-              if: always()
-              run: |
-                  # Ensure virtual environment exists before activating
-                  if [ ! -d ".venv" ]; then
-                      echo "Virtual environment not found, creating minimal environment..."
-                      python -m venv .venv
-                      source .venv/bin/activate
-                      # Install minimal dependencies if needed
-                      pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
-                  else
-                      source .venv/bin/activate
-                  fi
-                  python scripts/summarize_ci_failures.py
-            - name: Run CI failure diagnoser
-              if: always()
-              run: |
-                  # Ensure virtual environment exists before activating
-                  if [ ! -d ".venv" ]; then
-                      echo "Virtual environment not found, creating minimal environment..."
-                      python -m venv .venv
-                      source .venv/bin/activate
-                      # Install minimal dependencies needed for diagnoser
-                      pip install --quiet --no-deps pathlib || echo "Failed to install pathlib, continuing..."
-                  else
-                      source .venv/bin/activate
-                  fi
-
-                  # Create audit.md even if diagnoser fails
-                  if python scripts/ci_failure_diagnoser.py ${{ runner.temp }}/_github_workflow/*/job.log > audit.md 2>&1; then
-                      echo "CI failure diagnoser completed successfully"
-                  else
-                      {
-                        echo "# CI Failure Analysis"
-                        echo ""
-                        echo "CI failure diagnoser encountered an issue:"
-                        echo "- Log files may not be available at expected location"
-                        echo "- Job logs: \`${{ runner.temp }}/_github_workflow/*/job.log\`"
-                        echo ""
-                        echo "Please check the workflow logs for detailed error information."
-                      } > audit.md
-                  fi
-                  # Ensure audit.md exists and has content
-                  if [ ! -f audit.md ] || [ ! -s audit.md ]; then
-                      echo "# CI Status" > audit.md
-                      echo "No failure patterns detected in available logs." >> audit.md
-                  fi
-            - name: Download previous CI failure issue
-              if: always()
-              run: bash scripts/download_ci_failure_issue.sh
-              env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            - name: Create or update CI failure issue
-              if: always() && github.event_name == 'pull_request'
-              id: ci_failure
-              run: |
-                  set -euo pipefail
-                  printf -- "<!-- sha: %s -->\n" "$GITHUB_SHA" >> summary.md
-
-                  # Ensure audit.md exists before trying to read it
-                  if [ -f audit.md ]; then
-                      cat audit.md >> summary.md
-                  else
-                      echo "# CI Analysis" >> summary.md
-                      echo "Audit file not available." >> summary.md
-                  fi
-
-                  gh_bin=$(which gh)
-                  "$gh_bin" auth status 2>&1 | tee -a gh_cli.log
-
-                  # Check if we have sufficient permissions
-                  if ! gh_bin_check=$("$gh_bin" api user 2>&1); then
-                      echo "::warning::GitHub CLI authentication failed. Skipping issue operations."
-                      echo "Auth check output:" | tee -a gh_cli.log
-                      echo "$gh_bin_check" | tee -a gh_cli.log
-                      exit 0
-                  fi
-
-                  ISSUE_FILE=ci_failure_issue.txt
-                  ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
-                  if [ -f "$ISSUE_FILE" ]; then
-                      ISSUE=$(cat "$ISSUE_FILE")
-                      echo "Using saved issue number:" | tee -a gh_cli.log
-                      printf -- "%s\n" "$ISSUE" | tee -a gh_cli.log
+          ISSUE_FILE=ci_failure_issue.txt
+          ISSUE_TITLE="CI Failure: PR #${{ github.event.pull_request.number }}"
+          if [ -f "$ISSUE_FILE" ]; then
+              ISSUE=$(cat "$ISSUE_FILE")
+              echo "Using saved issue number:" | tee -a gh_cli.log
+              printf -- "%s\n" "$ISSUE" | tee -a gh_cli.log
+              if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
+                  echo "Failed to comment on issue. Continuing without issue update." | tee -a gh_cli.log
+                  echo "::warning::Failed to comment on issue ${ISSUE}. Continuing without issue update."
+              fi
+          else
+              echo "Searching for existing issue" | tee -a gh_cli.log
+              if search_output=$("$gh_bin" issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
+                  ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
+                  if [ -n "$ISSUE" ]; then
                       if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
-                          echo "Failed to comment on issue. Continuing without issue update." | tee -a gh_cli.log
-                          echo "::warning::Failed to comment on issue ${ISSUE}. Continuing without issue update."
+                          echo "Failed to comment on existing issue" | tee -a gh_cli.log
+                          printf "::warning::Failed to comment on existing issue %s\n" "$ISSUE"
                       fi
                   else
-                      echo "Searching for existing issue" | tee -a gh_cli.log
-                      if search_output=$("$gh_bin" issue list --label ci-failure --state open --search "$ISSUE_TITLE" 2>&1 | tee -a gh_cli.log); then
-                          ISSUE=$(echo "$search_output" | awk 'NR==1 {print $1}')
-                          if [ -n "$ISSUE" ]; then
-                              if ! "$gh_bin" issue comment "$ISSUE" --body-file summary.md 2>&1 | tee -a gh_cli.log; then
-                                  echo "Failed to comment on existing issue" | tee -a gh_cli.log
-                                  printf "::warning::Failed to comment on existing issue %s\n" "$ISSUE"
-                              fi
-                          else
-                              if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
-                                ISSUE=$(printf -- '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
-                              else
-                                  printf "::warning::Failed to create new issue. Continuing without issue creation.\n"
-                                  ISSUE=""
-                              fi
-                          fi
+                      if ISSUE_URL=$("$gh_bin" issue create --title "$ISSUE_TITLE" --body-file summary.md --label ci-failure 2>&1 | tee -a gh_cli.log); then
+                        ISSUE=$(printf -- '%s' "$ISSUE_URL" | grep -oE '[0-9]+$')
                       else
-                          printf "::warning::Failed to search for issues. Continuing without issue operations.\n"
+                          printf "::warning::Failed to create new issue. Continuing without issue creation.\n"
                           ISSUE=""
                       fi
                   fi
-                  printf -- "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
-              env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            - name: Save CI failure issue number
-              if: failure() && github.event_name == 'pull_request'
-              run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
-            - name: Upload CI failure issue number
-              if: failure() && github.event_name == 'pull_request'
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ci-failure-issue
-                  path: ci_failure_issue.txt
-                  retention-days: 7
-            - name: Close CI failure issue
-              if: success()
-              run: |
-                  gh_bin=$(which gh)
+              else
+                  printf "::warning::Failed to search for issues. Continuing without issue operations.\n"
+                  ISSUE=""
+              fi
+          fi
+          printf -- "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Save CI failure issue number
+        if: failure() && github.event_name == 'pull_request'
+        run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
+      - name: Upload CI failure issue number
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-failure-issue
+          path: ci_failure_issue.txt
+          retention-days: 7
+      - name: Close CI failure issue
+        if: success()
+        run: |
+          gh_bin=$(which gh)
 
-                  # Check if we have sufficient permissions
-                  if ! "$gh_bin" api user >/dev/null 2>&1; then
-                      echo "::warning::GitHub CLI authentication failed. Skipping issue closure."
-                      exit 0
-                  fi
+          # Check if we have sufficient permissions
+          if ! "$gh_bin" api user >/dev/null 2>&1; then
+              echo "::warning::GitHub CLI authentication failed. Skipping issue closure."
+              exit 0
+          fi
 
-                  if ISSUES=$("$gh_bin" issue list --label ci-failure --state open 2>&1 | tee -a gh_cli.log | awk '{print $1}'); then
-                      for ISSUE in $ISSUES; do
-                        if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
-                            if ! "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log; then
-                                echo "Failed to comment on issue during closure" | tee -a gh_cli.log
-                                echo "::warning::Failed to comment on issue ${ISSUE} during closure"
-                            fi
-                            if ! "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log; then
-                                echo "Failed to close issue" | tee -a gh_cli.log
-                                echo "::warning::Failed to close issue ${ISSUE}"
-                            fi
-                        fi
-                      done
-                  else
-                      echo "::warning::Failed to list issues for closure"
-                  fi
-              env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
-            - name: Prepare CI log artifacts
-              if: always()
-              run: |
-                  mkdir -p logs
-                  mv -f gh_cli.log logs/ 2>/dev/null || true
-                  mv -f audit.md logs/ 2>/dev/null || true
-            - name: Upload CI logs
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ci-logs
-                  path: |
-                      logs
-                      ${{ runner.temp }}/_github_workflow/*/job.log
-            - name: Root Artifact Guard
-              if: always()
-              run: bash scripts/enforce_output_location.sh
-    frameworks-validate:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v5
-            - run: chmod +x scripts/audit_frameworks.sh
-            - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
-            - name: Fail on legacy path references
-              run: |
-                  if grep -q "frameworks/build_deployment\|frameworks/monitoring_automation" frameworks_audit.md; then
-                      echo "Framework path mismatches found - legacy underscore paths still referenced"
-                      cat frameworks_audit.md
-                      exit 1
-                  else
-                      echo "All framework paths are clean!"
-                  fi
-            - name: Fail on script quality issues
-              run: |
-                  if grep -q "FAIL\|BLOCKED\|SECURE\|WARNING\|NOTE" frameworks_audit.md; then
-                      echo "Script quality or security issues found in frameworks"
-                      cat frameworks_audit.md
-                      exit 1
-                  else
-                      echo "All framework scripts pass quality checks!"
-                  fi
-            - name: Fail on documentation issues
-              run: |
-                  if grep -q "ERROR Missing\|LINK Broken\|NOTE Missing space" frameworks_audit.md; then
-                      echo "Documentation quality issues found in frameworks"
-                      cat frameworks_audit.md
-                      exit 1
-                  else
-                      echo "All framework documentation passes quality checks!"
-                  fi
-            - name: Attach audit
-              uses: actions/upload-artifact@v4
-              with:
-                  name: frameworks-audit
-                  path: frameworks_audit.md
+          if ISSUES=$("$gh_bin" issue list --label ci-failure --state open 2>&1 | tee -a gh_cli.log | awk '{print $1}'); then
+              for ISSUE in $ISSUES; do
+                if [ -n "$ISSUE" ] && [ "$ISSUE" != "#" ]; then
+                    if ! "$gh_bin" issue comment "$ISSUE" --body "CI run ${{ github.run_id }} passed. Closing." 2>&1 | tee -a gh_cli.log; then
+                        echo "Failed to comment on issue during closure" | tee -a gh_cli.log
+                        echo "::warning::Failed to comment on issue ${ISSUE} during closure"
+                    fi
+                    if ! "$gh_bin" issue close "$ISSUE" 2>&1 | tee -a gh_cli.log; then
+                        echo "Failed to close issue" | tee -a gh_cli.log
+                        echo "::warning::Failed to close issue ${ISSUE}"
+                    fi
+                fi
+              done
+          else
+              echo "::warning::Failed to list issues for closure"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Prepare CI log artifacts
+        if: always()
+        run: |
+          mkdir -p logs
+          mv -f gh_cli.log logs/ 2>/dev/null || true
+          mv -f audit.md logs/ 2>/dev/null || true
+      - name: Upload CI logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs
+          path: |
+            logs
+            ${{ runner.temp }}/_github_workflow/*/job.log
+      - name: Root Artifact Guard
+        if: always()
+        run: bash scripts/enforce_output_location.sh
+  frameworks-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: chmod +x scripts/audit_frameworks.sh
+      - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
+      - name: Fail on legacy path references
+        run: |
+          if grep -q "frameworks/build_deployment\|frameworks/monitoring_automation" frameworks_audit.md; then
+              echo "Framework path mismatches found - legacy underscore paths still referenced"
+              cat frameworks_audit.md
+              exit 1
+          else
+              echo "All framework paths are clean!"
+          fi
+      - name: Fail on script quality issues
+        run: |
+          if grep -q "FAIL\|BLOCKED\|SECURE\|WARNING\|NOTE" frameworks_audit.md; then
+              echo "Script quality or security issues found in frameworks"
+              cat frameworks_audit.md
+              exit 1
+          else
+              echo "All framework scripts pass quality checks!"
+          fi
+      - name: Fail on documentation issues
+        run: |
+          if grep -q "ERROR Missing\|LINK Broken\|NOTE Missing space" frameworks_audit.md; then
+              echo "Documentation quality issues found in frameworks"
+              cat frameworks_audit.md
+              exit 1
+          else
+              echo "All framework documentation passes quality checks!"
+          fi
+      - name: Attach audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: frameworks-audit
+          path: frameworks_audit.md
