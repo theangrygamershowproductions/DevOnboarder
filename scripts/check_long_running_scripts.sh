@@ -50,18 +50,13 @@ trap 'rm -f "$TMPFILE"' EXIT
 # Gather processes with commandline containing 'scripts/' (exclude this script itself)
 # Use pgrep to find PIDs, then ps to get details
 SCRIPT_PIDS=$(pgrep -f 'scripts/' || true)
+LINES=()
 if [ -n "$SCRIPT_PIDS" ]; then
-  # Get process details for the found PIDs
-  if command -v readarray >/dev/null 2>&1; then
-    readarray -t LINES < <(echo "$SCRIPT_PIDS" | xargs ps -o pid=,etimes=,cmd= 2>/dev/null || true)
-  else
-    LINES=()
-    while IFS= read -r ln; do
-      LINES+=("$ln")
-    done < <(echo "$SCRIPT_PIDS" | xargs ps -o pid=,etimes=,cmd= 2>/dev/null || true)
-  fi
-else
-  LINES=()
+  # Get process details for the found PIDs using ps
+  PS_OUTPUT=$(echo "$SCRIPT_PIDS" | xargs ps -o pid=,etimes=,cmd= 2>/dev/null || true)
+  while IFS= read -r line; do
+    [ -n "$line" ] && LINES+=("$line")
+  done <<< "$PS_OUTPUT"
 fi
 
 for ln in "${LINES[@]}"; do
