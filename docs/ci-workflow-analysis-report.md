@@ -97,7 +97,7 @@ Comprehensive analysis and resolution of CI workflow issues identified during PR
 
 **Format Required**: `TYPE(scope): subject` where TYPE must be uppercase
 
-**Supported Types**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE
+**Supported Types**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT, PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 
 ### 4. Continuous Improvement Checklist Validation ✅ RESOLVED
 

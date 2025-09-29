@@ -24,56 +24,31 @@ visibility: internal
 ## Table of Contents
 
 - [Git.md Documentation](#gitmd-documentation)
-
-    - [Table of Contents](#table-of-contents)
-
-    - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
-
-    - [Repository Structure and Submodules](#repository-structure-and-submodules)
-
+        - [Table of Contents](#table-of-contents)
+        - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
+        - [Repository Structure and Submodules](#repository-structure-and-submodules)
         - [🔜 Submodule Plan](#-submodule-plan)
-
-    - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
-
+        - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
         - [Option 1: `git stash`](#option-1-git-stash)
-
         - [Option 2: WIP Commit](#option-2-wip-commit)
-
         - [Option 3: Use `git switch`](#option-3-use-git-switch)
-
-    - [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
-
-    - [Managing Multiple Remotes](#managing-multiple-remotes)
-
+        - [Merging a Working Branch into Development](#merging-a-working-branch-into-development)
+        - [Managing Multiple Remotes](#managing-multiple-remotes)
         - [Add a second remote](#add-a-second-remote)
-
         - [Make a remote fetch-only](#make-a-remote-fetch-only)
-
         - [Rename a remote](#rename-a-remote)
-
-    - [Maintenance Notes](#maintenance-notes)
-
-    - [Git Commit Message SOP](#git-commit-message-sop)
-
+        - [Maintenance Notes](#maintenance-notes)
+        - [Git Commit Message SOP](#git-commit-message-sop)
         - [Purpose](#purpose)
-
         - [Guidelines](#guidelines)
-
         - [Format](#format)
-
             - [Types](#types)
-
             - [Example](#example)
-
             - [Versioning](#versioning)
-
-    - [Using Git Hooks](#using-git-hooks)
-
+        - [Using Git Hooks](#using-git-hooks)
         - [Why?](#why)
-
         - [Setup](#setup)
-
-    - [Steps to Push with SSH](#steps-to-push-with-ssh)
+        - [Steps to Push with SSH](#steps-to-push-with-ssh)
 
 ---
 
@@ -306,23 +281,29 @@ Ensure clear, consistent commit messages that aid review and traceability.
 
 ```
 
-The `<scope>` section is optional but recommended for clarity.
+**Commit types must be uppercase.** The `<scope>` section is optional but recommended for clarity.
 
 #### Types
 
 - **FEAT**: New features
-
 - **FIX**: Bug/security fixes
-
 - **DOCS**: Documentation
-
 - **STYLE**: Formatting/linting
-
 - **REFACTOR**: Structural changes
-
 - **TEST**: Tests
-
 - **CHORE**: Tooling, config, CI/CD
+- **SECURITY**: Security-related changes
+- **BUILD**: Build system changes
+- **REVERT**: Revert previous commits
+- **PERF**: Performance improvements
+- **CI**: CI/CD changes
+- **OPS**: Operations/infrastructure
+- **WIP**: Work in progress
+- **INIT**: Initial setup/project creation
+- **TAG**: Version tagging
+- **POLICY**: Policy/rule changes
+- **HOTFIX**: Critical hotfixes
+- **CLEANUP**: Code cleanup/removal
 
 #### Example
 

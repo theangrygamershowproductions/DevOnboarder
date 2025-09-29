@@ -148,11 +148,14 @@ npm ci --prefix frontend
 ```markdown
 TYPE(scope): description
 
-Types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+Types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT, PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 Examples:
 - feat(auth): add JWT validation endpoint
 - fix(bot): resolve Discord connection timeout
 - chore(ci): update workflow dependencies
+- perf(auth): optimize JWT token validation
+- ci(actions): add automated dependency updates
+- cleanup(deps): remove unused dependencies
 ```
 
 ## Service Integration Patterns Overview

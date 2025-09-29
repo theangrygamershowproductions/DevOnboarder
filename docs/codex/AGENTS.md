@@ -89,7 +89,7 @@ All contributors **must** follow these standards for commit messages:
 
 ```
 
-- **type**: One of FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE.
+- **type**: One of FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT, PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP.
 
 - **scope**: The part of the codebase affected (optional, but recommended).
 
