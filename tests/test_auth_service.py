@@ -229,6 +229,29 @@ def test_login_invalid_credentials():
     assert resp.json()["detail"] == "Invalid credentials"
 
 
+def test_login_discord_only_account():
+    """Test that Discord-only accounts cannot login with password."""
+    app = auth_service.create_app()
+
+    # Create a Discord-only account (no password set)
+    with auth_service.SessionLocal() as db:
+        discord_user = auth_service.User(
+            username="discord123",
+            password_hash="",  # Empty password hash for Discord-only account
+            discord_token="fake_token",
+        )
+        db.add(discord_user)
+        db.commit()
+
+    # Try to login with password - should fail with "Invalid credentials"
+    client = TestClient(app)
+    resp = client.post(
+        "/api/login", json={"username": "discord123", "password": "anypassword"}
+    )
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Invalid credentials"
+
+
 def test_xp_accumulation_and_level_calculation():
     app = auth_service.create_app()
     client = TestClient(app)
@@ -402,6 +425,10 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
             "avatar": None,
         },
     )
+
+    # Initialize database for this test
+    auth_service.Base.metadata.drop_all(bind=auth_service.engine)
+    auth_service.init_db()
 
     resp = client.get("/login/discord/callback?code=abc")
     assert resp.status_code == 200
@@ -1071,7 +1098,7 @@ def test_additional_auth_service_coverage():
     from devonboarder.auth_service import is_safe_redirect_url, create_app
     import os
 
-    # Test line 78 - relative URL with path starting with "//"
+    # Test line 78 - relative URL with path starting with //
     # Mock urlparse to create a scenario where path starts with //
     from unittest.mock import patch
     from urllib.parse import ParseResult

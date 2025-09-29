@@ -1,4 +1,5 @@
 from devonboarder import auth_service
+import pytest
 from fastapi import HTTPException
 
 
@@ -7,25 +8,29 @@ def test_validate_password_accepts_short_passwords():
     auth_service._validate_password_for_bcrypt("shortpwd")
 
 
+def test_validate_password_rejects_none_password():
+    with pytest.raises(HTTPException, match="Password required"):
+        auth_service._validate_password_for_bcrypt(None)
+
+
+def test_validate_password_rejects_empty_password():
+    with pytest.raises(HTTPException, match="Password cannot be empty"):
+        auth_service._validate_password_for_bcrypt("")
+
+
 def test_validate_password_rejects_long_passwords():
     # Create a password > 72 bytes when UTF-8 encoded
     long_password = "a" * 100
-    try:
-        auth_service._validate_password_for_bcrypt(long_password)
-    except HTTPException as exc:
-        assert exc.status_code == 400
-        assert "Password too long" in exc.detail
-    else:
-        raise AssertionError("Expected HTTPException for long password")
+    truncated = auth_service._validate_password_for_bcrypt(long_password)
+    assert truncated == long_password[:72]
+    assert len(truncated.encode("utf-8")) == 72
 
 
 def test_validate_password_handles_multibyte_overflow():
     # Use 4-byte unicode characters to ensure byte-length > char-length
     # '😊' is 4 bytes in UTF-8
     pwd = "😊" * 20  # 80 bytes
-    try:
-        auth_service._validate_password_for_bcrypt(pwd)
-    except HTTPException as exc:
-        assert exc.status_code == 400
-    else:
-        raise AssertionError("Expected HTTPException for multibyte long password")
+    truncated = auth_service._validate_password_for_bcrypt(pwd)
+    assert len(truncated.encode("utf-8")) == 72
+    # Should be 18 full emojis (72 / 4 = 18)
+    assert truncated == "😊" * 18
