@@ -439,7 +439,7 @@ jobs:
           echo "Testing xp service (95% threshold)..."
           if COVERAGE_FILE=logs/.coverage_xp pytest \
               -o cache_dir=logs/.pytest_cache \
-              --cov --cov-config=config/.coveragerc.xp \
+              --cov=src/xp \
               --cov-report=term-missing \
               --cov-report=xml:logs/coverage_xp.xml \
               --cov-fail-under=95 \
@@ -457,7 +457,7 @@ jobs:
           echo "Testing discord_integration service (95% threshold)..."
           if COVERAGE_FILE=logs/.coverage_discord pytest \
               -o cache_dir=logs/.pytest_cache \
-              --cov --cov-config=config/.coveragerc.discord \
+              --cov=src/discord_integration \
               --cov-report=term-missing \
               --cov-report=xml:logs/coverage_discord.xml \
               --cov-fail-under=95 \
