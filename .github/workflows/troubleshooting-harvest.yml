@@ -3,7 +3,7 @@ name: troubleshooting-harvest
 on:
    workflow_dispatch:
    schedule:
-      - cron: "0 8 * * *" # daily at 08:00 UTC (optional)
+      - cron: "0 8 * * *"  # daily at 08:00 UTC (optional)
 
 permissions:
    contents: read
