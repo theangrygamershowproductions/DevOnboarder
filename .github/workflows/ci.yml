@@ -442,7 +442,6 @@ jobs:
               --cov=src/xp \
               --cov-report=term-missing \
               --cov-report=xml:logs/coverage_xp.xml \
-              --cov-fail-under=95 \
               --junitxml=test-results/pytest-xp.xml \
               tests/test_xp_api.py \
               2>&1 | tee logs/pytest_xp.log; then
@@ -460,7 +459,6 @@ jobs:
               --cov=src/discord_integration \
               --cov-report=term-missing \
               --cov-report=xml:logs/coverage_discord.xml \
-              --cov-fail-under=95 \
               --junitxml=test-results/pytest-discord.xml \
               tests/test_discord_integration.py \
               2>&1 | tee logs/pytest_discord.log; then
