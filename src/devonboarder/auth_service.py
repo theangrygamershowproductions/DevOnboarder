@@ -398,9 +398,12 @@ def discord_callback(
         # Discord-created accounts have an empty local password. This is
         # recorded as a bcrypt hash for an empty string which is always <=72
         # bytes, so no validation is necessary here.
+        empty_password = ""
+        # Defensive validation: ensure empty password is valid for bcrypt
+        _validate_password_for_bcrypt(empty_password)
         user = User(
             username=username,
-            password_hash=pwd_context.hash(""),
+            password_hash=pwd_context.hash(empty_password),
             discord_token=access_token,
         )
         db.add(user)
