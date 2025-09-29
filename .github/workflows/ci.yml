@@ -437,8 +437,15 @@ jobs:
 
           # XP/gamification service - high standard
           echo "Testing xp service (95% threshold)..."
-          export PYTHONPATH=src
-          if pytest tests/test_xp_api.py -v 2>&1 | tee logs/pytest_xp.log; then
+          if COVERAGE_FILE=logs/.coverage_xp pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov --cov-config=config/.coveragerc.xp \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_xp.xml \
+              --cov-fail-under=95 \
+              --junitxml=test-results/pytest-xp.xml \
+              tests/test_xp_api.py \
+              2>&1 | tee logs/pytest_xp.log; then
               echo "PASS xp: Coverage above 95% threshold"
           else
               echo "FAIL xp: Coverage below 95% threshold"
@@ -448,8 +455,15 @@ jobs:
 
           # Discord integration - high standard (critical OAuth)
           echo "Testing discord_integration service (95% threshold)..."
-          export PYTHONPATH=src
-          if pytest tests/test_discord_integration.py -v 2>&1 | tee logs/pytest_discord.log; then
+          if COVERAGE_FILE=logs/.coverage_discord pytest \
+              -o cache_dir=logs/.pytest_cache \
+              --cov --cov-config=config/.coveragerc.discord \
+              --cov-report=term-missing \
+              --cov-report=xml:logs/coverage_discord.xml \
+              --cov-fail-under=95 \
+              --junitxml=test-results/pytest-discord.xml \
+              tests/test_discord_integration.py \
+              2>&1 | tee logs/pytest_discord.log; then
               echo "PASS discord_integration: Coverage above 95% threshold"
           else
               echo "FAIL discord_integration: Coverage below 95% threshold"
