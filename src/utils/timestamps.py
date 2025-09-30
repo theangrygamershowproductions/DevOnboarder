@@ -219,9 +219,34 @@ def validate_timestamp_format(timestamp: str) -> bool:
         True
     """
     try:
+        if not isinstance(timestamp, str):
+            return False
+
+        # Must be in GitHub API format: YYYY-MM-DDTHH:MM:SSZ or +00:00
+        if timestamp.endswith("Z"):
+            timezone_len = 1
+        elif timestamp.endswith("+00:00"):
+            timezone_len = 6
+        else:
+            return False
+
+        # Must contain exactly one 'T' separator
+        if timestamp.count("T") != 1:
+            return False
+
+        # Date part must be YYYY-MM-DD format
+        date_part, time_part = timestamp[:-timezone_len].split("T")
+        if len(date_part) != 10 or date_part.count("-") != 2:
+            return False
+
+        # Time part must be HH:MM:SS format
+        if len(time_part) != 8 or time_part.count(":") != 2:
+            return False
+
+        # Parse to ensure it's a valid datetime
         parse_github_timestamp(timestamp)
         return True
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, AttributeError):
         return False
 
 

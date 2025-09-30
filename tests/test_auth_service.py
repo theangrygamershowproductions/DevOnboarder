@@ -229,6 +229,29 @@ def test_login_invalid_credentials():
     assert resp.json()["detail"] == "Invalid credentials"
 
 
+def test_login_discord_only_account():
+    """Test that Discord-only accounts cannot login with password."""
+    app = auth_service.create_app()
+
+    # Create a Discord-only account (no password set)
+    with auth_service.SessionLocal() as db:
+        discord_user = auth_service.User(
+            username="discord123",
+            password_hash="",  # Empty password hash for Discord-only account
+            discord_token="fake_token",
+        )
+        db.add(discord_user)
+        db.commit()
+
+    # Try to login with password - should fail with "Invalid credentials"
+    client = TestClient(app)
+    resp = client.post(
+        "/api/login", json={"username": "discord123", "password": "anypassword"}
+    )
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Invalid credentials"
+
+
 def test_xp_accumulation_and_level_calculation():
     app = auth_service.create_app()
     client = TestClient(app)
@@ -402,6 +425,10 @@ def test_discord_oauth_callback_issues_jwt(monkeypatch):
             "avatar": None,
         },
     )
+
+    # Initialize database for this test
+    auth_service.Base.metadata.drop_all(bind=auth_service.engine)
+    auth_service.init_db()
 
     resp = client.get("/login/discord/callback?code=abc")
     assert resp.status_code == 200
@@ -1071,7 +1098,7 @@ def test_additional_auth_service_coverage():
     from devonboarder.auth_service import is_safe_redirect_url, create_app
     import os
 
-    # Test line 78 - relative URL with path starting with "//"
+    # Test line 78 - relative URL with path starting with //
     # Mock urlparse to create a scenario where path starts with //
     from unittest.mock import patch
     from urllib.parse import ParseResult
@@ -1333,3 +1360,104 @@ def test_final_missing_coverage_lines():
                     )
                     # Should be a redirect
                     assert resp.status_code == 307  # noqa: B101
+
+
+def test_validate_password_for_bcrypt_encoding_exception():
+    """Test _validate_password_for_bcrypt handles encoding
+    exceptions (lines 175-187)."""
+    from devonboarder.auth_service import _validate_password_for_bcrypt
+
+    # Test with a password that causes encoding issues
+    # Create a mock object that behaves like a string but raises exception on encode
+    class BadPassword(str):
+        def encode(self, encoding="utf-8", errors="strict"):
+            raise UnicodeEncodeError("utf-8", "bad", 0, 1, "mock error")
+
+    bad_password = BadPassword("bad_password")
+
+    # This should trigger the exception handling path (lines 175-187)
+    result = _validate_password_for_bcrypt(bad_password)
+
+    # Should fall back to str() and encode with ignore errors
+    assert isinstance(result, str)
+    assert result == "bad_password"  # Should be truncated if >72 bytes
+
+
+def test_get_current_user_jwt_decode_exceptions():
+    """Test get_current_user handles JWT decode exceptions (line 344)."""
+    from devonboarder.auth_service import get_current_user
+    from fastapi import HTTPException
+    from fastapi.security import HTTPAuthorizationCredentials
+    import pytest
+
+    # Create a mock request with invalid JWT token
+    class MockCredentials(HTTPAuthorizationCredentials):
+        def __init__(self):
+            super().__init__(scheme="Bearer", credentials="invalid.jwt.token")
+
+    # Test InvalidTokenError path
+    with pytest.raises(HTTPException) as exc_info:
+        get_current_user(MockCredentials(), None)  # type: ignore
+
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Invalid token"
+
+
+def test_create_app_init_db_on_startup():
+    """Test create_app calls init_db when INIT_DB_ON_STARTUP is set."""
+    import os
+    from unittest.mock import patch
+
+    # Set the environment variable
+    os.environ["INIT_DB_ON_STARTUP"] = "true"
+
+    try:
+        # Mock init_db to verify it's called
+        with patch("devonboarder.auth_service.init_db") as mock_init_db:
+            from devonboarder.auth_service import create_app
+
+            app = create_app()
+
+            # Verify init_db was called
+            mock_init_db.assert_called_once()
+
+            # Verify app was created
+            assert app is not None
+
+    finally:
+        # Clean up
+        if "INIT_DB_ON_STARTUP" in os.environ:
+            del os.environ["INIT_DB_ON_STARTUP"]
+
+
+def test_password_truncation_for_bcrypt():
+    """Test that passwords longer than 72 bytes are properly truncated."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create a password longer than 72 bytes (100 characters)
+    long_password = "a" * 50 + "b" * 50  # 100 chars, >72 bytes
+    assert len(long_password.encode("utf-8")) > 72  # Verify it's >72 bytes
+
+    # Register with long password
+    resp = client.post(
+        "/api/register", json={"username": "longpass_user", "password": long_password}
+    )
+    assert resp.status_code == 200
+
+    # Login with the same long password should work (truncated version)
+    token = _get_token(client, "longpass_user", long_password)
+    assert token
+
+    # Login with truncated password should also work
+    truncated_password = long_password.encode("utf-8")[:72].decode(
+        "utf-8", errors="ignore"
+    )
+    token2 = _get_token(client, "longpass_user", truncated_password)
+    assert token2
+
+    # Different password should fail
+    resp = client.post(
+        "/api/login", json={"username": "longpass_user", "password": "wrong_password"}
+    )
+    assert resp.status_code == 400
