@@ -145,7 +145,6 @@ pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto",
     bcrypt__default_rounds=12,
-    bcrypt__truncate_error=True,
 )
 
 

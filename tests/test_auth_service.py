@@ -1428,3 +1428,36 @@ def test_create_app_init_db_on_startup():
         # Clean up
         if "INIT_DB_ON_STARTUP" in os.environ:
             del os.environ["INIT_DB_ON_STARTUP"]
+
+
+def test_password_truncation_for_bcrypt():
+    """Test that passwords longer than 72 bytes are properly truncated."""
+    app = auth_service.create_app()
+    client = TestClient(app)
+
+    # Create a password longer than 72 bytes (100 characters)
+    long_password = "a" * 50 + "b" * 50  # 100 chars, >72 bytes
+    assert len(long_password.encode("utf-8")) > 72  # Verify it's >72 bytes
+
+    # Register with long password
+    resp = client.post(
+        "/api/register", json={"username": "longpass_user", "password": long_password}
+    )
+    assert resp.status_code == 200
+
+    # Login with the same long password should work (truncated version)
+    token = _get_token(client, "longpass_user", long_password)
+    assert token
+
+    # Login with truncated password should also work
+    truncated_password = long_password.encode("utf-8")[:72].decode(
+        "utf-8", errors="ignore"
+    )
+    token2 = _get_token(client, "longpass_user", truncated_password)
+    assert token2
+
+    # Different password should fail
+    resp = client.post(
+        "/api/login", json={"username": "longpass_user", "password": "wrong_password"}
+    )
+    assert resp.status_code == 400
