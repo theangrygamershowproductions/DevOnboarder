@@ -14,11 +14,11 @@ on:
   workflow_dispatch:
     inputs:
       workflow_run_id:
-        description: 'Workflow run ID to analyze'
+        description: "Workflow run ID to analyze"
         required: false
         type: string
       auto_resolve:
-        description: 'Attempt automatic resolution for high-confidence failures'
+        description: "Attempt automatic resolution for high-confidence failures"
         required: false
         type: boolean
         default: false
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Python environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Create and activate virtual environment
         run: |
@@ -86,9 +86,9 @@ jobs:
           printf "Found log files: %s\n" "$LOG_FILES"
 
           if [ -z "$LOG_FILES" ]; then
-          echo "No log files found, creating minimal analysis"
-          echo "Workflow failed but no logs available for analysis" > logs/ci-analysis/no-logs.txt
-          LOG_FILES="logs/ci-analysis/no-logs.txt"
+            echo "No log files found, creating minimal analysis"
+            echo "Workflow failed but no logs available for analysis" > logs/ci-analysis/no-logs.txt
+            LOG_FILES="logs/ci-analysis/no-logs.txt"
           fi
 
           {
@@ -97,8 +97,7 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
           env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Enhanced CI Failure Analyzer
         id: analysis
         run: |

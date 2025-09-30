@@ -9,6 +9,12 @@ LOG_FILE="logs/terminal_output_validation_$(date +%Y%m%d_%H%M%S).log"
 mkdir -p logs
 exec > >(tee -a "$LOG_FILE") 2>&1
 
+# Safety: guard potentially slow external commands with a short timeout
+TIMEOUT=5
+
+# Ensure child processes are cleaned up on exit (prevents stray greps/tee hanging)
+trap 'pkill -P $$ >/dev/null 2>&1 || true' EXIT
+
 echo "Starting Terminal Output Policy Validation (Refined)"
 echo "Target: GitHub Actions workflows"
 echo "Policy: ZERO TOLERANCE for emojis, command substitution, multi-line variables"
@@ -64,7 +70,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     file_violations=0
 
     # 1. Check for emojis and Unicode characters (keep this check)
-    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' "$file" 2>/dev/null; then
+    if timeout "$TIMEOUT" grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Emoji/Unicode characters found in $file"
         echo "These WILL cause immediate terminal hanging"
         ((file_violations++))
@@ -86,7 +92,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
             echo "This WILL cause terminal hanging"
             ((file_violations++))
         fi
-    done < <(grep -n -E 'echo.*\$\(' "$file" 2>/dev/null || true)
+    done < <(timeout "$TIMEOUT" grep -n -E 'echo.*\$\(' "$file" 2>/dev/null || true)
 
     # 3. Check for variable expansion in echo (refined)
     while IFS= read -r line_with_num; do
@@ -110,7 +116,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
             echo "This can cause terminal hanging"
             ((file_violations++))
         fi
-    done < <(grep -n -E '^\s*echo.*\$[A-Z_][A-Z0-9_]*' "$file" 2>/dev/null || true)
+    done < <(timeout "$TIMEOUT" grep -n -E '^\s*echo.*\$[A-Z_][A-Z0-9_]*' "$file" 2>/dev/null || true)
 
     # 4. Check for actual multi-line string variables (refined)
     # Look for assignments that span multiple lines, not single-line commands
@@ -146,10 +152,10 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
                 multiline_var=""
             fi
         fi
-    done < "$file"
+    done < <(timeout "$TIMEOUT" cat "$file")
 
     # 5. Check for here-doc syntax near echo (keep this check)
-    if grep -B3 -A3 'EOF' "$file" | grep -E 'echo|comment.*body' 2>/dev/null; then
+    if timeout "$TIMEOUT" grep -B3 -A3 'EOF' "$file" | timeout "$TIMEOUT" grep -E 'echo|comment.*body' 2>/dev/null; then
         # Only warn, don't count as violation unless it's clearly problematic
         echo "WARNING: Here-doc near echo/comment context in $file"
         echo "Verify this does not cause terminal hanging"
@@ -166,7 +172,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
             echo "This WILL cause terminal hanging"
             ((file_violations++))
         fi
-    done < <(grep -n -E 'echo.*\\[nt]' "$file" 2>/dev/null || true)
+    done < <(timeout "$TIMEOUT" grep -n -E 'echo.*\\[nt]' "$file" 2>/dev/null || true)
 
     # Add file violations to total
     ((total_violations += file_violations))

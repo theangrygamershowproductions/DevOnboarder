@@ -4,7 +4,7 @@
 import re
 import sys
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Any
 
 
 def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
@@ -53,7 +53,7 @@ def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
     return 0.0, "❌"
 
 
-def get_service_info() -> Dict[str, Dict[str, any]]:
+def get_service_info() -> Dict[str, Dict[str, Any]]:
     """Get service configuration and expected thresholds.
 
     Returns
@@ -72,9 +72,9 @@ def get_service_info() -> Dict[str, Dict[str, any]]:
             "description": "Shared utilities",
             "priority": "critical",
         },
-        "xp": {"threshold": 90, "description": "XP/gamification", "priority": "high"},
+        "xp": {"threshold": 95, "description": "XP/gamification", "priority": "high"},
         "discord_integration": {
-            "threshold": 90,
+            "threshold": 95,
             "description": "Discord OAuth/roles",
             "priority": "high",
         },
@@ -126,6 +126,8 @@ def generate_markdown_report() -> str:
             log_file = logs_dir / "pytest_llama.log"
         elif service_name == "discord_integration":
             log_file = logs_dir / "pytest_discord.log"
+        elif service_name == "devonboarder":
+            log_file = logs_dir / "pytest_auth.log"
 
         coverage, emoji = extract_coverage_from_log(log_file)
         threshold = config["threshold"]

@@ -364,7 +364,7 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 
 **Approved Commit Types** (memorize these):
 
-- **Standard**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD
+- **Standard**: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT, PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 
 - **Extended**: PERF, CI, OPS, REVERT, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 
