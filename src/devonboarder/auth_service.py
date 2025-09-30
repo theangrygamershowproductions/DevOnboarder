@@ -408,14 +408,11 @@ def discord_callback(
     username = profile["id"]
     user = db.query(User).filter_by(username=username).first()
     if not user:
-        # Discord-created accounts have an empty local password. This is
-        # recorded as a bcrypt hash for an empty string which is always <=72
-        # bytes, so no validation is necessary here.
-        empty_password = ""
-        validated_password = _validate_password_for_bcrypt(empty_password)
+        # Discord-created accounts have no local password. Store empty hash
+        # to indicate this is a Discord-only account.
         user = User(
             username=username,
-            password_hash=pwd_context.hash(validated_password),
+            password_hash="",  # Empty string indicates Discord-only account
             discord_token=access_token,
         )
         db.add(user)
