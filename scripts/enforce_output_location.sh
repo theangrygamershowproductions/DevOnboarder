@@ -105,10 +105,10 @@ check_root_pollution() {
     fi
 
     # Check for npm/node artifacts outside designated directories
-    if find . -maxdepth 1 -name "node_modules" -type d 2>/dev/null | grep -v -E "^\\./bot/node_modules$|^\\./frontend/node_modules$" | grep -q .; then
+    if find . -maxdepth 1 -name "node_modules" -type d 2>/dev/null | grep -v -E "^\\./bot/node_modules$|^\\./frontend/node_modules$|^\\./\\.github/actions/[^/]+/node_modules$" | grep -q .; then
         log_message "$RED" "❌ VIOLATION: Unexpected node_modules in root"
         find . -maxdepth 1 -name "node_modules" -type d | while read -r dir; do
-            echo "   $dir → should be in bot/ or frontend/ only"
+            echo "   $dir → should be in bot/, frontend/, or .github/actions/*/ only"
             violation_files+=("$dir")
         done
         violations=$((violations + 1))

@@ -49,9 +49,13 @@ def exchange_oauth(
     token = resp.json()["access_token"]
     user = db.query(auth_service.User).filter_by(username=username).first()
     if user is None:
+        # Do NOT hash an empty password here. Storing a hashed empty string
+        # can interact poorly with some bcrypt/passlib versions in CI/tests.
+        # Instead store an explicit empty sentinel and let login/verify logic
+        # treat it as a Discord-only account.
         user = auth_service.User(
             username=username,
-            password_hash=auth_service.pwd_context.hash(""),
+            password_hash="",
             discord_token=token,
         )
         db.add(user)
