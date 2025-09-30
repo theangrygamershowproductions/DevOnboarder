@@ -145,7 +145,7 @@ pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto",
     bcrypt__default_rounds=12,
-    bcrypt__truncate_error=False,  # Allow truncation instead of error
+    bcrypt__truncate_error=True,  # We validate passwords first
 )
 
 
@@ -169,12 +169,11 @@ def _validate_password_for_bcrypt(password: Optional[str]) -> str:
     Raises
     ------
     HTTPException
-        If password is None or empty.
+        If password is None.
     """
     if password is None:
         raise HTTPException(status_code=400, detail="Password required")
-    if not password.strip():
-        raise HTTPException(status_code=400, detail="Password cannot be empty")
+    # Allow empty passwords for Discord OAuth accounts
     try:
         b = str(password).encode("utf-8")
     except Exception:
@@ -413,9 +412,10 @@ def discord_callback(
         # recorded as a bcrypt hash for an empty string which is always <=72
         # bytes, so no validation is necessary here.
         empty_password = ""
+        validated_password = _validate_password_for_bcrypt(empty_password)
         user = User(
             username=username,
-            password_hash=pwd_context.hash(empty_password),
+            password_hash=pwd_context.hash(validated_password),
             discord_token=access_token,
         )
         db.add(user)

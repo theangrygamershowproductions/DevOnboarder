@@ -13,9 +13,10 @@ def test_validate_password_rejects_none_password():
         auth_service._validate_password_for_bcrypt(None)
 
 
-def test_validate_password_rejects_empty_password():
-    with pytest.raises(HTTPException, match="Password cannot be empty"):
-        auth_service._validate_password_for_bcrypt("")
+def test_validate_password_accepts_empty_password():
+    # Empty passwords are allowed for Discord OAuth accounts
+    result = auth_service._validate_password_for_bcrypt("")
+    assert result == ""
 
 
 def test_validate_password_rejects_long_passwords():
