@@ -1,6 +1,37 @@
 """Authentication service with Discord integration and JWT utilities."""
 
 from __future__ import annotations
+
+# Patch bcrypt for passlib compatibility before any other imports
+try:
+    import bcrypt as real_bcrypt
+    import bcrypt._bcrypt as _bcrypt
+
+    # Store the original C function directly
+    original_hashpw = _bcrypt.hashpw
+
+    # Create a wrapper function that truncates passwords
+    def patched_hashpw(password, salt):
+        if isinstance(password, str):
+            password = password.encode("utf-8")
+        if len(password) > 72:
+            password = password[:72]
+        return original_hashpw(password, salt)
+
+    # Replace the function in the module
+    real_bcrypt.hashpw = patched_hashpw
+
+    # Add the missing __about__ attribute that passlib expects (if missing)
+    if not hasattr(real_bcrypt, "__about__"):
+
+        class About:
+            __version__ = getattr(real_bcrypt, "__version__", "5.0.0")
+
+        setattr(real_bcrypt, "__about__", About())
+
+except ImportError:
+    pass
+
 from typing import Optional
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
