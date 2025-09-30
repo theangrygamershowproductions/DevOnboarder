@@ -1360,3 +1360,71 @@ def test_final_missing_coverage_lines():
                     )
                     # Should be a redirect
                     assert resp.status_code == 307  # noqa: B101
+
+
+def test_validate_password_for_bcrypt_encoding_exception():
+    """Test _validate_password_for_bcrypt handles encoding
+    exceptions (lines 175-187)."""
+    from devonboarder.auth_service import _validate_password_for_bcrypt
+
+    # Test with a password that causes encoding issues
+    # Create a mock object that behaves like a string but raises exception on encode
+    class BadPassword(str):
+        def encode(self, encoding="utf-8", errors="strict"):
+            raise UnicodeEncodeError("utf-8", "bad", 0, 1, "mock error")
+
+    bad_password = BadPassword("bad_password")
+
+    # This should trigger the exception handling path (lines 175-187)
+    result = _validate_password_for_bcrypt(bad_password)
+
+    # Should fall back to str() and encode with ignore errors
+    assert isinstance(result, str)
+    assert result == "bad_password"  # Should be truncated if >72 bytes
+
+
+def test_get_current_user_jwt_decode_exceptions():
+    """Test get_current_user handles JWT decode exceptions (line 344)."""
+    from devonboarder.auth_service import get_current_user
+    from fastapi import HTTPException
+    from fastapi.security import HTTPAuthorizationCredentials
+    import pytest
+
+    # Create a mock request with invalid JWT token
+    class MockCredentials(HTTPAuthorizationCredentials):
+        def __init__(self):
+            super().__init__(scheme="Bearer", credentials="invalid.jwt.token")
+
+    # Test InvalidTokenError path
+    with pytest.raises(HTTPException) as exc_info:
+        get_current_user(MockCredentials(), None)  # type: ignore
+
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == "Invalid token"
+
+
+def test_create_app_init_db_on_startup():
+    """Test create_app calls init_db when INIT_DB_ON_STARTUP is set."""
+    import os
+    from unittest.mock import patch
+
+    # Set the environment variable
+    os.environ["INIT_DB_ON_STARTUP"] = "true"
+
+    try:
+        # Mock init_db to verify it's called
+        with patch("devonboarder.auth_service.init_db") as mock_init_db:
+            from devonboarder.auth_service import create_app
+
+            app = create_app()
+
+            # Verify init_db was called
+            mock_init_db.assert_called_once()
+
+            # Verify app was created
+            assert app is not None
+
+    finally:
+        # Clean up
+        if "INIT_DB_ON_STARTUP" in os.environ:
+            del os.environ["INIT_DB_ON_STARTUP"]

@@ -21,6 +21,7 @@ permissions:
   contents: write  # Required for coverage badge commits
   issues: write  # Required for issue creation
   pull-requests: write  # Required for PR comments
+  actions: read  # Required for GitHub CLI workflow operations
 
 jobs:
   validate-yaml:
