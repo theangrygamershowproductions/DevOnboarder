@@ -1,13 +1,12 @@
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
+from devonboarder import auth_service
+from xp.api import create_app
 import os
 
 # Environment variables must be set before importing modules from devonboarder.
 os.environ.setdefault("APP_ENV", "development")
 os.environ.setdefault("JWT_SECRET_KEY", "devsecret")
-
-from xp.api import create_app
-from devonboarder import auth_service
-from fastapi.testclient import TestClient
-from fastapi.middleware.cors import CORSMiddleware
 
 
 def setup_function(function):
@@ -105,7 +104,9 @@ def test_default_cors_dev(monkeypatch):
     assert cors.kwargs["allow_origins"] == ["*"]
 
 
-def test_health_and_security_headers():
+def test_health_and_security_headers(monkeypatch):
+    monkeypatch.delenv("CORS_ALLOW_ORIGINS", raising=False)
+    monkeypatch.setenv("APP_ENV", "development")
     app = create_app()
     client = TestClient(app)
     resp = client.get("/health")

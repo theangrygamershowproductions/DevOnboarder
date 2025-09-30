@@ -1,0 +1,52 @@
+name: troubleshooting-harvest
+
+on:
+   workflow_dispatch:
+   schedule:
+      - cron: "0 8 * * *"  # daily at 08:00 UTC (optional)
+
+permissions:
+   contents: read
+   actions: read
+   checks: write
+
+jobs:
+   token-diagnostics:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+
+         - name: Load AAR_TOKEN to env if present
+           if: ${{ secrets.AAR_TOKEN != '' }}
+           run: |
+              # Safely expose the secret to the job's environment for later steps
+              echo "AAR_TOKEN=${{ secrets.AAR_TOKEN }}" >> "$GITHUB_ENV"
+
+         - name: Print GH token context
+           env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           run: |
+              echo "GITHUB_TOKEN available: ${GITHUB_TOKEN:+yes}"
+              echo "Repository: ${{ github.repository }}"
+              echo "Actor: ${{ github.actor }}"
+
+         - name: Inspect GITHUB_TOKEN scopes
+           run: |
+              set -euo pipefail
+              echo "Inspecting GITHUB_TOKEN scopes via API headers..."
+              curl -sI -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || true
+
+         - name: Inspect AAR_TOKEN (if provided)
+           if: ${{ env.AAR_TOKEN != '' }}
+           run: |
+              set -euo pipefail
+              echo "AAR_TOKEN present. Checking scopes and validity..."
+              # Show a compact JSON error or header
+              curl -sS -I -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || true
+              echo "Attempt a lightweight API probe (rate-limited):"
+              curl -sS -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | jq -r '.message // "OK"' || true
+
+         - name: Safe-run diagnostics script (no-op)
+           run: |
+              echo "Diagnostics harvested. If AAR_TOKEN returned 401/Bad credentials, rotate the token and ensure 'repo' and 'workflow' scopes are present."
