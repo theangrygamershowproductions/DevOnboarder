@@ -1,3 +1,9 @@
+---
+similarity_group: docs-
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # CI Debugging Report
 
 Run ID: 18119474102

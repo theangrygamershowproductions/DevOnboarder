@@ -1,3 +1,9 @@
+---
+similarity_group: ci-debug-wrapper.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # CI Debug Wrapper
 
 A unified tool for debugging DevOnboarder CI failures. Simplifies downloading reports, logs, and artifacts from GitHub Actions.
