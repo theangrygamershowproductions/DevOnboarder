@@ -49,7 +49,8 @@ validate_terminal_output() {
 }
 
 # Terminal output validation function added - violations in main script have been fixed
-# Self-validation temporarily disabled to avoid false positives from example strings
+# Self-validation temporarily disabled to avoid false positives from example strings.
+# The validate_terminal_output function is retained for future use (e.g., re-enabling self-validation or for use by other scripts).
 
 # Check if virtual environment is activated
 if [[ -z "${VIRTUAL_ENV:-}" ]]; then
