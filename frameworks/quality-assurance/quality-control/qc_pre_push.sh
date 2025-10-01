@@ -46,12 +46,18 @@ if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
     echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
         echo "   - $file"
     done
-    read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
-    if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
-        git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
-        echo "Files tracked - validation will include all files"
+
+    # Check if running non-interactively (from safe_commit.sh or CI)
+    if [[ -t 0 ]] && [[ "${CI:-}" != "true" ]] && [[ "${NON_INTERACTIVE:-}" != "true" ]]; then
+        read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
+        if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
+            git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
+            echo "Files tracked - validation will include all files"
+        else
+            echo "Continuing with validation blind spots present"
+        fi
     else
-        echo "Continuing with validation blind spots present"
+        echo "Non-interactive mode: Continuing with validation blind spots present"
     fi
 fi
 
@@ -118,7 +124,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     COVERAGE_DETAILS=""
 
     # Test XP service with isolated coverage (95% threshold)
-    if COVERAGE_FILE=logs/.coverage_xp python -m pytest \
+    if COVERAGE_FILE="logs/.coverage_xp" python -m pytest \
         --cov --cov-config=config/.coveragerc.xp \
         --cov-fail-under=95 --quiet \
         tests/test_xp_api.py 2>/dev/null; then
@@ -129,7 +135,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     fi
 
     # Test Discord service with isolated coverage (95% threshold)
-    if COVERAGE_FILE=logs/.coverage_discord python -m pytest \
+    if COVERAGE_FILE="logs/.coverage_discord" python -m pytest \
         --cov --cov-config=config/.coveragerc.discord \
         --cov-fail-under=95 --quiet \
         tests/test_discord_integration.py 2>/dev/null; then
@@ -140,7 +146,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     fi
 
     # Test Auth service with isolated coverage (95% threshold)
-    if COVERAGE_FILE=logs/.coverage_auth python -m pytest \
+    if COVERAGE_FILE="logs/.coverage_auth" python -m pytest \
         --cov --cov-config=config/.coveragerc.auth \
         --cov-fail-under=95 --quiet \
         tests/test_auth_service.py tests/test_server.py 2>/dev/null; then

@@ -144,7 +144,7 @@ echo "Commit message format validated"
 
 # CRITICAL: Validate quality gates are functional before proceeding
 echo "Running mandatory QC validation (95% threshold)..."
-if ! ./scripts/qc_pre_push.sh > /dev/null 2>&1; then
+if ! NON_INTERACTIVE=true ./scripts/qc_pre_push.sh > /dev/null 2>&1; then
     echo "FAILED: QC validation failed!"
     echo ""
     echo "Running full QC check for details..."
