@@ -120,6 +120,27 @@ if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SEC
 fi
 echo "Commit message format validated"
 
+# CRITICAL: Validate commit message format before proceeding
+echo "Validating commit message format..."
+if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
+    echo "❌ ERROR: Invalid commit message format!"
+    echo ""
+    echo "Required format: <TYPE>(<scope>): <subject>"
+    echo ""
+    echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
+    echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
+    echo "Build/Build types allowed for Dependabot compatibility"
+    echo ""
+    echo "Examples:"
+    echo "  FIX(auth): resolve bcrypt password truncation issue"
+    echo "  FEAT(ci): add automated dependency updates"
+    echo "  CHORE(deps): update Python requirements"
+    echo ""
+    echo "Your message: $COMMIT_MSG"
+    exit 1
+fi
+echo "Commit message format validated"
+
 # CRITICAL: Validate quality gates are functional before proceeding
 echo "Running mandatory QC validation (95% threshold)..."
 if ! ./scripts/qc_pre_push.sh > /dev/null 2>&1; then
