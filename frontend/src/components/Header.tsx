@@ -67,7 +67,7 @@ export default function Header({ className = "" }: HeaderProps) {
     };
 
     const getDefaultAvatarUrl = (discordId: string) => {
-        // Discord\'s default avatar calculation
+        // Discord's default avatar calculation
         const discriminator = parseInt(discordId) % 5;
         return `https://cdn.discordapp.com/embed/avatars/${discriminator}.png`;
     };
@@ -120,7 +120,7 @@ export default function Header({ className = "" }: HeaderProps) {
                                                     ? getDiscordAvatarUrl(user.discord_id, user.avatar)
                                                     : getDefaultAvatarUrl(user.discord_id)
                                             }
-                                            alt={`${user.username}\'s avatar`}
+                                            alt={`${user.username}'s avatar`}
                                             className="w-8 h-8 rounded-full border-2 theme-border"
                                         />
                                         <div className="hidden sm:block">
