@@ -1,4 +1,8 @@
-# Framework Migration Roadmap: Multi-Version Phased Rollout
+# DevOnboarder Framework Migration Roadmap
+
+## Strategic Multi-Version Phased Approach
+
+> **Connected to**: Issue #1506 (DevOnboarder Script Framework Organization Initiative) and Epic #1526 (Master Tracking Issue)
 
 ## Strategy Overview
 
@@ -23,10 +27,10 @@
 **Scope**: Migrate scripts with <5 references each
 
 **Issue-Driven Development**:
-- **Issue #1**: Migrate utility scripts to utility-management framework
-- **Issue #2**: Migrate analysis scripts to data-management framework
-- **Issue #3**: Migrate diagnostic scripts to system-monitoring framework
-- **Issue #4**: Update documentation references for migrated scripts
+- **Issue #1528**: Phase 2: Friction Prevention Framework Implementation (50 scripts)
+- **Issue #1532**: Phase 6: Documentation Automation Framework Implementation (10 scripts)  
+- **Issue #1533**: Phase 7: Utility Core Framework Implementation (5 scripts)
+- **Validation**: Each issue includes comprehensive testing and reference updates
 
 **Success Criteria**:
 - 20-30 additional scripts migrated
@@ -39,10 +43,10 @@
 **Scope**: Migrate scripts with 5-15 references each
 
 **Issue-Driven Development**:
-- **Issue #5**: Migrate environment setup scripts
-- **Issue #6**: Migrate documentation processing scripts
-- **Issue #7**: Migrate build automation scripts (non-critical)
-- **Issue #8**: Create framework transition documentation
+- **Issue #1531**: Phase 5: Environment Management Framework Implementation (25 scripts)
+- **Issue #TBD**: Integration management scripts migration
+- **Issue #TBD**: Configuration management scripts migration
+- **Validation**: Controlled migration with extensive integration testing
 
 **Success Criteria**:
 - 40-50 additional scripts migrated
@@ -55,9 +59,10 @@
 **Scope**: Migrate moderately-referenced scripts (15-50 references)
 
 **Issue-Driven Development**:
-- **Issue #9**: Migrate CI/CD workflow scripts (non-critical path)
-- **Issue #10**: Migrate project management automation
-- **Issue #11**: Migrate security validation scripts (non-critical)
+- **Issue #1530**: Phase 4: CI/CD Enhancement Framework Implementation (30 scripts)
+- **Issue #TBD**: Advanced automation scripts migration
+- **Issue #TBD**: System monitoring scripts migration
+- **Validation**: Comprehensive validation with full regression testing
 - **Issue #12**: Update all framework documentation
 
 **Success Criteria**:
@@ -70,9 +75,10 @@
 **Scope**: Migrate high-reference scripts (50+ references)
 
 **Issue-Driven Development**:
-- **Issue #13**: Plan migration of moderately-critical scripts
-- **Issue #14**: Create comprehensive reference update automation
-- **Issue #15**: Staged migration of QC system components
+- **Issue #1529**: Phase 3: Security Validation Framework Implementation (45 scripts)
+- **Issue #TBD**: **RESEARCH**: Comprehensive analysis of qc_pre_push.sh dependencies
+- **Issue #TBD**: **RESEARCH**: Comprehensive analysis of manage_logs.sh dependencies
+- **Validation**: Major version upgrade with full system regression testing
 - **Issue #16**: Full framework documentation and training
 
 **Success Criteria**:
@@ -203,7 +209,27 @@ frameworks/migration-tools/
 
 ---
 
-**Status**: Roadmap Ready
-**Approach**: Issue-driven phased migration
-**Timeline**: 4 versions over 6-12 months
-**Risk Level**: Minimal (incremental approach)
+## Issue & Milestone Integration
+
+### Current Milestone Assignments:
+- **Framework Organization v1.0 - Foundation**: Issues #1506, #1526
+- **Framework Organization v1.1 - Low-Risk Migration**: Issues #1528, #1532, #1533
+- **Framework Organization v1.2 - Medium-Risk Migration**: Issues #1531
+- **Framework Organization v2.0 - Critical Infrastructure**: Issues #1529, #1530
+
+### Related Framework Issues:
+- **#1506**: DevOnboarder Script Framework Organization Initiative (Main Issue)
+- **#1526**: DevOnboarder Script Framework Organization v1.0.0 - Master Tracking Issue (Epic)
+- **#1528**: Phase 2: Friction Prevention Framework Implementation (50 scripts)
+- **#1529**: Phase 3: Security Validation Framework Implementation (45 scripts)
+- **#1530**: Phase 4: CI/CD Enhancement Framework Implementation (30 scripts)
+- **#1531**: Phase 5: Environment Management Framework Implementation (25 scripts)
+- **#1532**: Phase 6: Documentation Automation Framework Implementation (10 scripts)
+- **#1533**: Phase 7: Utility Core Framework Implementation (5 scripts)
+
+---
+
+**Status**: Roadmap Ready with Issue Integration Complete
+**Approach**: Issue-driven phased migration connected to existing framework organization issues
+**Timeline**: 4 versions over 6-12 months with milestone-based tracking
+**Risk Level**: Minimal (incremental approach with comprehensive issue tracking)
