@@ -2,7 +2,29 @@
 
 ## Project Overview
 
-DevOnboarder is a multi-service onboarding automation platform with FastAPI backend, Discord bot, React frontend, and PostgreSQL database. Services are orchestrated via Docker Compose with Traefik reverse proxy.
+DevOnboarder is a multi-service onboarding automation platform with FastAPI bac### Development Workflow
+
+### Environment Setup
+
+```bash
+# 1. Feature branch from main (MANDATORY)
+git checkout main && git pull
+git checkout -b feat/descriptive-feature-name
+
+# 2. Virtual environment (MANDATORY - enforced by safe commit wrapper)
+source .venv/bin/activate
+
+# 3. Install dependencies
+pip install -e .[test]
+npm ci --prefix bot
+npm ci --prefix frontend
+
+# 4. QC validation (MANDATORY - enforced by safe commit wrapper)
+./scripts/qc_pre_push.sh  # 95% quality threshold validation
+
+# 5. Safe commits only (MANDATORY - comprehensive validation)
+./scripts/safe_commit.sh "FEAT(component): description"
+```eact frontend, and PostgreSQL database. Services are orchestrated via Docker Compose with Traefik reverse proxy.
 
 **Philosophy**: "Work quietly and reliably" - extensive automation and quality gates ensure stability.
 
@@ -20,11 +42,21 @@ source .venv/bin/activate  # Required before ANY Python work
 ./scripts/qc_pre_push.sh  # 95% quality threshold validation
 ```
 
-**Use safe commit wrapper:**
+**Use safe commit wrapper (MANDATORY - includes comprehensive validation):**
 
 ```bash
 ./scripts/safe_commit.sh "feat(component): description"  # NEVER use git commit directly
 ```
+
+**Safe commit wrapper now enforces:**
+
+- ✅ Branch protection (prevents main branch commits)
+- ✅ Commit message format validation (uppercase TYPE required)
+- ✅ Mandatory QC validation (95% quality threshold)
+- ✅ Terminal output compliance (ZERO TOLERANCE policy)
+- ✅ Forbidden file detection (`Potato.md`, `*.env`, `*.pem`, `*.key`)
+- ✅ Emoji usage detection in committed files
+- ✅ Virtual environment activation verification
 
 ## Architecture Patterns
 
@@ -104,6 +136,28 @@ LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 ```
 
+### Error Prevention Patterns
+
+**Automated validations enforced by safe commit wrapper:**
+
+- **Forbidden File Detection**: Prevents commits of sensitive files:
+    - `Potato.md` (SSH keys and setup)
+    - `*.env` (environment variables)
+    - `*.pem`, `*.key` (private keys)
+    - `auth.db` (authentication database)
+
+- **Emoji Usage Detection**: ZERO TOLERANCE policy enforcement:
+    - Scans all committed files (`.md`, `.txt`, `.sh`, `.py`) for emoji usage
+    - Blocks commits containing forbidden emojis
+
+- **Terminal Output Validation**: Prevents forbidden echo patterns in scripts:
+    - Emojis in echo statements
+    - Variable expansion in echo (`echo "$VAR"`)
+    - Command substitution in echo (`echo "$(cmd)"`)
+    - Multi-line echo with `-e` flag
+
+- **Branch Protection**: Prevents direct commits to `main` branch entirely
+
 ### Enhanced Potato Policy
 
 **Protected sensitive files - NEVER expose:**
@@ -116,7 +170,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 
 ## Development Workflow
 
-### Environment Setup
+### Development Environment Setup
 
 ```bash
 # 1. Feature branch from main
@@ -143,20 +197,25 @@ npm ci --prefix frontend
 
 ### Commit Standards
 
-**Conventional format required:**
+**Conventional format required (ENFORCED by safe commit wrapper):**
 
 ```markdown
 TYPE(scope): description
 
 Types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT, PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
+
 Examples:
-- feat(auth): add JWT validation endpoint
-- fix(bot): resolve Discord connection timeout
-- chore(ci): update workflow dependencies
-- perf(auth): optimize JWT token validation
-- ci(actions): add automated dependency updates
-- cleanup(deps): remove unused dependencies
-```
+- FEAT(auth): add JWT validation endpoint
+- FIX(bot): resolve Discord connection timeout
+- CHORE(ci): update workflow dependencies
+- PERF(auth): optimize JWT token validation
+- CI(actions): add automated dependency updates
+- CLEANUP(deps): remove unused dependencies
+
+**Critical Notes:**
+- TYPE must be UPPERCASE (e.g., FEAT, not feat)
+- Scope is mandatory (e.g., (auth), (ci))
+- Safe commit wrapper validates format before allowing commits
 
 ## Service Integration Patterns Overview
 
@@ -266,7 +325,7 @@ import { command as profileCommand } from './profile.js';  // .js required
 
 ## Validation & Debugging
 
-### Environment Consistency
+### Environment Validation
 
 ```bash
 # Check environment synchronization
@@ -331,6 +390,19 @@ bash scripts/clean_pytest_artifacts.sh
 ```bash
 # Safe commit with automatic fixes
 ./scripts/safe_commit.sh "fix: resolve commit issues"
+
+# When safe commit wrapper blocks commits
+./scripts/safe_commit.sh --help  # See validation requirements
+source .venv/bin/activate        # Ensure virtual environment
+./scripts/qc_pre_push.sh         # Run QC validation manually
+```
+
+### Enhanced Error Prevention
+
+```bash
+# When terminal output validation fails
+printf "Status: %s\n" "$VAR"      # Use printf instead of echo
+echo "Task completed successfully"  # Plain echo without variables/emojis
 ```
 
 ### When Environment is Broken
@@ -342,10 +414,11 @@ make clean && make deps && make up
 
 ---
 
-**Last Updated**: 2025-09-23
+**Last Updated**: 2025-09-30
 **Coverage**: Backend 96%+, Bot 100%, Frontend 100%
 **Services**: Auth (8002), XP (8001), Discord Integration (8081), Dashboard (8003)
 **Architecture**: FastAPI + Discord.js + React + PostgreSQL + Traefik
 
 **Virtual Environment**: MANDATORY for all development and tooling
+**Safe Commit Wrapper**: ENFORCED - Comprehensive validation and error prevention
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution
