@@ -1,0 +1,9 @@
+name: "Enforce Versions"
+description: "Validate toolchain/runtime versions against versions.yaml"
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        set -euo pipefail
+        python3 scripts/verify_versions.py || exit 1

@@ -1,6 +1,37 @@
 """Authentication service with Discord integration and JWT utilities."""
 
 from __future__ import annotations
+
+# Patch bcrypt for passlib compatibility before any other imports
+try:
+    import bcrypt as real_bcrypt
+    import bcrypt._bcrypt as _bcrypt
+
+    # Store the original C function directly
+    original_hashpw = _bcrypt.hashpw
+
+    # Create a wrapper function that truncates passwords
+    def patched_hashpw(password, salt):
+        if isinstance(password, str):
+            password = password.encode("utf-8")
+        if len(password) > 72:
+            password = password[:72]
+        return original_hashpw(password, salt)
+
+    # Replace the function in the module
+    real_bcrypt.hashpw = patched_hashpw
+
+    # Add the missing __about__ attribute that passlib expects (if missing)
+    if not hasattr(real_bcrypt, "__about__"):
+
+        class About:
+            __version__ = getattr(real_bcrypt, "__version__", "5.0.0")
+
+        setattr(real_bcrypt, "__about__", About())
+
+except ImportError:
+    pass
+
 from typing import Optional
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
@@ -141,7 +172,49 @@ _engine_kwargs = (
 engine = create_engine(_db_url, **_engine_kwargs)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__default_rounds=12,
+)
+
+
+def _validate_password_for_bcrypt(password: Optional[str]) -> str:
+    """Validate and truncate passwords for bcrypt compatibility.
+
+    bcrypt operates on the first 72 bytes of the password. This function
+    truncates overly long passwords to prevent bcrypt errors while maintaining
+    security through the entropy of the first 72 bytes.
+
+    Parameters
+    ----------
+    password : Optional[str]
+        The password to validate and potentially truncate.
+
+    Returns
+    -------
+    str
+        The validated password, truncated to 72 bytes if necessary.
+
+    Raises
+    ------
+    HTTPException
+        If password is None.
+    """
+    if password is None:
+        raise HTTPException(status_code=400, detail="Password required")
+    # Allow empty passwords for Discord OAuth accounts
+    try:
+        b = str(password).encode("utf-8")
+    except Exception:
+        # Coerce to string and encode ignoring errors as a last resort
+        b = str(password).encode("utf-8", "ignore")
+    if len(b) > 72:
+        # Truncate to 72 bytes to prevent bcrypt errors
+        # This maintains security through the entropy of the first 72 bytes
+        truncated = b[:72].decode("utf-8", "ignore")
+        return truncated
+    return str(password)
 
 
 class User(Base):
@@ -272,9 +345,11 @@ def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     discord_token = data.get("discord_token")
     if db.query(User).filter_by(username=username).first():
         raise HTTPException(status_code=400, detail="Username exists")
+    # Validate and truncate password for bcrypt compatibility
+    validated_password = _validate_password_for_bcrypt(password)
     user = User(
         username=username,
-        password_hash=pwd_context.hash(password),
+        password_hash=pwd_context.hash(validated_password),
         discord_token=discord_token,
     )
     db.add(user)
@@ -289,8 +364,17 @@ def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     username = data["username"]
     password = data["password"]
     discord_token = data.get("discord_token")
+    # Validate and truncate password for bcrypt compatibility
+    validated_password = _validate_password_for_bcrypt(password)
     user = db.query(User).filter_by(username=username).first()
-    if not user or not pwd_context.verify(password, user.password_hash):
+    # If user does not exist, or the stored password_hash is empty (Discord-only
+    # account), treat as invalid credentials for password-based login.
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not user.password_hash:
+        # No local password set (Discord-only account)
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not pwd_context.verify(validated_password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     if discord_token is not None:
         user.discord_token = discord_token
@@ -354,9 +438,11 @@ def discord_callback(
     username = profile["id"]
     user = db.query(User).filter_by(username=username).first()
     if not user:
+        # Discord-created accounts have no local password. Store empty hash
+        # to indicate this is a Discord-only account.
         user = User(
             username=username,
-            password_hash=pwd_context.hash(""),
+            password_hash="",  # Empty string indicates Discord-only account
             discord_token=access_token,
         )
         db.add(user)
