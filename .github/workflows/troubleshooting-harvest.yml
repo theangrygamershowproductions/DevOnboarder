@@ -3,7 +3,7 @@ name: troubleshooting-harvest
 on:
    workflow_dispatch:
    schedule:
-      - cron: "0 8 * * *"  # daily at 08:00 UTC (optional)
+      - cron: "0 8 * * *" # daily at 08:00 UTC (optional)
 
 permissions:
    contents: read
@@ -15,13 +15,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - name: Checkout
-           uses: actions/checkout@v4
-
-         - name: Load AAR_TOKEN to env if present
-           if: ${{ secrets.AAR_TOKEN != '' }}
-           run: |
-              # Safely expose the secret to the job's environment for later steps
-              echo "AAR_TOKEN=${{ secrets.AAR_TOKEN }}" >> "$GITHUB_ENV"
+           uses: actions/checkout@v5
 
          - name: Print GH token context
            env:
@@ -32,20 +26,32 @@ jobs:
               echo "Actor: ${{ github.actor }}"
 
          - name: Inspect GITHUB_TOKEN scopes
+           env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            run: |
               set -euo pipefail
               echo "Inspecting GITHUB_TOKEN scopes via API headers..."
-              curl -sI -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || true
+              if [ -n "${GITHUB_TOKEN:-}" ]; then
+                curl -sI -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
+              else
+                echo "GITHUB_TOKEN not available"
+              fi
 
          - name: Inspect AAR_TOKEN (if provided)
-           if: ${{ env.AAR_TOKEN != '' }}
+           env:
+              AAR_TOKEN: ${{ secrets.AAR_TOKEN }}
            run: |
               set -euo pipefail
-              echo "AAR_TOKEN present. Checking scopes and validity..."
-              # Show a compact JSON error or header
-              curl -sS -I -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || true
-              echo "Attempt a lightweight API probe (rate-limited):"
-              curl -sS -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | jq -r '.message // "OK"' || true
+              if [ -n "${AAR_TOKEN:-}" ]; then
+                echo "AAR_TOKEN present. Checking scopes and validity..."
+                # Show a compact JSON error or header
+                curl -sS -I -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
+                echo "Attempt a lightweight API probe (rate-limited):"
+                curl -sS -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | jq -r '.message // "API accessible"' || echo "API probe failed"
+              else
+                echo "AAR_TOKEN not available - using GITHUB_TOKEN for diagnostics"
+                echo "Note: Some AAR features may be limited without AAR_TOKEN"
+              fi
 
          - name: Safe-run diagnostics script (no-op)
            run: |

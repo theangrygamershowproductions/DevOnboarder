@@ -3,10 +3,10 @@ name: Agent Instruction Validation
 on:
   pull_request:
     paths:
-      - '.codex/agents/**'
-      - '.codex/orchestration/**'
-      - '.codex/policies/**'
-      - '.github/copilot-instructions.md'
+      - ".codex/agents/**"
+      - ".codex/orchestration/**"
+      - ".codex/policies/**"
+      - ".github/copilot-instructions.md"
 
 jobs:
   validate_agent_instructions:
@@ -17,14 +17,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
