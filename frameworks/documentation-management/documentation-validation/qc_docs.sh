@@ -1,0 +1,1 @@
+../frameworks/quality-assurance/quality-control/qc_docs.sh
