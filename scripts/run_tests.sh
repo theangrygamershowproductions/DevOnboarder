@@ -1,1 +1,0 @@
-../frameworks/quality-assurance/testing/run_tests.sh

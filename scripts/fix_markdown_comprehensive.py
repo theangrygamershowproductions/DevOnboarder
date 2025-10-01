@@ -1,1 +1,0 @@
-../frameworks/quality-assurance/formatting/fix_markdown_comprehensive.py

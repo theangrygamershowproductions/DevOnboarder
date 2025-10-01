@@ -1,7 +1,9 @@
 ---
 repos:
     - repo: https://github.com/psf/black
-      rev: 25.1.0
+      rev: 2        -   id: clean-pytest-artifacts
+            name: Clean pytest sandbox artifacts
+            entry: frameworks/cicd-enhancement/testing-validation/clean_pytest_artifacts.sh.0
       hooks:
           - id: black
             language_version: python3
@@ -64,7 +66,7 @@ repos:
             pass_filenames: false
           - id: clean-pytest-artifacts
             name: Clean pytest sandbox artifacts
-            entry: scripts/clean_pytest_artifacts.sh
+            entry: frameworks/cicd-enhancement/testing-validation/clean_pytest_artifacts.sh
             language: script
             always_run: true
             pass_filenames: false
