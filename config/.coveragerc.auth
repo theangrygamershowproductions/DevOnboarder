@@ -1,5 +1,5 @@
 [run]
-source = src
+source = src/devonboarder
 omit =
     tests/*
     */__pycache__/*
@@ -10,12 +10,6 @@ omit =
     src/devonboarder/dashboard_service.py
     src/devonboarder/diagnostics.py
     src/devonboarder/server.py
-    src/discord_integration/*
-    src/feedback_service/*
-    src/llama2_agile_helper/*
-    src/routes/*
-    src/utils/*
-    src/xp/*
     src/devonboarder/__init__.py
     src/devonboarder/app.py
 
