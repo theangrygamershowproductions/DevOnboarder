@@ -1,3 +1,9 @@
+---
+similarity_group: external-pr-welcome-ops-playbook.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # External PR Welcome System - Operations Playbook
 
 ## 🎯 System Status: LIVE ✅
