@@ -14,10 +14,12 @@ echo "=== DevOnboarder Internal Link Validation ==="
 echo "Timestamp: $(date)"
 echo "Validating internal markdown links..."
 
-VALIDATION_FAILED=0
-
 # Find all markdown files
-echo "Scanning markdown files for internal links..."
+echo "Scanning markdown links for internal references..."
+
+# Create temp file to track validation failures across subshells
+TEMP_ERROR_FILE=$(mktemp)
+trap 'rm -f "$TEMP_ERROR_FILE"' EXIT
 
 # Check markdown links to docs/, scripts/, templates/, etc.
 while IFS= read -r -d '' file; do
@@ -64,7 +66,7 @@ while IFS= read -r -d '' file; do
             echo "  Link: $link"
             echo "  Target: $full_path"
             echo "  Status: File does not exist"
-            VALIDATION_FAILED=1
+            echo "FAILED" > "$TEMP_ERROR_FILE"
         fi
         done
     else
@@ -72,7 +74,8 @@ while IFS= read -r -d '' file; do
     fi
 done < <(find . -name "*.md" -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./.venv/*" -print0)
 
-if [[ $VALIDATION_FAILED -eq 1 ]]; then
+# Check if any validation failures occurred
+if [[ -s "$TEMP_ERROR_FILE" ]]; then
     echo ""
     echo "❌ VALIDATION FAILED: Broken internal links found"
     echo "Please fix the broken links before committing."
