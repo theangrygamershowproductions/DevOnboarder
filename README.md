@@ -65,6 +65,51 @@ Long-term platform evolution and strategic initiatives
 
 ---
 
+## 📋 **Script Framework Organization Initiative**
+
+DevOnboarder implements a hybrid migration strategy for organizing 250+ scripts into framework-based directories while maintaining system stability and team productivity.
+
+### **Strategic Approach**
+
+**Hybrid Migration Model**: Instead of disruptive script relocation, this initiative:
+
+- ✅ **Preserves critical infrastructure** in existing `scripts/` directory
+- ✅ **Copies low-risk scripts** to framework directories for gradual adoption
+- ✅ **Maintains 100% backward compatibility** during transition
+- ✅ **Enables incremental team adoption** of new framework structure
+
+### **Migration Timeline**
+
+| Version | Scope | Scripts | Risk Level | Target |
+|---------|-------|---------|------------|---------|
+| **1.x+1** | Low-Risk Migration | 75+ scripts | ✅ Low | 30% framework organization |
+| **1.x+2** | Medium-Risk Migration | 50+ scripts | ⚠️ Medium | 50% framework organization |
+| **1.x+3** | Integration Migration | 60+ scripts | ⚠️ Medium | 75% framework organization |
+| **2.x.x** | Critical Infrastructure | 45+ scripts | 🔴 High | 90%+ framework organization |
+
+### **Key Benefits**
+
+- **🛡️ Risk Mitigation**: Small, manageable changes per version with rollback capabilities
+- **👥 Team Adoption**: Gradual learning curve with clear documentation per phase
+- **📊 Issue Tracking**: Clear progress visibility through GitHub issues and milestones
+- **✅ Quality Assurance**: 95%+ quality threshold maintained throughout migration
+
+### **Framework Structure**
+
+```text
+frameworks/
+├── friction-prevention/        # Developer experience optimization
+├── security-validation/        # Security and compliance validation
+├── ci-cd-enhancement/         # Continuous integration improvements
+├── environment-management/    # Environment and configuration management
+├── documentation-automation/  # Documentation and reporting automation
+└── utility-core/             # Common utilities and shared components
+```
+
+**Related Issues**: [#1506](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1506) (Main Initiative) • [#1526](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1526) (Master Tracking) • [Framework Migration Roadmap](FRAMEWORK_MIGRATION_ROADMAP.md) • [Hybrid Migration Strategy](HYBRID_MIGRATION_APPROACH.md)
+
+---
+
 DevOnboarder demonstrates a trunk‑based workflow with Docker‑based services for rapid onboarding.
 
 See [docs/README.md](docs/README.md) for full setup instructions and workflow guidelines.
