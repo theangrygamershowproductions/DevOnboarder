@@ -11,10 +11,12 @@ on:
 
 jobs:
    validate-docs:
+      permissions:
+         contents: read # Required for checkout
       runs-on: ubuntu-latest
       steps:
          - name: Checkout code
-           uses: actions/checkout@v4
+           uses: actions/checkout@v5
 
          - name: Validate internal links
            run: |
