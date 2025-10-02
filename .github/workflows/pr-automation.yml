@@ -117,7 +117,7 @@ jobs:
             echo "First-time external contributor detected - posting welcome message"
 
             if [ -f "templates/external-pr-welcome.md" ]; then
-              gh pr comment "${{ github.event.pull_request.number }}" --body-file "templates/external-pr-welcome.md"
+              gh pr comment "$PR_NUMBER" --body-file "templates/external-pr-welcome.md"
               echo "Welcome message posted successfully"
             else
               echo "Warning: Welcome template not found at templates/external-pr-welcome.md"

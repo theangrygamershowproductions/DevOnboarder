@@ -58,7 +58,6 @@ consolidation_priority: P3
 # Simulate external PR welcome system
 gh workflow run pr-automation.yml \
   -f pr_number="1708" \
-  -f mode="analyze" \
   -f simulate_external_pr=true
 ```
 

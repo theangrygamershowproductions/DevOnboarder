@@ -75,7 +75,7 @@ log_gh_diagnostics() {
 
         echo "Available tokens (sanitized):"
         if [ -n "${GITHUB_TOKEN:-}" ]; then
-            echo "GITHUB_TOKEN: available (length: ${#GITHUB_TOKEN})"
+            echo "GITHUB_TOKEN: available"
         else
             echo "GITHUB_TOKEN: not available"
         fi

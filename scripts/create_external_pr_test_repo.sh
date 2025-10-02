@@ -61,7 +61,13 @@ The actual system includes comprehensive security guidance and onboarding resour
 EOF
 
 # Copy the welcome template
-cp "../templates/external-pr-welcome.md" "templates/"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TEMPLATE_SRC="$SCRIPT_DIR/../templates/external-pr-welcome.md"
+if [[ ! -f "$TEMPLATE_SRC" ]]; then
+  echo "❌ Template file not found: $TEMPLATE_SRC"
+  exit 1
+fi
+cp "$TEMPLATE_SRC" "templates/"
 
 # Create basic README
 cat > README.md << 'EOF'

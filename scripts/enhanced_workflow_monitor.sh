@@ -51,10 +51,13 @@ monitor_recent_failures() {
 
     if ! gh auth status >/dev/null 2>&1; then
         echo "GitHub CLI not authenticated - attempting authentication..."
-        if [ -n "${GITHUB_TOKEN:-}" ]; then
+        if [ -n "${AAR_TOKEN:-}" ]; then
+            printf "%s" "$AAR_TOKEN" | gh auth login --with-token
+        elif [ -n "${GITHUB_TOKEN:-}" ]; then
+            echo "Warning: Using GITHUB_TOKEN for gh auth login; consider using a more specific token like AAR_TOKEN."
             printf "%s" "$GITHUB_TOKEN" | gh auth login --with-token
         else
-            echo "No GITHUB_TOKEN available - skipping workflow monitoring"
+            echo "No authentication token available - skipping workflow monitoring"
             return 1
         fi
     fi
@@ -77,13 +80,10 @@ monitor_recent_failures() {
     echo "=== Analyzing Critical Workflow Patterns ==="
 
     # Analyze patterns in recent failures
-    local auto_fix_failures
     auto_fix_failures=$(printf "%s" "$failed_runs" | jq -r '.[] | select(.workflowName == "Auto Fix") | .databaseId' | wc -l)
 
-    local ci_monitor_failures
     ci_monitor_failures=$(printf "%s" "$failed_runs" | jq -r '.[] | select(.workflowName == "CI Monitor") | .databaseId' | wc -l)
 
-    local ci_failure_analyzer_failures
     ci_failure_analyzer_failures=$(printf "%s" "$failed_runs" | jq -r '.[] | select(.workflowName == "CI Failure Analyzer") | .databaseId' | wc -l)
 
     echo "Failure Pattern Analysis:"
@@ -231,7 +231,7 @@ main() {
     ci_monitor_failures=0
     ci_failure_analyzer_failures=0
 
-    # Run monitoring functions
+    # Run monitoring functions to set actual failure counts
     if monitor_recent_failures; then
         echo "✅ Recent failure monitoring completed"
     else
