@@ -262,7 +262,7 @@ The structured comment system creates foundation for:
 
 ### **Documentation Alignment**
 
-- **Process Documentation**: Existing [docs/standards/after-actions-report-process.md](docs/standards/after-actions-report-process.md) remains authoritative
+- **Process Documentation**: Existing [docs/standards/after-actions-report-process.md](standards/after-actions-report-process.md) remains authoritative
 
 - **Implementation Guide**: [AAR_IMPLEMENTATION_COMPLETE.md](AAR_IMPLEMENTATION_COMPLETE.md) covers core system
 

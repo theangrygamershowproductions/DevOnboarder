@@ -266,9 +266,9 @@ jobs:
               **⚠️ CRITICAL:** Until this is resolved, quality gates may be bypassed.
 
               **Related Documentation:**
-              - [Quality Gate Protection System](docs/standards/quality-gate-protection-system.md)
+              - [Quality Gate Protection System](#quality-gate-protection-system-zero-accountability-loss-framework)
 
-              - [Terminal Output Violations](docs/TERMINAL_OUTPUT_VIOLATIONS.md)`,
+              - [Terminal Output Violations](../TERMINAL_OUTPUT_VIOLATIONS.md)`,
 
               labels: ['critical', 'infrastructure', 'quality-gates']
             });
@@ -510,7 +510,7 @@ When debugging quality gates:
 
 - [Centralized Logging Policy](./centralized-logging-policy.md)
 
-- [DevOnboarder Setup Guide](../SETUP.md)
+- [DevOnboarder Setup Guide](../../SETUP.md)
 
 ---
 

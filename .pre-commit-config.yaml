@@ -95,6 +95,16 @@ repos:
                     "mkdir -p logs && bash scripts/check_potato_ignore.sh 2>&1 | tee logs/potato_check_$(date +%Y%m%d_%H%M%S).log",
                 ]
             language: system
+          - id: internal-link-validation
+            name: Internal Link Validation
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && bash scripts/validate_internal_links.sh 2>&1 | tee logs/link_validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
+            language: system
+            files: \.md$
           - id: env-docs-check
             name: Environment docs check
             entry: bash

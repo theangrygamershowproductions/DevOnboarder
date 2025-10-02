@@ -30,7 +30,7 @@ This page collects quick fixes for the most common problems.
 
 - If the Node.js download fails during the Prettier hook, see
 
-  [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors).
+  [Network troubleshooting](network-troubleshooting.md).
 
 - Missing Python packages? Install dev requirements with:
 

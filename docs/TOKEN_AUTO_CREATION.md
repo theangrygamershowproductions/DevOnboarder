@@ -396,4 +396,4 @@ bash scripts/sync_tokens.sh --sync-all
 
 - [Token Notification System](TOKEN_NOTIFICATION_SYSTEM.md)
 
-- [Enhanced Potato Policy](../docs/ENHANCED_POTATO_POLICY.md)
+- [Enhanced Potato Policy](enhanced-potato-policy.md)

@@ -797,7 +797,7 @@ To add new shortcuts or improve existing ones:
 
 ## Related Documentation
 
-- [DevOnboarder Setup Guide](setup.md)
+- [DevOnboarder Setup Guide](../SETUP.md)
 
 - [GitHub CLI Manual](https://cli.github.com/manual/)
 

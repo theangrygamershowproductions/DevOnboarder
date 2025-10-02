@@ -760,7 +760,7 @@ When modifying these git utilities:
 
 ## Related Documentation
 
-- [Branch Cleanup Documentation](../BRANCH_CLEANUP_ANALYSIS.md)
+- [Branch Cleanup Documentation](../reports/BRANCH_CLEANUP_ANALYSIS.md)
 
 - [DevOnboarder Workflow Guide](../../CONTRIBUTING.md)
 

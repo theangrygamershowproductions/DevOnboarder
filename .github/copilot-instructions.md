@@ -373,6 +373,42 @@ User contributions → XP events → Level calculation → API responses
 
 Bot automatically detects guild ID for dev/prod environment switching
 
+## GitHub Review Processes & Documentation Validation
+
+### Copilot Review Comment Handling
+
+**Critical Lessons Learned (PR #1715):**
+
+✅ **GitHub Review Behavior**: Comments are marked "Outdated" immediately when fixes are applied, not based on commit staleness
+✅ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks
+✅ **Root Cause Fixes**: Address underlying issues, not just symptoms identified in comments
+
+### Documentation Quality Requirements
+
+**MANDATORY validations now enforced:**
+
+```bash
+# Internal link validation (new pre-commit hook)
+scripts/validate_internal_links.sh  # Catches broken markdown references
+
+# Documentation quality checks
+scripts/check_docs.sh  # Vale prose linting and structure validation
+```
+
+**Common Documentation Errors to Avoid:**
+
+- ❌ `docs/TERMINAL_OUTPUT_POLICY.md` → ✅ `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
+- ❌ Relative paths without validation → ✅ Absolute paths with existence checks
+- ❌ Stale cross-references → ✅ Automated link validation
+
+### Review Process Workflow
+
+1. **Address Copilot Comments**: Fix root causes, not just surface issues
+2. **Validate Documentation**: Ensure all links and references are accurate
+3. **Run Quality Gates**: Use `./scripts/qc_pre_push.sh` before commits
+4. **Verify Resolution**: Check that GitHub marks comments as "Outdated"
+5. **Reference Guide**: See `docs/github-review-process-guide.md` for detailed procedures
+
 ## Emergency Commands
 
 ### When Tests Fail

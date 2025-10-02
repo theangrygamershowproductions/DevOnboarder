@@ -25,12 +25,12 @@ Welcome to **DevOnboarder**. This page explains how to get your environment
 running and where to find documentation about our workflow.
 
 If you're setting up a fresh Ubuntu machine, follow
-[ubuntu-setup.md](ubuntu-setup.md) for the commands that install Docker, Docker
+[ubuntu-setup.md](../ubuntu-setup.md) for the commands that install Docker, Docker
 Compose, Node.js 22, and Python 3.12. Running tests requires Python **3.12**.
 
 After cloning the repository, run `bash scripts/install_commit_msg_hook.sh` to
 install a `commit-msg` hook. This ensures your commit messages pass the lint
-check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+check in CI. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for details.
 
 ## Local Development
 
@@ -69,7 +69,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
 7. Run `python -m diagnostics` to confirm required packages import, all services are healthy, and environment variables match the examples. See
 
-   [diagnostics-sample.log](diagnostics-sample.log) for the expected output.
+   diagnostics-sample.log (legacy reference) for the expected output.
 
 8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
 
@@ -95,7 +95,7 @@ check in CI. See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 
     and `npm run coverage` from the `bot/` directory before committing.
     After installing dependencies, run `npm run coverage` in the `frontend/`
-    directory as well (see [../frontend/README.md](../frontend/README.md) for
+    directory as well (see [../bot/README.md](../../bot/README.md) for
     details).
     Install the project and test requirements with
     `pip install -e .[test]` **before running `pytest`**. The helper
@@ -183,97 +183,97 @@ platforms. Please report any issues you encounter on your operating system.
 
 ## Key Documentation
 
-- [About Potato](about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
+- [About Potato](../about-potato.md) &ndash; the playful backstory of our root vegetable mascot.
 
-- [Alpha phase roadmap](roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
+- [Alpha phase roadmap](../roadmap/alpha-phase.md) &ndash; pre- and post-launch milestones.
 
-- [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
+- [Alpha tester onboarding](../alpha/README.md) &ndash; guide for early testers.
 
-- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Alpha testers log](../contributing/ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 
-- [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
+- [Alpha wave rollout guide](../alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 
-- [Automatic Codex issue closing](codex-issue-autoclose.md)
+- [Automatic Codex issue closing](../codex-issue-autoclose.md)
 
   &ndash; merged PRs with `Fixes #<issue>` close the linked Codex ticket.
 
 - [Changelog](CHANGELOG.md) &ndash; record notable updates for each release.
 
-- [Code of Conduct](../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
+- [Code of Conduct](../../CODE_OF_CONDUCT.md) &ndash; expected behavior in our community.
 
-- [CI failure issue management](ci-failure-issues.md)
+- [CI failure issue management](../ci-failure-issues.md)
 
   &ndash; how automatic cleanup works and how to close old issues.
 
-- [CI workflow](ci-workflow.md)
+- [CI workflow](../ci-workflow.md)
 
   &ndash; overview of job steps, caching, concurrency, and coverage requirements.
 
-- [CI environment variables](ci-env-vars.md)
+- [CI environment variables](../ci-env-vars.md)
 
   &ndash; summary of tokens and other variables used by the workflows.
 
-- [CI-first OpenAI API key policy](ci-first-policy.md)
+- [CI-first OpenAI API key policy](../ci-first-policy.md)
 
   &ndash; explains why the OpenAI key only exists in CI.
 
-- [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
+- [CI resilience hardening steps](../../codex/prompts/ci_resilience_hardening.md)
 
   &ndash; quick checklist for analyzing failing runs.
 
-- [Discord message templates](discord/discord-message-templates.md) &ndash; sample posts for the community.
+- [Discord message templates](../discord/discord-message-templates.md) &ndash; sample posts for the community.
 
-- [Discord server configuration](discord/configuration.md) &ndash; enable the widget for status display.
+- [Discord server configuration](../discord/configuration.md) &ndash; enable the widget for status display.
 
-- [Doc QA onboarding](doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
+- [Doc QA onboarding](../doc-quality-onboarding.md) &ndash; quickstart for documentation checks.
 
-- [E2E test guide](e2e-tests.md) &ndash; run the Playwright suite.
+- [E2E test guide](../e2e-tests.md) &ndash; run the Playwright suite.
 
-- [Codex E2E report](codex-e2e-report.md) &ndash; record outcomes of each run.
+- [Codex E2E report](../codex-e2e-report.md) &ndash; record outcomes of each run.
 
-- [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
+- [Engineer assessment work items](../assessments/engineer_assessment_work_items.md)
 
   &ndash; checklist for onboarding reviews of new features.
 
-- [Endpoint reference](endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
+- [Endpoint reference](../endpoint-reference.md) &ndash; list of API routes and Discord command mappings.
 
-- [Environment variables](env.md) &ndash; explanation of `.env` settings and the role-based permission system.
+- [Environment variables](../env.md) &ndash; explanation of `.env` settings and the role-based permission system.
 
-- [Agents overview](../agents/index.md) &ndash; service and integration specs.
+- [Agents overview](../../agents/index.md) &ndash; service and integration specs.
 
   Codex also reads `.codex/agents/index.json` to map these agents for automation.
 
-- [Multi-bot orchestration](orchestration.md) – token management and escalation paths.
+- [Multi-bot orchestration](../orchestration.md) – token management and escalation paths.
 
-- [DevOnboarder in TAGS](ecosystem.md) &ndash; how the services fit together.
+- [DevOnboarder in TAGS](../ecosystem.md) &ndash; how the services fit together.
 
-- [TAGS integration guide](tags_integration.md) &ndash; compose files and feature flags.
+- [TAGS integration guide](../tags_integration.md) &ndash; compose files and feature flags.
 
-- [Feedback dashboard PRD](prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
+- [Feedback dashboard PRD](../prd/feedback-dashboard.md) &ndash; objectives and features for the feedback tool.
 
-- [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
+- [Founder's Circle onboarding](../founders/README.md) &ndash; roles and perks for core supporters.
 
-- [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+- [Founders log](../contributing/FOUNDERS.md) &ndash; record core contributors and how they help.
 
-- [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
+- [Frontend README](../../frontend/README.md) &ndash; instructions for running the React app.
 
-- [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
+- [Git guidelines](../git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 
-- [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
+- [Branch cleanup workflow](../git-guidelines.md) &ndash; nightly script for removing old branches.
 
-- [Issue labeling guide](contributing/issue-labeling-guide.md) &ndash; comprehensive labeling system for strategic issue management.
+- [Issue labeling guide](../contributing/issue-labeling-guide.md) &ndash; comprehensive labeling system for strategic issue management.
 
-- [Issue labels quick reference](contributing/labels-quick-reference.md) &ndash; essential labels and common filtering examples.
+- [Issue labels quick reference](../contributing/labels-quick-reference.md) &ndash; essential labels and common filtering examples.
 
-- [Marketing site home](../frontend/index.html) &ndash; early look at the public landing page.
+- [Marketing site home](../../frontend/index.html) &ndash; early look at the public landing page.
 
-- [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
+- [Merge checklist](../merge-checklist.md) &ndash; steps maintainers use before merging.
 
-- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+- [Network troubleshooting](../network-troubleshooting.md)
 
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 
-- [Network exception list](network-exception-list.md)
+- [Network exception list](../network-exception-list.md)
 
   &ndash; domains that must be reachable for setup and CI tasks.
   &ndash; required external domains and firewall exceptions.
@@ -281,40 +281,40 @@ platforms. Please report any issues you encounter on your operating system.
   &ndash; run `scripts/show_network_exceptions.sh` to print the list.
   &ndash; run `scripts/check_network_access.sh` to verify connectivity.
 
-- [Offline setup](offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
+- [Offline setup](../offline-setup.md) &ndash; download Python wheels and npm packages on another machine.
 
-- [Project origin & recovery story](origin.md) &ndash; why DevOnboarder exists.
+- [Project origin & recovery story](../origin.md) &ndash; why DevOnboarder exists.
 
-- [Pull request template](../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
+- [Pull request template](../../.github/pull_request_template.md) &ndash; describe your changes and verify the checklist.
 
-- [Sample pull request](sample-pr.md) &ndash; walkthrough of a minimal docs update.
+- [Sample pull request](../sample-pr.md) &ndash; walkthrough of a minimal docs update.
 
-- [First PR walkthrough](first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
+- [First PR walkthrough](../first-pr-guide.md) &ndash; clone, install hooks and open your first pull request.
 
-- [Service architecture diagram](architecture.svg) &ndash; high-level view of the auth, XP API, frontend and bot.
+- Service architecture diagram (legacy reference) &ndash; high-level view of the auth, XP API, frontend and bot.
 
-- [Service status dashboard](service-status.md) &ndash; checkbox view of core service health.
+- [Service status dashboard](../service-status.md) &ndash; checkbox view of core service health.
 
-- [Tools dashboard](tools-dashboard.md) &ndash; comprehensive maintenance, cleanup, and diagnostic tools reference.
+- [Tools dashboard](../tools-dashboard.md) &ndash; comprehensive maintenance, cleanup, and diagnostic tools reference.
 
-- [Security audit](security-audit-2025-07-01.md) &ndash; latest dependency check results.
+- [Security audit](../security-audit-2025-07-01.md) &ndash; latest dependency check results.
 
-- [Dependency update policy](dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
+- [Dependency update policy](../dependencies.md) &ndash; how Dependabot PRs are reviewed and merged.
 
-- [FIPS compliance for Go services](fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
+- [FIPS compliance for Go services](../fips-golang.md) &ndash; guidelines for running a Go project in FIPS mode.
 
-- [Builder ethics dossier](builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
+- [Builder ethics dossier](../builder_ethics_dossier.md) &ndash; outlines contributor ethics and provides a template.
 
-- [Task management](task-management.md) &ndash; archive completed items in `codex.tasks.json`.
+- [Task management](../task-management.md) &ndash; archive completed items in `codex.tasks.json`.
 
-- [Troubleshooting guide](troubleshooting.md)
+- [Troubleshooting guide](../troubleshooting.md)
 
   &ndash; quick fixes for setup problems and failing CI jobs.
 
 ## Onboarding Phases
 
-Our rollout begins with invite-only [alpha testing](alpha/README.md) followed by
-the **Founder's Circle** outlined in [founders/README.md](founders/README.md).
+Our rollout begins with invite-only [alpha testing](../alpha/README.md) followed by
+the **Founder's Circle** outlined in [founders/README.md](../founders/README.md).
 
 These groups provide early feedback before the project opens to the public.
 
@@ -326,8 +326,8 @@ level, which you can check through the `/profile` command or the
 
 ## Contributor Logging
 
-Add yourself to [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md) or
-[../FOUNDERS.md](../FOUNDERS.md) when you participate. These logs help us track
+Add yourself to [../ALPHA_TESTERS.md](../contributing/ALPHA_TESTERS.md) or
+[../FOUNDERS.md](../contributing/FOUNDERS.md) when you participate. These logs help us track
 who has contributed and when.
 
 ## Retrospectives
@@ -362,7 +362,7 @@ function. Importing :mod:`devonboarder` loads these modules into the global
 ## Available Bot Commands
 
 The Discord bot exposes several slash commands documented in
-[bot/README.md](../bot/README.md). Use `/qa_checklist` to display the QA
+[bot/README.md](../../bot/README.md). Use `/qa_checklist` to display the QA
 checklist from `docs/QA_CHECKLIST.md`; the command sends it back in ephemeral
 messages. Run `/dependency_inventory` to upload `dependency_inventory.xlsx` as a
 file for maintainers. The exported spreadsheet now lives at `docs/dependency_inventory.xlsx`.
@@ -372,7 +372,7 @@ file for maintainers. The exported spreadsheet now lives at `docs/dependency_inv
 All Markdown files are checked with **Vale** for style. The docs script prints a
 
 notice if grammar checks need **LanguageTool**.
-See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step guide.
+See [doc-quality-onboarding.md](../doc-quality-onboarding.md) for a step-by-step guide.
 
 - Run `bash scripts/check_docs.sh` before pushing any changes.
 
@@ -403,7 +403,7 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 
 - Markdown files must not exceed 120 characters per line (MD013). See
 
-  [doc-quality-onboarding.md](doc-quality-onboarding.md) for details.
+  [doc-quality-onboarding.md](../doc-quality-onboarding.md) for details.
 
 ## Issues and Pull Requests
 
@@ -413,24 +413,24 @@ See [doc-quality-onboarding.md](doc-quality-onboarding.md) for a step-by-step gu
 
 3. Use the pull request template and ensure the checklist passes.
 
-4. Review our [issue labeling guide](contributing/issue-labeling-guide.md) for proper categorization and prioritization.
+4. Review our [issue labeling guide](../contributing/issue-labeling-guide.md) for proper categorization and prioritization.
 
-5. Use the [labels quick reference](contributing/labels-quick-reference.md) for common labeling scenarios.
+5. Use the [labels quick reference](../contributing/labels-quick-reference.md) for common labeling scenarios.
 
 ### Continuous Improvement Checklist
 
 Pull requests must include the block from
-[`../.github/pull_request_template.md`](../.github/pull_request_template.md)
+[`../.github/pull_request_template.md`](../../.github/pull_request_template.md)
 labeled **## Continuous Improvement Checklist**. The CI workflow fails when this
 
 heading is missing. See
-[`checklists/continuous-improvement.md`](checklists/continuous-improvement.md)
+[`checklists/continuous-improvement.md`](../checklists/continuous-improvement.md)
 for the items. If the GitHub UI does not preload the template, copy the snippet
-from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
+from [`checklists/ci-checklist-snippet.md`](../checklists/ci-checklist-snippet.md).
 
-1. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
+1. Review [sample-pr.md](../sample-pr.md) for an end-to-end example.
 
-2. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
+2. See the Codex CI Monitoring Policy in [../Agents.md](../Agents.md) for how failed CI jobs automatically create tasks.
 
 3. When CI fails on a pull request, an issue titled `CI Failure: PR #<number>`
 
@@ -445,7 +445,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 5. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a
 
    token with `issues: write` permission or a `pull_request_target` workflow as
-   explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests).
+   explained in [ci-failure-issues.md](../ci-failure-issues.md).
    Maintainers can supply a personal access token as described in
    [ci-failure-issues.md#maintainer-token-setup].
 
@@ -453,7 +453,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
    `pull_request_target` workflow for forked pull requests so CI can update the
    failure issue. See
-   [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
+   [ci-failure-issues.md](../ci-failure-issues.md).
 
 7. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
 
@@ -477,7 +477,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
     It quotes the first match and opens an issue using
     `${{ secrets.CI_ISSUE_TOKEN }}` or `${{ secrets.GITHUB_TOKEN }}` when that
-    secret isn’t set. See [ci-env-vars.md](ci-env-vars.md) for details.
+    secret isn’t set. See [ci-env-vars.md](../ci-env-vars.md) for details.
 
 13. Workflows share `.github/.yamllint-config` to disable `document-start` and
 
@@ -501,4 +501,4 @@ bash scripts/security_audit.sh
 The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=high`
 in both `frontend/` and `bot/`. Each command fails when vulnerabilities are
 detected.
-CI also runs `pip-audit` immediately after installing Python requirements. If this step fails to reach the vulnerability database, see [docs/offline-setup.md](offline-setup.md).
+CI also runs `pip-audit` immediately after installing Python requirements. If this step fails to reach the vulnerability database, see [docs/offline-setup.md](../offline-setup.md).

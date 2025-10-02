@@ -219,7 +219,7 @@ For CI environments that need signature verification:
 
 - [GitHub GPG Signature Verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 
-- [DevOnboarder GPG Setup Script](../scripts/setup_github_gpg_keys.sh)
+- [DevOnboarder GPG Setup Script](../../scripts/setup_github_gpg_keys.sh)
 
 - [Git Signature Verification Documentation](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
 

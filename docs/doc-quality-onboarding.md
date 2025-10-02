@@ -45,7 +45,7 @@ before Vale to enforce Markdown style.
 
 To use `markdownlint-cli2` without internet access, run `npm ci --cache ~/devonboarder-offline/npm` on an online
 machine and copy the `devonboarder-offline` directory to your offline system. Installing from this cache lets
-`npx --offline -y markdownlint-cli2` work as expected. See [offline-setup.md](offline-setup.md#documentation-tooling-markdownlint-cli2)
+`npx --offline -y markdownlint-cli2` work as expected. See [offline-setup.md](offline-setup.md)
 for details.
 
 When working offline, install dependencies from the cache and run the linter directly:

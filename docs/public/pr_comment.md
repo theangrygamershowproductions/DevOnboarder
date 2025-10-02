@@ -96,9 +96,9 @@ processed_result = process_user_data(
 
 ## Resources
 
-- [Security Guidelines](../security/guidelines.md)
+- [Security Guidelines](../security/README.md)
 
-- [Safe Database Practices](../security/database-security.md)
+- [Safe Database Practices](../security/README.md)
 
 ```bash
 

@@ -382,7 +382,7 @@ Update the health matrix and remove references from code and docs.
 
 - [Security Policy](../SECURITY.md)
 
-- [Onboarding Guide](../ONBOARDING.md)
+- [Onboarding Guide](ONBOARDING.md)
 
 - [.env.example](../.env.example)
 

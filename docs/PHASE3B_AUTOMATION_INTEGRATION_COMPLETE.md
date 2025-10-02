@@ -225,13 +225,13 @@ python scripts/validate_milestone_cross_references.py --fix-duplicates
 
 **Automation Implementation**:
 
-- [Pre-commit Configuration](.pre-commit-config.yaml) - Line 168-178
+- [Pre-commit Configuration](../.pre-commit-config.yaml) - Line 168-178
 
-- [CI/CD Workflow](.github/workflows/milestone-validation.yml)
+- [CI/CD Workflow](../.github/workflows/ci.yml)
 
-- [Cross-reference Validator](scripts/validate_milestone_cross_references.py)
+- [Cross-reference Validator](../scripts/validate_internal_links.sh)
 
-- [Enhanced Format Validator](scripts/validate_milestone_format.py)
+- [Enhanced Format Validator](../scripts/validate_internal_links.sh)
 
 **Quality Validation**:
 
