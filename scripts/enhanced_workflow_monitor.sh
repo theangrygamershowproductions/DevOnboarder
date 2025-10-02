@@ -46,6 +46,10 @@ monitor_recent_failures() {
     # Check if GitHub CLI is available and authenticated
     if ! command -v gh >/dev/null 2>&1; then
         echo "GitHub CLI not available - skipping workflow monitoring"
+        # Set failure counts to 0 when CLI unavailable
+        auto_fix_failures=0
+        ci_monitor_failures=0
+        ci_failure_analyzer_failures=0
         return 1
     fi
 
@@ -58,6 +62,10 @@ monitor_recent_failures() {
             printf "%s" "$GITHUB_TOKEN" | gh auth login --with-token
         else
             echo "No authentication token available - skipping workflow monitoring"
+            # Set failure counts to 0 when no authentication available
+            auto_fix_failures=0
+            ci_monitor_failures=0
+            ci_failure_analyzer_failures=0
             return 1
         fi
     fi
@@ -70,6 +78,10 @@ monitor_recent_failures() {
 
     if [ "$failed_runs" = "[]" ] || [ -z "$failed_runs" ]; then
         echo "No recent workflow failures found"
+        # Set failure counts to 0 when no failures found
+        auto_fix_failures=0
+        ci_monitor_failures=0
+        ci_failure_analyzer_failures=0
         return 0
     fi
 
