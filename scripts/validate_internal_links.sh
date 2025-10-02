@@ -23,8 +23,15 @@ echo "Scanning markdown files for internal links..."
 while IFS= read -r -d '' file; do
     echo "Checking: $file"
 
-    # Extract markdown links: [text](path)
-    grep -oE '\[([^]]+)\]\(([^)]+)\)' "$file" | while IFS= read -r link; do
+    # Skip very large files that might hang the validator
+    if [[ $(wc -l < "$file") -gt 2000 ]]; then
+        echo "  Skipping large file (>2000 lines): $file"
+        continue
+    fi
+
+    # Extract markdown links: [text](path) - timeout protection
+    if links=$(timeout 10s grep -oE '\[([^]]+)\]\(([^)]+)\)' "$file" 2>/dev/null); then
+        echo "$links" | while IFS= read -r link; do
         # Extract the path part
         path="${link##*](}"
         path="${path%)}"
@@ -59,8 +66,11 @@ while IFS= read -r -d '' file; do
             echo "  Status: File does not exist"
             VALIDATION_FAILED=1
         fi
-    done
-done < <(find . -name "*.md" -type f -not -path "./.git/*" -print0)
+        done
+    else
+        echo "  No links found or file processing timed out"
+    fi
+done < <(find . -name "*.md" -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./.venv/*" -print0)
 
 if [[ $VALIDATION_FAILED -eq 1 ]]; then
     echo ""

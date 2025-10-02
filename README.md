@@ -116,6 +116,11 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 **📚 Documentation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
 
+**🔍 Quality & Review Guides**:
+
+- [GitHub Review Process Guide](docs/github-review-process-guide.md) - Copilot review lifecycle and troubleshooting
+- [Documentation Quality Standards](docs/documentation-quality-standards.md) - Cross-reference validation and quality patterns
+
 ## Why This Project Exists
 
 The short version: everything broke, then got rebuilt.
