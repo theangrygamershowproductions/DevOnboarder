@@ -79,16 +79,25 @@ handle_precommit_modifications() {
     echo "Attempting commit with enhanced validation..."
 
     # Run commit in subshell with timeout to prevent hanging
-    if timeout 60s git commit -m "$commit_msg" 2>&1; then
+    local commit_output
+    local exit_code
+
+    echo "Attempting commit with enhanced validation..."
+    commit_output=$(timeout 60s git commit -m "$commit_msg" 2>&1)
+    exit_code=$?
+
+    if [[ $exit_code -eq 0 ]]; then
         echo "✅ Enhanced re-staging commit successful!"
+        echo "$commit_output"
         return 0
     else
-        local exit_code=$?
         if [[ $exit_code -eq 124 ]]; then
             echo "❌ Enhanced re-staging commit timed out after 60 seconds"
             echo "This may indicate hanging pre-commit hooks or slow validation processes"
+            echo "Timeout occurred during commit operation"
         else
             echo "❌ Enhanced re-staging commit failed (exit code: $exit_code)"
+            echo "$commit_output"
         fi
 
         # Enhanced diagnostics
