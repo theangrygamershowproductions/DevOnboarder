@@ -40,7 +40,15 @@ When external contributors create pull requests from forks, GitHub's security mo
 
 DevOnboarder addresses these challenges through a **three-tier security architecture**:
 
-**Architecture Overview:** The security model consists of three distinct tiers - a Safe Execution Zone for read-only operations, a Privileged Execution Zone for trusted code with full permissions, and a Maintainer Override Zone for manual interventions. Each tier provides increasing levels of access while maintaining security boundaries.
+**Architecture Overview:** The security model consists of three distinct tiers designed to handle external pull requests securely:
+
+1. **Security Tier 1 - Safe Execution Zone**: The outermost tier handles untrusted code from external contributors. It uses the `pull_request` trigger with read-only permissions, no access to repository secrets, and can safely execute testing and validation workflows without security risks.
+
+2. **Security Tier 2 - Privileged Execution Zone**: The middle tier processes trusted code from maintainers and approved contributors. It uses the `pull_request_target` trigger with full write permissions, access to all repository secrets, and can perform privileged operations like auto-fixing and deployment.
+
+3. **Security Tier 3 - Maintainer Override Zone**: The innermost tier provides manual intervention capabilities for repository maintainers. It allows direct workflow triggering, manual token usage, and override of automated security restrictions when human judgment is required.
+
+Each tier provides increasing levels of access while maintaining strict security boundaries between untrusted external contributions and sensitive repository operations.
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
