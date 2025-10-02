@@ -21,6 +21,11 @@ on:
           - analyze
           - execute
           - full-auto
+      simulate_external_pr:
+        description: "Simulate external fork PR for testing welcome system"
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -73,25 +78,42 @@ jobs:
 
       - name: Welcome external contributors
         if: |
-          github.event.pull_request.head.repo.fork == true &&
-          github.event.action == 'opened'
+          (github.event.pull_request.head.repo.fork == true && github.event.action == 'opened') ||
+          (github.event_name == 'workflow_dispatch' && inputs.simulate_external_pr == true)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "External fork PR detected - checking if first-time contributor"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "SIMULATION MODE: Testing external PR welcome system"
+            PR_NUMBER="${{ inputs.pr_number }}"
+            printf "Using provided PR number: %s\n" "$PR_NUMBER"
+          else
+            echo "External fork PR detected - checking if first-time contributor"
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
+          # SECURITY: Idempotency check - prevent duplicate welcome comments
+          echo "Checking for existing welcome comments..."
+          EXISTING_WELCOME=$(gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | select(.body | contains("External PR Security Notice")) | .id' || echo "")
+
+          if [ -n "$EXISTING_WELCOME" ]; then
+            printf "Welcome comment already exists (ID: %s) - skipping\n" "$EXISTING_WELCOME"
+            exit 0
+          fi
 
           # Check contributor history using GitHub API directly to avoid variable assignments
+          USER_LOGIN="${{ github.event.pull_request.user.login || 'test-user' }}"
           echo "Checking contribution count for user:"
-          printf "%s\n" "${{ github.event.pull_request.user.login }}"
+          printf "%s\n" "$USER_LOGIN"
 
           # Count all PRs from this author (both open and closed)
-          TOTAL_PRS=$(gh pr list --author "${{ github.event.pull_request.user.login }}" --state all --json number --jq '. | length')
+          TOTAL_PRS=$(gh pr list --author "$USER_LOGIN" --state all --json number --jq '. | length' || echo "1")
 
           echo "Total PRs from this contributor:"
           printf "%s\n" "$TOTAL_PRS"
 
           # Welcome first-time contributors only
-          if [ "$TOTAL_PRS" -eq 1 ]; then
+          if [ "$TOTAL_PRS" -eq 1 ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "First-time external contributor detected - posting welcome message"
 
             if [ -f "templates/external-pr-welcome.md" ]; then
