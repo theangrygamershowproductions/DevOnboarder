@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
 interface User {
     username: string;
@@ -72,15 +73,15 @@ export default function Header({ className = "" }: HeaderProps) {
     };
 
     return (
-        <header className={`bg-white shadow-sm border-b ${className}`}>
+        <header className={`theme-header border-b ${className}`}>
             <div className="container mx-auto px-6 py-4">
                 <div className="flex justify-between items-center">
                     {/* Logo/Brand */}
                     <div className="flex items-center space-x-4">
-                        <a href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                        <a href="/" className="text-2xl font-bold theme-header-text hover:theme-header-text transition-colors">
                             DevOnboarder
                         </a>
-                        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                        <span className="text-sm theme-text-muted theme-surface px-2 py-1 rounded">
                             Beta
                         </span>
                     </div>
@@ -89,23 +90,26 @@ export default function Header({ className = "" }: HeaderProps) {
                     <div className="flex items-center space-x-4">
                         {/* Navigation Links */}
                         <nav className="hidden md:flex items-center space-x-6">
-                            <a href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+                            <a href="/" className="theme-nav-text hover:theme-nav-text transition-colors">
                                 Home
                             </a>
                             <a
                                 href="https://github.com/theangrygamershowproductions/DevOnboarder"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-gray-600 hover:text-gray-900 transition-colors"
+                                className="theme-nav-text hover:theme-nav-text transition-colors"
                             >
                                 Source
                             </a>
                         </nav>
 
+                        {/* Theme Toggle */}
+                        <ThemeToggle className="hidden sm:flex" />
+
                         {/* Authentication State */}
                         <div className="flex items-center space-x-3">
                             {loading ? (
-                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 theme-spinner"></div>
                             ) : user && user.isAuthenticated ? (
                                 <div className="flex items-center space-x-3">
                                     {/* User Avatar & Info */}
@@ -117,11 +121,11 @@ export default function Header({ className = "" }: HeaderProps) {
                                                     : getDefaultAvatarUrl(user.discord_id)
                                             }
                                             alt={`${user.username}'s avatar`}
-                                            className="w-8 h-8 rounded-full border-2 border-gray-200"
+                                            className="w-8 h-8 rounded-full border-2 theme-border"
                                         />
                                         <div className="hidden sm:block">
-                                            <div className="text-sm font-medium text-gray-900">{user.username}</div>
-                                            <div className="text-xs text-gray-500">
+                                            <div className="text-sm font-medium theme-text">{user.username}</div>
+                                            <div className="text-xs theme-text-muted">
                                                 {user.roles.length > 0 ? user.roles.join(", ") : "Member"}
                                             </div>
                                         </div>
@@ -130,7 +134,7 @@ export default function Header({ className = "" }: HeaderProps) {
                                     {/* Dashboard Link */}
                                     <a
                                         href="/dashboard"
-                                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-200"
+                                        className="theme-button-primary hover:theme-button-primary px-3 py-2 rounded-lg text-sm font-medium transition duration-200"
                                     >
                                         Dashboard
                                     </a>
@@ -138,22 +142,27 @@ export default function Header({ className = "" }: HeaderProps) {
                                     {/* Logout Button */}
                                     <button
                                         onClick={logout}
-                                        className="text-gray-600 hover:text-red-600 transition-colors text-sm"
+                                        className="theme-nav-text hover:text-red-500 transition-colors text-sm"
                                         title="Logout"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                         </svg>
                                     </button>
+
+                                    {/* Mobile Theme Toggle */}
+                                    <ThemeToggle className="sm:hidden" />
                                 </div>
                             ) : (
                                 <div className="flex items-center space-x-2">
                                     <a
                                         href="/dashboard"
-                                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
+                                        className="theme-button-primary hover:theme-button-primary px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
                                     >
                                         Staff Login
                                     </a>
+                                    {/* Mobile Theme Toggle for non-authenticated users */}
+                                    <ThemeToggle className="sm:hidden" />
                                 </div>
                             )}
                         </div>
