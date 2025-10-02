@@ -1,3 +1,9 @@
+---
+similarity_group: github-review-process-guide.md-docs
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # GitHub Review Process Guide
 
 ## GitHub Copilot Review System
