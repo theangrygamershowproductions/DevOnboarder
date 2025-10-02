@@ -1,122 +1,177 @@
 name: PR Automation Framework
 
 on:
-    pull_request:
-        types: [opened, synchronize, ready_for_review]
-        branches: [main, master]
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+    branches: [main, master]
 
-    # Allow manual triggering
-    workflow_dispatch:
-        inputs:
-            pr_number:
-                description: "PR number to process"
-                required: true
-                type: string
-            mode:
-                description: "Automation mode"
-                required: true
-                default: "analyze"
-                type: choice
-                options:
-                    - analyze
-                    - execute
-                    - full-auto
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to process"
+        required: true
+        type: string
+      mode:
+        description: "Automation mode"
+        required: true
+        default: "analyze"
+        type: choice
+        options:
+          - analyze
+          - execute
+          - full-auto
+      simulate_external_pr:
+        description: "Simulate external fork PR for testing welcome system"
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    pr-automation:
-        runs-on: ubuntu-latest
-        if: ${{ !github.event.pull_request.draft }}
+  pr-automation:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
 
-        permissions:
-            contents: write
-            pull-requests: write
-            checks: read
-            actions: read
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: read
+      actions: read
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v5
-              with:
-                  fetch-depth: 0
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
-            - name: Setup dependencies
-              run: |
-                  # Install GitHub CLI if not available
-                  type gh >/dev/null 2>&1 || {
-                    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-                      sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-                    ARCH=$(dpkg --print-architecture)
-                    printf -- 'deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' \
-                        "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-                    sudo apt update
-                    sudo apt install gh
-                  }
+      - name: Setup dependencies
+        run: |
+          # Install GitHub CLI if not available
+          type gh >/dev/null 2>&1 || {
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+              sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            ARCH=$(dpkg --print-architecture)
+            printf -- 'deb [arch=%s signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' \
+                "$ARCH" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh
+          }
 
-                  # Install other tools
-                  sudo apt-get update
-                  sudo apt-get install -y jq
+          # Install other tools
+          sudo apt-get update
+          sudo apt-get install -y jq
 
-                  # Install Node.js tools
-                  npm install -g markdownlint-cli
+          # Install Node.js tools
+          npm install -g markdownlint-cli
 
-            - name: Setup automation framework
-              run: |
-                  bash scripts/setup_automation.sh
+      - name: Setup automation framework
+        run: |
+          bash scripts/setup_automation.sh
 
-            - name: Authenticate with GitHub
-              run: |
-                printf -- '%s\n' "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+      - name: Authenticate with GitHub
+        run: |
+          printf -- '%s\n' "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
-            - name: Run PR automation
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  # Determine PR number and mode - use values directly to avoid variable assignments
-                  echo "Running PR automation for PR number:"
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                    printf "%s\n" "${{ github.event.inputs.pr_number }}"
-                    echo "Automation mode:"
-                    printf "%s\n" "${{ github.event.inputs.mode }}"
-                    bash scripts/automate_pr_process.sh "${{ github.event.inputs.pr_number }}" "${{ github.event.inputs.mode }}"
-                  else
-                    printf "%s\n" "${{ github.event.pull_request.number }}"
-                    echo "Automation mode:"
-                    echo "analyze"
-                    bash scripts/automate_pr_process.sh "${{ github.event.pull_request.number }}" "analyze"
-                  fi
+      - name: Welcome external contributors
+        if: |
+          (github.event.pull_request.head.repo.fork == true && github.event.action == 'opened') ||
+          (github.event_name == 'workflow_dispatch' && inputs.simulate_external_pr == true)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "SIMULATION MODE: Testing external PR welcome system"
+            PR_NUMBER="${{ inputs.pr_number }}"
+            printf "Using provided PR number: %s\n" "$PR_NUMBER"
+          else
+            echo "External fork PR detected - checking if first-time contributor"
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
 
-            - name: Upload automation reports
-              uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: pr-automation-reports-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
-                  path: |
-                      reports/
-                      logs/
-                  retention-days: 30
+          # SECURITY: Idempotency check - prevent duplicate welcome comments
+          echo "Checking for existing welcome comments..."
+          EXISTING_WELCOME=$(gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | select(.body | contains("External PR Security Notice")) | .id' || echo "")
 
-            - name: Comment automation summary
-              if: always()
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  # Use PR number directly to avoid variable assignments
-                  if [ -n "${{ github.event.pull_request.number }}" ]; then
-                    if [[ -f "reports/automation_summary_${{ github.event.pull_request.number }}.md" ]]; then
-                      echo "Posting automation summary to PR"
-                      echo "PR Number:"
-                      printf "%s\n" "${{ github.event.pull_request.number }}"
-                      gh pr comment "${{ github.event.pull_request.number }}" --body-file "reports/automation_summary_${{ github.event.pull_request.number }}.md"
-                    fi
-                  else
-                    if [[ -f "reports/automation_summary_${{ github.event.inputs.pr_number }}.md" ]]; then
-                      echo "Posting automation summary to PR"
-                      echo "PR Number:"
-                      printf "%s\n" "${{ github.event.inputs.pr_number }}"
-                      gh pr comment "${{ github.event.inputs.pr_number }}" --body-file "reports/automation_summary_${{ github.event.inputs.pr_number }}.md"
-                    fi
-                  fi
+          if [ -n "$EXISTING_WELCOME" ]; then
+            printf "Welcome comment already exists (ID: %s) - skipping\n" "$EXISTING_WELCOME"
+            exit 0
+          fi
+
+          # Check contributor history using GitHub API directly to avoid variable assignments
+          USER_LOGIN="${{ github.event.pull_request.user.login || 'test-user' }}"
+          echo "Checking contribution count for user:"
+          printf "%s\n" "$USER_LOGIN"
+
+          # Count all PRs from this author (both open and closed)
+          TOTAL_PRS=$(gh pr list --author "$USER_LOGIN" --state all --json number --jq '. | length' || echo "1")
+
+          echo "Total PRs from this contributor:"
+          printf "%s\n" "$TOTAL_PRS"
+
+          # Welcome first-time contributors only
+          if [ "$TOTAL_PRS" -eq 1 ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "First-time external contributor detected - posting welcome message"
+
+            if [ -f "templates/external-pr-welcome.md" ]; then
+              gh pr comment "$PR_NUMBER" --body-file "templates/external-pr-welcome.md"
+              echo "Welcome message posted successfully"
+            else
+              echo "Warning: Welcome template not found at templates/external-pr-welcome.md"
+            fi
+          else
+            echo "Repeat contributor - skipping welcome message"
+          fi
+
+      - name: Run PR automation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Determine PR number and mode - use values directly to avoid variable assignments
+          echo "Running PR automation for PR number:"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            printf "%s\n" "${{ github.event.inputs.pr_number }}"
+            echo "Automation mode:"
+            printf "%s\n" "${{ github.event.inputs.mode }}"
+            bash scripts/automate_pr_process.sh "${{ github.event.inputs.pr_number }}" "${{ github.event.inputs.mode }}"
+          else
+            printf "%s\n" "${{ github.event.pull_request.number }}"
+            echo "Automation mode:"
+            echo "analyze"
+            bash scripts/automate_pr_process.sh "${{ github.event.pull_request.number }}" "analyze"
+          fi
+
+      - name: Upload automation reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-automation-reports-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          path: |
+            reports/
+            logs/
+          retention-days: 30
+
+      - name: Comment automation summary
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Use PR number directly to avoid variable assignments
+          if [ -n "${{ github.event.pull_request.number }}" ]; then
+            if [[ -f "reports/automation_summary_${{ github.event.pull_request.number }}.md" ]]; then
+              echo "Posting automation summary to PR"
+              echo "PR Number:"
+              printf "%s\n" "${{ github.event.pull_request.number }}"
+              gh pr comment "${{ github.event.pull_request.number }}" --body-file "reports/automation_summary_${{ github.event.pull_request.number }}.md"
+            fi
+          else
+            if [[ -f "reports/automation_summary_${{ github.event.inputs.pr_number }}.md" ]]; then
+              echo "Posting automation summary to PR"
+              echo "PR Number:"
+              printf "%s\n" "${{ github.event.inputs.pr_number }}"
+              gh pr comment "${{ github.event.inputs.pr_number }}" --body-file "reports/automation_summary_${{ github.event.inputs.pr_number }}.md"
+            fi
+          fi
