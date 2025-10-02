@@ -38,9 +38,7 @@ handle_precommit_modifications() {
     # Enhanced re-staging with validation
     echo "Performing enhanced re-staging..."
 
-    # Store current staged state for comparison (for future diagnostic use)
-    # local pre_reset_staged
-    # pre_reset_staged=$(git diff --cached --name-only)
+
 
     # Reset and re-stage with validation
     git reset HEAD --quiet
@@ -86,7 +84,12 @@ handle_precommit_modifications() {
         return 0
     else
         local exit_code=$?
-        echo "❌ Enhanced re-staging commit failed (exit code: $exit_code)"
+        if [[ $exit_code -eq 124 ]]; then
+            echo "❌ Enhanced re-staging commit timed out after 60 seconds"
+            echo "This may indicate hanging pre-commit hooks or slow validation processes"
+        else
+            echo "❌ Enhanced re-staging commit failed (exit code: $exit_code)"
+        fi
 
         # Enhanced diagnostics
         echo ""

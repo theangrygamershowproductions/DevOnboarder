@@ -189,7 +189,7 @@ Milestone IDs should be referenced consistently across the project:
 
 - **In Pull Requests**: Include in description as "Addresses milestone_id: 2025-09-09-strategic-foundation-systems"
 
-- **In Documentation**: Link as `[Strategic Foundation Systems](milestones/2025-09/2025-09-09-enhancement-strategic-foundation-systems-implementation.md)`
+- **In Documentation**: Link as `[Strategic Foundation Systems](../../milestones/2025-09/2025-09-09-enhancement-strategic-foundation-systems-implementation.md)`
 
 - **In Reports**: Use milestone_id as unique identifier for tracking
 

@@ -12,7 +12,7 @@ This master task index tracks all rollout phases for DevOnboarder’s modulariza
 
 - [ ] [Migrate Code to Extracted Repos](migrate_code_checklist.md)
 
-- [ ] [Set Up Cross-Repo Codex Orchestration](cross_repo_orchestration_checklist.md)
+- [ ] [Set Up Cross-Repo Codex Orchestration](cross_repo_orchestration.md)
 
 ---
 

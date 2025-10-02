@@ -56,10 +56,8 @@ should_skip_link() {
         return 0
     fi
 
-    # Skip external links (http, https, mailto, etc.)
-    if [[ "$path" =~ ^https?:// ]] || [[ "$path" =~ ^mailto: ]] || [[ "$path" =~ ^#.* ]]; then
-        return 0
-    fi
+    # This function is now only for template placeholders and examples
+    # External links and fragments are handled in the main loop
 
     return 1
 }
@@ -87,7 +85,45 @@ while IFS= read -r -d '' file; do
         path="${link##*](}"
         path="${path%)}"
 
-        # Skip links that should be ignored
+        # Handle external links and fragments
+        if [[ "$path" =~ ^https?:// ]] || [[ "$path" =~ ^mailto: ]]; then
+            continue
+        fi
+
+        # Handle fragment-only links (e.g., #section)
+        if [[ "$path" =~ ^#(.+) ]]; then
+            fragment="${BASH_REMATCH[1]}"
+            # GitHub-style anchor: lowercase, remove non-alphanum except hyphens and spaces, replace spaces with hyphens
+            anchor=$(echo "$fragment" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9 -]//g' | sed -E 's/ /-/g')
+
+            # First try direct text search in headers (handles emojis and special chars)
+            if grep -Eq "^#{1,6} .*${fragment}.*" "$file"; then
+                continue  # Fragment found directly
+            fi
+
+            # Try GitHub-style anchor matching (without emojis)
+            if grep -E "^#{1,6} " "$file" | \
+                sed -E 's/^#{1,6} *//' | \
+                sed -E 's/ *#*$//' | \
+                awk '{
+                    header = tolower($0);
+                    gsub(/[^a-z0-9 -]/, "", header);
+                    gsub(/ /, "-", header);
+                    print header
+                }' | grep -qx "$anchor"; then
+                continue  # Anchor found via GitHub-style transformation
+            fi
+
+            # If neither direct nor transformed match found, report error
+            echo "ERROR: Broken fragment link in $file"
+            echo "  Link: $link"
+            echo "  Target: $file#$fragment"
+            echo "  Status: Section does not exist"
+            echo "FAILED" > "$TEMP_ERROR_FILE"
+            continue
+        fi
+
+        # Skip other links that should be ignored
         if should_skip_link "$path"; then
             continue
         fi

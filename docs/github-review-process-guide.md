@@ -46,8 +46,11 @@ consolidation_priority: P3
 # Get PR review status
 gh pr view <PR_NUMBER> --json reviewDecision,reviews
 
-# Get specific review comments
-gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments --jq '.[] | select(.user.login == "Copilot") | {file: .path, line: .original_line, body: .body[0:100]}'
+# Get specific review comments (using correct Copilot bot identity)
+gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments --jq '.[] | select(.user.login == "copilot-pull-request-reviewer") | {file: .path, line: .original_line, body: .body[0:100]}'
+
+# Alternative method to get all automated review comments
+gh api repos/<OWNER>/<REPO>/pulls/<PR_NUMBER>/comments --jq '.[] | select(.user.login | test("copilot|github-advanced-security")) | {file: .path, line: .original_line, body: .body[0:100]}'
 ```
 
 ---

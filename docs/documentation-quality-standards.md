@@ -14,7 +14,7 @@ consolidation_priority: P3
 
 ```bash
 # Validation check for template references
-find templates/ -name "*.md" -exec grep -H '\[.*\](docs/.*\.md)' {} \; | while read -r line; do
+find templates/ -name "*.md" -exec grep -H '\[documentation links]' {} \; | while read -r line; do
     file=$(echo "$line" | cut -d: -f1)
     link=$(echo "$line" | grep -o 'docs/[^)]*\.md')
     if [[ ! -f "$link" ]]; then
@@ -64,25 +64,25 @@ scripts/audit_frameworks.sh  # Existing script enhanced with link checking
 ❌ **Hardcoded paths without validation**
 
 ```markdown
-[Terminal Policy](docs/TERMINAL_OUTPUT_POLICY.md)  # File doesn't exist
+[Terminal Policy](TERMINAL_OUTPUT_VIOLATIONS.md)  # File doesn't exist
 ```
 
 ✅ **Validated references with automated checking**
 
 ```markdown
-[Terminal Policy](docs/TERMINAL_OUTPUT_VIOLATIONS.md)  # Validated via pre-commit
+[Terminal Policy](TERMINAL_OUTPUT_VIOLATIONS.md)  # Validated via pre-commit
 ```
 
 ❌ **Outdated cross-references**
 
 ```markdown
-[Old Framework](frameworks/deprecated-framework/README.md)  # Stale reference
+[Documentation Framework](frameworks/README.md)  # Stale reference
 ```
 
 ✅ **Maintained cross-references**
 
 ```markdown
-[Quality Framework](frameworks/quality-assurance/README.md)  # Current and validated
+[Quality Framework](../frameworks/quality-assurance/README.md)  # Current and validated
 ```
 
 ### Automated Validation Workflow

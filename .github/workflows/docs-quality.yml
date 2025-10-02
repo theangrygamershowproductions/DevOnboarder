@@ -17,6 +17,8 @@ jobs:
    validate-docs:
       permissions:
          contents: read # Required for checkout
+         actions: read # Required for workflow access
+         security-events: read # Required for security scanning
       runs-on: ubuntu-latest
       steps:
          - name: Checkout code

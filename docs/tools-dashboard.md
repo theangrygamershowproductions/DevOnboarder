@@ -272,13 +272,13 @@ bash scripts/review_resolved_issues.sh
 
 ## 📚 **Related Documentation**
 
-- **CI Status**: [`docs/ci-dashboard.md`](docs/ci-dashboard.md) - Live CI health monitoring
+- **CI Status**: [`docs/ci-dashboard.md`](ci-dashboard.md) - Live CI health monitoring
 
-- **Contributing**: [`CONTRIBUTING.md`](CONTRIBUTING.md) - Development guidelines
+- **Contributing**: [`CONTRIBUTING.md`](../CONTRIBUTING.md) - Development guidelines
 
-- **Security**: [`SECURITY.md`](SECURITY.md) - Security policies and procedures
+- **Security**: [`SECURITY.md`](../SECURITY.md) - Security policies and procedures
 
-- **Agent System**: [`agents/index.md`](agents/index.md) - Codex agent documentation
+- **Agent System**: [`agents/index.md`](../agents/index.md) - Codex agent documentation
 
 ---
 
@@ -287,7 +287,7 @@ bash scripts/review_resolved_issues.sh
 | Issue Type | Quick Fix | Tool |
 
 |------------|-----------|------|
-| **CI Failures** | Check [CI Dashboard](docs/ci-dashboard.md) | `scripts/enhanced_ci_failure_analyzer.py` |
+| **CI Failures** | Check [CI Dashboard](ci-dashboard.md) | `scripts/enhanced_ci_failure_analyzer.py` |
 
 | **Branch Conflicts** | Run branch cleanup | `scripts/quick_branch_cleanup.sh` |
 

@@ -1,0 +1,692 @@
+ERROR: Broken link in ./docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md
+  Link: [DevOnboarder Multi-Service Architecture](../ARCHITECTURE.md)
+  Target: /home/potato/DevOnboarder/docs/ARCHITECTURE.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md
+  Link: [Container Security Best Practices](./CONTAINER_SECURITY.md)
+  Target: /home/potato/DevOnboarder/docs/troubleshooting/CONTAINER_SECURITY.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/troubleshooting/README.md
+  Link: [Permission Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-2-file-permission-mismatches-with-volume-mounts)
+  Target: /home/potato/DevOnboarder/docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-2-file-permission-mismatches-with-volume-mounts
+  Status: File does not exist
+ERROR: Broken link in ./docs/troubleshooting/README.md
+  Link: [ES Module Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-3-es-module-vs-commonjs-syntax)
+  Target: /home/potato/DevOnboarder/docs/troubleshooting/DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-3-es-module-vs-commonjs-syntax
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md
+  Link: [Branch Protection Configuration](../infrastructure/BRANCH_PROTECTION.md)
+  Target: /home/potato/DevOnboarder/docs/infrastructure/BRANCH_PROTECTION.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md
+  Link: [CI Status Check Troubleshooting](./CI_STATUS_CHECK_MISMATCHES.md)
+  Target: /home/potato/DevOnboarder/docs/troubleshooting/CI_STATUS_CHECK_MISMATCHES.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md
+  Link: [Repository Configuration Best Practices](../standards/REPOSITORY_SETUP.md)
+  Target: /home/potato/DevOnboarder/docs/standards/REPOSITORY_SETUP.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/@v1.0.0/README.md
+  Link: [Setup Guide](../setup.md)
+  Target: /home/potato/DevOnboarder/docs/setup.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/@v1.0.0/README.md
+  Link: [API Documentation](../api/)
+  Target: /home/potato/DevOnboarder/docs/api
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/scripts/git-utilities.md
+  Link: [Branch Cleanup Documentation](../BRANCH_CLEANUP_ANALYSIS.md)
+  Target: /home/potato/DevOnboarder/docs/BRANCH_CLEANUP_ANALYSIS.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/ci-failure-issues.md
+  Link: [README.md](README.md#issues-and-pull-requests)
+  Target: /home/potato/DevOnboarder/docs/README.md#issues-and-pull-requests
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/ONBOARDING.md
+  Link: [Service Health Checks](README.md#service-health-checks)
+  Target: /home/potato/DevOnboarder/docs/README.md#service-health-checks
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/troubleshooting.md
+  Link: [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+  Target: /home/potato/DevOnboarder/docs/network-troubleshooting.md#pre-commit-nodeenv-ssl-errors
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/setup.md](../setup.md)
+  Target: /home/potato/DevOnboarder/docs/setup.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/deployment.md](../deployment.md)
+  Target: /home/potato/DevOnboarder/docs/deployment.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/development.md](../development.md)
+  Target: /home/potato/DevOnboarder/docs/development.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/testing.md](../testing.md)
+  Target: /home/potato/DevOnboarder/docs/testing.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/quality.md](../quality.md)
+  Target: /home/potato/DevOnboarder/docs/quality.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/reports/HAND-OFF.md
+  Link: [docs/security.md](../security.md)
+  Target: /home/potato/DevOnboarder/docs/security.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/standards/quality-gate-protection-system.md
+  Link: [Quality Gate Protection System](docs/standards/quality-gate-protection-system.md)
+  Target: /home/potato/DevOnboarder/docs/standards/docs/standards/quality-gate-protection-system.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/standards/quality-gate-protection-system.md
+  Link: [Terminal Output Violations](docs/TERMINAL_OUTPUT_VIOLATIONS.md)
+  Target: /home/potato/DevOnboarder/docs/standards/docs/TERMINAL_OUTPUT_VIOLATIONS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/standards/quality-gate-protection-system.md
+  Link: [DevOnboarder Setup Guide](../SETUP.md)
+  Target: /home/potato/DevOnboarder/docs/SETUP.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/standards/milestone-documentation-format.md
+  Link: [Strategic Foundation Systems](milestones/2025-09/2025-09-09-enhancement-strategic-foundation-systems-implementation.md)
+  Target: /home/potato/DevOnboarder/docs/standards/milestones/2025-09/2025-09-09-enhancement-strategic-foundation-systems-implementation.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/codex/codex.plan.md
+  Link: [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml)
+  Target: /home/potato/DevOnboarder/docs/codex/codex/tasks/llama2-agile-helper.yaml
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/codex/AGENTS.md
+  Link: [docs/git-guidelines.md](./docs/git-guidelines.md)
+  Target: /home/potato/DevOnboarder/docs/codex/docs/git-guidelines.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/codex/AGENTS.md
+  Link: [docs/git/](./docs/git/)
+  Target: /home/potato/DevOnboarder/docs/codex/docs/git
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/alpha/README.md
+  Link: [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/ALPHA_TESTERS.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/doc-quality-onboarding.md
+  Link: [offline-setup.md](offline-setup.md#documentation-tooling-markdownlint-cli2)
+  Target: /home/potato/DevOnboarder/docs/offline-setup.md#documentation-tooling-markdownlint-cli2
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/policies/no-default-token-policy.md
+  Link: [Token Permissions Matrix](token-permissions-matrix.md)
+  Target: /home/potato/DevOnboarder/docs/policies/token-permissions-matrix.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/public/pr_comment.md
+  Link: [Security Guidelines](../security/guidelines.md)
+  Target: /home/potato/DevOnboarder/docs/security/guidelines.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/public/pr_comment.md
+  Link: [Safe Database Practices](../security/database-security.md)
+  Target: /home/potato/DevOnboarder/docs/security/database-security.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/founders/README.md
+  Link: [../../FOUNDERS.md](../../FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/FOUNDERS.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/Canvas-AAR-Deployment-Summary.md
+  Link: [docs/standards/after-actions-report-process.md](docs/standards/after-actions-report-process.md)
+  Target: /home/potato/DevOnboarder/docs/docs/standards/after-actions-report-process.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/tags-ceo.md)
+  Target: /home/potato/DevOnboarder/agents/tags-ceo.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/tags-cto.md)
+  Target: /home/potato/DevOnboarder/agents/tags-cto.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/tags-cfo.md)
+  Target: /home/potato/DevOnboarder/agents/tags-cfo.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/tags-cmo.md)
+  Target: /home/potato/DevOnboarder/agents/tags-cmo.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/crfv-ceo.md)
+  Target: /home/potato/DevOnboarder/agents/crfv-ceo.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/crfv-cto.md)
+  Target: /home/potato/DevOnboarder/agents/crfv-cto.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [agent](../agents/crfv-coo.md)
+  Target: /home/potato/DevOnboarder/agents/crfv-coo.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [`agents/code-quality-auto-fix.md`](../agents/code-quality-auto-fix.md)
+  Target: /home/potato/DevOnboarder/agents/code-quality-auto-fix.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/devonboarder-integration-status.md
+  Link: [CI Monitoring Documentation](ci-monitoring.md)
+  Target: /home/potato/DevOnboarder/docs/ci-monitoring.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/copilot-refactor/DOCUMENTATION_ALIGNMENT_SUMMARY.md
+  Link: [`docs/MODULAR_DOCUMENTATION_INDEX.md`](MODULAR_DOCUMENTATION_INDEX.md)
+  Target: /home/potato/DevOnboarder/docs/copilot-refactor/MODULAR_DOCUMENTATION_INDEX.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/copilot-refactor/DOCUMENTATION_ALIGNMENT_SUMMARY.md
+  Link: [`docs/agent-context-loading-strategy.md`](agent-context-loading-strategy.md)
+  Target: /home/potato/DevOnboarder/docs/copilot-refactor/agent-context-loading-strategy.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/copilot-refactor/DOCUMENTATION_ALIGNMENT_SUMMARY.md
+  Link: [`docs/README.md`](README.md)
+  Target: /home/potato/DevOnboarder/docs/copilot-refactor/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/copilot-refactor/DOCUMENTATION_ALIGNMENT_SUMMARY.md
+  Link: [`docs/copilot-refactor/progress-checklist.md`](copilot-refactor/progress-checklist.md)
+  Target: /home/potato/DevOnboarder/docs/copilot-refactor/copilot-refactor/progress-checklist.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [ubuntu-setup.md](ubuntu-setup.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ubuntu-setup.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CONTRIBUTING.md](../CONTRIBUTING.md)
+  Target: /home/potato/DevOnboarder/docs/CONTRIBUTING.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [diagnostics-sample.log](diagnostics-sample.log)
+  Target: /home/potato/DevOnboarder/docs/v1/diagnostics-sample.log
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [../frontend/README.md](../frontend/README.md)
+  Target: /home/potato/DevOnboarder/docs/frontend/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [About Potato](about-potato.md)
+  Target: /home/potato/DevOnboarder/docs/v1/about-potato.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Alpha phase roadmap](roadmap/alpha-phase.md)
+  Target: /home/potato/DevOnboarder/docs/v1/roadmap/alpha-phase.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Alpha tester onboarding](alpha/README.md)
+  Target: /home/potato/DevOnboarder/docs/v1/alpha/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Alpha testers log](../ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/docs/ALPHA_TESTERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md)
+  Target: /home/potato/DevOnboarder/docs/v1/alpha/alpha-wave-rollout-guide.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Automatic Codex issue closing](codex-issue-autoclose.md)
+  Target: /home/potato/DevOnboarder/docs/v1/codex-issue-autoclose.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Code of Conduct](../CODE_OF_CONDUCT.md)
+  Target: /home/potato/DevOnboarder/docs/CODE_OF_CONDUCT.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CI failure issue management](ci-failure-issues.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-failure-issues.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CI workflow](ci-workflow.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-workflow.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CI environment variables](ci-env-vars.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-env-vars.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CI-first OpenAI API key policy](ci-first-policy.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-first-policy.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [CI resilience hardening steps](../codex/prompts/ci_resilience_hardening.md)
+  Target: /home/potato/DevOnboarder/docs/codex/prompts/ci_resilience_hardening.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Discord message templates](discord/discord-message-templates.md)
+  Target: /home/potato/DevOnboarder/docs/v1/discord/discord-message-templates.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Discord server configuration](discord/configuration.md)
+  Target: /home/potato/DevOnboarder/docs/v1/discord/configuration.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Doc QA onboarding](doc-quality-onboarding.md)
+  Target: /home/potato/DevOnboarder/docs/v1/doc-quality-onboarding.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [E2E test guide](e2e-tests.md)
+  Target: /home/potato/DevOnboarder/docs/v1/e2e-tests.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Codex E2E report](codex-e2e-report.md)
+  Target: /home/potato/DevOnboarder/docs/v1/codex-e2e-report.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Engineer assessment work items](assessments/engineer_assessment_work_items.md)
+  Target: /home/potato/DevOnboarder/docs/v1/assessments/engineer_assessment_work_items.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Endpoint reference](endpoint-reference.md)
+  Target: /home/potato/DevOnboarder/docs/v1/endpoint-reference.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Environment variables](env.md)
+  Target: /home/potato/DevOnboarder/docs/v1/env.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Agents overview](../agents/index.md)
+  Target: /home/potato/DevOnboarder/docs/agents/index.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Multi-bot orchestration](orchestration.md)
+  Target: /home/potato/DevOnboarder/docs/v1/orchestration.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [DevOnboarder in TAGS](ecosystem.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ecosystem.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [TAGS integration guide](tags_integration.md)
+  Target: /home/potato/DevOnboarder/docs/v1/tags_integration.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Feedback dashboard PRD](prd/feedback-dashboard.md)
+  Target: /home/potato/DevOnboarder/docs/v1/prd/feedback-dashboard.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Founder's Circle onboarding](founders/README.md)
+  Target: /home/potato/DevOnboarder/docs/v1/founders/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Founders log](../FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/docs/FOUNDERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Frontend README](../frontend/README.md)
+  Target: /home/potato/DevOnboarder/docs/frontend/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Git guidelines](git-guidelines.md)
+  Target: /home/potato/DevOnboarder/docs/v1/git-guidelines.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup)
+  Target: /home/potato/DevOnboarder/docs/v1/git-guidelines.md#stale-branch-cleanup
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Issue labeling guide](contributing/issue-labeling-guide.md)
+  Target: /home/potato/DevOnboarder/docs/v1/contributing/issue-labeling-guide.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Issue labels quick reference](contributing/labels-quick-reference.md)
+  Target: /home/potato/DevOnboarder/docs/v1/contributing/labels-quick-reference.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Marketing site home](../frontend/index.html)
+  Target: /home/potato/DevOnboarder/docs/frontend/index.html
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Merge checklist](merge-checklist.md)
+  Target: /home/potato/DevOnboarder/docs/v1/merge-checklist.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+  Target: /home/potato/DevOnboarder/docs/v1/network-troubleshooting.md#pre-commit-nodeenv-ssl-errors
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Network exception list](network-exception-list.md)
+  Target: /home/potato/DevOnboarder/docs/v1/network-exception-list.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Offline setup](offline-setup.md)
+  Target: /home/potato/DevOnboarder/docs/v1/offline-setup.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Project origin & recovery story](origin.md)
+  Target: /home/potato/DevOnboarder/docs/v1/origin.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Pull request template](../.github/pull_request_template.md)
+  Target: /home/potato/DevOnboarder/docs/.github/pull_request_template.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Sample pull request](sample-pr.md)
+  Target: /home/potato/DevOnboarder/docs/v1/sample-pr.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [First PR walkthrough](first-pr-guide.md)
+  Target: /home/potato/DevOnboarder/docs/v1/first-pr-guide.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Service architecture diagram](architecture.svg)
+  Target: /home/potato/DevOnboarder/docs/v1/architecture.svg
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Service status dashboard](service-status.md)
+  Target: /home/potato/DevOnboarder/docs/v1/service-status.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Tools dashboard](tools-dashboard.md)
+  Target: /home/potato/DevOnboarder/docs/v1/tools-dashboard.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Security audit](security-audit-2025-07-01.md)
+  Target: /home/potato/DevOnboarder/docs/v1/security-audit-2025-07-01.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Dependency update policy](dependencies.md)
+  Target: /home/potato/DevOnboarder/docs/v1/dependencies.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [FIPS compliance for Go services](fips-golang.md)
+  Target: /home/potato/DevOnboarder/docs/v1/fips-golang.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Builder ethics dossier](builder_ethics_dossier.md)
+  Target: /home/potato/DevOnboarder/docs/v1/builder_ethics_dossier.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Task management](task-management.md)
+  Target: /home/potato/DevOnboarder/docs/v1/task-management.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [Troubleshooting guide](troubleshooting.md)
+  Target: /home/potato/DevOnboarder/docs/v1/troubleshooting.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [alpha testing](alpha/README.md)
+  Target: /home/potato/DevOnboarder/docs/v1/alpha/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [founders/README.md](founders/README.md)
+  Target: /home/potato/DevOnboarder/docs/v1/founders/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/docs/ALPHA_TESTERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [../FOUNDERS.md](../FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/docs/FOUNDERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [bot/README.md](../bot/README.md)
+  Target: /home/potato/DevOnboarder/docs/bot/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [doc-quality-onboarding.md](doc-quality-onboarding.md)
+  Target: /home/potato/DevOnboarder/docs/v1/doc-quality-onboarding.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [doc-quality-onboarding.md](doc-quality-onboarding.md)
+  Target: /home/potato/DevOnboarder/docs/v1/doc-quality-onboarding.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [issue labeling guide](contributing/issue-labeling-guide.md)
+  Target: /home/potato/DevOnboarder/docs/v1/contributing/issue-labeling-guide.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [labels quick reference](contributing/labels-quick-reference.md)
+  Target: /home/potato/DevOnboarder/docs/v1/contributing/labels-quick-reference.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [`../.github/pull_request_template.md`](../.github/pull_request_template.md)
+  Target: /home/potato/DevOnboarder/docs/.github/pull_request_template.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [`checklists/continuous-improvement.md`](checklists/continuous-improvement.md)
+  Target: /home/potato/DevOnboarder/docs/v1/checklists/continuous-improvement.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md)
+  Target: /home/potato/DevOnboarder/docs/v1/checklists/ci-checklist-snippet.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [sample-pr.md](sample-pr.md)
+  Target: /home/potato/DevOnboarder/docs/v1/sample-pr.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [../AGENTS.md](../AGENTS.md)
+  Target: /home/potato/DevOnboarder/docs/AGENTS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-failure-issues.md#forked-pull-requests
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-failure-issues.md#forked-pull-requests
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [ci-env-vars.md](ci-env-vars.md)
+  Target: /home/potato/DevOnboarder/docs/v1/ci-env-vars.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/README.md
+  Link: [docs/offline-setup.md](offline-setup.md)
+  Target: /home/potato/DevOnboarder/docs/v1/offline-setup.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/v1/QA_CHECKLIST.md
+  Link: [git guidelines](git-guidelines.md)
+  Target: /home/potato/DevOnboarder/docs/v1/git-guidelines.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/v1/QA_CHECKLIST.md
+  Link: [pull request template](../.github/pull_request_template.md)
+  Target: /home/potato/DevOnboarder/docs/.github/pull_request_template.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/README.md
+  Link: [Alpha testers log](../ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/ALPHA_TESTERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [Founders log](../FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/FOUNDERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup)
+  Target: /home/potato/DevOnboarder/docs/git-guidelines.md#stale-branch-cleanup
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+  Target: /home/potato/DevOnboarder/docs/network-troubleshooting.md#pre-commit-nodeenv-ssl-errors
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/ALPHA_TESTERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [../FOUNDERS.md](../FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/FOUNDERS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [../AGENTS.md](../AGENTS.md)
+  Target: /home/potato/DevOnboarder/AGENTS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests)
+  Target: /home/potato/DevOnboarder/docs/ci-failure-issues.md#forked-pull-requests
+  Status: File does not exist
+ERROR: Broken link in ./docs/README.md
+  Link: [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests)
+  Target: /home/potato/DevOnboarder/docs/ci-failure-issues.md#forked-pull-requests
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/EXTERNAL_PR_SECURITY_GUIDE.md
+  Link: [`docs/ci-failure-issues.md`](../ci-failure-issues.md)
+  Target: /home/potato/DevOnboarder/ci-failure-issues.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/EXTERNAL_PR_SECURITY_GUIDE.md
+  Link: [`docs/WORKFLOW_SECURITY_STANDARDS.md`](../WORKFLOW_SECURITY_STANDARDS.md)
+  Target: /home/potato/DevOnboarder/WORKFLOW_SECURITY_STANDARDS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/EXTERNAL_PR_SECURITY_GUIDE.md
+  Link: [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)
+  Target: /home/potato/.github/workflows/ci.yml
+  Status: File does not exist
+ERROR: Broken link in ./docs/EXTERNAL_PR_SECURITY_GUIDE.md
+  Link: [`.github/workflows/auto-fix.yml`](../../.github/workflows/auto-fix.yml)
+  Target: /home/potato/.github/workflows/auto-fix.yml
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/documentation-quality-standards.md
+  Link: [.*\](docs/.*\.md)
+  Target: /home/potato/DevOnboarder/docs/docs/.*\.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/documentation-quality-standards.md
+  Link: [Terminal Policy](docs/TERMINAL_OUTPUT_POLICY.md)
+  Target: /home/potato/DevOnboarder/docs/docs/TERMINAL_OUTPUT_POLICY.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/documentation-quality-standards.md
+  Link: [Terminal Policy](docs/TERMINAL_OUTPUT_VIOLATIONS.md)
+  Target: /home/potato/DevOnboarder/docs/docs/TERMINAL_OUTPUT_VIOLATIONS.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/documentation-quality-standards.md
+  Link: [Old Framework](frameworks/deprecated-framework/README.md)
+  Target: /home/potato/DevOnboarder/docs/frameworks/deprecated-framework/README.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/documentation-quality-standards.md
+  Link: [Quality Framework](frameworks/quality-assurance/README.md)
+  Target: /home/potato/DevOnboarder/docs/frameworks/quality-assurance/README.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/tools-dashboard.md
+  Link: [`docs/ci-dashboard.md`](docs/ci-dashboard.md)
+  Target: /home/potato/DevOnboarder/docs/docs/ci-dashboard.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/tools-dashboard.md
+  Link: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+  Target: /home/potato/DevOnboarder/docs/CONTRIBUTING.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/tools-dashboard.md
+  Link: [`SECURITY.md`](SECURITY.md)
+  Target: /home/potato/DevOnboarder/docs/SECURITY.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/tools-dashboard.md
+  Link: [`agents/index.md`](agents/index.md)
+  Target: /home/potato/DevOnboarder/docs/agents/index.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/tools-dashboard.md
+  Link: [CI Dashboard](docs/ci-dashboard.md)
+  Target: /home/potato/DevOnboarder/docs/docs/ci-dashboard.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/PHASE3B_AUTOMATION_INTEGRATION_COMPLETE.md
+  Link: [Pre-commit Configuration](.pre-commit-config.yaml)
+  Target: /home/potato/DevOnboarder/docs/.pre-commit-config.yaml
+  Status: File does not exist
+ERROR: Broken link in ./docs/PHASE3B_AUTOMATION_INTEGRATION_COMPLETE.md
+  Link: [CI/CD Workflow](.github/workflows/milestone-validation.yml)
+  Target: /home/potato/DevOnboarder/docs/.github/workflows/milestone-validation.yml
+  Status: File does not exist
+ERROR: Broken link in ./docs/PHASE3B_AUTOMATION_INTEGRATION_COMPLETE.md
+  Link: [Cross-reference Validator](scripts/validate_milestone_cross_references.py)
+  Target: /home/potato/DevOnboarder/docs/scripts/validate_milestone_cross_references.py
+  Status: File does not exist
+ERROR: Broken link in ./docs/PHASE3B_AUTOMATION_INTEGRATION_COMPLETE.md
+  Link: [Enhanced Format Validator](scripts/validate_milestone_format.py)
+  Target: /home/potato/DevOnboarder/docs/scripts/validate_milestone_format.py
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/Agents.md
+  Link: [Onboarding Guide](../ONBOARDING.md)
+  Target: /home/potato/DevOnboarder/ONBOARDING.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/phase2-enhanced-potato-policy-status.md
+  Link: [Phase 3: Root Artifact Guard Implementation](./phase3-root-artifact-guard.md)
+  Target: /home/potato/DevOnboarder/docs/phase3-root-artifact-guard.md
+  Status: File does not exist
+ERROR: Broken link in ./docs/phase2-enhanced-potato-policy-status.md
+  Link: [DevOnboarder Enhancement Plan](./devonboarder-enhancement-plan.md)
+  Target: /home/potato/DevOnboarder/docs/devonboarder-enhancement-plan.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./docs/TOKEN_AUTO_CREATION.md
+  Link: [Enhanced Potato Policy](../docs/ENHANCED_POTATO_POLICY.md)
+  Target: /home/potato/DevOnboarder/docs/ENHANCED_POTATO_POLICY.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./reports/potato-policy-audit-20250726-195832.md
+  Link: [docs/about-potato.md](docs/about-potato.md)
+  Target: /home/potato/DevOnboarder/reports/docs/about-potato.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./ISSUE_1261_STATUS_REPORT.md
+  Link: [Phase 2 Summary](docs/PHASE2_MILESTONE_STANDARDIZATION_COMPLETE.md)
+  Target: /home/potato/DevOnboarder/docs/PHASE2_MILESTONE_STANDARDIZATION_COMPLETE.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./agents/documentation-quality-enforcer.md
+  Link: [Documentation Quality Certification](docs/public/documentation-quality-certification.md)
+  Target: /home/potato/DevOnboarder/agents/docs/public/documentation-quality-certification.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./codex/tasks/tasks.md
+  Link: [Set Up Cross-Repo Codex Orchestration](cross_repo_orchestration_checklist.md)
+  Target: /home/potato/DevOnboarder/codex/tasks/cross_repo_orchestration_checklist.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./README.md
+  Link: [FOUNDERS.md](FOUNDERS.md)
+  Target: /home/potato/DevOnboarder/FOUNDERS.md
+  Status: File does not exist
+ERROR: Broken link in ./README.md
+  Link: [ALPHA_TESTERS.md](ALPHA_TESTERS.md)
+  Target: /home/potato/DevOnboarder/ALPHA_TESTERS.md
+  Status: File does not exist
+ERROR: Broken link in ./README.md
+  Link: [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
+  Target: /home/potato/DevOnboarder/docs/README.md#documentation-quality-checks
+  Status: File does not exist
+ERROR: Broken link in ./README.md
+  Link: [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications)
+  Target: /home/potato/DevOnboarder/docs/ONBOARDING.md#sending-notifications
+  Status: File does not exist
+ERROR: Broken link in ./README.md
+  Link: [AGENTS.md](AGENTS.md)
+  Target: /home/potato/DevOnboarder/AGENTS.md
+  Status: File does not exist
+ERROR: Broken link in ./README.md
+  Link: [AGENTS.md](AGENTS.md)
+  Target: /home/potato/DevOnboarder/AGENTS.md
+  Status: File does not exist
+--
+ERROR: Broken link in ./.codex/checklists/standards/node_modules_hygiene.md
+  Link: [Root Artifact Guard System](../agents/tags/ci_root_artifact_guard.md)
+  Target: /home/potato/DevOnboarder/.codex/checklists/agents/tags/ci_root_artifact_guard.md
+  Status: File does not exist
+ERROR: Broken link in ./.codex/checklists/standards/node_modules_hygiene.md
+  Link: [CI Triage Guard Framework](./2025-07-28_foo_sandbox_pollution.md)
+  Target: /home/potato/DevOnboarder/.codex/checklists/standards/2025-07-28_foo_sandbox_pollution.md
+  Status: File does not exist
+ERROR: Broken link in ./.codex/checklists/standards/node_modules_hygiene.md
+  Link: [DevOnboarder Virtual Environment Standards](../../.github/copilot-instructions.md)
+  Target: /home/potato/DevOnboarder/.codex/.github/copilot-instructions.md
+  Status: File does not exist

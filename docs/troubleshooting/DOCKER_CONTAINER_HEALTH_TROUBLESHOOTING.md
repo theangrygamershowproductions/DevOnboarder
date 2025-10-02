@@ -374,9 +374,9 @@ volumes:
 
 - [Docker Health Check Documentation](https://docs.docker.com/engine/reference/builder/#healthcheck)
 
-- [DevOnboarder Multi-Service Architecture](../ARCHITECTURE.md)
+- [DevOnboarder Architecture](../development/architecture-overview.md)
 
-- [Container Security Best Practices](./CONTAINER_SECURITY.md)
+- [Security Best Practices](../policies/security-best-practices.md)
 
 ## Quick Reference Commands
 

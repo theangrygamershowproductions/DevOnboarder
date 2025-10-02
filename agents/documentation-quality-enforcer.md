@@ -246,7 +246,7 @@ jobs:
 
             ${{ job.status === 'success' && 'No impact on documentation certification status.' || 'Documentation quality issues detected. Certification may be affected.' }}
 
-            See [Documentation Quality Certification](docs/public/documentation-quality-certification.md) for standards.
+            See [Documentation Quality Certification](../docs/public/documentation-quality-certification.md) for standards.
             `;
 
             github.rest.issues.createComment({

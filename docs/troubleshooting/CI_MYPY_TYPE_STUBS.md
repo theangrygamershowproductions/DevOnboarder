@@ -233,9 +233,9 @@ This issue integrates with DevOnboarder's automated diagnostic system:
 
 ### See Also
 
-- [Quality Control Documentation](../standards/quality-control.md)
+- [Quality Control Documentation](../policies/quality-control-policy.md)
 
-- [Environment Setup Guide](../SETUP.md)
+- [Environment Setup Guide](../../SETUP.md)
 
 - [MyPy Configuration](../../pyproject.toml)
 
