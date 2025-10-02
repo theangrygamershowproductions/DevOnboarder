@@ -16,14 +16,61 @@ echo "Validating internal markdown links..."
 
 # Find all markdown files
 echo "Scanning markdown links for internal references..."
+echo "Excluding: templates/, archive/, .codex/templates/ directories"
+echo "Skipping: template placeholders and example paths"
 
 # Create temp file to track validation failures across subshells
 TEMP_ERROR_FILE=$(mktemp)
 trap 'rm -f "$TEMP_ERROR_FILE"' EXIT
 
+# Function to check if a file should be excluded
+should_exclude_file() {
+    local file="$1"
+
+    # Exclude template directories (contain examples/placeholders)
+    if [[ "$file" =~ /templates/ ]] || [[ "$file" =~ \.codex/templates/ ]]; then
+        return 0
+    fi
+
+    # Exclude archive directories (may have stale links)
+    if [[ "$file" =~ /archive/ ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+# Function to check if a link should be skipped
+should_skip_link() {
+    local path="$1"
+
+    # Skip template placeholders
+    if [[ "$path" =~ \{\{.*\}\} ]]; then
+        return 0
+    fi
+
+    # Skip example/placeholder paths
+    if [[ "$path" =~ ^(relative/path|docs/path|path/to) ]]; then
+        return 0
+    fi
+
+    # Skip external links (http, https, mailto, etc.)
+    if [[ "$path" =~ ^https?:// ]] || [[ "$path" =~ ^mailto: ]] || [[ "$path" =~ ^#.* ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Check markdown links to docs/, scripts/, templates/, etc.
 while IFS= read -r -d '' file; do
     echo "Checking: $file"
+
+    # Skip excluded files
+    if should_exclude_file "$file"; then
+        echo "  Skipped: Excluded directory"
+        continue
+    fi
 
     # Skip very large files that might hang the validator
     if [[ $(wc -l < "$file") -gt 2000 ]]; then
@@ -38,8 +85,8 @@ while IFS= read -r -d '' file; do
         path="${link##*](}"
         path="${path%)}"
 
-        # Skip external links (http, https, mailto, etc.)
-        if [[ "$path" =~ ^https?:// ]] || [[ "$path" =~ ^mailto: ]] || [[ "$path" =~ ^#.* ]]; then
+        # Skip links that should be ignored
+        if should_skip_link "$path"; then
             continue
         fi
 
