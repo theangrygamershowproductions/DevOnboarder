@@ -40,6 +40,8 @@ When external contributors create pull requests from forks, GitHub's security mo
 
 DevOnboarder addresses these challenges through a **three-tier security architecture**:
 
+**Architecture Overview:** The security model consists of three distinct tiers - a Safe Execution Zone for read-only operations, a Privileged Execution Zone for trusted code with full permissions, and a Maintainer Override Zone for manual interventions. Each tier provides increasing levels of access while maintaining security boundaries.
+
 ```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    SECURITY TIER 1                          │
@@ -258,8 +260,8 @@ permissions:
 # Settings > Developer settings > Personal access tokens
 # Required scopes: repo, workflow, issues, pull_requests
 
-# Use for manual operations
-GH_TOKEN=your_personal_token gh pr comment 123 --body "Comment from maintainer"
+# Use for manual operations (ensure $GH_TOKEN is set securely in your environment)
+gh pr comment 123 --body "Comment from maintainer"
 ```
 
 ## Maintainer Procedures
@@ -289,7 +291,7 @@ GH_TOKEN=your_personal_token gh pr comment 123 --body "Comment from maintainer"
 # Problem: Cannot automatically comment on fork PR test failures
 # Solution: Maintainer manual comment
 
-GH_TOKEN=your_personal_token gh pr comment 123 \
+gh pr comment 123 \
   --body "Tests failed. Please see CI logs for details."
 ```
 
@@ -307,7 +309,7 @@ git checkout pr-123
 ./scripts/apply_fixes.sh
 
 # 3. Create comment with suggested changes
-GH_TOKEN=your_personal_token gh pr comment 123 \
+gh pr comment 123 \
   --body "Suggested fixes: [paste diff or provide guidance]"
 ```
 
@@ -317,7 +319,7 @@ GH_TOKEN=your_personal_token gh pr comment 123 \
 # Problem: Need to rerun workflow for fork PR
 # Solution: Manual workflow trigger
 
-GH_TOKEN=your_personal_token gh workflow run ci.yml \
+gh workflow run ci.yml \
   -f ref=refs/pull/123/head
 ```
 
@@ -565,7 +567,7 @@ MODES:
   full-auto:  # Disabled for external PRs - security restriction
 
 # External PR workflow
-if [[ "${{ github.event.pull_request.head.repo.fork }}" == "true" ]]; then
+if [[ "$GITHUB_EVENT_PULL_REQUEST_HEAD_REPO_FORK" == "true" ]]; then
   AUTOMATION_MODE="analyze"  # Force analyze-only mode
   echo "External PR detected - restricting to analysis mode"
 fi
@@ -886,7 +888,7 @@ DevOnboarder implements sophisticated review requirements and approval flows tha
 
 **Current CODEOWNERS Configuration:**
 
-```gitignore
+```text
 # DevOnboarder CODEOWNERS for external PRs
 *       @theangrygamershowproductions/maintainers
 
@@ -1156,10 +1158,10 @@ gh pr view 123 --json headRepository.owner.login,baseRepository.owner.login
 
 This guide consolidates information from:
 
-- [`docs/ci-failure-issues.md`](ci-failure-issues.md) - Fork PR limitations and maintainer procedures
-- [`docs/WORKFLOW_SECURITY_STANDARDS.md`](WORKFLOW_SECURITY_STANDARDS.md) - Permission patterns and security principles
-- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) - External PR safe execution patterns
-- [`.github/workflows/auto-fix.yml`](.github/workflows/auto-fix.yml) - Privileged operation security model
+- [`docs/ci-failure-issues.md`](../ci-failure-issues.md) - Fork PR limitations and maintainer procedures
+- [`docs/WORKFLOW_SECURITY_STANDARDS.md`](../WORKFLOW_SECURITY_STANDARDS.md) - Permission patterns and security principles
+- [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) - External PR safe execution patterns
+- [`.github/workflows/auto-fix.yml`](../../.github/workflows/auto-fix.yml) - Privileged operation security model
 
 ## Quick Reference
 
@@ -1174,11 +1176,11 @@ This guide consolidates information from:
 ### Maintainer Quick Commands
 
 ```bash
-# Comment on fork PR
-GH_TOKEN=token gh pr comment 123 --body "Your message"
+# Comment on fork PR (requires GH_TOKEN environment variable)
+gh pr comment 123 --body "Your message"
 
-# Trigger workflow for fork PR
-GH_TOKEN=token gh workflow run workflow.yml -f ref=refs/pull/123/head
+# Trigger workflow for fork PR (requires GH_TOKEN environment variable)
+gh workflow run workflow.yml -f ref=refs/pull/123/head
 
 # Review fork PR locally
 gh pr checkout 123
