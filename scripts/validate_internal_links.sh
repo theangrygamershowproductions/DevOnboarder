@@ -20,8 +20,10 @@ echo "Excluding: templates/, archive/, .codex/templates/ directories"
 echo "Skipping: template placeholders and example paths"
 
 # Create temp file to track validation failures across subshells
-TEMP_ERROR_FILE=$(mktemp)
-trap 'rm -f "$TEMP_ERROR_FILE"' EXIT
+# Use a unique temp directory to avoid conflicts with concurrent processes
+TEMP_DIR=$(mktemp -d -t validate_links_XXXXXX)
+TEMP_ERROR_FILE="$TEMP_DIR/errors.log"
+trap 'rm -rf "$TEMP_DIR"' EXIT
 
 # Function to check if a file should be excluded
 should_exclude_file() {
@@ -78,8 +80,8 @@ while IFS= read -r -d '' file; do
         continue
     fi
 
-    # Extract markdown links: [text](path) - timeout protection
-    if links=$(timeout 10s grep -oE '\[([^]]+)\]\(([^)]+)\)' "$file" 2>/dev/null); then
+    # Extract markdown links: [text](path) - timeout protection with reduced time
+    if links=$(timeout 5s grep -oE '\[([^]]+)\]\(([^)]+)\)' "$file" 2>/dev/null); then
         echo "$links" | while IFS= read -r link; do
         # Extract the path part
         path="${link##*](}"
@@ -119,7 +121,8 @@ while IFS= read -r -d '' file; do
     else
         echo "  No links found or file processing timed out"
     fi
-done < <(find . -name "*.md" -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./.venv/*" -print0)
+# Use nice to lower priority and avoid interfering with concurrent processes
+done < <(nice -n 10 find . -name "*.md" -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./.venv/*" -not -path "./.pytest_cache/*" -not -path "./logs/*" -not -path "./.tox/*" -print0)
 
 # Check if any validation failures occurred
 if [[ -s "$TEMP_ERROR_FILE" ]]; then

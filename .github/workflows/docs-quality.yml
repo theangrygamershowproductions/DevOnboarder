@@ -9,6 +9,10 @@ on:
          - "templates/**"
          - ".github/copilot-instructions.md"
 
+concurrency:
+   group: docs-quality-${{ github.ref }} # Prevent concurrent docs validation runs
+   cancel-in-progress: true
+
 jobs:
    validate-docs:
       permissions:
