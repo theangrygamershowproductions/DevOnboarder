@@ -33,53 +33,34 @@ and Codex automation can keep the platform healthy.
 
 ## Table of Contents
 
-1. [Agent Service Map](#agent-service-map)
-
-2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
-
-3. [XP API](#xp-api)
-
-4. [Frontend Session Agent](#frontend-session-agent)
-
-5. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
-
-6. [Discord Integration Agent](#discord-integration-agent)
-
-7. [Verification Agent](#verification-agent)
-
-8. [Session/JWT Agent](#sessionjwt-agent)
-
-9. [Database Service (Postgres)](#database-service-postgres)
-
-10. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-
-11. [Planned Agents / Stubs](#planned-agents--stubs)
-
-12. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
-
-13. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
-
-14. [CI Wait Example](#ci-wait-example)
-
-15. [Agent Task Checklist](#agent-task-checklist)
-
-16. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
-
-17. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
-
-18. [Environment Variable Reference](#environment-variable-reference)
-
-19. [Codex Observability](#codex-observability)
-
-20. [How to Extend/Contribute](#how-to-extendcontribute)
-
-21. [Deprecation & Retirement](#deprecation--retirement)
-
-22. [Glossary](#glossary)
-
-23. [Related Docs](#related-docs)
-
-24. [Revision History](#revision-history)
+- [Agents — Service and Integration Roles (Codex-Driven Reference)](#agents--service-and-integration-roles-codex-driven-reference)
+    - [Table of Contents](#table-of-contents)
+    - [Agent Service Map](#agent-service-map)
+    - [Auth Server (Backend Agent)](#auth-server-backend-agent)
+    - [XP API](#xp-api)
+    - [Frontend Session Agent](#frontend-session-agent)
+    - [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
+    - [Discord Integration Agent](#discord-integration-agent)
+    - [Verification Agent](#verification-agent)
+    - [Session/JWT Agent](#sessionjwt-agent)
+    - [Database Service (Postgres)](#database-service-postgres)
+    - [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+    - [Planned Agents / Stubs](#planned-agents--stubs)
+    - [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+    - [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
+    - [CI Wait Example](#ci-wait-example)
+    - [Agent Task Checklist](#agent-task-checklist)
+    - [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
+    - [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+    - [Environment Variable Reference](#environment-variable-reference)
+    - [Codex Observability](#codex-observability)
+    - [Security Policy for Tooling and Dependencies](#security-policy-for-tooling-and-dependencies)
+    - [How to Extend/Contribute](#how-to-extendcontribute)
+    - [Deprecation \& Retirement](#deprecation--retirement)
+    - [Glossary](#glossary)
+    - [Related Docs](#related-docs)
+    - [Revision History](#revision-history)
+    - [Last Updated](#last-updated)
 
 ---
 
@@ -335,7 +316,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 CI health and failure events are monitored by Codex. Future outages will trigger
 an automated notification and suggested fix via Codex's reporting channel.
 
-## \U0001F512 Security Policy for Tooling and Dependencies
+## Security Policy for Tooling and Dependencies
 
 To reduce the attack surface in CI/CD workflows:
 

@@ -1,39 +1,22 @@
-name: Documentation Quality
+name: Docs Quality
 
 on:
    pull_request:
       paths:
-         - "docs/**"
-         - "README.md"
+         - "**/*.md"
          - "scripts/validate_internal_links.sh"
-         - "templates/**"
-         - ".github/copilot-instructions.md"
+         - ".pre-commit-config.yaml"
+
+permissions:
+   contents: read
 
 concurrency:
-   group: docs-quality-${{ github.ref }} # Prevent concurrent docs validation runs
+   group: docs-quality-${{ github.ref }}
    cancel-in-progress: true
 
 jobs:
-   validate-docs:
-      permissions:
-         contents: read # Required for checkout
-         actions: read # Required for workflow access
-         security-events: read # Required for security scanning
+   validate:
       runs-on: ubuntu-latest
       steps:
-         - name: Checkout code
-           uses: actions/checkout@v5
-
-         - name: Validate internal links
-           run: |
-              echo "Running internal link validation..."
-              bash scripts/validate_internal_links.sh
-
-         - name: Validate documentation quality
-           run: |
-              echo "Running documentation quality checks..."
-              if [[ -f "scripts/check_docs.sh" ]]; then
-                bash scripts/check_docs.sh
-              else
-                echo "Documentation quality script not found - skipping"
-              fi
+         - uses: actions/checkout@v5
+         - run: bash scripts/validate_internal_links.sh

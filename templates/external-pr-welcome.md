@@ -15,13 +15,13 @@ Your pull request is from a fork, so some CI features work differently for secur
 
 **For your first PR:**
 
-- [First PR Guide](docs/first-pr-guide.md) - Complete walkthrough for new contributors
-- [Terminal Output Policy](docs/TERMINAL_OUTPUT_VIOLATIONS.md) - **Critical**: Zero tolerance for emojis in workflows
-- [Git Guidelines](docs/git-guidelines.md) - Commit message format and branch naming
+- [First PR Guide](../docs/first-pr-guide.md) - Complete walkthrough for new contributors
+- [Terminal Output Policy](../docs/TERMINAL_OUTPUT_VIOLATIONS.md) - **Critical**: Zero tolerance for emojis in workflows
+- [Git Guidelines](../docs/git-guidelines.md) - Commit message format and branch naming
 
 **Understanding the security:**
 
-- [External PR Security Guide](docs/EXTERNAL_PR_SECURITY_GUIDE.md) - Technical details about three-tier security model
+- [External PR Security Guide](../docs/EXTERNAL_PR_SECURITY_GUIDE.md) - Technical details about three-tier security model
 
 ## 🚀 **What happens next?**
 
@@ -36,4 +36,4 @@ Comment on this PR with any questions! A maintainer will respond soon. Your cont
 
 ---
 
-*This message appears for first-time external contributors to explain our security model. See [External PR Security Guide](docs/EXTERNAL_PR_SECURITY_GUIDE.md) for technical details.*
+*This message appears for first-time external contributors to explain our security model. See [External PR Security Guide](../docs/EXTERNAL_PR_SECURITY_GUIDE.md) for technical details.*

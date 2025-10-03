@@ -377,27 +377,41 @@ Bot automatically detects guild ID for dev/prod environment switching
 
 ### Copilot Review Comment Handling
 
-**Critical Lessons Learned (PR #1715):**
+**Critical Lessons Learned (PR #1720):**
 
 ✅ **GitHub Review Behavior**: Comments are marked "Outdated" immediately when fixes are applied, not based on commit staleness
-✅ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks
+✅ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks and CI workflows
 ✅ **Root Cause Fixes**: Address underlying issues, not just symptoms identified in comments
 
-### Documentation Quality Requirements
+### Documentation Validation Enhancement System (PR #1720)
 
 **MANDATORY validations now enforced:**
 
 ```bash
-# Internal link validation (new pre-commit hook)
-scripts/validate_internal_links.sh  # Catches broken markdown references
+# Enhanced internal link validation with parallelization
+scripts/validate_internal_links.sh  # GitHub-style anchors, fragment support, metrics
 
-# Documentation quality checks
-scripts/check_docs.sh  # Vale prose linting and structure validation
+# GitHub-style anchor generation with duplicate handling
+scripts/anchors_github.py  # Handles -1, -2 suffixes for repeated headings
+
+# Enhanced safe commit wrapper with timeout handling
+scripts/safe_commit_enhanced.sh  # Prevents silent drift, proper re-staging
 ```
 
-**Common Documentation Errors to Avoid:**
+**System Features:**
 
-- ❌ `docs/TERMINAL_OUTPUT_POLICY.md` → ✅ `docs/TERMINAL_OUTPUT_VIOLATIONS.md`
+- ✅ **513 markdown files** validated in ~60 seconds with parallel processing
+- ✅ **Fragment validation** with GitHub-style anchor normalization
+- ✅ **Duplicate heading support** (title → title-1 → title-2)
+- ✅ **JSON metrics reporting** with real file counts and broken link tracking
+- ✅ **CI workflow separation** (docs-quality.yml + pr-welcome.yml)
+- ✅ **Fork security** with proper pull_request vs pull_request_target usage
+
+**Common Documentation Errors Now Caught:**
+
+- ❌ Broken internal links with fragments (#section)
+- ❌ Non-existent file references in templates
+- ❌ Duplicate heading anchors without proper suffixes
 - ❌ Relative paths without validation → ✅ Absolute paths with existence checks
 - ❌ Stale cross-references → ✅ Automated link validation
 

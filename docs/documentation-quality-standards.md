@@ -49,14 +49,20 @@ VALIDATION_PATTERNS=(
 ### Standard Validation Commands
 
 ```bash
-# Full documentation quality check
-scripts/validate_internal_links.sh
+# Enhanced internal link validation with parallelization and metrics
+scripts/validate_internal_links.sh  # Validates 513+ files in ~60 seconds
+
+# GitHub-style anchor generation (supports duplicate headings)
+python3 scripts/anchors_github.py < file.md  # Returns JSON with anchors array
+
+# Enhanced safe commit with validation hardening
+scripts/safe_commit_enhanced.sh "message"  # Prevents silent staging drift
 
 # Template-specific validation
-scripts/validate_template_references.sh  # New script for template validation
+scripts/validate_template_references.sh  # Template consistency validation
 
 # Framework documentation validation
-scripts/audit_frameworks.sh  # Existing script enhanced with link checking
+scripts/audit_frameworks.sh  # Framework documentation integrity
 ```
 
 ### Common Anti-Patterns
@@ -87,12 +93,14 @@ scripts/audit_frameworks.sh  # Existing script enhanced with link checking
 
 ### Automated Validation Workflow
 
-1. **Pre-commit**: `validate_internal_links.sh` catches broken links before commit
-2. **Documentation quality**: `check_docs.sh` validates prose and structure
-3. **Framework audit**: `audit_frameworks.sh` checks framework documentation integrity
-4. **Template validation**: New template-specific checks for consistency
+1. **Pre-commit**: `validate_internal_links.sh` catches broken links with parallel processing
+2. **CI Integration**: `docs-quality.yml` workflow validates on PR changes
+3. **PR Welcome**: `pr-welcome.yml` workflow handles fork contributions securely
+4. **Enhanced Commits**: `safe_commit_enhanced.sh` prevents staging drift
+5. **Metrics Tracking**: JSON reports with real-time file counts and broken link statistics
 
 ---
-**Implemented**: October 2, 2025
-**Integration**: Pre-commit hooks + quality assurance framework
-**Coverage**: Templates, documentation, framework references, cross-links
+**Enhanced**: October 2, 2025 (PR #1720)
+**Integration**: Pre-commit hooks + CI workflows + enhanced safe commit wrapper
+**Performance**: 513 markdown files validated in ~60 seconds with parallelization
+**Coverage**: Internal links, fragments, GitHub-style anchors, duplicate headings

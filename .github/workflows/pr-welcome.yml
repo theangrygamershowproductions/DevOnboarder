@@ -1,0 +1,28 @@
+name: PR Welcome
+
+on:
+   pull_request_target:
+      types: [opened, reopened]
+
+permissions:
+   pull-requests: write
+
+jobs:
+   welcome:
+      if: ${{ github.event.pull_request.head.repo.fork == true }}
+      runs-on: ubuntu-latest
+      steps:
+         - name: Idempotent welcome
+           env:
+              GH_TOKEN: ${{ secrets.WELCOME_BOT_TOKEN || github.token }}
+           run: |
+              set -euo pipefail
+              PR="${{ github.event.pull_request.number }}"
+              REPO="${{ github.repository }}"
+              # detect existing
+              existing="$(gh api repos/$REPO/issues/$PR/comments?per_page=100 || true)"
+              if echo "$existing" | grep -q "Welcome to DevOnboarder"; then
+                echo "Welcome already posted."
+                exit 0
+              fi
+              gh api repos/$REPO/issues/$PR/comments -f body=$'👋 Welcome to DevOnboarder!\n\nHere's how CI/docs validation works…'

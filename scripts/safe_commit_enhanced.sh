@@ -38,7 +38,8 @@ handle_precommit_modifications() {
     # Enhanced re-staging with validation
     echo "Performing enhanced re-staging..."
 
-
+    # Refresh index to catch mode/perm flips
+    git update-index --refresh >/dev/null 2>&1 || true
 
     # Reset and re-stage with validation
     git reset HEAD --quiet
@@ -61,6 +62,13 @@ handle_precommit_modifications() {
 
     echo "Re-staged $restaged_count files successfully"
 
+    # Assert clean delta to avoid silent drift
+    if ! git diff --quiet --cached; then
+        echo "WARNING: Re-stage incomplete: staged delta remains." >&2
+        git status --porcelain
+        return 1
+    fi
+
     # Verify staged files match expectation
     local post_restage_staged
     post_restage_staged=$(git diff --cached --name-only | sort)
@@ -73,6 +81,7 @@ handle_precommit_modifications() {
         printf "%s\n" "$expected_staged" | sed 's/^/  /'
         echo "Actually staged:"
         printf "%s\n" "$post_restage_staged" | sed 's/^/  /'
+        return 1
     fi
 
     # Attempt commit with timeout protection
