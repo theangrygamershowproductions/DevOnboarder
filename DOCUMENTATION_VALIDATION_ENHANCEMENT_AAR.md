@@ -1,3 +1,9 @@
+---
+similarity_group: docs-
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # After Action Report: Documentation Validation Enhancement System
 
 **Date:** October 3, 2025
