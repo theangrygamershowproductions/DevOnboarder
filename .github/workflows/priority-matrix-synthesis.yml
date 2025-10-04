@@ -13,6 +13,21 @@ on:
         required: false
         default: false
         type: boolean
+      success_detection_window:
+        description: 'Time window for success detection (e.g., "5 minutes ago")'
+        required: false
+        default: '5 minutes ago'
+        type: string
+      max_files_display:
+        description: 'Maximum number of files to display in success messages'
+        required: false
+        default: 10
+        type: number
+      max_files_per_priority:
+        description: 'Maximum files to show per priority group'
+        required: false
+        default: 5
+        type: number
 
 jobs:
   synthesize-priority-matrix:
@@ -220,14 +235,16 @@ jobs:
         id: commit-status
         run: |
           # Check if any Priority Matrix commit was actually made
-          LATEST_COMMIT=$(git log -1 --oneline --grep="Priority Matrix" --since="5 minutes ago" || echo "")
+          SUCCESS_WINDOW="${{ github.event.inputs.success_detection_window || '5 minutes ago' }}"
+          MAX_FILES="${{ github.event.inputs.max_files_display || 10 }}"
+          LATEST_COMMIT=$(git log -1 --oneline --grep="Priority Matrix" --since="$SUCCESS_WINDOW" || echo "")
           if [ -n "$LATEST_COMMIT" ]; then
             echo "commit_success=true" >> $GITHUB_OUTPUT
             echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
             echo "commit_message=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
 
             # Get list of files that were actually modified
-            MODIFIED_FILES=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(md)$' | head -10 || echo "")
+            MODIFIED_FILES=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(md)$' | head -"$MAX_FILES" || echo "")
             echo "modified_files<<EOF" >> $GITHUB_OUTPUT
             echo "$MODIFIED_FILES" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
@@ -271,20 +288,21 @@ jobs:
                 return acc;
               }, {});
 
+              const maxPerPriority = ${{ github.event.inputs.max_files_per_priority || 5 }};
               for (const [priority, files] of Object.entries(byPriority).sort()) {
                 body.push(`**${priority} Priority (${files.length} files)**:`);
-                files.slice(0, 5).forEach(f => {
+                files.slice(0, maxPerPriority).forEach(f => {
                   const status = f.merge ? 'Merge candidate' : 'Enhanced';
                   body.push(`- ${status} \`${f.path}\` (confidence: ${f.confidence})`);
                 });
-                if (files.length > 5) {
-                  body.push(`- ... and ${files.length - 5} more files`);
+                if (files.length > maxPerPriority) {
+                  body.push(`- ... and ${files.length - maxPerPriority} more files`);
                 }
                 body.push("");
               }
 
               body.push(`**Quality Metrics:**`);
-              body.push(`- Average confidence: ${(results.modified.reduce((sum, f) => sum + f.confidence, 0) / results.modified.length).toFixed(2)}`);
+              body.push(`- Average confidence: ${results.modified.length > 0 ? (results.modified.reduce((sum, f) => sum + f.confidence, 0) / results.modified.length).toFixed(2) : "N/A"}`);
               body.push(`- Merge candidates: ${results.modified.filter(f => f.merge).length}`);
               body.push(`- High uniqueness (4-5): ${results.modified.filter(f => f.uniqueness >= 4).length}`);
             } else if (modifiedFiles.length > 0) {
