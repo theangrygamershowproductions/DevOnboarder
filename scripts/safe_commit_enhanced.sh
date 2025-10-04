@@ -114,7 +114,6 @@ handle_precommit_modifications() {
     local commit_output
     local exit_code
 
-    echo "Attempting commit with enhanced validation..."
     commit_output=$(timeout 60s git commit -m "$commit_msg" 2>&1)
     exit_code=$?
 
