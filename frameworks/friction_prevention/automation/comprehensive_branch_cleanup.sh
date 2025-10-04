@@ -108,22 +108,19 @@ merged_locals=()
 echo -e "${YELLOW}Local branches merged into $BASE_BRANCH:${NC}"
 
 if [ -d ".git/refs/heads" ]; then
-    # Get all local branch names
+    # Get all local branch names (including nested branches)
     all_locals=()
+    declare -A seen_branches
+
+    # Find all branch files recursively and deduplicate
     while IFS= read -r -d '' file; do
         branch="${file#.git/refs/heads/}"
-        all_locals+=("$branch")
-    done < <(find .git/refs/heads -type f -print0 2>/dev/null)
-
-    # Also get nested branches
-    while IFS= read -r -d '' dir; do
-        if [ -d "$dir" ]; then
-            while IFS= read -r -d '' file; do
-                branch="${file#.git/refs/heads/}"
-                all_locals+=("$branch")
-            done < <(find "$dir" -type f -print0 2>/dev/null)
+        # Only add if not already seen
+        if [[ -z "${seen_branches[$branch]:-}" ]]; then
+            seen_branches["$branch"]=1
+            all_locals+=("$branch")
         fi
-    done < <(find .git/refs/heads -type d -mindepth 1 -print0 2>/dev/null)
+    done < <(find .git/refs/heads -type f -print0 2>/dev/null)
 
     # Check each branch for merge status
     for branch in "${all_locals[@]}"; do

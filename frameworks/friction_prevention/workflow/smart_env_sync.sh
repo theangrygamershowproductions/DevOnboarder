@@ -1,6 +1,7 @@
 #!/bin/bash
 # =============================================================================
-# File: scripts/sm# Variables that should remain environment-specific (never synchronized)
+# File: scripts/smart_env_sync.sh
+# Variables that should remain environment-specific (never synchronized)
 ENVIRONMENT_SPECIFIC_VARS=(
     "JWT_SECRET_KEY"
     "AUTH_SECRET_KEY"
@@ -131,23 +132,7 @@ SYNCHRONIZED_VARS=(
     "VITE_ALLOWED_HOST_PROD"
 )
 
-# Variables that should remain environment-specific
-ENVIRONMENT_SPECIFIC_VARS=(
-    "JWT_SECRET_KEY"
-    "AUTH_SECRET_KEY"
-    "DISCORD_BOT_TOKEN"
-    "DISCORD_CLIENT_SECRET"
-    "BOT_JWT"
-    "APP_ENV"
-    "NODE_ENV"
-    "PYTHON_ENV"
-    "CI"
-    "DEBUG"
-    "DATABASE_URL"
-    "REDIS_URL"
-    "GH_TOKEN"
-    "NPM_TOKEN"
-)
+
 
 # Function to check if variable should be excluded for specific file
 is_variable_excluded() {

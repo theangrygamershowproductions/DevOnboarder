@@ -34,34 +34,30 @@
 - `scripts/execute_automation_plan.sh` - Automation plan execution
 - `scripts/automate_signature_verification.sh` - Signature verification automation
 
-## Workflow Enhancement Scripts (15 scripts)
+## Workflow Enhancement Scripts (11 scripts)
 
-### Environment Setup (5 scripts)
+### Environment Management (3 scripts)
 
-- `scripts/smart_env_sync.sh` - Environment synchronization
-- `scripts/setup-env.sh` - Environment setup automation
-- `scripts/auto_environment_setup.sh` - Auto environment setup
-- `scripts/dev_setup.sh` - Development setup
-- `scripts/sync_env_variables.sh` - Environment variable sync
+- `smart_env_sync.sh` - Intelligent environment synchronization
+- `enhanced_token_loader.sh` - Enhanced token loading
+- `env_security_audit.sh` - Environment security auditing
 
-### Development Workflow (5 scripts)
+### CI/CD Enhancement (3 scripts)
 
-- `scripts/safe_commit.sh` - Safe commit wrapper
-- `scripts/safe_commit_enhanced.sh` - Enhanced safe commit
-- `scripts/git_safety_wrapper.sh` - Git safety wrapper
-- `scripts/interactive_commit_fixer.sh` - Interactive commit fixing
-- `scripts/commit_changes.sh` - Commit automation
+- `monitor_ci_health.sh` - CI health monitoring
+- `run_tests_with_logging.sh` - Test execution with enhanced logging
+- `manage_logs.sh` - Log management system
 
-### Dependency Management (3 scripts)
+### Testing Workflow (2 scripts)
 
-- `scripts/check_dependencies.sh` - Dependency validation
-- `scripts/sync_with_remote.sh` - Remote synchronization
-- `scripts/version_project_configs.sh` - Version configuration management
+- `run_tests.sh` - Test execution framework
+- `clean_pytest_artifacts.sh` - Pytest artifact cleanup
 
-### Testing & Validation (2 scripts)
+### Quality & Release (3 scripts)
 
-- `scripts/run_tests_with_logging.sh` - Enhanced test runner
-- `scripts/complete_system_validation.sh` - System validation
+- `qc_pre_push.sh` - Pre-push quality control
+- `validate_internal_links.sh` - Internal link validation
+- `anchors_github.py` - GitHub anchor generation
 
 ## Productivity Tools (10 scripts)
 

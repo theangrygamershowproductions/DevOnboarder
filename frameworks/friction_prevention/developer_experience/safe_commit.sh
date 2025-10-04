@@ -101,43 +101,25 @@ COMMIT_MSG="$1"
 echo "Starting safe commit process..."
 printf "Commit message: %s\n" "$COMMIT_MSG"
 
-# CRITICAL: Validate commit message format before proceeding
-echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)\([^)]+\): .+' >/dev/null; then
+# Accepts all standard/extended types, 'BUILD' and 'Build' (for Dependabot), and optional scope
+if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
     echo "ERROR: Invalid commit message format!"
     echo ""
     echo "Required format: <TYPE>(<scope>): <subject>"
     echo ""
     echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
     echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
+    echo "BUILD/Build types allowed for Dependabot compatibility"
     echo ""
     echo "Examples:"
     echo "  FEAT(auth): add JWT validation endpoint"
     echo "  FIX(bot): resolve Discord connection timeout"
     echo "  CHORE(ci): update workflow dependencies"
-    echo ""
-    printf "Your message: %s\n" "$COMMIT_MSG"
-    exit 1
-fi
-echo "Commit message format validated"
-
-# CRITICAL: Validate commit message format before proceeding
-echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
-    echo "❌ ERROR: Invalid commit message format!"
-    echo ""
-    echo "Required format: <TYPE>(<scope>): <subject>"
-    echo ""
-    echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
-    echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
-    echo "Build/Build types allowed for Dependabot compatibility"
-    echo ""
-    echo "Examples:"
     echo "  FIX(auth): resolve bcrypt password truncation issue"
     echo "  FEAT(ci): add automated dependency updates"
     echo "  CHORE(deps): update Python requirements"
     echo ""
-    echo "Your message: $COMMIT_MSG"
+    printf "Your message: %s\n" "$COMMIT_MSG"
     exit 1
 fi
 echo "Commit message format validated"
