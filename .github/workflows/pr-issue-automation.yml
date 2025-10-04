@@ -50,11 +50,6 @@ jobs:
             pull-requests: write
             issues: write
 
-        env:
-            # SECURITY: Follow DevOnboarder No Default Token Policy v1.0
-            # Use specialized tokens only - NO GITHUB_TOKEN fallback per policy
-            GITHUB_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN != '' && secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v5
@@ -65,8 +60,9 @@ jobs:
 
             - name: Authenticate GitHub CLI
               run: |
-                  # Use explicit authentication like other working workflows
-                  printf -- '%s\n' "${{ env.GITHUB_TOKEN }}" | gh auth login --with-token
+                  # SECURITY: Follow DevOnboarder Token Policy - Use specialized tokens explicitly
+                  # Use the same pattern as successful PR Automation Framework workflow
+                  printf -- '%s\n' "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN != '' && secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}" | gh auth login --with-token
 
             - name: Create PR tracking issue
               env:
