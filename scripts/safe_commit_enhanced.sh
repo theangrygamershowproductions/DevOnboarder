@@ -6,6 +6,20 @@
 set -euo pipefail
 
 # Enhanced re-staging logic for pre-commit hook failures
+#
+# CRITICAL: This function returns 1 on FATAL errors that indicate repository
+# corruption or inconsistency. Callers MUST check the return code:
+#
+# Example correct usage:
+#   if ! handle_precommit_modifications "$msg" "$files" "$attempt"; then
+#       echo "FATAL: Pre-commit modification handling failed" >&2
+#       exit 1
+#   fi
+#
+# Example INCORRECT usage (silent failure risk):
+#   handle_precommit_modifications "$msg" "$files" "$attempt"
+#   # Continues execution even on fatal errors!
+#
 handle_precommit_modifications() {
     local commit_msg="$1"
     local original_staged_files="$2"
@@ -64,10 +78,14 @@ handle_precommit_modifications() {
 
     # Assert clean delta to avoid silent drift
     if ! git diff --quiet --cached; then
-        echo "ERROR: Re-stage incomplete: staged delta remains." >&2
+        echo "FATAL ERROR: Re-stage incomplete: staged delta remains." >&2
         echo "This indicates a critical issue with pre-commit hook modifications." >&2
+        echo "Repository state may be inconsistent." >&2
         git status --porcelain
-        echo "Callers should handle this return code (1) as a fatal error." >&2
+        echo "" >&2
+        echo "CRITICAL: This function returns 1 to indicate FATAL failure." >&2
+        echo "Callers MUST check return code and treat as fatal error." >&2
+        echo "DO NOT proceed with commit operations after this failure." >&2
         return 1
     fi
 
@@ -135,6 +153,33 @@ handle_precommit_modifications() {
     fi
 }
 
-# Export the function for use in main safe_commit.sh
+# Safe wrapper that enforces proper error handling
+# This function ensures that fatal errors from handle_precommit_modifications
+# are treated as fatal and don't continue execution
+safe_handle_precommit_modifications() {
+    local commit_msg="$1"
+    local original_staged_files="$2"
+    local attempt_number="${3:-1}"
+
+    echo "=== Safe Pre-commit Handler Wrapper ==="
+
+    if ! handle_precommit_modifications "$commit_msg" "$original_staged_files" "$attempt_number"; then
+        local exit_code=$?
+        echo "" >&2
+        echo "FATAL: handle_precommit_modifications failed with exit code $exit_code" >&2
+        echo "This indicates a critical repository state issue." >&2
+        echo "Aborting all commit operations to prevent data loss." >&2
+        echo "" >&2
+        exit $exit_code
+    fi
+
+    echo "✅ Pre-commit modifications handled successfully"
+    return 0
+}
+
+# Export the functions for use in main safe_commit.sh
 # This would be integrated into the existing safe_commit.sh script
 echo "Enhanced safe commit handler functions loaded"
+echo "Available functions:"
+echo "  - handle_precommit_modifications() [requires error checking]"
+echo "  - safe_handle_precommit_modifications() [enforces error checking]"
