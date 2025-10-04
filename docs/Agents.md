@@ -37,10 +37,14 @@ and Codex automation can keep the platform healthy.
     - [Table of Contents](#table-of-contents)
     - [Agent Service Map](#agent-service-map)
     - [Auth Server (Backend Agent)](#auth-server-backend-agent)
+        - [Auth Server Endpoints](#auth-server-endpoints)
     - [XP API](#xp-api)
+        - [XP API Endpoints](#xp-api-endpoints)
     - [Frontend Session Agent](#frontend-session-agent)
+        - [Routes](#routes)
     - [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
     - [Discord Integration Agent](#discord-integration-agent)
+        - [Discord Integration Endpoints](#discord-integration-endpoints)
     - [Verification Agent](#verification-agent)
     - [Session/JWT Agent](#sessionjwt-agent)
     - [Database Service (Postgres)](#database-service-postgres)
@@ -66,14 +70,13 @@ and Codex automation can keep the platform healthy.
 
 ## Agent Service Map
 
-| Agent Name          | Endpoint(s)         | Port | Healthcheck | Depends On | Status   |
-| ------------------- | ------------------- | ---- | ----------- | ---------- | -------- |
-
-| Auth Server         | `/api/*`, `/health` | 8002 | `/health`   | db         | updating |
-| Discord Integration | `/oauth`, `/roles`  | 8081 | `/health`   | Auth, db   | verify   |
-| Frontend Agent      | `/`, `/session`     | 3000 | N/A         | Auth       | stable   |
-| XP API              | `/xp`, `/health`    | 8001 | `/health`   | db         | verify   |
-| Database (Postgres) | N/A                 | 5432 | docker      | N/A        | stable   |
+| Agent Name          | Port | Healthcheck | Depends On | Status   |
+| ------------------- | ---- | ----------- | ---------- | -------- |
+| Auth Server         | 8002 | `/health`   | db         | updating |
+| Discord Integration | 8081 | `/health`   | Auth, db   | verify   |
+| Frontend Agent      | 3000 | N/A         | Auth       | stable   |
+| XP API              | 8001 | `/health`   | db         | verify   |
+| Database (Postgres) | 5432 | docker      | N/A        | stable   |
 
 ---
 
@@ -81,7 +84,12 @@ and Codex automation can keep the platform healthy.
 
 **Purpose:** Provides Discord OAuth, role checks, JWT issuance, and user session endpoints.
 
-**Key Endpoints:** `POST /api/discord/exchange`, `GET /api/auth/user`, `GET /api/verification/status`, `GET /health`
+### Auth Server Endpoints
+
+- `GET /health` - Service health check
+- `POST /api/discord/exchange` - Exchange Discord code for JWT
+- `GET /api/auth/user` - Get current user session
+- `GET /api/verification/status` - Check user verification status
 
 **Environment:** Discord client credentials, role IDs, JWT secret and config.
 
@@ -97,7 +105,12 @@ and Codex automation can keep the platform healthy.
 
 **Purpose:** Provides onboarding and XP routes backed by the auth service database.
 
-**Key Endpoints:** `GET /api/user/onboarding-status`, `GET /api/user/level`, `POST /api/user/contribute`, `GET /health`
+### XP API Endpoints
+
+- `GET /health` - Service health check
+- `GET /api/user/onboarding-status` - Get user onboarding progress
+- `GET /api/user/level` - Get user XP level and statistics
+- `POST /api/user/contribute` - Record user contribution for XP
 
 **Environment:** Shares database connection via `DATABASE_URL`.
 
@@ -106,6 +119,12 @@ and Codex automation can keep the platform healthy.
 ## Frontend Session Agent
 
 **Purpose:** Stores and refreshes JWTs, restores sessions, and applies RBAC checks client-side.
+
+### Routes
+
+- `GET /` - Main application interface
+- `GET /session` - Session management interface
+- `GET /*` - Protected routes with RBAC checks
 
 **Key Files:** `src/hooks/useSession.ts`, `src/lib/auth/discord.ts`
 
@@ -126,6 +145,12 @@ and Codex automation can keep the platform healthy.
 **Status:** Verify – exposes `/oauth` and `/roles` for account linking and role lookups.
 
 **Purpose:** Handles Discord OAuth flows and role lookups.
+
+### Discord Integration Endpoints
+
+- `GET /health` - Service health check
+- `POST /oauth` - Handle Discord OAuth callback
+- `GET /roles` - Lookup user Discord roles
 
 **Key Files:** `src/discord_integration/api.py`
 
@@ -175,15 +200,11 @@ Examples include a Discord bot/webhook agent and ID.me integration.
 
 **Example Docker Compose Healthcheck:**
 
-```yaml
-
-healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-    interval: 5s
-    timeout: 2s
-    retries: 10
-
-```
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+        interval: 5s
+        timeout: 2s
+        retries: 10
 
 ## Healthcheck Implementation Guide
 
@@ -191,41 +212,28 @@ Add a simple `/health` route in each service so CI and Compose can poll for read
 
 **Express:**
 
-```js
-
-app.get("/health", (req, res) => res.status(200).send("OK"));
-
-```
+    app.get("/health", (req, res) => res.status(200).send("OK"));
 
 **FastAPI:**
 
-```python
-
-@app.get("/health")
-def healthcheck():
-    return {"status": "ok"}
-
-```
+    @app.get("/health")
+    def healthcheck():
+        return {"status": "ok"}
 
 ## CI Wait Example
 
 Use a small loop in your workflow to wait for the auth service before running tests:
 
-```yaml
-
-- name: Wait for Auth service
-
-  run: |
-      for i in {1..20}; do
-        if curl -sf http://localhost:8002/health; then
-          echo "Auth is up"
-          exit 0
-        fi
-        sleep 3
-      done
-      exit 1
-
-```
+    - name: Wait for Auth service
+      run: |
+          for i in {1..20}; do
+            if curl -sf http://localhost:8002/health; then
+              echo "Auth is up"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
 
 ---
 
