@@ -6,3 +6,6 @@
 # Exclude other files that have specific linting requirements
 *.yml
 *.yaml
+
+# Exclude markdown files - they have their own linting rules via markdownlint
+*.md

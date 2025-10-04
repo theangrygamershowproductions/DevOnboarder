@@ -1,11 +1,15 @@
 # markdownlint-cli2 configuration
 # Uses existing .markdownlint.json for rules and .markdownlintignore for excludes
 # Note: globs removed to allow pre-commit to control which files are checked
+# Auto-fix enabled with robust rules to ensure consistent formatting
 
 config:
     extends: ".markdownlint.json"
 
 # globs removed - pre-commit will pass only staged markdown files
+# fix: true   # Enable auto-fix with comprehensive rule set
+outputFormatters:
+    - ["markdownlint-cli2-formatter-default"]
 
 ignores:
     - "node_modules/**"
@@ -23,5 +27,5 @@ ignores:
     - "logs/**"
     - "tmp/**"
     - ".git/**"
-    - "Potato.md" # Potato Policy - contains sensitive SSH/setup info
-    - ".github/ISSUE_TEMPLATE/bug_report.md" # Temporary - testing AAR compliance
+    - "Potato.md"  # Potato Policy - contains sensitive SSH/setup info
+    - ".github/ISSUE_TEMPLATE/bug_report.md"  # Temporary - testing AAR compliance

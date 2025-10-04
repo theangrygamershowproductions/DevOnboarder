@@ -3,7 +3,7 @@ name: troubleshooting-harvest
 on:
    workflow_dispatch:
    schedule:
-      - cron: "0 8 * * *" # daily at 08:00 UTC (optional)
+      - cron: "0 8 * * *"  # daily at 08:00 UTC (optional)
 
 permissions:
    contents: read
@@ -32,7 +32,8 @@ jobs:
               set -euo pipefail
               echo "Inspecting GITHUB_TOKEN scopes via API headers..."
               if [ -n "${GITHUB_TOKEN:-}" ]; then
-                curl -sI -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
+                curl -sI -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com/ | \
+                  tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
               else
                 echo "GITHUB_TOKEN not available"
               fi
@@ -45,7 +46,8 @@ jobs:
               if [ -n "${AAR_TOKEN:-}" ]; then
                 echo "AAR_TOKEN present. Checking scopes and validity..."
                 # Show a compact JSON error or header
-                curl -sS -I -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
+                curl -sS -I -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | \
+                  tr -d '\r' | grep -i '^x-oauth-scopes:' || echo "No scopes header found"
                 echo "Attempt a lightweight API probe (rate-limited):"
                 curl -sS -H "Authorization: token ${AAR_TOKEN}" https://api.github.com/ | jq -r '.message // "API accessible"' || echo "API probe failed"
               else
