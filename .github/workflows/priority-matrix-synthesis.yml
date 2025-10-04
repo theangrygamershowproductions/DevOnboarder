@@ -13,6 +13,21 @@ on:
         required: false
         default: false
         type: boolean
+      success_detection_window:
+        description: 'Time window for success detection (e.g., "5 minutes ago")'
+        required: false
+        default: '5 minutes ago'
+        type: string
+      max_files_display:
+        description: 'Maximum number of files to display in success messages'
+        required: false
+        default: 10
+        type: number
+      max_files_per_priority:
+        description: 'Maximum files to show per priority group'
+        required: false
+        default: 5
+        type: number
 
 jobs:
   synthesize-priority-matrix:
@@ -215,18 +230,116 @@ jobs:
               body: comment
             });
 
+      - name: Check commit success status
+        if: always() && github.event_name == 'pull_request'
+        id: commit-status
+        run: |
+          # Check if any Priority Matrix commit was actually made
+          SUCCESS_WINDOW="${{ github.event.inputs.success_detection_window || '5 minutes ago' }}"
+          MAX_FILES="${{ github.event.inputs.max_files_display || 10 }}"
+          LATEST_COMMIT=$(git log -1 --oneline --grep="Priority Matrix" --since="$SUCCESS_WINDOW" || echo "")
+          if [ -n "$LATEST_COMMIT" ]; then
+            echo "commit_success=true" >> $GITHUB_OUTPUT
+            echo "commit_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+            echo "commit_message=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
+
+            # Get list of files that were actually modified
+            MODIFIED_FILES=$(git diff --name-only HEAD~1 HEAD | grep -E '\.(md)$' | head -"$MAX_FILES" || echo "")
+            echo "modified_files<<EOF" >> $GITHUB_OUTPUT
+            echo "$MODIFIED_FILES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "commit_success=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment with success details
+        if: always() && github.event_name == 'pull_request' && steps.commit-status.outputs.commit_success == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const modifiedFiles = `${{ steps.commit-status.outputs.modified_files }}`.trim().split('\n').filter(f => f);
+            const commitSha = `${{ steps.commit-status.outputs.commit_sha }}`;
+            const commitMessage = `${{ steps.commit-status.outputs.commit_message }}`;
+
+            // Read synthesis results if available
+            let results = { modified: [], total_processed: 0 };
+            try {
+              results = JSON.parse(fs.readFileSync('synthesis_results.json', 'utf8'));
+            } catch (e) {
+              console.log('No synthesis results available');
+            }
+
+            let body = [
+              "## Priority Matrix Bot - Enhancement Complete",
+              "",
+              `**Commit**: \`${commitSha.substring(0, 8)}\` - ${commitMessage}`,
+              ""
+            ];
+
+            if (results.modified.length > 0) {
+              body.push(`**Enhanced ${results.modified.length} documents** with Priority Matrix metadata:`);
+              body.push("");
+
+              // Group by priority for better readability
+              const byPriority = results.modified.reduce((acc, file) => {
+                acc[file.priority] = acc[file.priority] || [];
+                acc[file.priority].push(file);
+                return acc;
+              }, {});
+
+              const maxPerPriority = ${{ github.event.inputs.max_files_per_priority || 5 }};
+              for (const [priority, files] of Object.entries(byPriority).sort()) {
+                body.push(`**${priority} Priority (${files.length} files)**:`);
+                files.slice(0, maxPerPriority).forEach(f => {
+                  const status = f.merge ? 'Merge candidate' : 'Enhanced';
+                  body.push(`- ${status} \`${f.path}\` (confidence: ${f.confidence})`);
+                });
+                if (files.length > maxPerPriority) {
+                  body.push(`- ... and ${files.length - maxPerPriority} more files`);
+                }
+                body.push("");
+              }
+
+              body.push(`**Quality Metrics:**`);
+              body.push(`- Average confidence: ${results.modified.length > 0 ? (results.modified.reduce((sum, f) => sum + f.confidence, 0) / results.modified.length).toFixed(2) : "N/A"}`);
+              body.push(`- Merge candidates: ${results.modified.filter(f => f.merge).length}`);
+              body.push(`- High uniqueness (4-5): ${results.modified.filter(f => f.uniqueness >= 4).length}`);
+            } else if (modifiedFiles.length > 0) {
+              body.push(`**Modified files** (${modifiedFiles.length}):`);
+              modifiedFiles.slice(0, 10).forEach(f => body.push(`- \`${f}\``));
+              if (modifiedFiles.length > 10) {
+                body.push(`- ... and ${modifiedFiles.length - 10} more files`);
+              }
+            } else {
+              body.push("**Status**: Priority Matrix fields are up to date - no changes needed.");
+            }
+
+            body.push("");
+            body.push("*Automated by Priority Matrix synthesis - documentation quality maintained*");
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body.join("\n")
+            });
+
       - name: Fallback - comment patch if signing fails
-        if: failure() && github.event_name == 'pull_request'
+        if: failure() && github.event_name == 'pull_request' && steps.commit-status.outputs.commit_success != 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const body = [
-              "**Priority Matrix Bot** - Signed commit failed",
+              "## Priority Matrix Bot - Manual Action Required",
               "",
-              "GPG signing or push was rejected. To apply Priority Matrix enhancements manually:",
+              "**Status**: Automated GPG signing failed and no fallback commit was detected.",
+              "",
+              "**Manual steps to apply Priority Matrix enhancements:**",
               "",
               "```bash",
               "# Run Priority Matrix synthesis locally",
+              "source .venv/bin/activate",
               "python scripts/synthesize_priority_matrix.py",
               "",
               "# Review and commit changes",
@@ -234,9 +347,14 @@ jobs:
               "git commit -S -m 'FEAT(docs): manual Priority Matrix field synthesis'",
               "```",
               "",
-              "**Failure context**: Automated GPG signing failed - may need key rotation or secret updates.",
+              "**Troubleshooting**: This may indicate GPG key rotation is needed or repository secrets require updates.",
               "",
-              "*This is a fallback notification - no separate PR will be created.*"
+              "**Next steps**:",
+              "1. Check repository secrets: `PMBOT_GPG_PRIVATE`, `PMBOT_GPG_KEY_ID`",
+              "2. Verify GPG key expiration in machine user account",
+              "3. Run synthesis manually if time-sensitive",
+              "",
+              "*This notification only appears when automation completely fails - successful fallbacks are reported above.*"
             ].join("\n");
 
             github.rest.issues.createComment({
