@@ -200,11 +200,13 @@ Examples include a Discord bot/webhook agent and ID.me integration.
 
 **Example Docker Compose Healthcheck:**
 
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-        interval: 5s
-        timeout: 2s
-        retries: 10
+```yaml
+healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+    interval: 5s
+    timeout: 2s
+    retries: 10
+```
 
 ## Healthcheck Implementation Guide
 

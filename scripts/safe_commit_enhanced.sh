@@ -64,8 +64,10 @@ handle_precommit_modifications() {
 
     # Assert clean delta to avoid silent drift
     if ! git diff --quiet --cached; then
-        echo "WARNING: Re-stage incomplete: staged delta remains." >&2
+        echo "ERROR: Re-stage incomplete: staged delta remains." >&2
+        echo "This indicates a critical issue with pre-commit hook modifications." >&2
         git status --porcelain
+        echo "Callers should handle this return code (1) as a fatal error." >&2
         return 1
     fi
 

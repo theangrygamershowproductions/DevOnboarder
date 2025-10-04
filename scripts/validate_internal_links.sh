@@ -69,7 +69,11 @@ validate_file_links() {
 
                 # Use GitHub-style anchor checking with duplicate handling
                 if command -v python3 >/dev/null 2>&1 && [[ -f "scripts/anchors_github.py" ]]; then
-                    anchors_json="$(python3 scripts/anchors_github.py < "$file" 2>/dev/null)" || anchors_json='{"anchors":[]}'
+                    mkdir -p logs
+                    if ! anchors_json="$(python3 scripts/anchors_github.py < "$file" 2>logs/anchors_github_error.log)"; then
+                        echo "WARNING: anchors_github.py failed for $file. See logs/anchors_github_error.log for details." >&2
+                        anchors_json='{"anchors":[]}'
+                    fi
                     if ! printf '%s' "$anchors_json" | grep -q "\"$fragment\""; then
                         echo "ERROR: Broken fragment link in $file"
                         echo "  Link: $link"
@@ -140,8 +144,10 @@ mapfile -t files < <(git ls-files -- '**/*.md' ':!:node_modules/**' ':!:.venv/**
 
 echo "Found ${#files[@]} markdown files to validate"
 
+# Limit parallelism to avoid overwhelming the system
+MAX_PROCS=$(($(nproc)<8 ? $(nproc) : 8))
 # Process files in parallel
-printf "%s\n" "${files[@]}" | xargs -n1 -P"$(nproc)" -I {} bash -c 'validate_file_links "$@"' _ {} "$TEMP_DIR"
+printf "%s\n" "${files[@]}" | xargs -n1 -P"$MAX_PROCS" -I {} bash -c 'validate_file_links "$@"' _ {} "$TEMP_DIR"
 
 # Count actual errors from error log
 if [[ -s "$TEMP_DIR/errors.log" ]]; then
