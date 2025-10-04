@@ -20,6 +20,9 @@ set -euo pipefail
 #   handle_precommit_modifications "$msg" "$files" "$attempt"
 #   # Continues execution even on fatal errors!
 #
+# RECOMMENDED: Use safe_handle_precommit_modifications() instead, which
+# automatically enforces proper error handling and prevents silent failures.
+#
 handle_precommit_modifications() {
     local commit_msg="$1"
     local original_staged_files="$2"
@@ -163,6 +166,9 @@ safe_handle_precommit_modifications() {
 
     echo "=== Safe Pre-commit Handler Wrapper ==="
 
+    # Set environment variable to indicate proper error handling context
+    export SAFE_COMMIT_ERROR_HANDLING=1
+
     if ! handle_precommit_modifications "$commit_msg" "$original_staged_files" "$attempt_number"; then
         local exit_code=$?
         echo "" >&2
@@ -174,6 +180,9 @@ safe_handle_precommit_modifications() {
     fi
 
     echo "✅ Pre-commit modifications handled successfully"
+
+    # Clean up environment variable
+    unset SAFE_COMMIT_ERROR_HANDLING
     return 0
 }
 
@@ -181,5 +190,14 @@ safe_handle_precommit_modifications() {
 # This would be integrated into the existing safe_commit.sh script
 echo "Enhanced safe commit handler functions loaded"
 echo "Available functions:"
-echo "  - handle_precommit_modifications() [requires error checking]"
-echo "  - safe_handle_precommit_modifications() [enforces error checking]"
+echo "  - handle_precommit_modifications() [REQUIRES EXPLICIT ERROR CHECKING]"
+echo "  - safe_handle_precommit_modifications() [RECOMMENDED - ENFORCES ERROR CHECKING]"
+echo ""
+echo "CRITICAL USAGE NOTES:"
+echo "  • handle_precommit_modifications() MUST be called with error checking:"
+echo "    if ! handle_precommit_modifications \"\$msg\" \"\$files\" \"\$attempt\"; then"
+echo "        echo \"FATAL: Pre-commit handling failed\" >&2"
+echo "        exit 1"
+echo "    fi"
+echo "  • safe_handle_precommit_modifications() automatically handles errors (RECOMMENDED)"
+echo "  • Silent failures in commit process can corrupt repository state"
