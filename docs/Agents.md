@@ -19,7 +19,7 @@ updated_at: '2025-09-12'
 visibility: internal
 ---
 
-# Agents — Service and Integration Roles (Codex-Driven Reference)
+# Agent Service and Integration Roles
 
 > **Note**: The up-to-date agent documentation now lives at
 > [agents/index.md](../agents/index.md). The remainder of this file is kept for
@@ -33,7 +33,7 @@ and Codex automation can keep the platform healthy.
 
 ## Table of Contents
 
-- [Agents — Service and Integration Roles (Codex-Driven Reference)](#agents--service-and-integration-roles-codex-driven-reference)
+- [Agent Service and Integration Roles](#agent-service-and-integration-roles)
     - [Table of Contents](#table-of-contents)
     - [Agent Service Map](#agent-service-map)
     - [Auth Server (Backend Agent)](#auth-server-backend-agent)
@@ -49,18 +49,18 @@ and Codex automation can keep the platform healthy.
     - [Session/JWT Agent](#sessionjwt-agent)
     - [Database Service (Postgres)](#database-service-postgres)
     - [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-    - [Planned Agents / Stubs](#planned-agents--stubs)
+    - [Planned Agents and Stubs](#planned-agents-and-stubs)
     - [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
     - [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
     - [CI Wait Example](#ci-wait-example)
     - [Agent Task Checklist](#agent-task-checklist)
-    - [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
+    - [Next Steps and Remediation Timeline](#next-steps-and-remediation-timeline)
     - [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
     - [Environment Variable Reference](#environment-variable-reference)
     - [Codex Observability](#codex-observability)
     - [Security Policy for Tooling and Dependencies](#security-policy-for-tooling-and-dependencies)
     - [How to Extend/Contribute](#how-to-extendcontribute)
-    - [Deprecation \& Retirement](#deprecation--retirement)
+    - [Deprecation and Retirement](#deprecation-and-retirement)
     - [Glossary](#glossary)
     - [Related Docs](#related-docs)
     - [Revision History](#revision-history)
@@ -188,7 +188,7 @@ Examples include Traefik or Nginx for routing, Docker Compose for orchestration,
 
 ---
 
-## Planned Agents / Stubs
+## Planned Agents and Stubs
 
 Examples include a Discord bot/webhook agent and ID.me integration.
 
@@ -251,7 +251,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 ---
 
-## Next Steps / Remediation Timeline
+## Next Steps and Remediation Timeline
 
 - [x] Implement `/health` in Auth
 
@@ -350,7 +350,7 @@ To reduce the attack surface in CI/CD workflows:
 
 ---
 
-## Deprecation & Retirement
+## Deprecation and Retirement
 
 When retiring an agent, mark the section as deprecated with the date and reason.
 Update the health matrix and remove references from code and docs.
