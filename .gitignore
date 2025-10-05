@@ -132,3 +132,15 @@ pmbot_signing_key*
 *.key
 # Test artifacts
 test-*.md
+
+# Security and analysis reports - prevent root pollution
+reports/
+*-report.json
+*-reports/
+security.json
+vulnerabilities.json
+trivy.json
+semgrep.json
+bandit.json
+safety.json
+prospector.json

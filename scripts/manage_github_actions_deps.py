@@ -12,12 +12,28 @@ Standards: Follows DevOnboarder quality and terminal output policies
 
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 import yaml
+
+# Try to import centralized UTC utilities, fallback if not available
+try:
+    sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+    from utils.timestamps import get_utc_timestamp
+
+    def get_current_utc() -> datetime:
+        """Get current UTC timestamp using centralized utility."""
+        # Convert ISO string back to datetime for calculation compatibility
+        return datetime.fromisoformat(get_utc_timestamp().replace("Z", "+00:00"))
+
+except ImportError:
+
+    def get_current_utc() -> datetime:
+        """Fallback UTC timestamp function."""
+        return datetime.now(timezone.utc)
 
 
 class GitHubActionsDependencyManager:
@@ -241,9 +257,7 @@ class GitHubActionsDependencyManager:
             release_datetime = datetime.fromisoformat(
                 release_date.replace("Z", "+00:00")
             )
-            days_old = (
-                datetime.now().astimezone() - release_datetime.astimezone()
-            ).days
+            days_old = (get_current_utc() - release_datetime).days
 
             if days_old > self.max_days:
                 return {

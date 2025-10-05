@@ -149,12 +149,15 @@ def is_safe_redirect_url(url: str) -> bool:
 # In production: loaded from .env.prod via docker-compose or system
 # In CI: loaded from .env.ci via docker-compose
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+_secret_key_raw = os.getenv("JWT_SECRET_KEY")
 APP_ENV = os.getenv("APP_ENV")
-if (not SECRET_KEY or SECRET_KEY == "secret") and APP_ENV != "development":
+if (not _secret_key_raw or _secret_key_raw == "secret") and APP_ENV != "development":
     raise RuntimeError(
         "JWT_SECRET_KEY must be set to a non-default value in production"
     )
+
+# Ensure SECRET_KEY is never None for type checking
+SECRET_KEY: str = _secret_key_raw or "secret"  # Development fallback
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
