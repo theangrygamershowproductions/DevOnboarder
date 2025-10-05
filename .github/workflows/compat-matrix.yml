@@ -1,0 +1,16 @@
+# Placeholder workflow - disabled pending implementation
+name: Compatibility Matrix
+
+# Disabled workflow - only triggers on workflow_dispatch for manual testing
+on:
+  workflow_dispatch:
+
+# Will be implemented in future development phases
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    if: false  # Disabled
+    steps:
+      - name: Placeholder
+        run: echo "Workflow disabled pending implementation"
