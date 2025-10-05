@@ -75,8 +75,8 @@ def test_oauth_creates_new_user(monkeypatch):
         user = db.query(auth_service.User).filter_by(username="newuser").first()
         assert user is not None  # noqa: B101
         assert user.discord_token == "test_token"  # noqa: B101
-        # For Discord-only accounts, password hash is intentionally empty
-        # as these users authenticate via Discord OAuth without local passwords
+        # For Discord-only accounts, password hash is intentionally empty string,
+        # as these users authenticate via Discord OAuth without local passwords.
         assert user.password_hash == ""  # noqa: B106 B101
 
         # Clean up
