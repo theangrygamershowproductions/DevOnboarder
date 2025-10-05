@@ -2,11 +2,7 @@
 Governance Policy Engine for DevOnboarder Framework Phase 3
 
 This module provides the governance policy engine that enables policy-driven
-development with aut                        message=(
-                            f"Script {script_path.name} requires "
-                            f"{required_level.value} governance level, "
-                            f"but has {current_level.value}"
-                        ),ated compliance verification and approval workflows.
+development with automated compliance verification and approval workflows.
 
 Key Features:
 - Policy-based governance with automated compliance checking
