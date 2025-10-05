@@ -11,7 +11,7 @@ omit =
 show_missing = True
 skip_covered = False
 precision = 2
-fail_under = 90
+fail_under = 95
 
 [html]
 directory = logs/htmlcov-discord

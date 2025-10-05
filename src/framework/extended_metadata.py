@@ -41,6 +41,7 @@ class ExecutionFrequency(Enum):
     DAILY = "daily"
     WEEKLY = "weekly"
     MONTHLY = "monthly"
+    ON_DEMAND = "on_demand"
 
 
 class ContextAwarenessLevel(Enum):
@@ -56,6 +57,7 @@ class DecisionMakingCapability(Enum):
     """Decision making capability levels"""
 
     AUTONOMOUS = "autonomous"
+    AUTOMATED = "automated"
     ASSISTED = "assisted"
     MANUAL = "manual"
 
@@ -107,9 +109,9 @@ class PerformanceBaseline:
 
     def __post_init__(self):
         """Validate performance baseline constraints"""
-        valid_durations = ["< 30s", "< 5min", "< 30min", "< 1hour"]
-        valid_memory = ["< 100MB", "< 500MB", "< 1GB"]
-        valid_cpu = ["< 10%", "< 50%", "< 80%"]
+        valid_durations = ["< 30s", "< 1min", "< 5min", "< 10min", "< 30min", "< 1hour"]
+        valid_memory = ["< 50MB", "< 100MB", "< 500MB", "< 1GB"]
+        valid_cpu = ["< 5%", "< 10%", "< 50%", "< 75%", "< 80%"]
 
         if self.target_duration not in valid_durations:
             raise ValueError(f"Invalid target_duration: {self.target_duration}")
@@ -128,8 +130,8 @@ class FailureThreshold:
 
     def __post_init__(self):
         """Validate failure threshold constraints"""
-        valid_error_rates = ["0%", "< 1%", "< 5%", "< 10%"]
-        valid_timeout_rates = ["0%", "< 2%", "< 5%"]
+        valid_error_rates = ["0%", "< 0.1%", "< 1%", "< 2%", "< 5%", "< 10%"]
+        valid_timeout_rates = ["0%", "< 0.1%", "< 0.5%", "< 2%", "< 5%"]
 
         if self.error_rate not in valid_error_rates:
             raise ValueError(f"Invalid error_rate: {self.error_rate}")
@@ -356,6 +358,10 @@ class ExtendedMetadata:
             "ci_cd",
             "quality_assurance",
             "documentation",
+            "testing",
+            "security",
+            "automation",
+            "test",
         ]
         if self.similarity_group not in valid_similarity_groups:
             raise ValueError(f"Invalid similarity_group: {self.similarity_group}")
@@ -369,40 +375,87 @@ class ExtendedMetadata:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ExtendedMetadata":
         """Create from dictionary for deserialization"""
+        # Create a copy to avoid modifying original data
+        data = data.copy()
+
         # Handle datetime conversion
         if isinstance(data.get("last_updated"), str):
             data["last_updated"] = datetime.fromisoformat(data["last_updated"])
 
-        # Convert enum strings back to enums
+        # Convert governance data to GovernanceMetadata object
         if "governance" in data:
-            gov = data["governance"]
-            if isinstance(gov["level"], str):
-                gov["level"] = GovernanceLevel(gov["level"])
-            if "compliance_tags" in gov:
-                gov["compliance_tags"] = [
-                    ComplianceTag(tag) for tag in gov["compliance_tags"]
+            gov_data = data["governance"].copy()
+            if isinstance(gov_data["level"], str):
+                gov_data["level"] = GovernanceLevel(gov_data["level"])
+            if "compliance_tags" in gov_data:
+                gov_data["compliance_tags"] = [
+                    ComplianceTag(tag) for tag in gov_data["compliance_tags"]
                 ]
+            data["governance"] = GovernanceMetadata(**gov_data)
 
+        # Convert observability data to ObservabilityMetadata object
         if "observability" in data:
-            obs = data["observability"]
-            if "metrics" in obs and "execution_frequency" in obs["metrics"]:
-                obs["metrics"]["execution_frequency"] = ExecutionFrequency(
-                    obs["metrics"]["execution_frequency"]
-                )
-            if "logging" in obs and "level" in obs["logging"]:
-                obs["logging"]["level"] = LogLevel(obs["logging"]["level"])
+            obs_data = data["observability"].copy()
 
+            # Convert metrics
+            if "metrics" in obs_data:
+                metrics_data = obs_data["metrics"].copy()
+                if "execution_frequency" in metrics_data:
+                    metrics_data["execution_frequency"] = ExecutionFrequency(
+                        metrics_data["execution_frequency"]
+                    )
+                # Convert performance baseline
+                if "performance_baseline" in metrics_data:
+                    metrics_data["performance_baseline"] = PerformanceBaseline(
+                        **metrics_data["performance_baseline"]
+                    )
+                # Convert failure threshold
+                if "failure_threshold" in metrics_data:
+                    metrics_data["failure_threshold"] = FailureThreshold(
+                        **metrics_data["failure_threshold"]
+                    )
+                obs_data["metrics"] = ObservabilityMetrics(**metrics_data)
+
+            # Convert health check
+            if "health_check" in obs_data:
+                obs_data["health_check"] = HealthCheck(**obs_data["health_check"])
+
+            # Convert logging config
+            if "logging" in obs_data:
+                logging_data = obs_data["logging"].copy()
+                if "level" in logging_data:
+                    logging_data["level"] = LogLevel(logging_data["level"])
+                obs_data["logging"] = LoggingConfig(**logging_data)
+
+            data["observability"] = ObservabilityMetadata(**obs_data)
+
+        # Convert intelligence data to IntelligenceMetadata object
         if "intelligence" in data:
-            intel = data["intelligence"]
-            if "context_awareness" in intel and "level" in intel["context_awareness"]:
-                intel["context_awareness"]["level"] = ContextAwarenessLevel(
-                    intel["context_awareness"]["level"]
+            intel_data = data["intelligence"].copy()
+
+            # Convert context awareness
+            if "context_awareness" in intel_data:
+                ca_data = intel_data["context_awareness"].copy()
+                if "level" in ca_data:
+                    ca_data["level"] = ContextAwarenessLevel(ca_data["level"])
+                intel_data["context_awareness"] = ContextAwareness(**ca_data)
+
+            # Convert automation capability
+            if "automation_capability" in intel_data:
+                ac_data = intel_data["automation_capability"].copy()
+                if "decision_making" in ac_data:
+                    ac_data["decision_making"] = DecisionMakingCapability(
+                        ac_data["decision_making"]
+                    )
+                intel_data["automation_capability"] = AutomationCapability(**ac_data)
+
+            # Convert learning metrics
+            if "learning_metrics" in intel_data:
+                intel_data["learning_metrics"] = LearningMetrics(
+                    **intel_data["learning_metrics"]
                 )
-            automation_cap = intel.get("automation_capability", {})
-            if "decision_making" in automation_cap:
-                automation_cap["decision_making"] = DecisionMakingCapability(
-                    automation_cap["decision_making"]
-                )
+
+            data["intelligence"] = IntelligenceMetadata(**intel_data)
 
         return cls(**data)
 

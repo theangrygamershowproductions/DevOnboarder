@@ -117,6 +117,22 @@ def test_get_user_roles_multiple_guilds(monkeypatch):
                 "verificationType": "government",
             },
         ),
+        (
+            {"10": [], "50": ["mil"]},
+            {
+                "isAdmin": False,
+                "isVerified": True,
+                "verificationType": "military",
+            },
+        ),
+        (
+            {"10": [], "50": ["verified"]},
+            {
+                "isAdmin": False,
+                "isVerified": True,
+                "verificationType": "member",
+            },
+        ),
     ],
 )
 def test_resolve_user_flags_combinations(monkeypatch, roles, expected):

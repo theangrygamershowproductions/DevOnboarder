@@ -3,8 +3,9 @@ Governance Policy Engine for DevOnboarder Framework Phase 3
 
 This module provides the governance policy engine that enables policy-driven
 development with aut                        message=(
-                            f"Script {script_path.name} requires {required_level.value} "
-                            f"governance level, but has {current_level.value}"
+                            f"Script {script_path.name} requires "
+                            f"{required_level.value} governance level, "
+                            f"but has {current_level.value}"
                         ),ated compliance verification and approval workflows.
 
 Key Features:
@@ -75,7 +76,7 @@ class ApprovalRequest:
     """Represents an approval request"""
 
     script_path: Path
-    metadata: ExtendedMetadata
+    metadata: Optional[ExtendedMetadata]
     requested_by: str
     requested_at: datetime
     reason: str
@@ -125,7 +126,7 @@ class MetadataRequiredRule(PolicyRule):
                     severity=PolicyViolationSeverity.HIGH,
                     message=f"Script {script_path.name} missing required metadata",
                     script_path=script_path,
-                    remediation_hint="Create metadata using create_default_script_metadata()",
+                    remediation_hint="Use create_default_script_metadata()",
                 )
             ]
         return []
@@ -163,8 +164,11 @@ class GovernanceLevelRule(PolicyRule):
                         PolicyViolation(
                             violation_type=PolicyViolationType.GOVERNANCE_LEVEL_INSUFFICIENT,
                             severity=self._get_severity_for_level(required_level),
-                            message=f"Script {script_path.name} requires {required_level.value} "
-                            f"governance level, but has {current_level.value}",
+                            message=(
+                                f"Script {script_path.name} requires "
+                                f"{required_level.value} governance level, "
+                                f"but has {current_level.value}"
+                            ),
                             script_path=script_path,
                             metadata=metadata,
                             remediation_hint=(
@@ -235,7 +239,7 @@ class ComplianceTagRule(PolicyRule):
                             script_path=script_path,
                             metadata=metadata,
                             remediation_hint=(
-                                f"Add '{missing_tag.value}' to governance.compliance_tags"
+                                f"Add '{missing_tag.value}' to compliance_tags"
                             ),
                         )
                     )
@@ -325,7 +329,7 @@ class AuditOverdueRule(PolicyRule):
                     violation_type=PolicyViolationType.AUDIT_OVERDUE,
                     severity=self._get_severity_for_overdue_days(days_overdue),
                     message=(
-                        f"Script {script_path.name} audit overdue by {days_overdue} days"
+                        f"Script {script_path.name} audit overdue by {days_overdue}d"
                     ),
                     script_path=script_path,
                     metadata=metadata,
@@ -367,8 +371,47 @@ class ApprovalManager:
 
                 with open(self.approvals_file) as f:
                     data = yaml.safe_load(f) or {}
-                # TODO: Implement proper deserialization
-                logger.debug(f"Loaded {len(data)} approvals")
+
+                # Deserialize approval requests
+                for script_path_str, approval_data in data.items():
+                    try:
+                        # Convert string dates back to datetime
+                        if approval_data.get("requested_at"):
+                            approval_data["requested_at"] = datetime.fromisoformat(
+                                approval_data["requested_at"]
+                            )
+                        if approval_data.get("approved_at"):
+                            approval_data["approved_at"] = datetime.fromisoformat(
+                                approval_data["approved_at"]
+                            )
+
+                        # Create ApprovalRequest (simplified metadata deserialization)
+                        # In production, would need full metadata deserialization
+                        request = ApprovalRequest(
+                            script_path=Path(script_path_str),
+                            metadata=None,  # Simplified for now
+                            requested_by=approval_data["requested_by"],
+                            requested_at=approval_data["requested_at"],
+                            reason=approval_data["reason"],
+                            governance_level=GovernanceLevel(
+                                approval_data["governance_level"]
+                            ),
+                            compliance_tags=[
+                                ComplianceTag(tag)
+                                for tag in approval_data["compliance_tags"]
+                            ],
+                            approved=approval_data.get("approved"),
+                            approved_by=approval_data.get("approved_by"),
+                            approved_at=approval_data.get("approved_at"),
+                            approval_notes=approval_data.get("approval_notes"),
+                        )
+                        self.approvals[script_path_str] = request
+                    except Exception as e:
+                        logger.warning(
+                            f"Failed to deserialize approval for {script_path_str}: {e}"
+                        )
+
+                logger.debug(f"Loaded {len(self.approvals)} approvals")
             except Exception as e:
                 logger.warning(f"Failed to load approvals: {e}")
 
@@ -425,11 +468,51 @@ class ApprovalManager:
         request = self.approvals[key]
         return request.approved is True
 
+    def add_approval(self, request: ApprovalRequest) -> None:
+        """Add an approval request directly to the manager"""
+        key = str(request.script_path)
+        self.approvals[key] = request
+        logger.debug(f"Added approval request for {request.script_path.name}")
+
+    def save_approvals(self):
+        """Public method to save approvals to file"""
+        self._save_approvals()
+
     def _save_approvals(self):
         """Save approvals to file"""
         self.approvals_file.parent.mkdir(parents=True, exist_ok=True)
-        # TODO: Implement proper serialization
-        logger.debug("Approvals saved")
+
+        try:
+            import yaml
+
+            # Serialize approvals to YAML-compatible format
+            data = {}
+            for script_path_str, approval in self.approvals.items():
+                data[script_path_str] = {
+                    "script_path": str(approval.script_path),
+                    "requested_by": approval.requested_by,
+                    "requested_at": approval.requested_at.isoformat(),
+                    "reason": approval.reason,
+                    "governance_level": approval.governance_level.value,
+                    "compliance_tags": [tag.value for tag in approval.compliance_tags],
+                    "approved": approval.approved,
+                    "approved_by": approval.approved_by,
+                    "approved_at": (
+                        approval.approved_at.isoformat()
+                        if approval.approved_at
+                        else None
+                    ),
+                    "approval_notes": approval.approval_notes,
+                }
+
+            with open(self.approvals_file, "w") as f:
+                yaml.safe_dump(data, f, default_flow_style=False, sort_keys=True)
+
+            logger.debug(
+                f"Saved {len(self.approvals)} approvals to {self.approvals_file}"
+            )
+        except Exception as e:
+            logger.error(f"Failed to save approvals: {e}")
 
 
 class GovernancePolicyEngine:
@@ -555,8 +638,8 @@ class GovernancePolicyEngine:
         compliant_scripts = total_scripts - len(compliance_results)
 
         # Count violations by type and severity
-        violation_counts = {}
-        severity_counts = {}
+        violation_counts: Dict[str, int] = {}
+        severity_counts: Dict[str, int] = {}
 
         for violations in compliance_results.values():
             for violation in violations:

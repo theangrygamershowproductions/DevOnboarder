@@ -1,0 +1,76 @@
+# Extended Metadata for enhanced_token_loader.sh
+# Critical security script with maximum governance requirements
+
+script_info:
+  name: "enhanced_token_loader.sh"
+  version: "2.1.0"
+  last_updated: "2025-10-04T12:00:00Z"
+
+# Existing Priority Matrix Bot fields (maintained)
+similarity_group: "ci_cd"
+content_uniqueness_score: 0.92
+merge_candidate: false
+
+# Phase 3 Extensions: Governance
+governance:
+  level: "critical"
+  compliance_tags:
+    - "security"
+    - "audit"
+    - "privacy"
+  audit_frequency_days: 30
+  approval_required: true
+  governance_owner: "team_security"
+  policy_exceptions: []
+
+# Phase 3 Extensions: Observability
+observability:
+  metrics:
+    execution_frequency: "daily"
+    performance_baseline:
+      target_duration: "< 5min"
+      memory_usage: "< 500MB"
+      cpu_usage: "< 50%"
+    failure_threshold:
+      error_rate: "0%"
+      timeout_rate: "0%"
+    monitoring_alerts:
+      - "performance_degradation"
+      - "failure_spike"
+      - "security_anomaly"
+      - "resource_exhaustion"
+  health_check:
+    endpoint: null
+    interval_seconds: null
+    timeout_seconds: null
+  logging:
+    level: "INFO"
+    structured: true
+    retention_days: 90
+
+# Phase 3 Extensions: Intelligence
+intelligence:
+  context_awareness:
+    level: "high"
+    environmental_factors:
+      - "git_branch_state"
+      - "ci_pipeline_status"
+      - "deployment_environment"
+      - "system_load"
+    decision_inputs:
+      - "historical_performance"
+      - "current_system_state"
+      - "security_context"
+  automation_capability:
+    decision_making: "assisted"
+    self_healing: false
+    adaptive_behavior: false
+    learning_enabled: true
+  integration_points:
+    - "ci_pipeline"
+    - "deployment_automation"
+    - "monitoring_systems"
+  learning_metrics:
+    success_rate_tracking: true
+    user_feedback_integration: true
+    performance_optimization: true

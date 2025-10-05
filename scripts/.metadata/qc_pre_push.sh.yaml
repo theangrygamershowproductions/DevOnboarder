@@ -1,0 +1,68 @@
+# Extended Metadata for qc_pre_push.sh
+# Quality assurance script with moderate governance requirements
+
+script_info:
+  name: "qc_pre_push.sh"
+  version: "4.1.2"
+  last_updated: "2025-10-04T10:15:00Z"
+
+# Existing Priority Matrix Bot fields (maintained)
+similarity_group: "quality_assurance"
+content_uniqueness_score: 0.88
+merge_candidate: false
+
+# Phase 3 Extensions: Governance
+governance:
+  level: "medium"
+  compliance_tags:
+    - "security"
+  audit_frequency_days: 180
+  approval_required: false
+  governance_owner: "team_devops"
+  policy_exceptions: []
+
+# Phase 3 Extensions: Observability
+observability:
+  metrics:
+    execution_frequency: "daily"
+    performance_baseline:
+      target_duration: "< 5min"
+      memory_usage: "< 500MB"
+      cpu_usage: "< 50%"
+    failure_threshold:
+      error_rate: "< 5%"
+      timeout_rate: "< 2%"
+    monitoring_alerts:
+      - "performance_degradation"
+      - "failure_spike"
+  health_check:
+    endpoint: null
+    interval_seconds: null
+    timeout_seconds: null
+  logging:
+    level: "INFO"
+    structured: true
+    retention_days: 30
+
+# Phase 3 Extensions: Intelligence
+intelligence:
+  context_awareness:
+    level: "medium"
+    environmental_factors:
+      - "git_branch_state"
+      - "ci_pipeline_status"
+    decision_inputs:
+      - "historical_performance"
+      - "current_system_state"
+  automation_capability:
+    decision_making: "manual"
+    self_healing: false
+    adaptive_behavior: false
+    learning_enabled: false
+  integration_points:
+    - "pre_commit_hooks"
+    - "ci_pipeline"
+  learning_metrics:
+    success_rate_tracking: true
+    user_feedback_integration: false
+    performance_optimization: true

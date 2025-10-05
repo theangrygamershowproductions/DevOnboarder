@@ -129,10 +129,11 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     fi
 
     # Test Discord service with isolated coverage (95% threshold)
+    # Run both Discord test files together for comprehensive coverage
     if COVERAGE_FILE=logs/.coverage_discord python -m pytest \
         --cov --cov-config=config/.coveragerc.discord \
         --cov-fail-under=95 --quiet \
-        tests/test_discord_integration.py 2>/dev/null; then
+        tests/test_discord_integration_api.py tests/test_discord_integration_coverage.py 2>/dev/null; then
         COVERAGE_DETAILS+="PASS Discord: 95%+ "
     else
         COVERAGE_SUCCESS=false

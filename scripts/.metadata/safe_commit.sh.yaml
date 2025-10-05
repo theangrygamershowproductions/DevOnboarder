@@ -1,0 +1,71 @@
+# Extended Metadata for safe_commit.sh
+# High-security script with comprehensive governance requirements
+
+script_info:
+  name: "safe_commit.sh"
+  version: "3.2.1"
+  last_updated: "2025-10-04T15:30:00Z"
+
+# Existing Priority Matrix Bot fields (maintained)
+similarity_group: "quality_assurance"
+content_uniqueness_score: 0.95
+merge_candidate: false
+
+# Phase 3 Extensions: Governance
+governance:
+  level: "high"
+  compliance_tags:
+    - "security"
+    - "audit"
+  audit_frequency_days: 90
+  approval_required: false
+  governance_owner: "team_devops"
+  policy_exceptions: []
+
+# Phase 3 Extensions: Observability
+observability:
+  metrics:
+    execution_frequency: "daily"
+    performance_baseline:
+      target_duration: "< 30s"
+      memory_usage: "< 100MB"
+      cpu_usage: "< 10%"
+    failure_threshold:
+      error_rate: "< 1%"
+      timeout_rate: "< 2%"
+    monitoring_alerts:
+      - "performance_degradation"
+      - "failure_spike"
+      - "security_anomaly"
+  health_check:
+    endpoint: null
+    interval_seconds: null
+    timeout_seconds: null
+  logging:
+    level: "INFO"
+    structured: true
+    retention_days: 30
+
+# Phase 3 Extensions: Intelligence
+intelligence:
+  context_awareness:
+    level: "high"
+    environmental_factors:
+      - "git_branch_state"
+      - "ci_pipeline_status"
+    decision_inputs:
+      - "historical_performance"
+      - "current_system_state"
+      - "security_context"
+  automation_capability:
+    decision_making: "assisted"
+    self_healing: true
+    adaptive_behavior: false
+    learning_enabled: true
+  integration_points:
+    - "pre_commit_hooks"
+    - "ci_pipeline"
+  learning_metrics:
+    success_rate_tracking: true
+    user_feedback_integration: false
+    performance_optimization: true
