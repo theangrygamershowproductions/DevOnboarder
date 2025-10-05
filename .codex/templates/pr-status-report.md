@@ -217,7 +217,7 @@ Before pushing changes, ensure:
 
 - [ ] Commit messages follow conventional format
 
-### 🆘 Need Help?
+### 🆘 Need Help
 
 - **Infrastructure Issues:** Check [CI Troubleshooting Guide]({{troubleshooting_url}})
 

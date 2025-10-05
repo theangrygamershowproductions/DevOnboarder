@@ -69,8 +69,8 @@ recommend_token_for_operation() {
     esac
 }
 
-# Function to get GitHub token following DevOnboarder hierarchy
-get_github_token() {
+# Function to get appropriate scoped token following DevOnboarder hierarchy
+get_scoped_token() {
     # DevOnboarder token hierarchy for GitHub issue operations
     # Based on .codex/tokens/token_scope_map.yaml
     local issue_operation_tokens=(
@@ -84,73 +84,84 @@ get_github_token() {
         "SECURITY_AUDIT_TOKEN"        # SPECIALIZED: Security policy enforcement
         "VALIDATE_PERMISSIONS_TOKEN"   # SPECIALIZED: Bot permissions validation
         "CI_BOT_TOKEN"                # DEPRECATED: Legacy bot operations (scoped)
-        "GITHUB_TOKEN"                # PROHIBITED: Broad permissions (fallback only)
     )
 
     echo "Checking DevOnboarder token hierarchy for issue operations..."
 
     for token_name in "${issue_operation_tokens[@]}"; do
         local token_value="${!token_name}"
-        if [[ -n "$token_value" ]]; then
+        # Skip placeholder values that indicate unconfigured tokens
+        if [[ -n "$token_value" && "$token_value" != "CHANGE_ME_"* ]]; then
             case "$token_name" in
                 "CI_ISSUE_AUTOMATION_TOKEN")
-                    echo "Using PRIMARY token: $token_name (Main CI automation)"
+                    echo "Selected PRIMARY token: $token_name (Main CI automation)"
                     ;;
                 "CI_ISSUE_TOKEN"|"DIAGNOSTICS_BOT_KEY"|"CI_HEALTH_KEY"|"CLEANUP_CI_FAILURE_KEY"|"AAR_BOT_TOKEN"|"REVIEW_KNOWN_ERRORS_KEY"|"SECURITY_AUDIT_TOKEN"|"VALIDATE_PERMISSIONS_TOKEN")
-                    echo "Using SPECIALIZED token: $token_name (Task-scoped)"
+                    echo "Selected SPECIALIZED token: $token_name (Task-scoped)"
                     ;;
                 "CI_BOT_TOKEN")
-                    echo "Using DEPRECATED token: $token_name (Legacy - consider upgrading)"
-                    ;;
-                "GITHUB_TOKEN")
-                    echo "Using PROHIBITED token: $token_name (Fallback only - violates No Default Token Policy)"
+                    echo "Selected DEPRECATED token: $token_name (Legacy - consider upgrading)"
                     ;;
             esac
-            export GITHUB_TOKEN="$token_value"
+            # Return the token value without setting GITHUB_TOKEN
+            echo "$token_value"
             return 0
         fi
     done
 
-    echo "ERROR: No GitHub token found in DevOnboarder hierarchy"
-    echo "Expected tokens (in priority order):"
-    echo "  1. CI_ISSUE_AUTOMATION_TOKEN (primary)"
-    echo "  2. Task-specific tokens (CI_ISSUE_TOKEN, DIAGNOSTICS_BOT_KEY, etc.)"
-    echo "  3. CI_BOT_TOKEN (deprecated)"
-    echo "  4. GITHUB_TOKEN (prohibited - fallback only)"
-    echo
-    echo "See .codex/tokens/token_scope_map.yaml for complete token registry"
+    # Fallback to GITHUB_TOKEN in CI environments when scoped tokens aren't configured
+    if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]] && [[ -n "$GITHUB_TOKEN" ]]; then
+        echo "WARNING: Using GITHUB_TOKEN fallback (scoped tokens not configured)" >&2
+        echo "This violates No Default Token Policy but is necessary for CI operation" >&2
+        echo "$GITHUB_TOKEN"
+        return 0
+    fi
+
+    echo "ERROR: No usable token found in DevOnboarder hierarchy" >&2
+    echo "Expected tokens (in priority order):" >&2
+    echo "  1. CI_ISSUE_AUTOMATION_TOKEN (primary)" >&2
+    echo "  2. Task-specific tokens (CI_ISSUE_TOKEN, DIAGNOSTICS_BOT_KEY, etc.)" >&2
+    echo "  3. CI_BOT_TOKEN (deprecated)" >&2
+    echo "  4. GITHUB_TOKEN (CI fallback only - violates No Default Token Policy)" >&2
+    echo "See .codex/tokens/token_scope_map.yaml for complete token registry" >&2
     return 1
 }
 
-# Function to validate required environment
-validate_environment() {
-    if ! get_github_token; then
-        exit 1
-    fi
+# Global variable to store the selected scoped token
+DEVONBOARDER_SCOPED_TOKEN=""
 
+# Function to validate required environment and get scoped token
+validate_environment() {
     if ! command -v gh >/dev/null 2>&1; then
         echo "ERROR: GitHub CLI (gh) not found"
         exit 1
     fi
 
-    # Test GitHub CLI authentication - enhanced for CI environments
+    # Get the appropriate scoped token from DevOnboarder hierarchy
+    DEVONBOARDER_SCOPED_TOKEN=$(get_scoped_token)
+    if [[ -z "$DEVONBOARDER_SCOPED_TOKEN" ]]; then
+        echo "ERROR: Cannot proceed without a scoped token from DevOnboarder hierarchy"
+        exit 1
+    fi
+
+    # Test the scoped token works - don't overwrite GITHUB_TOKEN
     if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]]; then
-        # In CI environments, GITHUB_TOKEN should work automatically
-        echo "CI environment detected - verifying token works with basic API call"
-        if ! gh api user >/dev/null 2>&1; then
-            echo "ERROR: GitHub CLI cannot authenticate in CI environment"
-            echo "GITHUB_TOKEN is set but gh API calls fail"
-            echo "This may indicate token permission issues"
+        echo "CI environment detected - testing scoped token"
+        if ! GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh api user >/dev/null 2>&1; then
+            echo "ERROR: Scoped token cannot authenticate with GitHub API"
+            echo "Token may lack required permissions for issue operations"
             exit 1
         else
-            echo "GitHub CLI authentication verified in CI environment"
+            echo "Scoped token authentication verified in CI environment"
         fi
     else
-        # In local environments, check traditional auth status
-        if ! gh auth status >/dev/null 2>&1; then
-            echo "ERROR: GitHub CLI not authenticated"
-            echo "Run 'gh auth login' or set GITHUB_TOKEN environment variable"
+        echo "Local environment detected - testing scoped token"
+        if ! GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh api user >/dev/null 2>&1; then
+            echo "ERROR: Scoped token cannot authenticate with GitHub API"
+            echo "Ensure the token has appropriate permissions for issue operations"
             exit 1
+        else
+            echo "Scoped token authentication verified in local environment"
         fi
     fi
 }
@@ -165,9 +176,9 @@ handle_issue_comment() {
         exit 1
     fi
 
-    echo "Adding comment to issue #$issue_number"
+    echo "Adding comment to issue #$issue_number using scoped token"
 
-    if gh issue comment "$issue_number" --body "$comment_body"; then
+    if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue comment "$issue_number" --body "$comment_body"; then
         echo "Successfully commented on issue #$issue_number"
         return 0
     else
@@ -187,16 +198,16 @@ handle_issue_close() {
         exit 1
     fi
 
-    echo "Closing issue #$issue_number"
+    echo "Closing issue #$issue_number using scoped token"
 
     # Enhanced two-step process for DevOnboarder terminal output policy compliance
     if [[ -n "$template_file" && -f "$template_file" ]]; then
         echo "Using template file for detailed comment: $template_file"
         # Step 1: Add detailed comment from template file
-        if gh issue comment "$issue_number" --body-file "$template_file"; then
+        if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue comment "$issue_number" --body-file "$template_file"; then
             echo "Successfully added detailed comment from template"
             # Step 2: Simple closure
-            if gh issue close "$issue_number" --reason completed; then
+            if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue close "$issue_number" --reason completed; then
                 echo "Successfully closed issue #$issue_number with template comment"
                 return 0
             else
@@ -210,7 +221,7 @@ handle_issue_close() {
     elif [[ -n "$close_comment" ]]; then
         # Legacy single-step process (for simple comments only)
         echo "Using simple comment closure (legacy mode)"
-        if gh issue close "$issue_number" --comment "$close_comment"; then
+        if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue close "$issue_number" --comment "$close_comment"; then
             echo "Successfully closed issue #$issue_number with comment"
             return 0
         else
@@ -219,7 +230,7 @@ handle_issue_close() {
         fi
     else
         # Simple closure without comment
-        if gh issue close "$issue_number" --reason completed; then
+        if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue close "$issue_number" --reason completed; then
             echo "Successfully closed issue #$issue_number"
             return 0
         else
@@ -235,9 +246,9 @@ handle_issue_list() {
     local state="${2:-open}"
     local json_fields="${3:-number,title,labels}"
 
-    echo "Searching for issues with query: $search_query"
+    echo "Searching for issues with query: $search_query using scoped token"
 
-    if gh issue list --search "$search_query" --state "$state" --json "$json_fields"; then
+    if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh issue list --search "$search_query" --state "$state" --json "$json_fields"; then
         echo "Successfully retrieved issue list"
         return 0
     else
@@ -256,9 +267,9 @@ handle_pr_comment() {
         exit 1
     fi
 
-    echo "Adding comment to PR #$pr_number"
+    echo "Adding comment to PR #$pr_number using scoped token"
 
-    if gh pr comment "$pr_number" --body "$comment_body"; then
+    if GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh pr comment "$pr_number" --body "$comment_body"; then
         echo "Successfully commented on PR #$pr_number"
         return 0
     else
@@ -311,12 +322,13 @@ main() {
             echo "  list <search_query> [state] [json_fields] - List issues matching query"
             echo "  pr-comment <pr_number> <comment_body>    - Add comment to pull request"
             echo
-            echo "DevOnboarder Token Hierarchy:"
+            echo "DevOnboarder Token Hierarchy (No Default Token Policy):"
             echo "  PRIMARY: CI_ISSUE_AUTOMATION_TOKEN (main CI automation)"
             echo "  SPECIALIZED: CI_ISSUE_TOKEN, DIAGNOSTICS_BOT_KEY, CI_HEALTH_KEY, etc."
             echo "  DEPRECATED: CI_BOT_TOKEN (legacy)"
-            echo "  PROHIBITED: GITHUB_TOKEN (fallback only)"
+            echo "  PROHIBITED: GITHUB_TOKEN (violates No Default Token Policy)"
             echo
+            echo "This script uses scoped tokens without overwriting GITHUB_TOKEN"
             echo "See .codex/tokens/token_scope_map.yaml for complete token registry"
             echo
             recommend_token_for_operation "general"

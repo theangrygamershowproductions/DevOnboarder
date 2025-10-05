@@ -23,7 +23,7 @@ visibility: internal
 
 This guide explains how to use the `"conclusion": "FAILURE"` filter to focus CI analysis on relevant failures only.
 
-## Why Use Failure Filters?
+## Why Use Failure Filters
 
 When analyzing CI issues, filtering by `"conclusion": "FAILURE"` helps:
 

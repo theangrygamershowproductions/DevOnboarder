@@ -1461,3 +1461,14 @@ def test_password_truncation_for_bcrypt():
         "/api/login", json={"username": "longpass_user", "password": "wrong_password"}
     )
     assert resp.status_code == 400
+
+
+def test_validate_password_none_raises_exception():
+    """Test that _validate_password_for_bcrypt raises HTTPException for None."""
+    with pytest.raises(auth_service.HTTPException) as exc_info:
+        auth_service._validate_password_for_bcrypt(None)
+    assert exc_info.value.status_code == 400
+    assert "Password required" in str(exc_info.value.detail)
+
+
+# Test removed - User model doesn't have discord_user_id field

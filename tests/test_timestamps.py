@@ -10,6 +10,11 @@ from src.utils.timestamps import (
     get_local_timestamp_for_filename,
     validate_timestamp_format,
 )
+from src.utils.timestamp_fallback import (
+    get_utc_timestamp as fallback_get_utc_timestamp,
+    get_utc_display_timestamp as fallback_get_utc_display_timestamp,
+    get_local_timestamp_for_filename as fallback_get_local_timestamp_for_filename,
+)
 
 
 class TestUTCTimestamps:
@@ -202,4 +207,73 @@ class TestUTCTimestamps:
             mock_datetime.now.return_value = mock_local_time
 
             result = get_local_timestamp_for_filename()
+            assert result == "20250921_190626"
+
+
+class TestTimestampFallback:
+    """Test timestamp fallback functions for standalone script execution."""
+
+    def test_fallback_get_utc_timestamp_format(self):
+        """Test fallback get_utc_timestamp returns correct ISO 8601 format."""
+        result = fallback_get_utc_timestamp()
+
+        # Should be in format: 2025-09-21T19:06:26Z
+        assert len(result) == 20  # YYYY-MM-DDTHH:MM:SSZ
+        assert result.endswith("Z")
+        assert "T" in result
+
+        # Should be parseable as ISO format
+        parsed = datetime.fromisoformat(result.replace("Z", "+00:00"))
+        assert parsed.tzinfo is not None
+
+    def test_fallback_get_utc_display_timestamp_format(self):
+        """Test fallback get_utc_display_timestamp returns human-readable format."""
+        result = fallback_get_utc_display_timestamp()
+
+        # Should be in format: 2025-09-21 19:06:26 UTC
+        assert len(result) == 23  # YYYY-MM-DD HH:MM:SS UTC
+        assert result.endswith(" UTC")
+        assert " " in result
+
+    def test_fallback_get_local_timestamp_for_filename_format(self):
+        """Test fallback local timestamp format for filenames."""
+        result = fallback_get_local_timestamp_for_filename()
+
+        # Should be in format: 20250921_190626
+        assert len(result) == 15  # YYYYMMDD_HHMMSS
+        assert "_" in result
+        assert result.replace("_", "").isdigit()
+
+    def test_fallback_functions_use_utc_timezone(self):
+        """Test that fallback timestamp functions use UTC timezone."""
+        # Mock datetime.now to return a specific time
+        mock_time = datetime(2025, 9, 21, 19, 6, 26, 123456, tzinfo=timezone.utc)
+
+        with patch("src.utils.timestamp_fallback.datetime") as mock_datetime:
+            mock_datetime.now.return_value = mock_time
+
+            # Test fallback get_utc_timestamp
+            ts = fallback_get_utc_timestamp()
+            assert ts == "2025-09-21T19:06:26Z"
+
+    def test_fallback_display_timestamp_uses_utc(self):
+        """Test that fallback display timestamp uses UTC timezone."""
+        # Mock datetime.now to return a specific time
+        mock_time = datetime(2025, 9, 21, 19, 6, 26, tzinfo=timezone.utc)
+
+        with patch("src.utils.timestamp_fallback.datetime") as mock_datetime:
+            mock_datetime.now.return_value = mock_time
+
+            # Test fallback get_utc_display_timestamp
+            display_ts = fallback_get_utc_display_timestamp()
+            assert display_ts == "2025-09-21 19:06:26 UTC"
+
+    def test_fallback_local_timestamp_uses_local_time(self):
+        """Test that fallback filename timestamp uses local time (not UTC)."""
+        mock_local_time = datetime(2025, 9, 21, 19, 6, 26)
+
+        with patch("src.utils.timestamp_fallback.datetime") as mock_datetime:
+            mock_datetime.now.return_value = mock_local_time
+
+            result = fallback_get_local_timestamp_for_filename()
             assert result == "20250921_190626"

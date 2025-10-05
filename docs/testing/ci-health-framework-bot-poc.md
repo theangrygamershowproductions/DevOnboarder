@@ -10,7 +10,7 @@ consolidation_priority: P3
 
 This document outlines our proof of concept for implementing the first framework-specific bot: the **CI Health Framework Bot**. This will validate our framework-based bot architecture before scaling to other frameworks.
 
-## Why CI Health Framework for POC?
+## Why CI Health Framework for POC
 
 ### **Strategic Advantages**
 

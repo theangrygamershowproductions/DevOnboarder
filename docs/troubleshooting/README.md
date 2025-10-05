@@ -42,7 +42,7 @@ This directory contains troubleshooting guides for common DevOnboarder issues.
 | TypeScript compilation fails | Fix file permissions with container UID | [Docker Container Health Troubleshooting](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md) |
 | Health check scripts fail | Use ES module syntax (`import` not `require`) | [Docker Container Health Troubleshooting](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md) |
 
-### Need Help?
+### Need Help
 
 If your issue isn't covered here:
 

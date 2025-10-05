@@ -1537,3 +1537,99 @@ def test_websocket_error_handling():
         )
         assert result.returncode == 0
         assert "test output" in result.stdout
+
+
+def test_dashboard_service_base_dir_fallback():
+    """Test base directory fallback when no pyproject.toml found."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+
+        # Don't create pyproject.toml to trigger fallback
+        dashboard = DashboardService(base_dir=temp_path)
+
+        # Should fallback to provided directory
+        assert dashboard.base_dir == temp_path
+
+
+def test_dashboard_service_project_root_detection_fallback():
+    """Test project root detection by searching up directory tree with fallback."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+
+        # Create nested directory structure
+        nested_dir = temp_path / "nested" / "dir"
+        nested_dir.mkdir(parents=True)
+
+        # Create pyproject.toml in root
+        (temp_path / "pyproject.toml").touch()
+
+        # Change to nested directory and create dashboard service
+        original_cwd = os.getcwd()
+        try:
+            os.chdir(nested_dir)
+            dashboard = DashboardService()
+            # Should find project root with pyproject.toml
+            assert dashboard.base_dir == temp_path
+        finally:
+            os.chdir(original_cwd)
+
+
+@pytest.mark.asyncio
+async def test_execute_script_invalid_path_error():
+    """Test script execution with invalid path raises HTTPException."""
+    from src.devonboarder.dashboard_service import DashboardService
+    from fastapi import HTTPException
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        dashboard = DashboardService(base_dir=temp_path)
+
+        # Test invalid script path with .. in path
+        request = ExecutionRequest(script_path="../invalid/path/script.sh")
+        with pytest.raises(HTTPException) as exc_info:
+            await dashboard.execute_script(request)
+
+        assert exc_info.value.status_code == 403
+        assert "Invalid script path" in str(exc_info.value.detail)
+
+
+@pytest.mark.asyncio
+async def test_execute_script_access_denied_error():
+    """Test script execution with path outside allowed directories."""
+    from src.devonboarder.dashboard_service import DashboardService
+    from fastapi import HTTPException
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        dashboard = DashboardService(base_dir=temp_path)
+
+        # Test absolute path outside base directory
+        outside_path = "/tmp/outside_script.sh"
+        request = ExecutionRequest(script_path=outside_path)
+        with pytest.raises(HTTPException) as exc_info:
+            await dashboard.execute_script(request)
+
+        assert exc_info.value.status_code == 403
+        assert "Access denied" in str(exc_info.value.detail)
+
+
+@pytest.mark.asyncio
+async def test_execute_script_not_found_error_coverage():
+    """Test script execution with non-existent script for missing coverage."""
+    from src.devonboarder.dashboard_service import DashboardService
+    from fastapi import HTTPException
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        scripts_dir = temp_path / "scripts"
+        scripts_dir.mkdir()
+
+        dashboard = DashboardService(base_dir=temp_path)
+
+        # Test non-existent script (this should hit line 274 - script not found)
+        request = ExecutionRequest(script_path="scripts/nonexistent.sh")
+        with pytest.raises(HTTPException) as exc_info:
+            await dashboard.execute_script(request)
+
+        assert exc_info.value.status_code == 404
+        assert "Script not found" in str(exc_info.value.detail)
