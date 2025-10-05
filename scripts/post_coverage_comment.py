@@ -29,14 +29,17 @@ def read_js_coverage(path: str) -> float | None:
 
 def read_py_coverage(path: str = ".coverage") -> float | None:
     """Return total coverage percentage from a coverage data file."""
-    # Check for coverage file in configured location first (logs/.coverage)
-    coverage_paths = ["logs/.coverage", path]
-
-    coverage_file = None
-    for check_path in coverage_paths:
-        if os.path.exists(check_path):
-            coverage_file = check_path
-            break
+    # If a specific path is provided, use it directly
+    if path != ".coverage" and os.path.exists(path):
+        coverage_file = path
+    else:
+        # Check for coverage file in configured location first (logs/.coverage)
+        coverage_paths = ["logs/.coverage", path]
+        coverage_file = None
+        for check_path in coverage_paths:
+            if os.path.exists(check_path):
+                coverage_file = check_path
+                break
 
     if coverage_file is None:
         return None
@@ -59,10 +62,26 @@ def main() -> None:
 
     results: dict[str, float] = {}
 
-    py_cov = read_py_coverage()
-    if py_cov is not None:
-        results["Backend"] = py_cov
+    # Service-specific Python coverage files
+    py_services = {
+        "XP": "logs/.coverage_xp",
+        "Discord": "logs/.coverage_discord",
+        "Auth": "logs/.coverage_auth",
+        "Framework": "logs/.coverage",  # Overall coverage includes Framework
+    }
 
+    for name, path in py_services.items():
+        pct = read_py_coverage(path)
+        if pct is not None:
+            results[name] = pct
+
+    # Fallback to overall backend coverage if no services found
+    if not any(key in results for key in ["XP", "Discord", "Auth", "Framework"]):
+        py_cov = read_py_coverage()
+        if py_cov is not None:
+            results["Backend"] = py_cov
+
+    # JavaScript coverage files
     js_paths = {
         "Frontend": "frontend/coverage/coverage-summary.json",
         "Bot": "bot/coverage/coverage-summary.json",
