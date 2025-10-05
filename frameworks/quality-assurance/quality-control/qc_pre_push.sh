@@ -46,12 +46,18 @@ if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
     echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
         echo "   - $file"
     done
-    read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
-    if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
-        git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
-        echo "Files tracked - validation will include all files"
+
+    # Non-blocking prompt with timeout for automated environments
+    echo "Add files to git tracking for validation? [Y/n] (10s timeout, default: n)"
+    if read -r -t 10 -p "> " track_files 2>/dev/null; then
+        if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
+            git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' | while IFS= read -r file; do git add "$file"; done
+            echo "Files tracked - validation will include all files"
+        else
+            echo "Continuing with validation blind spots present"
+        fi
     else
-        echo "Continuing with validation blind spots present"
+        echo "Timeout reached - continuing with validation blind spots present"
     fi
 fi
 
@@ -73,7 +79,7 @@ declare -a FAILURES=()
 
 # 1. YAML Linting
 echo "Checking YAML files..."
-if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
+if timeout 30 yamllint -c .github/.yamllint-config .github/workflows/; then
     CHECKS+=("SUCCESS: YAML lint")
 else
     CHECKS+=("FAILED: YAML lint")
@@ -82,7 +88,7 @@ fi
 
 # 2. Python Code Quality
 echo "Checking Python code quality..."
-if python -m ruff check . --quiet 2>/dev/null; then
+if timeout 60 python -m ruff check .; then
     CHECKS+=("SUCCESS: Ruff lint")
 else
     CHECKS+=("FAILED: Ruff lint")
@@ -91,7 +97,7 @@ fi
 
 # 3. Python Formatting
 echo "Checking Python formatting..."
-if python -m black --check . --quiet 2>/dev/null; then
+if timeout 60 python -m black --check .; then
     CHECKS+=("SUCCESS: Black format")
 else
     CHECKS+=("FAILED: Black format")
@@ -102,7 +108,7 @@ fi
 echo "Type checking with MyPy..."
 export MYPY_CACHE_DIR="logs/.mypy_cache"
 mkdir -p logs/.mypy_cache
-if python -m mypy src/devonboarder 2>/dev/null; then
+if timeout 90 python -m mypy src/devonboarder; then
     CHECKS+=("SUCCESS: MyPy types")
 else
     CHECKS+=("FAILED: MyPy types")
@@ -118,10 +124,11 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     COVERAGE_DETAILS=""
 
     # Test XP service with isolated coverage (95% threshold)
-    if COVERAGE_FILE=logs/.coverage_xp python -m pytest \
+    echo "Testing XP service coverage..."
+    if timeout 90 env COVERAGE_FILE=logs/.coverage_xp python -m pytest \
         --cov --cov-config=config/.coveragerc.xp \
-        --cov-fail-under=95 --quiet \
-        tests/test_xp_api.py 2>/dev/null; then
+        --cov-fail-under=95 --tb=short --maxfail=1 \
+        tests/test_xp_api.py; then
         COVERAGE_DETAILS+="PASS XP: 95%+ "
     else
         COVERAGE_SUCCESS=false
@@ -130,10 +137,11 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
 
     # Test Discord service with isolated coverage (95% threshold)
     # Run both Discord test files together for comprehensive coverage
-    if COVERAGE_FILE=logs/.coverage_discord python -m pytest \
+    echo "Testing Discord service coverage..."
+    if timeout 120 env COVERAGE_FILE=logs/.coverage_discord python -m pytest \
         --cov --cov-config=config/.coveragerc.discord \
-        --cov-fail-under=95 --quiet \
-        tests/test_discord_integration_api.py tests/test_discord_integration_coverage.py 2>/dev/null; then
+        --cov-fail-under=95 --tb=short --maxfail=1 \
+        tests/test_discord_integration_api.py tests/test_discord_integration_coverage.py; then
         COVERAGE_DETAILS+="PASS Discord: 95%+ "
     else
         COVERAGE_SUCCESS=false
@@ -141,14 +149,27 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     fi
 
     # Test Auth service with isolated coverage (95% threshold)
-    if COVERAGE_FILE=logs/.coverage_auth python -m pytest \
+    echo "Testing Auth service coverage..."
+    if timeout 120 env COVERAGE_FILE=logs/.coverage_auth python -m pytest \
         --cov --cov-config=config/.coveragerc.auth \
-        --cov-fail-under=95 --quiet \
-        tests/test_auth_service.py tests/test_server.py 2>/dev/null; then
-        COVERAGE_DETAILS+="PASS Auth: 95%+"
+        --cov-fail-under=95 --tb=short --maxfail=1 \
+        tests/test_auth_service.py tests/test_server.py; then
+        COVERAGE_DETAILS+="PASS Auth: 95%+ "
     else
         COVERAGE_SUCCESS=false
-        COVERAGE_DETAILS+="FAIL Auth: <95%"
+        COVERAGE_DETAILS+="FAIL Auth: <95% "
+    fi
+
+    # Test Framework service with isolated coverage (95% threshold)
+    echo "Testing Framework service coverage..."
+    if timeout 60 env COVERAGE_FILE=logs/.coverage_framework python -m pytest \
+        --cov --cov-config=config/.coveragerc.framework \
+        --cov-fail-under=95 --tb=short --maxfail=1 \
+        tests/framework/; then
+        COVERAGE_DETAILS+="PASS Framework: 95%+ "
+    else
+        COVERAGE_SUCCESS=false
+        COVERAGE_DETAILS+="FAIL Framework: <95% "
     fi
 
     if $COVERAGE_SUCCESS; then
@@ -183,7 +204,7 @@ fi
 
 # 8. Security Scan
 echo "Running security scan..."
-if python -m bandit -r src -ll --quiet 2>/dev/null; then
+if timeout 60 python -m bandit -r src -ll; then
     CHECKS+=("SUCCESS: Security scan")
 else
     CHECKS+=("FAILED: Security scan")
@@ -193,7 +214,7 @@ fi
 # 9. UTC Timestamp Validation
 echo "Validating UTC timestamp compliance..."
 if [[ -x "$REPO_ROOT/scripts/validate_utc_compliance.sh" ]]; then
-    if bash "$REPO_ROOT/scripts/validate_utc_compliance.sh" 2>/dev/null; then
+    if timeout 30 bash "$REPO_ROOT/scripts/validate_utc_compliance.sh"; then
         CHECKS+=("SUCCESS: UTC compliance")
     else
         CHECKS+=("FAILED: UTC compliance")
