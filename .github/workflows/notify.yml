@@ -33,9 +33,9 @@ jobs:
         steps:
             - uses: actions/checkout@v5
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
-                  version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Install PyYAML

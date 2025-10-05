@@ -224,6 +224,19 @@ else
     CHECKS+=("WARNING: UTC compliance check skipped (validator not found)")
 fi
 
+# 10. GitHub Actions Dependency Validation
+echo "Validating GitHub Actions dependencies..."
+if [[ -x "$REPO_ROOT/scripts/manage_github_actions_deps.py" ]]; then
+    if timeout 60 python "$REPO_ROOT/scripts/manage_github_actions_deps.py" "$REPO_ROOT" --window-days 30,90; then
+        CHECKS+=("SUCCESS: GitHub Actions deps")
+    else
+        CHECKS+=("FAILED: GitHub Actions deps")
+        FAILURES+=("Outdated GitHub Actions dependencies detected")
+    fi
+else
+    CHECKS+=("WARNING: GitHub Actions dependency check skipped (validator not found)")
+fi
+
 # Calculate success rate
 TOTAL_CHECKS=${#CHECKS[@]}
 SUCCESS_COUNT=$(printf '%s\n' "${CHECKS[@]}" | grep -c "SUCCESS:" || echo "0")
@@ -259,5 +272,6 @@ else
     echo "  • Run: yamllint -c .github/.yamllint-config .github/workflows/"
     echo "  • Run: python -m pytest --cov=src --cov-fail-under=95"
     echo "  • Run: bash $REPO_ROOT/scripts/validate_utc_compliance.sh (use src.utils.timestamps)"
+    echo "  • Run: python $REPO_ROOT/scripts/manage_github_actions_deps.py $REPO_ROOT --window-days 30,90"
     exit 1
 fi

@@ -47,9 +47,10 @@ jobs:
                   # Safely capture workflow run details without checking out untrusted code
                   printf "head_sha=%s\n" "${{ github.event.workflow_run.head_sha || github.sha }}" >> "$GITHUB_OUTPUT"
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Validate env docs
