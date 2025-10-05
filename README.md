@@ -747,7 +747,7 @@ For complete QC documentation, see [`docs/quality-control-95-rule.md`](docs/qual
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
-## Found DevOnboarder useful?
+## Found DevOnboarder useful
 
 If this project helped speed up onboarding, save time, or avoid headaches,
 please [⭐ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder)

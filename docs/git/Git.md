@@ -327,7 +327,7 @@ PATCH v0.0.6 — Adds debug logging to session management (useSession.ts)
 
 ## Using Git Hooks
 
-### Why?
+### Why
 
 Hooks ensure:
 

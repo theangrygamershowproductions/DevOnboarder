@@ -95,7 +95,7 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 
 ```
 
-### What happens next?
+### What happens next
 
 Each line links to the CI logs or artifacts so you can jump straight to the problem.
 

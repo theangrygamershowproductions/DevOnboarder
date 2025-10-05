@@ -31,19 +31,19 @@ Use this template after each sprint or major incident. Mark completed actions wi
 
 -
 
-## What Went Well?
+## What Went Well
 
 -
 
-## What Didn’t Go Well?
+## What Didn’t Go Well
 
 -
 
-## What Did We Learn?
+## What Did We Learn
 
 -
 
-## What Can We Automate Next?
+## What Can We Automate Next
 
 -
 

@@ -28,7 +28,7 @@ behind DevOnboarder. From humble beginnings, the Potato has been woven into
 every phase of the workflow: immortalized in `.gitignore`, `.dockerignore`,
 `.codespell-ignore`, and more.
 
-## Why Potato?
+## Why Potato
 
 - **A Running Joke**
 
@@ -125,7 +125,7 @@ _For the full origin story and philosophy behind this security framework, see [p
 
 ---
 
-### 🥚 Easter Egg: Who _is_ Potato?
+### 🥚 Easter Egg: Who _is_ Potato
 
 Nobody knows for sure.
 Is Potato a mischievous mascot?
