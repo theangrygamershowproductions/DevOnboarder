@@ -99,7 +99,7 @@ jobs:
                   - old content
                   + new content
                   EOF
-                  echo "$patch" > fix-ci-health.patch.diff
+                  # Note: patch file already created above, no need to overwrite
             - name: Apply YAML patch
               run: git apply fix-ci-health.patch.diff || true
             - name: Suggest fix with OpenAI
