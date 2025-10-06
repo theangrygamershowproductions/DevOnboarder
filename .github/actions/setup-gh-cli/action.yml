@@ -31,7 +31,7 @@ runs:
         echo "Installing GitHub CLI..."
 
         # Determine version to install
-        if [ "${{ inputs.version }}" = "latest" ]; then
+        if [ "${{ inputs.version }}" = "latest" ] || [ "${{ inputs.version }}" = "stable" ]; then
           VERSION=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | jq -r '.tag_name' | sed 's/^v//')
         else
           VERSION="${{ inputs.version }}"
