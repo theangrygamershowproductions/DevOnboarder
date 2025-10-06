@@ -35,8 +35,8 @@ jobs:
             - name: Install GitHub CLI
               uses: ./.github/actions/setup-gh-cli
               with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Install PyYAML
