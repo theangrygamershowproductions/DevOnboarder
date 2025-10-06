@@ -7,6 +7,10 @@ on:
       - "**/*.py"
       - ".vscode/**"
       - "scripts/**"
+
+permissions:
+  contents: read
+
 jobs:
   scan:
     runs-on: ubuntu-latest
