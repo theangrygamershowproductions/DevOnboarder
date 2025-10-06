@@ -1,3 +1,9 @@
+---
+similarity_group: docs-
+content_uniqueness_score: 4
+merge_candidate: false
+consolidation_priority: P3
+---
 # QC Validation Remediation Plan
 
 **Issue**: QC validation script `qc_pre_push.sh` blocking legitimate PR squash merges to main branch
