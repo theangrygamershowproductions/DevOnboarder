@@ -97,6 +97,7 @@ echo ""
 if [[ "$SKIP_GENERATION" != "true" ]]; then
     # Create temporary GPG home directory
     TEMP_GNUPG_HOME=$(mktemp -d)
+    trap 'rm -rf "$TEMP_GNUPG_HOME"' EXIT
     export GNUPGHOME="$TEMP_GNUPG_HOME"
     echo "Creating temporary GPG directory: $TEMP_GNUPG_HOME"
     blue "Generating GPG key for AAR Bot..."
@@ -231,9 +232,6 @@ echo ""
 blue "Framework isolation test ready for execution!"
 echo ""
 
-# Cleanup on exit (only if temp directory was created)
-if [[ -n "${TEMP_GNUPG_HOME:-}" ]]; then
-    trap 'rm -rf "$TEMP_GNUPG_HOME"' EXIT
-fi
+# Cleanup on exit is handled by trap set immediately after temp directory creation
 
 green "Setup complete! Follow the next steps above to configure GitHub."

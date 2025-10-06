@@ -31,8 +31,10 @@ Agents should check for external toolkit availability through environment detect
 
 ```bash
 # Agent toolkit detection pattern
-if [ -d "$HOME/devonboarder-toolkit" ]; then
-    # TAGS internal environment detected
+# Use an environment variable or generic path to avoid exposing proprietary toolkit names
+TOOLKIT_PATH="${TOOLKIT_PATH:-$HOME/.external-toolkit}"
+if [ -d "$TOOLKIT_PATH" ]; then
+    # Enhanced environment detected
     # Use enhanced capabilities without exposing details
     TOOLKIT_AVAILABLE=true
     ENHANCED_MODE=true

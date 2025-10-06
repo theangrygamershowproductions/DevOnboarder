@@ -20,8 +20,10 @@ if [[ -f "$SENTINEL" ]]; then
 fi
 
 # 3) Feature-probe (non-identifying capability check)
-if command -v notion-mcp-probe >/dev/null 2>&1; then
-  notion-mcp-probe >/dev/null 2>&1 && { echo "ENHANCED"; exit 0; }
+if [[ -n "${ENHANCED_PROBE_CMD:-}" ]]; then
+  if command -v "${ENHANCED_PROBE_CMD}" > /dev/null 2>&1; then
+    "${ENHANCED_PROBE_CMD}" > /dev/null 2>&1 && { echo "ENHANCED"; exit 0; }
+  fi
 fi
 
 echo "STANDARD"

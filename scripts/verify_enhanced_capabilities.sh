@@ -11,7 +11,12 @@ echo "================================================="
 # 1. Check uvx availability and markitdown-mcp
 echo "1. Checking uvx and MCP tools..."
 if command -v uvx >/dev/null 2>&1; then
-    echo "   ✅ uvx available: $(uvx --version 2>/dev/null || echo 'version unknown')"
+    UVX_VERSION="$(uvx --version 2>/dev/null)" || UVX_VERSION=""
+    if [ -n "$UVX_VERSION" ]; then
+        echo "   ✅ uvx available: $UVX_VERSION"
+    else
+        echo "   ✅ uvx available: version unknown"
+    fi
     if uvx markitdown-mcp --help >/dev/null 2>&1; then
         echo "   ✅ markitdown-mcp available"
     else
@@ -49,7 +54,11 @@ echo "5. Checking VS Code MCP configuration..."
 if [ -f ".vscode/mcp.json" ]; then
     echo "   ✅ VS Code MCP config exists"
     echo "   📋 Configured servers:"
-    grep -o '"[^"]*":\s*{' .vscode/mcp.json | sed 's/:.*//' | sed 's/"//g' | sed 's/^/      - /'
+    if command -v jq > /dev/null 2>&1; then
+        jq -r 'keys[]' .vscode/mcp.json | sed 's/^/      - /'
+    else
+        grep -o '"[^"]*":\s*{' .vscode/mcp.json | sed 's/:.*//' | sed 's/"//g' | sed 's/^/      - /'
+    fi
 else
     echo "   ❌ VS Code MCP config missing"
 fi
