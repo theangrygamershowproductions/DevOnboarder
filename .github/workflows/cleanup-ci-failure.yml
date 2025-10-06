@@ -46,24 +46,23 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             issues: write
-        env:
-            GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY }}
         steps:
             - name: Check for Cleanup Token
               run: |
-                  if [ -z "$GH_TOKEN" ]; then
-                    echo "::error::CLEANUP_CI_FAILURE_KEY is not set! Exiting to prevent unauthenticated GitHub CLI use."
+                  # Check for token hierarchy like Priority Matrix system
+                  if [ -z "${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}" ]; then
+                    echo "::error::No authentication token available! Exiting to prevent unauthenticated GitHub CLI use."
                     exit 1
                   fi
             - name: Checkout repository
               uses: actions/checkout@v5
+              with:
+                  token: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Install the gh cli
               uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
-                  token: ${{ secrets.GITHUB_TOKEN }}
-              env:
-                  GH_TOKEN: ${{ env.GH_TOKEN }}
+                  token: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Verify gh version
@@ -84,7 +83,13 @@ jobs:
                   gh api rate_limit
                   python scripts/list_open_ci_issues.py
               continue-on-error: true
+            - name: Configure git authentication
+              run: |
+                  # Configure git to use the scoped token for authentication (Priority Matrix pattern)
+                  git config --local url."https://${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
             - name: Smart CI failure cleanup
+              env:
+                  GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
               run: |
                   mkdir -p logs
 

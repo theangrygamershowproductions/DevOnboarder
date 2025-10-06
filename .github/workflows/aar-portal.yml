@@ -83,6 +83,11 @@ jobs:
             --aar-dir .aar \
             --output-dir docs/aar-portal
 
+      - name: Configure git authentication for AAR Portal
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          # Configure git to use the scoped token for authentication (Priority Matrix pattern)
+          git config --local url."https://${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
       - name: Create Pull Request for portal updates (GPG signed)
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
