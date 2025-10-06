@@ -144,3 +144,11 @@ semgrep.json
 bandit.json
 safety.json
 prospector.json
+
+# VS Code secrets & local MCP config
+.vscode/*.secrets.json
+.vscode/mcp.local.json
+
+# Local state and configuration
+**/.local/**
+**/.state/**

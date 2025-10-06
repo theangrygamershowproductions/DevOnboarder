@@ -1,0 +1,8 @@
+extends: existence
+message: "Avoid proprietary identifiers in public docs; use neutral capability language."
+level: error
+ignorecase: true
+tokens:
+  - devonboarder[-_ ]?premium
+  - internal[-_ ]?toolkit
+  - (?:private|proprietary)\s+(?:tool|agent|sdk)
