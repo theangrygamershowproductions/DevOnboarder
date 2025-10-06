@@ -35,23 +35,23 @@ jobs:
       - name: Setup GPG commit signing (AAR Bot)
         env:
           # Using AAR Bot credentials for testing
-          AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
-          AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
-          AARBOT_NAME: ${{ vars.AARBOT_NAME }}
-          AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+          AAR_BOT_GPG_PRIVATE: ${{ secrets.AAR_BOT_GPG_PRIVATE }}
+          AAR_BOT_GPG_KEY_ID: ${{ vars.AAR_BOT_GPG_KEY_ID }}
+          AAR_BOT_NAME: ${{ vars.AAR_BOT_NAME }}
+          AAR_BOT_EMAIL: ${{ vars.AAR_BOT_EMAIL }}
         run: |
           # Import GPG private key (using printf to avoid terminal output violations)
-          printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+          printf '%s\n' "$AAR_BOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
 
           # Configure git to use GPG signing
-          git config --global user.name "$AARBOT_NAME"
-          git config --global user.email "$AARBOT_EMAIL"
-          git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+          git config --global user.name "$AAR_BOT_NAME"
+          git config --global user.email "$AAR_BOT_EMAIL"
+          git config --global user.signingkey "$AAR_BOT_GPG_KEY_ID"
           git config --global commit.gpgsign true
           git config --global gpg.format openpgp
 
           # Set up non-interactive GPG trust for automation
-          gpg --batch --no-tty --command-fd 0 --edit-key "$AARBOT_GPG_KEY_ID" <<EOF
+          gpg --batch --no-tty --command-fd 0 --edit-key "$AAR_BOT_GPG_KEY_ID" <<EOF
           trust
           5
           y
