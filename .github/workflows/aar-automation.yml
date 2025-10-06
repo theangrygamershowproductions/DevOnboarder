@@ -59,10 +59,29 @@ jobs:
       # gpg-signing: Required for commit verification
 
     steps:
+      - name: Set token for AAR automation
+        id: set-token
+        run: |
+          # Multi-step token selection following Priority Matrix pattern
+          if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+          else
+              echo "::error::No authentication token available for AAR operations!"
+              exit 1
+          fi
+          echo "Using token source for AAR: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.set-token.outputs.selected-token }}
           fetch-depth: 0
 
       - name: Setup Python environment
@@ -151,7 +170,7 @@ jobs:
       - name: Configure git authentication for AAR commits
         run: |
           # Configure git to use the scoped token for authentication (Priority Matrix pattern)
-          git config --local url."https://${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --local url."https://${{ steps.set-token.outputs.selected-token }}@github.com/".insteadOf "https://github.com/"
       - name: Commit AAR files (GPG signed)
         run: |
           git add .aar/
