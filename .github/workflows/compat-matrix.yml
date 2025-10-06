@@ -6,7 +6,7 @@ permissions:
 
 # Disabled workflow - only triggers on workflow_dispatch for manual testing
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 # Will be implemented in future development phases
 
