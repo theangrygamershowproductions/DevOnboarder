@@ -1,5 +1,6 @@
 # Placeholder workflow - disabled pending implementation
 name: Compatibility Matrix
+permissions: {}
 
 # Disabled workflow - only triggers on workflow_dispatch for manual testing
 on:
