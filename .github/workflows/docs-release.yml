@@ -1,6 +1,8 @@
 # Placeholder workflow - disabled pending implementation
 name: Documentation Release
-permissions: {}
+
+permissions:
+  contents: read
 
 # Disabled workflow - only triggers on workflow_dispatch for manual testing
 on:
