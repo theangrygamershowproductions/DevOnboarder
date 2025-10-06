@@ -45,7 +45,7 @@ DevOnboarder implements unified GPG signing across all automation workflows that
 | Bot | Email | Key ID | Purpose | Workflows |
 |-----|-------|--------|---------|-----------|
 | Priority Matrix Bot | `priority-matrix@theangrygamershow.com` | `9BA7DCDBF5D4DEDD` | Priority matrix synthesis and document enhancement | `priority-matrix-synthesis.yml` |
-| AAR Bot | `aarbot@theangrygamershow.com` | `99CA270AD84AE20C` | After Action Report generation and portal automation | `aar-automation.yml`, `aar-portal.yml` |
+| AAR Bot | `aarbot@theangrygamershow.com` | `2EF19BAC905D2C41` | After Action Report generation and portal automation | `aar-automation.yml`, `aar-portal.yml` |
 
 **Strategy**: Each bot has its own email identity for commit attribution, but all GPG keys are managed through the unified `scarabofthespudheap` GitHub account for centralized security control.
 
@@ -92,7 +92,7 @@ cp docs/templates/gpg-automation-workflow.yml .github/workflows/your-automation.
 
 #### GitHub Variables (Repository Level)
 
-- `AARBOT_GPG_KEY_ID` - AAR Bot GPG key ID (99CA270AD84AE20C)
+- `AAR_BOT_GPG_KEY_ID` - AAR Bot GPG key ID (2EF19BAC905D2C41)
 - `AARBOT_NAME` - AAR Bot display name (DevOnboarder AAR Bot)
 - `AARBOT_EMAIL` - AAR Bot email address (`aarbot@theangrygamershow.com`)
 - `PMBOT_GPG_KEY_ID` - Priority Matrix Bot GPG key ID (9BA7DCDBF5D4DEDD)
