@@ -51,13 +51,32 @@ jobs:
             issues: write
 
         steps:
+            - name: Set token for PR Issue Automation
+              id: set-token
+              run: |
+                # Multi-step token selection with AAR_BOT_TOKEN hierarchy per Token Policy
+                if [ -n "${{ secrets.AAR_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.AAR_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=AAR_BOT_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+                else
+                    echo "::error::No authentication token available for PR Issue operations!"
+                    exit 1
+                fi
+                echo "Using token source for PR Issue Automation: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
             - name: Checkout code
               uses: actions/checkout@v5
 
             - name: Setup GitHub CLI
               uses: ./.github/actions/setup-gh-cli
               with:
-                  token: ${{ secrets.AAR_BOT_TOKEN || secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}
+                  token: ${{ steps.set-token.outputs.selected-token }}
 
             - name: Create PR tracking issue
               env:
