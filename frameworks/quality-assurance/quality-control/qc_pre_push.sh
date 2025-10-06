@@ -18,18 +18,23 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../../../" && pwd)"
 echo "Running 95% QC Pre-Push Validation..."
 # This script ensures all code meets DevOnboarder quality standards before pushing
 
-# CRITICAL: Branch workflow validation to prevent main branch commits
+# ENHANCED: Branch workflow validation with GitHub Actions context detection
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
-    echo
-    echo "WARNING: You're about to push to main branch!"
-    echo "   DevOnboarder requires feature branch workflow"
-    echo "   Consider: git checkout -b feat/your-feature-name"
-    echo
-    read -r -p "Continue anyway? [y/N]: " continue_main
-    if [[ ! "$continue_main" =~ ^[Yy]$ ]]; then
-        echo "Aborted. Create feature branch first."
-        exit 1
+    # Check if running in GitHub Actions (PR merge context)
+    if [[ -n "${GITHUB_ACTIONS:-}" && "${GITHUB_EVENT_NAME:-}" == "push" && "${GITHUB_REF:-}" == "refs/heads/main" ]]; then
+        echo "✅ GitHub Actions PR merge to main detected - allowing QC validation"
+    else
+        echo
+        echo "WARNING: You're about to push to main branch!"
+        echo "   DevOnboarder requires feature branch workflow"
+        echo "   Consider: git checkout -b feat/your-feature-name"
+        echo
+        read -r -p "Continue anyway? [y/N]: " continue_main
+        if [[ ! "$continue_main" =~ ^[Yy]$ ]]; then
+            echo "Aborted. Create feature branch first."
+            exit 1
+        fi
     fi
 fi
 
