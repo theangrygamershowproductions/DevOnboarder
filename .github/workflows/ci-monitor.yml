@@ -37,10 +37,10 @@ jobs:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
                   path: logs
-            - name: Install the gh cli
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+            - name: Setup GitHub CLI
+              uses: ./.github/actions/setup-gh-cli
               with:
-                  version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Check for rate-limit error

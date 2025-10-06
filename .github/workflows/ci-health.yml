@@ -73,9 +73,10 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ matrix.branch }}
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Set up Python
@@ -108,9 +109,10 @@ jobs:
               with:
                   path: results
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - id: summarize
