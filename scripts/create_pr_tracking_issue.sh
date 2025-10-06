@@ -41,11 +41,13 @@ echo "Title: $PR_TITLE"
 echo "Author: $PR_AUTHOR"
 echo "Branch: $PR_BRANCH"
 
-# Check for required tokens with enhanced guidance
+# Check for required tokens with enhanced guidance (AAR Bot token hierarchy)
 if command -v require_tokens >/dev/null 2>&1; then
-    if ! require_tokens "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
+    if ! require_tokens "AAR_BOT_TOKEN" "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
         echo "❌ Cannot create PR tracking issue without required tokens"
-        echo "💡 Please add the missing tokens and re-run this script"
+        echo "💡 Please add AAR_BOT_TOKEN or fallback tokens and re-run this script"
+        echo "💡 Primary: AAR_BOT_TOKEN (post-merge reporter for AAR operations)"
+        echo "💡 Fallback: CI_ISSUE_AUTOMATION_TOKEN, CI_BOT_TOKEN"
         exit 1
     fi
 fi
@@ -142,14 +144,15 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 EOF
 )
 
-# In CI environment, GITHUB_TOKEN is already set by the workflow
-# Log which token source is being used for debugging
-if [[ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]]; then
-    log "Using CI_ISSUE_AUTOMATION_TOKEN for issue creation"
+# Log which token source is being used for debugging (AAR Bot token hierarchy per Token Policy)
+if [[ -n "${AAR_BOT_TOKEN:-}" ]]; then
+    log "Using AAR_BOT_TOKEN for issue creation (PRIMARY - AAR Bot for post-merge reporter)"
+elif [[ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]]; then
+    log "Using CI_ISSUE_AUTOMATION_TOKEN for issue creation (FALLBACK - general CI automation)"
 elif [[ -n "${CI_BOT_TOKEN:-}" ]]; then
-    log "Using CI_BOT_TOKEN for issue creation"
+    log "Using CI_BOT_TOKEN for issue creation (FALLBACK - legacy bot operations)"
 elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    log "Using GITHUB_TOKEN for issue creation"
+    log "Using GITHUB_TOKEN for issue creation (WARNING - violates No Default Token Policy)"
 else
     echo "ERROR: No GitHub token available for issue creation"
     log "ERROR: No GitHub token available"

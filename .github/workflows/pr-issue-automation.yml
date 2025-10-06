@@ -57,11 +57,13 @@ jobs:
             - name: Setup GitHub CLI
               uses: ./.github/actions/setup-gh-cli
               with:
-                  token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  token: ${{ secrets.AAR_BOT_TOKEN || secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}
 
             - name: Create PR tracking issue
               env:
-                  # Scoped token environment variables for DevOnboarder scripts
+                  # AAR Bot token hierarchy for PR tracking operations per Token Policy
+                  AAR_BOT_TOKEN: ${{ secrets.AAR_BOT_TOKEN }}
+                  # Fallback tokens for compatibility
                   CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
                   CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
                   # PR context variables
@@ -92,7 +94,9 @@ jobs:
 
             - name: Link issue to PR
               env:
-                  # Scoped token environment variables for DevOnboarder scripts
+                  # AAR Bot token hierarchy for issue operations per Token Policy
+                  AAR_BOT_TOKEN: ${{ secrets.AAR_BOT_TOKEN }}
+                  # Fallback tokens for compatibility
                   CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
                   CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
               run: |
