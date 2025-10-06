@@ -19,7 +19,7 @@ jobs:
       - name: Block secret-looking tokens
         run: |
           set -euo pipefail
-          ! git grep -nE '(?:^|[^A-Z0-9])sk-[A-Za-z0-9]{20,}' -- . || {
+          ! git grep -nE 'sk-[A-Za-z0-9]{20,}' -- . || {
             echo "::error title=Secret-like token found::Remove any token-looking string (sk-*)"; exit 1; }
       - name: Block proprietary identifiers
         run: |
