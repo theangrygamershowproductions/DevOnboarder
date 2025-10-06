@@ -47,22 +47,32 @@ jobs:
         permissions:
             issues: write
         steps:
-            - name: Check for Cleanup Token
+            - name: Set token for authentication
+              id: set-token
               run: |
-                  # Check for token hierarchy like Priority Matrix system
-                  if [ -z "${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}" ]; then
-                    echo "::error::No authentication token available! Exiting to prevent unauthenticated GitHub CLI use."
-                    exit 1
+                  # Multi-step token selection following Priority Matrix pattern
+                  if [ -n "${{ secrets.CLEANUP_CI_FAILURE_KEY }}" ]; then
+                      echo "selected-token=${{ secrets.CLEANUP_CI_FAILURE_KEY }}" >> $GITHUB_OUTPUT
+                      echo "token-source=CLEANUP_CI_FAILURE_KEY" >> $GITHUB_OUTPUT
+                  elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+                      echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                      echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+                  elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+                      echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+                      echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+                  else
+                      echo "::error::No authentication token available! Please configure CLEANUP_CI_FAILURE_KEY or CI_BOT_TOKEN."
+                      exit 1
                   fi
+                  echo "Using token source: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
             - name: Checkout repository
               uses: actions/checkout@v5
               with:
-                  token: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  token: ${{ steps.set-token.outputs.selected-token }}
             - name: Install the gh cli
               uses: ./.github/actions/setup-gh-cli
               with:
-                  version: stable
-                  token: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  token: ${{ steps.set-token.outputs.selected-token }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Verify gh version
@@ -86,10 +96,12 @@ jobs:
             - name: Configure git authentication
               run: |
                   # Configure git to use the scoped token for authentication (Priority Matrix pattern)
-                  git config --local url."https://${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+                  git config --local url."https://${{ steps.set-token.outputs.selected-token }}@github.com/".insteadOf "https://github.com/"
             - name: Smart CI failure cleanup
               env:
-                  GH_TOKEN: ${{ secrets.CLEANUP_CI_FAILURE_KEY || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
+                  # Token source for debugging
+                  TOKEN_SOURCE: ${{ steps.set-token.outputs.token-source }}
               run: |
                   mkdir -p logs
 
