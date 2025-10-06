@@ -51,21 +51,41 @@ jobs:
             issues: write
 
         steps:
+            - name: Set token for PR Issue Automation
+              id: set-token
+              run: |
+                # Multi-step token selection with AAR_BOT_TOKEN hierarchy per Token Policy
+                if [ -n "${{ secrets.AAR_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.AAR_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=AAR_BOT_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+                else
+                    echo "::error::No authentication token available for PR Issue operations!"
+                    exit 1
+                fi
+                echo "Using token source for PR Issue Automation: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
             - name: Checkout code
               uses: actions/checkout@v5
 
             - name: Setup GitHub CLI
-              run: |
-                  gh --version
-
-            - name: Authenticate GitHub CLI
-              run: |
-                  # SECURITY: Follow DevOnboarder Token Policy - Use specialized tokens explicitly
-                  # Use the same pattern as successful PR Automation Framework workflow
-                  printf -- '%s\n' "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN != '' && secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN }}" | gh auth login --with-token
+              uses: ./.github/actions/setup-gh-cli
+              with:
+                  token: ${{ steps.set-token.outputs.selected-token }}
 
             - name: Create PR tracking issue
               env:
+                  # AAR Bot token hierarchy for PR tracking operations per Token Policy
+                  AAR_BOT_TOKEN: ${{ secrets.AAR_BOT_TOKEN }}
+                  # Fallback tokens for compatibility
+                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
+                  # PR context variables
                   PR_TITLE: ${{ github.event.pull_request.title }}
                   PR_AUTHOR: ${{ github.event.pull_request.user.login }}
                   PR_BRANCH: ${{ github.event.pull_request.head.ref }}
@@ -83,14 +103,21 @@ jobs:
                   fi
 
                   echo "Creating tracking issue for PR"
-                  echo "Title extracted"
-                  echo "Author extracted"
-                  echo "Branch extracted"
+                  printf "PR Number: %s\n" "$PR_NUMBER"
+                  printf "Title: %s\n" "$PR_TITLE"
+                  printf "Author: %s\n" "$PR_AUTHOR"
+                  printf "Branch: %s\n" "$PR_BRANCH"
 
-                  # Run PR issue creation script (uses already authenticated gh CLI)
+                  # Run PR issue creation script (uses scoped token hierarchy)
                   bash scripts/create_pr_tracking_issue.sh "$PR_NUMBER" "$PR_TITLE" "$PR_AUTHOR" "$PR_BRANCH"
 
             - name: Link issue to PR
+              env:
+                  # AAR Bot token hierarchy for issue operations per Token Policy
+                  AAR_BOT_TOKEN: ${{ secrets.AAR_BOT_TOKEN }}
+                  # Fallback tokens for compatibility
+                  CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
+                  CI_BOT_TOKEN: ${{ secrets.CI_BOT_TOKEN }}
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
@@ -106,13 +133,17 @@ jobs:
                               "**Tracking Issue Created**: This PR is now tracked by Issue #$ISSUE_NUMBER"
                           bash scripts/ci_gh_issue_wrapper.sh comment "$ISSUE_NUMBER" \
                               "**Linked Pull Request**: PR #$PR_NUMBER is implementing this feature"
+                      else
+                          echo "Could not extract issue number from log file"
                       fi
+                  else
+                      echo "PR issue creation log file not found"
                   fi
 
             - name: Update project labels
               run: |
                   PR_NUMBER="${{ github.event.pull_request.number || github.event.inputs.pr_number }}"
 
-                  # Add tracking labels (uses authenticated gh CLI)
+                  # Add tracking labels (uses authenticated gh CLI from setup step)
                   echo "Adding tracking labels to PR"
                   gh pr edit "$PR_NUMBER" --add-label "pr-tracking,automated" || echo "Could not add labels"

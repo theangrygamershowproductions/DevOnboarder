@@ -31,6 +31,25 @@ jobs:
         if: github.event.workflow_run.conclusion == 'failure'
         runs-on: ubuntu-latest
         steps:
+            - name: Set token for CI Monitor operations
+              id: set-token
+              run: |
+                # Multi-step token selection (using CI_ISSUE_TOKEN as per this workflow's pattern)
+                if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_ISSUE_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+                else
+                    echo "::error::No authentication token available for CI Monitor operations!"
+                    exit 1
+                fi
+                echo "Using token source for CI Monitor: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
             - uses: actions/download-artifact@v4
               if: github.event.workflow_run.conclusion == 'failure'
               with:
@@ -62,7 +81,7 @@ jobs:
             - name: Open issue on rate-limit
               if: steps.check.outputs.hit == 'true'
               env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_ISSUE_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
               run: |
                   printf '%s\n' \
                     "Our CI run failed due to API rate limits. Matched line: ${{ steps.check.outputs.match }}." \

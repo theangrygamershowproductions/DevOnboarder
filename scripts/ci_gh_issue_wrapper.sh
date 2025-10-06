@@ -45,21 +45,23 @@ recommend_token_for_operation() {
     case "$operation" in
         "comment"|"close")
             echo "Recommended tokens for issue $operation:"
-            echo "  - CI_ISSUE_AUTOMATION_TOKEN (primary)"
+            echo "  - AAR_BOT_TOKEN (primary - AAR Bot post-merge reporting per Token Policy)"
+            echo "  - CI_ISSUE_AUTOMATION_TOKEN (secondary - general CI automation)"
             echo "  - CI_ISSUE_TOKEN (specialized for CI failures)"
             echo "  - CLEANUP_CI_FAILURE_KEY (specialized for closing failures)"
             ;;
         "list")
             echo "Recommended tokens for issue listing:"
-            echo "  - CI_ISSUE_AUTOMATION_TOKEN (primary)"
+            echo "  - AAR_BOT_TOKEN (primary - AAR Bot post-merge reporting per Token Policy)"
+            echo "  - CI_ISSUE_AUTOMATION_TOKEN (secondary - general CI automation)"
             echo "  - DIAGNOSTICS_BOT_KEY (specialized for monitoring)"
             echo "  - CI_HEALTH_KEY (specialized for health checks)"
             ;;
         "pr-comment")
             echo "Recommended tokens for PR operations:"
+            echo "  - AAR_BOT_TOKEN (primary - AAR Bot post-merge reporting per Token Policy)"
             echo "  - CHECKLIST_BOT_TOKEN (specialized for PR quality)"
-            echo "  - AAR_BOT_TOKEN (specialized for post-merge)"
-            echo "  - CI_ISSUE_AUTOMATION_TOKEN (primary fallback)"
+            echo "  - CI_ISSUE_AUTOMATION_TOKEN (fallback - general CI automation)"
             ;;
         "general"|*)
             echo "Token Selection Guide:"
@@ -74,12 +76,12 @@ get_scoped_token() {
     # DevOnboarder token hierarchy for GitHub issue operations
     # Based on .codex/tokens/token_scope_map.yaml
     local issue_operation_tokens=(
-        "CI_ISSUE_AUTOMATION_TOKEN"    # PRIMARY: Main CI automation & issue management
+        "AAR_BOT_TOKEN"               # PRIMARY: AAR Bot for post-merge reporting (per Token Policy)
+        "CI_ISSUE_AUTOMATION_TOKEN"   # SECONDARY: Main CI automation & issue management
         "CI_ISSUE_TOKEN"              # SPECIALIZED: Creates CI issues on failure
         "DIAGNOSTICS_BOT_KEY"         # SPECIALIZED: Root Artifact Monitor issue creation
         "CI_HEALTH_KEY"               # SPECIALIZED: CI stability monitoring issues
         "CLEANUP_CI_FAILURE_KEY"      # SPECIALIZED: CI failure auto-closer
-        "AAR_BOT_TOKEN"               # SPECIALIZED: Post-merge reporting issues
         "REVIEW_KNOWN_ERRORS_KEY"     # SPECIALIZED: Error pattern recognition
         "SECURITY_AUDIT_TOKEN"        # SPECIALIZED: Security policy enforcement
         "VALIDATE_PERMISSIONS_TOKEN"   # SPECIALIZED: Bot permissions validation
@@ -93,10 +95,13 @@ get_scoped_token() {
         # Skip placeholder values that indicate unconfigured tokens
         if [[ -n "$token_value" && "$token_value" != "CHANGE_ME_"* ]]; then
             case "$token_name" in
-                "CI_ISSUE_AUTOMATION_TOKEN")
-                    echo "Selected PRIMARY token: $token_name (Main CI automation)"
+                "AAR_BOT_TOKEN")
+                    echo "Selected PRIMARY token: $token_name (AAR Bot post-merge reporting - Token Policy compliant)"
                     ;;
-                "CI_ISSUE_TOKEN"|"DIAGNOSTICS_BOT_KEY"|"CI_HEALTH_KEY"|"CLEANUP_CI_FAILURE_KEY"|"AAR_BOT_TOKEN"|"REVIEW_KNOWN_ERRORS_KEY"|"SECURITY_AUDIT_TOKEN"|"VALIDATE_PERMISSIONS_TOKEN")
+                "CI_ISSUE_AUTOMATION_TOKEN")
+                    echo "Selected SECONDARY token: $token_name (Main CI automation)"
+                    ;;
+                "CI_ISSUE_TOKEN"|"DIAGNOSTICS_BOT_KEY"|"CI_HEALTH_KEY"|"CLEANUP_CI_FAILURE_KEY"|"REVIEW_KNOWN_ERRORS_KEY"|"SECURITY_AUDIT_TOKEN"|"VALIDATE_PERMISSIONS_TOKEN")
                     echo "Selected SPECIALIZED token: $token_name (Task-scoped)"
                     ;;
                 "CI_BOT_TOKEN")
@@ -323,7 +328,8 @@ main() {
             echo "  pr-comment <pr_number> <comment_body>    - Add comment to pull request"
             echo
             echo "DevOnboarder Token Hierarchy (No Default Token Policy):"
-            echo "  PRIMARY: CI_ISSUE_AUTOMATION_TOKEN (main CI automation)"
+            echo "  PRIMARY: AAR_BOT_TOKEN (AAR Bot post-merge reporting per Token Policy)"
+            echo "  SECONDARY: CI_ISSUE_AUTOMATION_TOKEN (general CI automation)"
             echo "  SPECIALIZED: CI_ISSUE_TOKEN, DIAGNOSTICS_BOT_KEY, CI_HEALTH_KEY, etc."
             echo "  DEPRECATED: CI_BOT_TOKEN (legacy)"
             echo "  PROHIBITED: GITHUB_TOKEN (violates No Default Token Policy)"

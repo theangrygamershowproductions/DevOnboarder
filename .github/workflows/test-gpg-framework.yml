@@ -26,11 +26,30 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Set token for GPG Framework testing
+        id: set-token
+        run: |
+          # Multi-step token selection following Priority Matrix pattern
+          if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+          else
+              echo "::error::No authentication token available for GPG Framework testing!"
+              exit 1
+          fi
+          echo "Using token source for GPG Framework: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.set-token.outputs.selected-token }}
 
       - name: Setup GPG commit signing (AAR Bot)
         env:

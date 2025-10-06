@@ -73,6 +73,8 @@ runs:
 
         # Configure authentication if token provided
         if [ -n "${{ inputs.token }}" ]; then
+          # Clear any existing GH_TOKEN to avoid conflicts
+          unset GH_TOKEN
           echo "${{ inputs.token }}" | gh auth login --with-token
         fi
 
