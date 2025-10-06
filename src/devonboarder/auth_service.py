@@ -156,8 +156,13 @@ if (not _secret_key_raw or _secret_key_raw == "secret") and APP_ENV != "developm
         "JWT_SECRET_KEY must be set to a non-default value in production"
     )
 
-# Ensure SECRET_KEY is never None for type checking
-SECRET_KEY: str = _secret_key_raw or "secret"  # Development fallback
+# Ensure SECRET_KEY is never None for type checking - secure fallback
+if not _secret_key_raw:
+    raise RuntimeError(
+        "JWT_SECRET_KEY environment variable is required. "
+        "Set JWT_SECRET_KEY to a secure random string for production use."
+    )
+SECRET_KEY: str = _secret_key_raw
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 TOKEN_EXPIRE_SECONDS = int(os.getenv("TOKEN_EXPIRE_SECONDS", "3600"))
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))

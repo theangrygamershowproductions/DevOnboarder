@@ -303,7 +303,13 @@ class GitHubActionsDependencyManager:
             # GitHub API endpoint for releases
             url = f"https://api.github.com/repos/{action_name}/releases/tags/{tag_name}"
 
-            response = self.session.get(url, timeout=10)
+            try:
+                response = self.session.get(url, timeout=10)
+            except Exception as e:
+                raise RuntimeError(
+                    f"Network error validating {action_name}@{version}: {str(e)}. "
+                    f"Check internet connection and GitHub API availability."
+                ) from e
 
             if response.status_code == 200:
                 release_info = response.json()

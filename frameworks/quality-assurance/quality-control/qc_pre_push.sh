@@ -18,11 +18,16 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../../../" && pwd)"
 echo "Running 95% QC Pre-Push Validation..."
 # This script ensures all code meets DevOnboarder quality standards before pushing
 
+# Helper function: Check if running in GitHub Actions PR merge context
+is_github_actions_merge() {
+    [[ -n "${GITHUB_ACTIONS:-}" && "${GITHUB_EVENT_NAME:-}" == "push" && "${GITHUB_REF:-}" == "refs/heads/main" ]]
+}
+
 # ENHANCED: Branch workflow validation with GitHub Actions context detection
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
     # Check if running in GitHub Actions (PR merge context)
-    if [[ -n "${GITHUB_ACTIONS:-}" && "${GITHUB_EVENT_NAME:-}" == "push" && "${GITHUB_REF:-}" == "refs/heads/main" ]]; then
+    if is_github_actions_merge; then
         echo "✅ GitHub Actions PR merge to main detected - allowing QC validation"
     else
         echo
