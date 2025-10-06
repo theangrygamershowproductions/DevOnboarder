@@ -45,6 +45,7 @@ dependencies = [
     "alembic",
     "psycopg2-binary",
     "pyyaml>=6.0",
+    "logfire>=4.11.0",
 ]
 
 [project.optional-dependencies]

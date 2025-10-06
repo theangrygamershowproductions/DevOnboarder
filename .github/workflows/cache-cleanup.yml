@@ -1,0 +1,134 @@
+name: Cache Cleanup
+
+on:
+  pull_request:
+    types:
+      - closed
+  # Manual cleanup trigger
+  workflow_dispatch:
+    inputs:
+      cleanup_type:
+        description: 'Type of cleanup to perform'
+        required: true
+        default: 'pr-only'
+        type: choice
+        options:
+          - 'pr-only'
+          - 'stale-caches'
+          - 'all-old-caches'
+
+jobs:
+  cleanup-pr-caches:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup_type == 'pr-only')
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Cleanup PR Caches
+        run: |
+          echo "Fetching list of cache keys for PR #${{ github.event.pull_request.number }}"
+          BRANCH="refs/pull/${{ github.event.pull_request.number }}/merge"
+
+          # Get cache IDs for this PR (limit 100 to avoid timeout)
+          cacheKeysForPR=$(gh cache list --ref $BRANCH --limit 100 --json id --jq '.[].id')
+
+          if [ -z "$cacheKeysForPR" ]; then
+            echo "No caches found for PR #${{ github.event.pull_request.number }}"
+            exit 0
+          fi
+
+          echo "Found caches for PR: $cacheKeysForPR"
+
+          # Don't fail workflow if cache deletion fails
+          set +e
+          echo "Deleting caches for PR #${{ github.event.pull_request.number }}..."
+          deleted_count=0
+          for cacheKey in $cacheKeysForPR; do
+            if gh cache delete $cacheKey; then
+              echo "Deleted cache: $cacheKey"
+              deleted_count=$((deleted_count + 1))
+            else
+              echo "Failed to delete cache: $cacheKey"
+            fi
+          done
+
+          echo "Cache cleanup completed. Deleted $deleted_count caches for PR #${{ github.event.pull_request.number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+
+  cleanup-stale-caches:
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.cleanup_type == 'stale-caches' || github.event.inputs.cleanup_type == 'all-old-caches')
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Cleanup Stale Caches
+        run: |
+          echo "Fetching all cache entries to identify stale caches"
+
+          # Get all caches with creation dates
+          all_caches=$(gh cache list --limit 100 --json id,createdAt,key,ref --jq '.[] | select(.createdAt < (now - 7*24*60*60) | todate) | .id')
+
+          if [ -z "$all_caches" ]; then
+            echo "No stale caches found (older than 7 days)"
+            exit 0
+          fi
+
+          echo "Found stale caches: $all_caches"
+
+          # Don't fail workflow if cache deletion fails
+          set +e
+          echo "Deleting stale caches (older than 7 days)..."
+          deleted_count=0
+          for cacheId in $all_caches; do
+            if gh cache delete $cacheId; then
+              echo "Deleted stale cache: $cacheId"
+              deleted_count=$((deleted_count + 1))
+            else
+              echo "Failed to delete stale cache: $cacheId"
+            fi
+          done
+
+          echo "Stale cache cleanup completed. Deleted $deleted_count caches"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+
+  cleanup-old-caches:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup_type == 'all-old-caches'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Emergency Cache Cleanup
+        run: |
+          echo "EMERGENCY: Cleaning up oldest 50 caches to free space"
+
+          # Get oldest 50 caches by creation date
+          oldest_caches=$(gh cache list --limit 100 --json id,createdAt --jq 'sort_by(.createdAt) | .[0:50] | .[].id')
+
+          if [ -z "$oldest_caches" ]; then
+            echo "No caches found for cleanup"
+            exit 0
+          fi
+
+          echo "Found oldest caches for deletion: $oldest_caches"
+
+          # Don't fail workflow if cache deletion fails
+          set +e
+          echo "Deleting oldest 50 caches to free up space..."
+          deleted_count=0
+          for cacheId in $oldest_caches; do
+            if gh cache delete $cacheId; then
+              echo "Deleted old cache: $cacheId"
+              deleted_count=$((deleted_count + 1))
+            else
+              echo "Failed to delete old cache: $cacheId"
+            fi
+          done
+
+          echo "Emergency cache cleanup completed. Deleted $deleted_count caches"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
