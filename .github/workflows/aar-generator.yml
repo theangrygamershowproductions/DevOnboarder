@@ -189,7 +189,7 @@ jobs:
     name: "AAR Security Audit"
     runs-on: ubuntu-latest
     needs: generate-aar
-    if: always()
+    if: ${{ always() && needs.generate-aar.result != 'skipped' }}
 
     permissions:
       contents: read
@@ -227,6 +227,17 @@ jobs:
           path: "aar-artifacts/"
         continue-on-error: true
 
+      - name: "Check artifacts availability"
+        id: check-artifacts
+        run: |
+          if [ -d "aar-artifacts" ] && [ "$(find aar-artifacts -type f | wc -l)" -gt 0 ]; then
+            echo "artifacts-available=true" >> "$GITHUB_OUTPUT"
+            echo "AAR artifacts found - proceeding with security audit"
+          else
+            echo "artifacts-available=false" >> "$GITHUB_OUTPUT"
+            echo "No AAR artifacts found - skipping detailed security audit"
+          fi
+
       - name: "Audit token usage compliance"
         env:
           CI_ISSUE_AUTOMATION_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}
@@ -250,9 +261,12 @@ jobs:
           bash scripts/check_potato_ignore.sh
 
           # Check for any sensitive data exposure in AAR reports
-          if [ -d "aar-artifacts" ]; then
+          if [ -d "aar-artifacts" ] && [ "${{ steps.check-artifacts.outputs.artifacts-available }}" = "true" ]; then
+            echo "Checking AAR artifacts for sensitive data exposure..."
             grep -r "GITHUB_TOKEN\|CI_BOT_TOKEN\|CI_ISSUE_AUTOMATION_TOKEN" aar-artifacts/ || true
             echo "Sensitive token check completed"
+          else
+            echo "No AAR artifacts to audit - skipping sensitive data check"
           fi
 
       - name: "Generate security report"
