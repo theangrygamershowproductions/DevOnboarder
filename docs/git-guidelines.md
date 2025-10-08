@@ -73,7 +73,7 @@ CLEANUP(deps): remove unused dependencies
 
 ```
 
-See the **commit-message policy** in [../AGENTS.md](../AGENTS.md) for a detailed
+See the **commit-message policy** in [Agents Overview](../agents/index.md) for a detailed
 
 explanation of the required format and history rules.
 

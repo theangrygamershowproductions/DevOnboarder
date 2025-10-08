@@ -130,3 +130,25 @@ cloudflared/ac65c0eb-6e16-4444-b340-feb89e45d991.json
 pmbot_signing_key*
 *.pem
 *.key
+# Test artifacts
+test-*.md
+
+# Security and analysis reports - prevent root pollution
+reports/
+*-report.json
+*-reports/
+security.json
+vulnerabilities.json
+trivy.json
+semgrep.json
+bandit.json
+safety.json
+prospector.json
+
+# VS Code secrets & local MCP config
+.vscode/*.secrets.json
+.vscode/mcp.local.json
+
+# Local state and configuration
+**/.local/**
+**/.state/**

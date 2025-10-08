@@ -25,8 +25,13 @@ def exchange_oauth(
     data: dict[str, Any], db: Session = Depends(auth_service.get_db)
 ) -> dict[str, str]:
     """Exchange a Discord OAuth code for a token and store it."""
-    username = data["username"]
-    code = data["code"]
+    try:
+        username = data["username"]
+        code = data["code"]
+    except KeyError as exc:
+        raise HTTPException(
+            status_code=500, detail=f"Missing required field: {exc}"
+        ) from exc
     try:
         resp = httpx.post(
             "https://discord.com/api/oauth2/token",
@@ -44,24 +49,38 @@ def exchange_oauth(
         )
     except httpx.TimeoutException as exc:
         raise HTTPException(status_code=504, detail="Discord API timeout") from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Discord API error") from exc
 
-    resp.raise_for_status()
-    token = resp.json()["access_token"]
-    user = db.query(auth_service.User).filter_by(username=username).first()
-    if user is None:
-        # Do NOT hash an empty password here. Storing a hashed empty string
-        # can interact poorly with some bcrypt/passlib versions in CI/tests.
-        # Instead store an explicit empty sentinel and let login/verify logic
-        # treat it as a Discord-only account.
-        user = auth_service.User(
-            username=username,
-            password_hash="",
-            discord_token=token,
-        )
-        db.add(user)
-    else:
-        user.discord_token = token
-    db.commit()
+    try:
+        resp.raise_for_status()
+    except httpx.HTTPStatusError as exc:
+        raise HTTPException(status_code=500, detail="Discord OAuth failed") from exc
+
+    try:
+        response_data = resp.json()
+        token = response_data["access_token"]
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(status_code=500, detail="Invalid Discord response") from exc
+    try:
+        user = db.query(auth_service.User).filter_by(username=username).first()
+        if user is None:
+            # Do NOT hash an empty password here. Storing a hashed empty string
+            # can interact poorly with some bcrypt/passlib versions in CI/tests.
+            # Instead store an explicit empty sentinel and let login/verify logic
+            # treat it as a Discord-only account.
+            user = auth_service.User(
+                username=username,
+                password_hash="",  # noqa: B106
+                discord_token=token,
+            )
+            db.add(user)
+        else:
+            user.discord_token = token
+        db.commit()
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Database error") from exc
     return {"linked": username}
 
 
@@ -69,17 +88,30 @@ def exchange_oauth(
 def get_roles(
     username: str, db: Session = Depends(auth_service.get_db)
 ) -> dict[str, Any]:
-    """Return guild role mappings for the specified user."""
-    user = db.query(auth_service.User).filter_by(username=username).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-
+    """Get Discord roles for a user."""
     try:
-        roles = get_user_roles(user.discord_token)
-    except httpx.TimeoutException as exc:
-        raise HTTPException(status_code=504, detail="Discord API timeout") from exc
+        user = db.query(auth_service.User).filter_by(username=username).first()
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    return {"roles": roles}
+        if user.discord_token is None:
+            raise HTTPException(status_code=404, detail="Discord token not found")
+
+        # Cast to string for type checker
+        discord_token: str = user.discord_token  # type: ignore[assignment]
+        if discord_token == "":  # noqa: B105
+            raise HTTPException(status_code=404, detail="Invalid Discord token")
+
+        try:
+            roles = get_user_roles(discord_token)
+        except httpx.TimeoutException as exc:
+            raise HTTPException(status_code=504, detail="Discord API timeout") from exc
+
+        return {"roles": roles}
+    except HTTPException:
+        raise  # Re-raise HTTP exceptions as-is
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Database error") from exc
 
 
 def create_app() -> FastAPI:

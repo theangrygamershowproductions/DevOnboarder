@@ -29,7 +29,7 @@ visibility: internal
 
 This page collects helpful tips for new contributors. Follow
 [docs/README.md](README.md) for a complete development setup.
-See the [Service Health Checks](README.md#service-health-checks) section for
+See the [Service Status Dashboard](service-status.md) section for
 monitoring endpoints available locally and in production.
 Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 
@@ -95,7 +95,7 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 
 ```
 
-### What happens next?
+### What happens next
 
 Each line links to the CI logs or artifacts so you can jump straight to the problem.
 

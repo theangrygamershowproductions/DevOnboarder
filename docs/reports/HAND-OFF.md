@@ -133,9 +133,9 @@ This document provides comprehensive handoff information for the DevOnboarder pl
 
    - [README.md](../../README.md): Primary setup instructions
 
-   - [docs/setup.md](../setup.md): Detailed configuration guide
+   - [Setup Guide](../../SETUP.md): Detailed configuration guide
 
-   - [docs/deployment.md](../deployment.md): Production deployment
+   - [Development Guide](../development/development-workflow.md): Production deployment
 
    - [docs/troubleshooting.md](../troubleshooting.md): Issue resolution
 
@@ -151,13 +151,13 @@ This document provides comprehensive handoff information for the DevOnboarder pl
 
 3. **Development Guides**
 
-   - [docs/development.md](../development.md): Development workflow
+   - [Development Overview](../development/architecture-overview.md): Development workflow
 
-   - [docs/testing.md](../testing.md): Testing procedures
+   - [Testing Guide](../e2e-tests.md): Testing procedures
 
-   - [docs/quality.md](../quality.md): Quality standards
+   - [Quality Control](../quality-control-95-rule.md): Quality standards
 
-   - [docs/security.md](../security.md): Security guidelines
+   - [Security Guide](../security/README.md): Security guidelines
 
 ## Access and Credentials
 

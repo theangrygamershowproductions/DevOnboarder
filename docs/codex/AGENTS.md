@@ -122,8 +122,8 @@ DOCS(ci): Document built-in GITHUB_TOKEN usage for CI failure issues
 
 ```
 
-See [docs/git-guidelines.md](./docs/git-guidelines.md) and the files under
-[docs/git/](./docs/git/) for additional Git best practices.
+See [docs/git-guidelines.md](../git-guidelines.md) and the files under
+[docs/git/](../git/) for additional Git best practices.
 
 ## Commit History Policy: No Rewriting or Force-Pushing
 

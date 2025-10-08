@@ -199,19 +199,19 @@ For CI environments that need signature verification:
 
 ## Common Questions
 
-### Q: Are the commits actually signed?
+### Q: Are the commits actually signed
 
 **A:** Yes! The "Can't check signature" message means the signature exists but you don't have the public key to verify it.
 
-### Q: Is this a security issue?
+### Q: Is this a security issue
 
 **A:** No, this is just a verification limitation. The commits are properly signed by GitHub.
 
-### Q: Why doesn't Git import these keys automatically?
+### Q: Why doesn't Git import these keys automatically
 
 **A:** Git doesn't automatically import keys for security reasons. You must explicitly import keys you trust.
 
-### Q: Should I trust GitHub's keys?
+### Q: Should I trust GitHub's keys
 
 **A:** For verifying GitHub's own merge commits, yes. These keys are publicly documented and widely used.
 
@@ -219,7 +219,7 @@ For CI environments that need signature verification:
 
 - [GitHub GPG Signature Verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 
-- [DevOnboarder GPG Setup Script](../scripts/setup_github_gpg_keys.sh)
+- [DevOnboarder GPG Setup Script](../../scripts/setup_github_gpg_keys.sh)
 
 - [Git Signature Verification Documentation](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
 

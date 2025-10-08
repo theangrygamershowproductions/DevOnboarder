@@ -541,7 +541,7 @@ The policy framework includes mechanisms for:
 
 ### Appendix A: Token Classification Matrix
 
-See [Token Permissions Matrix](token-permissions-matrix.md) for comprehensive token documentation.
+See [Token Permissions Matrix](../security/token-permissions-matrix.md) for comprehensive token documentation.
 
 ### Appendix B: Violation Examples and Remediation
 

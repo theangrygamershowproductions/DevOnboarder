@@ -373,6 +373,56 @@ User contributions → XP events → Level calculation → API responses
 
 Bot automatically detects guild ID for dev/prod environment switching
 
+## GitHub Review Processes & Documentation Validation
+
+### Copilot Review Comment Handling
+
+**Critical Lessons Learned (PR #1720):**
+
+✅ **GitHub Review Behavior**: Comments are marked "Outdated" immediately when fixes are applied, not based on commit staleness
+✅ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks and CI workflows
+✅ **Root Cause Fixes**: Address underlying issues, not just symptoms identified in comments
+
+### Documentation Validation Enhancement System (PR #1720)
+
+**MANDATORY validations now enforced:**
+
+```bash
+# Enhanced internal link validation with parallelization
+scripts/validate_internal_links.sh  # GitHub-style anchors, fragment support, metrics
+
+# GitHub-style anchor generation with duplicate handling
+scripts/anchors_github.py  # Handles -1, -2 suffixes for repeated headings
+
+# Enhanced safe commit wrapper with timeout handling
+scripts/safe_commit_enhanced.sh  # Prevents silent drift, proper re-staging
+```
+
+**System Features:**
+
+- ✅ **513 markdown files** validated in ~60 seconds with parallel processing
+- ✅ **Fragment validation** with GitHub-style anchor normalization
+- ✅ **Duplicate heading support** (title → title-1 → title-2)
+- ✅ **JSON metrics reporting** with real file counts and broken link tracking
+- ✅ **CI workflow separation** (docs-quality.yml + pr-welcome.yml)
+- ✅ **Fork security** with proper pull_request vs pull_request_target usage
+
+**Common Documentation Errors Now Caught:**
+
+- ❌ Broken internal links with fragments (#section)
+- ❌ Non-existent file references in templates
+- ❌ Duplicate heading anchors without proper suffixes
+- ❌ Relative paths without validation → ✅ Absolute paths with existence checks
+- ❌ Stale cross-references → ✅ Automated link validation
+
+### Review Process Workflow
+
+1. **Address Copilot Comments**: Fix root causes, not just surface issues
+2. **Validate Documentation**: Ensure all links and references are accurate
+3. **Run Quality Gates**: Use `./scripts/qc_pre_push.sh` before commits
+4. **Verify Resolution**: Check that GitHub marks comments as "Outdated"
+5. **Reference Guide**: See `docs/github-review-process-guide.md` for detailed procedures
+
 ## Emergency Commands
 
 ### When Tests Fail
@@ -412,9 +462,62 @@ echo "Task completed successfully"  # Plain echo without variables/emojis
 make clean && make deps && make up
 ```
 
+## External Toolkit Integration
+
+### Environment-Based Capability Detection
+
+When working in environments that may have access to enhanced toolkits or extended capabilities, agents should use environment-based detection patterns:
+
+```bash
+# Safe detection pattern for enhanced capabilities
+MODE="$(scripts/tooling/detect_enhanced.sh)"
+if [[ "$MODE" == "ENHANCED" ]]; then
+    ENHANCED_TOOLS_AVAILABLE=true
+    # Use enhanced workflows when available
+else
+    ENHANCED_TOOLS_AVAILABLE=false
+    # Gracefully degrade to standard DevOnboarder capabilities
+fi
+```
+
+### Security Guidelines for External Resources
+
+**CRITICAL**: Never reference specific external toolkit names, proprietary tools, or commercial features in public repository documentation or code.
+
+**Pattern**: Use environment detection and conditional logic rather than hardcoded references:
+
+```python
+# ✅ APPROVED - Environment-based detection
+import os
+from pathlib import Path
+
+def has_enhanced_capabilities() -> bool:
+    """Check if enhanced toolkit is available without exposing specifics."""
+    import subprocess
+    try:
+        result = subprocess.run(["scripts/tooling/detect_enhanced.sh"],
+                              capture_output=True, text=True, check=True)
+        return result.stdout.strip() == "ENHANCED"
+    except (subprocess.SubprocessError, FileNotFoundError):
+        return False
+
+# ❌ FORBIDDEN - Hardcoded references to proprietary tools
+# Don't reference specific toolkit names or commercial features
+```
+
+### Dual-Mode Operation
+
+Agents should be designed to operate effectively in both standard and enhanced environments:
+
+1. **Standard Mode**: Use only DevOnboarder core capabilities
+2. **Enhanced Mode**: Leverage additional capabilities when environment detection confirms availability
+3. **Graceful Degradation**: Always provide functional fallbacks
+
+For implementation details, see: `docs/agents/external-toolkit-integration.md`
+
 ---
 
-**Last Updated**: 2025-09-30
+**Last Updated**: 2025-01-02
 **Coverage**: Backend 96%+, Bot 100%, Frontend 100%
 **Services**: Auth (8002), XP (8001), Discord Integration (8081), Dashboard (8003)
 **Architecture**: FastAPI + Discord.js + React + PostgreSQL + Traefik

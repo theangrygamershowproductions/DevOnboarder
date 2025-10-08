@@ -63,13 +63,15 @@ Automatically enforces DevOnboarder's documentation quality standards on all pul
 
    - Check technical writing standards
 
-3. **Cross-Reference Integrity**
+3. **Internal Link Validation**
 
-   - Validate internal links in changed documentation
+   - Validate internal links across all markdown files with fragment support
 
-   - Verify external link accessibility
+   - GitHub-style anchor normalization with duplicate handling
 
-   - Check for broken references
+   - Parallel processing of 513+ markdown files in ~60 seconds
+
+   - JSON metrics reporting with real-time counts
 
 4. **Technical Accuracy Verification**
 
@@ -174,54 +176,27 @@ CONTRIBUTING.md
 ### GitHub Actions Workflow
 
 ```yaml
-name: Documentation Quality Enforcement
+name: Docs Quality
 on:
   pull_request:
     paths:
       - '**/*.md'
+      - 'scripts/validate_internal_links.sh'
+      - '.pre-commit-config.yaml'
 
-      - 'docs/**/*'
+permissions:
+  contents: read
 
-    types: [opened, synchronize]
+concurrency:
+  group: docs-quality-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  documentation-quality:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install markdownlint-cli
-
-        run: npm install -g markdownlint-cli
-
-      - name: Setup Vale
-
-        run: |
-          wget -O vale.tar.gz https://github.com/errata-ai/vale/releases/latest/download/vale_Linux_64-bit.tar.gz
-          tar -xzf vale.tar.gz
-          sudo mv vale /usr/local/bin/
-
-      - name: Run Documentation Quality Checks
-
-        run: |
-          echo "Running markdownlint validation..."
-          markdownlint **/*.md --config .markdownlint.json
-
-          echo "Running Vale content quality check..."
-          vale docs/ --config=.vale.ini
-
-          echo "Validating cross-references..."
-          python scripts/validate_documentation_links.py
-
-          echo "Documentation quality enforcement complete"
+      - uses: actions/checkout@v5
+      - run: bash scripts/validate_internal_links.sh
 
       - name: Update PR with Quality Report
 
@@ -246,7 +221,7 @@ jobs:
 
             ${{ job.status === 'success' && 'No impact on documentation certification status.' || 'Documentation quality issues detected. Certification may be affected.' }}
 
-            See [Documentation Quality Certification](docs/public/documentation-quality-certification.md) for standards.
+            See [Documentation Quality Certification](../docs/public/documentation-quality-certification.md) for standards.
             `;
 
             github.rest.issues.createComment({

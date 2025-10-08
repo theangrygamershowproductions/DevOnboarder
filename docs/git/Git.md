@@ -27,7 +27,7 @@ visibility: internal
         - [Table of Contents](#table-of-contents)
         - [Adding Entries to .gitignore](#adding-entries-to-gitignore)
         - [Repository Structure and Submodules](#repository-structure-and-submodules)
-        - [🔜 Submodule Plan](#-submodule-plan)
+        - [Submodule Plan](#submodule-plan)
         - [Switching Between Branches Without Committing](#switching-between-branches-without-committing)
         - [Option 1: `git stash`](#option-1-git-stash)
         - [Option 2: WIP Commit](#option-2-wip-commit)
@@ -96,7 +96,7 @@ Our current structure:
 
 - `backend/`: Auth microservice
 
-### 🔜 Submodule Plan
+### Submodule Plan
 
 When ready:
 
@@ -327,7 +327,7 @@ PATCH v0.0.6 — Adds debug logging to session management (useSession.ts)
 
 ## Using Git Hooks
 
-### Why?
+### Why
 
 Hooks ensure:
 

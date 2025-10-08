@@ -46,21 +46,47 @@ This directory contains **reusable strategic planning frameworks** designed for 
 
 ```text
 docs/frameworks/
-├── README.md                    # This navigation guide
-
-└── strategic-planning/          # Strategic planning methodology
-
-    ├── application-registry.md      # Framework application tracking
-
-    ├── conversation_continuity_guide.md  # Multi-session planning protocols
-
-    ├── framework-governance.md      # Version control and evolution
-
+├── README.md                           # This navigation guide
+├── friction-prevention.md              # Framework Phase 2 implementation docs
+├── friction-prevention-integration.md  # Integration guide for Framework Phase 2
+├── friction-prevention-quickstart.md   # Quick start guide for developers
+└── strategic-planning/                 # Strategic planning methodology
+    ├── application-registry.md         # Framework application tracking
+    ├── conversation_continuity_guide.md # Multi-session planning protocols
+    ├── framework-governance.md         # Version control and evolution
     └── scope-assessment-checklist.md   # 12-point validation tool
-
 ```
 
 ## Framework Components
+
+### Framework Phase 2: Friction Prevention (v2.0.0)
+
+**Location**: Root directory (`friction-prevention*.md`)
+
+**Purpose**: Comprehensive collection of 36 automation and productivity scripts designed to eliminate common development friction points
+
+**Components**:
+
+1. **Main Documentation** (`friction-prevention.md`)
+   - Complete framework overview and architecture
+   - Script categories and purposes (20 automation + 11 workflow + 3 productivity + 2 developer experience)
+   - Integration patterns and migration guidelines
+   - Quality gates and development standards
+
+2. **Integration Guide** (`friction-prevention-integration.md`)
+   - Migration from legacy scripts
+   - CI/CD pipeline integration patterns
+   - VS Code and Makefile integration
+   - Team collaboration guidelines
+
+3. **Quick Start Guide** (`friction-prevention-quickstart.md`)
+   - Essential commands and workflows
+   - Common patterns and troubleshooting
+   - VS Code setup and daily usage
+
+**Status**: Implementation Complete, Documentation Ready
+**Dependencies**: Quality Assurance Framework (Phase 1)
+**Next Phase**: Security Validation Framework (Phase 3)
 
 ### Strategic Planning Framework (v1.0.0)
 

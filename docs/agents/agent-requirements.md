@@ -143,6 +143,33 @@ visibility: internal
 
 14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
+15. **EXTERNAL TOOLKIT INTEGRATION**: Use environment-based detection patterns for enhanced capabilities without exposing proprietary information
+
+## External Toolkit Integration for Agents
+
+**Environment Detection Pattern**: Agents should detect enhanced capabilities using standardized environment checks without hardcoded references to proprietary tools:
+
+```bash
+# Safe detection pattern
+MODE="$(scripts/tooling/detect_enhanced.sh)"
+if [[ "$MODE" == "ENHANCED" ]]; then
+    # Enhanced capabilities available
+    ENHANCED_MODE=true
+else
+    # Standard DevOnboarder capabilities only
+    ENHANCED_MODE=false
+fi
+```
+
+**Security Requirements**:
+
+- **NEVER** reference specific external toolkit names in public repository
+- **ALWAYS** use environment-based detection patterns
+- **PROVIDE** graceful degradation to standard capabilities
+- **MAINTAIN** complete separation between public and private tooling
+
+For complete implementation guide, see: `docs/agents/external-toolkit-integration.md`
+
 ## Pre-commit Hook Management for Agents
 
 **CRITICAL UNDERSTANDING**: Pre-commit hooks frequently modify files during validation (trailing whitespace, formatting fixes). This creates a common cycle where:

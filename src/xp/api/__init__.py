@@ -46,7 +46,13 @@ def contribute(
     db: Session = Depends(auth_service.get_db),
 ) -> dict[str, str]:
     """Record a contribution and award XP."""
-    description = data["description"]
+    try:
+        description = data["description"]
+    except KeyError:
+        from fastapi import HTTPException
+
+        raise HTTPException(status_code=500, detail="Internal server error")
+
     db.add(auth_service.Contribution(user_id=current_user.id, description=description))
     db.add(
         auth_service.XPEvent(user_id=current_user.id, xp=auth_service.CONTRIBUTION_XP)

@@ -88,7 +88,7 @@ visibility: internal
 
 #### Primary Navigation Document
 
-**Created**: [`docs/MODULAR_DOCUMENTATION_INDEX.md`](MODULAR_DOCUMENTATION_INDEX.md)
+**Created**: [`docs/MODULAR_DOCUMENTATION_INDEX.md`](../MODULAR_DOCUMENTATION_INDEX.md)
 
 **Features**:
 
@@ -118,7 +118,7 @@ visibility: internal
 
 #### Agent Context Loading Strategy
 
-**Updated**: [`docs/agent-context-loading-strategy.md`](agent-context-loading-strategy.md)
+**Updated**: [`docs/agent-context-loading-strategy.md`](../agent-context-loading-strategy.md)
 
 **Changes**:
 
@@ -132,7 +132,7 @@ visibility: internal
 
 #### Main Documentation Index
 
-**Updated**: [`docs/README.md`](README.md)
+**Updated**: [`docs/README.md`](../README.md)
 
 **Changes**:
 
@@ -158,7 +158,7 @@ visibility: internal
 
 #### Refactoring Progress Checklist
 
-**Updated**: [`docs/copilot-refactor/progress-checklist.md`](copilot-refactor/progress-checklist.md)
+**Updated**: [`docs/copilot-refactor/progress-checklist.md`](progress-checklist.md)
 
 **Changes**:
 

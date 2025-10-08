@@ -23,6 +23,25 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
+            - name: Set token for Post-Merge Cleanup operations
+              id: set-token
+              run: |
+                # Multi-step token selection following Priority Matrix pattern
+                if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+                else
+                    echo "::error::No authentication token available for Post-Merge Cleanup operations!"
+                    exit 1
+                fi
+                echo "Using token source for Post-Merge Cleanup: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
             - uses: actions/checkout@v5
 
             - name: Set up Python
@@ -76,7 +95,7 @@ jobs:
 
             - name: Close resolved CI failure issues
               env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
                   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
               run: |
                   echo "Checking for CI failure issues to close after successful merge"

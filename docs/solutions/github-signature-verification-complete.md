@@ -186,11 +186,11 @@ git log --show-signature -1
 
 ## 📚 Related Documentation
 
-- [GitHub Signature Verification Troubleshooting](docs/troubleshooting/GITHUB_SIGNATURE_VERIFICATION.md)
+- [GitHub Signature Verification Troubleshooting](../troubleshooting/GITHUB_SIGNATURE_VERIFICATION.md)
 
-- [DevOnboarder Setup Guide](SETUP.md)
+- [DevOnboarder Setup Guide](../../SETUP.md)
 
-- [GPG Key Setup Script](scripts/setup_github_gpg_keys.sh)
+- [GPG Key Setup Script](../../scripts/setup_github_gpg_keys.sh)
 
 ## 🎉 Summary
 

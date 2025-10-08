@@ -73,9 +73,10 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ matrix.branch }}
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - name: Set up Python
@@ -104,13 +105,33 @@ jobs:
         if: always()
         runs-on: ubuntu-latest
         steps:
+            - name: Set token for CI Health operations
+              id: set-token
+              run: |
+                # Multi-step token selection following Priority Matrix pattern
+                if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+                elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+                    echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+                    echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+                else
+                    echo "::error::No authentication token available for CI Health operations!"
+                    exit 1
+                fi
+                echo "Using token source for CI Health: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
             - uses: actions/download-artifact@v4
               with:
                   path: results
             - name: Install GitHub CLI
-              uses: sersoft-gmbh/setup-gh-cli-action@v2
+              uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Show gh version
               run: which gh && gh --version
             - id: summarize
@@ -127,7 +148,7 @@ jobs:
             - name: Create issue for failures
               if: steps.summarize.outputs.failures != ''
               env:
-                  GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
                   FAILED: ${{ steps.summarize.outputs.failures }}
                   CI_BOT_USERNAME: ${{ secrets.CI_BOT_USERNAME }}
               run: |

@@ -35,6 +35,7 @@ repos:
           - id: markdownlint-cli2
             files: '\.md$'
             pass_filenames: true
+            args: ["--config", ".markdownlint-cli2.yaml", "--fix"]
     - repo: https://github.com/adrienverge/yamllint.git
       rev: v1.37.0
       hooks:
@@ -95,6 +96,16 @@ repos:
                     "mkdir -p logs && bash scripts/check_potato_ignore.sh 2>&1 | tee logs/potato_check_$(date +%Y%m%d_%H%M%S).log",
                 ]
             language: system
+          - id: internal-link-validation
+            name: Internal Link Validation
+            entry: bash
+            args:
+                [
+                    "-c",
+                    "mkdir -p logs && bash scripts/validate_internal_links.sh 2>&1 | tee logs/link_validation_$(date +%Y%m%d_%H%M%S).log",
+                ]
+            language: system
+            files: \.md$
           - id: env-docs-check
             name: Environment docs check
             entry: bash
@@ -110,7 +121,9 @@ repos:
             args:
                 [
                     "-c",
-                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_agents.py 2>&1 | tee logs/agent_validation_$(date +%Y%m%d_%H%M%S).log",
+                    "mkdir -p logs && source .venv/bin/activate && \
+                     python scripts/validate_agents.py 2>&1 | \
+                     tee logs/agent_validation_$(date +%Y%m%d_%H%M%S).log",
                 ]
             language: system
             pass_filenames: false
@@ -121,7 +134,9 @@ repos:
             args:
                 [
                     "-c",
-                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_metadata_standards.py 2>&1 | tee logs/metadata_validation_$(date +%Y%m%d_%H%M%S).log",
+                    "mkdir -p logs && source .venv/bin/activate && \
+                     python scripts/validate_metadata_standards.py 2>&1 | \
+                     tee logs/metadata_validation_$(date +%Y%m%d_%H%M%S).log",
                 ]
             language: system
             pass_filenames: false
@@ -152,7 +167,11 @@ repos:
             args:
                 [
                     "-c",
-                    "mkdir -p logs && source .venv/bin/activate && TMPDIR=logs python -m pytest --cov=src --cov-fail-under=95 --cov-report=term --cov-report=html:logs/htmlcov --cov-report=xml:logs/coverage.xml --tb=short 2>&1 | tee logs/pytest_$(date +%Y%m%d_%H%M%S).log; exit ${PIPESTATUS[0]}",
+                    "mkdir -p logs && source .venv/bin/activate && TMPDIR=logs \
+                     python -m pytest --cov=src --cov-fail-under=95 \
+                     --cov-report=term --cov-report=html:logs/htmlcov \
+                     --cov-report=xml:logs/coverage.xml --tb=short 2>&1 | \
+                     tee logs/pytest_$(date +%Y%m%d_%H%M%S).log; exit ${PIPESTATUS[0]}",
                 ]
             language: system
             pass_filenames: false
@@ -165,7 +184,9 @@ repos:
             args:
                 [
                     "-c",
-                    "mkdir -p logs && source .venv/bin/activate && python scripts/validate_milestone_format.py milestones/ 2>&1 | tee logs/milestone_validation_$(date +%Y%m%d_%H%M%S).log",
+                    "mkdir -p logs && source .venv/bin/activate && \
+                     python scripts/validate_milestone_format.py milestones/ 2>&1 | \
+                     tee logs/milestone_validation_$(date +%Y%m%d_%H%M%S).log",
                 ]
             language: system
             pass_filenames: false
@@ -188,7 +209,9 @@ repos:
             language: system
             pass_filenames: false
             stages: [pre-commit, pre-push]
-            entry: bash -c 'git diff --name-only --cached --diff-filter=ACMRD | grep -q "^docs/ci/.*-archived\.md$" && echo "Archived AARs are immutable." && exit 1 || true'
+            entry: bash -c 'git diff --name-only --cached --diff-filter=ACMRD | \
+                     grep -q "^docs/ci/.*-archived\.md$" && \
+                     echo "Archived AARs are immutable." && exit 1 || true'
           - id: enforce-branch-workflow
             name: Enforce feature branch workflow
             language: system

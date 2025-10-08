@@ -47,7 +47,7 @@ Members of the Founder's Circle help guide the long-term vision of the project.
 
 3. Join scheduled feedback sessions or submit pull requests with improvements.
 
-4. Add yourself to [../../FOUNDERS.md](../../FOUNDERS.md) so we can track contributions.
+4. Add yourself to [Founders](../contributing/FOUNDERS.md) so we can track contributions.
 
 5. Read the [Founder's Circle charter](charter.md) to understand expectations.
 

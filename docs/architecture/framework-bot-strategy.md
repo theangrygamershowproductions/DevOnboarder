@@ -15,7 +15,7 @@ This document outlines the evolution from our current 2-bot system to a comprehe
 ### Existing Bots
 
 - **Priority Matrix Bot**: `priority-matrix@theangrygamershow.com` (9BA7DCDBF5D4DEDD)
-- **AAR Bot**: `aarbot@theangrygamershow.com` (99CA270AD84AE20C)
+- **AAR Bot**: `aarbot@theangrygamershow.com` (2EF19BAC905D2C41)
 
 ### Current Workflows Using GPG
 

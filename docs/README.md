@@ -262,7 +262,7 @@ platforms. Please report any issues you encounter on your operating system.
 
 - [Alpha tester onboarding](alpha/README.md) &ndash; guide for early testers.
 
-- [Alpha testers log](../ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
+- [Alpha testers log](contributing/ALPHA_TESTERS.md) &ndash; track invitations and feedback status.
 
 - [Alpha wave rollout guide](alpha/alpha-wave-rollout-guide.md) &ndash; steps to prepare each invite wave.
 
@@ -330,13 +330,13 @@ platforms. Please report any issues you encounter on your operating system.
 
 - [Founder's Circle onboarding](founders/README.md) &ndash; roles and perks for core supporters.
 
-- [Founders log](../FOUNDERS.md) &ndash; record core contributors and how they help.
+- [Founders log](contributing/FOUNDERS.md) &ndash; record core contributors and how they help.
 
 - [Frontend README](../frontend/README.md) &ndash; instructions for running the React app.
 
 - [Git guidelines](git-guidelines.md) &ndash; branch naming, commit messages and the pre‑PR checklist.
 
-- [Branch cleanup workflow](git-guidelines.md#stale-branch-cleanup) &ndash; nightly script for removing old branches.
+- [Git Guidelines](git-guidelines.md) &ndash; nightly script for removing old branches.
 
 - [Issue labeling guide](contributing/issue-labeling-guide.md) &ndash; comprehensive labeling system for strategic issue management.
 
@@ -346,7 +346,7 @@ platforms. Please report any issues you encounter on your operating system.
 
 - [Merge checklist](merge-checklist.md) &ndash; steps maintainers use before merging.
 
-- [Network troubleshooting](network-troubleshooting.md#pre-commit-nodeenv-ssl-errors)
+- [Network troubleshooting](network-troubleshooting.md)
 
   &ndash; work around pre-commit `nodeenv` SSL errors and other network restrictions.
 
@@ -403,8 +403,8 @@ level, which you can check through the `/profile` command or the
 
 ## Contributor Logging
 
-Add yourself to [../ALPHA_TESTERS.md](../ALPHA_TESTERS.md) or
-[../FOUNDERS.md](../FOUNDERS.md) when you participate. These logs help us track
+Add yourself to [Alpha Testers](contributing/ALPHA_TESTERS.md) or
+[Founders](contributing/FOUNDERS.md) when you participate. These logs help us track
 who has contributed and when.
 
 ## Retrospectives
@@ -507,7 +507,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
 1. Review [sample-pr.md](sample-pr.md) for an end-to-end example.
 
-2. See the Codex CI Monitoring Policy in [../AGENTS.md](../AGENTS.md) for how failed CI jobs automatically create tasks.
+2. See the Codex CI Monitoring Policy in [Agents Overview](../agents/index.md) for how failed CI jobs automatically create tasks.
 
 3. When CI fails on a pull request, an issue titled `CI Failure: PR #<number>`
 
@@ -522,7 +522,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 5. `${{ secrets.GITHUB_TOKEN }}` is read-only on pull requests from forks. Use a
 
    token with `issues: write` permission or a `pull_request_target` workflow as
-   explained in [ci-failure-issues.md](ci-failure-issues.md#forked-pull-requests).
+   explained in [CI Failure Analysis Guide](ci-failure-analysis-guide.md).
    Maintainers can supply a personal access token as described in
    [ci-failure-issues.md#maintainer-token-setup].
 
@@ -530,7 +530,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
    `pull_request_target` workflow for forked pull requests so CI can update the
    failure issue. See
-   [ci-failure-issues.md#forked-pull-requests](ci-failure-issues.md#forked-pull-requests).
+   [CI Failure Analysis Guide](ci-failure-analysis-guide.md).
 
 7. A nightly job (`cleanup-ci-failure.yml`) logs token details, closes any open
 

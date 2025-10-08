@@ -55,6 +55,6 @@ This directory will contain version-specific documentation for the v1.0.0 releas
 
 - [Main Documentation](../README.md) - Current development documentation
 
-- [Setup Guide](../setup.md) - Installation and configuration
+- [Quick Start Guide](../../QUICKSTART.md) - Installation and configuration
 
-- [API Documentation](../api/) - Service APIs and endpoints
+- [API Documentation](../endpoint-reference.md) - Service APIs and endpoints

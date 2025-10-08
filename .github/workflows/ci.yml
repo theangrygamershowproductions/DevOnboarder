@@ -91,11 +91,30 @@ jobs:
       - name: Fetch base branch
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-              git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
+              git fetch origin ${{ github.base_ref }}
           else
-              # For push events, fetch main as base
-              git fetch origin main:main
+              # For push events, fetch main as base - avoid checking out into current branch
+              git fetch origin main
           fi
+      - name: Set token for CI operations
+        id: set-token
+        run: |
+          # Multi-step token selection following Priority Matrix pattern
+          if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+          else
+              echo "::error::No authentication token available for CI operations!"
+              exit 1
+          fi
+          echo "Using token source for CI: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
       - name: Install shellcheck
         run: pip install shellcheck-py
       - name: Lint shell scripts
@@ -694,7 +713,7 @@ jobs:
           gh_bin=$(which gh)
           "$gh_bin" pr comment ${{ github.event.pull_request.number }} --body-file coverage-summary.md
         env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
       - name: Update coverage badge
         run: |
           source .venv/bin/activate
@@ -798,7 +817,7 @@ jobs:
               echo "::warning::Failed to add label to PR ${{ github.event.pull_request.number }}"
           fi
         env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
       - name: Summarize CI failures
         if: always()
         run: |
@@ -850,7 +869,7 @@ jobs:
         if: always()
         run: bash scripts/download_ci_failure_issue.sh
         env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
       - name: Create or update CI failure issue
         if: always() && github.event_name == 'pull_request'
         id: ci_failure
@@ -911,7 +930,7 @@ jobs:
           fi
           printf -- "issue-number=%s\n" "${ISSUE:-none}" >> "$GITHUB_OUTPUT"
         env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
       - name: Save CI failure issue number
         if: failure() && github.event_name == 'pull_request'
         run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
@@ -950,7 +969,7 @@ jobs:
               echo "::warning::Failed to list issues for closure"
           fi
         env:
-          GH_TOKEN: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.set-token.outputs.selected-token }}
       - name: Prepare CI log artifacts
         if: always()
         run: |

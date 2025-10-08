@@ -59,10 +59,29 @@ jobs:
       # gpg-signing: Required for commit verification
 
     steps:
+      - name: Set token for AAR automation
+        id: set-token
+        run: |
+          # Multi-step token selection following Priority Matrix pattern
+          if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+          else
+              echo "::error::No authentication token available for AAR operations!"
+              exit 1
+          fi
+          echo "Using token source for AAR: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.set-token.outputs.selected-token }}
           fetch-depth: 0
 
       - name: Setup Python environment
@@ -73,23 +92,23 @@ jobs:
 
       - name: Setup GPG commit signing (AAR Bot)
         env:
-          AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
-          AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
-          AARBOT_NAME: ${{ vars.AARBOT_NAME }}
-          AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+          AAR_BOT_GPG_PRIVATE: ${{ secrets.AAR_BOT_GPG_PRIVATE }}
+          AAR_BOT_GPG_KEY_ID: ${{ vars.AAR_BOT_GPG_KEY_ID }}
+          AAR_BOT_NAME: ${{ vars.AAR_BOT_NAME }}
+          AAR_BOT_EMAIL: ${{ vars.AAR_BOT_EMAIL }}
         run: |
           # Import GPG private key (using printf to avoid terminal output violations)
-          printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+          printf '%s\n' "$AAR_BOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
 
           # Configure git to use GPG signing
-          git config --global user.name "$AARBOT_NAME"
-          git config --global user.email "$AARBOT_EMAIL"
-          git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+          git config --global user.name "$AAR_BOT_NAME"
+          git config --global user.email "$AAR_BOT_EMAIL"
+          git config --global user.signingkey "$AAR_BOT_GPG_KEY_ID"
           git config --global commit.gpgsign true
           git config --global gpg.format openpgp
 
           # Set up non-interactive GPG trust for automation
-          gpg --batch --no-tty --command-fd 0 --edit-key "$AARBOT_GPG_KEY_ID" <<EOF
+          gpg --batch --no-tty --command-fd 0 --edit-key "$AAR_BOT_GPG_KEY_ID" <<EOF
           trust
           5
           y
@@ -148,6 +167,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure git authentication for AAR commits
+        run: |
+          # Configure git to use the scoped token for authentication (Priority Matrix pattern)
+          git config --local url."https://${{ steps.set-token.outputs.selected-token }}@github.com/".insteadOf "https://github.com/"
       - name: Commit AAR files (GPG signed)
         run: |
           git add .aar/
@@ -158,25 +181,28 @@ jobs:
             if [ "${{ github.event_name }}" = "issues" ]; then
               printf 'DOCS(aar): add after actions report for issue #%s [signed]\n\n' \
                 "${{ github.event.issue.number }}" > commit_msg.txt
-              printf '- Generated AAR for issue resolution analysis\n' >> commit_msg.txt
-              printf '- Captured lessons learned and process improvements\n' >> commit_msg.txt
-              printf '- AAR Bot automation: cryptographically signed\n\n' >> commit_msg.txt
+              echo "- Generated AAR for issue resolution analysis" >> commit_msg.txt
+              echo "- Captured lessons learned and process improvements" >> commit_msg.txt
+              echo "- AAR Bot automation: cryptographically signed" >> commit_msg.txt
+              echo "" >> commit_msg.txt
               printf 'Issue: #%s\nAAR Type: Issue closure analysis' \
                 "${{ github.event.issue.number }}" >> commit_msg.txt
             elif [ "${{ github.event_name }}" = "pull_request" ]; then
               printf 'DOCS(aar): add after actions report for PR #%s [signed]\n\n' \
                 "${{ github.event.pull_request.number }}" > commit_msg.txt
-              printf '- Generated AAR for pull request analysis\n' >> commit_msg.txt
-              printf '- Captured development insights and learnings\n' >> commit_msg.txt
-              printf '- AAR Bot automation: cryptographically signed\n\n' >> commit_msg.txt
+              echo "- Generated AAR for pull request analysis" >> commit_msg.txt
+              echo "- Captured development insights and learnings" >> commit_msg.txt
+              echo "- AAR Bot automation: cryptographically signed" >> commit_msg.txt
+              echo "" >> commit_msg.txt
               printf 'PR: #%s\nAAR Type: Pull request development analysis' \
                 "${{ github.event.pull_request.number }}" >> commit_msg.txt
             else
               printf 'DOCS(aar): add after actions report for %s [signed]\n\n' \
                 "${{ github.event.inputs.aar_type }}" > commit_msg.txt
               printf '- Generated AAR for %s analysis\n' "${{ github.event.inputs.aar_type }}" >> commit_msg.txt
-              printf '- Manual AAR generation via workflow dispatch\n' >> commit_msg.txt
-              printf '- AAR Bot automation: cryptographically signed\n\n' >> commit_msg.txt
+              echo "- Manual AAR generation via workflow dispatch" >> commit_msg.txt
+              echo "- AAR Bot automation: cryptographically signed" >> commit_msg.txt
+              echo "" >> commit_msg.txt
               printf 'AAR Type: %s' "${{ github.event.inputs.aar_type }}" >> commit_msg.txt
             fi
 

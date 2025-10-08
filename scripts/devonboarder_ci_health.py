@@ -20,7 +20,7 @@ import sys
 import time
 import subprocess
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from pathlib import Path
 
 # DevOnboarder centralized logging pattern
@@ -58,7 +58,7 @@ class TokenLoader:
             token = os.getenv(token_env)
             if token:
                 self.token = token
-                self.token_source = f"env:{token_env}"
+                self.token_source = token_env
                 logger.info(f"Token loaded from environment: {token_env}")
                 return token
 
@@ -509,7 +509,7 @@ class CIHealthDashboard:
 
     def get_workflow_runs(
         self, branch: Optional[str] = None, limit: int = 10
-    ) -> List[Dict]:
+    ) -> Optional[List[Dict]]:
         """Get recent workflow runs using GitHub CLI"""
         cmd = [
             "gh",
@@ -528,10 +528,12 @@ class CIHealthDashboard:
             result = subprocess.run(cmd, capture_output=True, text=True)
             if result.returncode == 0:
                 return json.loads(result.stdout)
+            else:
+                logger.error(f"GitHub CLI failed with return code {result.returncode}")
+                return None
         except Exception as e:
             logger.error(f"Failed to get workflow runs: {e}")
-
-        return []
+            return None
 
     def get_workflow_logs(self, run_id: str) -> str:
         """Get workflow logs for analysis"""
@@ -557,6 +559,8 @@ class CIHealthDashboard:
         }
 
         workflows = self.get_workflow_runs(limit=20)
+        if workflows is None:
+            workflows = []
         active_workflows = [w for w in workflows if w["status"] == "in_progress"]
 
         logger.info(f"Analyzing {len(active_workflows)} active workflows")
@@ -775,6 +779,179 @@ class CIHealthDashboard:
         score += min(suggestions_count * 0.05, 0.2)  # Max 0.2
 
         return min(score, 1.0)  # Cap at 1.0
+
+    def analyze_workflow_health(self, runs: List[Dict]) -> float:
+        """Analyze workflow health and return health score (0-100)"""
+        if not runs:
+            return 0.0  # No runs = no health data = 0 score
+
+        success_rate = self.calculate_success_rate(runs)
+
+        # Success rate is already a percentage (0-100), so use it directly
+        health_score = success_rate
+
+        return health_score
+
+    def detect_anomalies(self, runs: List[Dict]) -> List[str]:
+        """Detect anomalies in workflow runs"""
+        if not runs:
+            return []
+
+        anomalies = []
+        failure_count = sum(1 for run in runs if run.get("conclusion") == "failure")
+
+        # High failure rate anomaly
+        if len(runs) > 0 and failure_count / len(runs) > 0.5:
+            anomalies.append(
+                f"High failure rate detected: {failure_count}/{len(runs)} runs failed"
+            )
+
+        # Recent failures anomaly
+        recent_runs = runs[:5]  # Last 5 runs
+        recent_failures = sum(
+            1 for run in recent_runs if run.get("conclusion") == "failure"
+        )
+        if recent_failures >= 3:
+            anomalies.append(
+                f"Multiple recent failures: {recent_failures}/5 recent runs failed"
+            )
+
+        # No recent runs anomaly (check if all runs are older than 24 hours)
+        if len(runs) > 0:
+            current_time = datetime.now()
+            recent_run_count = 0
+
+            for run in runs:
+                created_field = run.get("created_at") or run.get("createdAt")
+                if created_field:
+                    try:
+                        # Handle ISO timestamp with Z suffix
+                        timestamp_str = created_field.replace("Z", "")
+                        if "T" in timestamp_str:
+                            # Parse ISO format timestamp
+                            run_time = datetime.fromisoformat(timestamp_str)
+
+                            # Calculate time difference in hours
+                            time_diff_hours = (
+                                current_time - run_time
+                            ).total_seconds() / 3600
+
+                            # Consider runs within 24 hours as "recent"
+                            if time_diff_hours < 24:
+                                recent_run_count += 1
+                    except (ValueError, TypeError):
+                        # If we can't parse the timestamp, skip this run
+                        continue
+
+            # If no recent runs found, it's an anomaly
+            if recent_run_count == 0:
+                anomalies.append("No recent workflow runs in the last 24 hours")
+
+        return anomalies
+
+    def calculate_success_rate(self, runs: List[Dict]) -> float:
+        """Calculate success rate from workflow runs"""
+        if not runs:
+            return 0.0  # 0% success rate if no runs
+
+        successful_runs = sum(1 for run in runs if run.get("conclusion") == "success")
+        return (successful_runs / len(runs)) * 100.0  # Return as percentage
+
+    def calculate_average_duration(self, runs: List[Dict]) -> float:
+        """Calculate average duration of workflow runs in minutes"""
+        if not runs:
+            return 0.0
+
+        durations = []
+        for run in runs:
+            # Support both camelCase and snake_case field names
+            created_field = run.get("created_at") or run.get("createdAt")
+            updated_field = run.get("updated_at") or run.get("updatedAt")
+
+            if created_field and updated_field:
+                try:
+                    created = datetime.fromisoformat(
+                        created_field.replace("Z", "+00:00")
+                    )
+                    updated = datetime.fromisoformat(
+                        updated_field.replace("Z", "+00:00")
+                    )
+                    duration = (updated - created).total_seconds() / 60
+                    durations.append(duration)
+                except (ValueError, KeyError):
+                    continue
+
+        return sum(durations) / len(durations) if durations else 0.0
+
+    def generate_health_report(
+        self, workflow_data: Union[List[Dict], Dict]
+    ) -> Dict[str, Any]:
+        """Generate comprehensive health report"""
+        # Handle both list of runs directly or dict with 'runs'/'workflow_runs' key
+        if isinstance(workflow_data, list):
+            runs = workflow_data
+        else:
+            runs = workflow_data.get("runs", workflow_data.get("workflow_runs", []))
+
+        health_score = self.analyze_workflow_health(runs)
+        success_rate = self.calculate_success_rate(runs)
+        anomalies = self.detect_anomalies(runs)
+        avg_duration = self.calculate_average_duration(runs)
+
+        # Determine status based on health score
+        if health_score >= 80:
+            status = "healthy"
+        elif health_score >= 60:
+            status = "degraded"
+        else:
+            status = "unhealthy"
+
+        recommendations: List[str] = []
+
+        report = {
+            "timestamp": datetime.now().isoformat(),
+            "health_score": health_score,
+            "success_rate": success_rate,
+            "status": status,
+            "total_runs": len(runs),
+            "average_duration_minutes": avg_duration,
+            "anomalies": anomalies,
+            "recommendations": recommendations,
+            "summary": {
+                "total_runs": len(runs),
+                "health_score": health_score,
+                "status": status,
+                "success_rate": success_rate,
+                "average_duration_minutes": avg_duration,
+            },
+        }
+
+        # Add recommendations based on analysis
+        if health_score < 80:
+            recommendations.append("Review recent failures and implement fixes")
+
+        if anomalies:
+            recommendations.append("Investigate detected anomalies immediately")
+
+        if avg_duration > 30:  # If workflows take more than 30 minutes
+            recommendations.append("Consider optimizing workflow performance")
+
+        return report
+
+    def save_health_report(self, report: Dict[str, Any], filename: str) -> bool:
+        """Save health report to file"""
+        try:
+            output_path = self.project_root / "logs" / filename
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(output_path, "w", encoding="utf-8") as f:
+                json.dump(report, f, indent=2, default=str)
+
+            logger.info(f"Health report saved to {output_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to save health report: {e}")
+            return False
 
     def display_dashboard(self, branch: Optional[str] = None, live_mode: bool = False):
         """Display real-time CI health dashboard"""

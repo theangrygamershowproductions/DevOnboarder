@@ -1,0 +1,22 @@
+name: Docs Quality
+
+on:
+   pull_request:
+      paths:
+         - "**/*.md"
+         - "scripts/validate_internal_links.sh"
+         - ".pre-commit-config.yaml"
+
+permissions:
+   contents: read
+
+concurrency:
+   group: docs-quality-${{ github.ref }}
+   cancel-in-progress: true
+
+jobs:
+   validate:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@v5
+         - run: bash scripts/validate_internal_links.sh

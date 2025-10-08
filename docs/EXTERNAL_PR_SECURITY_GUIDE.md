@@ -1166,10 +1166,10 @@ gh pr view 123 --json headRepository.owner.login,baseRepository.owner.login
 
 This guide consolidates information from:
 
-- [`docs/ci-failure-issues.md`](../ci-failure-issues.md) - Fork PR limitations and maintainer procedures
-- [`docs/WORKFLOW_SECURITY_STANDARDS.md`](../WORKFLOW_SECURITY_STANDARDS.md) - Permission patterns and security principles
-- [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) - External PR safe execution patterns
-- [`.github/workflows/auto-fix.yml`](../../.github/workflows/auto-fix.yml) - Privileged operation security model
+- [`docs/ci-failure-issues.md`](ci-failure-issues.md) - Fork PR limitations and maintainer procedures
+- [`docs/WORKFLOW_SECURITY_STANDARDS.md`](WORKFLOW_SECURITY_STANDARDS.md) - Permission patterns and security principles
+- [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) - External PR safe execution patterns
+- [`.github/workflows/auto-fix.yml`](../.github/workflows/auto-fix.yml) - Privileged operation security model
 
 ## Quick Reference
 

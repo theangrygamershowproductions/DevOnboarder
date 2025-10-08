@@ -367,9 +367,9 @@ Phase 2 completion enables:
 
 ---
 
-**Next Phase**: [Phase 3: Root Artifact Guard Implementation](./phase3-root-artifact-guard.md)
+**Next Phase**: [Phase 3: Root Artifact Guard Implementation](phase-3-root-artifact-guard-plan.md)
 
-**Implementation Plan**: [DevOnboarder Enhancement Plan](./devonboarder-enhancement-plan.md)
+**Implementation Plan**: [DevOnboarder Enhancement Plan](devonboarder-integration-status.md)
 **Security Framework**: [Enhanced Potato Policy v2.0](./enhanced-potato-policy.md)
 
 **Last Updated**: 2025-01-02

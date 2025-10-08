@@ -243,7 +243,7 @@ visibility: internal
 
 - [Phase 1 Standards](docs/standards/milestone-documentation-format.md)
 
-- [Phase 2 Summary](docs/PHASE2_MILESTONE_STANDARDIZATION_COMPLETE.md)
+- [Phase 2 Summary](docs/PHASE1_MILESTONE_STANDARDIZATION_COMPLETE.md)
 
 - [Phase 3A Report](docs/PHASE3A_VALIDATION_ENHANCEMENT_COMPLETE.md)
 

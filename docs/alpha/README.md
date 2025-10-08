@@ -46,7 +46,7 @@ This template outlines how to onboard early testers who receive special access.
 
 5. Expect occasional downtime or breaking changes while we iterate.
 
-6. Update [../../ALPHA_TESTERS.md](../../ALPHA_TESTERS.md) with your feedback status.
+6. Update [Alpha Testers](../contributing/ALPHA_TESTERS.md) with your feedback status.
 
 7. Track progress in [feedback-template.md](feedback-template.md) as issues are addressed.
 

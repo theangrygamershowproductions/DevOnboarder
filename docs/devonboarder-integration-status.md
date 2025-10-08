@@ -84,21 +84,21 @@ visibility: internal
 
 ### TAGS Organization
 
-- [x] **CEO** - Strategic leadership ([agent](../agents/tags-ceo.md))
+- [x] **CEO** - Strategic leadership ([agent specs needed])
 
-- [x] **CTO** - Technical strategy ([agent](../agents/tags-cto.md))
+- [x] **CTO** - Technical strategy ([agent specs needed])
 
-- [x] **CFO** - Financial strategy and reporting ([agent](../agents/tags-cfo.md))
+- [x] **CFO** - Financial strategy and reporting ([agent specs needed])
 
-- [x] **CMO** - Marketing strategy ([agent](../agents/tags-cmo.md))
+- [x] **CMO** - Marketing strategy ([agent specs needed])
 
 ### CRFV Organization
 
-- [x] **CEO** - Strategic oversight ([agent](../agents/crfv-ceo.md))
+- [x] **CEO** - Strategic oversight ([agent specs needed])
 
-- [x] **CTO** - Technical architecture ([agent](../agents/crfv-cto.md))
+- [x] **CTO** - Technical architecture ([agent specs needed])
 
-- [x] **COO** - Operations management ([agent](../agents/crfv-coo.md))
+- [x] **COO** - Operations management ([agent specs needed])
 
 ## 🔧 Integration Commands (Draft Mode)
 
@@ -212,7 +212,7 @@ The CI monitoring framework is **production-ready** and integrated with DevOnboa
 
 - **Python Automation Script** ([`scripts/ci-monitor.py`](../scripts/ci-monitor.py)) - GitHub CLI integrated
 
-- **Auto-Fix Agent** ([`agents/code-quality-auto-fix.md`](../agents/code-quality-auto-fix.md)) - Pre-commit ready
+- **Auto-Fix Agent** ([code quality auto-fix agent needed]) - Pre-commit ready
 
 - **Reporting Templates** ([`.codex/templates/pr-status-report.md`](../.codex/templates/pr-status-report.md)) - Structured output
 
@@ -311,7 +311,7 @@ npx markdownlint-cli2 "**/*.md"
 
 ### Core Framework
 
-- [CI Monitoring Documentation](ci-monitoring.md)
+- [CI Monitoring Documentation](ci-dashboard.md)
 
 - [Core Metadata Standards](core-metadata-standards.md)
 

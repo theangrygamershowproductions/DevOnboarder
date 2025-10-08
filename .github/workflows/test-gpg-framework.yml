@@ -26,32 +26,51 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Set token for GPG Framework testing
+        id: set-token
+        run: |
+          # Multi-step token selection following Priority Matrix pattern
+          if [ -n "${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_ISSUE_AUTOMATION_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_ISSUE_AUTOMATION_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.CI_BOT_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.CI_BOT_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=CI_BOT_TOKEN" >> $GITHUB_OUTPUT
+          elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+              echo "selected-token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+              echo "token-source=GITHUB_TOKEN" >> $GITHUB_OUTPUT
+          else
+              echo "::error::No authentication token available for GPG Framework testing!"
+              exit 1
+          fi
+          echo "Using token source for GPG Framework: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
+
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.CI_ISSUE_AUTOMATION_TOKEN || secrets.CI_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.set-token.outputs.selected-token }}
 
       - name: Setup GPG commit signing (AAR Bot)
         env:
           # Using AAR Bot credentials for testing
-          AARBOT_GPG_PRIVATE: ${{ secrets.AARBOT_GPG_PRIVATE }}
-          AARBOT_GPG_KEY_ID: ${{ vars.AARBOT_GPG_KEY_ID }}
-          AARBOT_NAME: ${{ vars.AARBOT_NAME }}
-          AARBOT_EMAIL: ${{ vars.AARBOT_EMAIL }}
+          AAR_BOT_GPG_PRIVATE: ${{ secrets.AAR_BOT_GPG_PRIVATE }}
+          AAR_BOT_GPG_KEY_ID: ${{ vars.AAR_BOT_GPG_KEY_ID }}
+          AAR_BOT_NAME: ${{ vars.AAR_BOT_NAME }}
+          AAR_BOT_EMAIL: ${{ vars.AAR_BOT_EMAIL }}
         run: |
           # Import GPG private key (using printf to avoid terminal output violations)
-          printf '%s\n' "$AARBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
+          printf '%s\n' "$AAR_BOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
 
           # Configure git to use GPG signing
-          git config --global user.name "$AARBOT_NAME"
-          git config --global user.email "$AARBOT_EMAIL"
-          git config --global user.signingkey "$AARBOT_GPG_KEY_ID"
+          git config --global user.name "$AAR_BOT_NAME"
+          git config --global user.email "$AAR_BOT_EMAIL"
+          git config --global user.signingkey "$AAR_BOT_GPG_KEY_ID"
           git config --global commit.gpgsign true
           git config --global gpg.format openpgp
 
           # Set up non-interactive GPG trust for automation
-          gpg --batch --no-tty --command-fd 0 --edit-key "$AARBOT_GPG_KEY_ID" <<EOF
+          gpg --batch --no-tty --command-fd 0 --edit-key "$AAR_BOT_GPG_KEY_ID" <<EOF
           trust
           5
           y

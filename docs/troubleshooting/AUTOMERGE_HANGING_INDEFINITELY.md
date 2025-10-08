@@ -342,11 +342,11 @@ gh pr merge ISSUE_NUMBER --auto --merge
 
 ## 🚀 Related Documentation
 
-- [Branch Protection Configuration](../infrastructure/BRANCH_PROTECTION.md)
+- [Branch Protection Guide](../git/README.md)
 
-- [CI Status Check Troubleshooting](./CI_STATUS_CHECK_MISMATCHES.md)
+- [CI Status Documentation](../ci/ci-status-current.md)
 
-- [Repository Configuration Best Practices](../standards/REPOSITORY_SETUP.md)
+- [Setup Guide](../../SETUP.md)
 
 ---
 

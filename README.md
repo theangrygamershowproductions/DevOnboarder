@@ -116,6 +116,11 @@ See [docs/README.md](docs/README.md) for full setup instructions and workflow gu
 
 **📚 Documentation**: DevOnboarder uses modular documentation for improved navigation - see [docs/MODULAR_DOCUMENTATION_INDEX.md](docs/MODULAR_DOCUMENTATION_INDEX.md) for the complete guide to all specialized modules.
 
+**🔍 Quality & Review Guides**:
+
+- [GitHub Review Process Guide](docs/github-review-process-guide.md) - Copilot review lifecycle and troubleshooting
+- [Documentation Quality Standards](docs/documentation-quality-standards.md) - Cross-reference validation and quality patterns
+
 ## Why This Project Exists
 
 The short version: everything broke, then got rebuilt.
@@ -426,7 +431,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 
 7. Verify merges with [docs/merge-checklist.md](docs/merge-checklist.md).
 
-8. Track community members in [FOUNDERS.md](FOUNDERS.md) and [ALPHA_TESTERS.md](ALPHA_TESTERS.md).
+8. Track community members in [Founders](docs/contributing/FOUNDERS.md) and [Alpha Testers](docs/contributing/ALPHA_TESTERS.md).
 
 9. Update all relevant READMEs when new roles are added to the GitHub organization.
 
@@ -449,7 +454,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
     - The script automatically downloads Vale if it isn't installed and
 
       prints a warning if the download fails. See
-      [docs/README.md#documentation-quality-checks](docs/README.md#documentation-quality-checks)
+      [Documentation Quality Standards](docs/documentation-quality-standards.md)
       for more details.
     - LanguageTool checks are optional; start a local server and set
 
@@ -470,12 +475,12 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 
 20. Review [.codex/Agents.md](.codex/Agents.md) for agent YAML header requirements and centralized notifications.
 
-21. See [docs/ONBOARDING.md#sending-notifications](docs/ONBOARDING.md#sending-notifications) for how to send human updates.
+21. See [Onboarding Guide](docs/ONBOARDING.md) for how to send human updates.
 
 22. Keep the sentinel word `Potato` and the file `Potato.md` listed in `.gitignore`,
 
     `.dockerignore`, and `.codespell-ignore`.
-    See [AGENTS.md](AGENTS.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
+    See [Agents Overview](agents/index.md) for the full policy. Both pre-commit and CI run `scripts/check_potato_ignore.sh`
     to confirm the entries exist. Do not remove them without approval.
     For the security philosophy and origin story, see [docs/potato-policy-aar.md](docs/potato-policy-aar.md).
 
@@ -485,7 +490,7 @@ Workflow documentation lives under the [docs/](docs/) directory. New contributor
 
 24. Prefix a commit message with `[no-ci]` to skip the CI workflow on direct pushes. Pull requests always run CI. See
 
-    [AGENTS.md](AGENTS.md) for details.
+    [Agents Overview](agents/index.md) for details.
 
 25. See [docs/network-exception-list.md](docs/network-exception-list.md)
 
@@ -742,7 +747,7 @@ For complete QC documentation, see [`docs/quality-control-95-rule.md`](docs/qual
 
 Licensed under the MIT License. See `LICENSE.md` for details.
 
-## Found DevOnboarder useful?
+## Found DevOnboarder useful
 
 If this project helped speed up onboarding, save time, or avoid headaches,
 please [⭐ star the repo](https://github.com/theangrygamershowproductions/DevOnboarder)

@@ -39,10 +39,10 @@ This directory contains troubleshooting guides for common DevOnboarder issues.
 | MyPy passes locally but fails in CI | Add `types-*` to `pyproject.toml` | [CI MyPy Type Stubs](CI_MYPY_TYPE_STUBS.md) |
 | **Automerge hangs indefinitely** | **Check default branch + status names** | **[Automerge Hanging Guide](AUTOMERGE_HANGING_INDEFINITELY.md)** |
 
-| TypeScript compilation fails | Fix file permissions with container UID | [Permission Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-2-file-permission-mismatches-with-volume-mounts) |
-| Health check scripts fail | Use ES module syntax (`import` not `require`) | [ES Module Section](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md#issue-3-es-module-vs-commonjs-syntax) |
+| TypeScript compilation fails | Fix file permissions with container UID | [Docker Container Health Troubleshooting](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md) |
+| Health check scripts fail | Use ES module syntax (`import` not `require`) | [Docker Container Health Troubleshooting](DOCKER_CONTAINER_HEALTH_TROUBLESHOOTING.md) |
 
-### Need Help?
+### Need Help
 
 If your issue isn't covered here:
 

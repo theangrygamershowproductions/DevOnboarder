@@ -100,4 +100,4 @@ $(if [ -f "logs/potato-violations.log" ]; then echo "### Last 10 Violations"; ta
 
 _This report was generated automatically by the Potato Policy audit system._
 
-_For more information, see [docs/about-potato.md](docs/about-potato.md)_
+_For more information, see [docs/about-potato.md](../docs/about-potato.md)_

@@ -1,0 +1,30 @@
+name: Scan Proprietary References
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "**/*.sh"
+      - "**/*.py"
+      - ".vscode/**"
+      - "scripts/**"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block secret-looking tokens
+        run: |
+          set -euo pipefail
+          ! git grep -nE 'sk-[A-Za-z0-9]{20,}' -- . || {
+            echo "::error title=Secret-like token found::Remove any token-looking string (sk-*)"; exit 1; }
+      - name: Block proprietary identifiers
+        run: |
+          set -euo pipefail
+          # Add only what you truly consider proprietary identifiers:
+          BAD='(devonboarder[-_ ]?premium|internal[-_ ]?toolkit)'
+          ! git grep -nE "$BAD" -- . || {
+            echo "::error title=Proprietary reference found::Use generic capability language"; exit 1; }

@@ -92,7 +92,7 @@ modules.
 - [agile-001] Connect Llama2 Agile Helper agent for sprint summaries and backlog
 
   suggestions. See
-  [codex/tasks/llama2-agile-helper.yaml](codex/tasks/llama2-agile-helper.yaml).
+  [codex task templates](../../codex/tasks/).
 
 ---
 

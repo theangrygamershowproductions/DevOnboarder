@@ -19,7 +19,7 @@ updated_at: '2025-09-12'
 visibility: internal
 ---
 
-# Agents — Service and Integration Roles (Codex-Driven Reference)
+# Agent Service and Integration Roles
 
 > **Note**: The up-to-date agent documentation now lives at
 > [agents/index.md](../agents/index.md). The remainder of this file is kept for
@@ -33,66 +33,50 @@ and Codex automation can keep the platform healthy.
 
 ## Table of Contents
 
-1. [Agent Service Map](#agent-service-map)
-
-2. [Auth Server (Backend Agent)](#auth-server-backend-agent)
-
-3. [XP API](#xp-api)
-
-4. [Frontend Session Agent](#frontend-session-agent)
-
-5. [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
-
-6. [Discord Integration Agent](#discord-integration-agent)
-
-7. [Verification Agent](#verification-agent)
-
-8. [Session/JWT Agent](#sessionjwt-agent)
-
-9. [Database Service (Postgres)](#database-service-postgres)
-
-10. [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
-
-11. [Planned Agents / Stubs](#planned-agents--stubs)
-
-12. [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
-
-13. [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
-
-14. [CI Wait Example](#ci-wait-example)
-
-15. [Agent Task Checklist](#agent-task-checklist)
-
-16. [Next Steps / Remediation Timeline](#next-steps--remediation-timeline)
-
-17. [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
-
-18. [Environment Variable Reference](#environment-variable-reference)
-
-19. [Codex Observability](#codex-observability)
-
-20. [How to Extend/Contribute](#how-to-extendcontribute)
-
-21. [Deprecation & Retirement](#deprecation--retirement)
-
-22. [Glossary](#glossary)
-
-23. [Related Docs](#related-docs)
-
-24. [Revision History](#revision-history)
+- [Agent Service and Integration Roles](#agent-service-and-integration-roles)
+    - [Table of Contents](#table-of-contents)
+    - [Agent Service Map](#agent-service-map)
+    - [Auth Server (Backend Agent)](#auth-server-backend-agent)
+        - [Auth Server Endpoints](#auth-server-endpoints)
+    - [XP API](#xp-api)
+        - [XP API Endpoints](#xp-api-endpoints)
+    - [Frontend Session Agent](#frontend-session-agent)
+        - [Routes](#routes)
+    - [Role Guard (RBAC Agent)](#role-guard-rbac-agent)
+    - [Discord Integration Agent](#discord-integration-agent)
+        - [Discord Integration Endpoints](#discord-integration-endpoints)
+    - [Verification Agent](#verification-agent)
+    - [Session/JWT Agent](#sessionjwt-agent)
+    - [Database Service (Postgres)](#database-service-postgres)
+    - [DevOps/Infrastructure Agents](#devopsinfrastructure-agents)
+    - [Planned Agents and Stubs](#planned-agents-and-stubs)
+    - [Startup Healthcheck (Autocheck Agent)](#startup-healthcheck-autocheck-agent)
+    - [Healthcheck Implementation Guide](#healthcheck-implementation-guide)
+    - [CI Wait Example](#ci-wait-example)
+    - [Agent Task Checklist](#agent-task-checklist)
+    - [Next Steps and Remediation Timeline](#next-steps-and-remediation-timeline)
+    - [Agent Health/Liveness Matrix](#agent-healthliveness-matrix)
+    - [Environment Variable Reference](#environment-variable-reference)
+    - [Codex Observability](#codex-observability)
+    - [Security Policy for Tooling and Dependencies](#security-policy-for-tooling-and-dependencies)
+    - [How to Extend/Contribute](#how-to-extendcontribute)
+    - [Deprecation and Retirement](#deprecation-and-retirement)
+    - [Glossary](#glossary)
+    - [Related Docs](#related-docs)
+    - [Revision History](#revision-history)
+    - [Last Updated](#last-updated)
 
 ---
 
 ## Agent Service Map
 
-| Agent Name          | Endpoint(s)         | Port | Healthcheck | Depends On | Status   |
-| ------------------- | ------------------- | ---- | ----------- | ---------- | -------- |
-
-| Auth Server         | `/api/*`, `/health` | 8002 | `/health`   | db         | updating |
-| Discord Integration | `/oauth`, `/roles`  | 8081 | `/health`   | Auth, db   | verify   |
-| Frontend Agent      | `/`, `/session`     | 3000 | N/A         | Auth       | stable   |
-| XP API              | `/xp`, `/health`    | 8001 | `/health`   | db         | verify   |
-| Database (Postgres) | N/A                 | 5432 | docker      | N/A        | stable   |
+| Agent Name          | Port | Healthcheck | Depends On | Status   |
+| ------------------- | ---- | ----------- | ---------- | -------- |
+| Auth Server         | 8002 | `/health`   | db         | updating |
+| Discord Integration | 8081 | `/health`   | Auth, db   | verify   |
+| Frontend Agent      | 3000 | N/A         | Auth       | stable   |
+| XP API              | 8001 | `/health`   | db         | verify   |
+| Database (Postgres) | 5432 | docker      | N/A        | stable   |
 
 ---
 
@@ -100,7 +84,12 @@ and Codex automation can keep the platform healthy.
 
 **Purpose:** Provides Discord OAuth, role checks, JWT issuance, and user session endpoints.
 
-**Key Endpoints:** `POST /api/discord/exchange`, `GET /api/auth/user`, `GET /api/verification/status`, `GET /health`
+### Auth Server Endpoints
+
+- `GET /health` - Service health check
+- `POST /api/discord/exchange` - Exchange Discord code for JWT
+- `GET /api/auth/user` - Get current user session
+- `GET /api/verification/status` - Check user verification status
 
 **Environment:** Discord client credentials, role IDs, JWT secret and config.
 
@@ -116,7 +105,12 @@ and Codex automation can keep the platform healthy.
 
 **Purpose:** Provides onboarding and XP routes backed by the auth service database.
 
-**Key Endpoints:** `GET /api/user/onboarding-status`, `GET /api/user/level`, `POST /api/user/contribute`, `GET /health`
+### XP API Endpoints
+
+- `GET /health` - Service health check
+- `GET /api/user/onboarding-status` - Get user onboarding progress
+- `GET /api/user/level` - Get user XP level and statistics
+- `POST /api/user/contribute` - Record user contribution for XP
 
 **Environment:** Shares database connection via `DATABASE_URL`.
 
@@ -125,6 +119,12 @@ and Codex automation can keep the platform healthy.
 ## Frontend Session Agent
 
 **Purpose:** Stores and refreshes JWTs, restores sessions, and applies RBAC checks client-side.
+
+### Routes
+
+- `GET /` - Main application interface
+- `GET /session` - Session management interface
+- `GET /*` - Protected routes with RBAC checks
 
 **Key Files:** `src/hooks/useSession.ts`, `src/lib/auth/discord.ts`
 
@@ -145,6 +145,12 @@ and Codex automation can keep the platform healthy.
 **Status:** Verify – exposes `/oauth` and `/roles` for account linking and role lookups.
 
 **Purpose:** Handles Discord OAuth flows and role lookups.
+
+### Discord Integration Endpoints
+
+- `GET /health` - Service health check
+- `POST /oauth` - Handle Discord OAuth callback
+- `GET /roles` - Lookup user Discord roles
 
 **Key Files:** `src/discord_integration/api.py`
 
@@ -182,7 +188,7 @@ Examples include Traefik or Nginx for routing, Docker Compose for orchestration,
 
 ---
 
-## Planned Agents / Stubs
+## Planned Agents and Stubs
 
 Examples include a Discord bot/webhook agent and ID.me integration.
 
@@ -195,13 +201,11 @@ Examples include a Discord bot/webhook agent and ID.me integration.
 **Example Docker Compose Healthcheck:**
 
 ```yaml
-
 healthcheck:
     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
     interval: 5s
     timeout: 2s
     retries: 10
-
 ```
 
 ## Healthcheck Implementation Guide
@@ -210,41 +214,28 @@ Add a simple `/health` route in each service so CI and Compose can poll for read
 
 **Express:**
 
-```js
-
-app.get("/health", (req, res) => res.status(200).send("OK"));
-
-```
+    app.get("/health", (req, res) => res.status(200).send("OK"));
 
 **FastAPI:**
 
-```python
-
-@app.get("/health")
-def healthcheck():
-    return {"status": "ok"}
-
-```
+    @app.get("/health")
+    def healthcheck():
+        return {"status": "ok"}
 
 ## CI Wait Example
 
 Use a small loop in your workflow to wait for the auth service before running tests:
 
-```yaml
-
-- name: Wait for Auth service
-
-  run: |
-      for i in {1..20}; do
-        if curl -sf http://localhost:8002/health; then
-          echo "Auth is up"
-          exit 0
-        fi
-        sleep 3
-      done
-      exit 1
-
-```
+    - name: Wait for Auth service
+      run: |
+          for i in {1..20}; do
+            if curl -sf http://localhost:8002/health; then
+              echo "Auth is up"
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
 
 ---
 
@@ -260,7 +251,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 
 ---
 
-## Next Steps / Remediation Timeline
+## Next Steps and Remediation Timeline
 
 - [x] Implement `/health` in Auth
 
@@ -335,7 +326,7 @@ Use a small loop in your workflow to wait for the auth service before running te
 CI health and failure events are monitored by Codex. Future outages will trigger
 an automated notification and suggested fix via Codex's reporting channel.
 
-## \U0001F512 Security Policy for Tooling and Dependencies
+## Security Policy for Tooling and Dependencies
 
 To reduce the attack surface in CI/CD workflows:
 
@@ -359,7 +350,7 @@ To reduce the attack surface in CI/CD workflows:
 
 ---
 
-## Deprecation & Retirement
+## Deprecation and Retirement
 
 When retiring an agent, mark the section as deprecated with the date and reason.
 Update the health matrix and remove references from code and docs.
@@ -382,7 +373,7 @@ Update the health matrix and remove references from code and docs.
 
 - [Security Policy](../SECURITY.md)
 
-- [Onboarding Guide](../ONBOARDING.md)
+- [Onboarding Guide](ONBOARDING.md)
 
 - [.env.example](../.env.example)
 
