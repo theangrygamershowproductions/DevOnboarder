@@ -67,8 +67,8 @@ check_metadata() {
     local has_version=false
     local has_updated=false
     
-    # Look for metadata in first 10 lines
-    head -10 "$file" | while read -r line; do
+    # Look for metadata in first 25 lines (to capture full YAML frontmatter)
+    head -25 "$file" | while read -r line; do
         if [[ "$line" =~ Version:|v[0-9] ]]; then
             has_version=true
         fi
@@ -77,11 +77,11 @@ check_metadata() {
         fi
     done
     
-    if ! head -10 "$file" | grep -q "Version:\|v[0-9]"; then
+    if ! head -25 "$file" | grep -qi "version:\|v[0-9]"; then
         log_warning "$file: Missing version information in header"
     fi
     
-    if ! head -10 "$file" | grep -q "Updated:\|Last.Modified:\|Created:"; then
+    if ! head -25 "$file" | grep -qi "updated_at:\|updated:\|last.modified:\|created:"; then
         log_warning "$file: Missing timestamp information in header"
     fi
 }

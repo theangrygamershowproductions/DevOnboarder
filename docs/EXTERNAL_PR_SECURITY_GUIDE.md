@@ -22,9 +22,15 @@ visibility: public
 
 ## Goal & Context
 
-This document provides comprehensive security guidance for handling external pull requests (PRs) from forked repositories in the DevOnboarder project. The goal is to enable secure community contributions while maintaining the integrity of the main repository and protecting sensitive information.
+This document provides comprehensive security guidance for handling external pull
+requests (PRs) from forked repositories in the DevOnboarder project. The goal is to
+enable secure community contributions while maintaining the integrity of the main
+repository and protecting sensitive information.
 
-**Context**: DevOnboarder implements a multi-layered security architecture to safely process external PRs, balancing security requirements with the need for community contributions. This guide serves as the authoritative reference for maintainers and contributors on secure external PR handling.
+**Context**: DevOnboarder implements a multi-layered security architecture to safely
+process external PRs, balancing security requirements with the need for community
+contributions. This guide serves as the authoritative reference for maintainers and
+contributors on secure external PR handling.
 
 ## Requirements & Constraints
 
@@ -69,7 +75,10 @@ This document provides comprehensive security guidance for handling external pul
 
 ## Overview
 
-DevOnboarder implements a multi-layered security model to safely handle pull requests from external contributors and forked repositories. This guide provides a comprehensive overview of the security architecture, workflow patterns, and procedures for maintaining security while enabling community contributions.
+DevOnboarder implements a multi-layered security model to safely handle pull requests
+from external contributors and forked repositories. This guide provides a comprehensive
+overview of the security architecture, workflow patterns, and procedures for maintaining
+security while enabling community contributions.
 
 ## Security Architecture
 
@@ -86,15 +95,26 @@ When external contributors create pull requests from forks, GitHub's security mo
 
 DevOnboarder addresses these challenges through a **three-tier security architecture**:
 
-**Architecture Overview:** The security model consists of three distinct tiers designed to handle external pull requests securely:
+**Architecture Overview:** The security model consists of three distinct tiers designed
+to handle external pull requests securely:
 
-1. **Security Tier 1 - Safe Execution Zone**: The outermost tier handles untrusted code from external contributors. It uses the `pull_request` trigger with read-only permissions, no access to repository secrets, and can safely execute testing and validation workflows without security risks.
+1. **Security Tier 1 - Safe Execution Zone**: The outermost tier handles untrusted code
+from external contributors. It uses the `pull_request` trigger with read-only permissions,
+no access to repository secrets, and can safely execute testing and validation workflows
+without security risks.
 
-2. **Security Tier 2 - Privileged Execution Zone**: The middle tier processes trusted code from maintainers and approved contributors. It uses the `pull_request_target` trigger with full write permissions, access to all repository secrets, and can perform privileged operations like auto-fixing and deployment.
+2. **Security Tier 2 - Privileged Execution Zone**: The middle tier processes trusted code
+from maintainers and approved contributors. It uses the `pull_request_target` trigger with
+full write permissions, access to all repository secrets, and can perform privileged
+operations like auto-fixing and deployment.
 
-3. **Security Tier 3 - Maintainer Override Zone**: The innermost tier provides manual intervention capabilities for repository maintainers. It allows direct workflow triggering, manual token usage, and override of automated security restrictions when human judgment is required.
+3. **Security Tier 3 - Maintainer Override Zone**: The innermost tier provides manual
+intervention capabilities for repository maintainers. It allows direct workflow triggering,
+manual token usage, and override of automated security restrictions when human judgment
+is required.
 
-Each tier provides increasing levels of access while maintaining strict security boundaries between untrusted external contributions and sensitive repository operations.
+Each tier provides increasing levels of access while maintaining strict security boundaries
+between untrusted external contributions and sensitive repository operations.
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
@@ -379,7 +399,9 @@ gh workflow run ci.yml \
 
 ## DevOnboarder Quality Gates Integration
 
-DevOnboarder implements comprehensive quality validation that affects how external PRs are processed. Understanding these integrations is crucial for maintainers and external contributors.
+DevOnboarder implements comprehensive quality validation that affects how external PRs
+are processed. Understanding these integrations is crucial for maintainers and external
+contributors.
 
 ### Quality Control Validation (`qc_pre_push.sh`)
 
@@ -435,7 +457,8 @@ The safe commit wrapper provides comprehensive validation but has different beha
 
 **Branch Protection for External PRs:**
 
-External contributors cannot directly commit to protected branches, but the validation helps ensure their PR branches meet standards:
+External contributors cannot directly commit to protected branches, but the validation
+helps ensure their PR branches meet standards:
 
 ```bash
 # Protected branches (external PRs cannot target directly)
@@ -481,7 +504,8 @@ required_reviews:
 
 ## Codex Agent System Integration
 
-DevOnboarder's Codex agent system has specific security considerations for external PRs, particularly when modifying agent instructions or triggering agent workflows.
+DevOnboarder's Codex agent system has specific security considerations for external PRs,
+particularly when modifying agent instructions or triggering agent workflows.
 
 ### Agent Workflow Security
 
@@ -605,7 +629,8 @@ sandbox/external-pr-123-agent-modification
 
 ## DevOnboarder Automation Framework
 
-DevOnboarder's comprehensive automation framework handles external PRs with specific security and operational considerations.
+DevOnboarder's comprehensive automation framework handles external PRs with specific
+security and operational considerations.
 
 ### PR Automation System (`automate_pr_process.sh`)
 
@@ -772,7 +797,8 @@ LOG_ENTRIES:
 
 ## Enhanced Potato Policy Integration
 
-DevOnboarder's Enhanced Potato Policy provides automated security enforcement that is particularly important for external PRs to prevent accidental exposure of sensitive information.
+DevOnboarder's DevOnboarder's Enhanced Potato Policy provides automated security enforcement that is
+particularly important for external PRs to prevent accidental exposure of sensitive information.
 
 ### Security File Detection
 
@@ -936,7 +962,8 @@ DevOnboarder generates enhanced security reports for external PRs:
 
 ## Review Process and CODEOWNERS Integration
 
-DevOnboarder implements sophisticated review requirements and approval flows that apply specifically to external PRs, ensuring security and quality standards are maintained.
+DevOnboarder implements sophisticated review requirements and approval flows that apply
+specifically to external PRs, ensuring security and quality standards are maintained.
 
 ### CODEOWNERS Requirements
 
@@ -1243,5 +1270,6 @@ gh pr checkout 123
 ---
 
 **Last Updated:** October 1, 2025
-**Related Documentation:** [CI Failure Issues](ci-failure-issues.md), [Workflow Security Standards](WORKFLOW_SECURITY_STANDARDS.md)
+**Related Documentation:** [CI Failure Issues](ci-failure-issues.md),
+[Workflow Security Standards](WORKFLOW_SECURITY_STANDARDS.md)
 **Maintainer:** DevOnboarder Security Team

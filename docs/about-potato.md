@@ -121,7 +121,10 @@ The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a
 4. **🚨 Enforcement**:
    - ✅ **Pass**: If all files are compliant
    - ❌ **Fail**: If violations detected, forcing manual review
-   - 📊 **Status**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+   - 📊 **Status**: [![🥔 Potato Policy]
+     (https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/
+     potato-policy-focused.yml/badge.svg)]
+     (https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 
 ### Why This Matters
 
