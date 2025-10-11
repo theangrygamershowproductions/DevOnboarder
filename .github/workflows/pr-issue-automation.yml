@@ -17,7 +17,7 @@
 #   name: Agent.PR-Issue-Automation
 #   role: Automatically creates issues for pull requests requiring tracking
 #   scope: .github/workflows/pr-issue-automation.yml
-#   triggers: Pull request opened/reopened on main/master, manual workflow dispatch
+#   triggers: Pull request opened/reopened on main, manual workflow dispatch
 #   output: GitHub issues created for PR tracking and documentation
 #   gpg-signing: Required for commit verification
 # ---
@@ -26,7 +26,7 @@ name: PR Issue Automation
 on:
     pull_request:
         types: [opened, reopened]
-        branches: [main, master]
+        branches: [main]
 
     # Allow manual triggering
     workflow_dispatch:

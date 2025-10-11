@@ -204,7 +204,7 @@ class GitHubActionsDependencyManager:
             return "patch"
         elif re.match(r"^[a-f0-9]{40}$", version):
             return "commit_sha"
-        elif version in ["main", "master"]:
+        elif version in ["main"]:
             return "branch"
         else:
             return "unknown"

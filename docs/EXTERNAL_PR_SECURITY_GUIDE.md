@@ -587,7 +587,7 @@ fi
 {
   "safety": {
     "protected_files": ["Potato.md", "*.key", "*.pem"],
-    "protected_branches": ["main", "master", "production"],
+    "protected_branches": ["main", "production"],
     "external_pr_restrictions": {
       "auto_merge": false,
       "auto_fix_application": false,

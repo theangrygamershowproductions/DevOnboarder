@@ -22,7 +22,7 @@ on:
             - "docs/enhanced-potato-policy.md"
             - ".github/workflows/potato-policy-focused.yml"
     push:
-        branches: [main, master]
+        branches: [main]
     schedule:
         # Daily security audit at 2 AM UTC
         - cron: "0 2 * * *"

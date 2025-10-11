@@ -51,8 +51,6 @@ suggest_milestone_generation() {
     if [[ -z "$default_branch" ]]; then
         if git show-ref --verify --quiet refs/remotes/origin/main; then
             default_branch="main"
-        elif git show-ref --verify --quiet refs/remotes/origin/master; then
-            default_branch="master"
         elif git show-ref --verify --quiet refs/remotes/origin/develop; then
             default_branch="develop"
         else

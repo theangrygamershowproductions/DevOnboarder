@@ -84,7 +84,7 @@ The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a **reposito
 
     - Any ignore file modifications
 
-    - Pushes to main/master branches
+    - Pushes to main branch
 
 3. **⚡ Auto-Correction**: The `potato_policy_enforce.sh` script:
 

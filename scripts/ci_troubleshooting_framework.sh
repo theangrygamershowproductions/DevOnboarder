@@ -336,7 +336,7 @@ name: PR Merge Cleanup
 on:
     pull_request:
         types: [closed]
-        branches: [main, master]
+        branches: [main]
 
     # Allow manual triggering
     workflow_dispatch:
