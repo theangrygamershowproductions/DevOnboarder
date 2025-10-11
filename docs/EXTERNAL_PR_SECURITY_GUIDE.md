@@ -16,8 +16,54 @@ tags:
 - github-actions
 title: External PR Security Guide
 updated_at: '2025-10-01'
+version: 1.0
 visibility: public
 ---
+
+## Goal & Context
+
+This document provides comprehensive security guidance for handling external pull requests (PRs) from forked repositories in the DevOnboarder project. The goal is to enable secure community contributions while maintaining the integrity of the main repository and protecting sensitive information.
+
+**Context**: DevOnboarder implements a multi-layered security architecture to safely process external PRs, balancing security requirements with the need for community contributions. This guide serves as the authoritative reference for maintainers and contributors on secure external PR handling.
+
+## Requirements & Constraints
+
+**Requirements**:
+- All external PRs must undergo automated security validation
+- Privileged operations must be isolated from untrusted code execution
+- Manual maintainer intervention procedures must be documented
+- Security violations must trigger immediate blocking and notification
+
+**Constraints**:
+- GitHub's security model limits token permissions for fork PRs
+- Repository secrets are not accessible to external PR workflows
+- Auto-merge is disabled for all external PRs
+- Protected files (Potato Policy) cannot be modified by external contributors
+
+## Use Cases
+
+1. **External Contributor Code Submission**: Community members submit code changes from forks
+2. **Security Review Process**: Maintainers review external PRs for security implications
+3. **Automated Validation**: CI/CD pipelines validate external PRs safely
+4. **Manual Intervention**: Maintainers handle privileged operations for external PRs
+5. **Violation Response**: Automated blocking and notification for security violations
+
+## Dependencies
+
+- GitHub Actions workflows with proper permission configurations
+- DevOnboarder quality control system (qc_pre_push.sh)
+- Potato Policy security enforcement
+- CODEOWNERS configuration for review requirements
+- Personal access tokens for maintainer interventions
+
+## Acceptance Criteria
+
+- [ ] External PRs trigger safe validation workflows without privileged access
+- [ ] Privileged operations are handled through workflow_run triggers only
+- [ ] Security violations are automatically detected and blocked
+- [ ] Manual maintainer procedures are documented and functional
+- [ ] All external PRs require explicit maintainer approval before merge
+- [ ] Audit trails are maintained for all external PR security decisions
 
 # External Pull Request Security Guide
 
