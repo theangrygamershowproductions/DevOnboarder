@@ -181,19 +181,26 @@ jobs:
               uses: actions/github-script@v7
               with:
                   script: |
-                      const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
-                      const description = '${{ steps.check.outputs.status }}' === 'clean' 
-                          ? 'No root artifact violations detected' 
-                          : 'Root artifact violations found';
+                      try {
+                          const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
+                          const description = '${{ steps.check.outputs.status }}' === 'clean' 
+                              ? 'No root artifact violations detected' 
+                              : 'Root artifact violations found';
 
-                      console.log('Creating status:', { status, description, sha: context.sha });
+                          console.log('Creating status:', { status, description, sha: context.sha });
 
-                      await github.rest.repos.createCommitStatus({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          sha: context.sha,
-                          state: status,
-                          context: 'Root Artifact Guard',
-                          description: description,
-                          target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-                      });
+                          const result = await github.rest.repos.createCommitStatus({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              sha: context.sha,
+                              state: status,
+                              context: 'Root Artifact Guard',
+                              description: description,
+                              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+                          });
+
+                          console.log('Status created successfully:', result.data.state);
+                      } catch (error) {
+                          console.error('Failed to create status:', error);
+                          throw error;
+                      }
