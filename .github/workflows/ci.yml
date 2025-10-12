@@ -22,6 +22,7 @@ permissions:
   issues: write  # Required for issue creation
   pull-requests: write  # Required for PR comments
   actions: read  # Required for GitHub CLI workflow operations
+  statuses: write  # Required for creating commit statuses
 
 jobs:
   validate-yaml:
