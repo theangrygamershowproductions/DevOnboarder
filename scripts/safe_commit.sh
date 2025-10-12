@@ -16,6 +16,11 @@ source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 set -euo pipefail
 
+# Define error function locally (fallback if color_utils.sh doesn't provide it)
+error() {
+    printf "ERROR: %s\n" "$1" >&2
+}
+
 # Function to validate terminal output patterns (ZERO TOLERANCE policy)
 validate_terminal_output() {
     local script_path="$1"
@@ -88,7 +93,7 @@ echo "Checking for common instruction violations..."
 FORBIDDEN_FILES=("Potato.md" "*.pem" "*.key" "*.env" "auth.db")
 for pattern in "${FORBIDDEN_FILES[@]}"; do
     if git ls-files | grep -q "$pattern" 2>/dev/null; then
-        printf "error "Forbidden file pattern detected: %s\n" "$pattern"
+        printf "error: Forbidden file pattern detected: %s\n" "$pattern"
         printf "These files should never be committed per security instructions\n"
         exit 1
     fi
@@ -96,7 +101,7 @@ done
 
 # Check for emoji usage in committed files (common violation)
 if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "SUCCESS:\|ERROR:\|🚨\|💡\|🔍\|CHECK:\|📄\|🏆\|DEPLOY:\|🥔\|WARNING:\|💥\|TOOL:\|TARGET:\|REPORT:\|SYNC:\|🚦\|SUCCESS:\|ERROR:" >/dev/null 2>&1; then
-    printf "error "Emoji usage detected in committed files\n"
+    printf "error: Emoji usage detected in committed files\n"
     printf "ZERO TOLERANCE: Remove all emojis from documentation and scripts\n"
     exit 1
 fi
@@ -111,7 +116,8 @@ printf "Commit message: %s\n" "$COMMIT_MSG"
 
 # CRITICAL: Validate commit message format before proceeding
 echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
+COMMIT_MSG_REGEX='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
+if ! echo "$COMMIT_MSG" | grep -E "$COMMIT_MSG_REGEX" >/dev/null; then
     error "Invalid commit message format!"
     echo ""
     echo "Required format: <TYPE>(<scope>): <subject>"
@@ -126,27 +132,6 @@ if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SEC
     echo "  CHORE(deps): update Python requirements"
     echo ""
     printf "Your message: %s\n" "$COMMIT_MSG"
-    exit 1
-fi
-echo "Commit message format validated"
-
-# CRITICAL: Validate commit message format before proceeding
-echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
-    error "error "Invalid commit message format!"
-    echo ""
-    echo "Required format: <TYPE>(<scope>): <subject>"
-    echo ""
-    echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
-    echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
-    echo "Build/Build types allowed for Dependabot compatibility"
-    echo ""
-    echo "Examples:"
-    echo "  FIX(auth): resolve bcrypt password truncation issue"
-    echo "  FEAT(ci): add automated dependency updates"
-    echo "  CHORE(deps): update Python requirements"
-    echo ""
-    echo "Your message: $COMMIT_MSG"
     exit 1
 fi
 echo "Commit message format validated"

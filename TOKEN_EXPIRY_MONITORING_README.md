@@ -1,3 +1,25 @@
+---
+author: DevOnboarder Team
+consolidation_priority: P1
+content_uniqueness_score: 5
+created_at: '2025-10-12'
+description: Comprehensive token expiry monitoring system documentation with setup, usage, and troubleshooting guides
+document_type: documentation
+merge_candidate: false
+project: DevOnboarder
+similarity_group: token-expiry-monitoring-docs
+status: active
+tags:
+- monitoring
+- security
+- automation
+- documentation
+title: Token Expiry Monitoring System
+updated_at: '2025-10-12'
+visibility: internal
+version: 1.0
+---
+
 # Token Expiry Monitoring System
 
 ## Overview
@@ -12,6 +34,84 @@ The Token Expiry Monitoring System provides comprehensive automated monitoring a
 - 🛡️ **Security-First**: Zero-tolerance token exposure with masking and audit trails
 - ⚡ **VS Code Integration**: Seamless development workflow integration
 - 🔄 **90→45 Day Migration**: Planned support for shorter expiry cycles
+
+## Goal & Context
+
+**Primary Goal**: Implement automated token expiry monitoring to prevent service disruptions from expired tokens while maintaining security through proactive rotation planning.
+
+**Business Context**: DevOnboarder operates with multiple token types (CI/CD, runtime, maintainer) that require regular rotation. Manual monitoring has proven unreliable, leading to service disruptions. This system provides automated monitoring with intelligent notifications to infrastructure teams.
+
+**Technical Context**: Integrates with existing token_loader.py system, follows DevOnboarder security patterns, and provides multi-channel notifications for different severity levels.
+
+## Requirements & Constraints
+
+**Functional Requirements**:
+- Monitor all token categories (CI/CD, Runtime, Maintainer)
+- Provide configurable notification thresholds
+- Generate comprehensive expiry reports
+- Support interactive and automated monitoring modes
+- Integrate with DevOnboarder token architecture
+
+**Security Constraints**:
+- Zero-tolerance for token value exposure
+- Audit trail for all monitoring activities
+- Secure token storage validation
+- Access control based on user permissions
+
+**Performance Constraints**:
+- Minimal system resource usage
+- Configurable monitoring frequency
+- Background operation without UI blocking
+- Efficient token validation algorithms
+
+## Use Cases
+
+### Daily Infrastructure Monitoring
+**Actor**: Infrastructure Team Member
+**Goal**: Monitor token health as part of daily operations
+**Steps**:
+1. Run morning status check via VS Code task
+2. Review critical alerts in notifications directory
+3. Generate weekly reports for planning
+4. Address expiring tokens before deadline
+
+### Emergency Response
+**Actor**: On-call Infrastructure Engineer
+**Goal**: Respond to critical token expiry alerts
+**Steps**:
+1. Receive notification via configured channel
+2. Assess impact using detailed token analysis
+3. Execute emergency rotation procedures
+4. Update monitoring system with new token details
+
+### Compliance Auditing
+**Actor**: Security Team Member
+**Goal**: Verify token rotation compliance
+**Steps**:
+1. Generate compliance reports
+2. Review audit trails for rotation activities
+3. Validate security configurations
+4. Update policies based on findings
+
+## Dependencies
+
+**Core Dependencies**:
+- `token_loader.py` - DevOnboarder token management system
+- `bash` - Shell scripting environment
+- `python3` - Python runtime for advanced features
+- `curl` - HTTP client for notifications
+- `mail` - Email client for notifications
+
+**Optional Dependencies**:
+- `jq` - JSON processing for advanced reports
+- `slack` - Slack webhook integration
+- `cron` - System scheduling for automation
+
+**System Requirements**:
+- Ubuntu 24.04 LTS or compatible Linux distribution
+- 100MB free disk space for logs and reports
+- Network access for external notifications
+- User permissions for token file access
 
 ## Architecture Integration
 

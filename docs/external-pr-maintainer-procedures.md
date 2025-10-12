@@ -1,4 +1,82 @@
+---
+author: DevOnboarder Security Team
+consolidation_priority: P2
+content_uniqueness_score: 4
+created_at: '2025-10-12'
+description: Tier 3 maintainer procedures for secure external PR handling with manual intervention capabilities
+document_type: procedures
+merge_candidate: false
+project: DevOnboarder
+similarity_group: external-pr-security
+status: active
+tags:
+- security
+- procedures
+- external-pr
+- maintainer
+title: External PR Security - Tier 3 Maintainer Procedures
+updated_at: '2025-10-12'
+visibility: internal
+version: 1.0
+---
+
 # External PR Security - Tier 3 Maintainer Procedures
+
+## Goal & Context
+
+**Primary Goal**: Provide secure manual intervention procedures for external pull requests requiring maintainer privileges while maintaining audit trails and security controls.
+
+**Business Context**: External contributors cannot trigger certain automated workflows due to GitHub's fork restrictions. Tier 3 procedures enable maintainers to safely perform necessary actions while maintaining security and compliance.
+
+**Technical Context**: Leverages GitHub CLI with personal access tokens for authenticated operations, ensuring all actions are traceable and auditable.
+
+## Requirements & Constraints
+
+**Security Requirements**:
+- All actions must use personal access tokens, never repository secrets
+- Audit trail must be maintained for all manual interventions
+- Token scopes must be minimal necessary for the operation
+- Actions must be logged with timestamps and operator identification
+
+**Operational Constraints**:
+- Manual procedures only when automation fails
+- Must verify PR legitimacy before intervention
+- Cannot bypass core security validations
+- Must follow established approval workflows
+
+## Use Cases
+
+### Manual PR Commenting
+**Actor**: Repository Maintainer
+**Goal**: Comment on external PR when automation cannot
+**Steps**:
+1. Verify PR validation status
+2. Authenticate with personal token
+3. Post appropriate comment
+4. Log the manual intervention
+
+### Workflow Dispatch Override
+**Actor**: Repository Admin
+**Goal**: Manually trigger workflows for external PRs
+**Steps**:
+1. Confirm PR meets dispatch criteria
+2. Use personal token for authentication
+3. Dispatch workflow with proper parameters
+4. Document the override reason
+
+## Dependencies
+
+**Required Tools**:
+- GitHub CLI (`gh`) - Command-line interface for GitHub operations
+- Personal Access Token - For authenticated operations
+- Terminal access - For command execution
+- Repository maintainer permissions - For privileged operations
+
+**System Requirements**:
+- GitHub CLI version 2.0+
+- Valid personal access token with required scopes
+- Network access to GitHub API
+- Terminal environment with bash support
 
 ## Overview
 
