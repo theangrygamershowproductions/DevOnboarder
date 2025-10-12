@@ -159,7 +159,6 @@ github_cli_analysis.json
 codex.automation.bundle.json
 codex.ci.yml
 codex.tasks.json
-versions.yaml
 
 # Status/completion reports
 *_COMPLETE.md
