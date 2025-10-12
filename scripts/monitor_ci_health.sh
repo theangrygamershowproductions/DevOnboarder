@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # CI Health Monitoring - Track infrastructure reliability post-repair
 
 set -euo pipefail
@@ -21,19 +29,19 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN"; then
-        echo "❌ Cannot proceed without required tokens for CI monitoring"
+        error "Cannot proceed without required tokens for CI monitoring"
         echo "💡 CI health monitoring requires GitHub API access"
         exit 1
     fi
 fi
 
-echo "📊 CI Infrastructure Health Monitor"
+report "CI Infrastructure Health Monitor"
 echo "=================================="
 echo "Post-Repair Monitoring - $(date)"
 echo ""
 
 # Monitor recent CI performance
-echo "🔄 CI Performance Analysis:"
+sync "CI Performance Analysis:"
 
 # Get recent workflow runs with error handling using proper token
 # If AAR_TOKEN is provided by the token loader, prefer it for GH_TOKEN; otherwise
@@ -77,7 +85,7 @@ if [ -n "${AAR_TOKEN:-}" ]; then
     auth_check_rc=$?
     set -e
     if [ $auth_check_rc -ne 0 ]; then
-        echo "⚠️  AAR_TOKEN appears invalid or expired (gh api user failed)."
+        warning " AAR_TOKEN appears invalid or expired (gh api user failed)."
         echo "   GH output:";
         while IFS= read -r _line; do
             printf '      %s\n' "$_line"
@@ -105,7 +113,7 @@ if [ -n "${AAR_TOKEN:-}" ]; then
     if echo "$raw_runs" | grep -q '^__MONITOR_GH_ERROR__:'; then
         rc=$(echo "$raw_runs" | sed -n 's/^__MONITOR_GH_ERROR__:\([0-9]*\):.*$/\1/p')
         msg=$(echo "$raw_runs" | sed -n 's/^__MONITOR_GH_ERROR__:[0-9]*:\(.*\)$/\1/p')
-        echo "⚠️  Failed to list runs using AAR_TOKEN (exit $rc)."
+        warning " Failed to list runs using AAR_TOKEN (exit $rc)."
         echo "   GH output:"
         # Use parameter expansion to prefix each line (shellcheck SC2001 fix)
         while IFS= read -r _line; do
@@ -124,31 +132,31 @@ if [ -n "${AAR_TOKEN:-}" ]; then
             done <<<"$raw_runs_cli"
         else
             runs="$raw_runs_cli"
-            echo "✅ Retrieved recent CI run data (using local gh CLI auth as fallback)"
+            success "Retrieved recent CI run data (using local gh CLI auth as fallback)"
         fi
     else
         runs="$raw_runs"
-        echo "✅ Retrieved recent CI run data (using AAR_TOKEN)"
+        success "Retrieved recent CI run data (using AAR_TOKEN)"
     fi
 
     raw_failed=$(get_failed_runs_with_token "${AAR_TOKEN}" || true)
     if echo "$raw_failed" | grep -q '^__MONITOR_GH_ERROR__:'; then
-        echo "⚠️  Failed to list failed runs using AAR_TOKEN. Attempting fallback to gh CLI..."
+        warning " Failed to list failed runs using AAR_TOKEN. Attempting fallback to gh CLI..."
         raw_failed_cli=$( { set +e; gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>&1; } || true )
         if echo "$raw_failed_cli" | grep -q '^gh:' || echo "$raw_failed_cli" | grep -q 'error:'; then
             echo "   Fallback failed-run list also failed. Giving up on failed-run detail for now."
         else
             failed_runs_detailed="$raw_failed_cli"
-            echo "✅ Retrieved detailed failed run data (using local gh CLI auth as fallback)"
+            success "Retrieved detailed failed run data (using local gh CLI auth as fallback)"
         fi
     else
         failed_runs_detailed="$raw_failed"
-        echo "✅ Retrieved detailed failed run data (using AAR_TOKEN)"
+        success "Retrieved detailed failed run data (using AAR_TOKEN)"
     fi
 else
     raw_runs=$( { set +e; gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>&1; } || true )
     if echo "$raw_runs" | grep -q '^gh:' || echo "$raw_runs" | grep -q 'error:'; then
-        echo "⚠️  gh run list failed when using gh CLI auth."
+        warning " gh run list failed when using gh CLI auth."
         echo "   GH output:"
         while IFS= read -r _line; do
             printf '      %s\n' "$_line"
@@ -157,15 +165,15 @@ else
         set +e; gh auth status || true; gh api user --jq '{login: .login, id: .id}' || true; set -e
     else
         runs="$raw_runs"
-        echo "✅ Retrieved recent CI run data (using gh CLI auth)"
+        success "Retrieved recent CI run data (using gh CLI auth)"
     fi
 
     raw_failed=$( { set +e; gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>&1; } || true )
     if echo "$raw_failed" | grep -q '^gh:' || echo "$raw_failed" | grep -q 'error:'; then
-        echo "⚠️  gh run list for failed runs failed. Continuing without failed-run detail."
+        warning " gh run list for failed runs failed. Continuing without failed-run detail."
     else
         failed_runs_detailed="$raw_failed"
-        echo "✅ Retrieved detailed failed run data (using gh CLI auth)"
+        success "Retrieved detailed failed run data (using gh CLI auth)"
     fi
 fi
 
@@ -183,11 +191,11 @@ if [ -n "${runs:-}" ]; then
         if [ "$success_rate" -ge 90 ]; then
             echo "🎉 EXCELLENT: CI infrastructure highly reliable"
         elif [ "$success_rate" -ge 75 ]; then
-            echo "✅ GOOD: CI infrastructure generally reliable"
+            success "GOOD: CI infrastructure generally reliable"
         elif [ "$success_rate" -ge 60 ]; then
-            echo "⚠️  ACCEPTABLE: CI infrastructure needs attention"
+            warning " ACCEPTABLE: CI infrastructure needs attention"
         else
-            echo "❌ POOR: CI infrastructure requires immediate repair"
+            error "POOR: CI infrastructure requires immediate repair"
         fi
 
         # Show recent runs
@@ -202,21 +210,21 @@ if [ -n "${runs:-}" ]; then
                 echo ""
                 echo "🚨 Recent Failed Runs (detailed):"
                 # Print failed runs with safer jq concatenation to avoid quoting issues
-                echo "$failed_runs_detailed" | jq -r '.[] | "  ❌ " + (.workflowName // "<unknown>") + ": " + (.url // "<no-url>") + " (" + (.createdAt[0:19] // "") + ")"' | head -5
+                echo "$failed_runs_detailed" | jq -r '.[] | "  ERROR: " + (.workflowName // "<unknown>") + ": " + (.url // "<no-url>") + " (" + (.createdAt[0:19] // "") + ")"' | head -5
                 echo "   💡 Use: bash scripts/analyze_failed_ci_runs.sh for detailed failure analysis"
             fi
         fi
 
     else
-        echo "⚠️  No recent runs found"
+        warning " No recent runs found"
     fi
 else
-    echo "❌ Cannot retrieve CI run data - monitoring limited"
+    error "Cannot retrieve CI run data - monitoring limited"
 fi
 
 # Test infrastructure components
 echo ""
-echo "🛠️  Infrastructure Component Health:"
+tool " Infrastructure Component Health:"
 
 components=("gh" "jq" "git" "node" "python")
 healthy_components=0
@@ -224,27 +232,27 @@ total_components=${#components[@]}
 
 for component in "${components[@]}"; do
     if command -v "$component" >/dev/null 2>&1; then
-        echo "  ✅ $component: Available"
+        echo "  SUCCESS: $component: Available"
         ((healthy_components++))
     else
-        echo "  ❌ $component: Missing"
+        echo "  ERROR: $component: Missing"
     fi
 done
 
 infrastructure_health=$((healthy_components * 100 / total_components))
 echo ""
-echo "🏗️  Infrastructure Health: ${infrastructure_health}% ($healthy_components/$total_components components healthy)"
+build " Infrastructure Health: ${infrastructure_health}% ($healthy_components/$total_components components healthy)"
 
 # Overall assessment
 echo ""
-echo "📋 OVERALL HEALTH ASSESSMENT:"
+check "OVERALL HEALTH ASSESSMENT:"
 if [ "${success_rate:-0}" -ge 85 ] && [ "$infrastructure_health" -ge 80 ]; then
     echo "🎉 HEALTHY: Infrastructure repair successful"
 elif [ "${success_rate:-0}" -ge 70 ] && [ "$infrastructure_health" -ge 60 ]; then
-    echo "✅ STABLE: Infrastructure functional with minor issues"
+    success "STABLE: Infrastructure functional with minor issues"
 else
-    echo "⚠️  ATTENTION NEEDED: Infrastructure requires continued repair"
+    warning " ATTENTION NEEDED: Infrastructure requires continued repair"
 fi
 
 echo ""
-echo "📝 Monitor completed - check logs for detailed analysis"
+note "Monitor completed - check logs for detailed analysis"

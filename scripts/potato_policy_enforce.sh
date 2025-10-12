@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced Potato Policy Enforcement
 # "Every rule has a scar behind it" - Born from real-world security incidents
 # Ensures sensitive files are properly ignored in all ignore files
@@ -27,13 +31,13 @@ for file in "${FILES[@]}"; do
                 echo "$entry" >> "$file"
             fi
         done
-        echo "✅ $file updated"
+        success "$file updated"
     else
-        echo "⚠️  $file not found, creating..."
+        warning " $file not found, creating..."
         for entry in "${REQUIRED[@]}"; do
             echo "$entry" >> "$file"
         done
-        echo "✅ $file created"
+        success "$file created"
     fi
 done
 

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Clean Existing Markdown Compliance Violations
 # Removes emojis from existing script-generated markdown files
@@ -32,7 +36,7 @@ clean_file_emojis() {
     cp "$file" "$backup_file"
 
     # Remove common emojis used in DevOnboarder markdown generation
-    sed -i 's/📊//g; s/📋//g; s/🎯//g; s/✅//g; s/❌//g; s/⚠️//g; s/🚀//g; s/📝//g; s/💡//g; s/🔍//g' "$file"
+    sed -i 's/REPORT://g; s/CHECK://g; s/TARGET://g; s/SUCCESS://g; s/ERROR://g; s/WARNING://g; s/DEPLOY://g; s/NOTE://g; s/💡//g; s/🔍//g' "$file"
 
     CLEANED=$((CLEANED + 1))
 }
@@ -44,7 +48,7 @@ if [[ -d "$REPORTS_DIR" ]]; then
     echo "Processing $REPORTS_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+        if grep -q "REPORT:\|CHECK:\|TARGET:\|SUCCESS:\|ERROR:\|WARNING:\|DEPLOY:\|NOTE:\|💡\|🔍" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
@@ -58,7 +62,7 @@ if [[ -d "$AAR_DIR" ]]; then
     echo "Processing $AAR_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+        if grep -q "REPORT:\|CHECK:\|TARGET:\|SUCCESS:\|ERROR:\|WARNING:\|DEPLOY:\|NOTE:\|💡\|🔍" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$AAR_DIR" -name "*.md" -type f -print0)
@@ -71,12 +75,12 @@ echo "==================="
 # Run validation to confirm cleanup
 if ./scripts/validate_markdown_compliance.sh; then
     echo ""
-    echo "SUCCESS: All markdown compliance violations cleaned"
+    success "All markdown compliance violations cleaned"
     echo "Files cleaned: $CLEANED"
     echo "Backup location: $BACKUP_DIR"
 else
     echo ""
-    echo "WARNING: Some violations may still exist"
+    warning "Some violations may still exist"
     echo "Manual review may be needed"
 fi
 

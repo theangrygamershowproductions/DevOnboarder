@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # QC Extension: UTC Timestamp Validation
 # Purpose: Detect and prevent mixed timezone usage in DevOnboarder scripts
@@ -11,7 +15,7 @@ echo "=== QC Extension: UTC Timestamp Validation ==="
 dangerous_patterns=$(grep -r -E "(UTC|utc).*datetime\.now\(\)|datetime\.now\(\).*(UTC|utc)|datetime\.now\(\)\.astimezone\(\s*timezone\.utc\s*\)|datetime\.now\(\)\.replace\(\s*tzinfo\s*=\s*timezone\.utc\s*\)|datetime\.now\(\)\.isoformat\(\)\s*\+\s*['\"]\s*UTC\s*['\"]" scripts/ 2>/dev/null | grep -v "# INFRASTRUCTURE CHANGE" || true)
 
 if [ -n "$dangerous_patterns" ]; then
-    echo "❌ CRITICAL: Found scripts claiming UTC but using local time:"
+    error "CRITICAL: Found scripts claiming UTC but using local time:"
     echo "$dangerous_patterns"
     echo ""
     echo "Fix: Use src.utils.timestamps.get_utc_display_timestamp() instead"
@@ -23,10 +27,10 @@ fi
 mixed_timezone_usage=$(grep -r "datetime\.now()" scripts/ | grep -E "UTC|timezone" | grep -v "INFRASTRUCTURE CHANGE" || true)
 
 if [ -n "$mixed_timezone_usage" ]; then
-    echo "⚠️  WARNING: Mixed timezone usage detected:"
+    warning " WARNING: Mixed timezone usage detected:"
     echo "$mixed_timezone_usage"
     echo ""
     echo "Recommendation: Migrate to standardized UTC utilities"
 fi
 
-echo "✅ UTC timestamp compliance validated"
+success "UTC timestamp compliance validated"

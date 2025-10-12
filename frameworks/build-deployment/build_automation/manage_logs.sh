@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Log management utility for DevOnboarder
 set -euo pipefail
 
@@ -93,7 +97,7 @@ list_logs() {
         # Use find instead of ls | grep to avoid shellcheck warning
         find "$LOGS_DIR" -maxdepth 1 -type f -exec ls -lah {} \;
         echo ""
-        echo "📊 Total size: $(du -sh "$LOGS_DIR" | cut -f1)"
+        report "Total size: $(du -sh "$LOGS_DIR" | cut -f1)"
     else
         echo "   (no log files found)"
     fi

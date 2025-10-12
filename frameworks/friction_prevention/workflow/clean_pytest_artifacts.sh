@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # ==================================================================================
@@ -26,8 +34,8 @@ done
 # CRITICAL: This section removes TEMPORARY coverage artifacts while protecting
 # PERMANENT project configuration files:
 #
-# ✅ PROTECTED: config/.coveragerc.* - Service-specific coverage configurations
-# ✅ PROTECTED: config/* - All permanent project configuration files
+# SUCCESS: PROTECTED: config/.coveragerc.* - Service-specific coverage configurations
+# SUCCESS: PROTECTED: config/* - All permanent project configuration files
 # 🗑️ REMOVED: .coverage*, coverage.xml, etc. - Temporary test artifacts
 #
 # The --not -path "./config/*" exclusion ensures our coverage masking solution
@@ -85,7 +93,7 @@ find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -p
 # ==================================================================================
 # TEMPORARY CONFIGURATION BACKUPS CLEANUP
 #
-# ✅ PROTECTED: config/ - Permanent project configuration directory
+# SUCCESS: PROTECTED: config/ - Permanent project configuration directory
 # 🗑️ REMOVED: config_backups/ - Temporary backup directory created during testing
 #
 # DISTINCTION:
@@ -140,14 +148,14 @@ if [[ -d "logs/" ]]; then
 fi
 
 if [[ "$remaining_pytest" -gt 0 ]]; then
-    echo "DEBUG: Remaining pytest files"
+    debug_msg "Remaining pytest files"
     find . -name "*pytest*" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -type f 2>/dev/null | head -5 | while read -r f; do
         printf "  File: %s\n" "$f"
     done || true
 fi
 
 if [[ "$remaining_coverage" -gt 0 ]]; then
-    echo "DEBUG: Remaining coverage files"
+    debug_msg "Remaining coverage files"
     find . \( -name "*coverage*" -o -name ".coverage*" \) -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -not -path "./node_modules/*" -not -path "./*/node_modules/*" -not -path "./tests/*" -not -path "./frontend/*" -not -path "./bot/*" -not -path "./config/*" -type f 2>/dev/null | head -5 | while read -r f; do
         printf "  File: %s\n" "$f"
     done || true
@@ -170,7 +178,7 @@ foo_refs=$(echo "$foo_refs" | tr -d '\n')
 printf -- "- %s 'foo' references remaining in non-test files (target: 0)\n" "$foo_refs"
 
 if [[ "$foo_refs" -gt 0 ]]; then
-    echo "WARNING: foo references still exist in non-test files"
+    warning "foo references still exist in non-test files"
     grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
         --exclude-dir=.git \
         --exclude-dir=.venv \

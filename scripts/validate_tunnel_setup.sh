@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/validate_tunnel_setup.sh
 # Purpose: Comprehensive validation of Cloudflare tunnel configuration
@@ -29,19 +33,19 @@ VALIDATION_WARNINGS=0
 
 # Helper function to log errors
 log_error() {
-    echo "ERROR: $1"
+    error "$1"
     VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 }
 
 # Helper function to log warnings
 log_warning() {
-    echo "WARNING: $1"
+    warning "$1"
     VALIDATION_WARNINGS=$((VALIDATION_WARNINGS + 1))
 }
 
 # Helper function to log success
 log_success() {
-    echo "SUCCESS: $1"
+    success "$1"
 }
 
 # Validate file existence
@@ -262,7 +266,7 @@ generate_report() {
     if [ $VALIDATION_ERRORS -eq 0 ]; then
         if [ $VALIDATION_WARNINGS -eq 0 ]; then
             echo ""
-            echo "SUCCESS: All validations passed!"
+            success "All validations passed!"
             echo "You can now start the tunnel with:"
             echo "  bash scripts/setup_tunnel.sh --start"
         else

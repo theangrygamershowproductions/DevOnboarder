@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Phase 1 Pre-Migration QC Validation
 # Quality Assurance Framework - Syntax Validation
@@ -280,7 +284,7 @@ echo "Syntax errors: $SYNTAX_ERRORS"
 echo "Valid scripts: $((TOTAL_SCRIPTS - MISSING_SCRIPTS - SYNTAX_ERRORS))"
 
 if [[ $SYNTAX_ERRORS -eq 0 && $MISSING_SCRIPTS -eq 0 ]]; then
-    echo "SUCCESS: All Quality Assurance scripts passed syntax validation"
+    success "All Quality Assurance scripts passed syntax validation"
     exit 0
 else
     echo "FAILURE: Pre-migration syntax validation failed"

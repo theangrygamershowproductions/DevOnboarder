@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/safe_commit.sh
 # Purpose: Safe commit wrapper that handles pre-commit hook file modifications
@@ -14,7 +22,7 @@ validate_terminal_output() {
     local violations=()
 
     # Check for forbidden echo patterns
-    if grep -n "echo.*✅\|echo.*❌\|echo.*🚨\|echo.*💡\|echo.*🔍\|echo.*📋\|echo.*📄\|echo.*📋\|echo.*🏆" "$script_path" >/dev/null 2>&1; then
+    if grep -n "echo.*SUCCESS:\|echo.*ERROR:\|echo.*🚨\|echo.*💡\|echo.*🔍\|echo.*CHECK:\|echo.*📄\|echo.*CHECK:\|echo.*🏆" "$script_path" >/dev/null 2>&1; then
         violations+=("Emojis in echo statements (forbidden by ZERO TOLERANCE policy)")
     fi
 
@@ -40,7 +48,7 @@ validate_terminal_output() {
         printf "Safe alternatives:\n"
         printf "  Instead of: echo \"Status: \$VAR\"\n"
         printf "  Use:        printf \"Status: %%s\\n\" \"\$VAR\"\n"
-        printf "  Instead of: echo \"✅ Success\"\n"
+        printf "  Instead of: echo \"success "Success\"\n"
         printf "  Use:        echo \"Success\"\n"
         return 1
     fi
@@ -62,7 +70,7 @@ fi
 # CRITICAL: Prevent commits to main branch (instruction requirement)
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
-    echo "ERROR: Direct commits to main branch are not allowed!"
+    error "Direct commits to main branch are not allowed!"
     echo ""
     echo "DevOnboarder requires feature branch workflow:"
     echo "  1. Create feature branch: git checkout -b feat/your-feature-name"
@@ -80,15 +88,15 @@ echo "Checking for common instruction violations..."
 FORBIDDEN_FILES=("Potato.md" "*.pem" "*.key" "*.env" "auth.db")
 for pattern in "${FORBIDDEN_FILES[@]}"; do
     if git ls-files | grep -q "$pattern" 2>/dev/null; then
-        printf "ERROR: Forbidden file pattern detected: %s\n" "$pattern"
+        printf "error "Forbidden file pattern detected: %s\n" "$pattern"
         printf "These files should never be committed per security instructions\n"
         exit 1
     fi
 done
 
 # Check for emoji usage in committed files (common violation)
-if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "✅\|❌\|🚨\|💡\|🔍\|📋\|📄\|🏆\|🚀\|🥔\|⚠️\|💥\|🔧\|🎯\|📊\|🔄\|🚦\|✅\|❌" >/dev/null 2>&1; then
-    printf "ERROR: Emoji usage detected in committed files\n"
+if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "SUCCESS:\|ERROR:\|🚨\|💡\|🔍\|CHECK:\|📄\|🏆\|DEPLOY:\|🥔\|WARNING:\|💥\|TOOL:\|TARGET:\|REPORT:\|SYNC:\|🚦\|SUCCESS:\|ERROR:" >/dev/null 2>&1; then
+    printf "error "Emoji usage detected in committed files\n"
     printf "ZERO TOLERANCE: Remove all emojis from documentation and scripts\n"
     exit 1
 fi
@@ -103,7 +111,7 @@ printf "Commit message: %s\n" "$COMMIT_MSG"
 
 # Accepts all standard/extended types, 'BUILD' and 'Build' (for Dependabot), and optional scope
 if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|Build|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
-    echo "ERROR: Invalid commit message format!"
+    error "Invalid commit message format!"
     echo ""
     echo "Required format: <TYPE>(<scope>): <subject>"
     echo ""

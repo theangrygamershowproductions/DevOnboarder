@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Root Cache Pollution Validator for DevOnboarder
 # Ensures centralized cache management compliance
 set -euo pipefail
@@ -48,7 +52,7 @@ if [ "$POLLUTION_FOUND" = true ]; then
     echo "Solution: Run cache cleanup with: bash scripts/manage_logs.sh cache clean"
     exit 1
 else
-    echo "SUCCESS: No cache pollution found in repository root"
+    success "No cache pollution found in repository root"
     echo "Centralized cache management compliance verified"
     exit 0
 fi

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Comprehensive branch cleanup for DevOnboarder
 # This script safely identifies and cleans up merged and stale branches
 
@@ -50,13 +58,13 @@ is_protected_branch() {
 # Function to safely run git commands
 safe_git() {
     git "$@" 2>/dev/null || {
-        echo "⚠️  Git command failed: git $*"
+        warning " Git command failed: git $*"
         return 1
     }
 }
 
 # Current state analysis
-echo -e "${BLUE}📊 Current Branch Analysis${NC}"
+echo -e "${BLUE}REPORT: Current Branch Analysis"
 echo "============================"
 
 echo "Current branch: $(git branch --show-current 2>/dev/null || echo 'unknown')"
@@ -70,7 +78,7 @@ echo "Remote branches: $remote_count"
 echo ""
 
 # List all local branches
-echo -e "${YELLOW}Local Branches:${NC}"
+echo -e "${YELLOW}Local Branches:"
 echo "---------------"
 if [ -d ".git/refs/heads" ]; then
     find .git/refs/heads -type f -exec basename {} \; 2>/dev/null | sort || echo "None found"
@@ -82,7 +90,7 @@ fi
 echo ""
 
 # List all remote branches
-echo -e "${YELLOW}Remote Branches:${NC}"
+echo -e "${YELLOW}Remote Branches:"
 echo "----------------"
 if [ -d ".git/refs/remotes/origin" ]; then
     find .git/refs/remotes/origin -type f -exec basename {} \; 2>/dev/null | sort || echo "None found"
@@ -92,20 +100,20 @@ fi
 echo ""
 
 # Fetch latest remote information
-echo "🔄 Fetching latest remote information..."
+sync "Fetching latest remote information..."
 if safe_git fetch origin --prune; then
-    echo "✅ Remote fetch successful"
+    success "Remote fetch successful"
 else
-    echo "⚠️  Remote fetch failed - continuing with local analysis only"
+    warning " Remote fetch failed - continuing with local analysis only"
 fi
 echo ""
 
 # Identify merged local branches
-echo -e "${BLUE}🔍 Merged Branch Analysis${NC}"
+echo -e "${BLUE}🔍 Merged Branch Analysis"
 echo "=========================="
 
 merged_locals=()
-echo -e "${YELLOW}Local branches merged into $BASE_BRANCH:${NC}"
+echo -e "${YELLOW}Local branches merged into $BASE_BRANCH:"
 
 if [ -d ".git/refs/heads" ]; then
     # Get all local branch names
@@ -130,13 +138,13 @@ if [ -d ".git/refs/heads" ]; then
         if ! is_protected_branch "$branch"; then
             # Check if branch is merged into base branch
             if safe_git merge-base --is-ancestor "$branch" "$BASE_BRANCH"; then
-                echo "  ✅ $branch (merged)"
+                echo "  SUCCESS: $branch (merged)"
                 merged_locals+=("$branch")
             else
-                echo "  ❌ $branch (not merged)"
+                echo "  ERROR: $branch (not merged)"
             fi
         else
-            echo "  🔒 $branch (protected)"
+            echo "  SECURE: $branch (protected)"
         fi
     done
 else
@@ -145,13 +153,13 @@ fi
 echo ""
 
 # Identify stale branches
-echo -e "${BLUE}📅 Stale Branch Analysis${NC}"
+echo -e "${BLUE}📅 Stale Branch Analysis"
 echo "======================="
 
 cutoff_date=$(date -d "$DAYS_STALE days ago" +%s 2>/dev/null || date -v-"${DAYS_STALE}"d +%s 2>/dev/null || echo "0")
 stale_locals=()
 
-echo -e "${YELLOW}Branches older than $DAYS_STALE days:${NC}"
+echo -e "${YELLOW}Branches older than $DAYS_STALE days:"
 
 for branch in "${all_locals[@]:-}"; do
     if ! is_protected_branch "$branch"; then
@@ -170,11 +178,11 @@ done
 echo ""
 
 # Cleanup recommendations
-echo -e "${BLUE}💡 Cleanup Recommendations${NC}"
+echo -e "${BLUE}💡 Cleanup Recommendations"
 echo "========================="
 
 if [ ${#merged_locals[@]} -gt 0 ]; then
-    echo -e "${GREEN}Safe to delete (merged):${NC}"
+    echo -e "${GREEN}Safe to delete (merged):"
     for branch in "${merged_locals[@]}"; do
         echo "  - $branch"
     done
@@ -182,7 +190,7 @@ if [ ${#merged_locals[@]} -gt 0 ]; then
 fi
 
 if [ ${#stale_locals[@]} -gt 0 ]; then
-    echo -e "${YELLOW}Consider deleting (stale):${NC}"
+    echo -e "${YELLOW}Consider deleting (stale):"
     for branch in "${stale_locals[@]}"; do
         echo "  - $branch"
     done
@@ -191,7 +199,7 @@ fi
 
 # Cleanup execution
 if [ "$DRY_RUN" = "false" ]; then
-    echo -e "${RED}⚠️  LIVE MODE - WILL DELETE BRANCHES${NC}"
+    echo -e "${RED}WARNING:  LIVE MODE - WILL DELETE BRANCHES"
     echo "=================================="
 
     # Switch to base branch if needed
@@ -199,9 +207,9 @@ if [ "$DRY_RUN" = "false" ]; then
     if [ "$current_branch" != "$BASE_BRANCH" ]; then
         echo "Switching to $BASE_BRANCH..."
         if safe_git checkout "$BASE_BRANCH"; then
-            echo "✅ Switched to $BASE_BRANCH"
+            success "Switched to $BASE_BRANCH"
         else
-            echo "❌ Failed to switch to $BASE_BRANCH - aborting cleanup"
+            error "Failed to switch to $BASE_BRANCH - aborting cleanup"
             exit 1
         fi
     fi
@@ -210,32 +218,32 @@ if [ "$DRY_RUN" = "false" ]; then
     for branch in "${merged_locals[@]}"; do
         echo "Deleting merged branch: $branch"
         if safe_git branch -d "$branch"; then
-            echo "✅ Deleted $branch"
+            success "Deleted $branch"
         else
-            echo "⚠️  Failed to delete $branch (trying force delete)"
+            warning " Failed to delete $branch (trying force delete)"
             if safe_git branch -D "$branch"; then
-                echo "✅ Force deleted $branch"
+                success "Force deleted $branch"
             else
-                echo "❌ Failed to delete $branch"
+                error "Failed to delete $branch"
             fi
         fi
     done
 
     echo ""
-    echo "✅ Local branch cleanup complete"
+    success "Local branch cleanup complete"
 else
-    echo -e "${BLUE}🔍 DRY RUN MODE - No branches will be deleted${NC}"
+    echo -e "${BLUE}🔍 DRY RUN MODE - No branches will be deleted"
     echo "=============================================="
     echo "To actually delete branches, run with: DRY_RUN=false"
 fi
 
 echo ""
-echo "📊 Summary:"
+report "Summary:"
 echo "- Merged branches found: ${#merged_locals[@]}"
 echo "- Stale branches found: ${#stale_locals[@]}"
 echo "- Protected branches: ${#PROTECTED_BRANCHES[@]}"
 echo ""
-echo "📝 Cleanup log saved to: $LOG_FILE"
+note "Cleanup log saved to: $LOG_FILE"
 
 # Create summary file
 SUMMARY_FILE="logs/branch_cleanup_summary_$(date +%Y%m%d_%H%M%S).md"

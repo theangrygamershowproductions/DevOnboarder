@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/git_safety_wrapper.sh
 # Version: 1.0.0
@@ -20,15 +24,15 @@ log_info() {
 }
 
 log_error() {
-    echo "ERROR: $1" | tee -a "$LOG_FILE"
+    error "$1" | tee -a "$LOG_FILE"
 }
 
 log_warning() {
-    echo "WARNING: $1" | tee -a "$LOG_FILE"
+    warning "$1" | tee -a "$LOG_FILE"
 }
 
 log_success() {
-    echo "SUCCESS: $1" | tee -a "$LOG_FILE"
+    success "$1" | tee -a "$LOG_FILE"
 }
 
 # Check for Potato Approval file

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Generate Potato Policy status badge
 # This script generates a simple status badge for the Potato Policy
 
@@ -11,17 +19,17 @@ echo "======================================="
 if bash scripts/potato_policy_enforce.sh > /dev/null 2>&1; then
     if ! git diff --quiet; then
         # Changes were made, policy was not compliant
-        echo "Status: ❌ NON-COMPLIANT"
-        echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-❌%20Violations%20Detected-red)"
+        echo "Status: ERROR: NON-COMPLIANT"
+        echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-ERROR:%20Violations%20Detected-red)"
         exit 1
     else
         # No changes needed, policy is compliant
-        echo "Status: ✅ COMPLIANT"
-        echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-✅%20Enforced-green)"
+        echo "Status: SUCCESS: COMPLIANT"
+        echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-SUCCESS:%20Enforced-green)"
         exit 0
     fi
 else
-    echo "Status: ⚠️ ERROR"
-    echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-⚠️%20Error-yellow)"
+    echo "Status: WARNING: ERROR"
+    echo "Badge: ![Potato Policy](https://img.shields.io/badge/🥔%20Potato%20Policy-WARNING:%20Error-yellow)"
     exit 2
 fi

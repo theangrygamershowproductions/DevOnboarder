@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # shellcheck disable=SC2126,SC2012
 # scripts/validate_split_readiness.sh
 # Validates DevOnboarder's readiness for strategic repository split using comprehensive diagnostic data
@@ -22,36 +30,36 @@ PREREQUISITES_MET=true
 
 # Check if diagnostic scripts exist
 if [ ! -f "scripts/analyze_service_dependencies.sh" ]; then
-    echo "❌ Missing: scripts/analyze_service_dependencies.sh"
+    error "Missing: scripts/analyze_service_dependencies.sh"
     PREREQUISITES_MET=false
 else
-    echo "✅ Found: Service dependency analysis script"
+    success "Found: Service dependency analysis script"
 fi
 
 if [ ! -f "scripts/extract_service_interfaces.py" ]; then
-    echo "❌ Missing: scripts/extract_service_interfaces.py"
+    error "Missing: scripts/extract_service_interfaces.py"
     PREREQUISITES_MET=false
 else
-    echo "✅ Found: Service interface extraction script"
+    success "Found: Service interface extraction script"
 fi
 
 if [ ! -f "scripts/catalog_shared_resources.sh" ]; then
-    echo "❌ Missing: scripts/catalog_shared_resources.sh"
+    error "Missing: scripts/catalog_shared_resources.sh"
     PREREQUISITES_MET=false
 else
-    echo "✅ Found: Shared resources catalog script"
+    success "Found: Shared resources catalog script"
 fi
 
 if [ ! -f "docs/strategic-split-assessment.md" ]; then
-    echo "❌ Missing: docs/strategic-split-assessment.md"
+    error "Missing: docs/strategic-split-assessment.md"
     PREREQUISITES_MET=false
 else
-    echo "✅ Found: Strategic split assessment documentation"
+    success "Found: Strategic split assessment documentation"
 fi
 
 if [ "$PREREQUISITES_MET" = false ]; then
     echo ""
-    echo "❌ Prerequisites not met. Please run the missing diagnostic tools first."
+    error "Prerequisites not met. Please run the missing diagnostic tools first."
     echo "Recommended order:"
     echo "1. bash scripts/analyze_service_dependencies.sh"
     echo "2. python scripts/extract_service_interfaces.py"
@@ -67,23 +75,23 @@ echo "Executing diagnostic tools to gather current data..."
 
 echo "Running service dependency analysis..."
 if ! bash scripts/analyze_service_dependencies.sh >/dev/null 2>&1; then
-    echo "⚠️ Warning: Service dependency analysis had issues, continuing..."
+    warning "Warning: Service dependency analysis had issues, continuing..."
 else
-    echo "✅ Service dependency analysis complete"
+    success "Service dependency analysis complete"
 fi
 
 echo "Running service interface extraction..."
 if ! python scripts/extract_service_interfaces.py >/dev/null 2>&1; then
-    echo "⚠️ Warning: Service interface extraction had issues, continuing..."
+    warning "Warning: Service interface extraction had issues, continuing..."
 else
-    echo "✅ Service interface extraction complete"
+    success "Service interface extraction complete"
 fi
 
 echo "Running shared resources catalog..."
 if ! bash scripts/catalog_shared_resources.sh >/dev/null 2>&1; then
-    echo "⚠️ Warning: Shared resources catalog had issues, continuing..."
+    warning "Warning: Shared resources catalog had issues, continuing..."
 else
-    echo "✅ Shared resources catalog complete"
+    success "Shared resources catalog complete"
 fi
 
 echo ""
@@ -98,13 +106,13 @@ SERVICE_DIRS=$(find src/ -maxdepth 1 -type d 2>/dev/null | grep -v "src/$" | wc 
 echo "  Service directories identified: $SERVICE_DIRS"
 
 if [ "$SERVICE_DIRS" -ge 4 ]; then
-    echo "  ✅ GOOD: Multiple services with clear directory boundaries"
+    echo "  SUCCESS: GOOD: Multiple services with clear directory boundaries"
     SERVICE_BOUNDARY_SCORE=3
 elif [ "$SERVICE_DIRS" -ge 2 ]; then
-    echo "  ⚠️ MODERATE: Some service separation present"
+    echo "  WARNING: MODERATE: Some service separation present"
     SERVICE_BOUNDARY_SCORE=2
 else
-    echo "  ❌ POOR: Limited service boundary separation"
+    echo "  ERROR: POOR: Limited service boundary separation"
     SERVICE_BOUNDARY_SCORE=1
 fi
 
@@ -119,13 +127,13 @@ echo "  Database model files: $DB_MODEL_FILES"
 echo "  Shared database references: $SHARED_DB_REFS"
 
 if [ "$SHARED_DB_REFS" -lt 20 ]; then
-    echo "  ✅ LOW: Manageable database coupling"
+    echo "  SUCCESS: LOW: Manageable database coupling"
     DB_COUPLING_SCORE=3
 elif [ "$SHARED_DB_REFS" -lt 50 ]; then
-    echo "  ⚠️ MEDIUM: Moderate database coupling"
+    echo "  WARNING: MEDIUM: Moderate database coupling"
     DB_COUPLING_SCORE=2
 else
-    echo "  ❌ HIGH: Significant database coupling"
+    echo "  ERROR: HIGH: Significant database coupling"
     DB_COUPLING_SCORE=1
 fi
 
@@ -138,17 +146,17 @@ if [ -f "docs/service-api-contracts.md" ]; then
     echo "  Documented API endpoints: $API_ENDPOINTS"
 
     if [ "$API_ENDPOINTS" -gt 20 ]; then
-        echo "  ✅ MATURE: Comprehensive API documentation"
+        echo "  SUCCESS: MATURE: Comprehensive API documentation"
         API_MATURITY_SCORE=3
     elif [ "$API_ENDPOINTS" -gt 10 ]; then
-        echo "  ⚠️ DEVELOPING: Moderate API documentation"
+        echo "  WARNING: DEVELOPING: Moderate API documentation"
         API_MATURITY_SCORE=2
     else
-        echo "  ❌ IMMATURE: Limited API documentation"
+        echo "  ERROR: IMMATURE: Limited API documentation"
         API_MATURITY_SCORE=1
     fi
 else
-    echo "  ❌ No API contract documentation found"
+    echo "  ERROR: No API contract documentation found"
     API_MATURITY_SCORE=1
 fi
 
@@ -171,10 +179,10 @@ fi
 
 # Check if Jest is configured properly (our recent fix)
 if [ -f "bot/package.json" ] && grep -q "testTimeout" bot/package.json; then
-    echo "  ✅ Jest timeout configured (CI stability)"
+    echo "  SUCCESS: Jest timeout configured (CI stability)"
     TEST_CONFIG_SCORE=3
 else
-    echo "  ⚠️ Jest timeout missing (potential CI issues)"
+    echo "  WARNING: Jest timeout missing (potential CI issues)"
     TEST_CONFIG_SCORE=2
 fi
 
@@ -189,13 +197,13 @@ echo "  Total workflows: $WORKFLOW_COUNT"
 echo "  Multi-service workflows: $MULTI_SERVICE_WORKFLOWS"
 
 if [ "$WORKFLOW_COUNT" -lt 10 ]; then
-    echo "  ✅ SIMPLE: Manageable CI/CD complexity"
+    echo "  SUCCESS: SIMPLE: Manageable CI/CD complexity"
     CI_COMPLEXITY_SCORE=3
 elif [ "$WORKFLOW_COUNT" -lt 20 ]; then
-    echo "  ⚠️ MODERATE: Some CI/CD complexity"
+    echo "  WARNING: MODERATE: Some CI/CD complexity"
     CI_COMPLEXITY_SCORE=2
 else
-    echo "  ❌ COMPLEX: High CI/CD coordination needed"
+    echo "  ERROR: COMPLEX: High CI/CD coordination needed"
     CI_COMPLEXITY_SCORE=1
 fi
 
@@ -226,11 +234,11 @@ echo ""
 
 # Generate recommendations based on score
 if [ "$READINESS_PERCENTAGE" -ge 80 ]; then
-    echo "🎯 RECOMMENDATION: READY FOR STRATEGIC SPLIT"
+    target "RECOMMENDATION: READY FOR STRATEGIC SPLIT"
     echo ""
-    echo "✅ High readiness score indicates successful split probability"
-    echo "✅ Service boundaries are well-defined"
-    echo "✅ Technical infrastructure supports split"
+    success "High readiness score indicates successful split probability"
+    success "Service boundaries are well-defined"
+    success "Technical infrastructure supports split"
     echo ""
     echo "Suggested Split Order:"
     echo "1. Discord Bot (Independent, lowest risk)"
@@ -239,10 +247,10 @@ if [ "$READINESS_PERCENTAGE" -ge 80 ]; then
     echo "4. Remaining services (Based on API maturity)"
 
 elif [ "$READINESS_PERCENTAGE" -ge 60 ]; then
-    echo "⚠️ RECOMMENDATION: PARTIALLY READY - ADDRESS KEY ISSUES"
+    warning "RECOMMENDATION: PARTIALLY READY - ADDRESS KEY ISSUES"
     echo ""
-    echo "⚠️ Moderate readiness - address key issues before split"
-    echo "⚠️ Focus on improving lowest-scoring components"
+    warning "Moderate readiness - address key issues before split"
+    warning "Focus on improving lowest-scoring components"
     echo ""
     echo "Priority Improvements Needed:"
     if [ "$DB_COUPLING_SCORE" -lt 3 ]; then
@@ -256,10 +264,10 @@ elif [ "$READINESS_PERCENTAGE" -ge 60 ]; then
     fi
 
 else
-    echo "❌ RECOMMENDATION: NOT READY - SIGNIFICANT PREPARATION NEEDED"
+    error "RECOMMENDATION: NOT READY - SIGNIFICANT PREPARATION NEEDED"
     echo ""
-    echo "❌ Low readiness score indicates high split failure risk"
-    echo "❌ Multiple components need improvement"
+    error "Low readiness score indicates high split failure risk"
+    error "Multiple components need improvement"
     echo ""
     echo "Required Preparation Before Split:"
     echo "- Establish clearer service boundaries"

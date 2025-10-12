@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/update_potato_policy_for_tokens.sh
 # Purpose: Update Enhanced Potato Policy for Token Architecture v2.0
@@ -52,7 +56,7 @@ for ignore_file in "${IGNORE_FILES[@]}"; do
             printf "VERIFIED: %s already has token patterns\n" "$ignore_file"
         fi
     else
-        printf "WARNING: %s not found\n" "$ignore_file"
+        printf "warning "%s not found\n" "$ignore_file"
     fi
 done
 

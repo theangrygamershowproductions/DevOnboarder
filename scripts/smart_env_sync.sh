@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/sm# Variables that should remain environment-specific (never synchronized)
 ENVIRONMENT_SPECIFIC_VARS=(
@@ -363,7 +371,7 @@ validate_environments() {
 
     echo ""
     if [ $validation_errors -eq 0 ]; then
-        echo "SUCCESS: All environments are synchronized and valid"
+        success "All environments are synchronized and valid"
     else
         echo "FAILED: $validation_errors validation errors found"
     fi
@@ -405,7 +413,7 @@ main() {
 
     # Check if source file exists
     if [ ! -f "$SOURCE_ENV" ]; then
-        echo "ERROR: Source file $SOURCE_ENV not found"
+        error "Source file $SOURCE_ENV not found"
         exit 1
     fi
 

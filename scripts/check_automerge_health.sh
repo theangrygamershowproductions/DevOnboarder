@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Check for automerge hanging issues
 # Usage: bash scripts/check_automerge_health.sh
 
@@ -15,7 +19,7 @@ echo "========================================"
 
 # Get repository info
 if ! REPO_FULL=$(gh repo view --json owner,name --jq '.owner.login + "/" + .name'); then
-    red "ERROR: Could not get repository information"
+    red "error "Could not get repository information"
     echo "Make sure you're in a git repository and have GitHub CLI access"
     exit 1
 fi
@@ -145,7 +149,7 @@ else
 fi
 
 echo ""
-blue "DOCS: Documentation:"
+blue "docs "Documentation:"
 echo "   - Full troubleshooting guide: docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md"
 echo "   - Repository setup: docs/standards/REPOSITORY_SETUP.md"
 echo ""

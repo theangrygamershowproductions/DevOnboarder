@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # shellcheck disable=SC2181
 # scripts/fix_mvp_markdown_lint.sh
 # Automated markdown linting fix for MVP documentation
@@ -207,12 +211,12 @@ if command -v markdownlint >/dev/null 2>&1; then
     echo "Files passing validation: $VALIDATION_PASSED/$FIXED_COUNT"
 
     if [[ $VALIDATION_PASSED -eq $FIXED_COUNT ]]; then
-        echo "SUCCESS: All MVP markdown files now pass linting"
+        success "All MVP markdown files now pass linting"
     else
-        echo "WARNING: Some files may need manual review"
+        warning "Some files may need manual review"
     fi
 else
-    echo "WARNING: markdownlint not available - install with: npm install -g markdownlint-cli"
+    warning "markdownlint not available - install with: npm install -g markdownlint-cli"
 fi
 
 # Clean up backup files on success
@@ -229,11 +233,11 @@ fi
 
 echo
 if [[ $FIXED_COUNT -eq $TOTAL_FILES ]]; then
-    echo "SUCCESS: All MVP markdown files have been automatically fixed"
+    success "All MVP markdown files have been automatically fixed"
     echo "Ready for commit and MVP development"
     exit 0
 else
-    echo "WARNING: Some files could not be fixed automatically"
+    warning "Some files could not be fixed automatically"
     echo "Manual review may be required"
     exit 1
 fi

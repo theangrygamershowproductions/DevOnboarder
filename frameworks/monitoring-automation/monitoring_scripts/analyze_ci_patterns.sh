@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # CI Failure Pattern Recognition Agent
 # Analyzes CI failures and categorizes them for better decision making
 
@@ -22,7 +30,7 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN"; then
-        echo "ERROR: Cannot proceed without required tokens for CI pattern analysis"
+        error "Cannot proceed without required tokens for CI pattern analysis"
         echo "TIP: CI pattern analysis requires GitHub API access for PR and workflow data"
         exit 1
     fi
@@ -55,9 +63,9 @@ echo "================================================"
 
 # Check if GitHub CLI is authenticated
 if ! gh auth status >/dev/null 2>&1; then
-    echo "WARNING:  GitHub CLI not authenticated, using basic analysis"
-    echo "SUCCESS: Proceeding with simplified pattern analysis"
-    echo "BOT: Pattern Analysis Complete (simplified mode)"
+    warning " GitHub CLI not authenticated, using basic analysis"
+    success "Proceeding with simplified pattern analysis"
+    bot "Pattern Analysis Complete (simplified mode)"
     exit 0
 fi
 
@@ -65,7 +73,7 @@ fi
 FAILING_CHECKS=$(gh pr view "$PR_NUMBER" --json statusCheckRollup --jq '[.statusCheckRollup[] | select(.conclusion == "FAILURE")]' 2>/dev/null || echo "[]")
 
 if [ "$(echo "$FAILING_CHECKS" | jq length)" -eq 0 ]; then
-    echo "SUCCESS: No failing checks detected"
+    success "No failing checks detected"
     exit 0
 fi
 
@@ -75,7 +83,7 @@ echo
 # Categorize failures
 echo "$FAILING_CHECKS" | jq -r '.[] | "\(.name): \(.conclusion)"' | while read -r check; do
     check_name=$(echo "$check" | cut -d: -f1)
-    echo "ERROR: $check_name"
+    error "$check_name"
 
     # Pattern matching for common failure types
     case "$check_name" in
@@ -120,7 +128,7 @@ done
 
 # Generate overall recommendation
 FAILURE_COUNT=$(echo "$FAILING_CHECKS" | jq length)
-echo "TARGET: Overall Assessment:"
+target "Overall Assessment:"
 echo "  Total Failures: $FAILURE_COUNT"
 
 # Check for auto-fixable issues
@@ -148,4 +156,4 @@ else
 fi
 
 echo
-echo "BOT: Pattern Analysis Complete"
+bot "Pattern Analysis Complete"

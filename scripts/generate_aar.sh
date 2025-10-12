@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced After Actions Report Generator for DevOnboarder with Token Governance
 # Integrates with existing DevOnboarder automation infrastructure and comprehensive token governance
 
@@ -111,7 +115,7 @@ except:
 }
 EOF
 
-    echo "📋 Token governance status prepared for AAR integration"
+    check "Token governance status prepared for AAR integration"
 }
 
 if [ -z "$AAR_TYPE" ]; then
@@ -934,7 +938,7 @@ update_aar_index
 echo ""
 echo "AAR Generation Complete"
 echo "📁 AAR Location: $AAR_BASE_DIR"
-echo "📋 Index: .aar/index.md"
+check "Index: .aar/index.md"
 echo "Log: $LOG_FILE"
 echo ""
 echo "Next steps:"

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # PR Health Assessment Agent
 # Analyzes PR status and provides recommendations for next actions
 
@@ -50,11 +58,11 @@ echo "  Failing: $FAILED_COUNT"
 echo
 
 if [ "$FAILED_COUNT" -gt 0 ]; then
-    echo "ERROR: Failing Checks: $FAILING_CHECKS"
+    error "Failing Checks: $FAILING_CHECKS"
 fi
 
 if [ "$PASSED_COUNT" -gt 0 ]; then
-    echo "SUCCESS: Passing Checks: $PASSING_CHECKS"
+    success "Passing Checks: $PASSING_CHECKS"
 fi
 
 echo
@@ -70,7 +78,7 @@ echo "HEALTH: PR Health Score: $HEALTH_PERCENTAGE%"
 
 # Provide recommendations
 echo
-echo "TARGET: Recommendations:"
+target "Recommendations:"
 
 if [ "$HEALTH_PERCENTAGE" -ge 80 ]; then
     echo "  SUCCESS: HIGH HEALTH: PR is in good shape, consider proceeding with merge"
@@ -105,4 +113,4 @@ if [ "$ADDITIONS" -gt 1000 ]; then
 fi
 
 echo
-echo "BOT: Automated Assessment Complete"
+bot "Automated Assessment Complete"

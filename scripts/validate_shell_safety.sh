@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Shell Command Safety Validator
 # Detects potentially unsafe shell command patterns to prevent terminal hanging
 # Created in response to Shell Interpretation Incident - September 19, 2025
@@ -66,10 +74,10 @@ check_unsafe_echo_patterns() {
     echo "Checking for unsafe echo patterns..."
 
     # Pattern 1: Echo with emojis (from Terminal Output Policy)
-    if grep -n "echo.*[✅❌🎯🚀📋🔍📝💡⚠️🥔]" scripts/*.sh 2>/dev/null; then
+    if grep -n "echo.*[SUCCESS:ERROR:TARGET:DEPLOY:CHECK:🔍NOTE:💡WARNING:🥔]" scripts/*.sh 2>/dev/null; then
         while IFS: read -r file line content; do
             log_violation "CRITICAL" "Echo with emoji characters (terminal hanging risk)" "$file" "$line" "$content"
-        done < <(grep -n "echo.*[✅❌🎯🚀📋🔍📝💡⚠️🥔]" scripts/*.sh 2>/dev/null)
+        done < <(grep -n "echo.*[SUCCESS:ERROR:TARGET:DEPLOY:CHECK:🔍NOTE:💡WARNING:🥔]" scripts/*.sh 2>/dev/null)
     fi
 
     # Pattern 2: Echo with command substitution
@@ -134,11 +142,11 @@ echo "Shell safety validation complete"
 echo "================================"
 
 if [ "$VIOLATIONS_FOUND" -eq 0 ]; then
-    echo "SUCCESS: No shell safety violations detected"
+    success "No shell safety violations detected"
     echo "All commands follow DevOnboarder terminal safety standards"
     exit 0
 else
-    echo "WARNING: $VIOLATIONS_FOUND shell safety violations detected"
+    warning "$VIOLATIONS_FOUND shell safety violations detected"
     echo "Review log: $VALIDATION_LOG"
     echo ""
     echo "Recommended actions:"

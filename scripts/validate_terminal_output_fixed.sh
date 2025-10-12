@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Terminal Output Policy Enforcement Script - FIXED VERSION
 # ZERO TOLERANCE for violations that cause terminal hanging
 
@@ -28,7 +36,7 @@ find "$WORKFLOW_DIR" -name "*.yml" -o -name "*.yaml" | while IFS= read -r file; 
     echo "Validating file: $file"
 
     # Check for emojis and Unicode characters
-    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' "$file" 2>/dev/null; then
+    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|SUCCESS:|ERROR:|TOOL:|REPORT:|📈|📥|🔗|🐛|WARNING:|💡|TARGET:|DEPLOY:|CHECK:|🔍|NOTE:' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Emoji/Unicode characters found in $file"
         echo "These WILL cause immediate terminal hanging"
         VIOLATIONS=$((VIOLATIONS + 1))

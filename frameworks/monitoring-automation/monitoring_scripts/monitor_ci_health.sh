@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # CI Health Monitoring - Track infrastructure reliability post-repair
 
 set -euo pipefail
@@ -21,7 +29,7 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN"; then
-        echo "ERROR: Cannot proceed without required tokens for CI monitoring"
+        error "Cannot proceed without required tokens for CI monitoring"
         echo "TIP: CI health monitoring requires GitHub API access"
         exit 1
     fi
@@ -37,11 +45,11 @@ echo "RELOAD: CI Performance Analysis:"
 
 # Get recent workflow runs with error handling using proper token
 if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,status,workflowName,createdAt 2>/dev/null); then
-    echo "SUCCESS: Retrieved recent CI run data"
+    success "Retrieved recent CI run data"
 
     # Also get failed runs specifically for detailed analysis
     if failed_runs_detailed=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --status failure 2>/dev/null); then
-        echo "SUCCESS: Retrieved detailed failed run data"
+        success "Retrieved detailed failed run data"
     fi
 
     # Calculate success metrics
@@ -57,11 +65,11 @@ if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,sta
         if [ "$success_rate" -ge 90 ]; then
             echo "COMPLETE: EXCELLENT: CI infrastructure highly reliable"
         elif [ "$success_rate" -ge 75 ]; then
-            echo "SUCCESS: GOOD: CI infrastructure generally reliable"
+            success "GOOD: CI infrastructure generally reliable"
         elif [ "$success_rate" -ge 60 ]; then
-            echo "WARNING:  ACCEPTABLE: CI infrastructure needs attention"
+            warning " ACCEPTABLE: CI infrastructure needs attention"
         else
-            echo "ERROR: POOR: CI infrastructure requires immediate repair"
+            error "POOR: CI infrastructure requires immediate repair"
         fi
 
         # Show recent runs
@@ -81,10 +89,10 @@ if runs=$(GH_TOKEN="${AAR_TOKEN:-}" gh run list --limit 20 --json conclusion,sta
         fi
 
     else
-        echo "WARNING:  No recent runs found"
+        warning " No recent runs found"
     fi
 else
-    echo "ERROR: Cannot retrieve CI run data - monitoring limited"
+    error "Cannot retrieve CI run data - monitoring limited"
 fi
 
 # Test infrastructure components
@@ -106,7 +114,7 @@ done
 
 infrastructure_health=$((healthy_components * 100 / total_components))
 echo ""
-echo "BUILD:  Infrastructure Health: ${infrastructure_health}% ($healthy_components/$total_components components healthy)"
+build " Infrastructure Health: ${infrastructure_health}% ($healthy_components/$total_components components healthy)"
 
 # Overall assessment
 echo ""
@@ -114,10 +122,10 @@ echo "INFO: OVERALL HEALTH ASSESSMENT:"
 if [ "${success_rate:-0}" -ge 85 ] && [ "$infrastructure_health" -ge 80 ]; then
     echo "COMPLETE: HEALTHY: Infrastructure repair successful"
 elif [ "${success_rate:-0}" -ge 70 ] && [ "$infrastructure_health" -ge 60 ]; then
-    echo "SUCCESS: STABLE: Infrastructure functional with minor issues"
+    success "STABLE: Infrastructure functional with minor issues"
 else
-    echo "WARNING:  ATTENTION NEEDED: Infrastructure requires continued repair"
+    warning " ATTENTION NEEDED: Infrastructure requires continued repair"
 fi
 
 echo ""
-echo "NOTE: Monitor completed - check logs for detailed analysis"
+note "Monitor completed - check logs for detailed analysis"

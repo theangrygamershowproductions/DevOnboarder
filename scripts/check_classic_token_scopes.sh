@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Classic GitHub Token Permissions Checker
 # Specifically designed for Classic Personal Access Tokens
 
@@ -107,7 +111,7 @@ check_classic_token() {
 check_classic_token "AAR_TOKEN"
 
 echo ""
-echo "🔧 Classic Token Troubleshooting Guide:"
+tool "Classic Token Troubleshooting Guide:"
 echo "======================================="
 echo ""
 echo "For Classic Personal Access Tokens, you need these scopes:"

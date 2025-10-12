@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 FILE=".codex/bot-permissions.yaml"
@@ -44,4 +52,4 @@ if [ -n "$missing_required" ]; then
   exit 1
 fi
 
-echo "Bot permissions file valid ✅"
+echo "Bot permissions file valid SUCCESS:"

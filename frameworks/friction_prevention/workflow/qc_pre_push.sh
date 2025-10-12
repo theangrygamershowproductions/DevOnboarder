@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Quality Control Pre-Push Script
 # Validates 95% quality threshold across 8 metrics
 # ZERO TOLERANCE: Must pass all checks before push
@@ -22,7 +26,7 @@ echo "Running 95% QC Pre-Push Validation..."
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
     echo
-    echo "WARNING: You're about to push to main branch!"
+    warning "You're about to push to main branch!"
     echo "   DevOnboarder requires feature branch workflow"
     echo "   Consider: git checkout -b feat/your-feature-name"
     echo
@@ -42,7 +46,7 @@ echo "Skipping template validation (not applicable to QA framework)"
 echo "Checking for validation blind spots..."
 UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' || true)
 if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
-    echo "WARNING: Untracked files bypass quality checks"
+    warning "Untracked files bypass quality checks"
     echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
         echo "   - $file"
     done
@@ -74,7 +78,7 @@ declare -a FAILURES=()
 # 1. YAML Linting
 echo "Checking YAML files..."
 if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
-    CHECKS+=("SUCCESS: YAML lint")
+    CHECKS+=("success "YAML lint")
 else
     CHECKS+=("FAILED: YAML lint")
     FAILURES+=("YAML files have linting errors")
@@ -83,7 +87,7 @@ fi
 # 2. Python Code Quality
 echo "Checking Python code quality..."
 if python -m ruff check . --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Ruff lint")
+    CHECKS+=("success "Ruff lint")
 else
     CHECKS+=("FAILED: Ruff lint")
     FAILURES+=("Python code has linting errors")
@@ -92,7 +96,7 @@ fi
 # 3. Python Formatting
 echo "Checking Python formatting..."
 if python -m black --check . --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Black format")
+    CHECKS+=("success "Black format")
 else
     CHECKS+=("FAILED: Black format")
     FAILURES+=("Python code formatting issues")
@@ -103,7 +107,7 @@ echo "Type checking with MyPy..."
 export MYPY_CACHE_DIR="logs/.mypy_cache"
 mkdir -p logs/.mypy_cache
 if python -m mypy src/devonboarder 2>/dev/null; then
-    CHECKS+=("SUCCESS: MyPy types")
+    CHECKS+=("success "MyPy types")
 else
     CHECKS+=("FAILED: MyPy types")
     FAILURES+=("Type checking errors")
@@ -151,7 +155,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
     fi
 
     if $COVERAGE_SUCCESS; then
-        CHECKS+=("SUCCESS: Service coverage $COVERAGE_DETAILS")
+        CHECKS+=("success "Service coverage $COVERAGE_DETAILS")
     else
         CHECKS+=("FAILED: Service coverage $COVERAGE_DETAILS")
         FAILURES+=("Service-specific coverage thresholds not met")
@@ -162,19 +166,19 @@ fi
 echo "Checking documentation..."
 if [[ -x "$REPO_ROOT/scripts/check_docs.sh" ]]; then
     if bash "$REPO_ROOT/scripts/check_docs.sh" >/dev/null 2>&1; then
-        CHECKS+=("SUCCESS: Documentation")
+        CHECKS+=("success "Documentation")
     else
         CHECKS+=("FAILED: Documentation")
         FAILURES+=("Documentation quality issues")
     fi
 else
-    CHECKS+=("WARNING:  Documentation check skipped")
+    CHECKS+=("warning " Documentation check skipped")
 fi
 
 # 7. Commit Message Quality
 echo "Checking commit messages..."
 if bash "$REPO_ROOT/scripts/check_commit_messages.sh" 2>&1; then
-    CHECKS+=("SUCCESS: Commit messages")
+    CHECKS+=("success "Commit messages")
 else
     CHECKS+=("FAILED: Commit messages")
     FAILURES+=("Commit message format issues")
@@ -183,7 +187,7 @@ fi
 # 8. Security Scan
 echo "Running security scan..."
 if python -m bandit -r src -ll --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Security scan")
+    CHECKS+=("success "Security scan")
 else
     CHECKS+=("FAILED: Security scan")
     FAILURES+=("Security vulnerabilities detected")
@@ -193,13 +197,13 @@ fi
 echo "Validating UTC timestamp compliance..."
 if [[ -x "$REPO_ROOT/scripts/validate_utc_compliance.sh" ]]; then
     if bash "$REPO_ROOT/scripts/validate_utc_compliance.sh" 2>/dev/null; then
-        CHECKS+=("SUCCESS: UTC compliance")
+        CHECKS+=("success "UTC compliance")
     else
         CHECKS+=("FAILED: UTC compliance")
         FAILURES+=("Mixed timezone usage detected - use src.utils.timestamps")
     fi
 else
-    CHECKS+=("WARNING: UTC compliance check skipped (validator not found)")
+    CHECKS+=("warning "UTC compliance check skipped (validator not found)")
 fi
 
 # Calculate success rate
@@ -219,7 +223,7 @@ echo "Quality Score: $SUCCESS_COUNT/$TOTAL_CHECKS ($PERCENTAGE%)"
 
 # Check if we meet 95% threshold
 if [[ $PERCENTAGE -ge 95 ]]; then
-    echo "SUCCESS: PASS: Quality score meets 95% threshold"
+    success "PASS: Quality score meets 95% threshold"
     echo "Ready to push!"
     exit 0
 else

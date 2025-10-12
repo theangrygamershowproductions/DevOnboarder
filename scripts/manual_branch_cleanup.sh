@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Manual branch cleanup script - safe interactive cleanup of local and remote branches
 # This script provides a comprehensive view and safe cleanup options
 
@@ -27,7 +35,7 @@ safe_git() {
     if command -v git >/dev/null 2>&1; then
         git "$@"
     else
-        echo "❌ Git not found. Please install git."
+        error "Git not found. Please install git."
         exit 1
     fi
 }
@@ -35,7 +43,7 @@ safe_git() {
 # Function to check if we're in a git repository
 check_git_repo() {
     if ! safe_git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository."
+        error "Not in a git repository."
         exit 1
     fi
 }
@@ -47,24 +55,24 @@ get_current_branch() {
 
 # Function to list all branches with details
 list_branches() {
-    echo -e "${BLUE}📋 Branch Analysis${NC}"
+    echo -e "${BLUE}CHECK: Branch Analysis"
     echo "==================="
 
     current_branch=$(get_current_branch)
-    echo -e "Current branch: ${GREEN}$current_branch${NC}"
+    echo -e "Current branch: ${GREEN}$current_branch"
     echo ""
 
-    echo -e "${YELLOW}Local Branches:${NC}"
+    echo -e "${YELLOW}Local Branches:"
     echo "---------------"
     safe_git branch -v 2>/dev/null || echo "No local branches found"
     echo ""
 
-    echo -e "${YELLOW}Remote Branches:${NC}"
+    echo -e "${YELLOW}Remote Branches:"
     echo "----------------"
     safe_git branch -r -v 2>/dev/null || echo "No remote branches found"
     echo ""
 
-    echo -e "${YELLOW}Recently Merged Branches:${NC}"
+    echo -e "${YELLOW}Recently Merged Branches:"
     echo "-------------------------"
     # Show branches merged into main in the last 60 days
     safe_git for-each-ref --format='%(refname:short) %(committerdate:relative) %(authorname)' \
@@ -75,7 +83,7 @@ list_branches() {
 
 # Function to find merged branches
 find_merged_branches() {
-    echo -e "${BLUE}🔍 Finding Merged Branches${NC}"
+    echo -e "${BLUE}🔍 Finding Merged Branches"
     echo "============================"
 
     base_branch="${1:-main}"
@@ -86,7 +94,7 @@ find_merged_branches() {
     echo "Fetching latest remote changes..."
     safe_git fetch origin --prune >/dev/null 2>&1 || echo "Warning: Failed to fetch from origin"
 
-    echo -e "${YELLOW}Local branches merged into $base_branch:${NC}"
+    echo -e "${YELLOW}Local branches merged into $base_branch:"
     local_merged=$(safe_git branch --merged "$base_branch" 2>/dev/null | grep -v "^\*" | grep -v "$base_branch" | xargs -r echo || echo "")
     if [ -n "$local_merged" ]; then
         echo "$local_merged"
@@ -95,7 +103,7 @@ find_merged_branches() {
     fi
     echo ""
 
-    echo -e "${YELLOW}Remote branches merged into origin/$base_branch:${NC}"
+    echo -e "${YELLOW}Remote branches merged into origin/$base_branch:"
     remote_merged=$(safe_git branch -r --merged "origin/$base_branch" 2>/dev/null | \
                    grep -v "origin/$base_branch" | \
                    grep -v "origin/HEAD" | \
@@ -113,7 +121,7 @@ find_merged_branches() {
 
 # Function to safely delete local branches
 cleanup_local_branches() {
-    echo -e "${BLUE}🗑️  Local Branch Cleanup${NC}"
+    echo -e "${BLUE}🗑️  Local Branch Cleanup"
     echo "========================="
 
     current_branch=$(get_current_branch)
@@ -123,7 +131,7 @@ cleanup_local_branches() {
     if [ "$current_branch" != "$base_branch" ]; then
         echo "Switching to $base_branch..."
         safe_git checkout "$base_branch" 2>/dev/null || {
-            echo "❌ Failed to switch to $base_branch. Please switch manually."
+            error "Failed to switch to $base_branch. Please switch manually."
             return 1
         }
     fi
@@ -138,7 +146,7 @@ cleanup_local_branches() {
                    sed 's/^[ *]*//' || echo "")
 
     if [ -z "$merged_locals" ]; then
-        echo "✅ No local merged branches to delete"
+        success "No local merged branches to delete"
         return 0
     fi
 
@@ -153,11 +161,11 @@ cleanup_local_branches() {
             if [ -n "$branch" ]; then
                 echo "Deleting local branch: $branch"
                 safe_git branch -d "$branch" 2>/dev/null || {
-                    echo "⚠️  Failed to delete $branch (may have unmerged changes)"
+                    warning " Failed to delete $branch (may have unmerged changes)"
                     read -p "Force delete $branch? [y/N] " -n 1 -r
                     echo ""
                     if [[ $REPLY =~ ^[Yy]$ ]]; then
-                        safe_git branch -D "$branch" && echo "✅ Force deleted $branch"
+                        safe_git branch -D "$branch" && success "Force deleted $branch"
                     fi
                 }
             fi
@@ -169,7 +177,7 @@ cleanup_local_branches() {
 
 # Function to list stale branches
 list_stale_branches() {
-    echo -e "${BLUE}📅 Stale Branch Analysis${NC}"
+    echo -e "${BLUE}📅 Stale Branch Analysis"
     echo "========================"
 
     days_threshold="${1:-30}"
@@ -178,7 +186,7 @@ list_stale_branches() {
 
     cutoff_date=$(date -d "$days_threshold days ago" +%s 2>/dev/null || date -v-"${days_threshold}"d +%s 2>/dev/null || echo "0")
 
-    echo -e "${YELLOW}Stale Local Branches:${NC}"
+    echo -e "${YELLOW}Stale Local Branches:"
     safe_git for-each-ref --format='%(refname:short) %(committerdate:unix) %(committerdate:relative)' refs/heads/ 2>/dev/null | \
         while read -r branch timestamp relative; do
             if [ "$timestamp" -lt "$cutoff_date" ] && [ "$branch" != "main" ] && [ "$branch" != "dev" ] && [ "$branch" != "feat/potato-ignore-policy-focused" ]; then
@@ -187,7 +195,7 @@ list_stale_branches() {
         done || echo "Unable to analyze local branches"
     echo ""
 
-    echo -e "${YELLOW}Stale Remote Branches:${NC}"
+    echo -e "${YELLOW}Stale Remote Branches:"
     safe_git for-each-ref --format='%(refname:short) %(committerdate:unix) %(committerdate:relative)' refs/remotes/origin/ 2>/dev/null | \
         while read -r branch timestamp relative; do
             branch_name=${branch#origin/}
@@ -200,7 +208,7 @@ list_stale_branches() {
 
 # Function to run automated cleanup (safe mode)
 run_automated_cleanup() {
-    echo -e "${BLUE}🤖 Automated Safe Cleanup${NC}"
+    echo -e "${BLUE}BOT: Automated Safe Cleanup"
     echo "=========================="
 
     # Run existing cleanup script in dry-run mode
@@ -208,13 +216,13 @@ run_automated_cleanup() {
         echo "Running existing cleanup script (dry-run mode)..."
         DRY_RUN=true BASE_BRANCH=main DAYS_STALE=30 bash scripts/cleanup_branches.sh
     else
-        echo "⚠️  Cleanup script not found. Manual cleanup only."
+        warning " Cleanup script not found. Manual cleanup only."
     fi
 }
 
 # Main menu
 main_menu() {
-    echo -e "${GREEN}🧹 Branch Cleanup Options${NC}"
+    echo -e "${GREEN}🧹 Branch Cleanup Options"
     echo "=========================="
     echo "1. List all branches"
     echo "2. Find merged branches"

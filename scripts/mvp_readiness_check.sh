@@ -1,11 +1,15 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # scripts/mvp_readiness_check.sh
 # Comprehensive MVP readiness validation script
 
 set -e
 
-echo "🎯 DevOnboarder MVP Readiness Check"
+target "DevOnboarder MVP Readiness Check"
 echo "=================================="
 echo "Timestamp: $(date)"
 echo
@@ -27,18 +31,18 @@ check_command() {
 
     if output=$(eval "$command" 2>&1); then
         if [[ -z "$expected_pattern" ]] || echo "$output" | grep -q "$expected_pattern"; then
-            echo "✅ PASS"
+            success "PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
             return 0
         else
-            echo "❌ FAIL (unexpected output)"
+            error "FAIL (unexpected output)"
             echo "   Expected pattern: $expected_pattern"
             echo "   Actual output: $(echo "$output" | head -1)"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             return 1
         fi
     else
-        echo "❌ FAIL (command failed)"
+        error "FAIL (command failed)"
         echo "   Error: $(echo "$output" | head -1)"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         return 1
@@ -59,7 +63,7 @@ check_command "Discord Bot Process" "pgrep -f 'node.*bot' || docker ps --filter 
 echo
 
 # 2. Quality Gates Validation
-echo "🎯 Quality Gates Validation"
+target "Quality Gates Validation"
 echo "============================"
 
 # Set up Python environment
@@ -71,11 +75,11 @@ setup_python_env() {
         # Add virtual environment to PATH
         export PATH=".venv/bin:$PATH"
     elif command -v python3 >/dev/null 2>&1; then
-        echo "⚠️  Virtual environment not found, using system Python"
+        warning " Virtual environment not found, using system Python"
         export PYTHON_CMD="python3"
         export PIP_CMD="pip3"
     else
-        echo "❌ Python not found - please install Python or set up virtual environment"
+        error "Python not found - please install Python or set up virtual environment"
         exit 1
     fi
 }
@@ -90,7 +94,7 @@ check_command "Security Scanning" "safety check --json | jq '.vulnerabilities | 
 echo
 
 # 3. Integration Testing
-echo "🔄 Integration Testing"
+sync "Integration Testing"
 echo "====================="
 
 check_command "Python Integration Tests" "$PYTHON_CMD -m pytest tests/integration/ --tb=no -q" "passed"
@@ -117,38 +121,38 @@ check_command "System Memory Usage" "free -m | awk 'NR==2{printf \"%.1f\", \$3*1
 echo
 
 # 5. Documentation Quality
-echo "📚 Documentation Quality"
+docs "Documentation Quality"
 echo "========================"
 
 # Check if documentation tools are available
 if command -v vale >/dev/null 2>&1; then
     check_command "Documentation Style (Vale)" "vale docs/ --no-exit" "0 errors\\|No issues found"
 else
-    echo "⚠️  Vale not installed - skipping documentation style check"
+    warning " Vale not installed - skipping documentation style check"
 fi
 
 if command -v markdownlint >/dev/null 2>&1; then
     check_command "Markdown Linting" "markdownlint docs/ README.md" ""
 else
-    echo "⚠️  Markdownlint not installed - skipping markdown linting"
+    warning " Markdownlint not installed - skipping markdown linting"
 fi
 
 echo
 
 # 6. CI/CD Pipeline Health
-echo "🚀 CI/CD Pipeline Health"
+deploy "CI/CD Pipeline Health"
 echo "========================"
 
 if command -v gh >/dev/null 2>&1; then
     check_command "Recent CI Success Rate" "gh run list --limit=10 --json status,conclusion | jq '[.[] | select(.status==\"completed\")] | map(select(.conclusion==\"success\")) | length' | awk '{print (\$1 >= 8 ? \"PASS\" : \"FAIL\")}'" "PASS"
 else
-    echo "⚠️  GitHub CLI not available - skipping CI pipeline health check"
+    warning " GitHub CLI not available - skipping CI pipeline health check"
 fi
 
 echo
 
 # 7. Security Validation
-echo "🔒 Security Validation"
+secure "Security Validation"
 echo "======================"
 
 check_command "Python Dependencies Security" "pip-audit --desc --format=json | jq '.vulnerabilities | length'" "^0$"
@@ -160,7 +164,7 @@ fi
 echo
 
 # 8. Demo Environment Readiness
-echo "🎬 Demo Environment Readiness"
+media "Demo Environment Readiness"
 echo "============================="
 
 check_command "Environment Variables" "printenv | grep -E '^(DISCORD_|DATABASE_|AUTH_)' | wc -l | awk '{print (\$1 >= 3 ? \"PASS\" : \"FAIL\")}'" "PASS"
@@ -169,7 +173,7 @@ check_command "Docker Services" "docker-compose ps | grep -E '(Up|running)' | wc
 echo
 
 # Final Results Summary
-echo "📊 MVP Readiness Summary"
+report "MVP Readiness Summary"
 echo "========================"
 echo "Total Checks: $TOTAL_CHECKS"
 echo "Passed: $PASSED_CHECKS"
@@ -181,14 +185,14 @@ echo "Success Rate: $SUCCESS_RATE%"
 echo
 if [[ $PASSED_CHECKS -eq $TOTAL_CHECKS ]]; then
     echo "🎉 ALL CHECKS PASSED - MVP IS READY FOR DEMO!"
-    echo "✅ DevOnboarder MVP meets all quality and readiness criteria"
+    success "DevOnboarder MVP meets all quality and readiness criteria"
     exit 0
 elif [[ $(echo "$SUCCESS_RATE >= 90" | bc) -eq 1 ]]; then
-    echo "⚠️  MVP MOSTLY READY - Minor issues need attention"
-    echo "🔧 $FAILED_CHECKS checks failed but success rate is above 90%"
+    warning " MVP MOSTLY READY - Minor issues need attention"
+    tool "$FAILED_CHECKS checks failed but success rate is above 90%"
     exit 1
 else
-    echo "❌ MVP NOT READY - Critical issues must be resolved"
+    error "MVP NOT READY - Critical issues must be resolved"
     echo "🚨 $FAILED_CHECKS checks failed - success rate below 90%"
     exit 2
 fi

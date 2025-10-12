@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/require_tokens.sh
 # Purpose: Shell-based token requirement validation
@@ -28,11 +36,11 @@ notify_missing_tokens() {
     local ci_env="${CI:-}"
 
     echo ""
-    echo "⚠️  MISSING TOKENS DETECTED"
+    warning " MISSING TOKENS DETECTED"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
     for token in "${missing_tokens[@]}"; do
-        echo "❌ $token"
+        error "$token"
     done
 
     echo ""
@@ -48,7 +56,7 @@ notify_missing_tokens() {
     fi
 
     echo ""
-    echo "📚 For token setup guidance:"
+    docs "For token setup guidance:"
     echo "   See: docs/token-setup-guide.md"
     echo "   Architecture: docs/TOKEN_ARCHITECTURE.md"
 
@@ -64,7 +72,7 @@ require_tokens() {
     shift
     local required_tokens=("$@")
 
-    echo "🔐 $service_name: Validating required tokens..."
+    secure "$service_name: Validating required tokens..."
 
     local missing_tokens=()
     local available_tokens=()
@@ -82,11 +90,11 @@ require_tokens() {
     if [ ${#missing_tokens[@]} -gt 0 ]; then
         notify_missing_tokens "${missing_tokens[@]}"
         echo ""
-        echo "❌ $service_name: CANNOT START - Missing required tokens"
+        error "$service_name: CANNOT START - Missing required tokens"
         echo "   Missing: ${missing_tokens[*]}"
         return 1
     else
-        echo "✅ $service_name: All required tokens available"
+        success "$service_name: All required tokens available"
         return 0
     fi
 }

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Fine-Grained Token Organization Permission Diagnostic
 # Identifies and resolves organization-specific Fine-Grained token issues
 
@@ -13,7 +17,7 @@ echo "============================================="
 echo ""
 
 if [ -z "$AAR_TOKEN" ]; then
-    echo "ERROR: AAR_TOKEN not found"
+    error "AAR_TOKEN not found"
     exit 1
 fi
 
@@ -60,7 +64,7 @@ fi
 echo ""
 
 # Repository direct access
-echo "📚 Repository Direct Access:"
+docs "Repository Direct Access:"
 if repo_info=$(GH_TOKEN="$AAR_TOKEN" gh api repos/theangrygamershowproductions/DevOnboarder 2>/dev/null); then
     echo "   Repository metadata: Accessible"
 

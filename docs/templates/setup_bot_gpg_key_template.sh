@@ -1,4 +1,6 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Template for setting up GPG key for new automation bots
 # Copy this script and customize for your specific bot
 #
@@ -41,11 +43,11 @@ rm "$GPG_BATCH_FILE"
 KEY_ID=$(gpg --list-secret-keys --with-colons "$BOT_EMAIL" | awk -F: '/^sec:/ {print $5}')
 
 if [ -z "$KEY_ID" ]; then
-    echo "ERROR: Failed to generate or find GPG key"
+    error "Failed to generate or find GPG key"
     exit 1
 fi
 
-echo "✅ GPG key generated successfully!"
+success "GPG key generated successfully!"
 echo "Key ID: $KEY_ID"
 echo ""
 
@@ -59,7 +61,7 @@ PUBLIC_KEY=$(gpg --export --armor "$KEY_ID")
 
 echo ""
 echo "=========================================="
-echo "📋 GITHUB CONFIGURATION REQUIRED"
+check "GITHUB CONFIGURATION REQUIRED"
 echo "=========================================="
 echo ""
 echo "1. ADD REPOSITORY SECRETS (Settings → Secrets and variables → Actions → Repository secrets):"
@@ -93,7 +95,7 @@ echo "   - {BOT_NAME} → {BOT_NAME_UPPER} (for secrets/variables)"
 echo "   - Update env variables in GPG setup step"
 echo ""
 echo "=========================================="
-echo "✅ SETUP COMPLETE"
+success "SETUP COMPLETE"
 echo "=========================================="
 echo ""
 echo "Your workflow should now use these environment variables:"

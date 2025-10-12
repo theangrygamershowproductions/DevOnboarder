@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Project Navigator - Minimum Viable Navigator (MVN)
 # Phase 1: Constrained experiment for Issue Management + CI Troubleshooting
 #
@@ -32,16 +40,16 @@ check_branch_workflow() {
         echo "🚨 CRITICAL WORKFLOW VIOLATION DETECTED!"
         echo "========================================"
         echo
-        echo "❌ You are on the 'main' branch"
-        echo "✅ DevOnboarder requires feature branch workflow"
+        error "You are on the 'main' branch"
+        success "DevOnboarder requires feature branch workflow"
         echo
-        echo "📋 Proper DevOnboarder workflow:"
+        check "Proper DevOnboarder workflow:"
         echo "   1. git checkout main"
         echo "   2. git pull origin main"
         echo "   3. git checkout -b feat/descriptive-name"
         echo "   4. Then start work"
         echo
-        echo "🔧 Auto-fix options:"
+        tool "Auto-fix options:"
         echo "   [1] Create feature branch now (recommended)"
         echo "   [2] Continue on main (VIOLATION - not recommended)"
         echo "   [3] Exit and fix manually"
@@ -55,20 +63,20 @@ check_branch_workflow() {
                 if [[ -n "$branch_name" ]]; then
                     full_branch_name="feat/$branch_name"
                     if git checkout -b "$full_branch_name" 2>/dev/null; then
-                        echo "✅ Created and switched to branch: $full_branch_name"
+                        success "Created and switched to branch: $full_branch_name"
                         log_action "Branch workflow violation corrected: created $full_branch_name"
                     else
-                        echo "❌ Failed to create branch. Exiting for manual fix."
+                        error "Failed to create branch. Exiting for manual fix."
                         exit 1
                     fi
                 else
-                    echo "❌ No branch name provided. Exiting for manual fix."
+                    error "No branch name provided. Exiting for manual fix."
                     exit 1
                 fi
                 ;;
             2)
                 echo
-                echo "⚠️  WARNING: Continuing on main branch violates DevOnboarder workflow"
+                warning " WARNING: Continuing on main branch violates DevOnboarder workflow"
                 echo "   This should only be used for emergency fixes"
                 log_action "Branch workflow violation: user chose to continue on main"
                 ;;
@@ -83,7 +91,7 @@ check_branch_workflow() {
         esac
         echo
     else
-        echo "✅ Branch workflow compliance: Working on '$current_branch'"
+        success "Branch workflow compliance: Working on '$current_branch'"
         log_action "Branch workflow check passed: on branch $current_branch"
     fi
 }
@@ -99,13 +107,13 @@ show_main_menu() {
     echo
     echo "Select your focus area:"
     echo
-    echo "  [1] 📋 Issue Management"
+    echo "  [1] CHECK: Issue Management"
     echo "      Sprint operations, triage, GitHub issues"
     echo
-    echo "  [2] 🔧 CI/CD Troubleshooting"
+    echo "  [2] TOOL: CI/CD Troubleshooting"
     echo "      Pipeline failures, quality gates, service issues"
     echo
-    echo "  [9] 📊 Navigation Metrics"
+    echo "  [9] REPORT: Navigation Metrics"
     echo "      View MVN experiment results"
     echo
     echo "  [0] Exit"
@@ -117,20 +125,20 @@ show_main_menu() {
 load_issue_management_context() {
     log_action "Loading Issue Management context"
     echo
-    echo "🎯 ISSUE MANAGEMENT CONTEXT LOADED"
+    target "ISSUE MANAGEMENT CONTEXT LOADED"
     echo "=================================="
     echo
-    echo "📊 Current State:"
+    report "Current State:"
     echo "• 63 total issues analyzed and organized"
     echo "• 100% priority labeling complete (18 High, 32 Medium, 13 Low)"
     echo "• Strategic milestones: 5 milestones with 37 issue assignments"
     echo "• Sprint 1: COMPLETE (Issues #1437, #1315 resolved)"
     echo
-    echo "🎯 Active Framework:"
+    target "Active Framework:"
     echo "• Strategic Planning Framework v1.0.0"
     echo "• Issue Management Initiative - Administrative Triage COMPLETE"
     echo
-    echo "📋 Common Tasks:"
+    check "Common Tasks:"
     echo "• Sprint execution and monitoring"
     echo "• Issue triage operations"
     echo "• Priority labeling and milestone assignment"
@@ -151,7 +159,7 @@ load_issue_management_context() {
 load_ci_troubleshooting_context() {
     log_action "Loading CI/CD Troubleshooting context"
     echo
-    echo "🔧 CI/CD TROUBLESHOOTING CONTEXT LOADED"
+    tool "CI/CD TROUBLESHOOTING CONTEXT LOADED"
     echo "======================================="
     echo
     echo "⚙️ Quality Standards:"
@@ -159,7 +167,7 @@ load_ci_troubleshooting_context() {
     echo "• Test Coverage: Backend 96%+, Bot 100%, Frontend 100%"
     echo "• Virtual environment MANDATORY for all operations"
     echo
-    echo "🏗️ Service Architecture:"
+    build "Service Architecture:"
     echo "• 8 services: DevOnboarder (8000), XP API (8001), Auth (8002),"
     echo "  Dashboard (8003), Integration (8081), PostgreSQL (5432)"
     echo "• Docker-based multi-service environment"
@@ -171,7 +179,7 @@ load_ci_troubleshooting_context() {
     echo "• Service connectivity and Docker environment issues"
     echo "• Terminal output compliance (ZERO TOLERANCE for violations)"
     echo
-    echo "🛠️ Key Tools:"
+    tool "Key Tools:"
     echo "• scripts/qc_pre_push.sh - 95% quality validation"
     echo "• scripts/run_tests.sh - comprehensive test runner"
     echo "• scripts/safe_commit.sh - NEVER use git commit directly"
@@ -186,7 +194,7 @@ load_ci_troubleshooting_context() {
 show_navigation_metrics() {
     log_action "Viewing navigation metrics"
     echo
-    echo "📊 MVN EXPERIMENT METRICS"
+    report "MVN EXPERIMENT METRICS"
     echo "========================"
     echo
     echo "🧪 Phase 1 Results:"
@@ -199,7 +207,7 @@ show_navigation_metrics() {
     echo "• Faster task focus and resolution"
     echo "• Consistent use of pre-loaded context"
     echo
-    echo "🎯 Next Phase Readiness:"
+    target "Next Phase Readiness:"
     echo "• If 5+ successful sessions → Expand to more domains"
     echo "• If clear efficiency gains → Extract as universal template"
     echo "• If minimal usage → Refine or discontinue"
@@ -241,7 +249,7 @@ main() {
                 ;;
             *)
                 echo
-                echo "❌ Invalid option. Please choose 0, 1, 2, or 9."
+                error "Invalid option. Please choose 0, 1, 2, or 9."
                 echo
                 read -r -p "Press Enter to continue..."
                 ;;

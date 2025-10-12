@@ -1,7 +1,11 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Production Environment"
+bot "Starting Discord Bot - Production Environment"
 echo "==============================================="
 
 # Load production environment
@@ -10,7 +14,7 @@ export ENVIRONMENT=prod
 
 # Check if .env.prod exists
 if [[ ! -f ".env.prod" ]]; then
-    echo "❌ Production environment file not found: .env.prod"
+    error "Production environment file not found: .env.prod"
     echo "   Run: bash ../scripts/setup_discord_env.sh prod"
     exit 1
 fi
@@ -24,5 +28,5 @@ npm ci --only=production
 # Build for production
 npm run build
 
-echo "🚀 Starting bot in production mode..."
+deploy "Starting bot in production mode..."
 npm start

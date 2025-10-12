@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Verify GPG Key Setup for Priority Matrix Bot
@@ -13,23 +17,23 @@ echo "===================================="
 
 # Check if keys exist
 if [[ -f "$PRIVATE_KEY_FILE" && -f "$PUBLIC_KEY_FILE" ]]; then
-    echo "✅ Keys found in persistent location"
+    success "Keys found in persistent location"
     echo "   Private: $PRIVATE_KEY_FILE"
     echo "   Public: $PUBLIC_KEY_FILE"
     echo ""
 
     # Verify key format
     if grep -q "BEGIN OPENSSH PRIVATE KEY" "$PRIVATE_KEY_FILE"; then
-        echo "✅ Private key format: OpenSSH (correct)"
+        success "Private key format: OpenSSH (correct)"
     else
-        echo "❌ Private key format: Invalid"
+        error "Private key format: Invalid"
         exit 1
     fi
 
     if grep -q "ssh-ed25519" "$PUBLIC_KEY_FILE"; then
-        echo "✅ Public key format: ED25519 (correct)"
+        success "Public key format: ED25519 (correct)"
     else
-        echo "❌ Public key format: Invalid"
+        error "Public key format: Invalid"
         exit 1
     fi
 
@@ -58,7 +62,7 @@ if [[ -f "$PRIVATE_KEY_FILE" && -f "$PUBLIC_KEY_FILE" ]]; then
     echo "cat $PUBLIC_KEY_FILE"
 
 else
-    echo "❌ Keys not found in persistent location"
+    error "Keys not found in persistent location"
     echo "   Run: ./scripts/generate_persistent_gpg_keys.sh"
     exit 1
 fi

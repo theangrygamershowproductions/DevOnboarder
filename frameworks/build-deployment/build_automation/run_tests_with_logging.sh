@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced test runner with comprehensive logging for CI troubleshooting
 set -euo pipefail
 
@@ -14,7 +18,7 @@ fi
 
 # Validate PROJECT_ROOT and change to it
 if [ -z "${PROJECT_ROOT:-}" ] || [ ! -d "$PROJECT_ROOT" ]; then
-    echo "ERROR: PROJECT_ROOT not set or invalid: ${PROJECT_ROOT:-<unset>}"
+    error "PROJECT_ROOT not set or invalid: ${PROJECT_ROOT:-<unset>}"
     exit 1
 fi
 cd "$PROJECT_ROOT"
@@ -44,19 +48,19 @@ fi
 log_and_display "Checking pip dependencies..."
 if command -v pip >/dev/null 2>&1; then
     if ! pip check 2>&1; then
-        log_and_display "WARNING: Pip dependency check failed"
+        log_and_display "warning "Pip dependency check failed"
     fi
 else
-    log_and_display "WARNING: pip not found, skipping dependency check"
+    log_and_display "warning "pip not found, skipping dependency check"
 fi
 
 log_and_display "Running ruff linting..."
 if command -v ruff >/dev/null 2>&1; then
     if ! ruff check . 2>&1; then
-        log_and_display "WARNING: Ruff linting found issues"
+        log_and_display "warning "Ruff linting found issues"
     fi
 else
-    log_and_display "WARNING: ruff not found, skipping linting"
+    log_and_display "warning "ruff not found, skipping linting"
 fi
 
 log_and_display "Running Python tests with centralized cache configuration..."
@@ -67,7 +71,7 @@ set -e
 
 # Verify coverage report was generated
 if [ ! -d "logs/htmlcov" ]; then
-    log_and_display "WARNING: Coverage HTML report not found in logs/htmlcov"
+    log_and_display "warning "Coverage HTML report not found in logs/htmlcov"
     log_and_display "Coverage configuration in pyproject.toml may need verification"
 fi
 
@@ -95,7 +99,7 @@ if command -v coverage > /dev/null 2>&1; then
 fi
 
 if [ "$pytest_exit" -eq 0 ]; then
-    log_and_display "SUCCESS: Python tests passed!"
+    log_and_display "success "Python tests passed!"
 else
     log_and_display "FAILED: Python tests failed with exit code: $pytest_exit"
 
@@ -120,7 +124,7 @@ if [ -d bot ] && [ -f bot/package.json ]; then
     log_and_display "Running bot tests..."
     if npm ci --prefix bot 2>&1; then
         if (cd bot && npm run coverage 2>&1); then
-            log_and_display "SUCCESS: Bot tests passed!"
+            log_and_display "success "Bot tests passed!"
         else
             log_and_display "FAILED: Bot tests failed"
             pytest_exit=1
@@ -137,7 +141,7 @@ if [ -d frontend ] && [ -f frontend/package.json ]; then
         log_and_display "Running frontend tests..."
         if npm ci --prefix frontend 2>&1; then
             if (cd frontend && npm run coverage 2>&1); then
-                log_and_display "SUCCESS: Frontend tests passed!"
+                log_and_display "success "Frontend tests passed!"
             else
                 log_and_display "FAILED: Frontend tests failed"
                 pytest_exit=1
@@ -152,7 +156,7 @@ fi
 # Final summary
 if [ "$pytest_exit" -eq 0 ]; then
     log_and_display ""
-    log_and_display "SUCCESS: All tests completed successfully!"
+    log_and_display "success "All tests completed successfully!"
     log_and_display "Test results: test-results/pytest-results.xml"
     log_and_display "Full log: $TEST_LOG"
 else

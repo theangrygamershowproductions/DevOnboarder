@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Quality Control Pre-Push Script
 # Validates 95% quality threshold across 8 metrics
 # ZERO TOLERANCE: Must pass all checks before push
@@ -36,7 +44,7 @@ fi
 echo "Checking for validation blind spots..."
 UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$' || true)
 if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
-    echo "WARNING: Untracked files bypass quality checks"
+    warning "Untracked files bypass quality checks"
     echo "$UNTRACKED_IMPORTANT" | while IFS= read -r file; do
         echo "   - $file"
     done
@@ -52,7 +60,7 @@ fi
 # Ensure we're in virtual environment
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
     if [[ -f ".venv/bin/activate" ]]; then
-        echo "PYTHON: Activating virtual environment..."
+        python "Activating virtual environment..."
         # shellcheck source=/dev/null
         source .venv/bin/activate
     else
@@ -68,7 +76,7 @@ declare -a FAILURES=()
 # 1. YAML Linting
 echo "STEP 1: Checking YAML files..."
 if yamllint -c .github/.yamllint-config .github/workflows/ 2>/dev/null; then
-    CHECKS+=("SUCCESS: YAML lint")
+    CHECKS+=("success "YAML lint")
 else
     CHECKS+=("FAILED: YAML lint")
     FAILURES+=("YAML files have linting errors")
@@ -77,7 +85,7 @@ fi
 # 2. Python Code Quality
 echo "STEP 2: Checking Python code quality..."
 if python -m ruff check . --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Ruff lint")
+    CHECKS+=("success "Ruff lint")
 else
     CHECKS+=("FAILED: Ruff lint")
     FAILURES+=("Python code has linting errors")
@@ -86,7 +94,7 @@ fi
 # 3. Python Formatting
 echo "🖤 Checking Python formatting..."
 if python -m black --check . --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Black format")
+    CHECKS+=("success "Black format")
 else
     CHECKS+=("FAILED: Black format")
     FAILURES+=("Python code formatting issues")
@@ -97,7 +105,7 @@ echo "Type checking with MyPy..."
 export MYPY_CACHE_DIR="logs/.mypy_cache"
 mkdir -p logs/.mypy_cache
 if python -m mypy src/devonboarder 2>/dev/null; then
-    CHECKS+=("SUCCESS: MyPy types")
+    CHECKS+=("success "MyPy types")
 else
     CHECKS+=("FAILED: MyPy types")
     FAILURES+=("Type checking errors")
@@ -116,10 +124,10 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
         --cov --cov-config=config/.coveragerc.xp \
         --cov-fail-under=95 --quiet \
         tests/test_xp_api.py 2>/dev/null; then
-        COVERAGE_DETAILS+="SUCCESS: XP: 95%+ "
+        COVERAGE_DETAILS+="success "XP: 95%+ "
     else
         COVERAGE_SUCCESS=false
-        COVERAGE_DETAILS+="ERROR: XP: <95% "
+        COVERAGE_DETAILS+="error "XP: <95% "
     fi
 
     # Test Discord service with isolated coverage (95% threshold)
@@ -127,10 +135,10 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
         --cov --cov-config=config/.coveragerc.discord \
         --cov-fail-under=95 --quiet \
         tests/test_discord_integration.py 2>/dev/null; then
-        COVERAGE_DETAILS+="SUCCESS: Discord: 95%+ "
+        COVERAGE_DETAILS+="success "Discord: 95%+ "
     else
         COVERAGE_SUCCESS=false
-        COVERAGE_DETAILS+="ERROR: Discord: <95% "
+        COVERAGE_DETAILS+="error "Discord: <95% "
     fi
 
     # Test Auth service with isolated coverage (95% threshold)
@@ -138,14 +146,14 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
         --cov --cov-config=config/.coveragerc.auth \
         --cov-fail-under=95 --quiet \
         tests/test_auth_service.py tests/test_server.py 2>/dev/null; then
-        COVERAGE_DETAILS+="SUCCESS: Auth: 95%+"
+        COVERAGE_DETAILS+="success "Auth: 95%+"
     else
         COVERAGE_SUCCESS=false
-        COVERAGE_DETAILS+="ERROR: Auth: <95%"
+        COVERAGE_DETAILS+="error "Auth: <95%"
     fi
 
     if $COVERAGE_SUCCESS; then
-        CHECKS+=("SUCCESS: Service coverage $COVERAGE_DETAILS")
+        CHECKS+=("success "Service coverage $COVERAGE_DETAILS")
     else
         CHECKS+=("FAILED: Service coverage $COVERAGE_DETAILS")
         FAILURES+=("Service-specific coverage thresholds not met")
@@ -153,31 +161,31 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
 fi
 
 # 6. Documentation Quality
-echo "📚 Checking documentation..."
+docs "Checking documentation..."
 if [[ -x "scripts/check_docs.sh" ]]; then
     if bash scripts/check_docs.sh >/dev/null 2>&1; then
-        CHECKS+=("SUCCESS: Documentation")
+        CHECKS+=("success "Documentation")
     else
         CHECKS+=("FAILED: Documentation")
         FAILURES+=("Documentation quality issues")
     fi
 else
-    CHECKS+=("WARNING:  Documentation check skipped")
+    CHECKS+=("warning " Documentation check skipped")
 fi
 
 # 7. Commit Message Quality
 echo "STEP 3: Checking commit messages..."
 if bash scripts/check_commit_messages.sh >/dev/null 2>&1; then
-    CHECKS+=("SUCCESS: Commit messages")
+    CHECKS+=("success "Commit messages")
 else
     CHECKS+=("FAILED: Commit messages")
     FAILURES+=("Commit message format issues")
 fi
 
 # 8. Security Scan
-echo "🔒 Running security scan..."
+secure "Running security scan..."
 if python -m bandit -r src -ll --quiet 2>/dev/null; then
-    CHECKS+=("SUCCESS: Security scan")
+    CHECKS+=("success "Security scan")
 else
     CHECKS+=("FAILED: Security scan")
     FAILURES+=("Security vulnerabilities detected")
@@ -200,13 +208,13 @@ echo "📈 Quality Score: $SUCCESS_COUNT/$TOTAL_CHECKS ($PERCENTAGE%)"
 
 # Check if we meet 95% threshold
 if [[ $PERCENTAGE -ge 95 ]]; then
-    echo "SUCCESS: PASS: Quality score meets 95% threshold"
-    echo "SUCCESS: Ready to push!"
+    success "PASS: Quality score meets 95% threshold"
+    success "Ready to push!"
     exit 0
 else
     echo "FAILED: FAIL: Quality score below 95% threshold"
     echo ""
-    echo "🔧 Issues to fix:"
+    tool "Issues to fix:"
     for failure in "${FAILURES[@]}"; do
         echo "  • $failure"
     done

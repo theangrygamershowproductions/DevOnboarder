@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Phase 2: Automated Content Reference Synchronization
 # Syncs content references when canonical sources change
 
@@ -35,7 +43,7 @@ mkdir -p "$LOG_DIR"
 # Initialize logging
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🔄 DevOnboarder Content Reference Synchronization"
+sync "DevOnboarder Content Reference Synchronization"
 echo "=================================================="
 echo "Timestamp: $(date)"
 echo "Phase: 2 - Automation Opportunities"
@@ -53,7 +61,7 @@ check_canonical_modifications() {
         local canonical_file="${CANONICAL_SOURCES[$topic]}"
 
         if [[ ! -f "$canonical_file" ]]; then
-            echo "   ⚠️  Canonical source missing: $canonical_file"
+            echo "   WARNING:  Canonical source missing: $canonical_file"
             continue
         fi
 
@@ -66,18 +74,18 @@ check_canonical_modifications() {
         hours_since_modified=$(( (current_time - last_modified) / 3600 ))
 
         if [[ "$hours_since_modified" -lt 24 ]]; then
-            echo "   🔄 Recently modified: $canonical_file ($hours_since_modified hours ago)"
+            echo "   SYNC: Recently modified: $canonical_file ($hours_since_modified hours ago)"
             modified_sources+=("$topic")
         else
-            echo "   ✅ No recent changes: $canonical_file"
+            echo "   SUCCESS: No recent changes: $canonical_file"
         fi
     done
 
     if [[ ${#modified_sources[@]} -gt 0 ]]; then
-        echo "   📝 Modified canonical sources: ${modified_sources[*]}"
+        echo "   NOTE: Modified canonical sources: ${modified_sources[*]}"
         return 0
     else
-        echo "   ✅ No canonical sources modified recently"
+        echo "   SUCCESS: No canonical sources modified recently"
         return 1
     fi
 }
@@ -112,7 +120,7 @@ generate_sync_recommendations() {
     local canonical_file="${CANONICAL_SOURCES[$topic]}"
     local output_file="$LOG_DIR/sync_recommendations_${topic}_$TIMESTAMP.md"
 
-    echo "   📝 Generating sync recommendations for '$topic'..."
+    echo "   NOTE: Generating sync recommendations for '$topic'..."
 
     cat > "$output_file" << EOF
 # Content Sync Recommendations: $topic
@@ -245,10 +253,10 @@ check_reference_consistency() {
         local canonical_file="${CANONICAL_SOURCES[$topic]}"
         local pattern="${REFERENCE_PATTERNS[$topic]}"
 
-        echo "   📋 Checking '$topic' references..."
+        echo "   CHECK: Checking '$topic' references..."
 
         if [[ ! -f "$canonical_file" ]]; then
-            echo "      ❌ Canonical source missing: $canonical_file"
+            echo "      ERROR: Canonical source missing: $canonical_file"
             ((consistency_issues++))
             continue
         fi
@@ -267,14 +275,14 @@ check_reference_consistency() {
             reference_ratio=100
         fi
 
-        echo "      📊 References: $reference_count, Content duplications: $content_count"
+        echo "      REPORT: References: $reference_count, Content duplications: $content_count"
         echo "      📈 Reference ratio: $reference_ratio%"
 
         if [[ "$reference_ratio" -lt 50 ]]; then
-            echo "      ⚠️  Low reference ratio suggests opportunities for consolidation"
+            echo "      WARNING:  Low reference ratio suggests opportunities for consolidation"
             ((consistency_issues++))
         else
-            echo "      ✅ Good reference consistency"
+            echo "      SUCCESS: Good reference consistency"
         fi
     done
 
@@ -380,7 +388,7 @@ main() {
         esac
     done
 
-    echo "🚀 Starting Content Reference Synchronization"
+    deploy "Starting Content Reference Synchronization"
     echo "Configuration:"
     echo "   - Documentation root: $DOCS_ROOT"
     echo "   - Sync mode: $SYNC_MODE"
@@ -392,10 +400,10 @@ main() {
     if [[ "$consistency_only" == "true" ]]; then
         local consistency_issues=0
         if check_reference_consistency; then
-            echo "✅ Reference consistency check passed"
+            success "Reference consistency check passed"
         else
             consistency_issues=$?
-            echo "⚠️  Reference consistency check found $consistency_issues issues"
+            warning " Reference consistency check found $consistency_issues issues"
         fi
         exit "$consistency_issues"
     fi
@@ -403,7 +411,7 @@ main() {
     # Check for modifications (unless forced)
     local has_modifications=false
     if [[ "$force_sync" == "true" ]]; then
-        echo "🔄 Force sync enabled - skipping modification check"
+        sync "Force sync enabled - skipping modification check"
         has_modifications=true
     else
         if check_canonical_modifications; then
@@ -412,7 +420,7 @@ main() {
     fi
 
     if [[ "$has_modifications" == "false" ]]; then
-        echo "✅ No recent modifications detected - sync not needed"
+        success "No recent modifications detected - sync not needed"
         echo "💡 Use --force to sync anyway"
         exit 0
     fi
@@ -423,7 +431,7 @@ main() {
         if [[ -n "${CANONICAL_SOURCES[$specific_topic]:-}" ]]; then
             topics_to_process=("$specific_topic")
         else
-            echo "❌ Unknown topic: $specific_topic"
+            error "Unknown topic: $specific_topic"
             echo "Available topics: ${!CANONICAL_SOURCES[*]}"
             exit 1
         fi
@@ -431,16 +439,16 @@ main() {
         topics_to_process=("${!CANONICAL_SOURCES[@]}")
     fi
 
-    echo "📋 Processing topics: ${topics_to_process[*]}"
+    check "Processing topics: ${topics_to_process[*]}"
     echo
 
     # Execute sync mode for each topic
     for topic in "${topics_to_process[@]}"; do
-        echo "🔄 Processing topic: $topic"
+        sync "Processing topic: $topic"
 
         case "$SYNC_MODE" in
             check)
-                echo "   📊 Running consistency check..."
+                echo "   REPORT: Running consistency check..."
                 find_referencing_files "$topic" > /dev/null
                 ;;
             preview)
@@ -448,11 +456,11 @@ main() {
                 preview_reference_replacement "$topic"
                 ;;
             recommend)
-                echo "   📝 Generating sync recommendations..."
+                echo "   NOTE: Generating sync recommendations..."
                 generate_sync_recommendations "$topic"
                 ;;
             *)
-                echo "   ❌ Unknown sync mode: $SYNC_MODE"
+                echo "   ERROR: Unknown sync mode: $SYNC_MODE"
                 exit 1
                 ;;
         esac
@@ -460,11 +468,11 @@ main() {
         echo
     done
 
-    echo "✅ Content reference synchronization complete!"
+    success "Content reference synchronization complete!"
     echo "   📄 Log: $LOG_FILE"
-    echo "   📊 Outputs: $LOG_DIR/*_$TIMESTAMP.*"
+    echo "   REPORT: Outputs: $LOG_DIR/*_$TIMESTAMP.*"
     echo
-    echo "🔄 Next steps based on mode:"
+    sync "Next steps based on mode:"
     case "$SYNC_MODE" in
         check)
             echo "   💡 Run with --mode recommend to get consolidation guidance"

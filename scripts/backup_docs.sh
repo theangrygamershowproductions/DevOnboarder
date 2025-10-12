@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Modular Documentation Backup System
 # Automated backup with git-based versioning and integrity verification
 
@@ -68,7 +76,7 @@ copy_documentation() {
     local total_files=0
     local copied_files=0
 
-    echo "📋 Copying documentation files..."
+    check "Copying documentation files..."
 
     for doc_path in "${DOC_PATHS[@]}"; do
         if [ -d "$doc_path" ]; then
@@ -86,14 +94,14 @@ copy_documentation() {
             find "$doc_path" -type f \( -name "*.md" -o -name "*.json" -o -name "*.yml" -o -name "*.yaml" \) -exec cp --parents {} "$backup_path/" \;
 
             copied_files=$((copied_files + path_files))
-            echo "    ✅ $path_files files copied"
+            echo "    SUCCESS: $path_files files copied"
         else
-            echo "  ⚠️  Path not found: $doc_path"
+            echo "  WARNING:  Path not found: $doc_path"
         fi
     done
 
     echo ""
-    echo "📊 Copy Summary:"
+    report "Copy Summary:"
     echo "   Total files copied: $copied_files"
     echo "   Success rate: 100%"
 
@@ -105,7 +113,7 @@ generate_checksums() {
     local backup_path="$1"
     local checksum_file="$backup_path/checksums.sha256"
 
-    echo "🔐 Generating checksums for integrity verification..."
+    secure "Generating checksums for integrity verification..."
 
     # Change to backup directory for relative paths
     cd "$backup_path"
@@ -119,7 +127,7 @@ generate_checksums() {
 
     local checksum_count
     checksum_count=$(wc -l < "$checksum_file")
-    echo "   ✅ Generated checksums for $checksum_count files"
+    echo "   SUCCESS: Generated checksums for $checksum_count files"
     echo "   📄 Checksum file: $checksum_file"
 
     return 0
@@ -135,11 +143,11 @@ verify_backup_integrity() {
 
         cd "$backup_path"
         if sha256sum -c checksums.sha256 --quiet; then
-            echo "   ✅ All checksums verified successfully"
+            echo "   SUCCESS: All checksums verified successfully"
             cd - > /dev/null
             return 0
         else
-            echo "   ❌ Checksum verification failed"
+            echo "   ERROR: Checksum verification failed"
             cd - > /dev/null
             return 1
         fi
@@ -164,13 +172,13 @@ create_archive() {
 
         local archive_size
         archive_size=$(du -h "$archive_path" | cut -f1)
-        echo "   ✅ Archive created: $archive_name ($archive_size)"
+        echo "   SUCCESS: Archive created: $archive_name ($archive_size)"
 
         # Verify archive
         if tar -tzf "$archive_path" > /dev/null 2>&1; then
-            echo "   ✅ Archive integrity verified"
+            echo "   SUCCESS: Archive integrity verified"
         else
-            echo "   ❌ Archive verification failed"
+            echo "   ERROR: Archive verification failed"
             return 1
         fi
     else
@@ -191,7 +199,7 @@ cleanup_old_backups() {
         # Count remaining backups
         local remaining_count
         remaining_count=$(find "$BACKUP_DIR" -type d -name "20*" | wc -l)
-        echo "   📊 Backup retention: $remaining_count backups remaining"
+        echo "   REPORT: Backup retention: $remaining_count backups remaining"
 
         # Clean old archives
         find "$BACKUP_DIR" -name "*.tar.gz" -mtime +"$RETENTION_DAYS" -delete 2>/dev/null || true
@@ -219,7 +227,7 @@ generate_backup_report() {
 
 - **Timestamp**: $timestamp
 - **Date**: $(date)
-- **Status**: $([ "$success" = "true" ] && echo "✅ SUCCESS" || echo "❌ FAILED")
+- **Status**: $([ "$success" = "true" ] && success "SUCCESS" || error "FAILED")
 - **Git Commit**: $(git rev-parse HEAD 2>/dev/null || echo 'unknown')
 - **Git Branch**: $(git branch --show-current 2>/dev/null || echo 'unknown')
 
@@ -268,7 +276,7 @@ main() {
     local timestamp
     timestamp=$(date +%Y%m%d_%H%M%S)
 
-    echo "🚀 Starting backup process..."
+    deploy "Starting backup process..."
 
     # Create backup structure
     local backup_path
@@ -276,25 +284,25 @@ main() {
 
     # Copy documentation
     if ! copy_documentation "$backup_path"; then
-        echo "❌ Documentation copy failed"
+        error "Documentation copy failed"
         exit 1
     fi
 
     # Generate checksums
     if ! generate_checksums "$backup_path"; then
-        echo "❌ Checksum generation failed"
+        error "Checksum generation failed"
         exit 1
     fi
 
     # Verify integrity
     if ! verify_backup_integrity "$backup_path"; then
-        echo "❌ Backup integrity verification failed"
+        error "Backup integrity verification failed"
         exit 1
     fi
 
     # Create archive
     if ! create_archive "$backup_path" "$timestamp"; then
-        echo "❌ Archive creation failed"
+        error "Archive creation failed"
         exit 1
     fi
 
@@ -305,9 +313,9 @@ main() {
     cleanup_old_backups
 
     echo ""
-    echo "✅ Backup completed successfully!"
+    success "Backup completed successfully!"
     echo "   📁 Backup location: $backup_path"
-    echo "   🔒 Integrity verified: $([ "$VERIFY_CHECKSUMS" = "true" ] && echo "Yes" || echo "Skipped")"
+    echo "   SECURE: Integrity verified: $([ "$VERIFY_CHECKSUMS" = "true" ] && echo "Yes" || echo "Skipped")"
     echo "   📦 Archive created: $([ "$CREATE_ARCHIVE" = "true" ] && echo "Yes" || echo "Skipped")"
     echo "   📄 Log: $LOG_FILE"
 
@@ -327,7 +335,7 @@ case "${1:-backup}" in
         verify_backup_integrity "$2"
         ;;
     "list")
-        echo "📋 Available backups:"
+        check "Available backups:"
         if [ -d "$BACKUP_DIR" ]; then
             find "$BACKUP_DIR" -type d -name "20*" | sort -r | head -10 | while read -r backup; do
                 size=$(du -sh "$backup" 2>/dev/null | cut -f1)

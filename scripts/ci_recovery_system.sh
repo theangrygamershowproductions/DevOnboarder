@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # DevOnboarder CI Recovery Script
 # Systematically addresses the massive CI failures from token propagation issues
@@ -52,10 +60,10 @@ echo "Total failures today: $TOTAL_FAILURES"
 echo "Recent successes (last 15 min): $RECENT_SUCCESS_COUNT"
 
 if [[ $RECENT_SUCCESS_COUNT -gt 5 ]]; then
-    echo "✅ CI Health: RECOVERED - Recent runs succeeding"
+    success "CI Health: RECOVERED - Recent runs succeeding"
     RECOVERY_STATUS="RECOVERED"
 else
-    echo "⚠️  CI Health: UNSTABLE - Issues may persist"
+    warning " CI Health: UNSTABLE - Issues may persist"
     RECOVERY_STATUS="UNSTABLE"
 fi
 
@@ -90,12 +98,12 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Lessons Learned
 
-### What Worked Well ✅
+### What Worked Well SUCCESS:
 - **Token Architecture v2.1**: Robust design handled the transition
 - **Systematic Debugging**: Clear identification of root cause
 - **Professional Response**: Immediate investigation and documentation
 
-### Areas for Improvement 🔧
+### Areas for Improvement TOOL:
 - **Propagation Monitoring**: Add checks for API propagation delays
 - **Failure Cascade Prevention**: Implement circuit breakers for token issues
 - **Recovery Automation**: Automated detection and reporting of systematic failures
@@ -108,13 +116,13 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Impact Assessment
 
-**Professional Impact**: ✅ RESOLVED
+**Professional Impact**: SUCCESS: RESOLVED
 - All critical quality gates maintained functionality
 - Recent runs demonstrate full system recovery
 - No compromise to code quality standards
 - Clean CI status restored
 
-**Technical Impact**: ✅ MITIGATED
+**Technical Impact**: SUCCESS: MITIGATED
 - Zero actual system reliability issues
 - No code quality degradation
 - All automation systems functioning normally
@@ -126,7 +134,7 @@ The DevOnboarder CI system has successfully recovered from token propagation del
 All workflows are now operating normally with clean status indicators.
 EOF
 
-echo "✅ Recovery report generated: $RECOVERY_REPORT"
+success "Recovery report generated: $RECOVERY_REPORT"
 
 # Step 3: Validation Test
 echo ""
@@ -135,9 +143,9 @@ echo "=========================="
 
 echo "Testing workflow dispatch capability..."
 if gh workflow list --limit 1 >/dev/null 2>&1; then
-    echo "✅ GitHub API access: WORKING"
+    success "GitHub API access: WORKING"
 else
-    echo "❌ GitHub API access: FAILED"
+    error "GitHub API access: FAILED"
 fi
 
 # Step 4: Summary
@@ -157,5 +165,5 @@ if [[ "$RECOVERY_STATUS" == "RECOVERED" ]]; then
     echo "   • Professional reputation maintained"
     echo "   • All systems operating normally"
 else
-    echo "⚠️  PARTIAL: Some issues may remain - manual investigation recommended"
+    warning " PARTIAL: Some issues may remain - manual investigation recommended"
 fi

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced Token Environment Loader v2.1 with Developer Guidance
 # Provides clear error messages and token file guidance
 
@@ -7,9 +11,9 @@ provide_token_guidance() {
     local missing_token="$1"
     local script_name="${0##*/}"
 
-    echo "❌ Missing Token: $missing_token"
+    error "Missing Token: $missing_token"
     echo
-    echo "🔧 Quick Fix Guide:"
+    tool "Quick Fix Guide:"
     echo
 
     # Determine which file based on token type
@@ -19,14 +23,14 @@ provide_token_guidance() {
             echo "   Example: echo '${missing_token}=your_token_here' >> .tokens"
             echo "   Location: /home/potato/DevOnboarder/.tokens"
             echo
-            echo "🔐 Get token from: https://github.com/settings/personal-access-tokens/fine-grained"
+            secure "Get token from: https://github.com/settings/personal-access-tokens/fine-grained"
             ;;
         "DISCORD_BOT_TOKEN"|"DISCORD_CLIENT_SECRET"|"BOT_JWT"|"CF_DNS_API_TOKEN"|"TUNNEL_TOKEN")
             echo "📁 Runtime Token - Add to: .env file"
             echo "   Example: echo '${missing_token}=your_token_here' >> .env"
             echo "   Location: /home/potato/DevOnboarder/.env"
             echo
-            echo "🔐 Get token from: Discord Developer Portal or service provider"
+            secure "Get token from: Discord Developer Portal or service provider"
             ;;
         *)
             echo "📁 Token file location depends on token type"
@@ -43,7 +47,7 @@ provide_token_guidance() {
     echo "🧪 Validate after adding:"
     echo "   python3 scripts/token_loader.py validate $missing_token"
     echo
-    echo "🚀 Then re-run: $script_name"
+    deploy "Then re-run: $script_name"
 }
 
 # Function to check for specific required tokens
@@ -61,7 +65,7 @@ require_tokens() {
     # If any tokens are missing, provide guidance
     if [ ${#missing_tokens[@]} -gt 0 ]; then
         echo "🔍 Script: $script_name"
-        echo "❌ Missing ${#missing_tokens[@]} required token(s)"
+        error "Missing ${#missing_tokens[@]} required token(s)"
         echo
 
         for token in "${missing_tokens[@]}"; do

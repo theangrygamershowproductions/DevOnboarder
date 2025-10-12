@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # DevOnboarder Centralized Logging Policy Enforcement
@@ -52,7 +56,7 @@ if [ -n "$SCATTERED_LOGS" ]; then
     VIOLATIONS=$((VIOLATIONS + 1))
     echo ""
 else
-    echo "SUCCESS: No scattered log files found"
+    success "No scattered log files found"
     echo ""
 fi
 
@@ -79,7 +83,7 @@ if [ -n "$PROHIBITED_DIRS" ]; then
     VIOLATIONS=$((VIOLATIONS + 1))
     echo ""
 else
-    echo "SUCCESS: No prohibited log directories found"
+    success "No prohibited log directories found"
     echo ""
 fi
 
@@ -102,7 +106,7 @@ if [ -n "$SCRIPT_VIOLATIONS" ]; then
     VIOLATIONS=$((VIOLATIONS + 1))
     echo ""
 else
-    echo "SUCCESS: All scripts use centralized logging"
+    success "All scripts use centralized logging"
     echo ""
 fi
 
@@ -121,7 +125,7 @@ if [ -n "$WORKFLOW_VIOLATIONS" ]; then
     VIOLATIONS=$((VIOLATIONS + 1))
     echo ""
 else
-    echo "SUCCESS: All workflows use centralized logging"
+    success "All workflows use centralized logging"
     echo ""
 fi
 
@@ -135,23 +139,23 @@ DOC_VIOLATIONS=$(grep -r "ci-logs" "$PROJECT_ROOT/docs/" \
     || true)
 
 if [ -n "$DOC_VIOLATIONS" ]; then
-    echo "WARNING: Documentation with legacy log references found:"
+    warning "Documentation with legacy log references found:"
     echo "$DOC_VIOLATIONS"
     echo "   (Not blocking, but should be updated)"
     echo ""
 else
-    echo "SUCCESS: Documentation uses correct log references"
+    success "Documentation uses correct log references"
     echo ""
 fi
 
 # Validate logs/ directory structure
 echo "6. Validating logs/ directory structure..."
 if [ -d "$PROJECT_ROOT/logs" ]; then
-    echo "SUCCESS: Centralized logs/ directory exists"
+    success "Centralized logs/ directory exists"
 
     # Check if logs/ is in .gitignore
     if grep -q "^logs/$" "$PROJECT_ROOT/.gitignore" 2>/dev/null; then
-        echo "SUCCESS: logs/ directory properly ignored in .gitignore"
+        success "logs/ directory properly ignored in .gitignore"
     else
         echo "VIOLATION: logs/ directory not found in .gitignore"
         VIOLATIONS=$((VIOLATIONS + 1))
@@ -169,7 +173,7 @@ echo "Validation log: $LOG_FILE"
 echo ""
 
 if [ $VIOLATIONS -eq 0 ]; then
-    echo "SUCCESS: Centralized Logging Policy COMPLIANT"
+    success "Centralized Logging Policy COMPLIANT"
     echo "All logging properly uses centralized logs/ directory"
     echo ""
     echo "COMPLIANCE STATUS: PASSED"

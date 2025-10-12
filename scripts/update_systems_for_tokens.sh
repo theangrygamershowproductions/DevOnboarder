@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # =============================================================================
 # DevOnboarder System Update Script
@@ -39,7 +43,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            log "ERROR: Unknown option $1"
+            log "error "Unknown option $1"
             exit 1
             ;;
     esac

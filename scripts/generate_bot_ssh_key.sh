@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # DevOnboarder Priority Matrix Bot SSH Signing Setup
@@ -21,7 +25,7 @@ echo ""
 
 # Check if key already exists
 if [[ -f "$KEY_FILE" ]]; then
-    echo "ERROR: Key file '$KEY_FILE' already exists!"
+    error "Key file '$KEY_FILE' already exists!"
     echo "Remove it first or specify a different filename."
     exit 1
 fi
@@ -31,7 +35,7 @@ echo "Generating Ed25519 SSH signing key..."
 ssh-keygen -t ed25519 -C "$BOT_NAME <$BOT_EMAIL>" -f "$KEY_FILE" -N ""
 
 echo ""
-echo "✅ SSH key pair generated successfully!"
+success "SSH key pair generated successfully!"
 echo ""
 echo "Files created:"
 echo "  📄 $KEY_FILE (private key - for GitHub Actions secrets)"
@@ -58,7 +62,7 @@ echo "4. Security cleanup:"
 echo "   • After adding to GitHub, delete the local files:"
 echo "   • rm $KEY_FILE $KEY_FILE.pub"
 echo ""
-echo "🔒 The bot email must be associated with the machine user account for verification."
+secure "The bot email must be associated with the machine user account for verification."
 echo ""
 
 # Display the keys for easy copying
@@ -72,5 +76,5 @@ echo "=========================================================="
 cat "$KEY_FILE"
 echo ""
 echo ""
-echo "⚠️  SECURITY: Delete these files after copying to GitHub!"
+warning " SECURITY: Delete these files after copying to GitHub!"
 echo "   rm $KEY_FILE $KEY_FILE.pub"

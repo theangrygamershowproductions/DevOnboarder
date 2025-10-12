@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # safe_commit_enhanced.sh - Enhanced safe commit wrapper with improved error handling
 # Addresses edge cases in pre-commit hook re-staging failures
@@ -47,7 +55,7 @@ handle_precommit_modifications() {
     unstaged_changes=$(git diff --name-only)
 
     if [[ -n "$unstaged_changes" ]]; then
-        echo "WARNING: Unstaged changes detected alongside hook modifications"
+        warning "Unstaged changes detected alongside hook modifications"
         echo "Unstaged files:"
         printf "%s\n" "$unstaged_changes" | sed 's/^/  /'
     fi
@@ -69,7 +77,7 @@ handle_precommit_modifications() {
                 printf "  ✓ Re-staged: %s\n" "$file"
                 ((restaged_count++))
             else
-                printf "  ❌ Failed to re-stage: %s\n" "$file"
+                printf "  ERROR: Failed to re-stage: %s\n" "$file"
                 return 1
             fi
         else
@@ -99,7 +107,7 @@ handle_precommit_modifications() {
     expected_staged=$(echo "$original_staged_files" | sort)
 
     if [[ "$post_restage_staged" != "$expected_staged" ]]; then
-        echo "WARNING: Re-staged files don't match original staging"
+        warning "Re-staged files don't match original staging"
         echo "Expected:"
         printf "%s\n" "$expected_staged" | sed 's/^/  /'
         echo "Actually staged:"
@@ -118,16 +126,16 @@ handle_precommit_modifications() {
     exit_code=$?
 
     if [[ $exit_code -eq 0 ]]; then
-        echo "✅ Enhanced re-staging commit successful!"
+        success "Enhanced re-staging commit successful!"
         echo "$commit_output"
         return 0
     else
         if [[ $exit_code -eq 124 ]]; then
-            echo "❌ Enhanced re-staging commit timed out after 60 seconds"
+            error "Enhanced re-staging commit timed out after 60 seconds"
             echo "This may indicate hanging pre-commit hooks or slow validation processes"
             echo "Timeout occurred during commit operation"
         else
-            echo "❌ Enhanced re-staging commit failed (exit code: $exit_code)"
+            error "Enhanced re-staging commit failed (exit code: $exit_code)"
             echo "$commit_output"
         fi
 
@@ -178,7 +186,7 @@ safe_handle_precommit_modifications() {
         exit $exit_code
     fi
 
-    echo "✅ Pre-commit modifications handled successfully"
+    success "Pre-commit modifications handled successfully"
 
     # Clean up environment variable
     unset SAFE_COMMIT_ERROR_HANDLING

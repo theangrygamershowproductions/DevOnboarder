@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick Validation Helper for DevOnboarder
 # Provides easy shortcuts for common validation tasks
 
@@ -8,7 +12,7 @@ SCRIPT_DIR=$(dirname "$0")
 VALIDATE_SCRIPT="$SCRIPT_DIR/validate_ci_locally.sh"
 
 show_quick_help() {
-    echo "🚀 DevOnboarder Quick Validation Helper"
+    deploy "DevOnboarder Quick Validation Helper"
     echo "==============================================="
     echo
     echo "QUICK SHORTCUTS:"
@@ -54,7 +58,7 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --section bot --step "Bot Tests"
         ;;
     "security")
-        echo "🔒 Running security checks..."
+        secure "Running security checks..."
         bash "$VALIDATE_SCRIPT" --section security
         ;;
     "frontend")
@@ -62,11 +66,11 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --section frontend
         ;;
     "bot")
-        echo "🤖 Running bot validation..."
+        bot "Running bot validation..."
         bash "$VALIDATE_SCRIPT" --section bot
         ;;
     "build")
-        echo "🏗️ Running build pipeline..."
+        build "Running build pipeline..."
         bash "$VALIDATE_SCRIPT" --section build
         ;;
     "fast")
@@ -81,15 +85,15 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --list
         ;;
     "full")
-        echo "🎯 Running complete validation suite..."
+        target "Running complete validation suite..."
         bash "$VALIDATE_SCRIPT"
         ;;
     "step")
         if [[ -n "$2" ]]; then
-            echo "🎯 Running specific step: $2"
+            target "Running specific step: $2"
             bash "$VALIDATE_SCRIPT" --step "$2"
         else
-            echo "❌ Error: Please specify a step name or number"
+            error "Error: Please specify a step name or number"
             echo "Example: $0 step \"Python Tests\""
             exit 1
         fi
@@ -99,21 +103,21 @@ case "${1:-help}" in
             echo "🔍 Dry run for section: $2"
             bash "$VALIDATE_SCRIPT" --dry-run --section "$2"
         else
-            echo "❌ Error: Please specify a section for dry run"
+            error "Error: Please specify a section for dry run"
             echo "Example: $0 dry frontend"
             exit 1
         fi
         ;;
     "fix-yaml")
-        echo "🔧 Running YAML linting..."
+        tool "Running YAML linting..."
         bash "$VALIDATE_SCRIPT" --step "YAML Linting"
         ;;
     "fix-shell")
-        echo "🔧 Running Shellcheck..."
+        tool "Running Shellcheck..."
         bash "$VALIDATE_SCRIPT" --step "Shellcheck Linting"
         ;;
     "fix-python")
-        echo "🔧 Running Python checks..."
+        tool "Running Python checks..."
         bash "$VALIDATE_SCRIPT" --step "Black Formatting"
         bash "$VALIDATE_SCRIPT" --step "Ruff Linting"
         bash "$VALIDATE_SCRIPT" --step "MyPy Type Check"
@@ -123,7 +127,7 @@ case "${1:-help}" in
         show_quick_help
         ;;
     *)
-        echo "❌ Unknown command: $1"
+        error "Unknown command: $1"
         echo "Use '$0 help' to see available commands"
         exit 1
         ;;

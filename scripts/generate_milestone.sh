@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # DevOnboarder Milestone Generation Script
 # Automatically creates performance milestone records
@@ -342,7 +350,7 @@ EOF
         capture_performance_metrics "$milestone_file"
     fi
 
-    echo -e "${GREEN}✅ Milestone file created: $milestone_file${NC}"
+    success_msg " Milestone file created: $milestone_file"
 }
 
 function main() {
@@ -411,13 +419,13 @@ function main() {
 
     # Validate required parameters
     if [[ -z "$type" ]]; then
-        echo -e "${RED}Error: --type is required${NC}"
+        echo -e "${RED}Error: --type is required"
         usage
         exit 1
     fi
 
     if [[ ! "$type" =~ ^(bug|feature|enhancement|ci-fix|security|performance)$ ]]; then
-        echo -e "${RED}Error: Invalid type. Must be one of: bug, feature, enhancement, ci-fix, security, performance${NC}"
+        echo -e "${RED}Error: Invalid type. Must be one of: bug, feature, enhancement, ci-fix, security, performance"
         exit 1
     fi
 
@@ -448,7 +456,7 @@ function main() {
     create_milestone_file "$milestone_id" "$type" "$title" "$issue_number" "$pr_number" "$priority" "$template_only"
 
     echo ""
-    echo -e "${GREEN}🎯 Milestone generation complete!${NC}"
+    echo -e "${GREEN}TARGET: Milestone generation complete!"
     echo ""
     echo "Next steps:"
     echo "1. Edit the milestone file to add specific metrics"

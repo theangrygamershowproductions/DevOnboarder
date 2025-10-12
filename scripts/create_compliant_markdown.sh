@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Create markdown files that are lint-compliant from the start
 # Usage: bash scripts/create_compliant_markdown.sh "filename" "title"
 
@@ -8,7 +12,7 @@ FILENAME="$1"
 TITLE="$2"
 FILEPATH="docs/${FILENAME}.md"
 
-echo "📝 Creating lint-compliant markdown: $FILEPATH"
+note "Creating lint-compliant markdown: $FILEPATH"
 
 # Create file with proper formatting from the start
 cat > "$FILEPATH" << EOF
@@ -54,12 +58,12 @@ Final thoughts and next steps.
 *Generated using lint-compliant markdown template*
 EOF
 
-echo "✅ Created: $FILEPATH"
+success "Created: $FILEPATH"
 echo "🔍 Running lint check..."
 
 # Validate immediately
 if command -v markdownlint &> /dev/null; then
-    markdownlint "$FILEPATH" && echo "✅ Lint check passed" || echo "❌ Lint check failed"
+    markdownlint "$FILEPATH" && success "Lint check passed" || error "Lint check failed"
 else
     echo "ℹ️ markdownlint not available, manual validation recommended"
 fi

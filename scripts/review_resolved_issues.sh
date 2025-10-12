@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Review and close resolved issues for DevOnboarder
 # This script helps identify and close issues that have been resolved
 
@@ -16,7 +20,7 @@ echo "Timestamp: $(date)"
 echo ""
 
 # Check for common resolved issue patterns
-echo "📋 Reviewing open issues for resolution patterns..."
+check "Reviewing open issues for resolution patterns..."
 echo ""
 
 # 1. Check CI failure issues for merged PRs
@@ -28,7 +32,7 @@ if [[ "$ci_issues" != "[]" ]]; then
     echo ""
     echo "💡 Review these CI issues manually - they may be resolved if PRs merged"
 else
-    echo "✅ No open CI failure issues found"
+    success "No open CI failure issues found"
 fi
 echo ""
 
@@ -43,10 +47,10 @@ if bash scripts/enhanced_root_artifact_guard.sh --check | grep -q "Repository ro
         echo ""
         echo "💡 Consider closing these if artifact guard shows clean status"
     else
-        echo "✅ No open artifact pollution issues found"
+        success "No open artifact pollution issues found"
     fi
 else
-    echo "⚠️  Artifact pollution still detected - keeping related issues open"
+    warning " Artifact pollution still detected - keeping related issues open"
 fi
 echo ""
 
@@ -59,7 +63,7 @@ if [[ "$dep_issues" != "[]" ]]; then
     echo ""
     echo "💡 Review these dependency issues - check if updates completed"
 else
-    echo "✅ No open dependency issues found"
+    success "No open dependency issues found"
 fi
 echo ""
 
@@ -72,18 +76,18 @@ if [[ "$auto_issues" != "[]" ]]; then
     echo ""
     echo "💡 Review these automation issues - they may be completed"
 else
-    echo "✅ No open automation/chore issues found"
+    success "No open automation/chore issues found"
 fi
 echo ""
 
 # 5. Summary and recommendations
-echo "📊 Issue Resolution Summary"
+report "Issue Resolution Summary"
 echo "=========================="
 total_open=$(gh issue list --state open --json number | jq length)
 echo "Total open issues: $total_open"
 echo ""
 
-echo "🔧 Recommended Actions:"
+tool "Recommended Actions:"
 echo "1. Review CI failure issues for merged PRs"
 echo "2. Close artifact pollution issues if repository is clean"
 echo "3. Check dependency issues against current package versions"
@@ -97,5 +101,5 @@ echo "   - Artifact pollution issues when guard reports clean status"
 echo "   - Dependency issues when automation completes updates"
 echo ""
 
-echo "✅ Issue resolution review complete!"
+success "Issue resolution review complete!"
 echo "Check log: $LOG_FILE"

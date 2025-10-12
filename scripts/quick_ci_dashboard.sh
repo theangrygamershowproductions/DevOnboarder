@@ -1,30 +1,34 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick CI Dashboard - Get immediate CI insights
 # This script provides instant CI troubleshooting information
 
-echo "🛠️ DevOnboarder Quick CI Dashboard"
+tool "DevOnboarder Quick CI Dashboard"
 echo "=================================="
 echo ""
 
 # Check if we're in the right directory
 if [ ! -f "pyproject.toml" ]; then
-    echo "❌ Not in DevOnboarder project root. Run from the repository root directory."
+    error "Not in DevOnboarder project root. Run from the repository root directory."
     exit 1
 fi
 
 # Create logs directory if it doesn't exist
 mkdir -p logs
 
-echo "📊 Quick CI Analysis ($(date))"
+report "Quick CI Analysis ($(date))"
 echo ""
 
 # 1. Quick pattern analysis
 echo "🔍 CI Pattern Analysis:"
 echo "----------------------"
 if bash scripts/analyze_ci_patterns.sh 2>/dev/null; then
-    echo "✅ Pattern analysis completed"
+    success "Pattern analysis completed"
 else
-    echo "❌ Pattern analysis failed or found issues"
+    error "Pattern analysis failed or found issues"
 fi
 echo ""
 
@@ -32,30 +36,30 @@ echo ""
 echo "💚 CI Health Status:"
 echo "-------------------"
 if bash scripts/monitor_ci_health.sh 2>/dev/null; then
-    echo "✅ Health monitoring completed"
+    success "Health monitoring completed"
 else
-    echo "❌ Health issues detected"
+    error "Health issues detected"
 fi
 echo ""
 
 # 3. Script count
 SCRIPT_COUNT=$(find scripts -name "*.py" -o -name "*.sh" | wc -l)
-echo "🛠️ Available Tools: $SCRIPT_COUNT automation scripts"
+tool "Available Tools: $SCRIPT_COUNT automation scripts"
 echo ""
 
 # 4. Recent test status
 echo "🧪 Recent Test Status:"
 echo "---------------------"
 if [ -f "logs/.coverage" ]; then
-    echo "✅ Coverage data available"
+    success "Coverage data available"
 else
-    echo "⚠️ No recent coverage data"
+    warning "No recent coverage data"
 fi
 
 if [ -d "logs/.pytest_cache" ]; then
-    echo "✅ Test cache present"
+    success "Test cache present"
 else
-    echo "⚠️ No test cache found"
+    warning "No test cache found"
 fi
 echo ""
 
@@ -74,19 +78,19 @@ if [ -f "logs/ci_dashboard_report.html" ]; then
     CURRENT_TIME=$(date +%s)
     AGE_HOURS=$(( (CURRENT_TIME - REPORT_AGE) / 3600 ))
 
-    echo "📊 Dashboard Report:"
+    report "Dashboard Report:"
     echo "------------------"
-    echo "✅ Dashboard report available (${AGE_HOURS}h old)"
+    success "Dashboard report available (${AGE_HOURS}h old)"
     echo "   Open: logs/ci_dashboard_report.html"
     if [ $AGE_HOURS -gt 24 ]; then
         echo "💡 Consider regenerating: python scripts/generate_ci_dashboard_report.py"
     fi
 else
-    echo "📊 Generate Dashboard:"
+    report "Generate Dashboard:"
     echo "--------------------"
     echo "💡 Run: python scripts/generate_ci_dashboard_report.py"
     echo "   Creates: logs/ci_dashboard_report.html"
 fi
 
 echo ""
-echo "🎯 DevOnboarder: Working quietly and reliably in service of those who need it."
+target "DevOnboarder: Working quietly and reliably in service of those who need it."

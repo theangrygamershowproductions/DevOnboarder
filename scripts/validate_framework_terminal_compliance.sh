@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Framework Terminal Output Compliance Validator
 # Validates framework files for DevOnboarder terminal output policy
 # Excludes backup files and focuses on actual source files
@@ -31,7 +39,7 @@ while IFS= read -r -d '' file; do
     file_violations=0
 
     # Check for emojis and problematic Unicode characters
-    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝|🤖' "$file" 2>/dev/null; then
+    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|SUCCESS:|ERROR:|TOOL:|REPORT:|📈|📥|🔗|🐛|WARNING:|💡|TARGET:|DEPLOY:|CHECK:|🔍|NOTE:|BOT:' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Terminal-hanging characters found in $file"
         echo "DevOnboarder policy: Use ASCII equivalents (SUCCESS:, ERROR:, etc.)"
         ((file_violations++))

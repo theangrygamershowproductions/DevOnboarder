@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Security scanning script with proper report directory handling
 # Prevents root artifact violations by using logs/reports/ directory
 
@@ -16,11 +20,11 @@ mkdir -p "$REPORTS_DIR"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 SCAN_PREFIX="security_scan_${TIMESTAMP}"
 
-echo "🔒 Security Scan Starting - $(date)"
+secure "Security Scan Starting - $(date)"
 echo "📁 Reports will be saved to: $REPORTS_DIR"
 
 # Python Security Analysis
-echo "🐍 Running Python security analysis..."
+python "Running Python security analysis..."
 
 echo "  → Bandit (Python security scanner)..."
 bandit -r src/ -f json -o "$REPORTS_DIR/${SCAN_PREFIX}_bandit.json" || echo "Bandit completed with warnings"
@@ -38,7 +42,7 @@ echo "  → Trivy (vulnerability scanner)..."
 trivy fs . --format json --output "$REPORTS_DIR/${SCAN_PREFIX}_trivy.json" || echo "Trivy completed with warnings"
 
 # Code Quality Analysis
-echo "📊 Running code quality analysis..."
+report "Running code quality analysis..."
 
 echo "  → Prospector (Python analysis aggregator)..."
 prospector src/ --output-format json > "$REPORTS_DIR/${SCAN_PREFIX}_prospector.json" || echo "Prospector completed with warnings"
@@ -47,7 +51,7 @@ echo "  → Vulture (dead code detection)..."
 vulture src/ --min-confidence 60 > "$REPORTS_DIR/${SCAN_PREFIX}_vulture.txt" || echo "Vulture completed with warnings"
 
 # Generate summary report
-echo "📋 Generating summary report..."
+check "Generating summary report..."
 cat > "$REPORTS_DIR/${SCAN_PREFIX}_summary.md" << EOF
 # Security Scan Summary
 
@@ -73,9 +77,9 @@ cat > "$REPORTS_DIR/${SCAN_PREFIX}_summary.md" << EOF
 
 EOF
 
-echo "✅ Security scan completed successfully!"
+success "Security scan completed successfully!"
 echo "📁 All reports saved to: $REPORTS_DIR"
-echo "📋 Summary: $REPORTS_DIR/${SCAN_PREFIX}_summary.md"
+check "Summary: $REPORTS_DIR/${SCAN_PREFIX}_summary.md"
 
 # List generated reports
 echo -e "\n📄 Generated Reports:"

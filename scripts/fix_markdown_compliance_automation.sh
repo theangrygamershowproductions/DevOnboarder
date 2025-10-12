@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Fix Markdown Compliance in Automation Scripts
 # Addresses Issue #1315 - Fix systemic markdown compliance violations in automation script generation
@@ -49,9 +57,9 @@ echo "==============================================================="
 # Function to identify scripts that generate markdown with violations
 find_markdown_generating_scripts() {
     local violation_patterns=(
-        "📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍"  # Common emojis
+        "REPORT:" "CHECK:" "TARGET:" "SUCCESS:" "ERROR:" "WARNING:" "DEPLOY:" "NOTE:" "💡" "🔍"  # Common emojis
         "cat.*>.*\.md.*<<"                                   # Here-doc to markdown
-        "echo.*[📊📋🎯✅❌⚠️🚀📝💡🔍].*>.*\.md"                 # Emoji echo to markdown
+        "echo.*[REPORT:CHECK:TARGET:SUCCESS:ERROR:WARNING:DEPLOY:NOTE:💡🔍].*>.*\.md"                 # Emoji echo to markdown
     )
 
     echo "Scanning scripts for markdown compliance violations..."
@@ -90,8 +98,8 @@ fix_automate_pr_process() {
     cp "$script" "$backup"
 
     # Replace emoji-containing markdown generation
-    sed -i 's/## 📊 Analysis Results/## Analysis Results/g' "$script"
-    sed -i "s/echo -e \"\${YELLOW}📋 STEP 6: Automation Report\${NC}\"/echo \"STEP 6: Automation Report\"/g" "$script"
+    sed -i 's/## REPORT: Analysis Results/## Analysis Results/g' "$script"
+    sed -i "s/echo -e \"\${YELLOW}CHECK: STEP 6: Automation Report\${NC}\"/echo \"STEP 6: Automation Report\"/g" "$script"
 
     echo "Fixed: automate_pr_process.sh"
     FIXES_APPLIED=$((FIXES_APPLIED + 1))
@@ -125,8 +133,8 @@ fix_manage_ci_failure_issues() {
         cp "$script" "$backup"
 
         # Replace any emoji usage in generated markdown
-        sed -i 's/### 🎯 Resolution/### Resolution/g' "$script" 2>/dev/null || true
-        sed -i 's/### ✅ Status/### Status/g' "$script" 2>/dev/null || true
+        sed -i 's/### TARGET: Resolution/### Resolution/g' "$script" 2>/dev/null || true
+        sed -i 's/### SUCCESS: Status/### Status/g' "$script" 2>/dev/null || true
 
         echo "Fixed: manage_ci_failure_issues.sh"
         FIXES_APPLIED=$((FIXES_APPLIED + 1))
@@ -147,8 +155,8 @@ fix_update_systems_for_tokens() {
         cp "$script" "$backup"
 
         # Fix markdown generation sections
-        sed -i 's/## 🎯 Token System Integration/## Token System Integration/g' "$script" 2>/dev/null || true
-        sed -i 's/### ✅ /### /g' "$script" 2>/dev/null || true
+        sed -i 's/## TARGET: Token System Integration/## Token System Integration/g' "$script" 2>/dev/null || true
+        sed -i 's/### SUCCESS: /### /g' "$script" 2>/dev/null || true
 
         echo "Fixed: update_systems_for_tokens.sh"
         FIXES_APPLIED=$((FIXES_APPLIED + 1))
@@ -180,7 +188,7 @@ AAR_DIR=".aar"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+    local emoji_patterns=("REPORT:" "CHECK:" "TARGET:" "SUCCESS:" "ERROR:" "WARNING:" "DEPLOY:" "NOTE:" "💡" "🔍")
 
     for emoji in "${emoji_patterns[@]}"; do
         if grep -q "$emoji" "$file" 2>/dev/null; then
@@ -207,7 +215,7 @@ if [[ -d "$AAR_DIR" ]]; then
 fi
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: No markdown compliance violations found"
+    success "No markdown compliance violations found"
     exit 0
 else
     echo "FAILURE: $VIOLATIONS markdown compliance violations found"
@@ -229,13 +237,13 @@ cleanup_existing_violations() {
     # Clean reports directory
     if [[ -d "$REPORTS_DIR" ]]; then
         find "$REPORTS_DIR" -name "*.md" -type f | while read -r file; do
-            if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+            if grep -q "REPORT:\|CHECK:\|TARGET:\|SUCCESS:\|ERROR:\|WARNING:\|DEPLOY:\|NOTE:\|💡\|🔍" "$file" 2>/dev/null; then
                 echo "Cleaning: $file"
                 # Create backup
                 cp "$file" "$BACKUP_DIR/$(basename "$file")"
 
                 # Remove emojis
-                sed -i 's/📊//g; s/📋//g; s/🎯//g; s/✅//g; s/❌//g; s/⚠️//g; s/🚀//g; s/📝//g; s/💡//g; s/🔍//g' "$file"
+                sed -i 's/REPORT://g; s/CHECK://g; s/TARGET://g; s/SUCCESS://g; s/ERROR://g; s/WARNING://g; s/DEPLOY://g; s/NOTE://g; s/💡//g; s/🔍//g' "$file"
                 cleaned=$((cleaned + 1))
             fi
         done

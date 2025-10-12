@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 echo "=== Phase 1: Quality Assurance Framework Pre-Migration Validation ==="
 echo "Starting validation of ACTUAL Quality Assurance scripts..."
@@ -201,7 +209,7 @@ echo ""
 echo "Syntax Validation Summary:"
 echo "Scripts with syntax errors: $SYNTAX_ERRORS"
 if [ $SYNTAX_ERRORS -eq 0 ]; then
-    echo "SUCCESS: All Quality Assurance scripts pass syntax validation"
+    success "All Quality Assurance scripts pass syntax validation"
 else
     echo "ATTENTION: $SYNTAX_ERRORS scripts need syntax fixes"
 fi
@@ -245,7 +253,7 @@ echo ""
 echo "Shellcheck Validation Summary:"
 echo "Scripts with shellcheck issues: $SHELLCHECK_ERRORS"
 if [ $SHELLCHECK_ERRORS -eq 0 ]; then
-    echo "SUCCESS: All Quality Assurance scripts pass shellcheck validation"
+    success "All Quality Assurance scripts pass shellcheck validation"
 else
     echo "ATTENTION: $SHELLCHECK_ERRORS scripts need shellcheck review"
 fi

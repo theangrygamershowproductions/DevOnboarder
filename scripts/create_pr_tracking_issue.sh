@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder PR Tracking Issue Creation Script
 # Creates GitHub issues automatically when PRs are opened
 
@@ -44,7 +48,7 @@ echo "Branch: $PR_BRANCH"
 # Check for required tokens with enhanced guidance (AAR Bot token hierarchy)
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_BOT_TOKEN" "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
-        echo "❌ Cannot create PR tracking issue without required tokens"
+        error "Cannot create PR tracking issue without required tokens"
         echo "💡 Please add AAR_BOT_TOKEN or fallback tokens and re-run this script"
         echo "💡 Primary: AAR_BOT_TOKEN (post-merge reporter for AAR operations)"
         echo "💡 Fallback: CI_ISSUE_AUTOMATION_TOKEN, CI_BOT_TOKEN"
@@ -93,7 +97,7 @@ ISSUE_TITLE="Track PR #$PR_NUMBER: $PR_TITLE"
 ISSUE_BODY=$(cat << EOF
 # PR Tracking Issue: #$PR_NUMBER
 
-## 📋 Overview
+## CHECK: Overview
 
 This issue tracks the development and review progress of **Pull Request #$PR_NUMBER**.
 
@@ -105,7 +109,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - **Type**: $ISSUE_TYPE
 - **Priority**: $PRIORITY
 
-### 📊 Development Progress
+### REPORT: Development Progress
 
 - [ ] **Initial Implementation**: Code changes committed to feature branch
 - [ ] **Code Review**: PR reviewed by maintainers
@@ -114,7 +118,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - [ ] **Documentation Updated**: Any required docs updated
 - [ ] **Ready for Merge**: PR approved and ready for integration
 
-### 🎯 Acceptance Criteria
+### TARGET: Acceptance Criteria
 
 **Definition of Done**:
 - All CI checks passing (coverage, linting, security)
@@ -123,14 +127,14 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - No breaking changes or proper migration provided
 - Follows DevOnboarder quality standards
 
-### 🔧 Technical Details
+### TOOL: Technical Details
 
 **Implementation Scope**:
 - Feature/fix implementation in \`$PR_BRANCH\`
 - Integration with existing DevOnboarder architecture
 - Compliance with project coding standards
 
-### 📝 Notes
+### NOTE: Notes
 
 - This issue will be automatically closed when PR #$PR_NUMBER is merged
 - Progress updates will be posted as comments
@@ -154,8 +158,8 @@ elif [[ -n "${CI_BOT_TOKEN:-}" ]]; then
 elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
     log "Using GITHUB_TOKEN for issue creation (WARNING - violates No Default Token Policy)"
 else
-    echo "ERROR: No GitHub token available for issue creation"
-    log "ERROR: No GitHub token available"
+    error "No GitHub token available for issue creation"
+    log "error "No GitHub token available"
     exit 1
 fi
 
@@ -177,7 +181,7 @@ if ISSUE_URL=$(gh issue create \
     echo "Issue #$ISSUE_NUMBER" >> "$LOG_FILE"
 
     # Add initial progress comment
-    PROGRESS_COMMENT="## 🚀 Development Started
+    PROGRESS_COMMENT="## DEPLOY: Development Started
 
 PR #$PR_NUMBER has been opened and is now being tracked.
 
@@ -197,7 +201,7 @@ Development progress will be updated as the PR advances through review and valid
 else
     echo -e "${RED}Failed to create GitHub issue${NC}"
     echo "Error: $ISSUE_URL"
-    log "ERROR: Failed to create issue - $ISSUE_URL"
+    log "error "Failed to create issue - $ISSUE_URL"
     exit 1
 fi
 

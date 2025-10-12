@@ -1,11 +1,15 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
-echo "📊 DevOnboarder Log Analysis Report"
+report "DevOnboarder Log Analysis Report"
 echo "=================================="
 
 if [[ ! -d "logs/" ]]; then
-    echo "❌ No logs directory found"
+    error "No logs directory found"
     exit 0
 fi
 
@@ -28,7 +32,7 @@ echo "Total size: $total_size"
 echo
 
 # Categorize logs
-echo "📋 Log Categories:"
+check "Log Categories:"
 echo "  Test runs: $(find logs/ -name "test_run_*.log" 2>/dev/null | wc -l)"
 echo "  Coverage data: $(find logs/ -name "coverage_data_*" 2>/dev/null | wc -l)"
 echo "  Validation logs: $(find logs/ -name "*_validation_*.log" 2>/dev/null | wc -l)"

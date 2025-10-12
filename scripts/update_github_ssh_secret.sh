@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # update_github_ssh_secret.sh
 # Update the GitHub Secret PMBOT_SSH_PRIVATE with the current SSH key
 
@@ -10,7 +14,7 @@ echo
 
 # Get the current SSH private key in base64 format
 if [ ! -f ~/.devonboarder-keys/pmbot_ed25519 ]; then
-    echo "ERROR: SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
+    error "SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
     exit 1
 fi
 

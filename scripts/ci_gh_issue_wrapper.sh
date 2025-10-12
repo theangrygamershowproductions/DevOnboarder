@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # scripts/ci_gh_issue_wrapper.sh
 # Centralized GitHub issue operations wrapper for CI workflows
 # Provides error handling, logging, and permission management
@@ -23,7 +27,7 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
-        echo "❌ Cannot proceed without required tokens for GitHub issue operations"
+        error "Cannot proceed without required tokens for GitHub issue operations"
         echo "💡 CI issue wrapper requires GitHub API access with issue permissions"
         exit 1
     fi
@@ -116,13 +120,13 @@ get_scoped_token() {
 
     # Fallback to GITHUB_TOKEN in CI environments when scoped tokens aren't configured
     if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]] && [[ -n "$GITHUB_TOKEN" ]]; then
-        echo "WARNING: Using GITHUB_TOKEN fallback (scoped tokens not configured)" >&2
+        warning "Using GITHUB_TOKEN fallback (scoped tokens not configured)" >&2
         echo "This violates No Default Token Policy but is necessary for CI operation" >&2
         echo "$GITHUB_TOKEN"
         return 0
     fi
 
-    echo "ERROR: No usable token found in DevOnboarder hierarchy" >&2
+    error "No usable token found in DevOnboarder hierarchy" >&2
     echo "Expected tokens (in priority order):" >&2
     echo "  1. CI_ISSUE_AUTOMATION_TOKEN (primary)" >&2
     echo "  2. Task-specific tokens (CI_ISSUE_TOKEN, DIAGNOSTICS_BOT_KEY, etc.)" >&2
@@ -138,14 +142,14 @@ DEVONBOARDER_SCOPED_TOKEN=""
 # Function to validate required environment and get scoped token
 validate_environment() {
     if ! command -v gh >/dev/null 2>&1; then
-        echo "ERROR: GitHub CLI (gh) not found"
+        error "GitHub CLI (gh) not found"
         exit 1
     fi
 
     # Get the appropriate scoped token from DevOnboarder hierarchy
     DEVONBOARDER_SCOPED_TOKEN=$(get_scoped_token)
     if [[ -z "$DEVONBOARDER_SCOPED_TOKEN" ]]; then
-        echo "ERROR: Cannot proceed without a scoped token from DevOnboarder hierarchy"
+        error "Cannot proceed without a scoped token from DevOnboarder hierarchy"
         exit 1
     fi
 
@@ -153,7 +157,7 @@ validate_environment() {
     if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]]; then
         echo "CI environment detected - testing scoped token"
         if ! GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh api user >/dev/null 2>&1; then
-            echo "ERROR: Scoped token cannot authenticate with GitHub API"
+            error "Scoped token cannot authenticate with GitHub API"
             echo "Token may lack required permissions for issue operations"
             exit 1
         else
@@ -162,7 +166,7 @@ validate_environment() {
     else
         echo "Local environment detected - testing scoped token"
         if ! GH_TOKEN="$DEVONBOARDER_SCOPED_TOKEN" gh api user >/dev/null 2>&1; then
-            echo "ERROR: Scoped token cannot authenticate with GitHub API"
+            error "Scoped token cannot authenticate with GitHub API"
             echo "Ensure the token has appropriate permissions for issue operations"
             exit 1
         else
@@ -177,7 +181,7 @@ handle_issue_comment() {
     local comment_body="$2"
 
     if [[ -z "$issue_number" || -z "$comment_body" ]]; then
-        echo "ERROR: Issue comment requires issue number and comment body"
+        error "Issue comment requires issue number and comment body"
         exit 1
     fi
 
@@ -187,7 +191,7 @@ handle_issue_comment() {
         echo "Successfully commented on issue #$issue_number"
         return 0
     else
-        echo "ERROR: Failed to comment on issue #$issue_number"
+        error "Failed to comment on issue #$issue_number"
         return 1
     fi
 }
@@ -199,7 +203,7 @@ handle_issue_close() {
     local template_file="$3"
 
     if [[ -z "$issue_number" ]]; then
-        echo "ERROR: Issue close requires issue number"
+        error "Issue close requires issue number"
         exit 1
     fi
 
@@ -216,11 +220,11 @@ handle_issue_close() {
                 echo "Successfully closed issue #$issue_number with template comment"
                 return 0
             else
-                echo "ERROR: Failed to close issue #$issue_number after adding comment"
+                error "Failed to close issue #$issue_number after adding comment"
                 return 1
             fi
         else
-            echo "ERROR: Failed to add comment from template file"
+            error "Failed to add comment from template file"
             return 1
         fi
     elif [[ -n "$close_comment" ]]; then
@@ -230,7 +234,7 @@ handle_issue_close() {
             echo "Successfully closed issue #$issue_number with comment"
             return 0
         else
-            echo "ERROR: Failed to close issue #$issue_number"
+            error "Failed to close issue #$issue_number"
             return 1
         fi
     else
@@ -239,7 +243,7 @@ handle_issue_close() {
             echo "Successfully closed issue #$issue_number"
             return 0
         else
-            echo "ERROR: Failed to close issue #$issue_number"
+            error "Failed to close issue #$issue_number"
             return 1
         fi
     fi
@@ -257,7 +261,7 @@ handle_issue_list() {
         echo "Successfully retrieved issue list"
         return 0
     else
-        echo "ERROR: Failed to list issues"
+        error "Failed to list issues"
         return 1
     fi
 }
@@ -268,7 +272,7 @@ handle_pr_comment() {
     local comment_body="$2"
 
     if [[ -z "$pr_number" || -z "$comment_body" ]]; then
-        echo "ERROR: PR comment requires PR number and comment body"
+        error "PR comment requires PR number and comment body"
         exit 1
     fi
 
@@ -278,7 +282,7 @@ handle_pr_comment() {
         echo "Successfully commented on PR #$pr_number"
         return 0
     else
-        echo "ERROR: Failed to comment on PR #$pr_number"
+        error "Failed to comment on PR #$pr_number"
         return 1
     fi
 }
@@ -295,7 +299,7 @@ main() {
             if [[ "$1" =~ ^[0-9]+$ ]]; then
                 handle_issue_comment "$1" "$2"
             else
-                echo "ERROR: Invalid issue number format"
+                error "Invalid issue number format"
                 exit 1
             fi
             ;;
@@ -303,7 +307,7 @@ main() {
             if [[ "$1" =~ ^[0-9]+$ ]]; then
                 handle_issue_close "$1" "$2"
             else
-                echo "ERROR: Invalid issue number format"
+                error "Invalid issue number format"
                 exit 1
             fi
             ;;
@@ -314,7 +318,7 @@ main() {
             if [[ "$1" =~ ^[0-9]+$ ]]; then
                 handle_pr_comment "$1" "$2"
             else
-                echo "ERROR: Invalid PR number format"
+                error "Invalid PR number format"
                 exit 1
             fi
             ;;

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Smart Documentation Search
 # Provides keyword-based module discovery with contextual suggestions
 
@@ -24,7 +32,7 @@ devonboarder-search() {
     # Primary keyword mapping (ordered from most specific to least specific)
     case "$query_lower" in
         *"modulenotfounderror"*|*"virtual environment"*|*"venv"*)
-            echo "📚 Primary Match: Virtual Environment Issues"
+            docs "Primary Match: Virtual Environment Issues"
             echo "   → docs/policies/virtual-environment-policy.md"
             echo "   → docs/troubleshooting/common-issues-resolution.md"
             echo ""
@@ -34,17 +42,17 @@ devonboarder-search() {
             ;;
 
         *"terminal hanging"*|*"emoji"*|*"unicode"*)
-            echo "📚 Primary Match: Terminal Output Issues"
+            docs "Primary Match: Terminal Output Issues"
             echo "   → docs/policies/terminal-output-policy.md"
             echo ""
             echo "Critical Rules:"
-            echo "   ❌ Never use emojis in echo commands"
-            echo "   ❌ Never use multi-line echo"
-            echo "   ✅ Use individual echo commands with plain text"
+            echo "   ERROR: Never use emojis in echo commands"
+            echo "   ERROR: Never use multi-line echo"
+            echo "   SUCCESS: Use individual echo commands with plain text"
             ;;
 
         *"commit message"*|*"safe commit"*)
-            echo "📚 Primary Match: Git & Commit Standards"
+            docs "Primary Match: Git & Commit Standards"
             echo "   → docs/development/commit-message-standards.md"
             echo "   → docs/development/development-workflow.md"
             echo ""
@@ -54,7 +62,7 @@ devonboarder-search() {
             ;;
 
         *"potato policy"*|*"secret"*|*".env"*)
-            echo "📚 Primary Match: Security & File Protection"
+            docs "Primary Match: Security & File Protection"
             echo "   → docs/policies/enhanced-potato-policy.md"
             echo "   → docs/policies/environment-variable-management.md"
             echo ""
@@ -65,7 +73,7 @@ devonboarder-search() {
             ;;
 
         *"ci failure"*|*"quality control"*|*"pre-commit"*)
-            echo "📚 Primary Match: CI/CD & Quality Control"
+            docs "Primary Match: CI/CD & Quality Control"
             echo "   → docs/policies/quality-control-policy.md"
             echo "   → docs/troubleshooting/ci-troubleshooting-framework.md"
             echo "   → docs/policies/ci-hygiene-artifact-management.md"
@@ -76,7 +84,7 @@ devonboarder-search() {
             ;;
 
         *"discord"*|*"bot"*)
-            echo "📚 Primary Match: Discord Bot Development"
+            docs "Primary Match: Discord Bot Development"
             echo "   → docs/development/discord-bot-patterns.md"
             echo "   → docs/development/service-integration-patterns.md"
             echo ""
@@ -87,7 +95,7 @@ devonboarder-search() {
             ;;
 
         *"fastapi"*|*"api"*|*"cors"*)
-            echo "📚 Primary Match: API & Service Integration"
+            docs "Primary Match: API & Service Integration"
             echo "   → docs/development/api-conventions.md"
             echo "   → docs/development/service-integration-patterns.md"
             echo ""
@@ -99,7 +107,7 @@ devonboarder-search() {
             ;;
 
         *"database"*|*"alembic"*|*"sqlalchemy"*)
-            echo "📚 Primary Match: Database Management"
+            docs "Primary Match: Database Management"
             echo "   → docs/development/database-patterns.md"
             echo "   → docs/development/service-integration-patterns.md"
             echo ""
@@ -109,7 +117,7 @@ devonboarder-search() {
             ;;
 
         *"testing"*|*"pytest"*|*"coverage"*)
-            echo "📚 Primary Match: Testing & Coverage"
+            docs "Primary Match: Testing & Coverage"
             echo "   → docs/development/testing-requirements.md"
             echo "   → docs/policies/quality-control-policy.md"
             echo ""
@@ -120,7 +128,7 @@ devonboarder-search() {
             ;;
 
         *"linting"*|*"black"*|*"ruff"*)
-            echo "📚 Primary Match: Code Quality & Linting"
+            docs "Primary Match: Code Quality & Linting"
             echo "   → docs/development/code-quality-requirements.md"
             echo "   → docs/policies/quality-control-policy.md"
             echo ""
@@ -152,7 +160,7 @@ devonboarder-search() {
                 fi
             else
                 echo ""
-                echo "❌ No matches found for '$query'"
+                error "No matches found for '$query'"
                 echo ""
                 echo "💡 Try these common searches:"
                 echo "   devonboarder-search 'virtual environment'"
@@ -161,24 +169,24 @@ devonboarder-search() {
                 echo "   devonboarder-search 'commit message'"
                 echo "   devonboarder-search 'discord bot'"
                 echo ""
-                echo "📚 Or browse: docs/quick-reference/MODULE_OVERVIEW.md"
+                docs "Or browse: docs/quick-reference/MODULE_OVERVIEW.md"
             fi
             ;;
     esac
 
     # Context-aware suggestions based on current situation
     echo ""
-    echo "🎯 Context-Aware Suggestions:"
+    target "Context-Aware Suggestions:"
 
     # Check git status for context
     if git status --porcelain 2>/dev/null | grep -q .; then
-        echo "   📝 Uncommitted changes detected"
+        echo "   NOTE: Uncommitted changes detected"
         echo "      Consider: devonboarder-search 'commit message'"
     fi
 
     # Check if in virtual environment
     if [ -z "${VIRTUAL_ENV:-}" ]; then
-        echo "   ⚠️  Virtual environment not active"
+        echo "   WARNING:  Virtual environment not active"
         echo "      Consider: devonboarder-search 'virtual environment'"
     fi
 

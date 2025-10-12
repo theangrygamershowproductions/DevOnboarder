@@ -1,4 +1,6 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder CI Health Dashboard - Shell Integration Wrapper
 #
 # This script provides a convenient CLI entry point for the CI Health Dashboard
@@ -31,7 +33,7 @@ elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
     # Fallback to legacy token loader
     source "$PROJECT_ROOT/scripts/load_token_environment.sh"
 else
-    echo "WARNING: Token Architecture scripts not found. Dashboard may have limited functionality."
+    warning "Token Architecture scripts not found. Dashboard may have limited functionality."
 fi
 
 # Function to show usage help

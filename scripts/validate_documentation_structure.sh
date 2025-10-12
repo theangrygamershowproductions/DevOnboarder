@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Documentation Structure Validation
 # Prevents duplicate headings and enforces heading patterns
 
@@ -19,22 +23,22 @@ echo "🔍 Validating documentation structure: $FILE"
 
 # Check for duplicate headings
 check_duplicate_headings() {
-    echo "📋 Checking for duplicate headings..."
+    check "Checking for duplicate headings..."
     local duplicates
     duplicates=$(grep -h "^##\+ " "$FILE" | sort | uniq -d)
     if [[ -n "$duplicates" ]]; then
-        echo "❌ Duplicate headings found:"
+        error "Duplicate headings found:"
         echo "$duplicates" | while IFS= read -r line; do
             echo "   - $line"
         done
         return 1
     fi
-    echo "✅ No duplicate headings found"
+    success "No duplicate headings found"
 }
 
 # Check for generic heading patterns that are likely to duplicate
 check_generic_patterns() {
-    echo "📋 Checking for generic heading patterns..."
+    check "Checking for generic heading patterns..."
     local generic_patterns=("Challenge Description" "Implementation Solutions" "Problem" "Solutions")
     local found_generic=false
 
@@ -42,19 +46,19 @@ check_generic_patterns() {
         local count
         count=$(grep -c "^##\+ $pattern" "$FILE" || true)
         if [[ "$count" -gt 1 ]]; then
-            echo "⚠️  Generic pattern '$pattern' used $count times (likely to duplicate)"
+            warning " Generic pattern '$pattern' used $count times (likely to duplicate)"
             found_generic=true
         fi
     done
 
     if [[ "$found_generic" == "false" ]]; then
-        echo "✅ No problematic generic patterns found"
+        success "No problematic generic patterns found"
     fi
 }
 
 # Suggest improvements for generic headings
 suggest_improvements() {
-    echo "📋 Checking for improvement opportunities..."
+    check "Checking for improvement opportunities..."
     local suggestions_made=false
 
     if grep -q "### Challenge Description" "$FILE"; then
@@ -68,7 +72,7 @@ suggest_improvements() {
     fi
 
     if [[ "$suggestions_made" == "false" ]]; then
-        echo "✅ Heading structure looks good"
+        success "Heading structure looks good"
     fi
 }
 
@@ -78,4 +82,4 @@ check_duplicate_headings
 check_generic_patterns
 suggest_improvements
 echo "======================================"
-echo "📊 Documentation structure validation complete"
+report "Documentation structure validation complete"

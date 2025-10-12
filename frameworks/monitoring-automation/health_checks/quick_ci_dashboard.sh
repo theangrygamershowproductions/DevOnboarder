@@ -1,23 +1,27 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick CI Dashboard - Get immediate CI insights
 # This script provides instant CI troubleshooting information
 
 # Validate we're in the correct DevOnboarder project BEFORE announcing the script
 if [ ! -f "pyproject.toml" ]; then
-    echo "ERROR: Not in DevOnboarder project root. Run from the repository root directory."
+    error "Not in DevOnboarder project root. Run from the repository root directory."
     exit 1
 fi
 
 # Comprehensive DevOnboarder project validation
 if ! grep -q "name = \"devonboarder\"" pyproject.toml 2>/dev/null; then
-    echo "ERROR: Not in the DevOnboarder project directory. Found pyproject.toml but project name mismatch."
+    error "Not in the DevOnboarder project directory. Found pyproject.toml but project name mismatch."
     echo "Expected: name = \"devonboarder\" in pyproject.toml"
     exit 1
 fi
 
 # Additional validation: Check for DevOnboarder-specific files
 if [ ! -d "frameworks" ] || [ ! -f "scripts/qc_pre_push.sh" ]; then
-    echo "ERROR: Missing DevOnboarder-specific directories/files. Ensure you're in the correct repository."
+    error "Missing DevOnboarder-specific directories/files. Ensure you're in the correct repository."
     exit 1
 fi
 
@@ -35,9 +39,9 @@ echo ""
 echo "INFO: CI Pattern Analysis:"
 echo "----------------------"
 if bash scripts/analyze_ci_patterns.sh 2>/dev/null; then
-    echo "SUCCESS: Pattern analysis completed"
+    success "Pattern analysis completed"
 else
-    echo "ERROR: Pattern analysis failed or found issues"
+    error "Pattern analysis failed or found issues"
 fi
 echo ""
 
@@ -45,9 +49,9 @@ echo ""
 echo "HEALTHY: CI Health Status:"
 echo "-------------------"
 if bash scripts/monitor_ci_health.sh 2>/dev/null; then
-    echo "SUCCESS: Health monitoring completed"
+    success "Health monitoring completed"
 else
-    echo "ERROR: Health issues detected"
+    error "Health issues detected"
 fi
 echo ""
 
@@ -60,15 +64,15 @@ echo ""
 echo "TEST: Recent Test Status:"
 echo "---------------------"
 if [ -f "logs/.coverage" ]; then
-    echo "SUCCESS: Coverage data available"
+    success "Coverage data available"
 else
-    echo "WARNING: No recent coverage data"
+    warning "No recent coverage data"
 fi
 
 if [ -d "logs/.pytest_cache" ]; then
-    echo "SUCCESS: Test cache present"
+    success "Test cache present"
 else
-    echo "WARNING: No test cache found"
+    warning "No test cache found"
 fi
 echo ""
 
@@ -89,7 +93,7 @@ if [ -f "logs/ci_dashboard_report.html" ]; then
 
     echo "STATS: Dashboard Report:"
     echo "------------------"
-    echo "SUCCESS: Dashboard report available (${AGE_HOURS}h old)"
+    success "Dashboard report available (${AGE_HOURS}h old)"
     echo "   Open: logs/ci_dashboard_report.html"
     if [ $AGE_HOURS -gt 24 ]; then
         echo "TIP: Consider regenerating: python scripts/generate_ci_dashboard_report.py"
@@ -102,4 +106,4 @@ else
 fi
 
 echo ""
-echo "TARGET: DevOnboarder: Working quietly and reliably in service of those who need it."
+target "DevOnboarder: Working quietly and reliably in service of those who need it."

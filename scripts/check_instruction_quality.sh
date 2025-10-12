@@ -1,11 +1,19 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Pre-commit hook to enforce AI context management standards
 # Version: 1.0 | Created: 2025-01-10
 
 # Note: Removed 'set -e' to allow script to continue and show all issues
 
-echo "🤖 Running AI Context Management Quality Checks..."
+bot "Running AI Context Management Quality Checks..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -220,19 +228,19 @@ main() {
     
     # Summary
     echo ""
-    echo "🤖 AI Context Management Quality Check Summary:"
+    bot "AI Context Management Quality Check Summary:"
     echo "  Files checked: $FILES_CHECKED"
     echo "  Warnings: $WARNINGS"
     echo "  Errors: $ERRORS"
     
     if [ $ERRORS -gt 0 ]; then
-        echo -e "${RED}❌ Quality check failed with $ERRORS errors${NC}"
+        error_msg " Quality check failed with $ERRORS errors"
         exit 1
     elif [ $WARNINGS -gt 0 ]; then
-        echo -e "${YELLOW}⚠️  Quality check passed with $WARNINGS warnings${NC}"
+        debug_msg "  Quality check passed with $WARNINGS warnings"
         exit 0
     else
-        echo -e "${GREEN}✅ All quality checks passed!${NC}"
+        success_msg " All quality checks passed!"
         exit 0
     fi
 }

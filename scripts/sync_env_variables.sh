@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/sync_env_variables.sh
 # Purpose: Synchronize environment variables from .env to all environment files
@@ -60,7 +68,7 @@ echo ""
 
 # Validate source file exists
 if [ ! -f "$SOURCE_ENV" ]; then
-    echo "ERROR: Source environment file $SOURCE_ENV not found"
+    error "Source environment file $SOURCE_ENV not found"
     exit 1
 fi
 

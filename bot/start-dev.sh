@@ -1,7 +1,11 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Development Environment"
+bot "Starting Discord Bot - Development Environment"
 echo "================================================"
 
 # Load development environment
@@ -10,7 +14,7 @@ export ENVIRONMENT=dev
 
 # Check if .env.dev exists
 if [[ ! -f ".env.dev" ]]; then
-    echo "❌ Development environment file not found: .env.dev"
+    error "Development environment file not found: .env.dev"
     echo "   Run: bash ../scripts/setup_discord_env.sh dev"
     exit 1
 fi
@@ -30,5 +34,5 @@ if [[ ! -d "dist" ]] || [[ "src/" -nt "dist/" ]]; then
     npm run build
 fi
 
-echo "🚀 Starting bot in development mode..."
+deploy "Starting bot in development mode..."
 npm start

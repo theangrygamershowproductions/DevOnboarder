@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Branch Workflow Enforcer
 # PREVENTS the recurring main branch work violation
 #
@@ -26,7 +34,7 @@ enforce_branch_workflow() {
     if [[ "$PRE_COMMIT_MODE" == "true" ]]; then
         # Silent check for pre-commit hooks - just exit with error code
         if [[ "$current_branch" == "main" ]]; then
-            echo "ERROR: Cannot commit to main branch. Create a feature branch first."
+            error "Cannot commit to main branch. Create a feature branch first."
             exit 1
         fi
         return 0
@@ -38,13 +46,13 @@ enforce_branch_workflow() {
 
     if [[ "$current_branch" == "main" ]]; then
         echo
-        echo -e "${RED}🚨 CRITICAL WORKFLOW VIOLATION!${NC}"
-        echo -e "${RED}❌ You are on the 'main' branch${NC}"
-        echo -e "${GREEN}✅ DevOnboarder requires feature branch workflow${NC}"
+        echo -e "${RED}🚨 CRITICAL WORKFLOW VIOLATION!"
+        error_msg " You are on the 'main' branch"
+        success_msg " DevOnboarder requires feature branch workflow"
         echo
-        echo "📋 This prevents the recurring issue of working directly on main"
+        check "This prevents the recurring issue of working directly on main"
         echo
-        echo "🔧 Required actions:"
+        tool "Required actions:"
         echo "   [1] Create feature branch for your work"
         echo "   [2] Exit and follow proper workflow manually"
         echo
@@ -52,7 +60,7 @@ enforce_branch_workflow() {
 
         if [[ "$create_branch" =~ ^[Yy]$ ]]; then
             echo
-            echo "📝 Feature branch naming conventions:"
+            note "Feature branch naming conventions:"
             echo "   feat/feature-description    - New features"
             echo "   fix/bug-description         - Bug fixes"
             echo "   docs/update-description     - Documentation"
@@ -65,10 +73,10 @@ enforce_branch_workflow() {
             if [[ -n "$branch_name" ]]; then
                 if git checkout -b "$branch_name" 2>/dev/null; then
                     echo
-                    echo -e "${GREEN}✅ SUCCESS: Created and switched to branch: $branch_name${NC}"
-                    echo -e "${GREEN}✅ Workflow compliance achieved${NC}"
+                    success_msg " SUCCESS: Created and switched to branch: $branch_name"
+                    success_msg " Workflow compliance achieved"
                     echo
-                    echo "📋 Next steps:"
+                    check "Next steps:"
                     echo "   • Make your changes"
                     echo "   • Use ./scripts/safe_commit.sh for commits"
                     echo "   • Create PR when ready"
@@ -76,26 +84,26 @@ enforce_branch_workflow() {
                     return 0
                 else
                     echo
-                    echo -e "${RED}❌ Failed to create branch '$branch_name'${NC}"
+                    error_msg " Failed to create branch '$branch_name'"
                     echo "   Check if branch already exists or name is invalid"
                     return 1
                 fi
             else
                 echo
-                echo -e "${RED}❌ No branch name provided${NC}"
+                error_msg " No branch name provided"
                 echo "   Cannot proceed without proper branch"
                 return 1
             fi
         else
             echo
-            echo -e "${YELLOW}⚠️  Workflow violation not resolved${NC}"
+            debug_msg "  Workflow violation not resolved"
             echo "   Please create feature branch manually:"
             echo "   git checkout -b feat/your-feature-name"
             return 1
         fi
     else
         echo
-        echo -e "${GREEN}✅ Workflow compliance: Working on '$current_branch'${NC}"
+        success_msg " Workflow compliance: Working on '$current_branch'"
         echo "   You're following proper DevOnboarder branch workflow"
         return 0
     fi

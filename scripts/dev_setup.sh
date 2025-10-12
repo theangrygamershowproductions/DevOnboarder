@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Install Python and Node.js dependencies for development
 set -euo pipefail
 
@@ -14,4 +22,4 @@ fi
 
 pre-commit install
 
-echo "Development environment ready ✅"
+echo "Development environment ready SUCCESS:"

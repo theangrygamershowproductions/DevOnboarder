@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # ---
 # codex-agent:
 #   name: Agent.CheckBotPermissions
@@ -23,7 +27,7 @@ echo "🔍 Checking if bot '$BOT_NAME' has '$PERMISSION' permission..."
 PERMISSIONS_FILE="agents/permissions.yml"
 
 if [[ ! -f "$PERMISSIONS_FILE" ]]; then
-    echo "❌ Permissions manifest '$PERMISSIONS_FILE' not found."
+    error "Permissions manifest '$PERMISSIONS_FILE' not found."
     exit 1
 fi
 
@@ -36,15 +40,15 @@ else
 fi
 
 if [[ -z "$HAS_PERMISSION" ]]; then
-    echo "❌ Bot '$BOT_NAME' is NOT authorized for '$PERMISSION'"
+    error "Bot '$BOT_NAME' is NOT authorized for '$PERMISSION'"
     exit 1
 else
-    echo "✅ Bot '$BOT_NAME' IS authorized for '$PERMISSION'"
+    success "Bot '$BOT_NAME' IS authorized for '$PERMISSION'"
 fi
 
 # Optionally, show the token prefix for audit/debugging (never print the whole token)
 if [[ -n "$BOT_KEY" ]]; then
     echo "🔑 BOT_KEY present (starts with: ${BOT_KEY:0:6}...)"
 else
-    echo "⚠️  BOT_KEY environment variable is NOT set!"
+    warning " BOT_KEY environment variable is NOT set!"
 fi

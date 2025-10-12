@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Validate template variable dependencies before cleanup
 
 set -euo pipefail
@@ -29,7 +33,7 @@ if [[ -f "$SCRIPT_FILE" ]]; then
 
     while read -r var; do
         if ! grep -q "$var=" "$SCRIPT_FILE"; then
-            echo "WARNING: Variable $var used in templates but not declared in script"
+            warning "Variable $var used in templates but not declared in script"
             MISSING_VARS="$MISSING_VARS $var"
         fi
     done < <(echo "$USED_VARS")
@@ -38,7 +42,7 @@ if [[ -f "$SCRIPT_FILE" ]]; then
         echo "VALIDATION FAILED: Missing variable declarations"
         exit 1
     else
-        echo "✅ All template variables are declared in script"
+        success "All template variables are declared in script"
     fi
 fi
 

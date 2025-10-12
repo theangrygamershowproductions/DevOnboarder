@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Fix Markdown Compliance in Automation Scripts
 # Addresses Issue #1315 - Fix systemic markdown compliance violations in automation script generation
@@ -207,7 +215,7 @@ if [[ -d "$AAR_DIR" ]]; then
 fi
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: No markdown compliance violations found"
+    success "No markdown compliance violations found"
     exit 0
 else
     echo "FAILURE: $VIOLATIONS markdown compliance violations found"
