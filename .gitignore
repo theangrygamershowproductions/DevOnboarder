@@ -132,6 +132,81 @@ pmbot_signing_key*
 *.key
 # Test artifacts
 test-*.md
+test_quality_gate_*.md
+test-coverage.md
+coverage-summary.md
+coverage.svg
+
+# Generated fix/validation scripts
+fix_*.py
+fix_*.sh
+bulk_markdown_fix.sh
+cleanup_test_credentials.sh
+create_strategic_pr_issue.sh
+integrate_auto_fixers.sh
+simple_sync.sh
+validate_implementation.py
+
+# Analysis and report artifacts
+ci_failure_analysis.json
+ci_health_report.json
+ci_debug_report_*.md
+phase4_analysis_report.json
+phase4_health_report.json
+precommit_analysis.json
+precommit_analysis_v2.json
+github_cli_analysis.json
+codex.automation.bundle.json
+codex.ci.yml
+codex.tasks.json
+versions.yaml
+
+# Status/completion reports
+*_COMPLETE.md
+*_SUMMARY.md
+*_STATUS_REPORT.md
+*_SUCCESS_REPORT.md
+ENHANCED_*.md
+EXTENDED_*.md
+FRAMEWORK_*.md
+GITHUB_ACTIONS_*.md
+COMPREHENSIVE_*.md
+CORRECTED_*.md
+COVERAGE_MASKING_*.md
+DOCUMENTATION_*_AAR.md
+ISSUE_RESOLUTION_SUMMARY.md
+LOCAL_TOKEN_SETUP_COMPLETE.md
+OPTION1_PHASE1_COMPLETE.md
+PHASE*_*.md
+PRIORITY_MATRIX_*.md
+PR_SUMMARY.md
+TOKEN_LOADER_ENHANCEMENT_COMPLETE.md
+UTC_FIX_SUMMARY.md
+
+# Planning and milestone files
+HYBRID_MIGRATION_APPROACH.md
+MILESTONE_LOG.md
+PHASE_INDEX.md
+PHASE_ISSUE_INDEX.md
+TSM_GITHUB_ISSUE_DRAFT.md
+WORKFLOW_DIAGNOSTIC_ANALYSIS.md
+CI_SECRETS_MISALIGNMENT_RESOLUTION.md
+INFRASTRUCTURE_WORK_TODO.md
+QC_VALIDATION_REMEDIATION_PLAN.md
+ROOT_ARTIFACT_CLEANUP_COMPLETION.md
+priority-matrix-test.md
+
+# Temporary and audit files
+audit_output.txt
+broken_links_checklist.txt
+detailed_broken_links.txt
+emergency_assessment.txt
+fix_gpg_key_instructions.md
+fix_ssh_signature_verification.md
+friction-prevention-script-catalog.md
+init-db.sql
+package.json.unused
+95_PERCENT_CONFIDENCE.md
 
 # Security and analysis reports - prevent root pollution
 reports/
