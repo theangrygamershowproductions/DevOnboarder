@@ -303,16 +303,16 @@ GH_CMD="$GH_CMD --body-file \"$TEMPLATE_FILE\""
 # Add labels based on template type
 case $TEMPLATE_TYPE in
     "feature")
-        GH_CMD="$GH_CMD --label enhancement --label feature"
+        GH_CMD="$GH_CMD --label enhancement"
         ;;
     "docs")
         GH_CMD="$GH_CMD --label documentation"
         ;;
     "bugfix")
-        GH_CMD="$GH_CMD --label bug --label bugfix"
+        GH_CMD="$GH_CMD --label bug"
         ;;
     "chore")
-        GH_CMD="$GH_CMD --label maintenance --label chore"
+        GH_CMD="$GH_CMD --label automation"
         ;;
 esac
 
