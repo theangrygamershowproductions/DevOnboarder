@@ -181,17 +181,15 @@ jobs:
               run: |
                   status="${{ steps.check.outputs.status }}"
                   if [ "$status" = "clean" ]; then
-                      gh api repos/${{ github.repository }}/statuses/${{ github.sha }} \
-                          -X POST \
-                          -F state=success \
-                          -F context="Root Artifact Guard" \
-                          -F description="No root artifact violations detected" \
-                          -F target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      curl -X POST \
+                          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                          -H "Accept: application/vnd.github.v3+json" \
+                          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+                          -d "{\"state\":\"success\",\"context\":\"Root Artifact Guard\",\"description\":\"No root artifact violations detected\",\"target_url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
                   else
-                      gh api repos/${{ github.repository }}/statuses/${{ github.sha }} \
-                          -X POST \
-                          -F state=failure \
-                          -F context="Root Artifact Guard" \
-                          -F description="Root artifact violations found" \
-                          -F target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      curl -X POST \
+                          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                          -H "Accept: application/vnd.github.v3+json" \
+                          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+                          -d "{\"state\":\"failure\",\"context\":\"Root Artifact Guard\",\"description\":\"Root artifact violations found\",\"target_url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
                   fi
