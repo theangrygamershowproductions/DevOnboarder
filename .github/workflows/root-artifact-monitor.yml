@@ -188,8 +188,8 @@ jobs:
               with:
                   script: |
                       const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
-                      const description = '${{ steps.check.outputs.status }}' === 'clean' 
-                          ? 'No root artifact violations detected' 
+                      const description = '${{ steps.check.outputs.status }}' === 'clean'
+                          ? 'No root artifact violations detected'
                           : 'Root artifact violations found';
 
                       console.log('Creating status with GitHub Script:', { status, description, sha: context.sha });
