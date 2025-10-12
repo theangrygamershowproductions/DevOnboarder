@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 #
 # DevOnboarder PR Creation Script
 #
@@ -330,11 +334,11 @@ echo ""
 echo "Executing: $GH_CMD"
 if eval "$GH_CMD"; then
     echo ""
-    echo "SUCCESS: Pull request created successfully"
+    success "Pull request created successfully"
     echo "You can edit the PR description on GitHub if needed"
 else
     echo ""
-    echo "ERROR: Failed to create pull request"
+    error "Failed to create pull request"
     echo "Check the error messages above for details"
     exit 1
 fi

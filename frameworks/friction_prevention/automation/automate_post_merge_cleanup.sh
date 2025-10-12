@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # automate_post_merge_cleanup.sh - Automated post-merge cleanup workflow
 # Follows DevOnboarder terminal output compliance and centralized logging
@@ -23,7 +27,7 @@ echo "Log file: $LOG_FILE"
 validate_pr_number() {
     local pr_number="$1"
     if ! [[ "$pr_number" =~ ^[0-9]+$ ]]; then
-        echo "ERROR: Invalid PR number format: $pr_number"
+        error "Invalid PR number format: $pr_number"
         echo "Usage: $0 <pr-number>"
         exit 1
     fi
@@ -73,7 +77,7 @@ search_tracking_issues() {
                 done <<< "$issues"
             fi
         else
-            echo "WARNING: GitHub CLI not available, skipping issue search"
+            warning "GitHub CLI not available, skipping issue search"
         fi
     done
 
@@ -102,10 +106,10 @@ close_tracking_issues() {
                 if gh issue close "$issue_number" --comment "$close_message"; then
                     echo "Successfully closed tracking issue #$issue_number"
                 else
-                    echo "WARNING: Failed to close tracking issue #$issue_number"
+                    warning "Failed to close tracking issue #$issue_number"
                 fi
             else
-                echo "WARNING: GitHub CLI not available, cannot close issue #$issue_number"
+                warning "GitHub CLI not available, cannot close issue #$issue_number"
                 echo "Manual action required: Close issue #$issue_number with comment: $close_message"
             fi
         fi
@@ -126,7 +130,7 @@ cleanup_local_branch() {
     if [[ "$current_branch" != "main" ]]; then
         echo "Switching from $current_branch to main branch"
         if ! git checkout main; then
-            echo "WARNING: Failed to switch to main branch"
+            warning "Failed to switch to main branch"
             return 1
         fi
     fi
@@ -134,7 +138,7 @@ cleanup_local_branch() {
     # Update main branch
     echo "Updating main branch from origin"
     if ! git pull origin main; then
-        echo "WARNING: Failed to update main branch"
+        warning "Failed to update main branch"
         return 1
     fi
 
@@ -150,7 +154,7 @@ cleanup_local_branch() {
         while read -r branch; do
             if [[ -n "$branch" ]]; then
                 echo "Deleting merged branch: $branch"
-                git branch -d "$branch" || echo "WARNING: Failed to delete branch $branch"
+                git branch -d "$branch" || warning "Failed to delete branch $branch"
             fi
         done <<< "$merged_branches"
     else
@@ -168,7 +172,7 @@ verify_cleanup() {
     if [[ "$current_branch" == "main" ]]; then
         echo "VERIFICATION: Currently on main branch"
     else
-        echo "WARNING: Not on main branch, currently on $current_branch"
+        warning "Not on main branch, currently on $current_branch"
     fi
 
     # Check for any remaining local branches
@@ -182,7 +186,7 @@ verify_cleanup() {
     if [[ -z "$git_status" ]]; then
         echo "VERIFICATION: Working directory clean"
     else
-        echo "WARNING: Working directory has uncommitted changes"
+        warning "Working directory has uncommitted changes"
     fi
 }
 

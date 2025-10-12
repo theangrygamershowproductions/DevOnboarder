@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Enhanced validation targeting the final 4% of CI issues
 # Focuses on known problem areas with specific fixes
@@ -10,7 +14,7 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/final_4_percent_validation_$TIMESTAMP.log"
 
-echo "🎯 Final 4% Validation - Targeting Remaining CI Issues"
+target "Final 4% Validation - Targeting Remaining CI Issues"
 echo "======================================================"
 echo "Timestamp: $TIMESTAMP"
 echo "Log file: $LOG_FILE"
@@ -27,10 +31,10 @@ run_validation() {
     echo "Started: $(date)"
 
     if eval "$command" > "$log_file" 2>&1; then
-        echo "✅ $step_name: PASSED"
+        success "$step_name: PASSED"
         return 0
     else
-        echo "❌ $step_name: FAILED"
+        error "$step_name: FAILED"
         echo "Error details (last 10 lines):"
         tail -n 10 "$log_file" | sed 's/^/  /'
         echo "Full log: $log_file"
@@ -40,7 +44,7 @@ run_validation() {
 
 # Ensure virtual environment is active
 if [[ -z "${VIRTUAL_ENV:-}" ]]; then
-    echo "⚠️  Activating virtual environment..."
+    warning " Activating virtual environment..."
     # shellcheck disable=SC1091 # Runtime source operation
     source .venv/bin/activate
 fi
@@ -122,7 +126,7 @@ if [[ $TOTAL -gt 0 ]]; then
     if [[ $SUCCESS_RATE -ge 95 ]]; then
         echo "🎉 MISSION ACCOMPLISHED: 95%+ success rate achieved!"
     else
-        echo "⚠️  Need to address remaining failures to reach 95%"
+        warning " Need to address remaining failures to reach 95%"
     fi
 else
     echo "No tests executed"

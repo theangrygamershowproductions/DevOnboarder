@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Validate Markdown Compliance in Generated Files
 # Ensures all script-generated markdown follows DevOnboarder standards
@@ -22,7 +26,7 @@ mkdir -p "$LOGS_DIR"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+    local emoji_patterns=("REPORT:" "CHECK:" "TARGET:" "SUCCESS:" "ERROR:" "WARNING:" "DEPLOY:" "NOTE:" "💡" "🔍")
     local file_violations=0
 
     for emoji in "${emoji_patterns[@]}"; do
@@ -48,7 +52,7 @@ check_script_violations() {
         # Extract the markdown generation sections
         awk '/cat.*>.*\.md.*<<.*EOF/,/^EOF$/' "$script" > "$temp_file" 2>/dev/null || true
 
-        local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+        local emoji_patterns=("REPORT:" "CHECK:" "TARGET:" "SUCCESS:" "ERROR:" "WARNING:" "DEPLOY:" "NOTE:" "💡" "🔍")
         for emoji in "${emoji_patterns[@]}"; do
             if grep -q "$emoji" "$temp_file" 2>/dev/null; then
                 echo "SCRIPT VIOLATION: $script generates markdown with emoji: $emoji" >&2
@@ -118,7 +122,7 @@ echo "Phase 3: Validation Summary"
 echo "==========================="
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: No markdown compliance violations found"
+    success "No markdown compliance violations found"
     echo "All script-generated markdown content follows DevOnboarder standards"
     exit 0
 else

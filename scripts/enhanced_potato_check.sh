@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced Potato Policy Enforcement Script
 # "Every rule has a scar behind it" - Born from real-world security incidents
 #
@@ -30,14 +38,14 @@ EXIT_CODE=0
 # Virtual environment validation
 check_virtual_environment() {
     if [ -z "${VIRTUAL_ENV:-}" ]; then
-        echo -e "${RED}❌ CRITICAL: Virtual environment required for Enhanced Potato Policy operations${NC}" >&2
-        echo -e "${YELLOW}   Solution: source .venv/bin/activate && pip install -e .[test]${NC}" >&2
-        echo -e "${BLUE}   DevOnboarder requires ALL security tools to run in virtual environment context${NC}" >&2
+        error_msg " CRITICAL: Virtual environment required for Enhanced Potato Policy operations" >&2
+        echo -e "${YELLOW}   Solution: source .venv/bin/activate && pip install -e .[test]" >&2
+        echo -e "${BLUE}   DevOnboarder requires ALL security tools to run in virtual environment context" >&2
         exit 1
     fi
 
     if [ "$VERBOSE" = true ]; then
-        echo -e "${GREEN}✅ Virtual environment active: ${VIRTUAL_ENV}${NC}"
+        success_msg " Virtual environment active: ${VIRTUAL_ENV}"
     fi
 }
 
@@ -63,7 +71,7 @@ setup_logging() {
     } > "$LOG_FILE"
 
     if [ "$VERBOSE" = true ]; then
-        echo -e "${BLUE}📝 Logging to: $LOG_FILE${NC}"
+        echo -e "${BLUE}NOTE: Logging to: $LOG_FILE"
     fi
 }
 
@@ -109,7 +117,7 @@ check_pattern_in_file() {
     local pattern="$2"
 
     if [ ! -f "$file" ]; then
-        echo -e "${RED}❌ Ignore file missing: $file${NC}" | tee -a "$LOG_FILE"
+        error_msg " Ignore file missing: $file" | tee -a "$LOG_FILE"
         return 1
     fi
 
@@ -135,11 +143,11 @@ add_pattern_to_file() {
     local pattern="$2"
 
     if [ "$DRY_RUN" = true ]; then
-        echo -e "${YELLOW}[DRY-RUN] Would add '$pattern' to $file${NC}" | tee -a "$LOG_FILE"
+        echo -e "${YELLOW}[DRY-RUN] Would add '$pattern' to $file" | tee -a "$LOG_FILE"
         return 0
     fi
 
-    echo -e "${BLUE}🔧 Adding '$pattern' to $file${NC}" | tee -a "$LOG_FILE"
+    echo -e "${BLUE}TOOL: Adding '$pattern' to $file" | tee -a "$LOG_FILE"
     echo "$pattern" >> "$file"
 
     # Sort and remove duplicates
@@ -150,7 +158,7 @@ add_pattern_to_file() {
 validate_ignore_files() {
     local violations=0
 
-    echo -e "${PURPLE}🔍 Validating ignore file coverage...${NC}" | tee -a "$LOG_FILE"
+    echo -e "${PURPLE}🔍 Validating ignore file coverage..." | tee -a "$LOG_FILE"
 
     # Combine all patterns
     local all_patterns=("${CRITICAL_PATTERNS[@]}" "${SENSITIVE_PATTERNS[@]}" "${DEVONBOARDER_PATTERNS[@]}")
@@ -158,14 +166,14 @@ validate_ignore_files() {
     for ignore_file in "${IGNORE_FILES[@]}"; do
         local file_path="${PROJECT_ROOT}/${ignore_file}"
 
-        echo -e "${CYAN}   Checking: $ignore_file${NC}" | tee -a "$LOG_FILE"
+        echo -e "${CYAN}   Checking: $ignore_file" | tee -a "$LOG_FILE"
 
         if [ ! -f "$file_path" ]; then
-            echo -e "${RED}❌ Missing ignore file: $ignore_file${NC}" | tee -a "$LOG_FILE"
+            error_msg " Missing ignore file: $ignore_file" | tee -a "$LOG_FILE"
             violations=$((violations + 1))
 
             if [ "$AUTO_FIX" = true ]; then
-                echo -e "${BLUE}🔧 Creating missing ignore file: $ignore_file${NC}" | tee -a "$LOG_FILE"
+                echo -e "${BLUE}TOOL: Creating missing ignore file: $ignore_file" | tee -a "$LOG_FILE"
                 touch "$file_path"
             fi
             continue
@@ -173,7 +181,7 @@ validate_ignore_files() {
 
         for pattern in "${all_patterns[@]}"; do
             if ! check_pattern_in_file "$file_path" "$pattern"; then
-                echo -e "${YELLOW}⚠️  Missing pattern '$pattern' in $ignore_file${NC}" | tee -a "$LOG_FILE"
+                debug_msg "  Missing pattern '$pattern' in $ignore_file" | tee -a "$LOG_FILE"
                 violations=$((violations + 1))
 
                 if [ "$AUTO_FIX" = true ]; then
@@ -184,9 +192,9 @@ validate_ignore_files() {
     done
 
     if [ $violations -eq 0 ]; then
-        echo -e "${GREEN}✅ All ignore files properly configured${NC}" | tee -a "$LOG_FILE"
+        success_msg " All ignore files properly configured" | tee -a "$LOG_FILE"
     else
-        echo -e "${RED}❌ Found $violations ignore file violations${NC}" | tee -a "$LOG_FILE"
+        error_msg " Found $violations ignore file violations" | tee -a "$LOG_FILE"
         EXIT_CODE=1
     fi
 
@@ -197,7 +205,7 @@ validate_ignore_files() {
 scan_exposed_files() {
     local violations=0
 
-    echo -e "${PURPLE}🔍 Scanning for exposed sensitive files...${NC}" | tee -a "$LOG_FILE"
+    echo -e "${PURPLE}🔍 Scanning for exposed sensitive files..." | tee -a "$LOG_FILE"
 
     # Change to project root for relative path scanning
     cd "$PROJECT_ROOT"
@@ -217,9 +225,9 @@ scan_exposed_files() {
             -type f 2>/dev/null || true)
 
         if [ -n "$found_files" ]; then
-            echo -e "${RED}❌ CRITICAL: Found exposed sensitive files matching '$pattern':${NC}" | tee -a "$LOG_FILE"
+            error_msg " CRITICAL: Found exposed sensitive files matching '$pattern':" | tee -a "$LOG_FILE"
             echo "$found_files" | while IFS= read -r file; do
-                echo -e "${RED}   • $file${NC}" | tee -a "$LOG_FILE"
+                echo -e "${RED}   • $file" | tee -a "$LOG_FILE"
                 violations=$((violations + 1))
             done
 
@@ -235,9 +243,9 @@ scan_exposed_files() {
     done
 
     if [ $violations -eq 0 ]; then
-        echo -e "${GREEN}✅ No exposed sensitive files detected${NC}" | tee -a "$LOG_FILE"
+        success_msg " No exposed sensitive files detected" | tee -a "$LOG_FILE"
     else
-        echo -e "${RED}❌ CRITICAL: Found $violations exposed sensitive files${NC}" | tee -a "$LOG_FILE"
+        error_msg " CRITICAL: Found $violations exposed sensitive files" | tee -a "$LOG_FILE"
         EXIT_CODE=1
     fi
 
@@ -248,7 +256,7 @@ scan_exposed_files() {
 scan_content_patterns() {
     local violations=0
 
-    echo -e "${PURPLE}🔍 Scanning for hardcoded secrets in content...${NC}" | tee -a "$LOG_FILE"
+    echo -e "${PURPLE}🔍 Scanning for hardcoded secrets in content..." | tee -a "$LOG_FILE"
 
     # Advanced patterns for secret detection
     declare -a SECRET_PATTERNS=(
@@ -276,7 +284,7 @@ scan_content_patterns() {
         2>/dev/null || true)
 
     if [ -z "$files_to_scan" ]; then
-        echo -e "${YELLOW}⚠️  No files found to scan for content patterns${NC}" | tee -a "$LOG_FILE"
+        debug_msg "  No files found to scan for content patterns" | tee -a "$LOG_FILE"
         return 0
     fi
 
@@ -285,12 +293,12 @@ scan_content_patterns() {
         matches=$(echo "$files_to_scan" | xargs grep -l -E "$pattern" 2>/dev/null || true)
 
         if [ -n "$matches" ]; then
-            echo -e "${RED}❌ POTENTIAL SECRET DETECTED - Pattern: $pattern${NC}" | tee -a "$LOG_FILE"
+            error_msg " POTENTIAL SECRET DETECTED - Pattern: $pattern" | tee -a "$LOG_FILE"
             echo "$matches" | while IFS= read -r file; do
                 # Get specific line matches (without showing the actual secret)
                 local line_numbers
                 line_numbers=$(grep -n -E "$pattern" "$file" 2>/dev/null | cut -d: -f1 || true)
-                echo -e "${RED}   • $file (lines: $line_numbers)${NC}" | tee -a "$LOG_FILE"
+                echo -e "${RED}   • $file (lines: $line_numbers)" | tee -a "$LOG_FILE"
                 violations=$((violations + 1))
             done
 
@@ -306,9 +314,9 @@ scan_content_patterns() {
     done
 
     if [ $violations -eq 0 ]; then
-        echo -e "${GREEN}✅ No hardcoded secrets detected in content${NC}" | tee -a "$LOG_FILE"
+        success_msg " No hardcoded secrets detected in content" | tee -a "$LOG_FILE"
     else
-        echo -e "${YELLOW}⚠️  Found $violations potential secrets - manual review required${NC}" | tee -a "$LOG_FILE"
+        debug_msg "  Found $violations potential secrets - manual review required" | tee -a "$LOG_FILE"
         # Don't set EXIT_CODE for potential secrets, they need manual review
     fi
 
@@ -317,7 +325,7 @@ scan_content_patterns() {
 
 # Validate virtual environment isolation
 validate_virtual_env_isolation() {
-    echo -e "${PURPLE}🔍 Validating virtual environment isolation...${NC}" | tee -a "$LOG_FILE"
+    echo -e "${PURPLE}🔍 Validating virtual environment isolation..." | tee -a "$LOG_FILE"
 
     # Check that Python tools are available in virtual environment
     local required_tools=("python" "pip" "black" "ruff" "pytest")
@@ -325,24 +333,24 @@ validate_virtual_env_isolation() {
 
     for tool in "${required_tools[@]}"; do
         if ! command -v "$tool" &> /dev/null; then
-            echo -e "${RED}❌ Required tool '$tool' not available in virtual environment${NC}" | tee -a "$LOG_FILE"
+            error_msg " Required tool '$tool' not available in virtual environment" | tee -a "$LOG_FILE"
             violations=$((violations + 1))
         elif [ "$VERBOSE" = true ]; then
             local tool_path
             tool_path=$(command -v "$tool")
             if [[ "$tool_path" == "${VIRTUAL_ENV}"* ]]; then
-                echo -e "${GREEN}✅ $tool: $tool_path${NC}" | tee -a "$LOG_FILE"
+                success_msg " $tool: $tool_path" | tee -a "$LOG_FILE"
             else
-                echo -e "${YELLOW}⚠️  $tool not from virtual environment: $tool_path${NC}" | tee -a "$LOG_FILE"
+                debug_msg "  $tool not from virtual environment: $tool_path" | tee -a "$LOG_FILE"
                 violations=$((violations + 1))
             fi
         fi
     done
 
     if [ $violations -eq 0 ]; then
-        echo -e "${GREEN}✅ Virtual environment isolation validated${NC}" | tee -a "$LOG_FILE"
+        success_msg " Virtual environment isolation validated" | tee -a "$LOG_FILE"
     else
-        echo -e "${RED}❌ Virtual environment isolation violations: $violations${NC}" | tee -a "$LOG_FILE"
+        error_msg " Virtual environment isolation violations: $violations" | tee -a "$LOG_FILE"
         EXIT_CODE=1
     fi
 
@@ -372,14 +380,14 @@ generate_compliance_report() {
         echo ""
         echo "## Next Steps"
         if [ $EXIT_CODE -eq 0 ]; then
-            echo "✅ All checks passed - system is compliant"
+            success "All checks passed - system is compliant"
         else
-            echo "❌ Violations detected - review log file and fix issues"
+            error "Violations detected - review log file and fix issues"
             echo "📖 See: docs/enhanced-potato-policy.md for guidance"
         fi
     } > "$report_file"
 
-    echo -e "${BLUE}📊 Compliance report generated: $report_file${NC}" | tee -a "$LOG_FILE"
+    echo -e "${BLUE}REPORT: Compliance report generated: $report_file" | tee -a "$LOG_FILE"
 }
 
 # Usage information
@@ -440,7 +448,7 @@ parse_arguments() {
                 exit 0
                 ;;
             *)
-                echo -e "${RED}❌ Unknown option: $1${NC}" >&2
+                error_msg " Unknown option: $1" >&2
                 echo "Use --help for usage information" >&2
                 exit 2
                 ;;
@@ -454,10 +462,10 @@ main() {
     parse_arguments "$@"
 
     # Display header
-    echo -e "${PURPLE}🥔 Enhanced Potato Policy Enforcement${NC}"
-    echo -e "${PURPLE}======================================${NC}"
-    echo -e "${BLUE}DevOnboarder Security Framework v2.0${NC}"
-    echo -e "${BLUE}Philosophy: Pain → Protocol → Protection${NC}"
+    echo -e "${PURPLE}🥔 Enhanced Potato Policy Enforcement"
+    echo -e "${PURPLE}======================================"
+    echo -e "${BLUE}DevOnboarder Security Framework v2.0"
+    echo -e "${BLUE}Philosophy: Pain → Protocol → Protection"
     echo ""
 
     # Critical checks first
@@ -465,7 +473,7 @@ main() {
     setup_logging
 
     # Run all validation checks
-    echo -e "${CYAN}🚀 Starting comprehensive security validation...${NC}" | tee -a "$LOG_FILE"
+    echo -e "${CYAN}DEPLOY: Starting comprehensive security validation..." | tee -a "$LOG_FILE"
     echo ""
 
     validate_ignore_files
@@ -484,17 +492,17 @@ main() {
     generate_compliance_report
 
     # Final summary
-    echo -e "${PURPLE}======================================${NC}"
+    echo -e "${PURPLE}======================================"
     if [ $EXIT_CODE -eq 0 ]; then
-        echo -e "${GREEN}🎉 Enhanced Potato Policy: ALL CHECKS PASSED${NC}"
-        echo -e "${GREEN}✅ DevOnboarder security framework is compliant${NC}"
+        echo -e "${GREEN}🎉 Enhanced Potato Policy: ALL CHECKS PASSED"
+        success_msg " DevOnboarder security framework is compliant"
     else
-        echo -e "${RED}💥 Enhanced Potato Policy: VIOLATIONS DETECTED${NC}"
-        echo -e "${RED}❌ Review violations and apply fixes${NC}"
-        echo -e "${YELLOW}📖 See docs/enhanced-potato-policy.md for guidance${NC}"
+        echo -e "${RED}💥 Enhanced Potato Policy: VIOLATIONS DETECTED"
+        error_msg " Review violations and apply fixes"
+        echo -e "${YELLOW}📖 See docs/enhanced-potato-policy.md for guidance"
     fi
-    echo -e "${BLUE}📝 Full log: $LOG_FILE${NC}"
-    echo -e "${PURPLE}======================================${NC}"
+    echo -e "${BLUE}NOTE: Full log: $LOG_FILE"
+    echo -e "${PURPLE}======================================"
 
     exit $EXIT_CODE
 }

@@ -1,0 +1,242 @@
+# ---
+# codex-agent:
+#   name: Agent.ExternalPR
+#   role: Safely validates external pull requests from forks
+#   scope: .github/workflows/external-pr-validation.yml
+#   triggers: pull_request events from external contributors
+#   output: Safe validation results for external PRs
+#   security: Tier 1 - Safe Execution Zone with minimal permissions
+# ---
+name: External PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# SECURITY: Tier 1 - Safe Execution Zone
+# This workflow runs with minimal permissions and can safely execute
+# untrusted code from external contributors and forked repositories
+permissions:
+  contents: read  # Minimal permissions - can read repository contents
+  # NO write permissions for external PRs
+  # NO access to repository secrets
+  # NO ability to create issues or comment on PRs
+
+jobs:
+  detect-external-pr:
+    name: Detect External PR
+    runs-on: ubuntu-latest
+    outputs:
+      is_external: ${{ steps.detect.outputs.is_external }}
+      is_fork: ${{ steps.detect.outputs.is_fork }}
+      repo_owner: ${{ steps.detect.outputs.repo_owner }}
+      repo_name: ${{ steps.detect.outputs.repo_name }}
+    steps:
+      - name: Detect external PR characteristics
+        id: detect
+        run: |
+          # Fork detection - check if PR is from a forked repository
+          if [ "${{ github.event.pull_request.head.repo.fork }}" = "true" ]; then
+            echo "is_fork=true" >> $GITHUB_OUTPUT
+            echo "External fork PR detected"
+          else
+            echo "is_fork=false" >> $GITHUB_OUTPUT
+            echo "Internal PR detected"
+          fi
+
+          # External repository detection - check if different owner
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            echo "is_external=true" >> $GITHUB_OUTPUT
+            echo "External repository PR detected"
+          else
+            echo "is_external=false" >> $GITHUB_OUTPUT
+            echo "Internal repository PR detected"
+          fi
+
+          # Repository information for logging
+          echo "repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
+          echo "repo_name=${{ github.event.pull_request.head.repo.name }}" >> $GITHUB_OUTPUT
+
+  validate-yaml:
+    name: Validate YAML
+    runs-on: ubuntu-latest
+    needs: detect-external-pr
+    if: needs.detect-external-pr.outputs.is_external == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # SECURITY: Checkout untrusted code from fork
+          # This is safe because we have read-only permissions
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ".github/workflows/**/*.yml"
+          config_file: .github/.yamllint-config
+
+  lint-and-validate:
+    name: Lint & Basic Validation
+    runs-on: ubuntu-latest
+    needs: detect-external-pr
+    if: needs.detect-external-pr.outputs.is_external == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # SECURITY: Checkout untrusted code from fork
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Create virtual environment
+        run: python -m venv .venv
+      - name: Install basic dependencies
+        run: |
+          source .venv/bin/activate
+          pip install yamllint shellcheck-py
+      - name: Lint shell scripts
+        run: shellcheck --severity=warning scripts/*.sh
+      - name: Lint commit messages
+        run: bash scripts/check_commit_messages.sh
+      - name: Check versions
+        run: bash scripts/check_versions.sh
+      - name: Validate Codex Agents
+        run: |
+          source .venv/bin/activate
+          python scripts/validate_agents.py
+      - name: Enforce Potato ignore policy
+        run: bash scripts/check_potato_ignore.sh
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: detect-external-pr
+    if: needs.detect-external-pr.outputs.is_external == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Create virtual environment
+        run: python -m venv .venv
+      - name: Install security tools
+        run: |
+          source .venv/bin/activate
+          pip install bandit
+      - name: Run Bandit security scan
+        run: |
+          source .venv/bin/activate
+          bandit -r src -ll
+      - name: NPM audit (frontend)
+        run: |
+          cd frontend
+          npm audit --audit-level=high
+      - name: NPM audit (bot)
+        run: |
+          cd bot
+          npm audit --audit-level=high
+
+  quality-check:
+    name: Quality Check
+    runs-on: ubuntu-latest
+    needs: detect-external-pr
+    if: needs.detect-external-pr.outputs.is_external == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Create virtual environment
+        run: python -m venv .venv
+      - name: Install quality tools
+        run: |
+          source .venv/bin/activate
+          pip install black ruff mypy
+      - name: Run Black formatting check
+        run: |
+          source .venv/bin/activate
+          black --check .
+      - name: Run Ruff linting
+        run: |
+          source .venv/bin/activate
+          ruff check --output-format=github .
+      - name: Run MyPy type checking
+        run: |
+          source .venv/bin/activate
+          mypy --cache-dir=logs/.mypy_cache src/devonboarder
+
+  documentation-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    needs: detect-external-pr
+    if: needs.detect-external-pr.outputs.is_external == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install Vale
+        run: |
+          VALE_VERSION=3.12.0
+          VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+          TMP_DIR=$(mktemp -d)
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          curl -fsSL "$VALE_URL" | tar -xzC "$TMP_DIR"
+          sudo install -m 755 "$TMP_DIR/vale" /usr/local/bin/vale
+          vale --version
+      - name: Run documentation style check
+        run: ./scripts/check_docs.sh
+
+  # SECURITY: This job triggers the privileged workflow for post-processing
+  # It passes the PR information to the Tier 2 workflow
+  trigger-privileged-workflow:
+    name: Trigger Privileged Processing
+    runs-on: ubuntu-latest
+    needs: [detect-external-pr, validate-yaml, lint-and-validate, security-scan, quality-check, documentation-check]
+    if: |
+      always() &&
+      needs.detect-external-pr.outputs.is_external == 'true' &&
+      (needs.validate-yaml.result == 'success' ||
+       needs.lint-and-validate.result == 'success' ||
+       needs.security-scan.result == 'success' ||
+       needs.quality-check.result == 'success' ||
+       needs.documentation-check.result == 'success')
+    steps:
+      - name: Create workflow dispatch payload
+        run: |
+          # Create a summary of validation results for the privileged workflow
+          cat > workflow_payload.json << EOF
+          {
+            "pr_number": "${{ github.event.pull_request.number }}",
+            "pr_sha": "${{ github.event.pull_request.head.sha }}",
+            "repo_owner": "${{ needs.detect-external-pr.outputs.repo_owner }}",
+            "repo_name": "${{ needs.detect-external-pr.outputs.repo_name }}",
+            "is_fork": ${{ needs.detect-external-pr.outputs.is_fork }},
+            "validation_results": {
+              "yaml_validation": "${{ needs.validate-yaml.result }}",
+              "lint_validation": "${{ needs.lint-and-validate.result }}",
+              "security_scan": "${{ needs.security-scan.result }}",
+              "quality_check": "${{ needs.quality-check.result }}",
+              "documentation_check": "${{ needs.documentation-check.result }}"
+            }
+          }
+          EOF
+
+          cat workflow_payload.json
+
+      # This would trigger the Tier 2 privileged workflow
+      # For now, we'll just log the intent
+      - name: Log privileged workflow trigger
+        run: |
+          echo "EXTERNAL PR VALIDATION COMPLETE"
+          echo "PR #${{ github.event.pull_request.number }} from ${{ needs.detect-external-pr.outputs.repo_owner }}/${{ needs.detect-external-pr.outputs.repo_name }}"
+          echo "Validation results would be passed to privileged workflow"
+          echo "Next step: Implement workflow_run trigger in privileged workflow"

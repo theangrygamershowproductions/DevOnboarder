@@ -1,18 +1,20 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Comprehensive markdown linting fix script
 # Fixes MD030 list-marker-space errors across all markdown files
 
 set -e
 
-echo "🔧 Comprehensive markdown linting fixes..."
+tool "Comprehensive markdown linting fixes..."
 
 # Function to fix all common markdown issues in a file
 fix_markdown_file() {
     local file="$1"
 
     if [[ ! -f "$file" ]]; then
-        echo "⚠️  File not found: $file"
+        warning " File not found: $file"
         return
     fi
 
@@ -55,7 +57,7 @@ find . -name "*.md" -type f \
     fix_markdown_file "$file"
 done
 
-echo "✅ Markdown fixes complete!"
+success "Markdown fixes complete!"
 echo "🧪 Testing with markdownlint..."
 
 # Test a few key files to see if issues are resolved

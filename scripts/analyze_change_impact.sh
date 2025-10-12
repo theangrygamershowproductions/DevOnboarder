@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Change Impact Analysis Script
 # Identifies related modules when changes are made to prevent orphaned references
 
@@ -88,7 +96,7 @@ analyze_direct_references() {
     local source_file="$1"
     local references=()
 
-    echo "  📋 Analyzing direct references in: $(basename "$source_file")"
+    echo "  CHECK: Analyzing direct references in: $(basename "$source_file")"
 
     for pattern in "${REFERENCE_PATTERNS[@]}"; do
         while IFS= read -r match; do
@@ -155,7 +163,7 @@ check_broken_references() {
     local source_file="$1"
     local broken_refs=()
 
-    echo "  ❌ Checking for broken references in: $(basename "$source_file")"
+    echo "  ERROR: Checking for broken references in: $(basename "$source_file")"
 
     # Check markdown links
     while IFS= read -r link; do
@@ -332,13 +340,13 @@ EOF
     local broken_refs
     broken_refs=$(check_broken_references "$source_file")
     if [ -n "$broken_refs" ]; then
-        echo "⚠️ **Found broken references that need attention:**" >> "$output_file"
+        warning "**Found broken references that need attention:**" >> "$output_file"
         echo "" >> "$output_file"
         echo "$broken_refs" | while read -r ref; do
-            echo "- ❌ $ref" >> "$output_file"
+            echo "- ERROR: $ref" >> "$output_file"
         done
     else
-        echo "✅ No broken references found." >> "$output_file"
+        success "No broken references found." >> "$output_file"
     fi
 
     cat >> "$output_file" << EOF
@@ -385,7 +393,7 @@ EOF
 
 EOF
 
-    echo "   ✅ Report generated: $output_file"
+    echo "   SUCCESS: Report generated: $output_file"
 }
 
 # Assess risk level based on analysis
@@ -422,7 +430,7 @@ assess_risk_level() {
 
 # Analyze all files in batch mode
 batch_analysis() {
-    echo "🔄 Running batch analysis on all documentation..."
+    sync "Running batch analysis on all documentation..."
 
     local total_files=0
     local high_risk_files=()
@@ -450,14 +458,14 @@ batch_analysis() {
     done < <(find_all_docs)
 
     echo ""
-    echo "📊 Batch Analysis Summary:"
+    report "Batch Analysis Summary:"
     echo "   Total Files Analyzed: $total_files"
     echo "   High-Risk Files: ${#high_risk_files[@]}"
     echo "   Total Broken References: $broken_refs_total"
 
     if [ ${#high_risk_files[@]} -gt 0 ]; then
         echo ""
-        echo "⚠️ High-Risk Files Requiring Attention:"
+        warning "High-Risk Files Requiring Attention:"
         for file in "${high_risk_files[@]}"; do
             echo "   - $file"
         done
@@ -477,18 +485,18 @@ case "${1:-help}" in
         output_file="${3:-logs/impact_analysis_$(basename "$source_file" .md)_$(date +%Y%m%d_%H%M%S).md}"
 
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            error "File not found: $source_file"
             exit 1
         fi
 
         display_config
-        echo "🎯 Analyzing impact for: $source_file"
+        target "Analyzing impact for: $source_file"
         echo ""
 
         generate_impact_report "$source_file" "$output_file"
 
         echo ""
-        echo "✅ Impact analysis completed!"
+        success "Impact analysis completed!"
         echo "   📄 Report: $output_file"
         echo "   📄 Log: $LOG_FILE"
         ;;
@@ -506,18 +514,18 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            error "File not found: $source_file"
             exit 1
         fi
 
         echo "🔍 Checking references in: $source_file"
         echo ""
 
-        echo "📋 Direct References:"
+        check "Direct References:"
         analyze_direct_references "$source_file" || echo "   None found"
 
         echo ""
-        echo "❌ Broken References:"
+        error "Broken References:"
         check_broken_references "$source_file" || echo "   None found"
         ;;
 
@@ -529,7 +537,7 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            error "File not found: $source_file"
             exit 1
         fi
 
@@ -546,11 +554,11 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            error "File not found: $source_file"
             exit 1
         fi
 
-        echo "🎯 Risk assessment for: $source_file"
+        target "Risk assessment for: $source_file"
         echo "   Risk Level: $(assess_risk_level "$source_file")"
         ;;
 

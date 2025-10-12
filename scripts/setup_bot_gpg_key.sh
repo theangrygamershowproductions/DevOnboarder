@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Setup GPG key for Priority Matrix Bot without passphrase
 # This replaces SSH signing with GPG for consistent signature verification
 
@@ -36,7 +40,7 @@ rm "$GPG_BATCH_FILE"
 KEY_ID=$(gpg --list-secret-keys --keyid-format LONG "$BOT_EMAIL" | grep sec | awk '{print $2}' | cut -d'/' -f2)
 
 if [[ -z "$KEY_ID" ]]; then
-    echo "ERROR: Failed to create or find GPG key"
+    error "Failed to create or find GPG key"
     exit 1
 fi
 
@@ -55,7 +59,7 @@ echo "Private key exported to: $PRIVATE_KEY_FILE"
 echo ""
 echo "Next steps:"
 echo ""
-echo "⚠️  CRITICAL SECURITY REQUIREMENT:"
+warning " CRITICAL SECURITY REQUIREMENT:"
 echo "   Use SECONDARY GitHub account owned by corporate structure"
 echo "   DO NOT use personal developer accounts for bot tokens/keys"
 echo "   Example: developer@theangrygamershow.com (scarabofthespudheap)"

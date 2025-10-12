@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # automate_signature_verification.sh - Automated signature verification workflow
 # Follows DevOnboarder terminal output compliance and centralized logging
@@ -72,14 +76,14 @@ import_github_keys() {
         if gpg --keyserver keys.openpgp.org --recv-keys "$key" 2>/dev/null; then
             echo "Successfully imported key: $key"
         else
-            echo "WARNING: Failed to import key: $key"
+            warning "Failed to import key: $key"
         fi
     done
 
     # Check if automated setup script exists
     if [[ -f "scripts/setup_github_gpg_keys.sh" ]]; then
         echo "Running automated GitHub GPG key setup"
-        bash scripts/setup_github_gpg_keys.sh || echo "WARNING: Automated key setup failed"
+        bash scripts/setup_github_gpg_keys.sh || warning "Automated key setup failed"
     fi
 }
 
@@ -139,7 +143,7 @@ verify_git_config() {
 
     # Check if configuration is complete
     if [[ "$user_email" == "NOT_CONFIGURED" || "$signing_key" == "NOT_CONFIGURED" ]]; then
-        echo "WARNING: Git signing configuration incomplete"
+        warning "Git signing configuration incomplete"
         echo "RECOMMENDED ACTIONS:"
         echo "1. Set user email: git config user.email 'your-email@example.com'"
         echo "2. Set signing key: git config user.signingkey 'your-key-id'"

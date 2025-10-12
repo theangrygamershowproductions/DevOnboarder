@@ -1,10 +1,14 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Interactive commit message fixer with DevOnboarder conventional commit format
 # POTATO APPROVAL: emergency-interactive-commit-fix-20250807
 
 set -euo pipefail
 
-echo "🎯 DevOnboarder Interactive Commit Message Fixer"
+target "DevOnboarder Interactive Commit Message Fixer"
 echo "================================================="
 echo
 
@@ -62,7 +66,7 @@ convert_to_conventional() {
 echo "🔍 Analyzing commits from origin/main to HEAD..."
 COMMITS=$(git log --pretty=format:'%h %s' origin/main..HEAD)
 
-echo "📋 Current commits:"
+check "Current commits:"
 echo "$COMMITS"
 echo
 
@@ -76,10 +80,10 @@ while IFS= read -r line; do
 
         # Check if message follows conventional format
         if [[ ! "$MSG" =~ ^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|REVERT|CI|PERF|BUILD)\([a-z-]+\):.+ ]]; then
-            echo "❌ Non-conventional: $MSG"
+            error "Non-conventional: $MSG"
             NEEDS_FIXING=true
         else
-            echo "✅ Conventional: $MSG"
+            success "Conventional: $MSG"
         fi
     fi
 done <<< "$COMMITS"
@@ -90,11 +94,11 @@ if [ "$NEEDS_FIXING" = false ]; then
 fi
 
 echo
-read -p "🚀 Would you like to auto-fix these commit messages? (y/N): " -n 1 -r
+read -p "deploy "Would you like to auto-fix these commit messages? (y/N): " -n 1 -r
 echo
 
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Operation cancelled."
+    error "Operation cancelled."
     exit 1
 fi
 
@@ -104,7 +108,7 @@ echo "💾 Creating backup: $BACKUP_BRANCH"
 git branch "$BACKUP_BRANCH"
 
 # Start interactive rebase with auto-generated messages
-echo "🔧 Starting interactive rebase with message fixes..."
+tool "Starting interactive rebase with message fixes..."
 
 # Create temporary rebase script
 REBASE_SCRIPT=$(mktemp)
@@ -145,11 +149,11 @@ git rebase -i origin/main
 # Clean up
 rm -f "$REBASE_SCRIPT"
 
-echo "✅ Interactive rebase completed!"
+success "Interactive rebase completed!"
 echo "🔍 Checking results..."
 git log --oneline origin/main..HEAD | head -5
 
 echo
 echo "🎉 Commit message fixing complete!"
-echo "📋 Backup available at: $BACKUP_BRANCH"
-echo "🚀 Run: git push --force-with-lease origin $(git branch --show-current)"
+check "Backup available at: $BACKUP_BRANCH"
+deploy "Run: git push --force-with-lease origin $(git branch --show-current)"

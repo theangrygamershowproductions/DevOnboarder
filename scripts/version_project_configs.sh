@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: version_project_configs.sh
 # Version: 1.0.0
@@ -18,9 +26,9 @@ readonly SCRIPT_VERSION="1.0.0"
 readonly CURRENT_DATE
 CURRENT_DATE=$(date +"%Y-%m-%d")
 
-echo "🔧 $SCRIPT_NAME v$SCRIPT_VERSION"
+tool "$SCRIPT_NAME v$SCRIPT_VERSION"
 echo "=================================================================="
-echo "📋 Following DevOnboarder SOP standards (excluding .zshrc per user request)"
+check "Following DevOnboarder SOP standards (excluding .zshrc per user request)"
 echo "📅 Generated on: $CURRENT_DATE"
 echo
 
@@ -34,12 +42,12 @@ echo
 # Version pyproject.toml with DevOnboarder standards
 version_pyproject_toml() {
     if [[ -f "pyproject.toml" ]]; then
-        echo "🐍 Versioning pyproject.toml..."
+        python "Versioning pyproject.toml..."
         cp "pyproject.toml" "$BACKUP_DIR/pyproject.toml.backup"
-        echo "  ✅ Backup created"
-        echo "  📝 Adding DevOnboarder metadata header"
+        echo "  SUCCESS: Backup created"
+        echo "  NOTE: Adding DevOnboarder metadata header"
     else
-        echo "⚠️  pyproject.toml not found - skipping"
+        warning " pyproject.toml not found - skipping"
     fi
 }
 
@@ -55,7 +63,7 @@ version_docker_configs() {
         if [[ -f "$file" ]]; then
             echo "🐳 Versioning $file..."
             cp "$file" "$BACKUP_DIR/$(basename "$file").backup"
-            echo "  ✅ Backup created for $file"
+            echo "  SUCCESS: Backup created for $file"
         fi
     done
 }
@@ -128,24 +136,24 @@ TEAMS_TENANT_ID=
 TEAMS_CHANNEL_ID_ONBOARD=
 LLAMA2_API_KEY=
 EOF
-        echo "  ✅ Created .env.dev with proper metadata"
+        echo "  SUCCESS: Created .env.dev with proper metadata"
     else
-        echo "⚠️  .env.dev already exists - skipping template creation"
+        warning " .env.dev already exists - skipping template creation"
     fi
 }
 
 # Update .env.example if it exists
 update_env_example() {
     if [[ -f ".env.example" ]]; then
-        echo "📝 Updating .env.example with metadata header..."
+        note "Updating .env.example with metadata header..."
         cp ".env.example" "$BACKUP_DIR/env.example.backup"
-        echo "  ✅ Backup created"
+        echo "  SUCCESS: Backup created"
     fi
 }
 
 # Main execution
 main() {
-    echo "🚀 Starting DevOnboarder configuration versioning..."
+    deploy "Starting DevOnboarder configuration versioning..."
     echo
 
     # Version core project files
@@ -155,12 +163,12 @@ main() {
     update_env_example
 
     echo
-    echo "📊 Summary:"
-    echo "  ✅ Project configuration files processed"
+    report "Summary:"
+    echo "  SUCCESS: Project configuration files processed"
     echo "  💾 Backups saved to: $BACKUP_DIR"
-    echo "  🔒 User shell configs (.zshrc) preserved as requested"
+    echo "  SECURE: User shell configs (.zshrc) preserved as requested"
     echo
-    echo "🎯 Next steps:"
+    target "Next steps:"
     echo "  1. Review generated .env.dev and update with actual dev values"
     echo "  2. Ensure .env.dev is NOT committed (should be in .gitignore)"
     echo "  3. Run CI to test with new environment structure"
@@ -169,7 +177,7 @@ main() {
     # Git staging recommendation
     if git rev-parse --git-dir >/dev/null 2>&1; then
         echo
-        echo "📝 Git recommendations:"
+        note "Git recommendations:"
         echo "  - Stage .env.example if updated: git add .env.example"
         echo "  - Keep .env.dev local (verify .gitignore excludes it)"
         echo "  - Commit any pyproject.toml updates: git add pyproject.toml"

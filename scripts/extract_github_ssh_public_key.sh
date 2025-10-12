@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # extract_github_ssh_public_key.sh
 # Extract public key from the SSH private key stored in GitHub Secrets
 # This helps resolve SSH signature verification issues
@@ -39,6 +43,6 @@ if [ -f ~/.devonboarder-keys/pmbot_ed25519 ]; then
 
     echo "SSH public key extraction complete"
 else
-    echo "ERROR: SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
+    error "SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
     exit 1
 fi

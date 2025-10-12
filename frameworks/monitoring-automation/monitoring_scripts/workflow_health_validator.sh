@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # scripts/workflow_health_validator.sh
 # Pre-flight validation for GitHub Actions workflows
 # Tests configurations, API connectivity, and permissions before deployment
@@ -67,15 +75,15 @@ check_required_tool() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if command -v "$tool" >/dev/null 2>&1; then
-        echo "SUCCESS: $description ($tool): Available"
+        success "$description ($tool): Available"
         VALIDATION_RESULTS["tool_$tool"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
         if [[ "$optional" == "optional" ]]; then
-            echo "WARNING:  $description ($tool): Not available (optional)"
+            warning " $description ($tool): Not available (optional)"
             VALIDATION_RESULTS["tool_$tool"]="SKIP"
         else
-            echo "ERROR: $description ($tool): Missing (required)"
+            error "$description ($tool): Missing (required)"
             VALIDATION_RESULTS["tool_$tool"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -90,11 +98,11 @@ check_directory_structure() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if [[ -d "$dir" ]]; then
-            echo "SUCCESS: Directory structure ($dir): Present"
+            success "Directory structure ($dir): Present"
             VALIDATION_RESULTS["dir_$dir"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "ERROR: Directory structure ($dir): Missing"
+            error "Directory structure ($dir): Missing"
             VALIDATION_RESULTS["dir_$dir"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -123,7 +131,7 @@ test_github_auth() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if gh auth status >/dev/null 2>&1; then
-        echo "SUCCESS: GitHub CLI Authentication: Active"
+        success "GitHub CLI Authentication: Active"
         VALIDATION_RESULTS["github_auth"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
@@ -132,7 +140,7 @@ test_github_auth() {
         auth_info=$(gh auth status 2>&1)
         echo "   $(echo "$auth_info" | head -1)"
     else
-        echo "ERROR: GitHub CLI Authentication: Failed"
+        error "GitHub CLI Authentication: Failed"
         VALIDATION_RESULTS["github_auth"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         echo "   Run: gh auth login"
@@ -156,11 +164,11 @@ test_github_api_endpoints() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if test_api_endpoint "$endpoint"; then
-            echo "SUCCESS: GitHub API ($description): Accessible"
+            success "GitHub API ($description): Accessible"
             VALIDATION_RESULTS["api_$endpoint"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "ERROR: GitHub API ($description): Failed"
+            error "GitHub API ($description): Failed"
             VALIDATION_RESULTS["api_$endpoint"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -198,7 +206,7 @@ test_repository_access() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if gh repo view >/dev/null 2>&1; then
-        echo "SUCCESS: Repository Access: Available"
+        success "Repository Access: Available"
         VALIDATION_RESULTS["repo_access"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
@@ -207,7 +215,7 @@ test_repository_access() {
         repo_info=$(gh repo view --json name,owner,defaultBranch | jq -r '"\(.owner.login)/\(.name) (default: \(.defaultBranch))"')
         echo "   Repository: $repo_info"
     else
-        echo "ERROR: Repository Access: Failed"
+        error "Repository Access: Failed"
         VALIDATION_RESULTS["repo_access"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
@@ -434,11 +442,11 @@ test_token_availability() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if [[ -n "${!token}" ]]; then
-            echo "SUCCESS: Token Available: $token"
+            success "Token Available: $token"
             VALIDATION_RESULTS["token_$token"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "WARNING:  Token Missing: $token (may be loaded in CI)"
+            warning " Token Missing: $token (may be loaded in CI)"
             VALIDATION_RESULTS["token_$token"]="SKIP"
         fi
     done
@@ -454,28 +462,28 @@ test_repository_permissions() {
         case "$permission" in
             "read")
                 if gh repo view >/dev/null 2>&1; then
-                    echo "SUCCESS: Permission ($permission): Available"
+                    success "Permission ($permission): Available"
                     VALIDATION_RESULTS["perm_$permission"]="PASS"
                     PASSED_CHECKS=$((PASSED_CHECKS + 1))
                 else
-                    echo "ERROR: Permission ($permission): Failed"
+                    error "Permission ($permission): Failed"
                     VALIDATION_RESULTS["perm_$permission"]="FAIL"
                     FAILED_CHECKS=$((FAILED_CHECKS + 1))
                 fi
                 ;;
             "issues")
                 if gh issue list --limit 1 >/dev/null 2>&1; then
-                    echo "SUCCESS: Permission ($permission): Available"
+                    success "Permission ($permission): Available"
                     VALIDATION_RESULTS["perm_$permission"]="PASS"
                     PASSED_CHECKS=$((PASSED_CHECKS + 1))
                 else
-                    echo "ERROR: Permission ($permission): Failed"
+                    error "Permission ($permission): Failed"
                     VALIDATION_RESULTS["perm_$permission"]="FAIL"
                     FAILED_CHECKS=$((FAILED_CHECKS + 1))
                 fi
                 ;;
             *)
-                echo "WARNING:  Permission ($permission): Untested"
+                warning " Permission ($permission): Untested"
                 VALIDATION_RESULTS["perm_$permission"]="SKIP"
                 ;;
         esac
@@ -497,16 +505,16 @@ generate_health_report() {
 
     # Health status determination
     if [[ $pass_rate -ge 90 ]]; then
-        echo "SUCCESS: System Status: HEALTHY"
+        success "System Status: HEALTHY"
         echo "   All critical systems operational"
     elif [[ $pass_rate -ge 75 ]]; then
-        echo "WARNING: System Status: WARNING"
+        warning "System Status: WARNING"
         echo "   Some issues detected, monitoring required"
     elif [[ $pass_rate -ge 50 ]]; then
         echo "DEGRADED: System Status: DEGRADED"
         echo "   Multiple issues detected, intervention needed"
     else
-        echo "ERROR: System Status: CRITICAL"
+        error "System Status: CRITICAL"
         echo "   System integrity compromised, immediate action required"
     fi
 
@@ -514,7 +522,7 @@ generate_health_report() {
 
     # Failed checks summary
     if [[ $FAILED_CHECKS -gt 0 ]]; then
-        echo "ERROR: Failed Checks ($FAILED_CHECKS):"
+        error "Failed Checks ($FAILED_CHECKS):"
         for check_id in "${!VALIDATION_RESULTS[@]}"; do
             if [[ "${VALIDATION_RESULTS[$check_id]}" == "FAIL" ]]; then
                 echo "   - $check_id"
@@ -532,7 +540,7 @@ generate_health_report() {
 
 # Generate specific recommendations
 generate_recommendations() {
-    echo "TOOL: Recommendations:"
+    tool "Recommendations:"
 
     if [[ "${VALIDATION_RESULTS[aar_logs_specific]}" == "FAIL" ]]; then
         echo "   1. Fix AAR Automation: Remove 'git add logs/' from .github/workflows/aar-automation.yml"

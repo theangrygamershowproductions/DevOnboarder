@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Fix PR Automation Script
 # Usage: ./scripts/create_fix_pr.sh <component> <short-description> [files...]
 #
@@ -83,6 +87,6 @@ gh pr create --title "$PR_TITLE" --body-file "$TEMP_BODY"
 # Cleanup
 rm "$TEMP_BODY"
 
-echo "✅ Fix PR created successfully!"
+success "Fix PR created successfully!"
 echo "Branch: $BRANCH_NAME"
 echo "Next steps: Review and merge when CI passes"

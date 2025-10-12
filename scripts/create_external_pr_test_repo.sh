@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Create a test repository to validate external PR welcome system
 # POTATO APPROVAL: create-test-repo-20251002
 
@@ -53,9 +55,9 @@ Thank you for your external contribution to DevOnboarder test repository!
 
 This is a test of our external PR welcome system.
 
-**Test Status:** ✅ System Working
-**Fork Detection:** ✅ Confirmed
-**Automation:** ✅ Active
+**Test Status:** SUCCESS: System Working
+**Fork Detection:** SUCCESS: Confirmed
+**Automation:** SUCCESS: Active
 
 The actual system includes comprehensive security guidance and onboarding resources."
 EOF
@@ -64,7 +66,7 @@ EOF
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEMPLATE_SRC="$SCRIPT_DIR/../templates/external-pr-welcome.md"
 if [[ ! -f "$TEMPLATE_SRC" ]]; then
-  echo "❌ Template file not found: $TEMPLATE_SRC"
+  error "Template file not found: $TEMPLATE_SRC"
   exit 1
 fi
 cp "$TEMPLATE_SRC" "templates/"
@@ -95,7 +97,7 @@ git commit -m "INIT: Test repository for external PR welcome system validation"
 git push -u origin main
 
 echo ""
-echo "✅ Test repository created: https://github.com/$(gh api user --jq .login)/$TEST_REPO_NAME"
+success "Test repository created: https://github.com/$(gh api user --jq .login)/$TEST_REPO_NAME"
 echo ""
 echo "🧪 Testing Steps:"
 echo "1. Fork the test repository from a different account"
@@ -103,4 +105,4 @@ echo "2. Make a small change and open a PR"
 echo "3. Verify the welcome message appears"
 echo "4. Test with subsequent PRs to ensure no duplicate messages"
 echo ""
-echo "🎯 Once validated, delete the test repository and deploy to production"
+target "Once validated, delete the test repository and deploy to production"

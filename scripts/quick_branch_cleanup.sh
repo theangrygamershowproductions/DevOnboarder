@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick branch cleanup script for DevOnboarder
 # Performs safe cleanup of obviously stale branches
 
@@ -7,7 +11,7 @@ set -euo pipefail
 # Function to review pre-commit logs
 review_precommit_logs() {
     echo ""
-    echo "📋 REVIEWING PRE-COMMIT LOGS"
+    check "REVIEWING PRE-COMMIT LOGS"
     echo "============================"
 
     # Check for pre-commit error logs
@@ -30,20 +34,20 @@ review_precommit_logs() {
 
         # Show other critical errors
         if grep -q "Failed" logs/pre-commit-errors.log; then
-            echo "❌ Other Pre-commit Failures Found:"
+            error "Other Pre-commit Failures Found:"
             grep "Failed" logs/pre-commit-errors.log
             echo ""
         fi
 
         # Show successful items for context
-        echo "✅ Pre-commit Items That Passed:"
+        success "Pre-commit Items That Passed:"
         grep "Passed" logs/pre-commit-errors.log | tail -5
         echo ""
 
-        read -r -p "⚠️  Pre-commit errors found. Review complete? Press Enter to continue or Ctrl+C to exit and fix issues..."
+        read -r -p "warning " Pre-commit errors found. Review complete? Press Enter to continue or Ctrl+C to exit and fix issues..."
         return 1
     else
-        echo "✅ No pre-commit error log found - assuming clean run"
+        success "No pre-commit error log found - assuming clean run"
         return 0
     fi
 }
@@ -56,11 +60,11 @@ commit_with_log_review() {
     echo "Message: $commit_message"
 
     if git commit -m "$commit_message"; then
-        echo "✅ Commit successful"
+        success "Commit successful"
         return 0
     else
         echo ""
-        echo "⚠️  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES"
+        warning " COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES"
         echo "=================================================="
 
         # Call the log review function
@@ -70,19 +74,19 @@ commit_with_log_review() {
         echo "🔍 LOG REVIEW REQUIRED:"
         echo "Pre-commit hooks have flagged issues that must be fixed before commit."
         echo ""
-        echo "📋 Based on logs/pre-commit-errors.log analysis:"
+        check "Based on logs/pre-commit-errors.log analysis:"
         echo "  • Check shellcheck errors in scripts/verify_and_commit.sh"
         echo "  • Function definition order issues (SC2218)"
         echo "  • Review any other failures shown above"
         echo ""
-        echo "🛠️  To Fix Issues:"
+        tool " To Fix Issues:"
         echo "  1. Review the logs/pre-commit-errors.log file"
         echo "  2. Fix all reported violations in the affected files"
         echo "  3. Stage your fixes: git add ."
         echo "  4. Re-attempt commit: git commit -m \"$commit_message\""
         echo "  5. Or use: git commit --amend --no-edit (if you want to amend)"
         echo ""
-        echo "🔄 Alternative Recovery Options:"
+        sync "Alternative Recovery Options:"
         echo "  • Reset last commit: git reset --soft HEAD~1"
         echo "  • Check what's staged: git status"
         echo "  • Use enhanced commit tool: ./scripts/commit_changes.sh"
@@ -103,7 +107,7 @@ echo ""
 
 # Check if we're in the right directory
 if [ ! -f ".github/workflows/ci.yml" ]; then
-    echo "❌ Please run this script from the DevOnboarder root directory"
+    error "Please run this script from the DevOnboarder root directory"
     exit 1
 fi
 
@@ -116,11 +120,11 @@ cleanup_branch="chore/automated-branch-cleanup-$(date +%Y%m%d-%H%M%S)"
 echo "Creating feature branch: $cleanup_branch"
 
 if ! git checkout -b "$cleanup_branch"; then
-    echo "❌ Failed to create cleanup branch"
+    error "Failed to create cleanup branch"
     exit 1
 fi
 
-echo "✅ Working on feature branch: $cleanup_branch"
+success "Working on feature branch: $cleanup_branch"
 echo ""
 
 # Ensure we're working from latest main
@@ -129,16 +133,16 @@ git fetch origin main
 git merge origin/main --no-edit
 
 # Fetch and prune
-echo "🔄 Fetching latest changes and pruning deleted branches..."
+sync "Fetching latest changes and pruning deleted branches..."
 git fetch origin --prune
 
 # Show current branch status
 echo ""
-echo "📊 Current local branches:"
+report "Current local branches:"
 git branch -v
 
 echo ""
-echo "📊 Current remote branches:"
+report "Current remote branches:"
 git branch -r
 
 # Check for merged branches
@@ -153,12 +157,12 @@ if [ -n "$merged_branches" ]; then
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "$merged_branches" | xargs -r git branch -d
-        echo "✅ Deleted merged local branches"
+        success "Deleted merged local branches"
     else
         echo "Skipped local branch deletion"
     fi
 else
-    echo "✅ No merged local branches found"
+    success "No merged local branches found"
 fi
 
 # Offer to clean up obvious remote stale branches
@@ -193,10 +197,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     for branch in "${stale_remotes[@]}"; do
         if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
             echo "Deleting remote branch: $branch"
-            git push origin --delete "$branch" 2>/dev/null || echo "⚠️  Failed to delete $branch (may already be deleted)"
+            git push origin --delete "$branch" 2>/dev/null || warning " Failed to delete $branch (may already be deleted)"
         fi
     done
-    echo "✅ Stale remote branch cleanup complete"
+    success "Stale remote branch cleanup complete"
 else
     echo "Skipped remote branch cleanup"
 fi
@@ -205,7 +209,7 @@ fi
 echo ""
 echo "🔍 Checking for changes to commit from cleanup..."
 if ! git diff --quiet || ! git diff --staged --quiet; then
-    echo "📝 Found changes that need to be committed"
+    note "Found changes that need to be committed"
     echo ""
 
     # Show what changes were made
@@ -214,7 +218,7 @@ if ! git diff --quiet || ! git diff --staged --quiet; then
     echo ""
 
     # Stage changes
-    echo "📋 Staging cleanup changes..."
+    check "Staging cleanup changes..."
     git add .
 
     # Commit with appropriate message
@@ -223,9 +227,9 @@ if ! git diff --quiet || ! git diff --staged --quiet; then
     # Use the enhanced commit function with log review
     if commit_with_log_review "$commit_msg"; then
         echo ""
-        echo "✅ Commit successful! Now creating pull request..."
+        success "Commit successful! Now creating pull request..."
         echo ""
-        echo "🚀 Next Steps:"
+        deploy "Next Steps:"
         echo "1. Push feature branch: git push origin $cleanup_branch"
         echo "2. Create PR to merge cleanup changes into main"
         echo "3. Review and merge PR after approval"
@@ -234,20 +238,20 @@ if ! git diff --quiet || ! git diff --staged --quiet; then
         echo "Changes committed and ready for PR creation"
     else
         echo ""
-        echo "❌ Commit failed. Please fix the issues identified in the log review."
+        error "Commit failed. Please fix the issues identified in the log review."
         echo "   Then retry: git commit -m \"$commit_msg\""
         exit 1
     fi
 else
-    echo "✅ No changes to commit from cleanup"
+    success "No changes to commit from cleanup"
 fi
 
 # Final status
 echo ""
-echo "📊 Final status:"
+report "Final status:"
 git branch -v
 echo ""
-echo "✅ Quick cleanup complete!"
+success "Quick cleanup complete!"
 echo ""
 echo "💡 For comprehensive cleanup, see: BRANCH_CLEANUP_ANALYSIS.md"
 echo "💡 For automated cleanup, the nightly workflow will handle ongoing maintenance"

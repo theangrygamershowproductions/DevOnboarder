@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Enforce strict conventional commit format per project standards
@@ -52,4 +56,4 @@ if [ $errors -ne 0 ]; then
   exit 1
 fi
 
-echo "SUCCESS: All commit messages pass validation!"
+success "All commit messages pass validation!"

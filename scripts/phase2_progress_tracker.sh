@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Phase 2 Progress Tracker
 # Tracks progress toward Phase 2 completion criteria
 
@@ -43,7 +47,7 @@ if [ "$CURRENT_VIOLATIONS" -le "$BASELINE_VIOLATIONS" ]; then
         echo "TARGET ACHIEVED: Under target threshold"
     fi
 else
-    echo "WARNING: Violations increased since baseline"
+    warning "Violations increased since baseline"
 fi
 
 echo ""
@@ -146,50 +150,50 @@ TOTAL_CRITERIA=6
 
 # Criterion 1: Terminal violations ≤10
 if [ "$CURRENT_VIOLATIONS" -le "$TARGET_VIOLATIONS" ]; then
-    echo "✅ Terminal violations ≤$TARGET_VIOLATIONS: ACHIEVED"
+    success "Terminal violations ≤$TARGET_VIOLATIONS: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Terminal violations ≤$TARGET_VIOLATIONS: $CURRENT_VIOLATIONS violations remaining"
+    error "Terminal violations ≤$TARGET_VIOLATIONS: $CURRENT_VIOLATIONS violations remaining"
 fi
 
 # Criterion 2: Root Artifact Guard passes
 if bash scripts/enforce_output_location.sh >/dev/null 2>&1; then
-    echo "✅ Root Artifact Guard clean: ACHIEVED"
+    success "Root Artifact Guard clean: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Root Artifact Guard clean: Artifacts detected"
+    error "Root Artifact Guard clean: Artifacts detected"
 fi
 
 # Criterion 3: Smart Log Cleanup System functional
 if [ -f "scripts/smart_cleanup.sh" ] && grep -q "smart-cleanup" .github/workflows/post-merge-cleanup.yml 2>/dev/null; then
-    echo "✅ Smart Log Cleanup System: FUNCTIONAL"
+    success "Smart Log Cleanup System: FUNCTIONAL"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Smart Log Cleanup System: Incomplete"
+    error "Smart Log Cleanup System: Incomplete"
 fi
 
 # Criterion 4: All workflows compliant
 if [ "$VIOLATING_WORKFLOWS" -eq 0 ]; then
-    echo "✅ All workflows compliant: ACHIEVED"
+    success "All workflows compliant: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ All workflows compliant: $VIOLATING_WORKFLOWS workflows need fixes"
+    error "All workflows compliant: $VIOLATING_WORKFLOWS workflows need fixes"
 fi
 
 # Criterion 5: Copilot instructions enforced
 if grep -q "phase2_terminal_output_compliance" .github/copilot-instructions.md 2>/dev/null; then
-    echo "✅ Copilot instructions enforced: ACHIEVED"
+    success "Copilot instructions enforced: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ Copilot instructions enforced: Not configured"
+    error "Copilot instructions enforced: Not configured"
 fi
 
 # Criterion 6: QC standards maintained
 if [ -f "scripts/qc_pre_push.sh" ] && bash scripts/qc_pre_push.sh >/dev/null 2>&1; then
-    echo "✅ QC standards maintained: ACHIEVED"
+    success "QC standards maintained: ACHIEVED"
     ((COMPLETION_CRITERIA++))
 else
-    echo "❌ QC standards maintained: Failing"
+    error "QC standards maintained: Failing"
 fi
 
 echo ""

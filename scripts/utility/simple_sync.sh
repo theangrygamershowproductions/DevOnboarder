@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Simple git sync - pull then push
 
-echo "🔄 Syncing with remote..."
+sync "Syncing with remote..."
 
 # Step 1: Pull latest changes
 echo "📥 Pulling latest changes..."
@@ -14,5 +16,5 @@ git status --short
 echo "📤 Pushing changes..."
 git push origin main
 
-echo "✅ Sync complete!"
+success "Sync complete!"
 git log --oneline -3

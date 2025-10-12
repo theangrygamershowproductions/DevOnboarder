@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Integration test for external PR welcome system
 # Tests the actual GitHub Actions workflow logic safely
 
@@ -10,16 +12,16 @@ echo "=================================================="
 # Test environment validation
 echo "Test 1: Environment validation..."
 if ! command -v gh >/dev/null 2>&1; then
-    echo "❌ GitHub CLI not available"
+    error "GitHub CLI not available"
     exit 1
 fi
-echo "✅ GitHub CLI available"
+success "GitHub CLI available"
 
 if ! gh auth status >/dev/null 2>&1; then
-    echo "❌ GitHub CLI not authenticated"
+    error "GitHub CLI not authenticated"
     exit 1
 fi
-echo "✅ GitHub CLI authenticated"
+success "GitHub CLI authenticated"
 
 # Test workflow trigger conditions
 echo ""
@@ -39,16 +41,16 @@ cat > /tmp/fork_test.json << 'EOF'
 }
 EOF
 
-echo "✅ Fork detection condition can be evaluated"
+success "Fork detection condition can be evaluated"
 
 # Test contributor count API endpoint (without actually calling it)
 echo ""
 echo "Test 3: GitHub API endpoint validation..."
 REPO_URL="https://api.github.com/repos/theangrygamershowproductions/DevOnboarder/contributors"
 if curl -s -I "$REPO_URL" | grep -q "200 OK"; then
-    echo "✅ Contributors API endpoint accessible"
+    success "Contributors API endpoint accessible"
 else
-    echo "⚠️  Contributors API endpoint check failed (may be rate limited)"
+    warning " Contributors API endpoint check failed (may be rate limited)"
 fi
 
 # Test template rendering
@@ -56,9 +58,9 @@ echo ""
 echo "Test 4: Template content validation..."
 TEMPLATE_CONTENT=$(cat templates/external-pr-welcome.md)
 if echo "$TEMPLATE_CONTENT" | grep -q "Welcome to DevOnboarder"; then
-    echo "✅ Template contains welcome message"
+    success "Template contains welcome message"
 else
-    echo "❌ Template missing welcome message"
+    error "Template missing welcome message"
     exit 1
 fi
 
@@ -66,9 +68,9 @@ fi
 echo ""
 echo "Test 5: GitHub Actions workflow validation..."
 if grep -q "github.event.pull_request.head.repo.fork == true" .github/workflows/pr-automation.yml; then
-    echo "✅ Fork condition uses proper GitHub Actions syntax"
+    success "Fork condition uses proper GitHub Actions syntax"
 else
-    echo "❌ Fork condition syntax may be incorrect"
+    error "Fork condition syntax may be incorrect"
     exit 1
 fi
 

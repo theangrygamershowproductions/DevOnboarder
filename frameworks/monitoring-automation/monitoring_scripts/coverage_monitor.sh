@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Coverage monitoring script to ensure 95% threshold is maintained
 
 # Centralized logging for troubleshooting and repository health
@@ -37,9 +41,9 @@ cd ..
 # Summary
 echo "================================"
 if [ $PYTHON_EXIT -eq 0 ] && [ $BOT_EXIT -eq 0 ] && [ $FRONTEND_EXIT -eq 0 ]; then
-    echo "SUCCESS: All services maintain 95%+ coverage!"
+    success "All services maintain 95%+ coverage!"
     exit 0
 else
-    echo "ERROR: Coverage below threshold detected!"
+    error "Coverage below threshold detected!"
     exit 1
 fi

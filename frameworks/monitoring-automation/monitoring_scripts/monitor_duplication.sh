@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Phase 2: Automated Content Duplication Monitoring
 # Integrates with DevOnboarder quality gates to prevent regression
 
@@ -114,21 +122,21 @@ for pattern in "${CRITICAL_PATTERNS[@]}"; do
     file_count=$(grep -r -l "$pattern" docs 2>/dev/null | wc -l || echo "0")
 
     if [[ "$file_count" -gt "$MAX_CRITICAL_DUPLICATIONS" ]]; then
-        echo "ERROR: FAIL: Pattern '$pattern' found in $file_count files (max: $MAX_CRITICAL_DUPLICATIONS)"
+        error "FAIL: Pattern '$pattern' found in $file_count files (max: $MAX_CRITICAL_DUPLICATIONS)"
         ((failure_count++))
     else
-        echo "SUCCESS: PASS: Pattern '$pattern' found in $file_count files"
+        success "PASS: Pattern '$pattern' found in $file_count files"
     fi
 done
 
 if [[ "$failure_count" -gt 0 ]]; then
     echo
-    echo "ERROR: Quality gate FAILED: $failure_count critical duplication patterns exceeded threshold"
+    error "Quality gate FAILED: $failure_count critical duplication patterns exceeded threshold"
     echo "TIP: Suggestion: Run './scripts/detect_content_duplication.sh suggest' for consolidation guidance"
     exit 1
 else
     echo
-    echo "SUCCESS: Quality gate PASSED: All duplication patterns within acceptable limits"
+    success "Quality gate PASSED: All duplication patterns within acceptable limits"
     exit 0
 fi
 EOF
@@ -161,7 +169,7 @@ echo "=================================="
 monitoring_file="logs/pattern_growth_tracking.csv"
 
 if [[ ! -f "$monitoring_file" ]]; then
-    echo "NOTE: No monitoring data available yet"
+    note "No monitoring data available yet"
     exit 0
 fi
 
@@ -211,12 +219,12 @@ fi
 
 if [[ "$alerts_triggered" -gt 0 ]]; then
     echo
-    echo "WARNING:  $alerts_triggered duplication growth alerts triggered"
+    warning " $alerts_triggered duplication growth alerts triggered"
     echo "TIP: Consider running consolidation workflow: ./scripts/auto_consolidate_content.sh"
     exit 1
 else
     echo
-    echo "SUCCESS: No concerning duplication growth detected"
+    success "No concerning duplication growth detected"
     exit 0
 fi
 EOF
@@ -228,7 +236,7 @@ EOF
 
 # Function: GitHub Actions integration
 create_github_actions_integration() {
-    echo "BOT: Creating GitHub Actions integration..."
+    bot "Creating GitHub Actions integration..."
 
     local workflow_file=".github/workflows/duplication-monitoring.yml"
     local workflow_dir
@@ -422,10 +430,10 @@ main() {
     # Run quick duplication check
     local duplication_issues=0
     if quick_duplication_check; then
-        echo "SUCCESS: Quick duplication check passed"
+        success "Quick duplication check passed"
     else
         duplication_issues=$?
-        echo "WARNING:  Quick duplication check found $duplication_issues issues"
+        warning " Quick duplication check found $duplication_issues issues"
     fi
 
     # Skip additional steps if quick-check mode
@@ -451,7 +459,7 @@ main() {
     fi
 
     echo
-    echo "SUCCESS: Content duplication monitoring complete!"
+    success "Content duplication monitoring complete!"
     echo "   DOC: Log: $LOG_FILE"
     echo "   STATS: Monitoring data: $LOG_DIR/pattern_growth_tracking.csv"
 

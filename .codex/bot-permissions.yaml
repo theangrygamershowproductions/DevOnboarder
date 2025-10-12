@@ -1,7 +1,9 @@
-# Mapping of bots to repository secrets and GitHub permissions.
-# Ensure the referenced secrets exist in repository settings.
+# Mapping of bots to Bitwarden projects and GitHub permissions.
+# Tokens are now organized in Bitwarden projects: cicd-automation, runtime-services, maintainer-access
+# Reference: https://vault.bitwarden.com/#/organizations/6afacda6-0633-431f-964e-b2f6006cef2c/projects
 
 onboarding_agent:
+    bitwarden_project: cicd-automation
     secret: ONBOARDING_AGENT_KEY
     permissions:
         - issues: write
@@ -9,6 +11,7 @@ onboarding_agent:
         - contents: read
 
 ci_helper_agent:
+    bitwarden_project: cicd-automation
     secret: CI_HELPER_AGENT_KEY
     permissions:
         - actions: read
@@ -16,6 +19,7 @@ ci_helper_agent:
         # Remove checks: write unless this agent uses REST API only
 
 diagnostics_bot:
+    bitwarden_project: cicd-automation
     secret: DIAGNOSTICS_BOT_KEY
     permissions:
         - actions: read
@@ -23,6 +27,7 @@ diagnostics_bot:
         - contents: read  # Fix for repository: read
 
 orchestration_bot:
+    bitwarden_project: cicd-automation
     secret: ORCHESTRATION_BOT_KEY
     permissions:
         - workflows: write
@@ -30,6 +35,7 @@ orchestration_bot:
         - contents: read  # Fix for repository: read
 
 env_var_manager:
+    bitwarden_project: maintainer-access
     secret: ENV_VAR_MANAGER_KEY
     permissions:
         - contents: read
@@ -38,150 +44,178 @@ env_var_manager:
         - pull_requests: write
 
 ci_bot:
+    bitwarden_project: cicd-automation
     secret: CI_BOT_TOKEN
     permissions:
         - issues: write
 
 ci_monitor:
+    bitwarden_project: cicd-automation
     secret: CI_ISSUE_TOKEN
     permissions:
         - issues: write
 
 auto_fix:
+    bitwarden_project: runtime-services
     secret: OPENAI_API_KEY
     permissions:
         - contents: write
         - pull_requests: write
 
 llama2_agile_helper:
+    bitwarden_project: runtime-services
     secret: LLAMA2_API_KEY
     permissions:
         - contents: read
 
 ms_teams_integration:
+    bitwarden_project: runtime-services
     secret: TEAMS_APP_PASSWORD
     permissions: []
 
 dev_orchestrator:
+    bitwarden_project: cicd-automation
     secret: DEV_ORCHESTRATION_BOT_KEY
     permissions:
         - contents: read
 
 staging_orchestrator:
+    bitwarden_project: cicd-automation
     secret: STAGING_ORCHESTRATION_BOT_KEY
     permissions:
         - contents: read
 
 prod_orchestrator:
+    bitwarden_project: cicd-automation
     secret: PROD_ORCHESTRATION_BOT_KEY
     permissions:
         - contents: read
 
 # New entries generated from .codex/agents/index.json and workflows
 ai_mentor:
+    bitwarden_project: runtime-services
     secret: AI_MENTOR_KEY
     permissions:
         - issues: write
         - contents: read
 
 ci:
+    bitwarden_project: cicd-automation
     secret: CI_KEY
     permissions:
         - contents: read
         - actions: read
 
 ci_health:
+    bitwarden_project: cicd-automation
     secret: CI_HEALTH_KEY
     permissions:
         - issues: write
 
 cleanup_ci_failure:
+    bitwarden_project: cicd-automation
     secret: CLEANUP_CI_FAILURE_KEY
     permissions:
         - issues: write
 
 branch_cleanup:
+    bitwarden_project: maintainer-access
     secret: BRANCH_CLEANUP_TOKEN
     permissions:
         - contents: write
 
 close_codex_issues:
+    bitwarden_project: maintainer-access
     secret: CLOSE_CODEX_ISSUES_KEY
     permissions:
         - issues: write
 
 discord_integration:
+    bitwarden_project: runtime-services
     secret: DISCORD_INTEGRATION_KEY
     permissions:
         - issues: write
 
 env_doc_alignment:
+    bitwarden_project: maintainer-access
     secret: ENV_DOC_ALIGNMENT_KEY
     permissions:
         - contents: read
 
 secrets_alignment:
+    bitwarden_project: maintainer-access
     secret: SECRETS_ALIGNMENT_KEY
     permissions:
         - issues: write
 
 security_audit:
+    bitwarden_project: maintainer-access
     secret: SECURITY_AUDIT_KEY
     permissions:
         - contents: read
 
 idme_verification:
+    bitwarden_project: maintainer-access
     secret: IDME_VERIFICATION_KEY
     permissions:
         - issues: write
 
 notify:
+    bitwarden_project: runtime-services
     secret: NOTIFY_KEY
     permissions:
         - issues: write
 
 agent_maintenance:
+    bitwarden_project: maintainer-access
     secret: AGENT_MAINTENANCE_KEY
     permissions:
         - repo: write
         - contents: read
 
 review_known_errors:
+    bitwarden_project: maintainer-access
     secret: REVIEW_KNOWN_ERRORS_KEY
     permissions:
         - issues: write
 
 validate_permissions:
+    bitwarden_project: maintainer-access
     secret: BOT_PR_WRITE_TOKEN
     permissions:
         - contents: read
         - pull_requests: write
 
 audit_retro_actions:
+    bitwarden_project: maintainer-access
     secret: ORCHESTRATION_BOT_KEY
     permissions:
         - contents: read
         - issues: write
 
 post_merge_cleanup:
+    bitwarden_project: cicd-automation
     secret: CI_BOT_TOKEN
     permissions:
         - contents: read
         - actions: read
 
 documentation_quality:
+    bitwarden_project: maintainer-access
     secret: DOCUMENTATION_QUALITY_KEY
     permissions:
         - repo: read
         - repo: write
 
 open_api:
+    bitwarden_project: cicd-automation
     secret: GITHUB_TOKEN
     permissions:
         - contents: read
         - actions: write
 
 pr-_issue-_automation:
+    bitwarden_project: cicd-automation
     secret: CI_ISSUE_AUTOMATION_TOKEN
     permissions:
         - contents: read

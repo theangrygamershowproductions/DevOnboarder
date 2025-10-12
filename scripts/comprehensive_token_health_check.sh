@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Comprehensive Token Health Check System
 # Tests all 11 tokens from Token Architecture v2.1 for proper functionality
 
@@ -139,12 +143,12 @@ printf "Failed Tokens: %d\n" "${#FAILED_TOKENS[@]}"
 
 if [ ${#FAILED_TOKENS[@]} -eq 0 ]; then
     echo ""
-    echo "SUCCESS: All tokens are working correctly!"
+    success "All tokens are working correctly!"
     echo "Token Architecture v2.1 is fully operational"
     echo "All DevOnboarder services should function properly"
 else
     echo ""
-    echo "WARNING: Issues found with the following tokens:"
+    warning "Issues found with the following tokens:"
     for failed_token in "${FAILED_TOKENS[@]}"; do
         printf "   FAILED: %s\n" "$failed_token"
     done

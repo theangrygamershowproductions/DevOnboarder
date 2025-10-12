@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # validate_workflow_permissions.sh - Validate GitHub Actions workflows have explicit permissions
 
 set -euo pipefail
@@ -11,7 +15,7 @@ echo "DevOnboarder Workflow Permissions Validator"
 echo "==========================================="
 
 if [[ ! -d "$WORKFLOW_DIR" ]]; then
-    echo "ERROR: No workflows directory found at $WORKFLOW_DIR"
+    error "No workflows directory found at $WORKFLOW_DIR"
     exit 1
 fi
 
@@ -28,9 +32,9 @@ for workflow in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     # Check if workflow has permissions at any level
     if grep -q "permissions:" "$workflow"; then
-        echo "✅ $workflow_name - Has permissions"
+        success "$workflow_name - Has permissions"
     else
-        echo "❌ $workflow_name - MISSING permissions (security risk)"
+        error "$workflow_name - MISSING permissions (security risk)"
         VIOLATIONS+=("$workflow_name")
         EXIT_CODE=1
     fi

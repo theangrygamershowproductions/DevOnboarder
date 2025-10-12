@@ -1,9 +1,14 @@
 # filepath: agents/permissions.yml
+# Updated for Bitwarden project-based token organization
+# Reference: https://vault.bitwarden.com/#/organizations/6afacda6-0633-431f-964e-b2f6006cef2c/projects
+
 ci_bot:
+    bitwarden_project: cicd-automation
     permissions:
         - issues: write
 
 orchestration_bot:
+    bitwarden_project: cicd-automation
     permissions:
         - issues: write
         - pull_requests: read
@@ -11,12 +16,14 @@ orchestration_bot:
     token: "CLEANUP_CI_FAILURE_KEY"
 
 Agent.OpenAPI:
+    bitwarden_project: cicd-automation
     permissions:
         - contents: read
         - actions: write
     description: "Validates OpenAPI specifications and generates documentation previews"
 
 Agent.PR-Issue-Automation:
+    bitwarden_project: cicd-automation
     permissions:
         - contents: read
         - pull-requests: write

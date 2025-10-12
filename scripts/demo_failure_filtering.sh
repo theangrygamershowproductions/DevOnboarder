@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Local CI Analysis Demo
@@ -12,7 +20,7 @@ echo "💡 This demo shows how the 'conclusion: FAILURE' filter works"
 echo "   In a real environment with GitHub CLI authentication, you would use:"
 echo ""
 
-echo "🔧 Basic GitHub CLI Commands with Failure Filter:"
+tool "Basic GitHub CLI Commands with Failure Filter:"
 echo ""
 echo "   # List only failed runs"
 echo "   gh run list --status failure --limit 10"
@@ -24,7 +32,7 @@ echo "   # Failed runs for specific workflow"
 echo "   gh run list -w 'Enhanced Potato Policy Enforcement' --status failure"
 echo ""
 
-echo "📊 Example Failed Run Analysis:"
+report "Example Failed Run Analysis:"
 echo ""
 
 # Simulate failed run data (what would come from GitHub CLI)
@@ -57,7 +65,7 @@ cat << 'EOF'
 EOF
 
 echo ""
-echo "🎯 Analysis with jq (simulating what our scripts do):"
+target "Analysis with jq (simulating what our scripts do):"
 echo ""
 
 # Demonstrate filtering and analysis
@@ -70,11 +78,11 @@ SAMPLE_DATA='[
 ]'
 
 echo "📈 Total runs: $(echo "$SAMPLE_DATA" | jq length)"
-echo "❌ Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
-echo "✅ Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
+error "Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
+success "Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
 
 echo ""
-echo "🔧 Failures grouped by workflow:"
+tool "Failures grouped by workflow:"
 echo "$SAMPLE_DATA" | jq -r '
   [.[] | select(.conclusion == "FAILURE")] |
   group_by(.workflowName) |
@@ -94,17 +102,17 @@ echo "$SAMPLE_DATA" | jq -r '
 '
 
 echo ""
-echo "🎯 Key Benefits of Failure Filtering:"
-echo "   ✅ Focus only on relevant failures"
-echo "   ✅ Reduce analysis time and noise"
-echo "   ✅ Better pattern recognition"
-echo "   ✅ More efficient troubleshooting"
+target "Key Benefits of Failure Filtering:"
+echo "   SUCCESS: Focus only on relevant failures"
+echo "   SUCCESS: Reduce analysis time and noise"
+echo "   SUCCESS: Better pattern recognition"
+echo "   SUCCESS: More efficient troubleshooting"
 echo ""
 
 echo "🔗 Available Tools in DevOnboarder:"
 echo "   📱 python scripts/ci-monitor.py <PR>"
 echo "   🔍 bash scripts/analyze_failed_ci_runs.sh"
-echo "   📊 bash scripts/monitor_ci_health.sh"
+echo "   REPORT: bash scripts/monitor_ci_health.sh"
 echo ""
 
 echo "💡 For authentication setup:"
@@ -112,4 +120,4 @@ echo "   gh auth login"
 echo "   gh auth status"
 echo ""
 
-echo "📚 Complete guide: docs/ci-failure-analysis-guide.md"
+docs "Complete guide: docs/ci-failure-analysis-guide.md"

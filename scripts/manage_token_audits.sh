@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Token Audit Report Management
 # Manages retention, archival, and cleanup of token audit reports
 
@@ -89,10 +93,10 @@ show_status() {
         done
 
         if [ "$OLD_REPORTS" -gt 0 ]; then
-            echo "WARNING: Reports beyond retention: $OLD_REPORTS"
+            warning "Reports beyond retention: $OLD_REPORTS"
             echo "   Run 'clean' command to remove old reports"
         else
-            echo "SUCCESS: All reports within retention period"
+            success "All reports within retention period"
         fi
     fi
 
@@ -131,10 +135,10 @@ clean_reports() {
     done
 
     if [ "$REMOVED_COUNT" -eq 0 ]; then
-        echo "SUCCESS: No reports needed removal"
+        success "No reports needed removal"
     else
         echo ""
-        echo "SUCCESS: Removed $REMOVED_COUNT old audit reports"
+        success "Removed $REMOVED_COUNT old audit reports"
     fi
 }
 
@@ -144,7 +148,7 @@ generate_report() {
     echo "================================="
 
     if [ ! -f "scripts/generate_token_audit_report.sh" ]; then
-        echo "ERROR: Audit report generator not found"
+        error "Audit report generator not found"
         echo "   Expected: scripts/generate_token_audit_report.sh"
         exit 1
     fi
@@ -174,7 +178,7 @@ case "${1:-help}" in
         usage
         ;;
     *)
-        echo "ERROR: Unknown command: $1"
+        error "Unknown command: $1"
         echo ""
         usage
         exit 1

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/show_no_verify_enforcement.sh
 # Version: 1.0.0
@@ -26,29 +30,29 @@ show_enforcement_status() {
     echo ""
 
     # Policy Documentation
-    echo "📋 POLICY DOCUMENTATION:"
+    check "POLICY DOCUMENTATION:"
     if [ -f "docs/NO_VERIFY_POLICY.md" ]; then
-        echo "✅ Policy document: docs/NO_VERIFY_POLICY.md"
+        success "Policy document: docs/NO_VERIFY_POLICY.md"
         echo "   - Zero Tolerance Policy defined"
         echo "   - Emergency procedures documented"
         echo "   - Potato Approval requirements specified"
     else
-        echo "❌ Policy document missing"
+        error "Policy document missing"
     fi
     echo ""
 
     # Validation Scripts
-    echo "🔧 ENFORCEMENT SCRIPTS:"
+    tool "ENFORCEMENT SCRIPTS:"
     if [ -f "scripts/validate_no_verify_usage.sh" ] && [ -x "scripts/validate_no_verify_usage.sh" ]; then
-        echo "✅ Validation script: scripts/validate_no_verify_usage.sh (executable)"
+        success "Validation script: scripts/validate_no_verify_usage.sh (executable)"
     else
-        echo "❌ Validation script missing or not executable"
+        error "Validation script missing or not executable"
     fi
 
     if [ -f "scripts/git_safety_wrapper.sh" ] && [ -x "scripts/git_safety_wrapper.sh" ]; then
-        echo "✅ Safety wrapper: scripts/git_safety_wrapper.sh (executable)"
+        success "Safety wrapper: scripts/git_safety_wrapper.sh (executable)"
     else
-        echo "❌ Safety wrapper missing or not executable"
+        error "Safety wrapper missing or not executable"
     fi
     echo ""
 
@@ -56,35 +60,35 @@ show_enforcement_status() {
     echo "🪝 PRE-COMMIT INTEGRATION:"
     if [ -f ".pre-commit-config.yaml" ]; then
         if grep -q "validate-no-verify" ".pre-commit-config.yaml"; then
-            echo "✅ Pre-commit hook: validate-no-verify configured"
+            success "Pre-commit hook: validate-no-verify configured"
         else
-            echo "❌ Pre-commit hook not configured"
+            error "Pre-commit hook not configured"
         fi
     else
-        echo "❌ Pre-commit config missing"
+        error "Pre-commit config missing"
     fi
     echo ""
 
     # CI/CD Integration
-    echo "🚀 CI/CD INTEGRATION:"
+    deploy "CI/CD INTEGRATION:"
     if [ -f ".github/workflows/no-verify-policy.yml" ]; then
-        echo "✅ GitHub Actions: no-verify-policy.yml configured"
+        success "GitHub Actions: no-verify-policy.yml configured"
     else
-        echo "❌ GitHub Actions workflow missing"
+        error "GitHub Actions workflow missing"
     fi
     echo ""
 
     # Current Status
-    echo "📊 CURRENT COMPLIANCE STATUS:"
+    report "CURRENT COMPLIANCE STATUS:"
     log_info "Running validation check"
 
     if ./scripts/validate_no_verify_usage.sh >/dev/null 2>&1; then
-        echo "✅ COMPLIANT: All --no-verify usage properly authorized"
+        success "COMPLIANT: All --no-verify usage properly authorized"
         local emergency_approvals
         emergency_approvals=$(grep -r "POTATO.*APPROVED\|Emergency.*Potato" . --include="*.sh" --include="*.md" 2>/dev/null | wc -l || echo 0)
         echo "   Emergency approvals found: $emergency_approvals"
     else
-        echo "❌ VIOLATION: Unauthorized --no-verify usage detected"
+        error "VIOLATION: Unauthorized --no-verify usage detected"
         echo "   Run: ./scripts/validate_no_verify_usage.sh for details"
     fi
     echo ""
@@ -100,7 +104,7 @@ show_enforcement_status() {
     echo ""
 
     # Quality Gate Alternative
-    echo "✅ PREFERRED: QUALITY GATE RESOLUTION:"
+    success "PREFERRED: QUALITY GATE RESOLUTION:"
     echo "Instead of bypassing, fix the actual issues:"
     echo "1. Run: ./scripts/qc_pre_push.sh (identify specific issues)"
     echo "2. Fix: python -m ruff check --fix . (Python issues)"

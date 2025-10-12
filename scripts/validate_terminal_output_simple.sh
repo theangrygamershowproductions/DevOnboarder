@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Terminal Output Policy Enforcement Script - Simplified
 # ZERO TOLERANCE for violations that cause terminal hanging
 
@@ -27,8 +35,8 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     echo "Validating file: $file"
 
     # 1. Check for emojis and Unicode characters (CRITICAL)
-    if grep -l '✅\|❌\|🎯\|🚀\|📋\|🔍\|📝\|💡\|⚠️\|🛠️\|📊\|📈\|📥\|🔗\|🐛' "$file" 2>/dev/null; then
-        echo "  ❌ CRITICAL: Emoji/Unicode characters found"
+    if grep -l 'SUCCESS:\|ERROR:\|TARGET:\|DEPLOY:\|CHECK:\|🔍\|NOTE:\|💡\|WARNING:\|TOOL:\|REPORT:\|📈\|📥\|🔗\|🐛' "$file" 2>/dev/null; then
+        echo "  ERROR: CRITICAL: Emoji/Unicode characters found"
         ((total_violations++))
     fi
 
@@ -36,7 +44,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     # Exclude safe GitHub Actions patterns and variable assignments
     violations_found=$(grep -n '^\s*echo\s.*\$[A-Z_]' "$file" 2>/dev/null | grep -v 'GITHUB_OUTPUT\|GITHUB_ENV\|GITHUB_PATH' || true)
     if [ -n "$violations_found" ]; then
-        echo "  ❌ CRITICAL: Variable expansion in echo found"
+        echo "  ERROR: CRITICAL: Variable expansion in echo found"
         echo "$violations_found" | head -3 | while read -r line; do
             echo "    Line: $line"
         done
@@ -46,7 +54,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     # 3. Check for command substitution in echo (CRITICAL)
     violations_found=$(grep -n "echo.*\\\$(" "$file" 2>/dev/null | grep -v 'GITHUB_OUTPUT\|GITHUB_ENV' || true)
     if [ -n "$violations_found" ]; then
-        echo "  ❌ CRITICAL: Command substitution in echo found"
+        echo "  ERROR: CRITICAL: Command substitution in echo found"
         echo "$violations_found" | head -3 | while read -r line; do
             echo "    Line: $line"
         done
@@ -55,7 +63,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     # 4. Check for multi-line echo with escape sequences (CRITICAL)
     if grep -n 'echo.*\\n\|echo.*\\t' "$file" 2>/dev/null | head -1 >/dev/null; then
-        echo "  ❌ CRITICAL: Multi-line echo with escape sequences found"
+        echo "  ERROR: CRITICAL: Multi-line echo with escape sequences found"
         ((total_violations++))
     fi
 
@@ -73,7 +81,7 @@ echo "Total critical violations: $total_violations"
 # Check if any violations were found
 if [ "$total_violations" -gt 0 ]; then
     echo ""
-    echo "❌ ENFORCEMENT FAILURE: $total_violations critical violations found"
+    error "ENFORCEMENT FAILURE: $total_violations critical violations found"
     echo "These violations WILL cause terminal hanging in DevOnboarder environment"
     echo ""
     echo "Required fixes:"

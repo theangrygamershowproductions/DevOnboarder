@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # validate_internal_links.sh - Validate internal markdown links
 # Part of DevOnboarder quality assurance framework
@@ -71,11 +75,11 @@ validate_file_links() {
                 if command -v python3 >/dev/null 2>&1 && [[ -f "scripts/anchors_github.py" ]]; then
                     mkdir -p logs
                     if ! anchors_json="$(python3 scripts/anchors_github.py < "$file" 2>logs/anchors_github_error.log)"; then
-                        echo "WARNING: anchors_github.py failed for $file. See logs/anchors_github_error.log for details." >&2
+                        warning "anchors_github.py failed for $file. See logs/anchors_github_error.log for details." >&2
                         anchors_json='{"anchors":[]}'
                     fi
                     if ! printf '%s' "$anchors_json" | grep -q "\"$fragment\""; then
-                        echo "ERROR: Broken fragment link in $file"
+                        error "Broken fragment link in $file"
                         echo "  Link: $link"
                         echo "  Target: $file#$fragment"
                         echo "  Status: Section does not exist"
@@ -86,7 +90,7 @@ validate_file_links() {
                 else
                     # Fallback: direct text search in headers
                     if ! grep -Eq "^#{1,6} .*${fragment}.*" "$file"; then
-                        echo "ERROR: Broken fragment link in $file"
+                        error "Broken fragment link in $file"
                         echo "  Link: $link"
                         echo "  Target: $file#$fragment"
                         echo "  Status: Section does not exist"
@@ -117,7 +121,7 @@ validate_file_links() {
 
             # Check if target exists
             if [[ ! -e "$full_path" ]]; then
-                echo "ERROR: Broken link in $file"
+                error "Broken link in $file"
                 echo "  Link: $link"
                 echo "  Target: $full_path"
                 echo "  Status: File does not exist"
@@ -167,9 +171,9 @@ echo "Report: $report"
 # Check if any validation failures occurred
 if [[ $broken_count -gt 0 ]]; then
     echo ""
-    echo "❌ VALIDATION FAILED: $broken_count broken internal links found in $files_scanned files"
+    error "VALIDATION FAILED: $broken_count broken internal links found in $files_scanned files"
     echo "Please fix the broken links before committing."
     exit 1
 else
-    echo "✅ All internal links validated successfully ($files_scanned files checked)"
+    success "All internal links validated successfully ($files_scanned files checked)"
 fi

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/phase2_start_and_test.sh
 # Purpose: Start tunnel services and run Phase 2 integration tests
@@ -135,7 +139,7 @@ generate_phase2_report() {
     echo ""
 
     if [ "${TESTS_SUCCESSFUL:-false}" = "true" ]; then
-        echo "SUCCESS: Phase 2 Integration & CORS Testing Complete"
+        success "Phase 2 Integration & CORS Testing Complete"
         echo ""
         echo "Achievements:"
         echo "  ✓ Multi-subdomain tunnel configuration validated"
@@ -156,7 +160,7 @@ generate_phase2_report() {
 
         # Create completion marker
         cat > CLOUDFLARE_TUNNEL_PHASE2_COMPLETE.md << 'EOF'
-# Cloudflare Tunnel Phase 2 Implementation - COMPLETE ✅
+# Cloudflare Tunnel Phase 2 Implementation - COMPLETE SUCCESS:
 
 ## Integration & CORS Testing Results
 
@@ -164,7 +168,7 @@ generate_phase2_report() {
 **Status**: All integration tests passed
 **Architecture**: Multi-subdomain direct routing
 
-### 🎯 **Achievements**
+### TARGET: **Achievements**
 
 1. **Service Integration Validation**
    - All 5 core services health checks passing
@@ -186,7 +190,7 @@ generate_phase2_report() {
    - No proxy overhead from Traefik elimination
    - Clean subdomain separation maintained
 
-### 🚀 **Live Architecture**
+### DEPLOY: **Live Architecture**
 
 ```
 auth.dev.theangrygamershow.com     → auth-service:8002 ✓
@@ -196,7 +200,7 @@ dashboard.dev.theangrygamershow.com → dashboard-service:8003 ✓
 dev.theangrygamershow.com          → frontend:3000 ✓
 ```
 
-### 📊 **Test Results Summary**
+### REPORT: **Test Results Summary**
 
 - **Service Health**: 5/5 services healthy
 - **URL Connectivity**: 5/5 tunnel URLs accessible
@@ -204,7 +208,7 @@ dev.theangrygamershow.com          → frontend:3000 ✓
 - **Response Times**: All services < 2s response time
 - **Integration**: Cross-service communication verified
 
-### 🎯 **Ready for Phase 3**
+### TARGET: **Ready for Phase 3**
 
 The tunnel implementation is production-ready for Phase 3:
 - Performance optimization and caching strategies

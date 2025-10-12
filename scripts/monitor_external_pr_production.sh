@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Monitor external PR welcome system in production
 # POTATO APPROVAL: monitor-external-pr-20251002
 
@@ -23,7 +25,7 @@ if [ -n "$EXTERNAL_PRS" ]; then
     # Check each external PR for welcome comments
     gh pr list --state all --limit 5 --json number | jq -r '.[].number' | while read -r pr_number; do
         if gh pr view "$pr_number" --json comments --jq '.comments[].body' | grep -q "External PR Security Notice"; then
-            echo "✅ PR #$pr_number has welcome comment"
+            success "PR #$pr_number has welcome comment"
         else
             echo "ℹ️  PR #$pr_number - no welcome comment (may be from same contributor or internal)"
         fi
@@ -33,14 +35,14 @@ else
 fi
 
 echo ""
-echo "🎯 Monitoring Setup:"
+target "Monitoring Setup:"
 echo "===================================="
 echo "Option 1: Active monitoring - check workflow runs for 'Welcome external contributors' job"
 echo "Option 2: Create test PR from fork account to validate"
 echo "Option 3: Set up GitHub webhook to monitor welcome comment creation"
 
 echo ""
-echo "📊 Workflow Run Monitoring:"
+report "Workflow Run Monitoring:"
 gh run list --workflow=pr-automation.yml --limit 5 --json displayTitle,conclusion,createdAt
 
 echo ""

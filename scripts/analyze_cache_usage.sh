@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # DevOnboarder Cache Analysis and Management Script
 # Purpose: Analyze GitHub Actions cache usage patterns and provide optimization recommendations
@@ -27,11 +35,11 @@ echo "=========================================="
 
 # Function to calculate cache sizes
 analyze_cache_usage() {
-    echo -e "${BLUE}Analyzing current cache usage...${NC}"
+    echo -e "${BLUE}Analyzing current cache usage..."
 
     # Get cache data with error handling
     if ! gh cache list --json id,key,sizeInBytes,createdAt,lastAccessedAt,ref > cache_data.json 2>/dev/null; then
-        echo -e "${RED}Error: Failed to retrieve cache data. Please ensure you have proper GitHub CLI authentication.${NC}"
+        echo -e "${RED}Error: Failed to retrieve cache data. Please ensure you have proper GitHub CLI authentication."
         exit 1
     fi
 
@@ -40,10 +48,10 @@ analyze_cache_usage() {
     total_gb=$(echo "scale=2; $total_bytes / 1024 / 1024 / 1024" | bc)
     total_mb=$(echo "scale=0; $total_bytes / 1024 / 1024" | bc)
 
-    echo -e "${YELLOW}Total Cache Usage: ${total_gb} GB (${total_mb} MB)${NC}"
+    echo -e "${YELLOW}Total Cache Usage: ${total_gb} GB (${total_mb} MB)"
 
     # Analyze cache patterns
-    echo -e "${BLUE}Cache Pattern Analysis:${NC}"
+    echo -e "${BLUE}Cache Pattern Analysis:"
 
     # Playwright caches
     playwright_count=$(jq -r '.[] | select(.key | contains("playwright")) | .key' cache_data.json | wc -l)
@@ -63,17 +71,17 @@ analyze_cache_usage() {
 
     # Warning if approaching limit
     if (( $(echo "$total_gb > 8.0" | bc -l) )); then
-        echo -e "${RED}⚠️  WARNING: Cache usage is approaching 10GB limit!${NC}"
+        echo -e "${RED}WARNING:  WARNING: Cache usage is approaching 10GB limit!"
     elif (( $(echo "$total_gb > 6.0" | bc -l) )); then
-        echo -e "${YELLOW}⚠️  CAUTION: Cache usage is high. Consider cleanup.${NC}"
+        debug_msg "  CAUTION: Cache usage is high. Consider cleanup."
     else
-        echo -e "${GREEN}✅ Cache usage is within acceptable limits.${NC}"
+        success_msg " Cache usage is within acceptable limits."
     fi
 }
 
 # Function to identify duplicate/stale caches
 identify_cleanup_candidates() {
-    echo -e "${BLUE}Identifying cleanup candidates...${NC}"
+    echo -e "${BLUE}Identifying cleanup candidates..."
 
     # Find caches older than 7 days
     echo "Caches older than 7 days:"
@@ -96,20 +104,20 @@ identify_cleanup_candidates() {
 
 # Function to provide optimization recommendations
 provide_recommendations() {
-    echo -e "${BLUE}Cache Optimization Recommendations:${NC}"
+    echo -e "${BLUE}Cache Optimization Recommendations:"
 
     # Check if total usage is problematic
     total_bytes=$(jq -r '.[].sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum}')
     total_gb=$(echo "scale=2; $total_bytes / 1024 / 1024 / 1024" | bc)
 
     if (( $(echo "$total_gb > 7.0" | bc -l) )); then
-        echo -e "${RED}🚨 IMMEDIATE ACTION REQUIRED:${NC}"
+        echo -e "${RED}🚨 IMMEDIATE ACTION REQUIRED:"
         echo "1. Run emergency cache cleanup: gh workflow run cache-cleanup.yml -f cleanup_type=all-old-caches"
         echo "2. Review and optimize cache keys to reduce duplication"
         echo "3. Implement more aggressive cache retention policies"
     fi
 
-    echo -e "${GREEN}General Recommendations:${NC}"
+    echo -e "${GREEN}General Recommendations:"
     echo "1. The new cache-cleanup.yml workflow will automatically clean PR caches"
     echo "2. Run periodic manual cleanups: gh workflow run cache-cleanup.yml -f cleanup_type=stale-caches"
     echo "3. Consider optimizing Playwright cache keys to reduce size"
@@ -119,7 +127,7 @@ provide_recommendations() {
     # Specific recommendations based on patterns
     playwright_count=$(jq -r '.[] | select(.key | contains("playwright")) | .key' cache_data.json | wc -l)
     if [ "$playwright_count" -gt 10 ]; then
-        echo -e "${YELLOW}Playwright Optimization:${NC}"
+        echo -e "${YELLOW}Playwright Optimization:"
         echo "  - Consider using more specific cache keys to reduce browser re-downloads"
         echo "  - Implement cache sharing between similar test environments"
     fi
@@ -127,10 +135,10 @@ provide_recommendations() {
 
 # Function to run emergency cleanup
 emergency_cleanup() {
-    echo -e "${RED}EMERGENCY: Running immediate cache cleanup...${NC}"
+    echo -e "${RED}EMERGENCY: Running immediate cache cleanup..."
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo -e "${RED}Error: GitHub CLI not found. Please install gh CLI first.${NC}"
+        echo -e "${RED}Error: GitHub CLI not found. Please install gh CLI first."
         exit 1
     fi
 
@@ -154,7 +162,7 @@ emergency_cleanup() {
         fi
     done
 
-    echo -e "${GREEN}Emergency cleanup completed. Deleted $deleted_count caches.${NC}"
+    echo -e "${GREEN}Emergency cleanup completed. Deleted $deleted_count caches."
 }
 
 # Main execution
@@ -188,12 +196,12 @@ main() {
 
 # Check dependencies
 if ! command -v jq >/dev/null 2>&1; then
-    echo -e "${RED}Error: jq is required but not installed. Please install jq first.${NC}"
+    echo -e "${RED}Error: jq is required but not installed. Please install jq first."
     exit 1
 fi
 
 if ! command -v bc >/dev/null 2>&1; then
-    echo -e "${RED}Error: bc is required but not installed. Please install bc first.${NC}"
+    echo -e "${RED}Error: bc is required but not installed. Please install bc first."
     exit 1
 fi
 

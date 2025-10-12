@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Agent validation script for Codex agents
@@ -14,16 +22,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo "🤖 Validating Codex Agent Files..."
+bot "Validating Codex Agent Files..."
 
 if [ ! -f "$SCHEMA_FILE" ]; then
-    echo -e "${RED}❌ Agent schema not found: $SCHEMA_FILE${NC}" >&2
+    error_msg " Agent schema not found: $SCHEMA_FILE" >&2
     exit 1
 fi
 
 # Check if ajv is available
 if [ ! -f "$PROJECT_ROOT/node_modules/.bin/ajv" ]; then
-    echo -e "${YELLOW}⚠️  ajv-cli not found locally, trying npx...${NC}"
+    debug_msg "  ajv-cli not found locally, trying npx..."
     AJV_CMD="npx -y ajv-cli"
 else
     AJV_CMD="$PROJECT_ROOT/node_modules/.bin/ajv"
@@ -46,7 +54,7 @@ for agent_file in $(find "$PROJECT_ROOT" -path "*/.codex/agents/*.md" -o -path "
 
     # Check if file has frontmatter
     if [ "$(head -n1 "$agent_file")" != "---" ]; then
-        echo -e "${YELLOW}⚠️  $agent_name: No frontmatter found${NC}"
+        debug_msg "  $agent_name: No frontmatter found"
         continue
     fi
 
@@ -69,7 +77,7 @@ except Exception as e:
     print(f'YAML parsing error: {e}', file=sys.stderr)
     sys.exit(1)
 " 2>/dev/null; then
-        echo -e "${RED}❌ $agent_name: Failed to parse YAML frontmatter${NC}"
+        error_msg " $agent_name: Failed to parse YAML frontmatter"
         validation_errors=$((validation_errors + 1))
         rm -f "$tmp_frontmatter" "$tmp_json"
         continue
@@ -77,9 +85,9 @@ except Exception as e:
 
     # Validate against schema
     if $AJV_CMD validate $AJV_OPTS -s "$SCHEMA_FILE" -d "$tmp_json" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ $agent_name: Valid${NC}"
+        success_msg " $agent_name: Valid"
     else
-        echo -e "${RED}❌ $agent_name: Schema validation failed${NC}"
+        error_msg " $agent_name: Schema validation failed"
         echo "   Detailed errors:"
         $AJV_CMD validate $AJV_OPTS -s "$SCHEMA_FILE" -d "$tmp_json" 2>&1 | sed 's/^/   /' || true
         validation_errors=$((validation_errors + 1))
@@ -90,14 +98,14 @@ except Exception as e:
 done
 
 echo ""
-echo "📊 Agent Validation Summary:"
+report "Agent Validation Summary:"
 echo "   Total files: $total_files"
 echo "   Validation errors: $validation_errors"
 
 if [ $validation_errors -eq 0 ]; then
-    echo -e "${GREEN}🎉 All agent files are valid!${NC}"
+    echo -e "${GREEN}🎉 All agent files are valid!"
     exit 0
 else
-    echo -e "${RED}💥 $validation_errors agent file(s) failed validation${NC}"
+    echo -e "${RED}💥 $validation_errors agent file(s) failed validation"
     exit 1
 fi

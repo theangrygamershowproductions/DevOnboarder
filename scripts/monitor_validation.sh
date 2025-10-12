@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -eo pipefail
 
 echo "📺 DevOnboarder CI Validation Monitor"
@@ -9,7 +13,7 @@ echo
 LATEST_LOG=$(find logs -name "comprehensive_ci_validation_*.log" -type f -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2-)
 
 if [ -z "$LATEST_LOG" ]; then
-    echo "❌ No validation logs found in logs/"
+    error "No validation logs found in logs/"
     echo "💡 Start validation first: bash scripts/validate_ci_locally.sh"
     exit 1
 fi
@@ -22,12 +26,12 @@ echo "════════════════════════�
 # Show current progress if validation is running
 if pgrep -f "validate_ci_locally.sh" >/dev/null; then
     echo "🟢 Validation is currently RUNNING"
-    echo "📊 Real-time progress:"
+    report "Real-time progress:"
     echo
     tail -f "$LATEST_LOG"
 else
     echo "🔴 Validation is NOT running"
-    echo "📊 Final results from last run:"
+    report "Final results from last run:"
     echo
 
     # Show summary
@@ -39,14 +43,14 @@ else
 
     # Show any failures
     if grep -q "Status: FAILED" "$LATEST_LOG"; then
-        echo "❌ FAILED STEPS:"
+        error "FAILED STEPS:"
         grep -B1 -A5 "Status: FAILED" "$LATEST_LOG"
         echo
         echo "💡 TROUBLESHOOTING:"
         echo "   • View specific step log: cat logs/step_N_stepname.log"
         echo "   • View all failures: grep -A10 'FAILED' $LATEST_LOG"
     else
-        echo "✅ ALL STEPS PASSED"
+        success "ALL STEPS PASSED"
     fi
 
     echo

@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # scripts/workflow_health_validator.sh
 # Pre-flight validation for GitHub Actions workflows
 # Tests configurations, API connectivity, and permissions before deployment
@@ -67,15 +75,15 @@ check_required_tool() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if command -v "$tool" >/dev/null 2>&1; then
-        echo "✅ $description ($tool): Available"
+        success "$description ($tool): Available"
         VALIDATION_RESULTS["tool_$tool"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
         if [[ "$optional" == "optional" ]]; then
-            echo "⚠️  $description ($tool): Not available (optional)"
+            warning " $description ($tool): Not available (optional)"
             VALIDATION_RESULTS["tool_$tool"]="SKIP"
         else
-            echo "❌ $description ($tool): Missing (required)"
+            error "$description ($tool): Missing (required)"
             VALIDATION_RESULTS["tool_$tool"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -90,11 +98,11 @@ check_directory_structure() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if [[ -d "$dir" ]]; then
-            echo "✅ Directory structure ($dir): Present"
+            success "Directory structure ($dir): Present"
             VALIDATION_RESULTS["dir_$dir"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "❌ Directory structure ($dir): Missing"
+            error "Directory structure ($dir): Missing"
             VALIDATION_RESULTS["dir_$dir"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -123,7 +131,7 @@ test_github_auth() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if gh auth status >/dev/null 2>&1; then
-        echo "✅ GitHub CLI Authentication: Active"
+        success "GitHub CLI Authentication: Active"
         VALIDATION_RESULTS["github_auth"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
@@ -132,7 +140,7 @@ test_github_auth() {
         auth_info=$(gh auth status 2>&1)
         echo "   $(echo "$auth_info" | head -1)"
     else
-        echo "❌ GitHub CLI Authentication: Failed"
+        error "GitHub CLI Authentication: Failed"
         VALIDATION_RESULTS["github_auth"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         echo "   Run: gh auth login"
@@ -156,11 +164,11 @@ test_github_api_endpoints() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if test_api_endpoint "$endpoint"; then
-            echo "✅ GitHub API ($description): Accessible"
+            success "GitHub API ($description): Accessible"
             VALIDATION_RESULTS["api_$endpoint"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "❌ GitHub API ($description): Failed"
+            error "GitHub API ($description): Failed"
             VALIDATION_RESULTS["api_$endpoint"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
@@ -198,7 +206,7 @@ test_repository_access() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
     if gh repo view >/dev/null 2>&1; then
-        echo "✅ Repository Access: Available"
+        success "Repository Access: Available"
         VALIDATION_RESULTS["repo_access"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
@@ -207,7 +215,7 @@ test_repository_access() {
         repo_info=$(gh repo view --json name,owner,defaultBranch | jq -r '"\(.owner.login)/\(.name) (default: \(.defaultBranch))"')
         echo "   Repository: $repo_info"
     else
-        echo "❌ Repository Access: Failed"
+        error "Repository Access: Failed"
         VALIDATION_RESULTS["repo_access"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
@@ -255,16 +263,16 @@ validate_single_workflow() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if command -v yamllint >/dev/null 2>&1; then
         if yamllint "$workflow_file" >/dev/null 2>&1; then
-            echo "  ✅ YAML Syntax: Valid"
+            echo "  SUCCESS: YAML Syntax: Valid"
             VALIDATION_RESULTS["yaml_$workflow_name"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "  ❌ YAML Syntax: Invalid"
+            echo "  ERROR: YAML Syntax: Invalid"
             VALIDATION_RESULTS["yaml_$workflow_name"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
         fi
     else
-        echo "  ⚠️  YAML Syntax: Skipped (yamllint not available)"
+        echo "  WARNING:  YAML Syntax: Skipped (yamllint not available)"
         VALIDATION_RESULTS["yaml_$workflow_name"]="SKIP"
     fi
 
@@ -280,11 +288,11 @@ check_workflow_common_issues() {
     # Check for gitignored directory commits
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if grep -q "git add logs/" "$workflow_file"; then
-        echo "  ❌ GitIgnore Issue: Attempts to commit logs/ (gitignored)"
+        echo "  ERROR: GitIgnore Issue: Attempts to commit logs/ (gitignored)"
         VALIDATION_RESULTS["gitignore_$workflow_name"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     else
-        echo "  ✅ GitIgnore Compliance: No gitignored commits"
+        echo "  SUCCESS: GitIgnore Compliance: No gitignored commits"
         VALIDATION_RESULTS["gitignore_$workflow_name"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     fi
@@ -292,11 +300,11 @@ check_workflow_common_issues() {
     # Check for unhandled jq operations
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if grep -q "jq -r" "$workflow_file" && ! grep -q "jq.*||" "$workflow_file"; then
-        echo "  ❌ Error Handling: jq operations without error handling"
+        echo "  ERROR: Error Handling: jq operations without error handling"
         VALIDATION_RESULTS["error_handling_$workflow_name"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     else
-        echo "  ✅ Error Handling: Adequate error handling found"
+        echo "  SUCCESS: Error Handling: Adequate error handling found"
         VALIDATION_RESULTS["error_handling_$workflow_name"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     fi
@@ -312,12 +320,12 @@ validate_aar_automation_workflow() {
         # Check for specific AAR issues
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
         if grep -q "git add logs/" "$workflow_file"; then
-            echo "  ❌ AAR Logs Issue: DETECTED - Workflow attempts to commit gitignored logs/"
+            echo "  ERROR: AAR Logs Issue: DETECTED - Workflow attempts to commit gitignored logs/"
             VALIDATION_RESULTS["aar_logs_specific"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             echo "    Fix: Remove 'git add logs/' line from workflow"
         else
-            echo "  ✅ AAR Logs Issue: RESOLVED - No gitignored commits"
+            echo "  SUCCESS: AAR Logs Issue: RESOLVED - No gitignored commits"
             VALIDATION_RESULTS["aar_logs_specific"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         fi
@@ -334,12 +342,12 @@ validate_pr_merge_cleanup_workflow() {
         # Check for JSON parsing error handling
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
         if grep -q "jq -r" "$workflow_file" && ! grep -q "jq.*||.*error\|set +e.*jq" "$workflow_file"; then
-            echo "  ❌ JSON Parsing Issue: DETECTED - jq operations without error handling"
+            echo "  ERROR: JSON Parsing Issue: DETECTED - jq operations without error handling"
             VALIDATION_RESULTS["json_parsing_specific"]="FAIL"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             echo "    Fix: Add error handling for jq JSON parsing operations"
         else
-            echo "  ✅ JSON Parsing Issue: RESOLVED - Error handling present"
+            echo "  SUCCESS: JSON Parsing Issue: RESOLVED - Error handling present"
             VALIDATION_RESULTS["json_parsing_specific"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         fi
@@ -377,11 +385,11 @@ validate_script() {
     # Check if script exists
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if [[ -f "$script_path" ]]; then
-        echo "  ✅ Script Exists: $script_path"
+        echo "  SUCCESS: Script Exists: $script_path"
         VALIDATION_RESULTS["exists_$(basename "$script_path")"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo "  ❌ Script Missing: $script_path"
+        echo "  ERROR: Script Missing: $script_path"
         VALIDATION_RESULTS["exists_$(basename "$script_path")"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         return
@@ -390,11 +398,11 @@ validate_script() {
     # Check if script is executable
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if [[ -x "$script_path" ]]; then
-        echo "  ✅ Executable: Yes"
+        echo "  SUCCESS: Executable: Yes"
         VALIDATION_RESULTS["executable_$(basename "$script_path")"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo "  ❌ Executable: No"
+        echo "  ERROR: Executable: No"
         VALIDATION_RESULTS["executable_$(basename "$script_path")"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
@@ -402,11 +410,11 @@ validate_script() {
     # Check for basic shell syntax
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if bash -n "$script_path" 2>/dev/null; then
-        echo "  ✅ Shell Syntax: Valid"
+        echo "  SUCCESS: Shell Syntax: Valid"
         VALIDATION_RESULTS["syntax_$(basename "$script_path")"]="PASS"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo "  ❌ Shell Syntax: Invalid"
+        echo "  ERROR: Shell Syntax: Invalid"
         VALIDATION_RESULTS["syntax_$(basename "$script_path")"]="FAIL"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
@@ -434,11 +442,11 @@ test_token_availability() {
         TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
         if [[ -n "${!token}" ]]; then
-            echo "✅ Token Available: $token"
+            success "Token Available: $token"
             VALIDATION_RESULTS["token_$token"]="PASS"
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
         else
-            echo "⚠️  Token Missing: $token (may be loaded in CI)"
+            warning " Token Missing: $token (may be loaded in CI)"
             VALIDATION_RESULTS["token_$token"]="SKIP"
         fi
     done
@@ -454,28 +462,28 @@ test_repository_permissions() {
         case "$permission" in
             "read")
                 if gh repo view >/dev/null 2>&1; then
-                    echo "✅ Permission ($permission): Available"
+                    success "Permission ($permission): Available"
                     VALIDATION_RESULTS["perm_$permission"]="PASS"
                     PASSED_CHECKS=$((PASSED_CHECKS + 1))
                 else
-                    echo "❌ Permission ($permission): Failed"
+                    error "Permission ($permission): Failed"
                     VALIDATION_RESULTS["perm_$permission"]="FAIL"
                     FAILED_CHECKS=$((FAILED_CHECKS + 1))
                 fi
                 ;;
             "issues")
                 if gh issue list --limit 1 >/dev/null 2>&1; then
-                    echo "✅ Permission ($permission): Available"
+                    success "Permission ($permission): Available"
                     VALIDATION_RESULTS["perm_$permission"]="PASS"
                     PASSED_CHECKS=$((PASSED_CHECKS + 1))
                 else
-                    echo "❌ Permission ($permission): Failed"
+                    error "Permission ($permission): Failed"
                     VALIDATION_RESULTS["perm_$permission"]="FAIL"
                     FAILED_CHECKS=$((FAILED_CHECKS + 1))
                 fi
                 ;;
             *)
-                echo "⚠️  Permission ($permission): Untested"
+                warning " Permission ($permission): Untested"
                 VALIDATION_RESULTS["perm_$permission"]="SKIP"
                 ;;
         esac
@@ -514,7 +522,7 @@ generate_health_report() {
 
     # Failed checks summary
     if [[ $FAILED_CHECKS -gt 0 ]]; then
-        echo "❌ Failed Checks ($FAILED_CHECKS):"
+        error "Failed Checks ($FAILED_CHECKS):"
         for check_id in "${!VALIDATION_RESULTS[@]}"; do
             if [[ "${VALIDATION_RESULTS[$check_id]}" == "FAIL" ]]; then
                 echo "   - $check_id"
@@ -532,7 +540,7 @@ generate_health_report() {
 
 # Generate specific recommendations
 generate_recommendations() {
-    echo "🔧 Recommendations:"
+    tool "Recommendations:"
 
     if [[ "${VALIDATION_RESULTS[aar_logs_specific]}" == "FAIL" ]]; then
         echo "   1. Fix AAR Automation: Remove 'git add logs/' from .github/workflows/aar-automation.yml"
@@ -547,7 +555,7 @@ generate_recommendations() {
     fi
 
     if [[ $FAILED_CHECKS -eq 0 ]]; then
-        echo "   ✅ No critical issues detected"
+        echo "   SUCCESS: No critical issues detected"
         echo "   💡 System is ready for workflow execution"
     fi
 

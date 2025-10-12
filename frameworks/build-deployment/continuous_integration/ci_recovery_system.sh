@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # DevOnboarder CI Recovery Script
 # Systematically addresses the massive CI failures from token propagation issues
@@ -90,12 +94,12 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Lessons Learned
 
-### What Worked Well ✅
+### What Worked Well SUCCESS:
 - **Token Architecture v2.1**: Robust design handled the transition
 - **Systematic Debugging**: Clear identification of root cause
 - **Professional Response**: Immediate investigation and documentation
 
-### Areas for Improvement 🔧
+### Areas for Improvement TOOL:
 - **Propagation Monitoring**: Add checks for API propagation delays
 - **Failure Cascade Prevention**: Implement circuit breakers for token issues
 - **Recovery Automation**: Automated detection and reporting of systematic failures
@@ -108,13 +112,13 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Impact Assessment
 
-**Professional Impact**: ✅ RESOLVED
+**Professional Impact**: SUCCESS: RESOLVED
 - All critical quality gates maintained functionality
 - Recent runs demonstrate full system recovery
 - No compromise to code quality standards
 - Clean CI status restored
 
-**Technical Impact**: ✅ MITIGATED
+**Technical Impact**: SUCCESS: MITIGATED
 - Zero actual system reliability issues
 - No code quality degradation
 - All automation systems functioning normally
@@ -152,7 +156,7 @@ echo "Timestamp: $(date)"
 echo ""
 
 if [[ "$RECOVERY_STATUS" == "RECOVERED" ]]; then
-    echo "SUCCESS: DevOnboarder CI infrastructure is healthy!"
+    success "DevOnboarder CI infrastructure is healthy!"
     echo "   • Clean status indicators restored"
     echo "   • Professional reputation maintained"
     echo "   • All systems operating normally"

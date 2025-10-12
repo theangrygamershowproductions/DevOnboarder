@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Final Automation Execution for PR #966
 
 set -euo pipefail
@@ -17,13 +25,13 @@ echo ""
 # Step 2: Strategic Decision
 echo "🧠 Step 2: Strategic Decision"
 if [[ $HEALTH_SCORE -ge 95 ]]; then
-    echo "SUCCESS: RECOMMENDATION: MERGE READY (Score: ${HEALTH_SCORE}% - Meets 95% Standard)"
+    success "RECOMMENDATION: MERGE READY (Score: ${HEALTH_SCORE}% - Meets 95% Standard)"
     DECISION="MERGE"
 elif [[ $HEALTH_SCORE -ge 90 ]]; then
-    echo "TOOL: RECOMMENDATION: MINOR FIXES TO REACH 95% (Score: ${HEALTH_SCORE}%)"
+    tool "RECOMMENDATION: MINOR FIXES TO REACH 95% (Score: ${HEALTH_SCORE}%)"
     DECISION="FIX_TO_STANDARD"
 elif [[ $HEALTH_SCORE -ge 80 ]]; then
-    echo "WARNING:  RECOMMENDATION: SIGNIFICANT FIXES NEEDED (Score: ${HEALTH_SCORE}% << 95% Standard)"
+    warning " RECOMMENDATION: SIGNIFICANT FIXES NEEDED (Score: ${HEALTH_SCORE}% << 95% Standard)"
     DECISION="MAJOR_FIXES"
 else
     echo "ALERT: RECOMMENDATION: FRESH START (Score: ${HEALTH_SCORE}% - Far Below 95% Standard)"
@@ -35,7 +43,7 @@ echo ""
 echo "QUICK: Step 3: Executing Automated Fixes"
 
 # Apply markdown fixes to agents directory
-echo "TOOL: Applying markdown formatting fixes..."
+tool "Applying markdown formatting fixes..."
 if command -v markdownlint >/dev/null 2>&1; then
     markdownlint --fix agents/*.md 2>/dev/null || echo "   → No markdown issues to fix"
     echo "   SUCCESS: Markdown fixes applied to agents/"
@@ -44,7 +52,7 @@ else
 fi
 
 # Apply Python formatting
-echo "🐍 Applying Python code formatting..."
+python "Applying Python code formatting..."
 if command -v black >/dev/null 2>&1; then
     black --quiet . 2>/dev/null || echo "   → No Python formatting needed"
     echo "   SUCCESS: Python formatting applied"
@@ -68,35 +76,35 @@ else
 
     # Show what would be committed
     echo ""
-    echo "NOTE: Changes that would be committed:"
+    note "Changes that would be committed:"
     git diff --name-only | head -10
 fi
 
 echo ""
 
 # Step 5: Final Recommendation
-echo "TARGET: Step 5: Final Automation Summary"
+target "Step 5: Final Automation Summary"
 echo "=================================="
 echo "STATS: Initial Health Score: ${HEALTH_SCORE}%"
-echo "TOOL: Fixes Applied: Markdown formatting, Python formatting"
+tool "Fixes Applied: Markdown formatting, Python formatting"
 echo "INFO: Post-Fix Score: ${POST_FIX_SCORE}"
-echo "TARGET: Strategic Decision: ${DECISION}"
+target "Strategic Decision: ${DECISION}"
 echo ""
 
 case $DECISION in
     "MERGE")
-        echo "SUCCESS: READY FOR MERGE"
+        success "READY FOR MERGE"
         echo "   → PR meets our 95% health standard"
         echo "   → Consider proceeding with merge approval"
         ;;
     "FIX_TO_STANDARD")
-        echo "TOOL: APPLY TARGETED FIXES TO REACH 95%"
+        tool "APPLY TARGETED FIXES TO REACH 95%"
         echo "   → Close to standard, focused fixes needed"
         echo "   → Commit changes and re-run CI to reach 95%+"
         echo "   → Only merge when 95%+ standard is met"
         ;;
     "MAJOR_FIXES")
-        echo "WARNING:  SIGNIFICANT WORK REQUIRED"
+        warning " SIGNIFICANT WORK REQUIRED"
         echo "   → Current ${HEALTH_SCORE}% << 95% required standard"
         echo "   → Consider if time investment justifies continuation"
         echo "   → Alternative: Fresh start with lessons learned"
@@ -110,11 +118,11 @@ case $DECISION in
 esac
 
 echo ""
-echo "WARNING:  QUALITY GATE ENFORCEMENT:"
+warning " QUALITY GATE ENFORCEMENT:"
 echo "   STATS: Required Standard: 95% health score"
 echo "   INFO: Current Score: ${HEALTH_SCORE}%"
 echo "   TARGET: Gap to Standard: $((95 - HEALTH_SCORE)) percentage points"
 
 echo ""
-echo "SUCCESS: Automation execution complete!"
+success "Automation execution complete!"
 echo "STATS: Summary: PR #966 health is ${HEALTH_SCORE}% - ${DECISION} recommended"

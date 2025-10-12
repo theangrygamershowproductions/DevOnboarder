@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Smart branch creation with DevOnboarder patterns
 
 set -euo pipefail
@@ -53,10 +57,10 @@ create_clean_branch() {
     if [[ -f "$SIGNING_KEY_PATH" ]]; then
         git config --local user.signingkey "$SIGNING_KEY_PATH"
     else
-        echo "⚠️  Signing key not found at $SIGNING_KEY_PATH; skipping user.signingkey config."
+        warning " Signing key not found at $SIGNING_KEY_PATH; skipping user.signingkey config."
     fi
 
-    echo "✅ Branch $branch_name created and ready"
+    success "Branch $branch_name created and ready"
     echo "   Current branch: $(git branch --show-current)"
 }
 
@@ -105,7 +109,7 @@ main() {
     local description="$*"
 
     if [[ -z "$description" ]]; then
-        echo "❌ Description required"
+        error "Description required"
         echo "Usage: $0 $type 'your description here'"
         exit 1
     fi

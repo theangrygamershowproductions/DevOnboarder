@@ -31,7 +31,7 @@ cat > .automation-config.json << 'EOF'
   },
   "safety": {
     "protected_files": ["Potato.md", "*.key", "*.pem"],
-    "protected_branches": ["main", "master", "production"],
+    "protected_branches": ["main", "production"],
     "require_approval": true
   },
   "thresholds": {

@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Phase 3 Framework Terminal Output Compliance Fix
 # Removes all emoji and Unicode violations from migrated scripts
 
@@ -21,16 +29,16 @@ TOTAL_FIXES=0
 # Define emoji replacements
 declare -A EMOJI_MAP
 EMOJI_MAP["🔍"]="INFO:"
-EMOJI_MAP["✅"]="SUCCESS:"
-EMOJI_MAP["❌"]="ERROR:"
-EMOJI_MAP["📋"]="INFO:"
-EMOJI_MAP["🎯"]="TARGET:"
-EMOJI_MAP["🚀"]="ACTION:"
+EMOJI_MAP["SUCCESS:"]="SUCCESS:"
+EMOJI_MAP["ERROR:"]="ERROR:"
+EMOJI_MAP["CHECK:"]="INFO:"
+EMOJI_MAP["TARGET:"]="TARGET:"
+EMOJI_MAP["DEPLOY:"]="ACTION:"
 EMOJI_MAP["⚡"]="QUICK:"
-EMOJI_MAP["📊"]="STATS:"
-EMOJI_MAP["📝"]="NOTE:"
+EMOJI_MAP["REPORT:"]="STATS:"
+EMOJI_MAP["NOTE:"]="NOTE:"
 EMOJI_MAP["💡"]="TIP:"
-EMOJI_MAP["⚠️"]="WARNING:"
+EMOJI_MAP["WARNING:"]="WARNING:"
 
 # Function to fix terminal output in a script
 fix_script() {
@@ -56,15 +64,15 @@ fix_script() {
     done
 
     # Fix echo -e with color codes and emojis
-    if grep -q "echo -e.*\\\${.*}.*[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]" "$script_path"; then
+    if grep -q "echo -e.*\\\${.*}.*[🔍SUCCESS:ERROR:CHECK:TARGET:DEPLOY:⚡REPORT:NOTE:💡WARNING:]" "$script_path"; then
         # Remove echo -e color formatting with emojis
-        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]\([^"]*\)\${[^}]*}"/echo "\1INFO:\2"/g' "$script_path"
+        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[🔍SUCCESS:ERROR:CHECK:TARGET:DEPLOY:⚡REPORT:NOTE:💡WARNING:]\([^"]*\)\${[^}]*}"/echo "\1INFO:\2"/g' "$script_path"
         ((fixes_made++))
         echo "  Fixed echo -e with colors and emojis"
     fi
 
     # Fix any remaining standalone emojis in echo
-    for emoji in 🔍 ✅ ❌ 📋 🎯 🚀 ⚡ 📊 📝 💡 ⚠️; do
+    for emoji in 🔍 SUCCESS: ERROR: CHECK: TARGET: DEPLOY: ⚡ REPORT: NOTE: 💡 WARNING:; do
         if grep -q "$emoji" "$script_path"; then
             replacement="${EMOJI_MAP[$emoji]:-"INFO:"}"
             sed -i "s/$emoji/$replacement/g" "$script_path"
@@ -122,13 +130,13 @@ echo ""
 
 # Verify compliance
 echo "Verifying compliance..."
-VIOLATIONS=$(grep -r '[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]' "$FRAMEWORK_DIR" || true)
+VIOLATIONS=$(grep -r '[🔍SUCCESS:ERROR:CHECK:TARGET:DEPLOY:⚡REPORT:NOTE:💡WARNING:]' "$FRAMEWORK_DIR" || true)
 
 if [ -z "$VIOLATIONS" ]; then
-    echo "SUCCESS: No emoji violations found in Phase 3 framework"
+    success "No emoji violations found in Phase 3 framework"
     echo "Phase 3 framework is now compliant with terminal output policy"
 else
-    echo "WARNING: Some violations may remain:"
+    warning "Some violations may remain:"
     echo "$VIOLATIONS"
 fi
 

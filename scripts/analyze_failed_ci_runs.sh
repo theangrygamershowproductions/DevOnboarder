@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Enhanced CI Failure Analysis Tool
@@ -10,15 +14,15 @@ echo ""
 
 # Check GitHub CLI availability
 if ! command -v gh >/dev/null 2>&1; then
-    echo "❌ GitHub CLI not available"
+    error "GitHub CLI not available"
     echo "   Install with: https://cli.github.com/"
     exit 1
 fi
 
 # Get failed workflow runs with detailed information
-echo "📊 Fetching recent failed workflow runs..."
+report "Fetching recent failed workflow runs..."
 if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,createdAt,url,displayTitle,event --status failure 2>/dev/null); then
-    echo "✅ Retrieved failed run data"
+    success "Retrieved failed run data"
 
     # Count failed runs
     total_failed=$(echo "$failed_runs" | jq length)
@@ -51,7 +55,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         '
 
         echo ""
-        echo "📋 Workflow Failure Summary:"
+        check "Workflow Failure Summary:"
         echo "$failed_runs" | jq -r '
             group_by(.workflowName) |
             map({workflow: .[0].workflowName, count: length}) |
@@ -61,7 +65,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
         '
 
         echo ""
-        echo "🔧 Quick Analysis Commands:"
+        tool "Quick Analysis Commands:"
         echo ""
         echo "# Download logs from most recent failure:"
         latest_run_id=$(echo "$failed_runs" | jq -r '.[0].url' | grep -o '[0-9]*$' || echo "")
@@ -81,7 +85,7 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
     fi
 
 else
-    echo "❌ Failed to fetch workflow run data"
+    error "Failed to fetch workflow run data"
     echo "   Check GitHub CLI authentication: gh auth status"
     exit 1
 fi

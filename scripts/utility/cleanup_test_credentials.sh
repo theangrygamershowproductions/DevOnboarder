@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # cleanup_test_credentials.sh - Safe removal of test Discord credentials
 # This script removes test credentials and restores original configuration
 
@@ -8,7 +12,7 @@ echo "Cleaning up test Discord credentials..."
 
 # 1. Check if backup exists
 if [ ! -f .env.backup ]; then
-    echo "ERROR: No .env.backup found. Cannot restore original configuration."
+    error "No .env.backup found. Cannot restore original configuration."
     echo "Please manually review and update .env file."
     exit 1
 fi
@@ -33,13 +37,13 @@ docker compose -f docker-compose.tags.dev.yaml restart auth discord-integration 
 # 6. Verify no test credentials remain
 echo "Verifying cleanup..."
 if grep -q "8385e5715bf0e379d8249ce0a0c3e50f78d47f8b14fc86d907ee1c6d842e546b" .env bot/.env 2>/dev/null; then
-    echo "WARNING: Test credentials may still be present. Please review manually."
+    warning "Test credentials may still be present. Please review manually."
     exit 1
 fi
 
-echo "✅ Test credentials removed successfully!"
-echo "✅ Original configuration restored"
-echo "✅ Services restarted with original config"
+success "Test credentials removed successfully!"
+success "Original configuration restored"
+success "Services restarted with original config"
 
 # 7. Show current git status to verify no staged changes
 echo ""

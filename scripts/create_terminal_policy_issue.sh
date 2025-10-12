@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Terminal Policy Violation Issue Creator
 # Creates GitHub issues for terminal output policy violations
 # Part of DevOnboarder Zero Tolerance Terminal Output Policy
@@ -74,9 +82,9 @@ DevOnboarder enforces a **ZERO TOLERANCE POLICY** for terminal output violations
    bash scripts/validate_terminal_output_simple.sh
 
    # Fix violations using safe patterns:
-   # ✅ SAFE: echo "Task completed successfully"
-   # ❌ FORBIDDEN: echo "✅ Task completed" (emojis cause hanging)
-   # ❌ FORBIDDEN: echo -e "Line1\nLine2" (multi-line causes hanging)
+   # SUCCESS: SAFE: echo "Task completed successfully"
+   # ERROR: FORBIDDEN: success "Task completed" (emojis cause hanging)
+   # ERROR: FORBIDDEN: echo -e "Line1\nLine2" (multi-line causes hanging)
    ```
 
 2. **Validation Requirements:**
@@ -119,8 +127,8 @@ if issue_url=$(gh issue create \
     --label "terminal-policy-violation,critical,zero-tolerance" \
     --assignee "@me" 2>&1); then
 
-    echo -e "${GREEN}✅ GitHub issue created successfully${NC}"
-    echo -e "${BLUE}🔗 Issue URL: $issue_url${NC}"
+    success_msg " GitHub issue created successfully"
+    echo -e "${BLUE}🔗 Issue URL: $issue_url"
 
     # Log success
     echo "ISSUE_CREATED: $(date -Iseconds)"
@@ -130,7 +138,7 @@ if issue_url=$(gh issue create \
 
     exit 0
 else
-    echo -e "${RED}❌ Failed to create GitHub issue${NC}"
+    error_msg " Failed to create GitHub issue"
     echo "Error output: $issue_url"
     exit 1
 fi
