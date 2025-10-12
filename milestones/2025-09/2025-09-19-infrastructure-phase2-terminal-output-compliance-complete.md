@@ -118,8 +118,6 @@ visibility: internal
 
 - [docs/ai-agent-shell-safety-guidelines.md](../../docs/ai-agent-shell-safety-guidelines.md) - AI agent safety guidelines for shell command usage
 
-- [PHASE_INDEX.md](../../PHASE_INDEX.md) - Updated phase navigation and status tracking
-
 ## Strategic Impact Analysis
 
 | Metric | Before | After | Improvement |

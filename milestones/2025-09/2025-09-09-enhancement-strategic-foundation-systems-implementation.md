@@ -163,8 +163,6 @@ visibility: internal
 
 **Documentation:**
 
-- [MILESTONE_LOG.md](../../MILESTONE_LOG.md) - Historical milestone tracking
-
 - [milestones/2025-09/](../../milestones/2025-09/) - Structured milestone documentation
 
 ### Real-World Validation
