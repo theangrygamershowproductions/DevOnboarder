@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-# Source color utilities
-source "/home/potato/TAGS/shared/scripts/color_utils.sh"
-# Source color utilities
-source "/home/potato/TAGS/shared/scripts/color_utils.sh"
-# Source color utilities
-source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Centralized logging infrastructure for DevOnboarder ecosystem
+LOG_FILE="../logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 # Source color utilities
 source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
@@ -18,7 +16,7 @@ set -euo pipefail
 
 # Define error function locally (fallback if color_utils.sh doesn't provide it)
 error() {
-    printf "ERROR: %s\n" "$1" >&2
+    echo "ERROR: $1" >&2
 }
 
 # Function to validate terminal output patterns (ZERO TOLERANCE policy)
@@ -53,7 +51,7 @@ validate_terminal_output() {
         printf "Safe alternatives:\n"
         printf "  Instead of: echo \"Status: \$VAR\"\n"
         printf "  Use:        printf \"Status: %%s\\n\" \"\$VAR\"\n"
-        printf "  Instead of: echo \"success "Success\"\n"
+        printf '  Instead of: echo "success "Success"\n'
         printf "  Use:        echo \"Success\"\n"
         return 1
     fi
@@ -112,24 +110,24 @@ echo "Instruction compliance checks passed"
 COMMIT_MSG="$1"
 
 echo "Starting safe commit process..."
-printf "Commit message: %s\n" "$COMMIT_MSG"
+echo "Commit message: $COMMIT_MSG"
 
 # CRITICAL: Validate commit message format before proceeding
 echo "Validating commit message format..."
-COMMIT_MSG_REGEX='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
+COMMIT_MSG_REGEX='^[A-Z]+.*: .+'
 if ! echo "$COMMIT_MSG" | grep -E "$COMMIT_MSG_REGEX" >/dev/null; then
     error "Invalid commit message format!"
     echo ""
-    echo "Required format: <TYPE>(<scope>): <subject>"
+    echo 'Required format: <TYPE>(<scope>): <subject>'
     echo ""
     echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
     echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
     echo "Build/Build types allowed for Dependabot compatibility"
     echo ""
     echo "Examples:"
-    echo "  FIX(auth): resolve bcrypt password truncation issue"
-    echo "  FEAT(ci): add automated dependency updates"
-    echo "  CHORE(deps): update Python requirements"
+    echo '  FIX(auth): resolve bcrypt password truncation issue'
+    echo '  FEAT(ci): add automated dependency updates'
+    echo '  CHORE(deps): update Python requirements'
     echo ""
     printf "Your message: %s\n" "$COMMIT_MSG"
     exit 1
@@ -137,7 +135,7 @@ fi
 echo "Commit message format validated"
 
 # CRITICAL: Validate quality gates are functional before proceeding
-echo "Running mandatory QC validation (95% threshold)..."
+echo 'Running mandatory QC validation (95% threshold)...'
 if ! ./scripts/qc_pre_push.sh > /dev/null 2>&1; then
     echo "FAILED: QC validation failed!"
     echo ""
@@ -148,12 +146,12 @@ if ! ./scripts/qc_pre_push.sh > /dev/null 2>&1; then
     echo "Fix the issues above and try again"
     exit 1
 fi
-echo "QC validation passed (95% threshold met)"
+echo 'QC validation passed (95% threshold met)'
 
 # Get list of staged files before pre-commit runs
 STAGED_FILES=$(git diff --cached --name-only)
 echo "Files currently staged:"
-printf "%s\n" "$STAGED_FILES"
+printf '%s\n' "$STAGED_FILES"
 
 # Run pre-commit hooks (this may modify files)
 echo "Running pre-commit hooks..."
@@ -162,13 +160,13 @@ if git commit -m "$COMMIT_MSG"; then
     exit 0
 else
     COMMIT_EXIT_CODE=$?
-    printf "Pre-commit hooks failed (exit code: %s)\n" "$COMMIT_EXIT_CODE"
+    printf 'Pre-commit hooks failed (exit code: %s)\n' "$COMMIT_EXIT_CODE"
 
     # Check if files were modified by hooks (like trailing whitespace fixes)
     MODIFIED_FILES=$(git diff --name-only)
     if [[ -n "$MODIFIED_FILES" ]]; then
-        printf "Files were modified by pre-commit hooks:\n"
-        printf "%s\n" "$MODIFIED_FILES"
+        printf 'Files were modified by pre-commit hooks:\n'
+        printf '%s\n' "$MODIFIED_FILES"
 
         # Reset staging area and re-stage only the originally intended files
         # This prevents the "caching cycle" issue where modified files get staged on top of already staged files
@@ -176,61 +174,61 @@ else
         git reset HEAD --quiet
         echo "$STAGED_FILES" | while read -r file; do
             if [[ -f "$file" ]]; then
-                printf "  Re-staging: %s\n" "$file"
+                printf '  Re-staging: %s\n' "$file"
                 git add "$file"
             fi
         done
 
         # Commit again - should pass since hooks already fixed the issues
-        echo "Committing re-staged files (hooks already validated and fixed content)..."
+        echo 'Committing re-staged files (hooks already validated and fixed content)...'
         if git commit -m "$COMMIT_MSG"; then
             echo "Commit successful after re-staging!"
         else
             SECOND_EXIT_CODE=$?
-            printf "CRITICAL: Pre-commit failed AGAIN after re-staging files!\n"
-            printf "Exit code: %s\n" "$SECOND_EXIT_CODE"
-            printf "\n"
-            printf "AUTOMATIC LOG ANALYSIS:\n"
-            printf "==========================\n"
+            printf 'CRITICAL: Pre-commit failed AGAIN after re-staging files!\n'
+            printf 'Exit code: %s\n' "$SECOND_EXIT_CODE"
+            printf '\n'
+            printf 'AUTOMATIC LOG ANALYSIS:\n'
+            printf '==========================\n'
 
             # Show recent pre-commit logs
-            printf "Recent pre-commit cache logs:\n"
-            find ~/.cache/pre-commit -name "*.log" -type f -mtime -1 2>/dev/null | head -3 | while read -r logfile; do
-                printf "Log: %s\n" "$logfile"
-                printf "   Last 10 lines:\n"
+            printf 'Recent pre-commit cache logs:\n'
+                        find ~/.cache/pre-commit -name "*.log" -type f -mtime -1 2>/dev/null | head -3 | while read -r logfile; do
+                printf 'Log: %s\n' "$logfile"
+                printf '   Last 10 lines:\n'
                 tail -10 "$logfile" 2>/dev/null | sed 's/^/     /'
-                printf "\n"
+                printf '\n'
             done
 
             # Show git status for debugging
-            printf "Current git status:\n"
+            printf 'Current git status:\n'
             git status --porcelain | sed 's/^/   /'
-            printf "\n"
+            printf '\n'
 
             # Show what files were supposed to be committed
             if [[ -n "$STAGED_FILES" ]]; then
-            printf "Files that should have been staged:\n"
+            printf 'Files that should have been staged:\n'
             # shellcheck disable=SC2001 # Using sed for proper indentation formatting
             echo "$STAGED_FILES" | sed 's/^/   /'
         fi
-            printf "\n"
+            printf '\n'
 
             # Show current staged files
-            printf "Actually staged files:\n"
+            printf 'Actually staged files:\n'
             git diff --cached --name-only | sed 's/^/   /'
-            printf "\n"
+            printf '\n'
 
-            printf "This indicates a systemic pre-commit issue, not just whitespace fixes.\n"
-            printf "Recommended actions:\n"
-            printf "   1. Check the log output above for specific error patterns\n"
-            printf "   2. Run: source .venv/bin/activate && pre-commit run --all-files\n"
-            printf "   3. Or run individual hooks: pre-commit run <hook-name> --all-files\n"
-            printf "   4. Check DevOnboarder quality gates documentation\n"
+            printf 'This indicates a systemic pre-commit issue, not just whitespace fixes.\n'
+            printf 'Recommended actions:\n'
+            printf '   1. Check the log output above for specific error patterns\n'
+            echo '   2. Run: source .venv/bin/activate && pre-commit run --all-files'
+            echo '   3. Or run individual hooks: pre-commit run \<hook-name\> --all-files'
+            printf '   4. Check DevOnboarder quality gates documentation\n'
 
             exit $SECOND_EXIT_CODE
         fi
     else
-        echo "Pre-commit hooks failed but no files were modified. Check the errors above."
+        echo 'Pre-commit hooks failed but no files were modified. Check the errors above.'
         exit $COMMIT_EXIT_CODE
     fi
 fi
