@@ -177,19 +177,31 @@ jobs:
                   path: logs/ci/
                   retention-days: 7
 
-            - name: Create commit status
+            - name: Debug status creation
               run: |
-                  status="${{ steps.check.outputs.status }}"
-                  if [ "$status" = "clean" ]; then
-                      curl -X POST \
-                          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                          -H "Accept: application/vnd.github.v3+json" \
-                          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
-                          -d "{\"state\":\"success\",\"context\":\"Root Artifact Guard\",\"description\":\"No root artifact violations detected\",\"target_url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
-                  else
-                      curl -X POST \
-                          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                          -H "Accept: application/vnd.github.v3+json" \
-                          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
-                          -d "{\"state\":\"failure\",\"context\":\"Root Artifact Guard\",\"description\":\"Root artifact violations found\",\"target_url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"
-                  fi
+                  echo "About to create status for SHA: ${{ github.sha }}"
+                  echo "Status from check: ${{ steps.check.outputs.status }}"
+                  echo "Repository: ${{ github.repository }}"
+
+            - name: Create commit status
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
+                      const description = '${{ steps.check.outputs.status }}' === 'clean' 
+                          ? 'No root artifact violations detected' 
+                          : 'Root artifact violations found';
+
+                      console.log('Creating status with GitHub Script:', { status, description, sha: context.sha });
+
+                      await github.rest.repos.createCommitStatus({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          sha: context.sha,
+                          state: status,
+                          context: 'Root Artifact Guard',
+                          description: description,
+                          target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+                      });
+
+                      console.log('Status creation completed');
