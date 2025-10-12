@@ -186,6 +186,8 @@ jobs:
                           ? 'No root artifact violations detected' 
                           : 'Root artifact violations found';
 
+                      console.log('Creating status:', { status, description, sha: context.sha });
+
                       await github.rest.repos.createCommitStatus({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
