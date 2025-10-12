@@ -178,29 +178,20 @@ jobs:
                   retention-days: 7
 
             - name: Create commit status
-              uses: actions/github-script@v7
-              with:
-                  script: |
-                      try {
-                          const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
-                          const description = '${{ steps.check.outputs.status }}' === 'clean' 
-                              ? 'No root artifact violations detected' 
-                              : 'Root artifact violations found';
-
-                          console.log('Creating status:', { status, description, sha: context.sha });
-
-                          const result = await github.rest.repos.createCommitStatus({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              sha: context.sha,
-                              state: status,
-                              context: 'Root Artifact Guard',
-                              description: description,
-                              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-                          });
-
-                          console.log('Status created successfully:', result.data.state);
-                      } catch (error) {
-                          console.error('Failed to create status:', error);
-                          throw error;
-                      }
+              run: |
+                  status="${{ steps.check.outputs.status }}"
+                  if [ "$status" = "clean" ]; then
+                      gh api repos/${{ github.repository }}/statuses/${{ github.sha }} \
+                          -X POST \
+                          -F state=success \
+                          -F context="Root Artifact Guard" \
+                          -F description="No root artifact violations detected" \
+                          -F target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  else
+                      gh api repos/${{ github.repository }}/statuses/${{ github.sha }} \
+                          -X POST \
+                          -F state=failure \
+                          -F context="Root Artifact Guard" \
+                          -F description="Root artifact violations found" \
+                          -F target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  fi
