@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Enhanced workflow monitoring and logging system
 # Part of DevOnboarder diagnostic enhancement initiative
 
@@ -105,15 +109,15 @@ monitor_recent_failures() {
 
     # Generate specific recommendations
     if [ "$auto_fix_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: Auto Fix showing recurring failures - review patch generation logic"
+        warning " HIGH: Auto Fix showing recurring failures - review patch generation logic"
     fi
 
     if [ "$ci_monitor_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: CI Monitor failing repeatedly - check artifact availability and authentication"
+        warning " HIGH: CI Monitor failing repeatedly - check artifact availability and authentication"
     fi
 
     if [ "$ci_failure_analyzer_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: CI Failure Analyzer not functioning - verify GitHub CLI authentication"
+        warning " HIGH: CI Failure Analyzer not functioning - verify GitHub CLI authentication"
     fi
 
     return 0
@@ -157,7 +161,7 @@ check_workflow_health() {
             elif [ "$success_rate" -lt 90 ]; then
                 echo "  🟡 WARNING: Success rate below 90%"
             else
-                echo "  ✅ HEALTHY: Success rate above 90%"
+                echo "  SUCCESS: HEALTHY: Success rate above 90%"
             fi
         else
             echo "  No conclusive runs found"
@@ -191,9 +195,9 @@ $(gh run list --limit 10 --json workflowName,conclusion,createdAt,databaseId | j
 
 Based on recent patterns:
 
-1. **Auto Fix Workflow**: $([ "$auto_fix_failures" -gt 2 ] && echo "⚠️ Requires attention - recurring failures detected" || echo "✅ Operating normally")
-2. **CI Monitor Workflow**: $([ "$ci_monitor_failures" -gt 2 ] && echo "⚠️ Requires attention - check artifact handling" || echo "✅ Operating normally")
-3. **CI Failure Analyzer**: $([ "$ci_failure_analyzer_failures" -gt 2 ] && echo "⚠️ Requires attention - verify authentication" || echo "✅ Operating normally")
+1. **Auto Fix Workflow**: $([ "$auto_fix_failures" -gt 2 ] && warning "Requires attention - recurring failures detected" || success "Operating normally")
+2. **CI Monitor Workflow**: $([ "$ci_monitor_failures" -gt 2 ] && warning "Requires attention - check artifact handling" || success "Operating normally")
+3. **CI Failure Analyzer**: $([ "$ci_failure_analyzer_failures" -gt 2 ] && warning "Requires attention - verify authentication" || success "Operating normally")
 
 ## Next Steps
 
@@ -245,17 +249,17 @@ main() {
 
     # Run monitoring functions to set actual failure counts
     if monitor_recent_failures; then
-        echo "✅ Recent failure monitoring completed"
+        success "Recent failure monitoring completed"
     else
-        echo "⚠️ Recent failure monitoring encountered issues"
+        warning "Recent failure monitoring encountered issues"
     fi
 
     echo
 
     if check_workflow_health; then
-        echo "✅ Workflow health assessment completed"
+        success "Workflow health assessment completed"
     else
-        echo "⚠️ Workflow health assessment encountered issues"
+        warning "Workflow health assessment encountered issues"
     fi
 
     echo
@@ -275,7 +279,7 @@ main() {
         echo "🟡 WARNING: Some workflow systems may need attention"
         return 0
     else
-        echo "✅ HEALTHY: All monitored workflows operating within normal parameters"
+        success "HEALTHY: All monitored workflows operating within normal parameters"
         return 0
     fi
 }

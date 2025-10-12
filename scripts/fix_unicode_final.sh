@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Final Unicode Comment Fix - Clean Implementation
 
 set -euo pipefail
@@ -46,6 +50,6 @@ EOF
 
 chmod +x scripts/clean_pr_validation.sh
 
-echo "✅ Clean validation script created"
-echo "✅ No Unicode escape sequences"
-echo "✅ Plain text formatting for compatibility"
+success "Clean validation script created"
+success "No Unicode escape sequences"
+success "Plain text formatting for compatibility"

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # Verifies access to required domains listed in docs/network-exception-list.md
@@ -23,4 +31,4 @@ if [ "$failed" -ne 0 ]; then
   exit 1
 fi
 
-echo "All required domains are reachable ✅"
+echo "All required domains are reachable SUCCESS:"

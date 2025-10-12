@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 #
 # Enhanced Documentation Quality Control Script
 #
@@ -87,7 +91,7 @@ fi
 # Determine files to process
 if [[ -n "$SPECIFIC_FILE" ]]; then
     if [[ ! -f "$SPECIFIC_FILE" ]]; then
-        echo "ERROR: File not found"
+        error "File not found"
         printf "File path: %s\n" "$SPECIFIC_FILE"
         exit 1
     fi
@@ -156,12 +160,12 @@ echo "Running additional documentation quality checks..."
 if command -v markdownlint >/dev/null 2>&1; then
     echo "Running markdownlint validation..."
     if [[ -n "$SPECIFIC_FILE" ]]; then
-        markdownlint "$SPECIFIC_FILE" || echo "WARNING: Markdownlint issues found"
+        markdownlint "$SPECIFIC_FILE" || warning "Markdownlint issues found"
     else
-        markdownlint docs/ || echo "WARNING: Markdownlint issues found"
+        markdownlint docs/ || warning "Markdownlint issues found"
     fi
 else
-    echo "WARNING: markdownlint not available, skipping lint check"
+    warning "markdownlint not available, skipping lint check"
 fi
 
 # Vale check (if available)
@@ -190,12 +194,12 @@ fi
 if [[ "$FIX_MODE" = true ]]; then
     if [[ $FORMATTED_FILES -gt 0 ]]; then
         echo ""
-        echo "SUCCESS: Files have been fixed"
+        success "Files have been fixed"
         printf "Files fixed: %d\n" "$FORMATTED_FILES"
         echo "Please review changes and commit if appropriate"
     else
         echo ""
-        echo "SUCCESS: All files already properly formatted"
+        success "All files already properly formatted"
     fi
 else
     if [[ $FORMATTED_FILES -gt 0 ]]; then
@@ -205,7 +209,7 @@ else
         exit 1
     else
         echo ""
-        echo "SUCCESS: All files are properly formatted"
+        success "All files are properly formatted"
     fi
 fi
 

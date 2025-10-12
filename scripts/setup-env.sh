@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Bootstrap environment for local or Codex usage
 
 set -euo pipefail
@@ -103,7 +107,7 @@ EOF
     if [ -x "$SCRIPT_DIR/setup_github_gpg_keys.sh" ]; then
         echo "Setting up GitHub GPG keys..."
         "$SCRIPT_DIR/setup_github_gpg_keys.sh" || {
-            echo "WARNING: GitHub GPG key setup failed, but continuing..."
+            warning "GitHub GPG key setup failed, but continuing..."
             echo "This is non-critical for CI operation"
         }
     fi

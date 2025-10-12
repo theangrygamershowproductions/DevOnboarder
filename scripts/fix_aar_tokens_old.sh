@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick fix for AAR system token permissions.
 #
 # This script helps identify and fix the immediate issue with AAR system
@@ -28,13 +32,13 @@ echo
 
 # Check if AAR_TOKEN exists
 if [ -z "${AAR_TOKEN:-}" ]; then
-    echo "ERROR: AAR_TOKEN not found in environment"
+    error "AAR_TOKEN not found in environment"
     echo "SOLUTION: Please ensure AAR_TOKEN is set in your .tokens file"
     echo "ALTERNATIVE: Or run: python3 scripts/token_loader.py validate AAR_TOKEN"
     exit 1
 fi
 
-printf "SUCCESS: AAR_TOKEN found (length: %d)\n" "${#AAR_TOKEN}"
+printf "success "AAR_TOKEN found (length: %d)\n" "${#AAR_TOKEN}"
 
 # Test current permissions
 echo
@@ -79,10 +83,10 @@ fi
 echo
 echo "Diagnosis:"
 if [ "$ACTIONS_READ" = true ] && [ "$WORKFLOW_RUNS" = true ]; then
-    echo "SUCCESS: AAR_TOKEN has sufficient permissions for Actions API"
+    success "AAR_TOKEN has sufficient permissions for Actions API"
     echo "READY: You can now run: make aar-generate WORKFLOW_ID=17464386031"
 else
-    echo "ERROR: AAR_TOKEN missing required permissions"
+    error "AAR_TOKEN missing required permissions"
     echo
 
     # Check if this might be a propagation delay

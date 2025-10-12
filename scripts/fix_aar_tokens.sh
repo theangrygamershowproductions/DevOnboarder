@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # AAR System Token Diagnostic - GitHub Actions API Compliant
 # Based on official GitHub Actions REST API documentation
 # https://docs.github.com/en/rest/actions

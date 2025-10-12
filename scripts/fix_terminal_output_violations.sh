@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Terminal Output Violations Bulk Fix for Token Architecture v2.1
 # DevOnboarder ZERO TOLERANCE POLICY Compliance
@@ -36,7 +40,7 @@ TOKEN_SCRIPTS=(
 )
 
 # Violation patterns that WILL cause terminal hanging
-EMOJI_PATTERNS='[✅❌🎯📋🔍🚀💡⚠️🎨🔗📦]'
+EMOJI_PATTERNS='[SUCCESS:ERROR:TARGET:CHECK:🔍DEPLOY:💡WARNING:🎨🔗📦]'
 VARIABLE_ECHO_PATTERN='echo.*\$[A-Z_]*[^}]'
 COMMAND_SUB_ECHO_PATTERN='echo.*\$\([^)]*\)'
 
@@ -80,7 +84,7 @@ printf "Total Token Architecture v2.1 scripts: %d\n" "${#TOKEN_SCRIPTS[@]}"
 echo ""
 
 if [[ $TOTAL_VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: All Token Architecture v2.1 scripts are compliant"
+    success "All Token Architecture v2.1 scripts are compliant"
     echo "Terminal hanging risk eliminated"
     exit 0
 fi

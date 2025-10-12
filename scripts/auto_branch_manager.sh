@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Automatic Branch Management System
 # Automatically creates and switches to appropriate branches based on work type
 
@@ -19,7 +23,7 @@ echo "Project Root: $PROJECT_ROOT"
 
 # Check for virtual environment
 if [[ ! -d "$PROJECT_ROOT/.venv" ]]; then
-    echo "ERROR: Virtual environment not found at $PROJECT_ROOT/.venv"
+    error "Virtual environment not found at $PROJECT_ROOT/.venv"
     echo "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
     exit 1
 fi

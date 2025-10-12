@@ -1,10 +1,14 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder VS Code Integration Setup
 # Creates standardized VS Code workspace configuration for team consistency
 
 set -e
 
-echo "🔧 Setting up DevOnboarder VS Code Integration..."
+tool "Setting up DevOnboarder VS Code Integration..."
 
 # Create .vscode directory if it doesn't exist
 mkdir -p .vscode
@@ -149,15 +153,15 @@ cat > .vscode/extensions.json << 'EOF'
 }
 EOF
 
-echo "✅ VS Code integration setup complete!"
-echo "📋 Files created:"
+success "VS Code integration setup complete!"
+check "Files created:"
 echo "   • .vscode/settings.json - Enhanced workspace settings"
 echo "   • .vscode/tasks.json - DevOnboarder validation commands"
 echo "   • .vscode/extensions.json - Recommended extensions"
 echo ""
-echo "🎯 Usage:"
+target "Usage:"
 echo "   • Ctrl+Shift+P → 'Tasks: Run Task' → Select DevOnboarder validation"
 echo "   • Install recommended extensions when prompted"
 echo "   • YAML files now have consistent linting with CI"
 echo ""
-echo "🚀 VS Code now matches CI validation exactly!"
+deploy "VS Code now matches CI validation exactly!"

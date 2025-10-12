@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Post-Merge Cleanup Issue Manager
 # Handles GitHub issue operations for CI failure cleanup after merge
 # Part of DevOnboarder CI Triage Guard System
@@ -86,23 +94,23 @@ list_issues() {
         --search "CI Failure: PR #$PR_NUMBER" \
         --json number,title > temp_issues.json; then
 
-        echo "${GREEN}SUCCESS: Issue search completed${NC}"
+        echo "${GREEN}SUCCESS: Issue search completed"
 
         # Check if any issues were found
         local issue_count
         issue_count=$(jq length temp_issues.json)
 
         if [[ "$issue_count" -eq 0 ]]; then
-            echo "${YELLOW}INFO:  No open CI failure issues found for PR #$PR_NUMBER${NC}"
+            echo "${YELLOW}INFO:  No open CI failure issues found for PR #$PR_NUMBER"
         else
-            echo "${BLUE}LIST: Found $issue_count CI failure issue(s) for PR #$PR_NUMBER:${NC}"
+            echo "${BLUE}LIST: Found $issue_count CI failure issue(s) for PR #$PR_NUMBER:"
             jq -r '.[] | "Issue #\(.number): \(.title)"' temp_issues.json
         fi
 
         rm -f temp_issues.json
         return 0
     else
-        echo "${RED}FAILED: Failed to search for issues${NC}"
+        echo "${RED}FAILED: Failed to search for issues"
         rm -f temp_issues.json
         return 1
     fi
@@ -132,7 +140,7 @@ close_issues() {
     issue_count=$(jq length temp_issues.json 2>/dev/null || echo "0")
 
     if [[ "$issue_count" -eq 0 ]]; then
-        echo "${YELLOW}INFO:  No issues to close for PR #$PR_NUMBER${NC}"
+        echo "${YELLOW}INFO:  No issues to close for PR #$PR_NUMBER"
         rm -f temp_issues.json
         return 0
     fi
@@ -167,30 +175,30 @@ EOF
 
             # Comment on issue
             if gh issue comment "$issue_number" --body-file resolution_comment.md; then
-                echo "${GREEN}SUCCESS: Added resolution comment to issue #$issue_number${NC}"
+                echo "${GREEN}SUCCESS: Added resolution comment to issue #$issue_number"
             else
-                echo "${RED}FAILED: Failed to comment on issue #$issue_number${NC}"
+                echo "${RED}FAILED: Failed to comment on issue #$issue_number"
             fi
 
             # Close the issue (check if already closed first)
             current_state=$(gh issue view "$issue_number" --json state --jq .state 2>/dev/null || echo "unknown")
             if [[ "$current_state" == "unknown" ]]; then
-                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation${NC}"
+                echo "${RED}FAILED: Could not determine state for issue #$issue_number, skipping close operation"
             elif [[ "$current_state" == "CLOSED" ]]; then
-                echo "${YELLOW}INFO:  Issue #$issue_number already closed, skipping${NC}"
+                echo "${YELLOW}INFO:  Issue #$issue_number already closed, skipping"
                 ((closed_count++))
             elif gh issue close "$issue_number" --reason completed; then
-                echo "${GREEN}SUCCESS: Closed issue #$issue_number${NC}"
+                echo "${GREEN}SUCCESS: Closed issue #$issue_number"
                 ((closed_count++))
             else
-                echo "${RED}FAILED: Failed to close issue #$issue_number${NC}"
+                echo "${RED}FAILED: Failed to close issue #$issue_number"
             fi
 
             rm -f resolution_comment.md
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo "${BLUE}STATS: Summary: Closed $closed_count of $issue_count issues${NC}"
+    echo "${BLUE}STATS: Summary: Closed $closed_count of $issue_count issues"
     rm -f temp_issues.json
     return 0
 }
@@ -206,7 +214,7 @@ comment_issues() {
     issue_count=$(jq length temp_issues.json 2>/dev/null || echo "0")
 
     if [[ "$issue_count" -eq 0 ]]; then
-        echo "${YELLOW}INFO:  No issues to comment on for PR #$PR_NUMBER${NC}"
+        echo "${YELLOW}INFO:  No issues to comment on for PR #$PR_NUMBER"
         rm -f temp_issues.json
         return 0
     fi
@@ -235,17 +243,17 @@ This CI failure is being tracked as part of PR #$PR_NUMBER processing.
 EOF
 
             if gh issue comment "$issue_number" --body-file resolution_comment.md; then
-                echo "${GREEN}SUCCESS: Added comment to issue #$issue_number${NC}"
+                echo "${GREEN}SUCCESS: Added comment to issue #$issue_number"
                 ((commented_count++))
             else
-                echo "${RED}FAILED: Failed to comment on issue #$issue_number${NC}"
+                echo "${RED}FAILED: Failed to comment on issue #$issue_number"
             fi
 
             rm -f resolution_comment.md
         fi
     done < <(jq -r '.[].number' temp_issues.json)
 
-    echo "${BLUE}STATS: Summary: Commented on $commented_count of $issue_count issues${NC}"
+    echo "${BLUE}STATS: Summary: Commented on $commented_count of $issue_count issues"
     rm -f temp_issues.json
     return 0
 }

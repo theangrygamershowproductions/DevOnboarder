@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # scripts/mvp_health_monitor.sh
 # Continuous health monitoring for MVP services
@@ -189,12 +193,12 @@ while true; do
         fi
     done
 
-    echo "📊 Status: $healthy_count/$total_services services healthy"
+    report "Status: $healthy_count/$total_services services healthy"
 
     if [[ $healthy_count -eq $total_services ]]; then
-        echo "✅ All services operational"
+        success "All services operational"
     else
-        echo "⚠️  Some services need attention"
+        warning " Some services need attention"
     fi
 
     echo "⏰ Next check in ${MONITOR_INTERVAL}s..."

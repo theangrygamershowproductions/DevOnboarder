@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Discord Bot Configuration Validation Script
 set -euo pipefail
 
@@ -17,16 +25,16 @@ validate_token() {
     local name="$2"
 
     if [[ -z "$token" || "$token" == "YOUR_BOT_TOKEN_HERE" ]]; then
-        echo -e "${RED}❌ $name: Token not set${NC}"
+        error_msg " $name: Token not set"
         return 1
     elif [[ ${#token} -lt 50 ]]; then
-        echo -e "${RED}❌ $name: Token too short (${#token} chars)${NC}"
+        error_msg " $name: Token too short (${#token} chars)"
         return 1
     elif [[ ! "$token" =~ ^[A-Za-z0-9._-]+$ ]]; then
-        echo -e "${RED}❌ $name: Invalid token format${NC}"
+        error_msg " $name: Invalid token format"
         return 1
     else
-        echo -e "${GREEN}✅ $name: Token format valid (${#token} chars)${NC}"
+        success_msg " $name: Token format valid (${#token} chars)"
         return 0
     fi
 }
@@ -37,13 +45,13 @@ validate_client_id() {
     local name="$2"
 
     if [[ -z "$client_id" || "$client_id" == "YOUR_CLIENT_ID_HERE" ]]; then
-        echo -e "${RED}❌ $name: Client ID not set${NC}"
+        error_msg " $name: Client ID not set"
         return 1
     elif [[ ! "$client_id" =~ ^[0-9]{17,19}$ ]]; then
-        echo -e "${RED}❌ $name: Invalid client ID format${NC}"
+        error_msg " $name: Invalid client ID format"
         return 1
     else
-        echo -e "${GREEN}✅ $name: Client ID valid${NC}"
+        success_msg " $name: Client ID valid"
         return 0
     fi
 }
@@ -54,13 +62,13 @@ validate_guild_id() {
     local name="$2"
 
     if [[ -z "$guild_id" ]]; then
-        echo -e "${RED}❌ $name: Guild ID not set${NC}"
+        error_msg " $name: Guild ID not set"
         return 1
     elif [[ ! "$guild_id" =~ ^[0-9]{17,19}$ ]]; then
-        echo -e "${RED}❌ $name: Invalid guild ID format${NC}"
+        error_msg " $name: Invalid guild ID format"
         return 1
     else
-        echo -e "${GREEN}✅ $name: Guild ID valid${NC}"
+        success_msg " $name: Guild ID valid"
         return 0
     fi
 }
@@ -71,37 +79,37 @@ echo "================================"
 
 if [[ -f ".env" ]]; then
     # shellcheck source=/dev/null
-    source .env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
+    source .env 2>/dev/null || debug_msg "  Some variables may not be loadable"
 
     validate_token "${DISCORD_BOT_TOKEN:-}" "Main Bot Token"
     validate_client_id "${DISCORD_CLIENT_ID:-}" "Main Client ID"
     validate_guild_id "${DISCORD_DEV_GUILD_ID:-}" "Development Guild ID"
     validate_guild_id "${DISCORD_PROD_GUILD_ID:-}" "Production Guild ID"
 
-    echo -e "${GREEN}✅ Main .env file exists${NC}"
+    success_msg " Main .env file exists"
 else
-    echo -e "${RED}❌ Main .env file not found${NC}"
+    error_msg " Main .env file not found"
 fi
 
 # Check bot .env file
-echo -e "\n🤖 Bot Environment File (bot/.env)"
+echo -e "\nBOT: Bot Environment File (bot/.env)"
 echo "=================================="
 
 if [[ -f "bot/.env" ]]; then
     # shellcheck source=/dev/null
-    source bot/.env 2>/dev/null || echo -e "${YELLOW}⚠️  Some variables may not be loadable${NC}"
+    source bot/.env 2>/dev/null || debug_msg "  Some variables may not be loadable"
 
     validate_token "${DISCORD_BOT_TOKEN:-}" "Bot Token"
     validate_client_id "${DISCORD_CLIENT_ID:-}" "Bot Client ID"
     validate_guild_id "${DISCORD_GUILD_ID:-}" "Bot Guild ID"
 
-    echo -e "${GREEN}✅ Bot .env file exists${NC}"
+    success_msg " Bot .env file exists"
 else
-    echo -e "${RED}❌ Bot .env file not found${NC}"
+    error_msg " Bot .env file not found"
 fi
 
 # Check bot .env.dev file
-echo -e "\n🔧 Bot Development Environment File (bot/.env.dev)"
+echo -e "\nTOOL: Bot Development Environment File (bot/.env.dev)"
 echo "================================================="
 
 if [[ -f "bot/.env.dev" ]]; then
@@ -114,13 +122,13 @@ if [[ -f "bot/.env.dev" ]]; then
     validate_client_id "$ENV_DEV_CLIENT_ID" "Dev Client ID"
     validate_guild_id "$ENV_DEV_GUILD_ID" "Dev Guild ID"
 
-    echo -e "${GREEN}✅ Bot .env.dev file exists${NC}"
+    success_msg " Bot .env.dev file exists"
 else
-    echo -e "${RED}❌ Bot .env.dev file not found${NC}"
+    error_msg " Bot .env.dev file not found"
 fi
 
 # Cross-reference validation
-echo -e "\n🔄 Cross-Reference Validation"
+echo -e "\nSYNC: Cross-Reference Validation"
 echo "============================="
 
 # Compare main .env with bot/.env
@@ -128,16 +136,16 @@ MAIN_TOKEN=$(grep "DISCORD_BOT_TOKEN=" .env | cut -d'=' -f2 2>/dev/null || echo 
 BOT_TOKEN=$(grep "DISCORD_BOT_TOKEN=" bot/.env | cut -d'=' -f2 2>/dev/null || echo "")
 
 if [[ "$MAIN_TOKEN" == "$BOT_TOKEN" ]]; then
-    echo -e "${GREEN}✅ Main and Bot tokens match${NC}"
+    success_msg " Main and Bot tokens match"
 else
-    echo -e "${YELLOW}⚠️  Main and Bot tokens differ${NC}"
+    debug_msg "  Main and Bot tokens differ"
 fi
 
 # Compare main .env with bot/.env.dev
 if [[ "$MAIN_TOKEN" == "$ENV_DEV_TOKEN" ]]; then
-    echo -e "${GREEN}✅ Main and Dev tokens match${NC}"
+    success_msg " Main and Dev tokens match"
 else
-    echo -e "${YELLOW}⚠️  Main and Dev tokens differ${NC}"
+    debug_msg "  Main and Dev tokens differ"
 fi
 
 # Server mapping validation
@@ -151,15 +159,15 @@ MAIN_DEV_GUILD=$(grep "DISCORD_DEV_GUILD_ID=" .env | cut -d'=' -f2 2>/dev/null |
 MAIN_PROD_GUILD=$(grep "DISCORD_PROD_GUILD_ID=" .env | cut -d'=' -f2 2>/dev/null || echo "")
 
 if [[ "$MAIN_DEV_GUILD" == "1386935663139749998" ]]; then
-    echo -e "${GREEN}✅ Development guild ID correctly configured${NC}"
+    success_msg " Development guild ID correctly configured"
 else
-    echo -e "${YELLOW}⚠️  Development guild ID: $MAIN_DEV_GUILD${NC}"
+    debug_msg "  Development guild ID: $MAIN_DEV_GUILD"
 fi
 
 if [[ "$MAIN_PROD_GUILD" == "1065367728992571444" ]]; then
-    echo -e "${GREEN}✅ Production guild ID correctly configured${NC}"
+    success_msg " Production guild ID correctly configured"
 else
-    echo -e "${YELLOW}⚠️  Production guild ID: $MAIN_PROD_GUILD${NC}"
+    debug_msg "  Production guild ID: $MAIN_PROD_GUILD"
 fi
 
 # Test bot invite generation
@@ -170,16 +178,16 @@ if command -v node &> /dev/null && [[ -f "bot/scripts/generate-invite.js" ]]; th
     echo "Testing invite link generation..."
     cd bot
     if node scripts/generate-invite.js > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ Bot invite link generation successful${NC}"
+        success_msg " Bot invite link generation successful"
     else
-        echo -e "${RED}❌ Bot invite link generation failed${NC}"
+        error_msg " Bot invite link generation failed"
     fi
     cd ..
 else
-    echo -e "${YELLOW}⚠️  Cannot test invite generation (Node.js or script not found)${NC}"
+    debug_msg "  Cannot test invite generation (Node.js or script not found)"
 fi
 
-echo -e "\n🎯 Summary"
+echo -e "\nTARGET: Summary"
 echo "=========="
 echo "Configuration validation complete!"
 echo ""

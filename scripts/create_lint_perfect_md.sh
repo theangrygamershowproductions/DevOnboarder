@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder Lint-Perfect Markdown Generator
 # Creates markdown files that pass all linting rules from the start
 
@@ -59,7 +63,7 @@ EOF
     # Replace placeholder with actual title
     sed -i "s/TITLE_PLACEHOLDER/$title/g" "$filepath"
 
-    echo "✅ Created lint-perfect markdown: $filepath"
+    success "Created lint-perfect markdown: $filepath"
 }
 
 # Usage examples

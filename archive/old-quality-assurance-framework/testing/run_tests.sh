@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 # NOTE: For enhanced logging and troubleshooting, use run_tests_with_logging.sh

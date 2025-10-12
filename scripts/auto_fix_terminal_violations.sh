@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Automated Terminal Output Violations Fixer
 # Applies common fixes to Token Architecture v2.1 scripts
@@ -14,7 +18,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 TARGET_SCRIPT="$1"
 
 if [[ ! -f "$TARGET_SCRIPT" ]]; then
-    echo "ERROR: Script not found: $TARGET_SCRIPT"
+    error "Script not found: $TARGET_SCRIPT"
     exit 1
 fi
 
@@ -31,14 +35,14 @@ cp "$TARGET_SCRIPT" "$TMP_FILE"
 echo "Applying automated fixes..."
 
 # Fix 1: Remove common emojis with safe replacements
-sed -i 's/✅ /Success: /g' "$TMP_FILE"
-sed -i 's/❌ /Error: /g' "$TMP_FILE"
-sed -i 's/⚠️ /Warning: /g' "$TMP_FILE"
+sed -i 's/SUCCESS: /Success: /g' "$TMP_FILE"
+sed -i 's/ERROR: /Error: /g' "$TMP_FILE"
+sed -i 's/WARNING: /Warning: /g' "$TMP_FILE"
 sed -i 's/🔍 /Checking: /g' "$TMP_FILE"
-sed -i 's/🚀 /Ready: /g' "$TMP_FILE"
+sed -i 's/DEPLOY: /Ready: /g' "$TMP_FILE"
 sed -i 's/💡 /Info: /g' "$TMP_FILE"
-sed -i 's/📋 /List: /g' "$TMP_FILE"
-sed -i 's/🎯 /Target: /g' "$TMP_FILE"
+sed -i 's/CHECK: /List: /g' "$TMP_FILE"
+sed -i 's/TARGET: /Target: /g' "$TMP_FILE"
 sed -i 's/🎨 /Style: /g' "$TMP_FILE"
 sed -i 's/🔗 /Link: /g' "$TMP_FILE"
 sed -i 's/📦 /Package: /g' "$TMP_FILE"
@@ -50,14 +54,14 @@ sed -i 's/echo ".*length: ${\(.*\)}.*"/printf "Length: %d\\n" "${\1}"/g' "$TMP_F
 sed -i 's/echo ".*\$\([A-Z_]*\).*"/printf "Value: %s\\n" "$\1"/g' "$TMP_FILE"
 
 # Fix 3: Remove remaining standalone emojis
-sed -i 's/✅//g' "$TMP_FILE"
-sed -i 's/❌//g' "$TMP_FILE"
-sed -i 's/⚠️//g' "$TMP_FILE"
+sed -i 's/SUCCESS://g' "$TMP_FILE"
+sed -i 's/ERROR://g' "$TMP_FILE"
+sed -i 's/WARNING://g' "$TMP_FILE"
 sed -i 's/🔍//g' "$TMP_FILE"
-sed -i 's/🚀//g' "$TMP_FILE"
+sed -i 's/DEPLOY://g' "$TMP_FILE"
 sed -i 's/💡//g' "$TMP_FILE"
-sed -i 's/📋//g' "$TMP_FILE"
-sed -i 's/🎯//g' "$TMP_FILE"
+sed -i 's/CHECK://g' "$TMP_FILE"
+sed -i 's/TARGET://g' "$TMP_FILE"
 sed -i 's/🎨//g' "$TMP_FILE"
 sed -i 's/🔗//g' "$TMP_FILE"
 sed -i 's/📦//g' "$TMP_FILE"
@@ -71,7 +75,7 @@ echo "Verifying fixes..."
 VIOLATIONS_AFTER=$(bash scripts/fix_terminal_output_violations.sh 2>/dev/null | grep "$TARGET_SCRIPT" -A 5 | grep "CRITICAL VIOLATIONS" | awk '{print $4}' || echo "0")
 
 if [[ "$VIOLATIONS_AFTER" == "0" ]]; then
-    echo "SUCCESS: All violations fixed in $TARGET_SCRIPT"
+    success "All violations fixed in $TARGET_SCRIPT"
     echo "Backup available at: ${TARGET_SCRIPT}.backup"
     exit 0
 else

@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # setup_ci_health_bot_gpg_key.sh
 # DevOnboarder CI Health Framework Bot GPG Key Generation and Setup Guide
@@ -21,7 +25,7 @@ echo ""
 
 # Validate we're in the DevOnboarder project root
 if [[ ! -f "pyproject.toml" ]] || ! grep -q "devonboarder" pyproject.toml 2>/dev/null; then
-    red "ERROR: Must be run from DevOnboarder project root"
+    red "error "Must be run from DevOnboarder project root"
     exit 1
 fi
 
@@ -58,7 +62,7 @@ echo ""
 blue "Checking for existing CI Health Bot keys..."
 
 if gpg --list-keys "$BOT_EMAIL" >/dev/null 2>&1; then
-    yellow "WARNING: GPG key already exists for $BOT_EMAIL"
+    yellow "warning "GPG key already exists for $BOT_EMAIL"
     echo ""
     echo "Existing key found. Options:"
     echo "1. Continue with existing key (recommended)"
@@ -120,7 +124,7 @@ EOF
     if gpg --batch --generate-key "$BATCH_FILE"; then
         green "GPG key generated successfully!"
     else
-        red "ERROR: Failed to generate GPG key"
+        red "error "Failed to generate GPG key"
         rm -f "$BATCH_FILE"
         exit 1
     fi
@@ -135,7 +139,7 @@ fi
 KEY_ID=$(gpg --list-keys --with-colons "$BOT_EMAIL" | awk -F: '/^pub/ {print $5}' | head -1)
 
 if [[ -z "$KEY_ID" ]]; then
-    red "ERROR: Could not retrieve key ID"
+    red "error "Could not retrieve key ID"
     exit 1
 fi
 

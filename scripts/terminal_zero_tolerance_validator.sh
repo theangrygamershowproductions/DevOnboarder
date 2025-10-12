@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # scripts/terminal_zero_tolerance_validator.sh
 # Comprehensive terminal output violation detection
 
@@ -11,7 +19,7 @@ echo
 
 # Critical violation patterns that cause hanging
 declare -a CRITICAL_PATTERNS=(
-    "echo.*[✅❌🎯🚀📋🔍📝💡⚠️]"     # Emojis cause immediate hanging
+    "echo.*[SUCCESS:ERROR:TARGET:DEPLOY:CHECK:🔍NOTE:💡WARNING:]"     # Emojis cause immediate hanging
     "echo.*[→≥≤┌└├]"                    # Unicode characters cause hanging
     "echo.*\\$\\("                      # Command substitution in echo
     "echo.*\\$\\{"                      # Variable expansion in echo
@@ -78,10 +86,10 @@ echo "Total violations: $VIOLATION_COUNT"
 echo
 
 if [[ $VIOLATION_COUNT -eq 0 ]]; then
-    echo "SUCCESS: Zero violations found - terminal output policy compliant"
+    success "Zero violations found - terminal output policy compliant"
     exit 0
 elif [[ $VIOLATION_COUNT -le 10 ]]; then
-    echo "WARNING: $VIOLATION_COUNT violations found - within Phase 1 target"
+    warning "$VIOLATION_COUNT violations found - within Phase 1 target"
     exit 1
 else
     echo "CRITICAL: $VIOLATION_COUNT violations found - exceeds acceptable threshold"

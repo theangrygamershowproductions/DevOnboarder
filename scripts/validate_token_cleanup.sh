@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Token Policy Enforcement & Cleanup Validation for DevOnboarder
 # Part of No Default Token Policy v1.0 implementation
 
@@ -6,7 +14,7 @@ set -euo pipefail
 
 # Ensure we're in DevOnboarder root
 if [ ! -f ".github/workflows/ci.yml" ]; then
-    echo "❌ Please run this script from the DevOnboarder root directory"
+    error "Please run this script from the DevOnboarder root directory"
     exit 1
 fi
 
@@ -22,7 +30,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${GREEN}🔐 DevOnboarder Token Policy Enforcement & Cleanup Validation${NC}"
+echo -e "${GREEN}SECURE: DevOnboarder Token Policy Enforcement & Cleanup Validation"
 echo "==============================================================="
 echo "Validating No Default Token Policy v1.0 compliance and cleanup"
 echo ""
@@ -48,19 +56,19 @@ log_violation() {
 
     case "$severity" in
         "CRITICAL")
-            echo -e "${RED}❌ CRITICAL: $message${NC}"
+            error_msg " CRITICAL: $message"
             echo "   File: $file"
             [ -n "$line_number" ] && echo "   Line: $line_number"
             ((VIOLATIONS_FOUND++))
             ;;
         "WARNING")
-            echo -e "${YELLOW}⚠️  WARNING: $message${NC}"
+            debug_msg "  WARNING: $message"
             echo "   File: $file"
             [ -n "$line_number" ] && echo "   Line: $line_number"
             ((WARNINGS_FOUND++))
             ;;
         "INFO")
-            echo -e "${BLUE}ℹ️  INFO: $message${NC}"
+            echo -e "${BLUE}ℹ️  INFO: $message"
             echo "   File: $file"
             ;;
     esac
@@ -69,7 +77,7 @@ log_violation() {
 # Function to activate virtual environment for Python tools
 activate_virtual_env() {
     if [ ! -d ".venv" ]; then
-        echo -e "${RED}❌ Virtual environment not found${NC}"
+        error_msg " Virtual environment not found"
         echo "DevOnboarder requires virtual environment setup:"
         echo "  python -m venv .venv"
         echo "  source .venv/bin/activate"
@@ -79,19 +87,19 @@ activate_virtual_env() {
 
     # shellcheck source=/dev/null
     source .venv/bin/activate
-    echo -e "${BLUE}🐍 Virtual environment activated for Python tools${NC}"
+    echo -e "${BLUE}PYTHON: Virtual environment activated for Python tools"
 }
 
 # Function to check registry availability and structure
 check_token_registry() {
-    echo -e "${BLUE}📋 Checking token scope registry...${NC}"
+    echo -e "${BLUE}CHECK: Checking token scope registry..."
 
     if [ ! -f "$REGISTRY_FILE" ]; then
         log_violation "CRITICAL" "Token scope registry not found" "$REGISTRY_FILE"
         return 1
     fi
 
-    echo "✅ Registry file exists: $REGISTRY_FILE"
+    success "Registry file exists: $REGISTRY_FILE"
 
     # Validate YAML structure if PyYAML is available
     if command -v python >/dev/null 2>&1 && python -c "import yaml" 2>/dev/null; then
@@ -111,7 +119,7 @@ except Exception as e:
     print(f'ERROR: {e}')
     exit(1)
 "; then
-            echo "✅ Registry has valid YAML structure"
+            success "Registry has valid YAML structure"
         else
             log_violation "CRITICAL" "Registry has invalid YAML structure" "$REGISTRY_FILE"
         fi
@@ -122,7 +130,7 @@ except Exception as e:
 
 # Function to scan workflows for token policy violations
 scan_workflows_for_violations() {
-    echo -e "${BLUE}🔍 Scanning GitHub workflows for token policy violations...${NC}"
+    echo -e "${BLUE}🔍 Scanning GitHub workflows for token policy violations..."
 
     if [ ! -d "$GITHUB_WORKFLOWS" ]; then
         log_violation "WARNING" "GitHub workflows directory not found" "$GITHUB_WORKFLOWS"
@@ -174,7 +182,7 @@ scan_workflows_for_violations() {
 
         for token in "${approved_tokens[@]}"; do
             if grep -q "$token" "$workflow_file"; then
-                echo "  ✅ Found approved token: $token"
+                echo "  SUCCESS: Found approved token: $token"
             fi
         done
 
@@ -196,7 +204,7 @@ scan_workflows_for_violations() {
 
 # Function to scan agent documentation for token usage
 scan_agent_docs_for_token_usage() {
-    echo -e "${BLUE}📚 Scanning agent documentation for token usage patterns...${NC}"
+    echo -e "${BLUE}DOCS: Scanning agent documentation for token usage patterns..."
 
     if [ ! -d "agents" ]; then
         log_violation "WARNING" "Agents directory not found" "agents/"
@@ -226,7 +234,7 @@ scan_agent_docs_for_token_usage() {
                 done <<< "$(grep -n "GITHUB_TOKEN" "$agent_file")"
             fi
 
-            echo "  📝 Found token references in documentation"
+            echo "  NOTE: Found token references in documentation"
         fi
 
         ((FILES_CHECKED++))
@@ -236,7 +244,7 @@ scan_agent_docs_for_token_usage() {
 
 # Function to run comprehensive token audit
 run_comprehensive_token_audit() {
-    echo -e "${BLUE}🔎 Running comprehensive token audit...${NC}"
+    echo -e "${BLUE}🔎 Running comprehensive token audit..."
 
     mkdir -p "$TOKEN_AUDIT_DIR"
 
@@ -258,7 +266,7 @@ run_comprehensive_token_audit() {
         --project-root . \
         --json-output "$audit_output_file" \
         --strict-mode 2>&1 | tee "$TOKEN_AUDIT_DIR/enforcement-validation-audit.log"; then
-        echo "✅ Token audit completed successfully"
+        success "Token audit completed successfully"
 
         # Parse audit results if jq is available
         if command -v jq >/dev/null 2>&1 && [ -f "$audit_output_file" ]; then
@@ -267,7 +275,7 @@ run_comprehensive_token_audit() {
             local audit_warnings
             audit_warnings=$(jq -r '.warnings // 0' "$audit_output_file" 2>/dev/null || echo "0")
 
-            echo "  📊 Audit Results:"
+            echo "  REPORT: Audit Results:"
             echo "     Violations: $audit_violations"
             echo "     Warnings: $audit_warnings"
 
@@ -281,7 +289,7 @@ run_comprehensive_token_audit() {
 
 # Function to check for cleanup artifacts and token-related debris
 check_token_cleanup() {
-    echo -e "${BLUE}🧹 Checking for token-related cleanup requirements...${NC}"
+    echo -e "${BLUE}🧹 Checking for token-related cleanup requirements..."
 
     # Check for any token-related temporary files
     local temp_token_files=()
@@ -297,7 +305,7 @@ check_token_cleanup() {
             # Skip known good files
             case "$file" in
                 ".codex/tokens/"*|"scripts/"*"token"*|"docs/"*)
-                    echo "  ✅ $file (expected location)"
+                    echo "  SUCCESS: $file (expected location)"
                     ;;
                 *)
                     log_violation "WARNING" "Unexpected token-related file found" "$file"
@@ -305,7 +313,7 @@ check_token_cleanup() {
             esac
         done
     else
-        echo "✅ No unexpected token-related files found"
+        success "No unexpected token-related files found"
     fi
 
     # Check for environment files that might contain tokens
@@ -318,11 +326,11 @@ check_token_cleanup() {
         echo "Checking environment files for token exposure:"
         for env_file in "${env_files[@]}"; do
             if grep -q "TOKEN" "$env_file" 2>/dev/null; then
-                echo "  📝 $env_file contains token references"
+                echo "  NOTE: $env_file contains token references"
 
                 # Check if it's properly gitignored
                 if git check-ignore "$env_file" >/dev/null 2>&1; then
-                    echo "    ✅ File is properly gitignored"
+                    echo "    SUCCESS: File is properly gitignored"
                 else
                     log_violation "CRITICAL" "Environment file with tokens is not gitignored" "$env_file"
                 fi
@@ -333,15 +341,15 @@ check_token_cleanup() {
 
 # Function to validate Enhanced Potato Policy integration
 check_potato_policy_integration() {
-    echo -e "${BLUE}🥔 Checking Enhanced Potato Policy integration with token governance...${NC}"
+    echo -e "${BLUE}🥔 Checking Enhanced Potato Policy integration with token governance..."
 
     # Check for Potato Policy enforcement script
     if [ -f "scripts/check_potato_ignore.sh" ]; then
-        echo "✅ Potato Policy enforcement script found"
+        success "Potato Policy enforcement script found"
 
         # Check if it's being run (should be in workflows)
         if grep -r "check_potato_ignore" .github/workflows/ >/dev/null 2>&1; then
-            echo "✅ Potato Policy integrated into CI workflows"
+            success "Potato Policy integrated into CI workflows"
         else
             log_violation "WARNING" "Potato Policy script not integrated into CI" "scripts/check_potato_ignore.sh"
         fi
@@ -355,7 +363,7 @@ check_potato_policy_integration() {
     for ignore_file in "${ignore_files[@]}"; do
         if [ -f "$ignore_file" ]; then
             if grep -q "Potato" "$ignore_file"; then
-                echo "✅ Potato entries found in $ignore_file"
+                success "Potato entries found in $ignore_file"
             else
                 log_violation "WARNING" "No Potato entries found in $ignore_file" "$ignore_file"
             fi
@@ -367,7 +375,7 @@ check_potato_policy_integration() {
 
 # Function to generate comprehensive enforcement report
 generate_enforcement_report() {
-    echo -e "${BLUE}📊 Generating comprehensive token policy enforcement report...${NC}"
+    echo -e "${BLUE}REPORT: Generating comprehensive token policy enforcement report..."
 
     local report_file="$TOKEN_AUDIT_DIR/enforcement-validation-report.md"
 
@@ -388,16 +396,16 @@ generate_enforcement_report() {
 ## Policy Compliance Status
 
 $(if [ "$VIOLATIONS_FOUND" -eq 0 ]; then
-    echo "✅ **COMPLIANT** - No critical violations detected"
+    success "**COMPLIANT** - No critical violations detected"
 else
-    echo "❌ **NON-COMPLIANT** - $VIOLATIONS_FOUND critical violations detected"
+    error "**NON-COMPLIANT** - $VIOLATIONS_FOUND critical violations detected"
 fi)
 
 ## Key Findings
 
 ### Token Registry Status
-- Registry File: $([ -f "$REGISTRY_FILE" ] && echo "✅ Present" || echo "❌ Missing")
-- YAML Structure: $(python -c "import yaml; yaml.safe_load(open('$REGISTRY_FILE'))" 2>/dev/null && echo "✅ Valid" || echo "❌ Invalid")
+- Registry File: $([ -f "$REGISTRY_FILE" ] && success "Present" || error "Missing")
+- YAML Structure: $(python -c "import yaml; yaml.safe_load(open('$REGISTRY_FILE'))" 2>/dev/null && success "Valid" || error "Invalid")
 
 ### Workflow Security
 - Workflows Scanned: $WORKFLOWS_CHECKED
@@ -405,12 +413,12 @@ fi)
 - Approved Token Usage: $(grep -l -E "(CI_ISSUE_AUTOMATION_TOKEN|DIAGNOSTICS_BOT_KEY|CI_HEALTH_KEY)" .github/workflows/*.yml 2>/dev/null | wc -l || echo "0")
 
 ### Enhanced Potato Policy Integration
-- Enforcement Script: $([ -f "scripts/check_potato_ignore.sh" ] && echo "✅ Present" || echo "❌ Missing")
-- CI Integration: $(grep -r "check_potato_ignore" .github/workflows/ >/dev/null 2>&1 && echo "✅ Active" || echo "❌ Missing")
+- Enforcement Script: $([ -f "scripts/check_potato_ignore.sh" ] && success "Present" || error "Missing")
+- CI Integration: $(grep -r "check_potato_ignore" .github/workflows/ >/dev/null 2>&1 && success "Active" || error "Missing")
 
 ### Virtual Environment Compliance
-- Virtual Environment: $([ -d ".venv" ] && echo "✅ Available" || echo "❌ Missing")
-- Audit Script: $([ -f "$AUDIT_SCRIPT" ] && echo "✅ Available" || echo "❌ Missing")
+- Virtual Environment: $([ -d ".venv" ] && success "Available" || error "Missing")
+- Audit Script: $([ -f "$AUDIT_SCRIPT" ] && success "Available" || error "Missing")
 
 ## Recommendations
 
@@ -457,7 +465,7 @@ Review the complete log file for detailed findings: \`$LOG_FILE\`
 **Contact**: See project documentation for governance questions
 EOF
 
-    echo "✅ Enforcement report generated: $report_file"
+    success "Enforcement report generated: $report_file"
 }
 
 # Main execution
@@ -494,7 +502,7 @@ main() {
     echo ""
 
     # Final summary
-    echo -e "${BLUE}📋 Validation Summary${NC}"
+    echo -e "${BLUE}CHECK: Validation Summary"
     echo "=================="
     echo "Files Checked: $FILES_CHECKED"
     echo "Workflows Checked: $WORKFLOWS_CHECKED"
@@ -503,18 +511,18 @@ main() {
     echo ""
 
     if [ "$VIOLATIONS_FOUND" -eq 0 ]; then
-        echo -e "${GREEN}✅ SUCCESS: No critical policy violations detected${NC}"
+        success_msg " SUCCESS: No critical policy violations detected"
         echo -e "Token governance appears to be properly implemented."
         echo ""
-        echo "📊 Full report: $TOKEN_AUDIT_DIR/enforcement-validation-report.md"
-        echo "📝 Detailed log: $LOG_FILE"
+        report "Full report: $TOKEN_AUDIT_DIR/enforcement-validation-report.md"
+        note "Detailed log: $LOG_FILE"
         return 0
     else
-        echo -e "${RED}❌ FAILURE: $VIOLATIONS_FOUND critical policy violations detected${NC}"
+        error_msg " FAILURE: $VIOLATIONS_FOUND critical policy violations detected"
         echo -e "Token governance requires immediate attention."
         echo ""
-        echo "📊 Full report: $TOKEN_AUDIT_DIR/enforcement-validation-report.md"
-        echo "📝 Detailed log: $LOG_FILE"
+        report "Full report: $TOKEN_AUDIT_DIR/enforcement-validation-report.md"
+        note "Detailed log: $LOG_FILE"
         echo ""
         echo "Next steps:"
         echo "1. Review detailed findings in the report"

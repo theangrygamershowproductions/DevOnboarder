@@ -1,4 +1,6 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder CI Health Dashboard - AAR Integration CLI Wrapper
 # Provides convenient access to CI health AAR integration features
 
@@ -26,12 +28,12 @@ elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
     # Fallback to legacy token loader
     source "$PROJECT_ROOT/scripts/load_token_environment.sh"
 else
-    echo "⚠️  Warning: Token Architecture scripts not found. AAR integration may have limited functionality."
+    warning " Warning: Token Architecture scripts not found. AAR integration may have limited functionality."
 fi
 
 # Check for virtual environment
 if [[ ! -d "$PROJECT_ROOT/.venv" ]]; then
-    echo "ERROR: Virtual environment not found at $PROJECT_ROOT/.venv"
+    error "Virtual environment not found at $PROJECT_ROOT/.venv"
     echo "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
     exit 1
 fi
@@ -41,7 +43,7 @@ source "$PROJECT_ROOT/.venv/bin/activate"
 
 # Verify Python dependencies
 if ! python -c "import json, subprocess" 2>/dev/null; then
-    echo "ERROR: Missing Python dependencies"
+    error "Missing Python dependencies"
     echo "Run: pip install -e .[test]"
     exit 1
 fi

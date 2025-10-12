@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Framework Audit Script
 # Comprehensive validation of framework documentation consistency and preventable errors
 
@@ -15,7 +23,7 @@ NC='\033[0m'         # No Color - reset
 
 echo "# Frameworks Audit ($(date -u '+%Y-%m-%dT%H:%M:%S%Z'))"
 echo ""
-echo "Root: ${BLUE}frameworks${NC}"
+echo "Root: ${BLUE}frameworks"
 echo ""
 
 # Status & Script Count Check
@@ -89,7 +97,7 @@ echo "## Legacy Path Reference Scan (underscore→hyphen)"
 # Check each framework for legacy references
 for framework_dir in frameworks/*/; do
     framework_name=$(basename "$framework_dir")
-    echo "### ${BLUE}$framework_name${NC} → ${BLUE}${framework_name//_/-}${NC}"
+    echo "### ${BLUE}$framework_name${NC} → ${BLUE}${framework_name//_/-}"
 
     if [[ -d "$framework_dir" ]]; then
         # Look for references to the old underscore version in README
@@ -123,7 +131,7 @@ issues_found=false
 
 for framework_dir in frameworks/*/; do
     framework_name=$(basename "$framework_dir")
-    echo "### ${BLUE}$framework_name${NC}"
+    echo "### ${BLUE}$framework_name"
 
     # Find all shell scripts
     scripts=$(find "$framework_dir" -name "*.sh" -type f 2>/dev/null || true)
@@ -162,7 +170,7 @@ for framework_dir in frameworks/*/; do
         fi
 
         # Check for terminal output violations (critical for CI compatibility)
-        if grep -q "echo.*✅\|echo.*❌\|echo.*🚀\|echo.*📋\|echo.*🔍\|echo.*📝\|echo.*💡\|echo.*⚠️\|echo.*🔧\|echo.*🎯" "$script"; then
+        if grep -q "echo.*SUCCESS:\|echo.*ERROR:\|echo.*DEPLOY:\|echo.*CHECK:\|echo.*🔍\|echo.*NOTE:\|echo.*💡\|echo.*WARNING:\|echo.*TOOL:\|echo.*TARGET:" "$script"; then
             issues="${issues}${YELLOW}[EMOJIS IN ECHO]${NC} "
         fi
 
@@ -238,10 +246,10 @@ for framework_dir in frameworks/*/; do
     framework_name=$(basename "$framework_dir")
     readme_file="$framework_dir/README.md"
 
-    echo "### ${BLUE}$framework_name${NC}"
+    echo "### ${BLUE}$framework_name"
 
     if [[ ! -f "$readme_file" ]]; then
-        echo "${RED}[MISSING README.md]${NC}"
+        echo "${RED}[MISSING README.md]"
         echo ""
         continue
     fi
@@ -280,7 +288,7 @@ for framework_dir in frameworks/*/; do
     if [[ -n "$issues" ]]; then
         echo "$issues"
     else
-        echo "${GREEN}[README QUALITY CHECKS PASSED]${NC}"
+        echo "${GREEN}[README QUALITY CHECKS PASSED]"
     fi
 
     echo ""
@@ -319,9 +327,9 @@ echo "|---|:---:|:---:|:---:|"
 for framework_dir in frameworks/*/; do
     framework_name=$(basename "$framework_dir")
 
-    has_scripts=$([[ -d "$framework_dir/scripts" ]] && echo "${GREEN}[YES]${NC}" || echo "${RED}[NO]${NC}")
-    has_readme=$([[ -f "$framework_dir/README.md" ]] && echo "${GREEN}[YES]${NC}" || echo "${RED}[NO]${NC}")
-    has_tests=$([[ -d "$framework_dir/tests" ]] && echo "${GREEN}[YES]${NC}" || echo "${RED}[NO]${NC}")
+    has_scripts=$([[ -d "$framework_dir/scripts" ]] && echo "${GREEN}[YES]" || echo "${RED}[NO]")
+    has_readme=$([[ -f "$framework_dir/README.md" ]] && echo "${GREEN}[YES]" || echo "${RED}[NO]")
+    has_tests=$([[ -d "$framework_dir/tests" ]] && echo "${GREEN}[YES]" || echo "${RED}[NO]")
 
     echo "| ${BLUE}$framework_name${NC} | $has_scripts | $has_readme | $has_tests |"
 done

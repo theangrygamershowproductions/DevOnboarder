@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Phase 3 Implementation Test Suite - Developer Scripts
 # Tests enhanced token loading across developer utility scripts
 
@@ -74,7 +78,7 @@ printf "Failed: %d\n" "${#FAILED_TESTS[@]}"
 echo ""
 
 if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
-    echo "SUCCESS: Phase 3 developer scripts enhanced successfully!"
+    success "Phase 3 developer scripts enhanced successfully!"
     echo "Option 1 implementation working perfectly across developer utilities"
     echo ""
     printf "Enhanced Scripts Count: %d\n" "$PASSED_TESTS"

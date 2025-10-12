@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # DevOnboarder UTC Timestamp Infrastructure Fix
 #
 # INFRASTRUCTURE CHANGE LOG:
@@ -151,7 +159,7 @@ for script in "${SCRIPTS_TO_FIX[@]}"; do
         fi
     else
         ERROR_COUNT=$((ERROR_COUNT + 1))
-        echo "ERROR: Failed to process $script"
+        error "Failed to process $script"
     fi
 done
 

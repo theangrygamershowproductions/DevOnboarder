@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Fix Unicode terminal output violations in manage_test_artifacts.sh
 # This script applies the fix for issue #1008 by removing Unicode characters
 # from terminal output while adding enhanced Unicode handling for test artifacts
@@ -20,18 +22,18 @@ cp "$SCRIPT_PATH" "$SCRIPT_PATH.backup"
 echo "Creating Unicode-safe version of manage_test_artifacts.sh..."
 
 # Apply replacements to remove Unicode characters
-sed -i 's/❌/FAILED/g' "$SCRIPT_PATH"
-sed -i 's/✅/OK/g' "$SCRIPT_PATH"
-sed -i 's/⚠️/WARNING/g' "$SCRIPT_PATH"
+sed -i 's/ERROR:/FAILED/g' "$SCRIPT_PATH"
+sed -i 's/SUCCESS:/OK/g' "$SCRIPT_PATH"
+sed -i 's/WARNING:/WARNING/g' "$SCRIPT_PATH"
 sed -i 's/🧪/TEST/g' "$SCRIPT_PATH"
-sed -i 's/🔐/SECURITY/g' "$SCRIPT_PATH"
+sed -i 's/SECURE:/SECURITY/g' "$SCRIPT_PATH"
 sed -i 's/📁/FOLDER/g' "$SCRIPT_PATH"
-sed -i 's/🐍/PYTHON/g' "$SCRIPT_PATH"
+sed -i 's/PYTHON:/PYTHON/g' "$SCRIPT_PATH"
 sed -i 's/🧹/CLEAN/g' "$SCRIPT_PATH"
-sed -i 's/📊/STATS/g' "$SCRIPT_PATH"
-sed -i 's/🤖/BOT/g' "$SCRIPT_PATH"
+sed -i 's/REPORT:/STATS/g' "$SCRIPT_PATH"
+sed -i 's/BOT:/BOT/g' "$SCRIPT_PATH"
 sed -i 's/⚛️/REACT/g' "$SCRIPT_PATH"
-sed -i 's/📋/LIST/g' "$SCRIPT_PATH"
+sed -i 's/CHECK:/LIST/g' "$SCRIPT_PATH"
 sed -i 's/🎉/SUCCESS/g' "$SCRIPT_PATH"
 sed -i 's/•/*/g' "$SCRIPT_PATH"
 

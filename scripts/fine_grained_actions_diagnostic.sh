@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Fine-Grained Actions Permission Diagnostic
 # Specifically tests Actions permission requirements for AAR system
 
@@ -15,7 +23,7 @@ echo "Testing AAR_TOKEN Fine-Grained permissions..."
 echo ""
 
 if [ -z "$AAR_TOKEN" ]; then
-    echo "ERROR: AAR_TOKEN not found"
+    error "AAR_TOKEN not found"
     exit 1
 fi
 

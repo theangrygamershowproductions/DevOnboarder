@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Robust CI Pattern Analysis - Fixes GitHub CLI issues
 
 # Centralized logging for troubleshooting and repository health
@@ -41,12 +49,12 @@ echo "INFO: Analyzing CI failure patterns..."
 FAILING_CHECKS=$(get_failing_checks)
 
 if [ -z "$FAILING_CHECKS" ]; then
-    echo "SUCCESS: No failing checks detected or unable to retrieve data"
+    success "No failing checks detected or unable to retrieve data"
     echo "STATS: Pattern Analysis: All checks passing or data unavailable"
     exit 0
 fi
 
-echo "ERROR: Failing Checks Detected:"
+error "Failing Checks Detected:"
 while read -r check; do
     [ -n "$check" ] && echo "  - $check"
 done <<< "$FAILING_CHECKS"
@@ -84,7 +92,7 @@ fi
 # Documentation failures
 if echo "$FAILING_CHECKS" | grep -qi "docs\|documentation\|markdown\|readme"; then
     PATTERNS+=("DOCUMENTATION")
-    echo "  📚 DOCUMENTATION: Documentation quality issues detected"
+    echo "  DOCS: DOCUMENTATION: Documentation quality issues detected"
 fi
 
 # Infrastructure failures
@@ -106,7 +114,7 @@ if [ ${#PATTERNS[@]} -eq 0 ]; then
 fi
 
 echo ""
-echo "TARGET: Automated Fix Recommendations:"
+target "Automated Fix Recommendations:"
 
 for pattern in "${PATTERNS[@]}"; do
     case $pattern in
@@ -123,7 +131,7 @@ for pattern in "${PATTERNS[@]}"; do
             echo "  BUILD: BUILD: Check dependencies, fix compilation errors, verify configurations"
             ;;
         "DOCUMENTATION")
-            echo "  📚 DOCUMENTATION: Fix markdown errors, update docs, validate links"
+            echo "  DOCS: DOCUMENTATION: Fix markdown errors, update docs, validate links"
             ;;
         "INFRASTRUCTURE")
             echo "  BUILD: INFRASTRUCTURE: Verify deployment configs, check environment variables"
@@ -138,7 +146,7 @@ for pattern in "${PATTERNS[@]}"; do
 done
 
 echo ""
-echo "BOT: Auto-fix Potential Assessment:"
+bot "Auto-fix Potential Assessment:"
 if [[ " ${PATTERNS[*]} " =~ " CODE_QUALITY " ]] || [[ " ${PATTERNS[*]} " =~ " DOCUMENTATION " ]]; then
     echo "  SUCCESS: HIGH: Code quality and documentation issues are auto-fixable"
 elif [[ " ${PATTERNS[*]} " =~ " TESTING " ]] && [[ " ${PATTERNS[*]} " =~ " BUILD " ]]; then
@@ -148,4 +156,4 @@ else
 fi
 
 echo ""
-echo "SUCCESS: Pattern analysis complete"
+success "Pattern analysis complete"

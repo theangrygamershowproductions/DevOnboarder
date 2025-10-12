@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # DevOnboarder PR Inline Comments Checker
 # Efficiently extracts and displays Copilot and reviewer inline comments
@@ -231,7 +239,7 @@ FILTERED_COUNT=$(echo "$FILTERED_COMMENTS" | jq length)
 
 # Summary mode
 if [[ "$SUMMARY_ONLY" == true ]]; then
-    echo "📊 INLINE COMMENTS SUMMARY"
+    report "INLINE COMMENTS SUMMARY"
     echo "=========================="
     echo "Total comments: $COMMENT_COUNT"
     echo "Filtered comments: $FILTERED_COUNT"
@@ -275,7 +283,7 @@ if [[ "$OPEN_BROWSER" == true ]]; then
 fi
 
 # Full output mode
-echo "📋 INLINE COMMENTS DETAILS"
+check "INLINE COMMENTS DETAILS"
 echo "=========================="
 echo "Showing $FILTERED_COUNT of $COMMENT_COUNT total comments"
 echo ""
@@ -304,7 +312,7 @@ echo "$FILTERED_COMMENTS" | jq -c '.[]' | while IFS= read -r comment; do
     echo "├─────────────────────────────────────────────────────────────"
 
     # Format comment body with proper indentation
-    echo "│ 🤖 Comment:"
+    echo "│ BOT: Comment:"
     while IFS= read -r line; do
         echo "│ $line"
     done <<< "$BODY"
@@ -313,7 +321,7 @@ echo "$FILTERED_COMMENTS" | jq -c '.[]' | while IFS= read -r comment; do
     RESOLUTION=$(get_resolution "$COMMENT_ID")
     if [[ -n "$RESOLUTION" ]]; then
         echo "│"
-        echo "│ ✅ RESOLUTION:"
+        echo "│ SUCCESS: RESOLUTION:"
         echo "$RESOLUTION" | grep -E "(resolution_action|reasoning|additional_notes|commit_hash)" | while IFS= read -r line; do
             if [[ "$line" =~ ^[[:space:]]*([^:]+):[[:space:]]*\"(.*)\"$ ]]; then
                 KEY="${BASH_REMATCH[1]}"
@@ -321,7 +329,7 @@ echo "$FILTERED_COMMENTS" | jq -c '.[]' | while IFS= read -r comment; do
                 case "$KEY" in
                     "resolution_action") echo "│   ⚡ Action: $VALUE" ;;
                     "reasoning") echo "│   💡 Reason: $VALUE" ;;
-                    "additional_notes") [[ -n "$VALUE" ]] && echo "│   📝 Notes: $VALUE" ;;
+                    "additional_notes") [[ -n "$VALUE" ]] && echo "│   NOTE: Notes: $VALUE" ;;
                     "commit_hash") [[ -n "$VALUE" ]] && echo "│   🔗 Commit: $VALUE" ;;
                 esac
             fi
@@ -332,12 +340,12 @@ echo "$FILTERED_COMMENTS" | jq -c '.[]' | while IFS= read -r comment; do
     echo ""
 done
 
-echo "✅ Complete! Found $FILTERED_COUNT relevant inline comments."
+success "Complete! Found $FILTERED_COUNT relevant inline comments."
 
 # Show quick action suggestions
 if [[ "$FILTERED_COUNT" -gt 0 ]]; then
     echo ""
-    echo "🚀 QUICK ACTIONS:"
+    deploy "QUICK ACTIONS:"
     echo "  View in browser:  ./scripts/check_pr_inline_comments.sh --open-browser $PR_NUMBER"
     echo "  Summary only:     ./scripts/check_pr_inline_comments.sh --summary $PR_NUMBER"
     echo "  Copilot only:     ./scripts/check_pr_inline_comments.sh --copilot-only $PR_NUMBER"
@@ -348,7 +356,7 @@ fi
 
 # Resolution tracking functions
 annotate_resolutions() {
-    echo "🎯 RESOLUTION ANNOTATION MODE"
+    target "RESOLUTION ANNOTATION MODE"
     echo "Adding resolution notes for PR #$PR_NUMBER comments"
     echo ""
 
@@ -375,7 +383,7 @@ annotate_resolutions() {
         echo "└─────────────────────────────────────────────────────────────"
 
         if [[ -n "$EXISTING_RESOLUTION" ]]; then
-            echo "⚠️  Resolution already exists:"
+            warning " Resolution already exists:"
             echo "$EXISTING_RESOLUTION" | grep -E "(resolution_action|reasoning)" | sed 's/^/   /'
             echo ""
             read -rp "Update existing resolution? (y/N): " UPDATE_CHOICE
@@ -387,7 +395,7 @@ annotate_resolutions() {
         fi
 
         echo ""
-        echo "📝 Add resolution for this comment:"
+        note "Add resolution for this comment:"
         read -rp "Resolution action: " RESOLUTION_ACTION
         read -rp "Reasoning: " REASONING
         read -rp "Additional notes (optional): " ADDITIONAL_NOTES
@@ -395,19 +403,19 @@ annotate_resolutions() {
 
         if [[ -n "$RESOLUTION_ACTION" ]]; then
             save_resolution "$COMMENT_ID" "$RESOLUTION_ACTION" "$REASONING" "$ADDITIONAL_NOTES" "$COMMIT_HASH"
-            echo "✅ Resolution saved!"
+            success "Resolution saved!"
         else
-            echo "❌ Skipped - no resolution action provided"
+            error "Skipped - no resolution action provided"
         fi
         echo ""
     done
 
-    echo "🎯 Resolution annotation complete!"
+    target "Resolution annotation complete!"
     echo "View resolutions: ./scripts/check_pr_inline_comments.sh --resolution-summary $PR_NUMBER"
 }
 
 show_resolution_summary() {
-    echo "📋 RESOLUTION SUMMARY for PR #$PR_NUMBER"
+    check "RESOLUTION SUMMARY for PR #$PR_NUMBER"
     echo "Repository: $OWNER/$REPO"
     echo ""
 
@@ -433,12 +441,12 @@ show_resolution_summary() {
 
         # Show comment (truncated)
         COMMENT_PREVIEW=$(echo "$BODY" | head -2 | tr '\n' ' ' | cut -c1-60)
-        echo "│ 🤖 Comment: $COMMENT_PREVIEW..."
+        echo "│ BOT: Comment: $COMMENT_PREVIEW..."
         echo "│"
 
         if [[ -n "$RESOLUTION" ]]; then
             ((resolved_count++))
-            echo "│ ✅ RESOLVED:"
+            echo "│ SUCCESS: RESOLVED:"
             echo "$RESOLUTION" | grep -E "(resolution_action|reasoning|additional_notes|commit_hash)" | while IFS= read -r line; do
                 if [[ "$line" =~ ^[[:space:]]*([^:]+):[[:space:]]*\"(.*)\"$ ]]; then
                     KEY="${BASH_REMATCH[1]}"
@@ -452,23 +460,23 @@ show_resolution_summary() {
                 fi
             done
         else
-            echo "│ ❌ NO RESOLUTION"
+            echo "│ ERROR: NO RESOLUTION"
             echo "│   Run: ./scripts/check_pr_inline_comments.sh --annotate $PR_NUMBER"
         fi
         echo "└─────────────────────────────────────────────────────────────"
         echo ""
     done
 
-    echo "📊 SUMMARY: $resolved_count/$total_count comments resolved ($(( resolved_count * 100 / total_count ))%)"
+    report "SUMMARY: $resolved_count/$total_count comments resolved ($(( resolved_count * 100 / total_count ))%)"
 }
 
 export_learning_patterns() {
-    echo "📚 LEARNING EXPORT for PR #$PR_NUMBER"
+    docs "LEARNING EXPORT for PR #$PR_NUMBER"
     echo "Generating documentation from resolution patterns..."
     echo ""
 
     if [[ ! -f "$RESOLUTION_FILE" ]]; then
-        echo "❌ No resolutions found for PR #$PR_NUMBER"
+        error "No resolutions found for PR #$PR_NUMBER"
         echo "Run: ./scripts/check_pr_inline_comments.sh --annotate $PR_NUMBER"
         exit 1
     fi
@@ -542,9 +550,9 @@ EOF
 
 EOF
 
-    echo "✅ Learning export created: $export_file"
-    echo "📊 Metrics added to export"
-    echo "🎯 Ready for documentation integration"
+    success "Learning export created: $export_file"
+    report "Metrics added to export"
+    target "Ready for documentation integration"
 }
 
 verify_resolutions() {
@@ -562,15 +570,15 @@ verify_resolutions() {
         RESOLUTION=$(get_resolution "$COMMENT_ID")
         if [[ -z "$RESOLUTION" ]]; then
             ((unresolved_count++))
-            echo "❌ Unresolved: Comment $COMMENT_ID from $USER"
+            error "Unresolved: Comment $COMMENT_ID from $USER"
         fi
     done
 
     if [[ "$unresolved_count" -eq 0 ]]; then
-        echo "✅ All comments have resolutions!"
+        success "All comments have resolutions!"
         exit 0
     else
-        echo "⚠️  $unresolved_count/$total_count comments need resolutions"
+        warning " $unresolved_count/$total_count comments need resolutions"
         echo "Run: ./scripts/check_pr_inline_comments.sh --annotate $PR_NUMBER"
         exit 1
     fi

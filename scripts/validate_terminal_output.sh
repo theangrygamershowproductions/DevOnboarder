@@ -1,4 +1,12 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Terminal Output Policy Enforcement Script - Refined Edition
 # ZERO TOLERANCE for violations that cause terminal hanging
 # Excludes false positives from GitHub Actions file operations
@@ -70,7 +78,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     file_violations=0
 
     # 1. Check for emojis and Unicode characters (keep this check)
-    if timeout "$TIMEOUT" grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝' "$file" 2>/dev/null; then
+    if timeout "$TIMEOUT" grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|SUCCESS:|ERROR:|TOOL:|REPORT:|📈|📥|🔗|🐛|WARNING:|💡|TARGET:|DEPLOY:|CHECK:|🔍|NOTE:' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Emoji/Unicode characters found in $file"
         echo "These WILL cause immediate terminal hanging"
         ((file_violations++))
@@ -157,7 +165,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     # 5. Check for here-doc syntax near echo (keep this check)
     if timeout "$TIMEOUT" grep -B3 -A3 'EOF' "$file" | timeout "$TIMEOUT" grep -E 'echo|comment.*body' 2>/dev/null; then
         # Only warn, don't count as violation unless it's clearly problematic
-        echo "WARNING: Here-doc near echo/comment context in $file"
+        warning "Here-doc near echo/comment context in $file"
         echo "Verify this does not cause terminal hanging"
     fi
 

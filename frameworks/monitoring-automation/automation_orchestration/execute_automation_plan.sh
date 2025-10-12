@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Simplified PR automation execution for PR #966
 
 set -euo pipefail
@@ -21,7 +29,7 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN" "CI_ISSUE_AUTOMATION_TOKEN"; then
-        echo "ERROR: Cannot proceed without required tokens for PR automation"
+        error "Cannot proceed without required tokens for PR automation"
         echo "TIP: PR automation requires GitHub API access for health assessment"
         exit 1
     fi
@@ -51,11 +59,11 @@ echo ""
 echo "🧠 Step 3: Strategic Decision"
 if [[ $HEALTH_SCORE -ge 80 ]]; then
     DECISION="MERGE"
-    echo "SUCCESS: RECOMMENDATION: MERGE (Health Score: ${HEALTH_SCORE}%)"
+    success "RECOMMENDATION: MERGE (Health Score: ${HEALTH_SCORE}%)"
     echo "   → PR is healthy and ready for merge"
 elif [[ $HEALTH_SCORE -ge 40 ]]; then
     DECISION="FIX_AND_MERGE"
-    echo "TOOL: RECOMMENDATION: FIX AND MERGE (Health Score: ${HEALTH_SCORE}%)"
+    tool "RECOMMENDATION: FIX AND MERGE (Health Score: ${HEALTH_SCORE}%)"
     echo "   → Apply targeted fixes, then merge"
 else
     DECISION="NEW_PR"
@@ -74,7 +82,7 @@ elif [[ "$MODE" == "execute" ]]; then
 
     # Apply markdown fixes if pattern analysis shows documentation issues
     if grep -q "DOCUMENTATION QUALITY" reports/pattern_analysis_$PR_NUMBER.txt; then
-        echo "TOOL: Applying markdown fixes..."
+        tool "Applying markdown fixes..."
         if command -v markdownlint >/dev/null 2>&1; then
             # Run markdownlint fix on agent files
             find agents/ -name "*.md" -exec markdownlint --fix {} \; 2>/dev/null || true
@@ -84,7 +92,7 @@ elif [[ "$MODE" == "execute" ]]; then
 
     # Apply Python code fixes if needed
     if grep -q "TEST FAILURE" reports/pattern_analysis_$PR_NUMBER.txt; then
-        echo "🐍 Checking Python code formatting..."
+        python "Checking Python code formatting..."
         if command -v black >/dev/null 2>&1; then
             black --check --diff . || {
                 echo "   TOOL: Applying black formatting..."
@@ -96,8 +104,8 @@ elif [[ "$MODE" == "execute" ]]; then
     echo "   SUCCESS: Automated fixes applied"
 
 elif [[ "$MODE" == "full-auto" ]]; then
-    echo "BOT: FULL-AUTO MODE: Complete automation"
-    echo "WARNING:  This would apply fixes AND potentially auto-merge"
+    bot "FULL-AUTO MODE: Complete automation"
+    warning " This would apply fixes AND potentially auto-merge"
     echo "SHIELD:  Safety check: Potato.md protection active"
 
     # Safety check
@@ -110,5 +118,5 @@ elif [[ "$MODE" == "full-auto" ]]; then
 fi
 
 echo ""
-echo "SUCCESS: Automation execution complete for PR #966"
+success "Automation execution complete for PR #966"
 echo "STATS: Final Status: Health Score ${HEALTH_SCORE}% | Recommendation: $DECISION"

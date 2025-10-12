@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Append coverage summary and link to summary.md
 # Uses environment variables set by coverage tools or CI.
 
@@ -12,7 +16,7 @@ OUTPUT_FILE=${1:-summary.md}
 
 {
   echo ""
-  echo "### 📊 Coverage Summary"
+  echo "### REPORT: Coverage Summary"
   echo ""
   if [ -n "$COVERED_LINES" ] && [ -n "$TOTAL_LINES" ]; then
     echo "- **Lines:** ${COVERED_LINES}/${TOTAL_LINES} (${COVERAGE_PERCENT}%)"

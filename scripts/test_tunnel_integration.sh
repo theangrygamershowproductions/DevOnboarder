@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/test_tunnel_integration.sh
 # Purpose: Phase 2 - Service Integration & CORS Testing
@@ -49,7 +53,7 @@ log_test_fail() {
 }
 
 log_test_warning() {
-    echo "WARNING: $1"
+    warning "$1"
     TESTS_WARNINGS=$((TESTS_WARNINGS + 1))
 }
 
@@ -338,7 +342,7 @@ generate_test_report() {
     if [ $TESTS_FAILED -eq 0 ]; then
         if [ $TESTS_WARNINGS -eq 0 ]; then
             echo ""
-            echo "SUCCESS: All integration tests passed!"
+            success "All integration tests passed!"
             echo "Phase 2 is complete. Ready for Phase 3: Production Optimization"
             return 0
         else

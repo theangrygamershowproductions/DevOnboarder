@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # =============================================================================
 # DevOnboarder Token Migration Script
@@ -92,7 +96,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            log "ERROR: Unknown option $1"
+            log "error "Unknown option $1"
             exit 1
             ;;
     esac
@@ -117,13 +121,13 @@ migrate_environment() {
     log "Processing environment: ${env_suffix:-"(default)"}"
 
     if [[ ! -f "$env_file" ]]; then
-        log "WARNING: Environment file not found: $env_file"
+        log "warning "Environment file not found: $env_file"
         return 0
     fi
 
     # Check if tokens file already exists
     if [[ -f "$tokens_file" && "$FORCE_OVERWRITE" != "true" ]]; then
-        log "WARNING: Tokens file already exists: $tokens_file"
+        log "warning "Tokens file already exists: $tokens_file"
         log "Use --force to overwrite or manually merge"
         return 0
     fi
@@ -246,7 +250,7 @@ if [[ -n "$TARGET_ENV" ]]; then
             migrate_environment ""
             ;;
         *)
-            log "ERROR: Unknown environment: $TARGET_ENV"
+            log "error "Unknown environment: $TARGET_ENV"
             log "Valid environments: dev, prod, ci, default"
             exit 1
             ;;
@@ -267,9 +271,9 @@ if [[ "$DRY_RUN" == "false" ]]; then
     if command -v python3 > /dev/null; then
         log "Testing token loading system..."
         if python3 "$PROJECT_ROOT/scripts/token_loader.py" info > /dev/null 2>&1; then
-            log "SUCCESS: Token loading system validated"
+            log "success "Token loading system validated"
         else
-            log "WARNING: Token loading system validation failed"
+            log "warning "Token loading system validation failed"
         fi
     fi
 fi

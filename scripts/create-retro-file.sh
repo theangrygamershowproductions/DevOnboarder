@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
 RETRO_DIR="docs/checklists/retros"
@@ -7,7 +11,7 @@ DATE="$(date +%Y-%m-%d)"
 NEW_FILE="$RETRO_DIR/$DATE.md"
 
 if [ -f "$NEW_FILE" ]; then
-  echo "ERROR: $NEW_FILE already exists" >&2
+  error "$NEW_FILE already exists" >&2
   exit 1
 fi
 

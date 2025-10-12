@@ -1,11 +1,15 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # Fix MD030 list-marker-space and MD007 ul-indent issues across all markdown files
 # This script fixes "Expected: 1; Actual: 3" spacing issues and indentation
 
 set -e
 
-echo "🔧 Fixing markdown list marker spacing and indentation issues..."
+tool "Fixing markdown list marker spacing and indentation issues..."
 
 # Function to fix list marker spacing in a file
 fix_file() {
@@ -46,5 +50,5 @@ find . -name "*.md" \
         fix_file "$file"
     done
 
-echo "✅ Markdown spacing and indentation fixes complete!"
+success "Markdown spacing and indentation fixes complete!"
 echo "🔍 Run markdownlint again to verify fixes..."

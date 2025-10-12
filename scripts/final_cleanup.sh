@@ -1,7 +1,11 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 set -euo pipefail
 
-echo "🎯 FINAL CLEANUP: Eliminating all residual test artifacts"
+target "FINAL CLEANUP: Eliminating all residual test artifacts"
 echo "=================================================="
 
 # Script metadata
@@ -20,12 +24,12 @@ log_and_display "Started final cleanup at: $(date)"
 
 # Check if virtual environment exists
 if [ ! -d ".venv" ]; then
-    log_and_display "❌ ERROR: Virtual environment .venv not found"
+    log_and_display "error "error "Virtual environment .venv not found"
     log_and_display "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
     exit 1
 fi
 
-log_and_display "🐍 Activating virtual environment..."
+log_and_display "python "Activating virtual environment..."
 # shellcheck source=/dev/null
 source .venv/bin/activate
 
@@ -55,9 +59,9 @@ if [[ -d "config_backups" ]]; then
     backup_count=$(find config_backups/ -type f 2>/dev/null | wc -l)
     log_and_display "   Removing entire config_backups directory with $backup_count files..."
     rm -rf config_backups/ 2>/dev/null || true
-    log_and_display "   ✅ config_backups directory removed"
+    log_and_display "   SUCCESS: config_backups directory removed"
 else
-    log_and_display "   ✅ No config_backups directory found"
+    log_and_display "   SUCCESS: No config_backups directory found"
 fi
 
 log_and_display ""
@@ -68,13 +72,13 @@ pytest_artifacts=$(find . -type d -name "pytest-of-*" -not -path "./.venv/*" -no
 log_and_display "   Pytest temporary directories: $pytest_artifacts"
 
 if [[ "$pytest_artifacts" -gt 0 ]]; then
-    log_and_display "❌ ERROR: Still found pytest artifacts:"
+    log_and_display "error "error "Still found pytest artifacts:"
     find . -type d -name "pytest-of-*" -not -path "./.venv/*" -not -path "./.git/*" 2>/dev/null | while read -r dir; do
         log_and_display "   $dir"
     done
     exit 1
 else
-    log_and_display "✅ SUCCESS: No pytest artifacts found"
+    log_and_display "success "success "No pytest artifacts found"
 fi
 
 log_and_display ""
@@ -86,7 +90,7 @@ PRECOMMIT_LOG="logs/precommit_final_${TIMESTAMP}.log"
 # Run pre-commit and capture output to file
 log_and_display "   Running: pre-commit run --all-files"
 if pre-commit run --all-files 2>&1 | tee "$PRECOMMIT_LOG"; then
-    log_and_display "✅ All pre-commit hooks passed!"
+    log_and_display "success "All pre-commit hooks passed!"
 
     # Show summary of what passed from the actual log file
     if [[ -f "$PRECOMMIT_LOG" ]]; then
@@ -99,10 +103,10 @@ if pre-commit run --all-files 2>&1 | tee "$PRECOMMIT_LOG"; then
     fi
 
     # Also show success status directly
-    log_and_display "   ✅ Pre-commit validation complete"
+    log_and_display "   SUCCESS: Pre-commit validation complete"
 
 else
-    log_and_display "❌ Pre-commit hooks failed"
+    log_and_display "error "Pre-commit hooks failed"
     exit_code=$?
     log_and_display "   Exit code: $exit_code"
 
@@ -110,7 +114,7 @@ else
         log_and_display "Errors from $PRECOMMIT_LOG:"
         tail -30 "$PRECOMMIT_LOG" | tee -a "$LOG_FILE"
     else
-        log_and_display "❌ ERROR: Pre-commit log file not created at $PRECOMMIT_LOG"
+        log_and_display "error "error "Pre-commit log file not created at $PRECOMMIT_LOG"
         log_and_display "   This may indicate a fundamental pre-commit setup issue"
     fi
     exit 1

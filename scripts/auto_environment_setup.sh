@@ -1,15 +1,19 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Automatic DevOnboarder environment setup with consistency validation
 
 set -euo pipefail
 
-echo "🚀 DevOnboarder Auto-Environment Setup"
+deploy "DevOnboarder Auto-Environment Setup"
 echo "======================================"
 
 # Function to check if we're in DevOnboarder root
 check_devonboarder_root() {
     if [[ ! -f "pyproject.toml" ]] || ! grep -q "devonboarder" pyproject.toml; then
-        echo "❌ Not in DevOnboarder root directory"
+        error "Not in DevOnboarder root directory"
         echo "   Navigate to DevOnboarder project root first"
         exit 1
     fi
@@ -17,7 +21,7 @@ check_devonboarder_root() {
 
 # Function to setup virtual environment
 setup_venv() {
-    echo "🐍 Setting up Python virtual environment..."
+    python "Setting up Python virtual environment..."
 
     if [[ ! -d ".venv" ]]; then
         echo "   Creating .venv directory..."
@@ -34,8 +38,8 @@ setup_venv() {
     echo "   Installing DevOnboarder with test dependencies..."
     pip install -e ".[test]"
 
-    echo "✅ Virtual environment setup complete"
-    echo "⚠️  Note: Virtual environment activation is only active within this script"
+    success "Virtual environment setup complete"
+    warning " Note: Virtual environment activation is only active within this script"
     echo "   You'll need to activate it manually: source .venv/bin/activate"
 }
 
@@ -53,7 +57,7 @@ setup_node() {
         cd frontend && npm ci && cd ..
     fi
 
-    echo "✅ Node.js dependencies setup complete"
+    success "Node.js dependencies setup complete"
 }
 
 # Function to validate environment
@@ -63,7 +67,7 @@ validate_environment() {
     if [[ -f "scripts/check_environment_consistency.sh" ]]; then
         bash scripts/check_environment_consistency.sh
     else
-        echo "⚠️  Environment consistency checker not found"
+        warning " Environment consistency checker not found"
     fi
 }
 
@@ -77,10 +81,10 @@ main() {
     echo "======================================"
     echo "🎉 DevOnboarder environment ready!"
     echo ""
-    echo "📋 IMPORTANT: Activate virtual environment manually:"
+    check "IMPORTANT: Activate virtual environment manually:"
     echo "   source .venv/bin/activate"
     echo ""
-    echo "🚀 Then run quality validation:"
+    deploy "Then run quality validation:"
     echo "   ./scripts/qc_pre_push.sh"
     echo ""
     echo "💡 Tip: Virtual environment must be activated in each terminal session"

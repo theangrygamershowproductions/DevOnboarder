@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Quick emoji fix for Phase 3 framework scripts
 
 cd /home/potato/DevOnboarder || exit
@@ -17,16 +21,16 @@ s/💚/HEALTHY:/g
 s/🧪/TEST:/g
 s/📈/TREND:/g
 s/📉/DOWN:/g
-s/🔧/TOOL:/g
+s/TOOL:/TOOL:/g
 s/🔨/BUILD:/g
 s/⭐/STAR:/g
 s/🔀/MERGE:/g
-s/🔄/RELOAD:/g
-s/📊/REPORT:/g
-s/📋/LIST:/g
-s/🎯/GOAL:/g
+s/SYNC:/RELOAD:/g
+s/REPORT:/REPORT:/g
+s/CHECK:/LIST:/g
+s/TARGET:/GOAL:/g
 s/✨/NEW:/g
-s/🔒/SECURE:/g
+s/SECURE:/SECURE:/g
 s/🔓/OPEN:/g
 s/💾/SAVE:/g
 s/📤/UPLOAD:/g
@@ -34,16 +38,16 @@ s/📥/DOWNLOAD:/g
 s/🖥️/SYSTEM:/g
 s/📱/MOBILE:/g
 s/⚙️/CONFIG:/g
-s/🌐/NETWORK:/g
+s/WEB:/NETWORK:/g
 s/🗂️/FILES:/g
 s/📁/FOLDER:/g
 s/📄/DOC:/g
 s/🎨/STYLE:/g
 s/🔍/SEARCH:/g
-s/✅/OK:/g
-s/❌/FAIL:/g
-s/⚠️/WARN:/g
-s/🚀/START:/g
+s/SUCCESS:/OK:/g
+s/ERROR:/FAIL:/g
+s/WARNING:/WARN:/g
+s/DEPLOY:/START:/g
 s/🛑/STOP:/g
 s/⏸️/PAUSE:/g
 s/⏯️/PLAY:/g
@@ -61,7 +65,7 @@ s/⚡/FAST:/g
 s/🐌/SLOW:/g
 s/🏃/RUN:/g
 s/🚶/WALK:/g
-s/🛠️/REPAIR:/g
+s/TOOL:/REPAIR:/g
 s/🔨/HAMMER:/g
 s/🪓/AXE:/g
 s/⚔️/SWORD:/g
@@ -81,7 +85,7 @@ REMAINING=$(grep -r '[^[:print:]]' frameworks/monitoring_automation/ 2>/dev/null
 echo "Remaining non-ASCII characters: $REMAINING"
 
 if [ "$REMAINING" -eq 0 ]; then
-    echo "SUCCESS: Phase 3 framework is now terminal output compliant"
+    success "Phase 3 framework is now terminal output compliant"
 else
     echo "Some characters may remain - checking..."
     grep -r '[^[:print:]]' frameworks/monitoring_automation/ | head -3

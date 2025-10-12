@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Emergency rollback for external PR welcome system
 # POTATO APPROVAL: emergency-rollback-20251002
 
@@ -11,7 +13,7 @@ echo "This script will disable the external PR welcome system by commenting out 
 read -rp "Are you sure you want to proceed? (yes/no): " confirmation
 
 if [ "$confirmation" != "yes" ]; then
-    echo "❌ Rollback cancelled"
+    error "Rollback cancelled"
     exit 1
 fi
 
@@ -27,8 +29,8 @@ git add .github/workflows/pr-automation.yml
 git commit -m "HOTFIX: Disable external PR welcome system pending investigation"
 git push
 
-echo "✅ External PR welcome system disabled"
-echo "✅ Backup saved as .github/workflows/pr-automation.yml.bak"
+success "External PR welcome system disabled"
+success "Backup saved as .github/workflows/pr-automation.yml.bak"
 echo ""
 echo "To re-enable:"
 echo "1. Fix any issues"

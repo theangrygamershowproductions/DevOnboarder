@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Fine-Grained Token Specific Inspector
 # Designed specifically for GitHub Fine-Grained Personal Access Tokens
 
@@ -39,7 +43,7 @@ inspect_fine_grained_token() {
     fi
 
     echo ""
-    echo "🔐 Authentication & Identity:"
+    secure "Authentication & Identity:"
     if user_response=$(GH_TOKEN="$token_value" gh api user 2>&1); then
         if echo "$user_response" | grep -q '"login"'; then
             username=$(echo "$user_response" | jq -r '.login' 2>/dev/null || echo "unknown")
@@ -161,6 +165,6 @@ echo "3. Consider Propagation Time:"
 echo "   • Fine-Grained tokens can take 2-10 minutes for permissions to propagate"
 echo "   • Organization repositories sometimes take longer"
 echo ""
-echo "4. 🔄 Try Regenerating:"
+echo "4. SYNC: Try Regenerating:"
 echo "   • If permissions look correct but still failing"
 echo "   • Generate a new token with same permissions"

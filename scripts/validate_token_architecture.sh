@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Token Architecture v2.1 Validation Script
 # Validates separation of CI/CD and runtime tokens across all environments
 # FIXED: DevOnboarder ZERO TOLERANCE POLICY compliant

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # Commit message guide and examples for DevOnboarder
 # Helps developers understand proper commit message conventions
 
@@ -11,64 +19,64 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}📝 DevOnboarder Commit Message Guide${NC}"
+echo -e "${GREEN}NOTE: DevOnboarder Commit Message Guide"
 echo "===================================="
 echo ""
-echo -e "${YELLOW}This guide helps you write proper commit messages following DevOnboarder conventions.${NC}"
+echo -e "${YELLOW}This guide helps you write proper commit messages following DevOnboarder conventions."
 echo ""
 
 show_examples() {
-    echo -e "${BLUE}🎯 Commit Type Examples${NC}"
+    echo -e "${BLUE}TARGET: Commit Type Examples"
     echo "======================"
     echo ""
 
-    echo -e "${CYAN}FEAT: New features or functionality${NC}"
+    echo -e "${CYAN}FEAT: New features or functionality"
     echo "  FEAT(auth): add JWT token validation middleware"
     echo "  FEAT(bot): implement new /onboard command with role assignment"
     echo "  FEAT(api): add user profile endpoints with validation"
     echo "  FEAT(scripts): add comprehensive branch cleanup utilities"
     echo ""
 
-    echo -e "${CYAN}FIX: Bug fixes${NC}"
+    echo -e "${CYAN}FIX: Bug fixes"
     echo "  FIX(auth): resolve token expiration handling"
     echo "  FIX(bot): correct Discord permission validation logic"
     echo "  FIX(ci): resolve shellcheck Unicode character corruption"
     echo "  FIX(frontend): fix React component state management"
     echo ""
 
-    echo -e "${CYAN}DOCS: Documentation changes${NC}"
+    echo -e "${CYAN}DOCS: Documentation changes"
     echo "  DOCS: update README with new git workflow utilities"
     echo "  DOCS: add comprehensive API documentation for auth service"
     echo "  DOCS: update branch cleanup analysis and procedures"
     echo "  DOCS(setup): enhance environment configuration guide"
     echo ""
 
-    echo -e "${CYAN}CHORE: Maintenance and tooling${NC}"
+    echo -e "${CYAN}CHORE: Maintenance and tooling"
     echo "  CHORE(scripts): update automation utilities with error handling"
     echo "  CHORE(ci): enhance GitHub Actions workflow reliability"
     echo "  CHORE(deps): update Python dependencies to latest versions"
     echo "  CHORE: clean up temporary files and organize repository"
     echo ""
 
-    echo -e "${CYAN}REFACTOR: Code restructuring${NC}"
+    echo -e "${CYAN}REFACTOR: Code restructuring"
     echo "  REFACTOR(auth): extract JWT utility functions to separate module"
     echo "  REFACTOR(bot): reorganize command handlers for better maintainability"
     echo "  REFACTOR: consolidate error handling patterns across services"
     echo ""
 
-    echo -e "${CYAN}TEST: Testing related changes${NC}"
+    echo -e "${CYAN}TEST: Testing related changes"
     echo "  TEST(auth): add comprehensive JWT validation test coverage"
     echo "  TEST(bot): increase Discord command testing to 100% coverage"
     echo "  TEST: enhance integration test suite for API endpoints"
     echo ""
 
-    echo -e "${CYAN}CI: Continuous Integration changes${NC}"
+    echo -e "${CYAN}CI: Continuous Integration changes"
     echo "  CI: add automated branch cleanup workflow"
     echo "  CI: enhance pre-commit hooks with additional validation"
     echo "  CI(security): add dependency vulnerability scanning"
     echo ""
 
-    echo -e "${CYAN}STYLE: Code formatting${NC}"
+    echo -e "${CYAN}STYLE: Code formatting"
     echo "  STYLE: apply black formatting to Python files"
     echo "  STYLE(scripts): fix shellcheck violations across automation"
     echo "  STYLE: resolve markdownlint issues in documentation"
@@ -76,10 +84,10 @@ show_examples() {
 }
 
 show_scope_guide() {
-    echo -e "${BLUE}🎯 Scope Guidelines${NC}"
+    echo -e "${BLUE}TARGET: Scope Guidelines"
     echo "=================="
     echo ""
-    echo -e "${CYAN}Common scopes in DevOnboarder:${NC}"
+    echo -e "${CYAN}Common scopes in DevOnboarder:"
     echo "  auth      - Authentication service changes"
     echo "  bot       - Discord bot related changes"
     echo "  frontend  - React frontend changes"
@@ -94,41 +102,41 @@ show_scope_guide() {
 }
 
 show_message_structure() {
-    echo -e "${BLUE}📐 Message Structure${NC}"
+    echo -e "${BLUE}📐 Message Structure"
     echo "==================="
     echo ""
     echo -e "${CYAN}Format:${NC} TYPE(scope): subject"
     echo ""
-    echo -e "${CYAN}Rules:${NC}"
-    echo "  ✅ TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
-    echo "  ✅ scope is optional but recommended (lowercase)"
-    echo "  ✅ subject should be imperative mood (\"add\" not \"added\")"
-    echo "  ✅ subject should be descriptive and concise"
-    echo "  ✅ no period at the end of subject"
-    echo "  ✅ keep under 72 characters for better git log display"
+    echo -e "${CYAN}Rules:"
+    echo "  SUCCESS: TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
+    echo "  SUCCESS: scope is optional but recommended (lowercase)"
+    echo "  SUCCESS: subject should be imperative mood (\"add\" not \"added\")"
+    echo "  SUCCESS: subject should be descriptive and concise"
+    echo "  SUCCESS: no period at the end of subject"
+    echo "  SUCCESS: keep under 72 characters for better git log display"
     echo ""
-    echo -e "${CYAN}Examples:${NC}"
-    echo "  ✅ FEAT(auth): add JWT token validation middleware"
-    echo "  ✅ FIX(bot): resolve Discord connection timeout handling"
-    echo "  ✅ DOCS: update git workflow utilities documentation"
+    echo -e "${CYAN}Examples:"
+    echo "  SUCCESS: FEAT(auth): add JWT token validation middleware"
+    echo "  SUCCESS: FIX(bot): resolve Discord connection timeout handling"
+    echo "  SUCCESS: DOCS: update git workflow utilities documentation"
     echo ""
-    echo -e "${CYAN}Avoid:${NC}"
-    echo "  ❌ fix bug (too vague)"
-    echo "  ❌ Updated documentation (wrong tense)"
-    echo "  ❌ feat: add feature (wrong case)"
-    echo "  ❌ FEAT(auth): Added JWT validation. (wrong tense, has period)"
+    echo -e "${CYAN}Avoid:"
+    echo "  ERROR: fix bug (too vague)"
+    echo "  ERROR: Updated documentation (wrong tense)"
+    echo "  ERROR: feat: add feature (wrong case)"
+    echo "  ERROR: FEAT(auth): Added JWT validation. (wrong tense, has period)"
     echo ""
 }
 
 show_interactive_helper() {
-    echo -e "${BLUE}🤖 Interactive Commit Helper${NC}"
+    echo -e "${BLUE}BOT: Interactive Commit Helper"
     echo "============================="
     echo ""
     echo "Let's build a commit message step by step!"
     echo ""
 
     # Step 1: Choose type
-    echo -e "${CYAN}Step 1: What type of change is this?${NC}"
+    echo -e "${CYAN}Step 1: What type of change is this?"
     echo "1. FEAT - New feature or functionality"
     echo "2. FIX - Bug fix"
     echo "3. DOCS - Documentation change"
@@ -156,7 +164,7 @@ show_interactive_helper() {
     echo ""
 
     # Step 2: Choose scope
-    echo -e "${CYAN}Step 2: What component does this affect?${NC}"
+    echo -e "${CYAN}Step 2: What component does this affect?"
     echo "1. auth - Authentication service"
     echo "2. bot - Discord bot"
     echo "3. frontend - React frontend"
@@ -183,7 +191,7 @@ show_interactive_helper() {
     echo ""
 
     # Step 3: Subject
-    echo -e "${CYAN}Step 3: Describe what you did (imperative mood):${NC}"
+    echo -e "${CYAN}Step 3: Describe what you did (imperative mood):"
     echo "Examples: \"add user validation\", \"fix timeout handling\", \"update documentation\""
     read -r -p "Subject: " subject
 
@@ -195,21 +203,21 @@ show_interactive_helper() {
     fi
 
     echo ""
-    echo -e "${GREEN}🎉 Generated commit message:${NC}"
+    echo -e "${GREEN}🎉 Generated commit message:"
     echo "  $commit_msg"
     echo ""
-    echo -e "${YELLOW}💡 Copy this message and use it with git commit -m \"$commit_msg\"${NC}"
+    echo -e "${YELLOW}💡 Copy this message and use it with git commit -m \"$commit_msg\""
     echo "   Or use ./scripts/commit_changes.sh and select the custom message option."
     echo ""
 }
 
 show_current_changes() {
-    echo -e "${BLUE}🔍 Current Changes Analysis${NC}"
+    echo -e "${BLUE}🔍 Current Changes Analysis"
     echo "=========================="
     echo ""
 
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository"
+        error "Not in a git repository"
         return
     fi
 
@@ -220,7 +228,7 @@ show_current_changes() {
         # Check for unstaged changes
         if ! git diff --quiet; then
             echo ""
-            echo -e "${YELLOW}Unstaged changes found:${NC}"
+            echo -e "${YELLOW}Unstaged changes found:"
             git diff --name-only | head -10
             echo ""
             echo "💡 Run 'git add .' to stage changes, then use this guide again."
@@ -242,18 +250,18 @@ show_current_changes() {
     echo ""
 
     # Suggest commit types based on files
-    echo -e "${CYAN}Suggested commit types based on your changes:${NC}"
+    echo -e "${CYAN}Suggested commit types based on your changes:"
 
     if echo "$changed_files" | grep -q "\.md$"; then
-        echo "  📝 DOCS - You have documentation files"
+        echo "  NOTE: DOCS - You have documentation files"
     fi
 
     if echo "$changed_files" | grep -q "scripts/"; then
-        echo "  🔧 CHORE(scripts) or FEAT(scripts) - You have script changes"
+        echo "  TOOL: CHORE(scripts) or FEAT(scripts) - You have script changes"
     fi
 
     if echo "$changed_files" | grep -q "\.py$"; then
-        echo "  🐍 FEAT, FIX, or REFACTOR - You have Python changes"
+        echo "  PYTHON: FEAT, FIX, or REFACTOR - You have Python changes"
     fi
 
     if echo "$changed_files" | grep -q "\.(js|ts)$"; then
@@ -269,7 +277,7 @@ show_current_changes() {
 
 # Main menu
 main_menu() {
-    echo -e "${GREEN}📚 What would you like to learn about?${NC}"
+    echo -e "${GREEN}DOCS: What would you like to learn about?"
     echo "====================================="
     echo "1. Show commit message examples"
     echo "2. Show scope guidelines"

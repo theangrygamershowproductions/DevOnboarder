@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # filepath: scripts/trigger_codex_agent_dryrun.sh
 set -euo pipefail
 
@@ -20,7 +28,7 @@ export DEPLOY_ENV="$DEPLOY_ENV"
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
-echo "🔧 Configuration:"
+tool "Configuration:"
 echo "   Agent: $AGENT_NAME"
 echo "   Environment: $DEPLOY_ENV"
 echo "   Dry-run Mode: $CODEX_DRY_RUN"
@@ -33,13 +41,13 @@ validate_agent() {
     local agent_file=".codex/agents/${AGENT_NAME}.md"
 
     if [[ ! -f "$agent_file" ]]; then
-        echo "❌ Agent file not found: $agent_file"
+        error "Agent file not found: $agent_file"
         echo "Available agents:"
         find .codex/agents/ -name "*.md" -type f 2>/dev/null | sed 's/.codex\/agents\///; s/\.md$//' | sed 's/^/   /' || echo "   No agents found"
         return 1
     fi
 
-    echo "✅ Agent file found: $agent_file"
+    success "Agent file found: $agent_file"
     return 0
 }
 
@@ -51,16 +59,16 @@ check_dry_run_config() {
 
     if [[ -f "$agent_file" ]]; then
         if grep -q "codex_dry_run: true" "$agent_file"; then
-            echo "✅ Dry-run mode enabled in agent configuration"
+            success "Dry-run mode enabled in agent configuration"
         else
-            echo "⚠️  Dry-run mode not explicitly set in agent configuration"
+            warning " Dry-run mode not explicitly set in agent configuration"
             echo "   Adding dry-run safety check..."
         fi
 
-        if grep -q "⚠️.*dry-run mode" "$agent_file"; then
-            echo "✅ Dry-run warning notice present"
+        if grep -q "WARNING:.*dry-run mode" "$agent_file"; then
+            success "Dry-run warning notice present"
         else
-            echo "⚠️  Dry-run warning notice not found"
+            warning " Dry-run warning notice not found"
         fi
     fi
 }
@@ -118,40 +126,40 @@ validate_integration_readiness() {
 
     # Check Discord environment setup
     if [[ -f "scripts/setup_discord_env.sh" ]]; then
-        echo "✅ Discord environment setup script available"
+        success "Discord environment setup script available"
     else
-        echo "❌ Discord environment setup script missing"
+        error "Discord environment setup script missing"
         ((errors++))
     fi
 
     # Check bot configuration
     if [[ -f "bot/.env.dev" ]]; then
-        echo "✅ Bot development environment configured"
+        success "Bot development environment configured"
     else
-        echo "⚠️  Bot development environment not set up"
+        warning " Bot development environment not set up"
     fi
 
     # Check Codex directory structure
     if [[ -d ".codex" ]]; then
-        echo "✅ Codex directory exists"
+        success "Codex directory exists"
         mkdir -p .codex/agents .codex/state .codex/logs
     else
-        echo "⚠️  Codex directory missing, creating structure..."
+        warning " Codex directory missing, creating structure..."
         mkdir -p .codex/agents .codex/state .codex/logs
     fi
 
     # Check CI configuration
     if [[ -f ".github/workflows/ci.yml" ]] || [[ -f ".github/workflows/discord-integration.yml" ]]; then
-        echo "✅ CI workflows configured"
+        success "CI workflows configured"
     else
-        echo "⚠️  CI workflows not found"
+        warning " CI workflows not found"
     fi
 
     if [[ $errors -gt 0 ]]; then
-        echo "❌ $errors critical integration issues found"
+        error "$errors critical integration issues found"
         return 1
     else
-        echo "✅ Integration readiness validation passed"
+        success "Integration readiness validation passed"
         return 0
     fi
 }
@@ -163,38 +171,38 @@ run_integration_tests() {
     # Test 1: Directory structure
     echo "   Test 1: Directory structure..."
     if [[ -d ".codex" ]] && [[ -d "bot" ]] && [[ -d "scripts" ]]; then
-        echo "   ✅ Directory structure test passed"
+        echo "   SUCCESS: Directory structure test passed"
     else
-        echo "   ❌ Directory structure test failed"
+        echo "   ERROR: Directory structure test failed"
         return 1
     fi
 
     # Test 2: Environment setup
     echo "   Test 2: Environment setup..."
     if [[ -f "bot/.env.dev" ]]; then
-        echo "   ✅ Environment setup test passed"
+        echo "   SUCCESS: Environment setup test passed"
     else
-        echo "   ⚠️  Environment setup test had warnings (expected if first run)"
+        echo "   WARNING:  Environment setup test had warnings (expected if first run)"
     fi
 
     # Test 3: Dry-run execution
     echo "   Test 3: Dry-run execution..."
     simulate_codex_execution
-    echo "   ✅ Dry-run execution test passed"
+    echo "   SUCCESS: Dry-run execution test passed"
 
     # Test 4: Integration readiness
     echo "   Test 4: Integration readiness..."
     if validate_integration_readiness; then
-        echo "   ✅ Integration readiness test passed"
+        echo "   SUCCESS: Integration readiness test passed"
     else
-        echo "   ⚠️  Integration readiness test had warnings"
+        echo "   WARNING:  Integration readiness test had warnings"
     fi
 }
 
 # Function to display summary
 display_summary() {
     echo ""
-    echo "🎯 Dry-Run Summary:"
+    target "Dry-Run Summary:"
     echo "=================="
     echo "   Agent: $AGENT_NAME"
     echo "   Environment: $DEPLOY_ENV"
@@ -203,15 +211,15 @@ display_summary() {
     echo "   Live Actions: Disabled"
     echo "   Output Directory: $OUTPUT_DIR"
     echo ""
-    echo "📋 Next Steps:"
+    check "Next Steps:"
     echo "   1. Review dry-run output in $OUTPUT_DIR"
     echo "   2. Test Discord bot: cd bot && ./start-dev.sh"
     echo "   3. When ready for live testing: export DISCORD_BOT_READY=true"
     echo "   4. For production: export LIVE_TRIGGERS_ENABLED=true"
     echo ""
     echo "🔗 Integration Status:"
-    echo "   - DevOnboarder CI: ✅ Resolved"
-    echo "   - Discord Environment: ✅ Configured"
+    echo "   - DevOnboarder CI: SUCCESS: Resolved"
+    echo "   - Discord Environment: SUCCESS: Configured"
     echo "   - Codex Agents: 🧪 Dry-run mode active"
     echo "   - Live Integration: ⏸️ Awaiting authorization"
 }
@@ -233,8 +241,8 @@ main() {
     display_summary
 
     echo ""
-    echo "✅ Codex agent dry-run complete!"
-    echo "📝 Full log saved to: $LOG_FILE"
+    success "Codex agent dry-run complete!"
+    note "Full log saved to: $LOG_FILE"
 }
 
 # Execute main function with all arguments

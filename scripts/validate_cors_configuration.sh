@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/validate_cors_configuration.sh
 # Purpose: Validate CORS configuration for multi-subdomain architecture
@@ -22,17 +26,17 @@ VALIDATION_WARNINGS=0
 
 # Helper functions
 log_error() {
-    echo "ERROR: $1"
+    error "$1"
     VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
 }
 
 log_warning() {
-    echo "WARNING: $1"
+    warning "$1"
     VALIDATION_WARNINGS=$((VALIDATION_WARNINGS + 1))
 }
 
 log_success() {
-    echo "SUCCESS: $1"
+    success "$1"
 }
 
 # Validate environment CORS settings
@@ -266,7 +270,7 @@ generate_validation_report() {
 
     if [ $VALIDATION_ERRORS -eq 0 ]; then
         if [ $VALIDATION_WARNINGS -eq 0 ]; then
-            echo "SUCCESS: CORS configuration is valid"
+            success "CORS configuration is valid"
             echo "Ready for cross-origin testing"
             return 0
         else

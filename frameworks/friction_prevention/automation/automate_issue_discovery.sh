@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 
 # automate_issue_discovery.sh - Automated issue discovery and triage workflow
 # Follows DevOnboarder terminal output compliance and centralized logging
@@ -24,7 +28,7 @@ discover_ci_issues() {
     echo "=== Discovering CI failure issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping CI issue discovery"
+        warning "GitHub CLI not available, skipping CI issue discovery"
         return 1
     fi
 
@@ -56,7 +60,7 @@ discover_tracking_issues() {
     echo "=== Discovering tracking issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping tracking issue discovery"
+        warning "GitHub CLI not available, skipping tracking issue discovery"
         return 1
     fi
 
@@ -110,7 +114,7 @@ discover_stale_issues() {
     echo "=== Discovering stale issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping stale issue discovery"
+        warning "GitHub CLI not available, skipping stale issue discovery"
         return 1
     fi
 
@@ -125,13 +129,13 @@ discover_stale_issues() {
             thirty_days_ago=$(date -v-30d +%Y-%m-%d)
         fi
     else
-        echo "WARNING: Date command not available, attempting to use Python for date calculation"
+        warning "Date command not available, attempting to use Python for date calculation"
         if command -v python3 >/dev/null 2>&1; then
             thirty_days_ago=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
         elif command -v python >/dev/null 2>&1; then
             thirty_days_ago=$(python -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
         else
-            echo "WARNING: Neither date nor Python available, using today's date as fallback"
+            warning "Neither date nor Python available, using today's date as fallback"
             thirty_days_ago=$(date +%Y-%m-%d 2>/dev/null || echo "1970-01-01")
         fi
     fi
@@ -164,7 +168,7 @@ discover_priority_issues() {
     echo "=== Discovering high priority issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping priority issue discovery"
+        warning "GitHub CLI not available, skipping priority issue discovery"
         return 1
     fi
 

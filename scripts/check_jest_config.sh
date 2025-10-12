@@ -1,4 +1,8 @@
 #!/bin/bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # scripts/check_jest_config.sh
 # Validates Jest timeout configuration to prevent CI hanging
 
@@ -13,13 +17,13 @@ echo "======================================="
 echo "Checking Jest configuration for timeout settings..."
 
 if [[ ! -f "bot/package.json" ]]; then
-    echo "ERROR: bot/package.json not found"
+    error "bot/package.json not found"
     exit 1
 fi
 
 # Check if Jest timeout is configured
 if grep -q "testTimeout" bot/package.json; then
-    echo "SUCCESS: Jest timeout configured"
+    success "Jest timeout configured"
     echo "Configuration found:"
     grep -A 2 "testTimeout" bot/package.json | sed 's/^/  /'
 
@@ -27,13 +31,13 @@ if grep -q "testTimeout" bot/package.json; then
     TIMEOUT=$(grep "testTimeout" bot/package.json | sed 's/.*testTimeout": *\([0-9]*\).*/\1/')
 
     if [[ "$TIMEOUT" -ge 30000 ]]; then
-        echo "SUCCESS: Timeout value ($TIMEOUT ms) is adequate for CI"
+        success "Timeout value ($TIMEOUT ms) is adequate for CI"
     else
-        echo "WARNING: Timeout value ($TIMEOUT ms) may be too low for CI"
+        warning "Timeout value ($TIMEOUT ms) may be too low for CI"
         echo "Recommendation: Use 30000ms or higher"
     fi
 else
-    echo "ERROR: Jest timeout NOT configured - CI may hang"
+    error "Jest timeout NOT configured - CI may hang"
     echo "Solution: Add 'testTimeout: 30000' to Jest config in bot/package.json"
     echo ""
     echo "Example Jest configuration:"

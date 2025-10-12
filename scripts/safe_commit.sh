@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
+# Source color utilities
+source "/home/potato/TAGS/shared/scripts/color_utils.sh"
 # =============================================================================
 # File: scripts/safe_commit.sh
 # Purpose: Safe commit wrapper that handles pre-commit hook file modifications
@@ -8,13 +16,18 @@
 
 set -euo pipefail
 
+# Define error function locally (fallback if color_utils.sh doesn't provide it)
+error() {
+    printf "ERROR: %s\n" "$1" >&2
+}
+
 # Function to validate terminal output patterns (ZERO TOLERANCE policy)
 validate_terminal_output() {
     local script_path="$1"
     local violations=()
 
     # Check for forbidden echo patterns
-    if grep -n "echo.*✅\|echo.*❌\|echo.*🚨\|echo.*💡\|echo.*🔍\|echo.*📋\|echo.*📄\|echo.*📋\|echo.*🏆" "$script_path" >/dev/null 2>&1; then
+    if grep -n "echo.*SUCCESS:\|echo.*ERROR:\|echo.*🚨\|echo.*💡\|echo.*🔍\|echo.*CHECK:\|echo.*📄\|echo.*CHECK:\|echo.*🏆" "$script_path" >/dev/null 2>&1; then
         violations+=("Emojis in echo statements (forbidden by ZERO TOLERANCE policy)")
     fi
 
@@ -40,7 +53,7 @@ validate_terminal_output() {
         printf "Safe alternatives:\n"
         printf "  Instead of: echo \"Status: \$VAR\"\n"
         printf "  Use:        printf \"Status: %%s\\n\" \"\$VAR\"\n"
-        printf "  Instead of: echo \"✅ Success\"\n"
+        printf "  Instead of: echo \"success "Success\"\n"
         printf "  Use:        echo \"Success\"\n"
         return 1
     fi
@@ -62,7 +75,7 @@ fi
 # CRITICAL: Prevent commits to main branch (instruction requirement)
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
-    echo "ERROR: Direct commits to main branch are not allowed!"
+    error "Direct commits to main branch are not allowed!"
     echo ""
     echo "DevOnboarder requires feature branch workflow:"
     echo "  1. Create feature branch: git checkout -b feat/your-feature-name"
@@ -80,15 +93,15 @@ echo "Checking for common instruction violations..."
 FORBIDDEN_FILES=("Potato.md" "*.pem" "*.key" "*.env" "auth.db")
 for pattern in "${FORBIDDEN_FILES[@]}"; do
     if git ls-files | grep -q "$pattern" 2>/dev/null; then
-        printf "ERROR: Forbidden file pattern detected: %s\n" "$pattern"
+        printf "error: Forbidden file pattern detected: %s\n" "$pattern"
         printf "These files should never be committed per security instructions\n"
         exit 1
     fi
 done
 
 # Check for emoji usage in committed files (common violation)
-if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "✅\|❌\|🚨\|💡\|🔍\|📋\|📄\|🏆\|🚀\|🥔\|⚠️\|💥\|🔧\|🎯\|📊\|🔄\|🚦\|✅\|❌" >/dev/null 2>&1; then
-    printf "ERROR: Emoji usage detected in committed files\n"
+if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "SUCCESS:\|ERROR:\|🚨\|💡\|🔍\|CHECK:\|📄\|🏆\|DEPLOY:\|🥔\|WARNING:\|💥\|TOOL:\|TARGET:\|REPORT:\|SYNC:\|🚦\|SUCCESS:\|ERROR:" >/dev/null 2>&1; then
+    printf "error: Emoji usage detected in committed files\n"
     printf "ZERO TOLERANCE: Remove all emojis from documentation and scripts\n"
     exit 1
 fi
@@ -103,28 +116,9 @@ printf "Commit message: %s\n" "$COMMIT_MSG"
 
 # CRITICAL: Validate commit message format before proceeding
 echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)\([^)]+\): .+' >/dev/null; then
-    echo "ERROR: Invalid commit message format!"
-    echo ""
-    echo "Required format: <TYPE>(<scope>): <subject>"
-    echo ""
-    echo "Standard types: FEAT, FIX, DOCS, STYLE, REFACTOR, TEST, CHORE, SECURITY, BUILD, REVERT"
-    echo "Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP"
-    echo ""
-    echo "Examples:"
-    echo "  FEAT(auth): add JWT validation endpoint"
-    echo "  FIX(bot): resolve Discord connection timeout"
-    echo "  CHORE(ci): update workflow dependencies"
-    echo ""
-    printf "Your message: %s\n" "$COMMIT_MSG"
-    exit 1
-fi
-echo "Commit message format validated"
-
-# CRITICAL: Validate commit message format before proceeding
-echo "Validating commit message format..."
-if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+' >/dev/null; then
-    echo "❌ ERROR: Invalid commit message format!"
+COMMIT_MSG_REGEX='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
+if ! echo "$COMMIT_MSG" | grep -E "$COMMIT_MSG_REGEX" >/dev/null; then
+    error "Invalid commit message format!"
     echo ""
     echo "Required format: <TYPE>(<scope>): <subject>"
     echo ""
@@ -137,7 +131,7 @@ if ! echo "$COMMIT_MSG" | grep -E '^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SEC
     echo "  FEAT(ci): add automated dependency updates"
     echo "  CHORE(deps): update Python requirements"
     echo ""
-    echo "Your message: $COMMIT_MSG"
+    printf "Your message: %s\n" "$COMMIT_MSG"
     exit 1
 fi
 echo "Commit message format validated"
