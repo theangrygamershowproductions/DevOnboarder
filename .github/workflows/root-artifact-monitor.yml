@@ -192,16 +192,25 @@ jobs:
                           ? 'No root artifact violations detected'
                           : 'Root artifact violations found';
 
-                      console.log('Creating status with GitHub Script:', { status, description, sha: context.sha });
+                      console.log('About to create status:', { status, description, sha: context.sha, repo: context.repo });
 
-                      await github.rest.repos.createCommitStatus({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          sha: context.sha,
-                          state: status,
-                          context: 'Root Artifact Guard',
-                          description: description,
-                          target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-                      });
+                      try {
+                          const result = await github.rest.repos.createCommitStatus({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              sha: context.sha,
+                              state: status,
+                              context: 'Root Artifact Guard',
+                              description: description,
+                              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+                          });
 
-                      console.log('Status creation completed');
+                          console.log('Status creation result:', result.status, result.data);
+                          if (result.status !== 201) {
+                              throw new Error(`Status creation failed with status ${result.status}`);
+                          }
+                      } catch (error) {
+                          console.error('Status creation failed:', error);
+                          // Force workflow failure
+                          process.exit(1);
+                      }
