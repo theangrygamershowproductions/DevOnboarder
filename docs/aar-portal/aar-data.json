@@ -10,7 +10,7 @@
               "absolute_path": ".aar/2025/Q3/pull-requests/pr-1098-documentation-quality-certification-framework---mvp-ready.md",
               "ref_number": "1098",
               "type": "pull_requests",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-10-18T06:28:02.616792",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 5,
@@ -21,9 +21,9 @@
                 "enhancement",
                 "documentation"
               ],
-              "word_count": 874,
-              "line_count": 136,
-              "content_preview": "# After Actions Report: Documentation Quality Certification Framework - MVP Ready (#1098)\n\n## Executive Summary\n\nThis PR successfully implemented cloudflare tunnel subdomain architecture with comprehensive documentation quality certification framework. Key achievements include terminal output policy compliance, merge conflict resolution, and CI validation framework completion.\n\n## Context\n\n- **PR Number**: #1098\n- **PR Type**: Infrastructure/Documentation Enhancement\n- **Priority**: High\n- **Fil..."
+              "word_count": 920,
+              "line_count": 216,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: core-aar\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'AAR: Pr 1098 Documentation Quality Certification Framework   Mvp Ready'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# After Actions Report: Documentation Quality Certification Framework - MV..."
             }
           ],
           "issues": [
@@ -33,7 +33,7 @@
               "absolute_path": ".aar/2025/Q3/issues/issue-Discord Bot Authentication Enhancement-issue-discord-bot-authentication-enhancement.md",
               "ref_number": "Discord",
               "type": "issues",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-10-18T06:28:02.616792",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -47,9 +47,9 @@
                 "enhancement",
                 "documentation"
               ],
-              "word_count": 306,
-              "line_count": 76,
-              "content_preview": "# After Actions Report: Issue #Discord Bot Authentication Enhancement\n\n## Executive Summary\n\n<!-- Brief description of what was accomplished -->\n\n## Context\n\n- **Issue Number**: #Discord Bot Authentication Enhancement\n- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->\n- **Priority**: <!-- Critical/High/Medium/Low -->\n- **Duration**: <!-- Start Date to End Date -->\n- **Participants**: <!-- @username1, @username2 -->\n\n## Timeline\n\n<!-- Key milestones and activities -->\n\n- **Discover..."
+              "word_count": 354,
+              "line_count": 123,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: DevOnboarder\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'AAR: Issue Discord Bot Authentication Enhancement Issue Discord Bot Authentication\n  Enhancement'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# After Actions Report: Issue #Discord Bot A..."
             }
           ],
           "sprints": [
@@ -59,7 +59,7 @@
               "absolute_path": ".aar/2025/Q3/sprints/sprint-2025-07-30.md",
               "ref_number": "2025",
               "type": "sprints",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-10-18T06:28:02.616792",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 3,
@@ -71,9 +71,9 @@
                 "enhancement",
                 "documentation"
               ],
-              "word_count": 317,
-              "line_count": 69,
-              "content_preview": "# After Actions Report: Sprint-2025-07-30\n\n## Executive Summary\n\n<!-- High-level summary of sprint accomplishments and impact -->\n\n## Sprint Context\n\n- **Sprint Name**: Sprint-2025-07-30\n- **Duration**: <!-- Start Date to End Date -->\n- **Goals**: <!-- Primary objectives -->\n- **Team**: <!-- Participants -->\n\n## Accomplishments\n<!-- What was delivered -->\n- Major features or enhancements completed\n- Infrastructure improvements\n- Process optimizations\n\n## Metrics\n<!-- Quantitative assessment -->\n..."
+              "word_count": 358,
+              "line_count": 135,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: core-aar\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'After Actions Report: Sprint-2025-07-30'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# After Actions Report: Sprint-2025-07-30\n\n## Executive Summary\n\n<!-- High-level summary of sprint accomp..."
             }
           ],
           "incidents": [
@@ -83,7 +83,7 @@
               "absolute_path": ".aar/2025/Q3/incidents/incident-2025-07-30.md",
               "ref_number": "2025",
               "type": "incidents",
-              "date_created": "2025-08-09T06:31:43.703315",
+              "date_created": "2025-10-18T06:28:02.616792",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 4,
@@ -94,9 +94,9 @@
                 "enhancement",
                 "documentation"
               ],
-              "word_count": 401,
-              "line_count": 79,
-              "content_preview": "# Incident After Actions Report: Incident-2025-07-30\n\n## Incident Summary\n<!-- Brief description of what happened -->\n\n## Timeline\n<!-- Detailed chronological breakdown -->\n- **Detection**: <!-- When/how incident was discovered -->\n- **Response**: <!-- Initial response actions -->\n- **Investigation**: <!-- Root cause analysis process -->\n- **Resolution**: <!-- How the incident was resolved -->\n- **Recovery**: <!-- Return to normal operations -->\n\n## Impact Assessment\n<!-- What was affected -->\n-..."
+              "word_count": 443,
+              "line_count": 156,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: core-aar\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'Incident After Actions Report: Incident-2025-07-30'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# Incident After Actions Report: Incident-2025-07-30\n\n## Incident Summary\n\n<!-- Brief descript..."
             }
           ],
           "automation": [
@@ -106,7 +106,7 @@
               "absolute_path": ".aar/2025/Q3/automation/automation-enhancement-2025-07-30.md",
               "ref_number": "enhancement",
               "type": "automation",
-              "date_created": "2025-08-09T06:31:43.702315",
+              "date_created": "2025-10-18T06:28:02.616650",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 4,
@@ -118,9 +118,9 @@
                 "documentation",
                 "performance"
               ],
-              "word_count": 898,
-              "line_count": 120,
-              "content_preview": "# Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review\n\n## Enhancement Summary\n\nImplemented comprehensive git workflow automation system with intelligent commit message generation, pre-commit log review, and enhanced branch management strategies to resolve developer uncertainty around commit failures and improve code quality enforcement.\n\n## Context\n\n- **Problem Statement**: Developers experienced mysterious commit failures due to pre-commit hooks without clear guidanc..."
+              "word_count": 941,
+              "line_count": 190,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: DevOnboarder\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'AAR: Automation Enhancement 2025 07 30'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# Automation Enhancement AAR: Git Workflow Enhancement with Pre-commit Log Review\n\n## Enhancement Summ..."
             },
             {
               "title": "After Actions Report: CI Failure Analyzer Integration",
@@ -128,7 +128,7 @@
               "absolute_path": ".aar/2025/Q3/automation/ci-failure-analyzer-integration-2025-08-02.md",
               "ref_number": "unknown",
               "type": "automation",
-              "date_created": "2025-08-09T06:31:43.702315",
+              "date_created": "2025-10-18T06:28:02.616792",
               "files_changed": 0,
               "agents_updated": 0,
               "action_items": 12,
@@ -141,9 +141,9 @@
                 "documentation",
                 "performance"
               ],
-              "word_count": 741,
-              "line_count": 157,
-              "content_preview": "# After Actions Report: CI Failure Analyzer Integration\n\n## Executive Summary\n\nSuccessfully integrated Enhanced CI Failure Analyzer v1.0 with GitHub Actions, completing Phase 4: CI Triage Guard Enhancement. Delivered production-ready automation for CI failure analysis with intelligent resolution recommendations.\n\n## Context\n\n- **Implementation Type**: GitHub Actions Integration\n- **Priority**: High\n- **Duration**: August 2, 2025\n- **Framework**: DevOnboarder Phase 4: CI Triage Guard Enhancement\n..."
+              "word_count": 786,
+              "line_count": 239,
+              "content_preview": "---\nauthor: DevOnboarder Team\n\nconsolidation_priority: P3\ncontent_uniqueness_score: 4\ncreated_at: '2025-09-12'\ndescription: After Action Report\ndocument_type: aar\nmerge_candidate: false\nproject: core-aar\nsimilarity_group: aar-aar\nstatus: active\ntags:\n\n- aar\n\n- retrospective\n\n- lessons-learned\n\ntitle: 'AAR: Ci Failure Analyzer Integration 2025 08 02'\nupdated_at: '2025-09-12'\nvisibility: internal\n---\n\n# After Actions Report: CI Failure Analyzer Integration\n\n## Executive Summary\n\nSuccessfully integ..."
             }
           ]
         }
@@ -189,5 +189,5 @@
       "avg_actions_per_aar": 5.2
     }
   },
-  "generated": "2025-08-09T06:31:50.162360"
+  "generated": "2025-10-18T06:28:13.316665"
 }
