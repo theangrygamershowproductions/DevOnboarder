@@ -20,7 +20,7 @@ def test_bootstrap_creates_env_dev(tmp_path):
     docker_stub.chmod(0o755)
 
     env = os.environ.copy()
-    env["PATH"] = str(bin_dir) + os.pathsep + env.get("PATH", "")
+    env["PATH"] = str(bin_dir)  os.pathsep  env.get("PATH", "")
 
     subprocess.run(
         ["bash", str(tmp_path / "bootstrap.sh")],

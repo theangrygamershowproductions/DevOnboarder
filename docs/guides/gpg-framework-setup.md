@@ -54,7 +54,7 @@ DevOnboarder implements unified GPG signing across all automation workflows that
 - **Passphrase-free keys**: Designed for non-interactive automation
 - **Base64 encoded storage**: Secure key storage in GitHub secrets
 - **Non-interactive trust**: Automated GPG trust configuration
-- **Token hierarchy integration**: Uses CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN pattern
+- **Token hierarchy integration**: Uses CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN pattern
 
 ## Quick Start
 
@@ -163,13 +163,13 @@ jobs:
 **CRITICAL**: All GPG automation workflows MUST follow terminal output policy:
 
 ```bash
-# ✅ CORRECT - Use printf instead of echo
+#  CORRECT - Use printf instead of echo
 printf "Status: %s\n" "$STATUS"
 printf "GPG signing configured\n"
 
-# ❌ WRONG - Echo with variables/emojis causes hanging
+#  WRONG - Echo with variables/emojis causes hanging
 echo "Status: $STATUS"
-echo "✅ GPG configured"
+echo " GPG configured"
 ```
 
 ### Required Quality Gates
@@ -191,7 +191,7 @@ Use the test framework to validate your automation patterns:
 gh workflow run test-gpg-framework.yml --repo your-org/DevOnboarder
 
 # Or manually dispatch via GitHub interface
-# Actions → Test GPG Framework Demo → Run workflow
+# Actions  Test GPG Framework Demo  Run workflow
 ```
 
 ### Local Testing
@@ -235,7 +235,7 @@ bash scripts/qc_pre_push.sh
 
 ## Framework Status
 
-**Current Status**: Production Ready ✅
+**Current Status**: Production Ready 
 
 - **Workflows Converted**: 3/3 (100% compliance)
 - **Success Rate**: 100% across all converted workflows

@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Script metadata
 SCRIPT_NAME="$(basename "$0")"
-TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+TIMESTAMP="$(date %Y%m%d_%H%M%S)"
 LOG_DIR="logs"
 
 # Initialize logging
@@ -19,7 +19,7 @@ log_and_display() {
 }
 
 main() {
-    log_and_display "🔧 DevOnboarder Pre-commit Verification and Commit Script"
+    log_and_display " DevOnboarder Pre-commit Verification and Commit Script"
     log_and_display "Started at: $(date)"
     log_and_display "Script: $SCRIPT_NAME"
     log_and_display "Log file: $LOG_FILE"
@@ -27,7 +27,7 @@ main() {
 
     # Activate virtual environment (mandatory per project policies)
     if [ ! -d ".venv" ]; then
-        log_and_display "❌ ERROR: Virtual environment .venv not found"
+        log_and_display "  Virtual environment .venv not found"
         log_and_display "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
         exit 1
     fi
@@ -37,23 +37,23 @@ main() {
     source .venv/bin/activate
 
     # Verify Python and pip are from virtual environment
-    log_and_display "📍 Python executable: $(which python)"
-    log_and_display "📍 Pip executable: $(which pip)"
+    log_and_display "LOCATION: Python executable: $(which python)"
+    log_and_display "LOCATION: Pip executable: $(which pip)"
 
     # Ensure logs directory exists
     mkdir -p logs
 
     # Validate YAML configuration
-    log_and_display "📝 Validating pre-commit YAML configuration..."
+    log_and_display " Validating pre-commit YAML configuration..."
     if python -c "import yaml; yaml.safe_load(open('.pre-commit-config.yaml'))" 2>&1 | tee -a "$LOG_FILE"; then
-        log_and_display "✅ YAML configuration is valid"
+        log_and_display " YAML configuration is valid"
     else
-        log_and_display "❌ YAML configuration has syntax errors"
+        log_and_display " YAML configuration has syntax errors"
         exit 1
     fi
 
     # Check git status before proceeding
-    log_and_display "📊 Current git status:"
+    log_and_display " Current git status:"
     git status --short | tee -a "$LOG_FILE"
 
     # Clean all test artifacts before validation for clean state
@@ -67,7 +67,7 @@ main() {
         log_and_display "   Running pytest cleanup..."
         bash scripts/clean_pytest_artifacts.sh 2>&1 | tee -a "$LOG_FILE"
     else
-        log_and_display "   ⚠️  Pytest cleanup script not found"
+        log_and_display "     Pytest cleanup script not found"
     fi
     log_and_display ""
 
@@ -76,9 +76,9 @@ main() {
     PRECOMMIT_LOG="$LOG_DIR/precommit_test_${TIMESTAMP}.log"
 
     if pre-commit run --all-files 2>&1 | tee "$PRECOMMIT_LOG"; then
-        log_and_display "✅ All pre-commit hooks passed"
+        log_and_display " All pre-commit hooks passed"
     else
-        log_and_display "❌ Pre-commit hooks failed. Check $PRECOMMIT_LOG for details"
+        log_and_display " Pre-commit hooks failed. Check $PRECOMMIT_LOG for details"
         log_and_display "Recent log files in logs/ directory:"
         find logs/ -type f -printf "%T@ %p\n" 2>/dev/null | sort -n | tail -5 | cut -d' ' -f2- | while read -r file; do ls -la "$file"; done | tee -a "$LOG_FILE"
         exit 1
@@ -89,7 +89,7 @@ main() {
     git add .
 
     # Show what will be committed
-    log_and_display "📋 Files to be committed:"
+    log_and_display " Files to be committed:"
     git diff --cached --name-only | tee -a "$LOG_FILE"
 
     # Generate commit message if not provided
@@ -122,21 +122,21 @@ main() {
         log_and_display "🎉 Commit successful!"
 
         # Show latest commit
-        log_and_display "📝 Latest commit:"
+        log_and_display " Latest commit:"
         git log --oneline -1 | tee -a "$LOG_FILE"
 
         # Show log summary
-        log_and_display "📊 Generated log files:"
+        log_and_display " Generated log files:"
         find logs/ -type f -printf "%T@ %p\n" 2>/dev/null | sort -n | tail -10 | cut -d' ' -f2- | while read -r file; do ls -la "$file"; done | tee -a "$LOG_FILE"
 
         log_and_display ""
-        log_and_display "✅ All checks passed! Ready for push."
-        log_and_display "📋 Next steps:"
+        log_and_display " All checks passed! Ready for push."
+        log_and_display " Next steps:"
         log_and_display "   git push origin feat/potato-ignore-policy-focused"
         log_and_display "   Check logs/ directory for detailed outputs"
 
     else
-        log_and_display "❌ Commit failed. Check logs for details"
+        log_and_display " Commit failed. Check logs for details"
         exit 1
     fi
 

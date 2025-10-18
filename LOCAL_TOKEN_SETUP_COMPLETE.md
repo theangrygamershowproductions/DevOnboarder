@@ -18,7 +18,7 @@ similarity_group: docs-
 
 # Token Architecture v2.1 - Local Implementation Checklist
 
-## ✅ Migration Complete
+##  Migration Complete
 
 Your Token Architecture v2.1 implementation is now complete! Here's what has been accomplished:
 
@@ -72,12 +72,12 @@ Your Token Architecture v2.1 implementation is now complete! Here's what has bee
 
 ### Security Features
 
-✅ **File Permissions**: All `.tokens*` files have secure 600 permissions
-✅ **Git Safety**: All `.tokens*` files (except .tokens.ci) are gitignored
-✅ **Token Masking**: Console output masks tokens (github_p***MASKED***)
-✅ **Backups Created**: Original .env files backed up with timestamps
+ **File Permissions**: All `.tokens*` files have secure 600 permissions
+ **Git Safety**: All `.tokens*` files (except .tokens.ci) are gitignored
+ **Token Masking**: Console output masks tokens (github_p***MASKED***)
+ **Backups Created**: Original .env files backed up with timestamps
 
-## 🔧 Validation Steps
+##  Validation Steps
 
 To verify your tokens are properly configured:
 
@@ -130,7 +130,7 @@ cd bot && npm run status
 
 ```
 
-## 🚀 Next Steps
+##  Next Steps
 
 1. **Update Your Services**: Any services using the migrated tokens will automatically load from the correct location
 
@@ -140,7 +140,7 @@ cd bot && npm run status
 
 4. **Security Guidelines**: Review `docs/TOKEN_SECURITY_GUIDELINES.md` for best practices
 
-## 🔐 Security Reminders
+##  Security Reminders
 
 - **Never commit .tokens files** (except .tokens.ci with test values)
 
@@ -152,7 +152,7 @@ cd bot && npm run status
 
 - **Regular rotation** of sensitive tokens
 
-## ✅ You're All Set
+##  You're All Set
 
 Your token architecture is now properly separated, secure, and ready for production use. The system automatically handles:
 

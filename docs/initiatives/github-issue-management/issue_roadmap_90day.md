@@ -32,7 +32,7 @@ consolidation_priority: P3
 
     - Script integration with `ci_gh_issue_wrapper.sh`
 
-    - Documentation for two-step closure process (comment + close)
+    - Documentation for two-step closure process (comment  close)
 
 - **Dependencies**: None (standalone process improvement)
 
@@ -80,7 +80,7 @@ consolidation_priority: P3
 
 - **Issue**: PR #1397 troubleshooting took 5.5 hours - implement fixes
 
-- **Impact**: Prevent future 5+ hour PR troubleshooting sessions
+- **Impact**: Prevent future 5 hour PR troubleshooting sessions
 
 - **Effort**: Medium-Large (3-5 days) - Multiple script/process changes
 
@@ -152,7 +152,7 @@ consolidation_priority: P3
 
 - **Security process** documented and usable for future incidents
 
-- **PR troubleshooting time** reduced by 50%+ (target <3 hours)
+- **PR troubleshooting time** reduced by 50% (target <3 hours)
 
 ---
 
@@ -176,7 +176,7 @@ consolidation_priority: P3
 
     - Automated documentation pipeline working
 
-    - GitHub Issues → Documentation conversion
+    - GitHub Issues  Documentation conversion
 
     - Integration with existing documentation system
 
@@ -312,7 +312,7 @@ consolidation_priority: P3
 
 ---
 
-**Framework**: DevOnboarder Priority Stack + Sprint-Based Execution
+**Framework**: DevOnboarder Priority Stack  Sprint-Based Execution
 
 **Review Cadence**: Weekly sprint check-ins, bi-weekly roadmap updates
 **Success Metrics**: Issue completion rate, quality gate improvements, time savings

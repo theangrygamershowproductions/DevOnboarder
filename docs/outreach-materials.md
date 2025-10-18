@@ -72,7 +72,7 @@ This page collects snippets for promoting DevOnboarder and tracking feedback.
 
 ### Short Community Post
 
-> 🚀 **Built a better onboarding flow for devs — sharing for feedback**
+>  **Built a better onboarding flow for devs — sharing for feedback**
 > Just open-sourced [DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder)
 > after getting tired of repeating myself onboarding folks (and myself) for new projects.
 > It hooks into VSCode, Discord, and GitHub.

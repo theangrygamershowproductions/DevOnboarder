@@ -33,8 +33,8 @@ f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"  # Misleadi
 
 ```python
 # From scripts/ci-monitor.py lines 372-373 - CORRECT UTC handling
-start_time = datetime.fromisoformat(started.replace("Z", "+00:00"))
-end_time = datetime.fromisoformat(completed.replace("Z", "+00:00"))
+start_time = datetime.fromisoformat(started.replace("Z", "00:00"))
+end_time = datetime.fromisoformat(completed.replace("Z", "00:00"))
 ```
 
 ### 2. Diagnostic Accuracy Impact
@@ -84,17 +84,17 @@ The system has proper UTC capabilities, but scripts aren't using them consistent
 
 ```python
 # Standard DevOnboarder timestamp functions
-def get_utc_timestamp() -> str:
+def get_utc_timestamp()  str:
     """Get current UTC timestamp in GitHub API compatible format."""
     return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
-def get_utc_display_timestamp() -> str:
+def get_utc_display_timestamp()  str:
     """Get current UTC timestamp for display/logging."""
     return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
-def parse_github_timestamp(github_ts: str) -> datetime:
+def parse_github_timestamp(github_ts: str)  datetime:
     """Parse GitHub API timestamp to datetime object."""
-    return datetime.fromisoformat(github_ts.replace("Z", "+00:00"))
+    return datetime.fromisoformat(github_ts.replace("Z", "00:00"))
 ```
 
 ### Phase 2: Fix Existing Scripts

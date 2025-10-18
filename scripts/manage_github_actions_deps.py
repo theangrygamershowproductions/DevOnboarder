@@ -24,14 +24,14 @@ try:
     sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
     from utils.timestamps import get_utc_timestamp
 
-    def get_current_utc() -> datetime:
+    def get_current_utc()  datetime:
         """Get current UTC timestamp using centralized utility."""
         # Convert ISO string back to datetime for calculation compatibility
-        return datetime.fromisoformat(get_utc_timestamp().replace("Z", "+00:00"))
+        return datetime.fromisoformat(get_utc_timestamp().replace("Z", "00:00"))
 
 except ImportError:
 
-    def get_current_utc() -> datetime:
+    def get_current_utc()  datetime:
         """Fallback UTC timestamp function."""
         return datetime.now(timezone.utc)
 
@@ -53,7 +53,7 @@ class GitHubActionsDependencyManager:
         self.session = requests.Session()
         self.session.headers.update(
             {
-                "Accept": "application/vnd.github.v3+json",
+                "Accept": "application/vnd.github.v3json",
                 "User-Agent": "DevOnboarder-Dependency-Manager/1.0",
             }
         )
@@ -61,7 +61,7 @@ class GitHubActionsDependencyManager:
         # Cache for API responses to avoid rate limiting
         self._cache: Dict[str, Optional[Dict[str, Any]]] = {}
 
-    def validate_all_workflows(self) -> Dict[str, Any]:
+    def validate_all_workflows(self)  Dict[str, Any]:
         """
         Validate all GitHub Actions dependencies in workflow files.
 
@@ -84,15 +84,15 @@ class GitHubActionsDependencyManager:
             "security_warnings": [],
         }
 
-        workflow_files = list(self.workflows_dir.glob("*.yml")) + list(
+        workflow_files = list(self.workflows_dir.glob("*.yml"))  list(
             self.workflows_dir.glob("*.yaml")
         )
 
         for workflow_file in workflow_files:
             try:
                 workflow_results = self._validate_workflow_file(workflow_file)
-                results["workflows_processed"] += 1
-                results["dependencies_checked"] += workflow_results[
+                results["workflows_processed"] = 1
+                results["dependencies_checked"] = workflow_results[
                     "dependencies_checked"
                 ]
                 results["violations"].extend(workflow_results["violations"])
@@ -111,7 +111,7 @@ class GitHubActionsDependencyManager:
 
         return results
 
-    def _validate_workflow_file(self, workflow_file: Path) -> Dict[str, Any]:
+    def _validate_workflow_file(self, workflow_file: Path)  Dict[str, Any]:
         """Validate dependencies in a single workflow file."""
         results = {
             "dependencies_checked": 0,
@@ -141,7 +141,7 @@ class GitHubActionsDependencyManager:
             actions = self._extract_actions_from_workflow(workflow, content)
 
             for action_info in actions:
-                results["dependencies_checked"] += 1
+                results["dependencies_checked"] = 1
                 violation = self._validate_action_dependency(
                     action_info, str(workflow_file.relative_to(self.repo_root))
                 )
@@ -171,12 +171,12 @@ class GitHubActionsDependencyManager:
 
     def _extract_actions_from_workflow(
         self, workflow: Dict, content: str
-    ) -> List[Dict]:
+    )  List[Dict]:
         """Extract GitHub Actions dependencies from workflow."""
         actions = []
 
         # Look for 'uses' statements in the YAML content
-        uses_pattern = r"uses:\s+([^@\s]+)@([^\s]+)"
+        uses_pattern = r"uses:\s([^@\s])@([^\s])"
         matches = re.findall(uses_pattern, content)
 
         for action_name, version in matches:
@@ -194,13 +194,13 @@ class GitHubActionsDependencyManager:
 
         return actions
 
-    def _determine_version_type(self, version: str) -> str:
+    def _determine_version_type(self, version: str)  str:
         """Determine the type of version specification."""
-        if re.match(r"^v?\d+$", version):
+        if re.match(r"^v?\d$", version):
             return "major"
-        elif re.match(r"^v?\d+\.\d+$", version):
+        elif re.match(r"^v?\d\.\d$", version):
             return "minor"
-        elif re.match(r"^v?\d+\.\d+\.\d+$", version):
+        elif re.match(r"^v?\d\.\d\.\d$", version):
             return "patch"
         elif re.match(r"^[a-f0-9]{40}$", version):
             return "commit_sha"
@@ -211,7 +211,7 @@ class GitHubActionsDependencyManager:
 
     def _validate_action_dependency(
         self, action_info: Dict, workflow_file: str
-    ) -> Optional[Dict]:
+    )  Optional[Dict]:
         """Validate a single action dependency against version windows."""
         action_name = action_info["name"]
         version = action_info["version"]
@@ -255,7 +255,7 @@ class GitHubActionsDependencyManager:
 
         try:
             release_datetime = datetime.fromisoformat(
-                release_date.replace("Z", "+00:00")
+                release_date.replace("Z", "00:00")
             )
             days_old = (get_current_utc() - release_datetime).days
 
@@ -289,7 +289,7 @@ class GitHubActionsDependencyManager:
 
     def _get_action_release_info(
         self, action_name: str, version: str
-    ) -> Optional[Dict]:
+    )  Optional[Dict]:
         """Get release information for a GitHub Action."""
         # Use cache to avoid repeated API calls
         cache_key = f"{action_name}@{version}"
@@ -335,7 +335,7 @@ class GitHubActionsDependencyManager:
 
         return None
 
-    def _check_security_advisories(self, action_info: Dict) -> Optional[Dict]:
+    def _check_security_advisories(self, action_info: Dict)  Optional[Dict]:
         """Check for known security advisories for the action."""
         # This is a placeholder for security advisory checking
         # In a real implementation, this would check against GitHub
@@ -343,7 +343,7 @@ class GitHubActionsDependencyManager:
         # or other vulnerability databases
         return None
 
-    def _generate_update_recommendation(self, action_info: Dict) -> Optional[Dict]:
+    def _generate_update_recommendation(self, action_info: Dict)  Optional[Dict]:
         """Generate update recommendations for the action."""
         action_name = action_info["name"]
         current_version = action_info["version"]
@@ -371,7 +371,7 @@ class GitHubActionsDependencyManager:
 
         return None
 
-    def generate_report(self, results: Dict) -> str:
+    def generate_report(self, results: Dict)  str:
         """Generate a human-readable report from validation results."""
         report_lines = [
             "GitHub Actions Dependency Validation Report",
@@ -411,7 +411,7 @@ class GitHubActionsDependencyManager:
                 report_lines.extend(
                     [
                         (
-                            f"  {rec['action']}: {rec['current_version']} -> "
+                            f"  {rec['action']}: {rec['current_version']}  "
                             f"{rec['recommended_version']}"
                         ),
                         f"    Reason: {rec['reason']}",
@@ -441,9 +441,9 @@ def main():
     window_days = (30, 90)  # Default
     if "--window-days" in sys.argv:
         idx = sys.argv.index("--window-days")
-        if idx + 1 < len(sys.argv):
+        if idx  1 < len(sys.argv):
             try:
-                min_days, max_days = map(int, sys.argv[idx + 1].split(","))
+                min_days, max_days = map(int, sys.argv[idx  1].split(","))
                 window_days = (min_days, max_days)
             except ValueError:
                 print(
@@ -460,7 +460,7 @@ def main():
 
     # Generate and display report
     report = manager.generate_report(results)
-    print("\n" + report)
+    print("\n"  report)
 
     # Exit with appropriate code
     if results["violations"]:

@@ -70,7 +70,7 @@ if [ -n "$GH_TOKEN" ]; then
     echo "Status: GH_TOKEN: Available"
     # Check if it's actually an OpenAI token
     if [[ "$GH_TOKEN" == sk-proj-* ]]; then
-        echo "   Warning:  WARNING: This appears to be an OpenAI token, not a GitHub token"
+        echo "   Warning:   This appears to be an OpenAI token, not a GitHub token"
     fi
 else
     echo "Error: GH_TOKEN: Not set"
@@ -118,16 +118,16 @@ echo "=============="
 # Count available GitHub tokens
 github_token_count=0
 if [ -n "$CI_ISSUE_AUTOMATION_TOKEN" ]; then
-    github_token_count=$((github_token_count + 1))
+    github_token_count=$((github_token_count  1))
 fi
 if [ -n "$CI_BOT_TOKEN" ]; then
-    github_token_count=$((github_token_count + 1))
+    github_token_count=$((github_token_count  1))
 fi
 if [ -n "$GITHUB_TOKEN" ]; then
-    github_token_count=$((github_token_count + 1))
+    github_token_count=$((github_token_count  1))
 fi
 if [ -n "$CI_ISSUE_TOKEN" ]; then
-    github_token_count=$((github_token_count + 1))
+    github_token_count=$((github_token_count  1))
 fi
 
 printf "Value: %s\n" "$"
@@ -135,13 +135,13 @@ printf "Value: %s\n" "$"
 # Orchestration token count
 orchestration_token_count=0
 if [ -n "$DEV_ORCHESTRATION_BOT_KEY" ]; then
-    orchestration_token_count=$((orchestration_token_count + 1))
+    orchestration_token_count=$((orchestration_token_count  1))
 fi
 if [ -n "$STAGING_ORCHESTRATION_BOT_KEY" ]; then
-    orchestration_token_count=$((orchestration_token_count + 1))
+    orchestration_token_count=$((orchestration_token_count  1))
 fi
 if [ -n "$PROD_ORCHESTRATION_BOT_KEY" ]; then
-    orchestration_token_count=$((orchestration_token_count + 1))
+    orchestration_token_count=$((orchestration_token_count  1))
 fi
 
 printf "Value: %s\n" "$"

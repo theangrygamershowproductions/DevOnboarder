@@ -29,27 +29,27 @@ Successfully migrated DevOnboarder from multi-subdomain architecture to single-d
 
 ### Before (Multi-Subdomain)
 
-- `auth.dev.theangrygamershow.com` → Auth Service
+- `auth.dev.theangrygamershow.com`  Auth Service
 
-- `api.dev.theangrygamershow.com` → XP API Service
+- `api.dev.theangrygamershow.com`  XP API Service
 
-- `discord.dev.theangrygamershow.com` → Discord Integration
+- `discord.dev.theangrygamershow.com`  Discord Integration
 
-- `dashboard.dev.theangrygamershow.com` → Dashboard Service
+- `dashboard.dev.theangrygamershow.com`  Dashboard Service
 
-- `dev.theangrygamershow.com` → Frontend
+- `dev.theangrygamershow.com`  Frontend
 
-### After (Single Domain + Path-Based)
+### After (Single Domain  Path-Based)
 
-- `dev.theangrygamershow.com/auth` → Auth Service
+- `dev.theangrygamershow.com/auth`  Auth Service
 
-- `dev.theangrygamershow.com/api` → XP API Service
+- `dev.theangrygamershow.com/api`  XP API Service
 
-- `dev.theangrygamershow.com/discord` → Discord Integration
+- `dev.theangrygamershow.com/discord`  Discord Integration
 
-- `dev.theangrygamershow.com/dashboard` → Dashboard Service
+- `dev.theangrygamershow.com/dashboard`  Dashboard Service
 
-- `dev.theangrygamershow.com/` → Frontend (root)
+- `dev.theangrygamershow.com/`  Frontend (root)
 
 ## Files Modified
 

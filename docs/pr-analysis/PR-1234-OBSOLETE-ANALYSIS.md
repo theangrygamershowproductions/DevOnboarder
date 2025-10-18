@@ -37,7 +37,7 @@ PR #1234 "feat(openapi): scaffold spec, CI linting, docs, and tests (phase 2 pla
 
 - **Created**: September 4, 2025
 
-- **Branch**: `scarabofthespudheap:patch-1` → `main`
+- **Branch**: `scarabofthespudheap:patch-1`  `main`
 
 - **CI Status**: 4 failures (but now irrelevant due to obsolete status)
 
@@ -45,24 +45,24 @@ PR #1234 "feat(openapi): scaffold spec, CI linting, docs, and tests (phase 2 pla
 
 The original PR proposed:
 
-- ✅ OpenAPI scaffold with x-codex metadata
+-  OpenAPI scaffold with x-codex metadata
 
-- ✅ Spectral/Redocly CI linting
+-  Spectral/Redocly CI linting
 
-- ✅ Preview artifact generation
+-  Preview artifact generation
 
-- ✅ Documentation integration
+-  Documentation integration
 
-- ✅ Spectral rules implementation
+-  Spectral rules implementation
 
-- ✅ Client import smoke test
+-  Client import smoke test
 
 ## Evidence: Work Already Integrated
 
 ### Recent Commit History Shows Complete Integration
 
 ```bash
-aabf8a09 (HEAD -> main) SECURITY: Add explicit workflow permissions to openapi-validate (#1281)
+aabf8a09 (HEAD  main) SECURITY: Add explicit workflow permissions to openapi-validate (#1281)
 7cc4a180 Merge pull request #1275 from theangrygamershowproductions/feat/openapi-phase2-fixed
 86cc5ba8 SECURITY(ci): add explicit permissions to OpenAPI workflow
 86fe77e6 FIX(ci): fix shell globbing in openapi validation workflow
@@ -75,15 +75,15 @@ f35c65d9 REFACTOR(openapi): use built-in DevOnboarder validation instead of exte
 
 **File Evidence**:
 
-- ✅ `src/devonboarder/openapi.json` (485 lines) - Complete OpenAPI specification
+-  `src/devonboarder/openapi.json` (485 lines) - Complete OpenAPI specification
 
-- ✅ `scripts/generate_openapi.py` (47 lines) - Generation script
+-  `scripts/generate_openapi.py` (47 lines) - Generation script
 
-- ✅ `.github/workflows/openapi-validate.yml` - Dedicated CI workflow
+-  `.github/workflows/openapi-validate.yml` - Dedicated CI workflow
 
-- ✅ `openapi/devonboarder.ci.yaml` - CI configuration
+-  `openapi/devonboarder.ci.yaml` - CI configuration
 
-- ✅ `Makefile` - `make openapi` target
+-  `Makefile` - `make openapi` target
 
 **CI Integration Evidence**:
 
@@ -133,23 +133,23 @@ openapi:
 
 | Feature | PR #1234 Proposed | Main Branch Status |
 |---------|-------------------|-------------------|
-| OpenAPI Scaffold | ✅ Proposed | ✅ **IMPLEMENTED** (`src/devonboarder/openapi.json`) |
+| OpenAPI Scaffold |  Proposed |  **IMPLEMENTED** (`src/devonboarder/openapi.json`) |
 
-| CI Linting | ✅ Proposed | ✅ **IMPLEMENTED** (openapi-validate.yml) |
+| CI Linting |  Proposed |  **IMPLEMENTED** (openapi-validate.yml) |
 
-| Documentation | ✅ Proposed | ✅ **IMPLEMENTED** (Swagger UI integration) |
+| Documentation |  Proposed |  **IMPLEMENTED** (Swagger UI integration) |
 
-| Spectral Rules | ✅ Proposed | ✅ **IMPLEMENTED** (DevOnboarder validation) |
+| Spectral Rules |  Proposed |  **IMPLEMENTED** (DevOnboarder validation) |
 
-| Preview Artifacts | ✅ Proposed | ✅ **IMPLEMENTED** (CI workflow) |
+| Preview Artifacts |  Proposed |  **IMPLEMENTED** (CI workflow) |
 
-| Client Testing | ✅ Proposed | ✅ **IMPLEMENTED** (validation scripts) |
+| Client Testing |  Proposed |  **IMPLEMENTED** (validation scripts) |
 
 ## Contributor Impact Assessment
 
 **@scarabofthespudheap's contribution was valuable** and appears to have **influenced the final implementation**:
 
-1. **Timing Correlation**: External proposal (Sept 4) → Internal implementation (recent)
+1. **Timing Correlation**: External proposal (Sept 4)  Internal implementation (recent)
 
 2. **Feature Alignment**: Implemented features closely match proposed scope
 
@@ -161,13 +161,13 @@ openapi:
 
 ### Rationale
 
-- ✅ **All proposed functionality implemented** in main branch
+-  **All proposed functionality implemented** in main branch
 
-- ✅ **Superior integration** with DevOnboarder standards
+-  **Superior integration** with DevOnboarder standards
 
-- ✅ **Active CI validation** ensures ongoing quality
+-  **Active CI validation** ensures ongoing quality
 
-- ✅ **No value loss** - work preserved through alternative path
+-  **No value loss** - work preserved through alternative path
 
 ### Action Required
 

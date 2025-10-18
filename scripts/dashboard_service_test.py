@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 # Simple CORS configuration for testing
-def get_cors_origins() -> List[str]:
+def get_cors_origins()  List[str]:
     """Get CORS origins for testing."""
     return ["http://localhost:8081", "http://localhost:3000", "http://127.0.0.1:8081"]
 
@@ -72,7 +72,7 @@ class DashboardService:
         # Ensure logs directory exists
         self.logs_dir.mkdir(exist_ok=True)
 
-    def discover_scripts(self) -> List[ScriptInfo]:
+    def discover_scripts(self)  List[ScriptInfo]:
         """Discover all executable scripts in the scripts directory."""
         scripts: List[ScriptInfo] = []
 
@@ -116,7 +116,7 @@ class DashboardService:
 
         return sorted(scripts, key=lambda s: (s.category, s.name))
 
-    def _extract_description(self, script_path: Path) -> str:
+    def _extract_description(self, script_path: Path)  str:
         """Extract description from script header comments."""
         try:
             with open(script_path, "r", encoding="utf-8") as f:
@@ -152,7 +152,7 @@ class DashboardService:
             logger.warning(f"Failed to extract description from {script_path}: {e}")
             return "Description unavailable"
 
-    def _categorize_script(self, script_path: Path) -> str:
+    def _categorize_script(self, script_path: Path)  str:
         """Categorize script based on path and name."""
         path_str = str(script_path).lower()
         name_str = script_path.name.lower()
@@ -175,7 +175,7 @@ class DashboardService:
             return "general"
 
 
-def create_dashboard_app() -> FastAPI:
+def create_dashboard_app()  FastAPI:
     """Create the FastAPI dashboard application."""
     app = FastAPI(
         title="DevOnboarder Dashboard Service",
@@ -197,17 +197,17 @@ def create_dashboard_app() -> FastAPI:
     dashboard_service = DashboardService()
 
     @app.get("/health")
-    def health() -> Dict[str, str]:
+    def health()  Dict[str, str]:
         """Health check endpoint."""
         return {"status": "ok"}
 
     @app.get("/api/scripts", response_model=List[ScriptInfo])
-    def list_scripts() -> List[ScriptInfo]:
+    def list_scripts()  List[ScriptInfo]:
         """List all discovered scripts."""
         return dashboard_service.discover_scripts()
 
     @app.get("/api/executions", response_model=List[ExecutionResult])
-    def list_executions() -> List[ExecutionResult]:
+    def list_executions()  List[ExecutionResult]:
         """List all active executions."""
         return list(dashboard_service.active_executions.values())
 

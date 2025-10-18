@@ -64,7 +64,7 @@ Security Requirements
 
 - **Token security**: Secure Discord bot token storage
 
-- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 - **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
 

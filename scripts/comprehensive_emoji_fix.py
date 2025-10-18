@@ -14,31 +14,31 @@ from datetime import datetime
 # DevOnboarder emoji mapping for terminal output compliance
 EMOJI_MAP = {
     # Basic status indicators
-    "✅": "SUCCESS:",
-    "❌": "ERROR:",
-    "⚠️": "WARNING:",
-    "🟢": "SUCCESS:",
-    "🔴": "ERROR:",
-    "🟡": "WARNING:",
+    "": "",
+    "": "",
+    "": "",
+    "🟢": "",
+    "🔴": "",
+    "🟡": "",
     "🟠": "DEGRADED:",
     # Action indicators
-    "🔍": "INFO:",
-    "📋": "INFO:",
+    "": "",
+    "": "",
     "🎯": "TARGET:",
-    "🚀": "ACTION:",
-    "⚡": "QUICK:",
-    "📊": "STATS:",
-    "📝": "NOTE:",
-    "💡": "TIP:",
-    "🏗️": "BUILD:",
-    "⚙️": "CONFIG:",
+    "": "ACTION:",
+    "FAST:": "QUICK:",
+    "": "",
+    "": "",
+    "": "",
+    "BUILD:": "BUILD:",
+    "": "",
     "🤖": "BOT:",
     "👁️": "MONITOR:",
     "🕒": "TIME:",
     # Additional indicators found in codebase
     "🛡️": "SECURITY:",
-    "🔗": "LINK:",
-    "ℹ️": "INFO:",
+    "LINK:": "LINK:",
+    "ℹ️": "",
     "🚨": "ALERT:",
 }
 
@@ -68,8 +68,8 @@ def fix_file_emojis(file_path):
                 count = content.count(emoji)
                 if count > 0:
                     content = content.replace(emoji, replacement)
-                    fixes_made += count
-                    print(f"  Fixed {count}x: {emoji} -> {replacement}")
+                    fixes_made = count
+                    print(f"  Fixed {count}x: {emoji}  {replacement}")
 
         # Only write if changes were made
         if fixes_made > 0:
@@ -83,7 +83,7 @@ def fix_file_emojis(file_path):
             return 0
 
     except (OSError, UnicodeDecodeError) as e:
-        print(f"  ERROR: Failed to process {file_path}: {e}")
+        print(f"   Failed to process {file_path}: {e}")
         return 0
 
 
@@ -92,7 +92,7 @@ def main():
     framework_dir = Path("frameworks/monitoring_automation")
 
     if not framework_dir.exists():
-        print("ERROR: frameworks/monitoring_automation directory not found")
+        print(" frameworks/monitoring_automation directory not found")
         return 1
 
     print("Comprehensive Phase 3 Framework Emoji Fix")
@@ -108,8 +108,8 @@ def main():
         if file_path.is_file() and file_path.suffix in [".py", ".sh"]:
             print(f"Processing: {file_path}")
             fixes = fix_file_emojis(file_path)
-            total_fixes += fixes
-            files_processed += 1
+            total_fixes = fixes
+            files_processed = 1
             print()
 
     print("=" * 50)
@@ -130,18 +130,18 @@ def main():
                     content = f.read()
                 for emoji in EMOJI_MAP.keys():
                     if emoji in content:
-                        violation_count += content.count(emoji)
+                        violation_count = content.count(emoji)
             except (OSError, UnicodeDecodeError):
                 pass
 
     if violation_count == 0:
-        print("SUCCESS: No emoji violations found in Phase 3 framework")
+        print(" No emoji violations found in Phase 3 framework")
         print(
             "Phase 3 framework is now compliant with "
             "DevOnboarder terminal output policy"
         )
     else:
-        print(f"WARNING: {violation_count} violations may remain")
+        print(f" {violation_count} violations may remain")
         print("Manual review may be required for edge cases")
 
     print()

@@ -3,7 +3,7 @@ set -eo pipefail
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Parse command line arguments for targeted execution
@@ -14,7 +14,7 @@ DRY_RUN=false
 
 show_usage() {
     echo "DevOnboarder COMPREHENSIVE Local CI Validation"
-    echo "Running 90%+ of GitHub Actions pipeline locally..."
+    echo "Running 90% of GitHub Actions pipeline locally..."
     echo
     echo "USAGE:"
     echo "  $0 [OPTIONS]"
@@ -87,7 +87,7 @@ elif [[ -n "$TARGET_STEP" ]]; then
 elif [[ "$DRY_RUN" == "true" ]]; then
     echo "DRY RUN MODE - Showing what would execute"
 else
-    echo "Running 90%+ of GitHub Actions pipeline locally..."
+    echo "Running 90% of GitHub Actions pipeline locally..."
 fi
 echo "This eliminates 'hit and miss' development completely!"
 echo
@@ -114,7 +114,7 @@ cat > "$LOG_FILE" << EOF
 Started: $(date)
 Log File: $LOG_FILE
 
-This validation covers 90%+ of the GitHub Actions CI pipeline locally
+This validation covers 90% of the GitHub Actions CI pipeline locally
 to eliminate "hit and miss" development cycles.
 
 EOF
@@ -129,7 +129,7 @@ run_step() {
     local step_cmd="$2"
     local step_log
 
-    STEP_COUNTER=$((STEP_COUNTER + 1))
+    STEP_COUNTER=$((STEP_COUNTER  1))
     step_log="logs/step_${STEP_COUNTER}_$(echo "$step_name" | tr ' ' '_' | tr '[:upper:]' '[:lower:]').log"
 
     # Check if we should run this step based on targeting
@@ -170,7 +170,7 @@ run_step() {
         return 0
     fi
 
-    TOTAL_STEPS=$((TOTAL_STEPS + 1))
+    TOTAL_STEPS=$((TOTAL_STEPS  1))
 
     echo "Step $STEP_COUNTER: $step_name"
 
@@ -192,7 +192,7 @@ run_step() {
     if eval "$step_cmd" > "$step_log" 2>&1; then
         echo "$step_name: PASSED"
         [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: PASSED" >> "$LOG_FILE" 2>/dev/null; }
-        PASSED_STEPS=$((PASSED_STEPS + 1))
+        PASSED_STEPS=$((PASSED_STEPS  1))
     else
         echo "$step_name: FAILED"
         [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: FAILED" >> "$LOG_FILE" 2>/dev/null; }
@@ -202,7 +202,7 @@ run_step() {
         else
             echo "   No log file available (command may have failed early)"
         fi
-        FAILED_STEPS=$((FAILED_STEPS + 1))
+        FAILED_STEPS=$((FAILED_STEPS  1))
 
         # Add failure details to main log (with error handling)
         if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
@@ -312,7 +312,7 @@ start_section "CORE BUILD & TEST PIPELINE" "build"
 run_step "Generate Secrets (CI)" "CI=true bash scripts/generate-secrets.sh"
 
 # Environment audit
-run_step "Environment Audit" "env -i PATH=\"\$PATH\" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' && missing=\$(python -c 'import json,sys;print(\"\".join(json.load(open(\"logs/env_audit.json\")).get(\"missing\", [])))') && extras=\$(python -c 'import json,sys;d=json.load(open(\"logs/env_audit.json\"));print(\"\".join(e for e in d.get(\"extra\", []) if e not in (\"PATH\",\"PWD\",\"SHLVL\",\"_\")))') && [ -z \"\$missing\" ] && [ -z \"\$extras\" ]"
+run_step "Environment Audit" "env -i PATH=\"\$PATH\" bash -c 'set -a; source .env.ci; set a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' && missing=\$(python -c 'import json,sys;print(\"\".join(json.load(open(\"logs/env_audit.json\")).get(\"missing\", [])))') && extras=\$(python -c 'import json,sys;d=json.load(open(\"logs/env_audit.json\"));print(\"\".join(e for e in d.get(\"extra\", []) if e not in (\"PATH\",\"PWD\",\"SHLVL\",\"_\")))') && [ -z \"\$missing\" ] && [ -z \"\$extras\" ]"
 
 # Environment docs alignment
 run_step "Environment Docs" "python scripts/check_env_docs.py"
@@ -321,7 +321,7 @@ run_step "Environment Docs" "python scripts/check_env_docs.py"
 run_step "QC Validation (8 metrics)" "bash scripts/qc_pre_push.sh"
 
 # Python tests with coverage (using CI environment)
-run_step "Python Tests (95% coverage)" "set -a; source .env.ci; [ -f .tokens.ci ] && source .tokens.ci; set +a; python -m pytest --cov=src --cov-fail-under=95 -q"
+run_step "Python Tests (95% coverage)" "set -a; source .env.ci; [ -f .tokens.ci ] && source .tokens.ci; set a; python -m pytest --cov=src --cov-fail-under=95 -q"
 
 start_section "FRONTEND TESTING" "frontend"
 
@@ -473,7 +473,7 @@ else
     echo "   Main log unavailable: $LOG_FILE"
 fi
 echo
-echo "COVERAGE: ~95%+ of GitHub Actions CI pipeline"
+echo "COVERAGE: ~95% of GitHub Actions CI pipeline"
 echo "CONFIDENCE: $([ $FAILED_STEPS -eq 0 ] && echo "MAXIMUM" || echo "VERY HIGH") - Push safety validated"
 echo
 

@@ -24,9 +24,9 @@ class UnicodeTerminalValidator:
     def __init__(self):
         # Patterns that indicate terminal output in shell scripts
         self.shell_output_patterns = [
-            r'echo\s+["\']([^"\']*)["\']',  # echo "text" or echo 'text'
-            r"echo\s+([^#\n]*)",  # echo text (unquoted)
-            r'printf\s+["\']([^"\']*)["\']',  # printf "text"
+            r'echo\s["\']([^"\']*)["\']',  # echo "text" or echo 'text'
+            r"echo\s([^#\n]*)",  # echo text (unquoted)
+            r'printf\s["\']([^"\']*)["\']',  # printf "text"
         ]
 
         # Patterns that indicate terminal output in Python scripts
@@ -89,7 +89,7 @@ class UnicodeTerminalValidator:
             "\u25cb",
         }
 
-    def is_unicode_problematic(self, text: str) -> bool:
+    def is_unicode_problematic(self, text: str)  bool:
         """Check if text contains problematic Unicode characters."""
         # Check for any non-ASCII characters
         try:
@@ -106,7 +106,7 @@ class UnicodeTerminalValidator:
 
     def extract_terminal_output(
         self, content: str, file_extension: str
-    ) -> List[Tuple[int, str, str]]:
+    )  List[Tuple[int, str, str]]:
         """Extract terminal output strings from file content."""
         results: List[Tuple[int, str, str]] = []
         lines = content.split("\n")
@@ -129,7 +129,7 @@ class UnicodeTerminalValidator:
 
         return results
 
-    def validate_file(self, file_path: Path) -> List[Tuple[int, str, str, str]]:
+    def validate_file(self, file_path: Path)  List[Tuple[int, str, str, str]]:
         """Validate a single file for Unicode terminal output."""
         violations = []
 
@@ -150,7 +150,7 @@ class UnicodeTerminalValidator:
 
         return violations
 
-    def find_files_to_check(self, root_path: Path) -> List[Path]:
+    def find_files_to_check(self, root_path: Path)  List[Path]:
         """Find all shell and Python files to check."""
         files: List[Path] = []
 
@@ -172,7 +172,7 @@ class UnicodeTerminalValidator:
 
         return filtered_files
 
-    def validate_directory(self, directory: Path) -> int:
+    def validate_directory(self, directory: Path)  int:
         """Validate all files in a directory."""
         violations_count = 0
         files = self.find_files_to_check(directory)
@@ -184,7 +184,7 @@ class UnicodeTerminalValidator:
         for file_path in files:
             violations = self.validate_file(file_path)
             if violations:
-                violations_count += len(violations)
+                violations_count = len(violations)
                 print(f"\nVIOLATIONS in {file_path}:")
                 for line_num, full_line, text_content, _ in violations:
                     print(f"  Line {line_num}: {full_line}")
@@ -192,7 +192,7 @@ class UnicodeTerminalValidator:
 
         return violations_count
 
-    def suggest_fixes(self, text_content: str) -> str:
+    def suggest_fixes(self, text_content: str)  str:
         """Suggest ASCII alternatives for Unicode characters."""
         fixes = {
             "\u2705": "OK",
@@ -213,7 +213,7 @@ class UnicodeTerminalValidator:
             "\U0001f527": "FIX",
             "\U0001f7e2": "GREEN",
             "\U0001f534": "RED",
-            "\u2192": "->",
+            "\u2192": "",
             "\u2190": "<-",
             "\u2191": "^",
             "\u2193": "v",

@@ -190,9 +190,9 @@ echo "Issues prevented: [X]"
 |--------|--------------|------------------|------------------|
 | Resolution Time | 2 hours | 8-14 hours | **6x faster** |
 
-| Success Rate | 100% | 20-30% | **+75 percentage points** |
+| Success Rate | 100% | 20-30% | **75 percentage points** |
 
-| Automation Level | 100% | 10-20% | **+85 percentage points** |
+| Automation Level | 100% | 10-20% | **85 percentage points** |
 
 | Developer Velocity | Instant coverage reports | Hours of manual analysis | **90x improvement** |
 
@@ -211,7 +211,7 @@ echo "Issues prevented: [X]"
 
 - **Files Changed**: 2
 
-- **Total Line Changes**: +12, -8 (net +4)
+- **Total Line Changes**: 12, -8 (net 4)
 
 ### Technical Metrics
 
@@ -219,9 +219,9 @@ echo "Issues prevented: [X]"
 
 - **Success Rate**: 100% (all tests passed)
 
-- **Coverage**: 96%+ (per-service isolation achieved)
+- **Coverage**: 96% (per-service isolation achieved)
 
-- **QC Score**: 95%+ (all quality gates passed)
+- **QC Score**: 95% (all quality gates passed)
 
 ### Timing Data
 

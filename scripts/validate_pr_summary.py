@@ -8,6 +8,8 @@ and contain all necessary sections for proper documentation.
 import argparse
 import re
 import sys
+import re
+import argparse
 from pathlib import Path
 from typing import List, Tuple
 
@@ -65,7 +67,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
     # Count how many placeholders are still present
     placeholder_count = 0
     for placeholder in placeholders:
-        placeholder_count += content.count(placeholder)
+        placeholder_count = content.count(placeholder)
 
     # Allow some placeholders if not all sections apply, but warn if too many
     if placeholder_count > 5:
@@ -75,7 +77,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
         )
 
     # Check for empty sections (header followed immediately by another section)
-    section_pattern = r"## \w+[^\n]*\n\n(?=## \w+)"
+    section_pattern = r"## \w[^\n]*\n\n(?=## \w)"
     empty_sections = re.findall(section_pattern, content)
     if empty_sections:
         errors.append(
@@ -117,13 +119,13 @@ def main() -> int:
     _, errors = validate_pr_summary(file_path)
 
     if errors:
-        print("❌ PR Summary Validation Failed:")
+        print(" PR Summary Validation Failed:")
         for error in errors:
             print(f"  • {error}")
-        print("\n💡 Use the template: .github/PR_SUMMARY_TEMPLATE.md")
+        print("\n Use the template: .github/PR_SUMMARY_TEMPLATE.md")
         return 1
 
-    print("✅ PR Summary validation passed")
+    print(" PR Summary validation passed")
     return 0
 
 

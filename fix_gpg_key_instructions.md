@@ -30,7 +30,7 @@ The key should be in OpenSSH format:
 
 # Generate new SSH key pair
 
-ssh-keygen -t ed25519 -C "bot+priority-matrix@theangrygamershow.com" -f pmbot_key -N ""
+ssh-keygen -t ed25519 -C "botpriority-matrix@theangrygamershow.com" -f pmbot_key -N ""
 
 # The private key (pmbot_key) should be copied to PMBOT_SSH_PRIVATE secret
 
@@ -156,20 +156,20 @@ Environment secrets only override Repository secrets when:
 
 ### Testing Results
 
-- ✅ Direct file copy: VALID SSH key
+-  Direct file copy: VALID SSH key
 
-- ❌ Shell variable method: CORRUPTED (previous approach)
+-  Shell variable method: CORRUPTED (previous approach)
 
-- ✅ Base64 encoding/decoding: Preserves binary data integrity
+-  Base64 encoding/decoding: Preserves binary data integrity
 
 ### Implementation Status
 
-- ✅ Workflow updated to use base64 decoding
+-  Workflow updated to use base64 decoding
 
-- ✅ Base64-encoded secret content generated
+-  Base64-encoded secret content generated
 
-- 🔄 GitHub Secret updated - testing base64 decode validation
+- SYNC: GitHub Secret updated - testing base64 decode validation
 
-- 🔄 Ready for GitHub Secret update and testing
+- SYNC: Ready for GitHub Secret update and testing
 
 This approach eliminates shell variable corruption while maintaining DevOnboarder Terminal Output Policy compliance.

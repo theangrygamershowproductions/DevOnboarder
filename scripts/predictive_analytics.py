@@ -72,16 +72,16 @@ class PredictiveAnalytics:
         self.load_historical_data()
         self.train_models()
 
-    def validate_virtual_environment(self) -> None:
+    def validate_virtual_environment(self)  None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                "❌ Virtual environment not detected. "
+                " Virtual environment not detected. "
                 "DevOnboarder Phase 5 requires virtual environment isolation."
             )
-        print(f"✅ Predictive Analytics virtual environment: {self.venv_path}")
+        print(f" Predictive Analytics virtual environment: {self.venv_path}")
 
-    def setup_logging(self) -> None:
+    def setup_logging(self)  None:
         """Configure logging for analytics events."""
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
@@ -96,7 +96,7 @@ class PredictiveAnalytics:
         )
         self.logger = logging.getLogger("PredictiveAnalytics")
 
-    def load_historical_data(self) -> None:
+    def load_historical_data(self)  None:
         """Load historical data for model training."""
         # Load from Phase 4 CI analysis reports
         data_sources = [
@@ -120,7 +120,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Loaded {len(self.historical_data)} historical records")
 
-    def process_ci_data(self, data: Dict) -> None:
+    def process_ci_data(self, data: Dict)  None:
         """Process CI failure analysis data for training."""
         if "enhanced_ci_analysis" in data:
             analysis = data["enhanced_ci_analysis"]["analysis"]
@@ -137,7 +137,7 @@ class PredictiveAnalytics:
 
             self.historical_data.append(record)
 
-    def generate_synthetic_training_data(self) -> None:
+    def generate_synthetic_training_data(self)  None:
         """Generate synthetic data for model training demonstration."""
         np.random.seed(42)  # For reproducible results
 
@@ -152,9 +152,9 @@ class PredictiveAnalytics:
             # Higher failure rates during peak hours and after deployments
             failure_prob = 0.1
             if 9 <= hour <= 17:  # Business hours
-                failure_prob += 0.05
+                failure_prob = 0.05
             if day_of_week in [0, 6]:  # Monday/Sunday deployments
-                failure_prob += 0.03
+                failure_prob = 0.03
 
             cpu_usage = np.random.normal(45, 15)
             memory_usage = np.random.normal(60, 20)
@@ -162,7 +162,7 @@ class PredictiveAnalytics:
 
             # Correlate metrics with failure probability
             if cpu_usage > 70 or memory_usage > 80 or response_time > 2:
-                failure_prob += 0.2
+                failure_prob = 0.2
 
             record = {
                 "timestamp": base_time.isoformat(),
@@ -183,7 +183,7 @@ class PredictiveAnalytics:
 
             self.historical_data.append(record)
 
-    def prepare_features(self, data: List[Dict]) -> pd.DataFrame:
+    def prepare_features(self, data: List[Dict])  pd.DataFrame:
         """Prepare feature matrix for ML models."""
         df = pd.DataFrame(data)
 
@@ -193,7 +193,7 @@ class PredictiveAnalytics:
                 df[col] = 0
 
         # Feature engineering
-        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"] + 1)
+        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"]  1)
         df["response_error_ratio"] = df["response_time"] * df["error_rate"]
         df["load_factor"] = df["request_count"] / 1000
 
@@ -207,7 +207,7 @@ class PredictiveAnalytics:
 
         return df
 
-    def train_models(self) -> None:
+    def train_models(self)  None:
         """Train ML models on historical data."""
         if len(self.historical_data) < 10:
             self.logger.warning("Insufficient data for model training")
@@ -225,7 +225,7 @@ class PredictiveAnalytics:
 
         self.logger.info("ML models trained successfully")
 
-    def train_failure_predictor(self, df: pd.DataFrame) -> None:
+    def train_failure_predictor(self, df: pd.DataFrame)  None:
         """Train failure prediction model."""
         feature_cols = [col for col in self.feature_columns if col in df.columns]
         feature_cols.extend(["cpu_memory_ratio", "response_error_ratio", "load_factor"])
@@ -256,7 +256,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Failure predictor accuracy: {accuracy:.3f}")
 
-    def train_performance_forecaster(self, df: pd.DataFrame) -> None:
+    def train_performance_forecaster(self, df: pd.DataFrame)  None:
         """Train performance forecasting model."""
         feature_cols = [col for col in self.feature_columns if col in df.columns]
 
@@ -282,7 +282,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Performance forecaster MSE: {mse:.3f}")
 
-    def predict_failure_risk(self, current_metrics: Dict) -> PredictionResult:
+    def predict_failure_risk(self, current_metrics: Dict)  PredictionResult:
         """Predict failure risk based on current system metrics."""
         if not self.failure_predictor:
             return PredictionResult(
@@ -300,7 +300,7 @@ class PredictiveAnalytics:
 
         # Add engineered features
         features["cpu_memory_ratio"] = features["cpu_usage"] / (
-            features["memory_usage"] + 1
+            features["memory_usage"]  1
         )
         features["response_error_ratio"] = (
             features["response_time"] * features["error_rate"]
@@ -310,7 +310,7 @@ class PredictiveAnalytics:
         feature_vector = [
             features[col]
             for col in self.feature_columns
-            + ["cpu_memory_ratio", "response_error_ratio", "load_factor"]
+             ["cpu_memory_ratio", "response_error_ratio", "load_factor"]
         ]
         feature_vector = np.array(feature_vector).reshape(1, -1)
         feature_vector = self.scaler.transform(feature_vector)
@@ -319,7 +319,7 @@ class PredictiveAnalytics:
         prediction_prob = self.failure_predictor.predict_proba(feature_vector)[0][
             1
         ]  # Feature importance
-        feature_names = self.feature_columns + [
+        feature_names = self.feature_columns  [
             "cpu_memory_ratio",
             "response_error_ratio",
             "load_factor",
@@ -341,7 +341,7 @@ class PredictiveAnalytics:
 
     def forecast_performance(
         self, current_metrics: Dict, hours_ahead: int = 24
-    ) -> PredictionResult:
+    )  PredictionResult:
         """Forecast system performance trends."""
         if not self.performance_forecaster:
             return PredictionResult(
@@ -372,31 +372,31 @@ class PredictiveAnalytics:
             timestamp=datetime.now(),
         )
 
-    def generate_failure_recommendation(self, risk_score: float, metrics: Dict) -> str:
+    def generate_failure_recommendation(self, risk_score: float, metrics: Dict)  str:
         """Generate actionable recommendation based on failure risk."""
         if risk_score < 0.2:
-            return "✅ System healthy - continue monitoring"
+            return " System healthy - continue monitoring"
         elif risk_score < 0.5:
-            return "⚠️ Elevated risk - consider scaling resources"
+            return " Elevated risk - consider scaling resources"
         elif risk_score < 0.8:
             return "🚨 High risk - immediate attention required"
         else:
-            return "❌ Critical risk - activate incident response"
+            return " Critical risk - activate incident response"
 
-    def generate_performance_recommendation(self, score: float) -> str:
+    def generate_performance_recommendation(self, score: float)  str:
         """Generate performance optimization recommendation."""
         if score >= 90:
-            return "✅ Excellent performance - maintain current configuration"
+            return " Excellent performance - maintain current configuration"
         elif score >= 80:
             return "👍 Good performance - minor optimizations available"
         elif score >= 70:
-            return "⚠️ Fair performance - consider resource optimization"
+            return " Fair performance - consider resource optimization"
         else:
             return "🚨 Poor performance - immediate optimization required"
 
     def save_prediction_report(
         self, predictions: List[PredictionResult], output_path: str
-    ) -> None:
+    )  None:
         """Save prediction analysis report."""
         report = {
             "predictive_analysis": {
@@ -420,7 +420,7 @@ class PredictiveAnalytics:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        self.logger.info(f"📊 Prediction report saved: {output_path}")
+        self.logger.info(f" Prediction report saved: {output_path}")
 
 
 # CLI Interface

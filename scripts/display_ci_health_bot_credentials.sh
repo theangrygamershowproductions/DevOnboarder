@@ -22,13 +22,13 @@ echo ""
 
 # Validate we're in the DevOnboarder project root
 if [[ ! -f "pyproject.toml" ]] || ! grep -q "devonboarder" pyproject.toml 2>/dev/null; then
-    red "ERROR: Must be run from DevOnboarder project root"
+    red " Must be run from DevOnboarder project root"
     exit 1
 fi
 
 # Check if key files exist
 if [[ ! -f "ci-health-bot-public.gpg" ]] || [[ ! -f "ci-health-bot-private-base64.txt" ]]; then
-    red "ERROR: CI Health Bot key files not found"
+    red " CI Health Bot key files not found"
     echo "Run $(cyan "scripts/setup_ci_health_bot_gpg_key.sh") first"
     exit 1
 fi
@@ -37,7 +37,7 @@ fi
 KEY_ID=$(gpg --list-keys --with-colons "$BOT_EMAIL" | awk -F: '/^pub/ {print $5}' | head -1)
 
 if [[ -z "$KEY_ID" ]]; then
-    red "ERROR: Could not retrieve CI Health Bot key ID"
+    red " Could not retrieve CI Health Bot key ID"
     exit 1
 fi
 

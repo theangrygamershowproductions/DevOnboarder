@@ -22,22 +22,22 @@ bold() { printf "\033[1m%s\033[0m\n" "$1"; }
 
 # Error reporting with consistent format
 error() {
-    red "ERROR: $1" >&2
+    red " $1" >&2
 }
 
 # Success reporting with consistent format
 success() {
-    green "SUCCESS: $1"
+    green " $1"
 }
 
 # Warning reporting with consistent format
 warn() {
-    yellow "WARNING: $1"
+    yellow " $1"
 }
 
 # Info reporting with consistent format
 info() {
-    blue "INFO: $1"
+    blue " $1"
 }
 
 # Debug reporting with consistent format (only shows if DEBUG=1)

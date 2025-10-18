@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 
-def setup_logging() -> None:
+def setup_logging()  None:
     """Set up centralized logging per DevOnboarder standards."""
     import logging
 
@@ -45,7 +45,7 @@ def setup_logging() -> None:
     )
 
 
-def run_subprocess(cmd: List[str], description: str) -> Dict[str, Any]:
+def run_subprocess(cmd: List[str], description: str)  Dict[str, Any]:
     """
     Run a subprocess and return results.
 
@@ -100,7 +100,7 @@ def run_subprocess(cmd: List[str], description: str) -> Dict[str, Any]:
         }
 
 
-def fix_markdown_files(paths: List[str], dry_run: bool = False) -> bool:
+def fix_markdown_files(paths: List[str], dry_run: bool = False)  bool:
     """Fix markdown files using our markdown auto-fixer."""
     cmd = [sys.executable, "scripts/fix_markdown_formatting.py"]
     if dry_run:
@@ -111,7 +111,7 @@ def fix_markdown_files(paths: List[str], dry_run: bool = False) -> bool:
     return result["success"]
 
 
-def fix_shell_scripts(paths: List[str], dry_run: bool = False) -> bool:
+def fix_shell_scripts(paths: List[str], dry_run: bool = False)  bool:
     """Fix shell scripts using our shell script auto-fixer."""
     cmd = [sys.executable, "scripts/fix_shell_scripts.py"]
     if dry_run:
@@ -122,7 +122,7 @@ def fix_shell_scripts(paths: List[str], dry_run: bool = False) -> bool:
     return result["success"]
 
 
-def fix_frontmatter(paths: List[str], dry_run: bool = False) -> bool:
+def fix_frontmatter(paths: List[str], dry_run: bool = False)  bool:
     """Fix frontmatter using our frontmatter auto-fixer."""
     cmd = [sys.executable, "scripts/fix_frontmatter.py"]
     if dry_run:
@@ -133,7 +133,7 @@ def fix_frontmatter(paths: List[str], dry_run: bool = False) -> bool:
     return result["success"]
 
 
-def run_python_formatters(dry_run: bool = False) -> bool:
+def run_python_formatters(dry_run: bool = False)  bool:
     """Run Python formatters (black, ruff)."""
     import logging
 
@@ -166,14 +166,14 @@ def run_python_formatters(dry_run: bool = False) -> bool:
     return success
 
 
-def run_pre_commit_fixes() -> bool:
+def run_pre_commit_fixes()  bool:
     """Run pre-commit auto-fixes."""
     cmd = ["pre-commit", "run", "--all-files"]
     result = run_subprocess(cmd, "Pre-commit auto-fixes")
     return result["success"]
 
 
-def generate_report(results: List[Dict[str, Any]]) -> None:
+def generate_report(results: List[Dict[str, Any]])  None:
     """Generate a comprehensive report of all fixes applied."""
     import logging
 
@@ -186,19 +186,19 @@ def generate_report(results: List[Dict[str, Any]]) -> None:
 
     logger.info("Successful fixes: %d", len(successful_fixes))
     for fix in successful_fixes:
-        logger.info("  ✅ %s", fix["description"])
+        logger.info("   %s", fix["description"])
 
     if failed_fixes:
         logger.warning("Failed fixes: %d", len(failed_fixes))
         for fix in failed_fixes:
-            logger.warning("  ❌ %s", fix["description"])
+            logger.warning("   %s", fix["description"])
             if fix["stderr"]:
                 logger.warning("     Error: %s", fix["stderr"])
 
     logger.info("=== Report Complete ===")
 
 
-def main() -> int:
+def main()  int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="DevOnboarder Comprehensive Auto-Fixer",

@@ -52,7 +52,7 @@ Each initiative follows a standardized documentation approach using the DevOnboa
 
 - `issue_analysis_framework.md` - Statistical analysis and strategic categorization
 
-- `issue_roadmap_90day.md` - 3-sprint execution plan (Foundation → Implementation → Platform)
+- `issue_roadmap_90day.md` - 3-sprint execution plan (Foundation  Implementation  Platform)
 
 - `executive_summary_issue_strategy.md` - Leadership summary with immediate actions
 

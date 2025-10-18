@@ -12,7 +12,7 @@ import os
 import sys
 
 
-def has_docstring(node: ast.AST) -> bool:
+def has_docstring(node: ast.AST)  bool:
     return bool(ast.get_docstring(node))
 
 
@@ -28,7 +28,7 @@ ROUTE_DECORATORS = {
 }
 
 
-def _is_route_decorator(deco: ast.expr) -> bool:
+def _is_route_decorator(deco: ast.expr)  bool:
     """Return True if ``deco`` represents a FastAPI route decorator."""
 
     call = deco
@@ -38,7 +38,7 @@ def _is_route_decorator(deco: ast.expr) -> bool:
     return isinstance(call, ast.Attribute) and call.attr in ROUTE_DECORATORS
 
 
-def main() -> None:
+def main()  None:
     api_path = sys.argv[1] if len(sys.argv) > 1 else "src/devonboarder"
     errors: list[str] = []
     for dirpath, _, filenames in os.walk(api_path):

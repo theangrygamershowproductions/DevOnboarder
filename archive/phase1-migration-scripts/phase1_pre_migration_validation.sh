@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Create logs directory for centralized logging
 mkdir -p logs
-LOG_FILE="logs/phase1_pre_migration_validation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/phase1_pre_migration_validation_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Phase 1: Quality Assurance Framework - Pre-Migration QC Validation"
@@ -195,19 +195,19 @@ echo ""
 # Validate Validation Scripts
 echo "Validating Category 1: Validation Scripts (40 scripts)"
 for script in "${VALIDATION_SCRIPTS[@]}"; do
-    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS + 1))
+    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS  1))
     if ! validate_script_exists "$script"; then
-        MISSING_SCRIPTS=$((MISSING_SCRIPTS + 1))
+        MISSING_SCRIPTS=$((MISSING_SCRIPTS  1))
         continue
     fi
 
     if [[ "$script" == *.sh ]]; then
         if ! validate_shell_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     elif [[ "$script" == *.py ]]; then
         if ! validate_python_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     fi
 done
@@ -215,19 +215,19 @@ done
 echo ""
 echo "Validating Category 2: Testing Scripts (25 scripts)"
 for script in "${TESTING_SCRIPTS[@]}"; do
-    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS + 1))
+    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS  1))
     if ! validate_script_exists "$script"; then
-        MISSING_SCRIPTS=$((MISSING_SCRIPTS + 1))
+        MISSING_SCRIPTS=$((MISSING_SCRIPTS  1))
         continue
     fi
 
     if [[ "$script" == *.sh ]]; then
         if ! validate_shell_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     elif [[ "$script" == *.py ]]; then
         if ! validate_python_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     fi
 done
@@ -235,19 +235,19 @@ done
 echo ""
 echo "Validating Category 3: Compliance Scripts (25 scripts)"
 for script in "${COMPLIANCE_SCRIPTS[@]}"; do
-    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS + 1))
+    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS  1))
     if ! validate_script_exists "$script"; then
-        MISSING_SCRIPTS=$((MISSING_SCRIPTS + 1))
+        MISSING_SCRIPTS=$((MISSING_SCRIPTS  1))
         continue
     fi
 
     if [[ "$script" == *.sh ]]; then
         if ! validate_shell_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     elif [[ "$script" == *.py ]]; then
         if ! validate_python_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     fi
 done
@@ -255,19 +255,19 @@ done
 echo ""
 echo "Validating Category 4: Quality Control Scripts (19 scripts)"
 for script in "${QUALITY_CONTROL_SCRIPTS[@]}"; do
-    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS + 1))
+    TOTAL_SCRIPTS=$((TOTAL_SCRIPTS  1))
     if ! validate_script_exists "$script"; then
-        MISSING_SCRIPTS=$((MISSING_SCRIPTS + 1))
+        MISSING_SCRIPTS=$((MISSING_SCRIPTS  1))
         continue
     fi
 
     if [[ "$script" == *.sh ]]; then
         if ! validate_shell_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     elif [[ "$script" == *.py ]]; then
         if ! validate_python_syntax "$script"; then
-            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS  1))
         fi
     fi
 done
@@ -280,7 +280,7 @@ echo "Syntax errors: $SYNTAX_ERRORS"
 echo "Valid scripts: $((TOTAL_SCRIPTS - MISSING_SCRIPTS - SYNTAX_ERRORS))"
 
 if [[ $SYNTAX_ERRORS -eq 0 && $MISSING_SCRIPTS -eq 0 ]]; then
-    echo "SUCCESS: All Quality Assurance scripts passed syntax validation"
+    echo " All Quality Assurance scripts passed syntax validation"
     exit 0
 else
     echo "FAILURE: Pre-migration syntax validation failed"

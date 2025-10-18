@@ -124,7 +124,7 @@ make aar-validate        # Check AAR templates for markdown compliance
 
 make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
 
-make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR  GitHub issue
 
 ```
 
@@ -144,7 +144,7 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 
 ## Automation Ecosystem
 
-DevOnboarder includes 100+ automation scripts in `scripts/` covering:
+DevOnboarder includes 100 automation scripts in `scripts/` covering:
 
 - **CI Health Monitoring**: `monitor_ci_health.sh`, `analyze_ci_patterns.sh`
 

@@ -56,9 +56,9 @@ DevOnboarder uses `.markdownlint.json` for configuration with strict enforcement
 
 ### Section Break
 
-3. Third item (ERROR: Expected 1, got 3)
+3. Third item ( Expected 1, got 3)
 
-4. Fourth item (ERROR: Expected 2, got 4)
+4. Fourth item ( Expected 2, got 4)
 
 ```
 
@@ -101,9 +101,9 @@ npx markdownlint *.md docs/*.md --config .markdownlint.json | grep "MD029"
 ```markdown
 Some text
 
-### Heading (ERROR: No blank line before)
+### Heading ( No blank line before)
 
-More text (ERROR: No blank line after heading)
+More text ( No blank line after heading)
 
 ```
 
@@ -127,11 +127,11 @@ More text
 ```markdown
 Some text
 
-- List item (ERROR: No blank line before list)
+- List item ( No blank line before list)
 
 - Another item
 
-More text (ERROR: No blank line after list)
+More text ( No blank line after list)
 
 ```
 
@@ -157,12 +157,12 @@ More text
 ```markdown
 Some text
 
-```bash (ERROR: No blank line before code block)
+```bash ( No blank line before code block)
 echo "hello"
 
 ```
 
-More text (ERROR: No blank line after code block)
+More text ( No blank line after code block)
 
 ```text
 

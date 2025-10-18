@@ -59,9 +59,9 @@ fi
 
 **Anchor Normalization (GitHub-compatible)**:
 
-1. `toLowerCase()`: "Hello World" → "hello world"
-2. Remove non-word chars: "Hello, World! 🎉" → "hello world "
-3. Replace spaces with hyphens: "hello world " → "hello-world"
+1. `toLowerCase()`: "Hello World"  "hello world"
+2. Remove non-word chars: "Hello, World! 🎉"  "hello world "
+3. Replace spaces with hyphens: "hello world "  "hello-world"
 4. **Duplicates**: First occurrence = `"title"`, second = `"title-1"`, third = `"title-2"`
 
 **Fragment Checks (#section)**:
@@ -92,7 +92,7 @@ git update-index --refresh >/dev/null 2>&1 || true
 
 # Assert clean delta to avoid silent drift
 if ! git diff --quiet --cached; then
-    echo "WARNING: Re-stage incomplete: staged delta remains." >&2
+    echo " Re-stage incomplete: staged delta remains." >&2
     git status --porcelain
     return 1
 fi
@@ -140,8 +140,8 @@ printf '# Title\n# Title\n' > /tmp/dup.md
 python3 scripts/anchors_github.py < /tmp/dup.md | grep '"title-1"'
 
 # Verify workflow separation
-test -f .github/workflows/docs-quality.yml && echo "OK: docs-quality"
-test -f .github/workflows/pr-welcome.yml && echo "OK: pr-welcome"
+test -f .github/workflows/docs-quality.yml && echo " docs-quality"
+test -f .github/workflows/pr-welcome.yml && echo " pr-welcome"
 ```
 
 **Current Metrics Evidence**:
@@ -154,15 +154,15 @@ test -f .github/workflows/pr-welcome.yml && echo "OK: pr-welcome"
 }
 ```
 
-**Reality Check**: 513 markdown files currently in repository (not 3,802 or 450+)
+**Reality Check**: 513 markdown files currently in repository (not 3,802 or 450)
 
 ## 7) Open Risks & TODOs
 
 **Top 3 Risks**:
 
 1. **Fragment False Positives**: Complex markdown with unusual heading formats
-   - **Mitigation**: Two-pass validation (direct text → GitHub-style transformation)
-2. **Performance Scaling**: Growth beyond 1000+ files may impact CI budget
+   - **Mitigation**: Two-pass validation (direct text  GitHub-style transformation)
+2. **Performance Scaling**: Growth beyond 1000 files may impact CI budget
    - **Mitigation**: Parallelization, file size limits, selective path filtering
 3. **GitHub Enterprise Differences**: Anchor normalization variations
    - **Mitigation**: Direct text fallback before GitHub-style processing
@@ -175,7 +175,7 @@ test -f .github/workflows/pr-welcome.yml && echo "OK: pr-welcome"
 
 ## 8) Compatibility Guard
 
-**GH CLI Usage**: ✅ **COMPLIANT**
+**GH CLI Usage**:  **COMPLIANT**
 
 - PR welcome workflow uses `gh api` commands (not `--json/--jq` flags)
 - Link validator uses only git/bash/python (no gh CLI)
@@ -193,11 +193,11 @@ gh api repos/$REPO/issues/$PR/comments -f body="..."  # Compliant
 ## Quick Acceptance Results
 
 ```bash
-✅ OK: docs-quality workflow exists
-✅ OK: pr-welcome workflow exists
-✅ OK: minimal perms (no security-events in docs job)
-✅ OK: dup suffix handling works
-✅ Current: 513 files scanned, 14 broken links (real metrics)
+  docs-quality workflow exists
+  pr-welcome workflow exists
+  minimal perms (no security-events in docs job)
+  dup suffix handling works
+ Current: 513 files scanned, 14 broken links (real metrics)
 ```
 
 *Generated: October 2, 2025*

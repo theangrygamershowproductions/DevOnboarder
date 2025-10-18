@@ -55,7 +55,7 @@ DevOnboarder Quality Control Policy
 
 ==================================================
 
-⚠️ CRITICAL: 95% Quality Control Rule
+ CRITICAL: 95% Quality Control Rule
 ==================================================
 
 **ALL changes must pass comprehensive QC validation before merging**:
@@ -98,11 +98,11 @@ QC Validation Checklist (8 Critical Metrics)
 Coverage Thresholds
 ==================================================
 
-- **Python backend**: 96%+ (enforced in CI)
+- **Python backend**: 96% (enforced in CI)
 
 - **TypeScript bot**: 100% (enforced in CI)
 
-- **React frontend**: 100% statements, 98.43%+ branches
+- **React frontend**: 100% statements, 98.43% branches
 
 Test Commands (Virtual Environment Required)
 ==================================================

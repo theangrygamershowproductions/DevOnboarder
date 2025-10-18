@@ -114,7 +114,7 @@ cd bot && npm audit fix
 
 # Verify no root pollution created
 
-ls -la node_modules 2>/dev/null && echo "ERROR: Root pollution detected" || echo "Clean state confirmed"
+ls -la node_modules 2>/dev/null && echo " Root pollution detected" || echo "Clean state confirmed"
 
 # Run Root Artifact Guard validation
 
@@ -183,7 +183,7 @@ Root Artifact Guard......................................................Failed
 - exit code: 1
 
 VIOLATION: Unexpected node_modules in root
-   ./node_modules → should be in bot/ or frontend/ only
+   ./node_modules  should be in bot/ or frontend/ only
 
 ```
 
@@ -201,7 +201,7 @@ VIOLATION: Unexpected node_modules in root
 
 ### Common Mistakes to Avoid
 
-1. **Running npm audit fix from root** - Creates 500+ package pollution
+1. **Running npm audit fix from root** - Creates 500 package pollution
 
 2. **Installing global dependencies** - Violates isolation principles
 

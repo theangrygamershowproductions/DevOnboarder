@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.." || exit
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/sync_env_variables_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/sync_env_variables_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Configuration
@@ -60,7 +60,7 @@ echo ""
 
 # Validate source file exists
 if [ ! -f "$SOURCE_ENV" ]; then
-    echo "ERROR: Source environment file $SOURCE_ENV not found"
+    echo " Source environment file $SOURCE_ENV not found"
     exit 1
 fi
 
@@ -79,13 +79,13 @@ update_target_env() {
     echo "Processing: $target_file"
 
     if [ ! -f "$target_file" ]; then
-        echo "  WARNING: Target file $target_file not found, skipping"
+        echo "   Target file $target_file not found, skipping"
         return 0
     fi
 
     # Create backup
     if [ "$DRY_RUN" = false ]; then
-        cp "$target_file" "${target_file}.backup.$(date +%Y%m%d_%H%M%S)"
+        cp "$target_file" "${target_file}.backup.$(date %Y%m%d_%H%M%S)"
     fi
 
     # Create temporary file for updated content
@@ -117,7 +117,7 @@ update_target_env() {
                         echo "    OLD: $line"
                         echo "    NEW: $new_line"
                     fi
-                    changes_made=$((changes_made + 1))
+                    changes_made=$((changes_made  1))
                     echo "$new_line" >> "$temp_file"
                 else
                     echo "$line" >> "$temp_file"
@@ -138,7 +138,7 @@ update_target_env() {
             new_line="${var_name}=${source_vars[$var_name]}"
             echo "  ADDING: $var_name=${source_vars[$var_name]}"
             echo "$new_line" >> "$temp_file"
-            changes_made=$((changes_made + 1))
+            changes_made=$((changes_made  1))
         fi
     done
 
@@ -180,7 +180,7 @@ validate_synchronization() {
         source_value=$(grep "^$var_name=" "$SOURCE_ENV" 2>/dev/null | cut -d'=' -f2- || echo "")
 
         if [ -z "$source_value" ]; then
-            echo "  WARNING: Critical variable $var_name not found in source"
+            echo "   Critical variable $var_name not found in source"
             continue
         fi
 
@@ -190,17 +190,17 @@ validate_synchronization() {
                 target_value=$(grep "^$var_name=" "$target_file" 2>/dev/null | cut -d'=' -f2- || echo "")
 
                 if [ "$source_value" != "$target_value" ]; then
-                    echo "  ERROR: Variable $var_name mismatch in $target_file"
+                    echo "   Variable $var_name mismatch in $target_file"
                     echo "    Source: $source_value"
                     echo "    Target: $target_value"
-                    validation_errors=$((validation_errors + 1))
+                    validation_errors=$((validation_errors  1))
                 fi
             fi
         done
     done
 
     if [ $validation_errors -eq 0 ]; then
-        echo "  SUCCESS: All critical variables synchronized"
+        echo "   All critical variables synchronized"
     else
         echo "  FAILED: $validation_errors synchronization errors found"
     fi
@@ -224,7 +224,7 @@ main() {
     # Process each target file
     for target_file in "${TARGET_ENV_FILES[@]}"; do
         if update_target_env "$target_file"; then
-            total_changes=$((total_changes + $?))
+            total_changes=$((total_changes  $?))
         fi
         echo ""
     done

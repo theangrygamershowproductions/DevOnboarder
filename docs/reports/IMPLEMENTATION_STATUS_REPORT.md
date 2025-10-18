@@ -22,7 +22,7 @@ visibility: internal
 # DevOnboarder Implementation Status Report
 
 **Date**: August 5, 2025
-**Branch**: main → feat/cloudflare-tunnel-subdomain-architecture
+**Branch**: main  feat/cloudflare-tunnel-subdomain-architecture
 **Session Focus**: Cloudflare Tunnel Configuration & Service Operability
 
 ## Mission Accomplished: Discord Bot & Frontend UI Fully Operational
@@ -74,7 +74,7 @@ import { getOnboardingStatus } from "../api.js"; // Added .js extension
 
 - React Application: Complete dashboard interface
 
-- Port Management: Auto-resolved port conflict (3000 → 3001)
+- Port Management: Auto-resolved port conflict (3000  3001)
 
 - Features Available:
 
@@ -100,7 +100,7 @@ import { getOnboardingStatus } from "../api.js"; // Added .js extension
 
 - **Domain**: theangrygamershow.com
 
-- **Architecture**: 5 separate subdomains → single Traefik endpoint
+- **Architecture**: 5 separate subdomains  single Traefik endpoint
 
 **Subdomain Structure**:
 
@@ -112,7 +112,7 @@ import { getOnboardingStatus } from "../api.js"; // Added .js extension
 | `discord.dev` | <https://discord.dev.theangrygamershow.com> | Discord integration | DNS Required |
 | `dashboard.dev` | <https://dashboard.dev.theangrygamershow.com> | Admin dashboard | DNS Required |
 
-**Traffic Flow**: All subdomains → Cloudflare Tunnel → <http://traefik:80> → Internal services
+**Traffic Flow**: All subdomains  Cloudflare Tunnel  <http://traefik:80>  Internal services
 
 ### Configuration Files Updated
 
@@ -183,13 +183,13 @@ accessControlAllowOriginList:
 **Solution Pattern**:
 
 ```typescript
-// ❌ CommonJS style (doesn't work in ES modules)
+//  CommonJS style (doesn't work in ES modules)
 import { function } from "./module";
 
-// ✅ ES Module style (required)
+//  ES Module style (required)
 import { function } from "./module.js";
 
-// ✅ ES Module __dirname equivalent
+//  ES Module __dirname equivalent
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -219,7 +219,7 @@ const __dirname = path.dirname(__filename);
 **Traffic Flow Optimization**:
 
 ```text
-Internet → Cloudflare → Tunnel → Traefik:80 → Internal Services
+Internet  Cloudflare  Tunnel  Traefik:80  Internal Services
 
 ```
 
@@ -235,7 +235,7 @@ Internet → Cloudflare → Tunnel → Traefik:80 → Internal Services
 
 **Port Management**:
 
-- **Frontend**: Auto-resolves port conflicts (3000 → 3001)
+- **Frontend**: Auto-resolves port conflicts (3000  3001)
 
 - **Backend**: Consistent port assignments across services
 
@@ -311,7 +311,7 @@ docker compose -f docker-compose.dev.yaml --profile tunnel up -d
 |-----------|--------|----------|--------|
 | **Discord Bot** | RUNNING | Connected to Discord | DevOnboader#3613, 2 guilds |
 
-| **Frontend UI** | RUNNING | <http://localhost:3001/> | React + Vite, 100% coverage |
+| **Frontend UI** | RUNNING | <http://localhost:3001/> | React  Vite, 100% coverage |
 
 | **Cloudflare Tunnel** | CONFIGURED | Config ready | Needs DNS records |
 

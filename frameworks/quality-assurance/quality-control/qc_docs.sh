@@ -24,7 +24,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Initialize variables
@@ -87,7 +87,7 @@ fi
 # Determine files to process
 if [[ -n "$SPECIFIC_FILE" ]]; then
     if [[ ! -f "$SPECIFIC_FILE" ]]; then
-        echo "ERROR: File not found"
+        echo " File not found"
         printf "File path: %s\n" "$SPECIFIC_FILE"
         exit 1
     fi
@@ -113,18 +113,18 @@ for file in "${FILES[@]}"; do
         continue
     fi
 
-    TOTAL_FILES=$((TOTAL_FILES + 1))
+    TOTAL_FILES=$((TOTAL_FILES  1))
     echo -n "Processing: $file ... "
 
     if [[ "$FIX_MODE" = true ]]; then
         # Run formatting fix
         if python "$SCRIPT_DIR/../../../fix_markdown_comprehensive.py" "$file" >/dev/null 2>&1; then
             echo "FIXED"
-            FORMATTED_FILES=$((FORMATTED_FILES + 1))
+            FORMATTED_FILES=$((FORMATTED_FILES  1))
         else
             echo "ERROR"
-            ERROR_FILES=$((ERROR_FILES + 1))
-            ERRORS+=("Failed to process: $file")
+            ERROR_FILES=$((ERROR_FILES  1))
+            ERRORS=("Failed to process: $file")
         fi
     else
         # Check for formatting issues (dry run)
@@ -134,14 +134,14 @@ for file in "${FILES[@]}"; do
         if python "$SCRIPT_DIR/../../../fix_markdown_comprehensive.py" "$TEMP_FILE" >/dev/null 2>&1; then
             if ! cmp -s "$file" "$TEMP_FILE"; then
                 echo "NEEDS FORMATTING"
-                FORMATTED_FILES=$((FORMATTED_FILES + 1))
+                FORMATTED_FILES=$((FORMATTED_FILES  1))
             else
                 echo "OK"
             fi
         else
             echo "ERROR"
-            ERROR_FILES=$((ERROR_FILES + 1))
-            ERRORS+=("Failed to check: $file")
+            ERROR_FILES=$((ERROR_FILES  1))
+            ERRORS=("Failed to check: $file")
         fi
 
         rm "$TEMP_FILE"
@@ -156,12 +156,12 @@ echo "Running additional documentation quality checks..."
 if command -v markdownlint >/dev/null 2>&1; then
     echo "Running markdownlint validation..."
     if [[ -n "$SPECIFIC_FILE" ]]; then
-        markdownlint "$SPECIFIC_FILE" || echo "WARNING: Markdownlint issues found"
+        markdownlint "$SPECIFIC_FILE" || echo " Markdownlint issues found"
     else
-        markdownlint docs/ || echo "WARNING: Markdownlint issues found"
+        markdownlint docs/ || echo " Markdownlint issues found"
     fi
 else
-    echo "WARNING: markdownlint not available, skipping lint check"
+    echo " markdownlint not available, skipping lint check"
 fi
 
 # Vale check (if available)
@@ -190,12 +190,12 @@ fi
 if [[ "$FIX_MODE" = true ]]; then
     if [[ $FORMATTED_FILES -gt 0 ]]; then
         echo ""
-        echo "SUCCESS: Files have been fixed"
+        echo " Files have been fixed"
         printf "Files fixed: %d\n" "$FORMATTED_FILES"
         echo "Please review changes and commit if appropriate"
     else
         echo ""
-        echo "SUCCESS: All files already properly formatted"
+        echo " All files already properly formatted"
     fi
 else
     if [[ $FORMATTED_FILES -gt 0 ]]; then
@@ -205,7 +205,7 @@ else
         exit 1
     else
         echo ""
-        echo "SUCCESS: All files are properly formatted"
+        echo " All files are properly formatted"
     fi
 fi
 

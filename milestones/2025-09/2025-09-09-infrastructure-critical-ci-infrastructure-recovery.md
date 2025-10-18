@@ -189,8 +189,8 @@ echo "Issues prevented: [X]"
 | Metric | DevOnboarder | Industry Standard | Competitive Edge |
 |--------|--------------|------------------|------------------|
 | Resolution Time | [X] | [Y] | [Z]x faster |
-| Success Rate | [X]% | [Y]% | +[Z] percentage points |
-| Automation Level | [X]% | [Y]% | +[Z] percentage points |
+| Success Rate | [X]% | [Y]% | [Z] percentage points |
+| Automation Level | [X]% | [Y]% | [Z] percentage points |
 | Developer Velocity | [X] | [Y] | [Z]x improvement |
 
 ---

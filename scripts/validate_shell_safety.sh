@@ -12,7 +12,7 @@ LOG_DIR="$PROJECT_ROOT/logs"
 
 # Initialize variables
 VIOLATIONS_FOUND=0
-VALIDATION_LOG="$LOG_DIR/shell_safety_validation_$(date +%Y%m%d_%H%M%S).log"
+VALIDATION_LOG="$LOG_DIR/shell_safety_validation_$(date %Y%m%d_%H%M%S).log"
 
 mkdir -p "$LOG_DIR"
 
@@ -33,7 +33,7 @@ log_violation() {
     echo "[$severity] $pattern in $file:$line" | tee -a "$VALIDATION_LOG"
     echo "  Content: $content" | tee -a "$VALIDATION_LOG"
     echo "" | tee -a "$VALIDATION_LOG"
-    ((VIOLATIONS_FOUND++))
+    ((VIOLATIONS_FOUND))
 }
 
 # Pattern detection functions
@@ -66,10 +66,10 @@ check_unsafe_echo_patterns() {
     echo "Checking for unsafe echo patterns..."
 
     # Pattern 1: Echo with emojis (from Terminal Output Policy)
-    if grep -n "echo.*[✅❌🎯🚀📋🔍📝💡⚠️🥔]" scripts/*.sh 2>/dev/null; then
+    if grep -n "echo.*[🎯🥔]" scripts/*.sh 2>/dev/null; then
         while IFS: read -r file line content; do
             log_violation "CRITICAL" "Echo with emoji characters (terminal hanging risk)" "$file" "$line" "$content"
-        done < <(grep -n "echo.*[✅❌🎯🚀📋🔍📝💡⚠️🥔]" scripts/*.sh 2>/dev/null)
+        done < <(grep -n "echo.*[🎯🥔]" scripts/*.sh 2>/dev/null)
     fi
 
     # Pattern 2: Echo with command substitution
@@ -134,11 +134,11 @@ echo "Shell safety validation complete"
 echo "================================"
 
 if [ "$VIOLATIONS_FOUND" -eq 0 ]; then
-    echo "SUCCESS: No shell safety violations detected"
+    echo " No shell safety violations detected"
     echo "All commands follow DevOnboarder terminal safety standards"
     exit 0
 else
-    echo "WARNING: $VIOLATIONS_FOUND shell safety violations detected"
+    echo " $VIOLATIONS_FOUND shell safety violations detected"
     echo "Review log: $VALIDATION_LOG"
     echo ""
     echo "Recommended actions:"

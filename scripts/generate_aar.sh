@@ -12,7 +12,7 @@ fi
 
 # Enhanced centralized logging (mandatory DevOnboarder requirement)
 mkdir -p logs logs/aar-reports logs/token-audit
-LOG_FILE="logs/enhanced_aar_generation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/enhanced_aar_generation_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Enhanced AAR Generation with Token Governance"
@@ -111,7 +111,7 @@ except:
 }
 EOF
 
-    echo "📋 Token governance status prepared for AAR integration"
+    echo " Token governance status prepared for AAR integration"
 }
 
 if [ -z "$AAR_TYPE" ]; then
@@ -154,8 +154,8 @@ validate_token_governance_for_aar
 echo ""
 
 # Create AAR directory structure with enhanced organization
-YEAR=$(date +%Y)
-QUARTER="Q$(( ($(date +%-m) - 1) / 3 + 1 ))"
+YEAR=$(date %Y)
+QUARTER="Q$(( ($(date %-m) - 1) / 3  1 ))"
 AAR_BASE_DIR=".aar/$YEAR/$QUARTER"
 
 mkdir -p "$AAR_BASE_DIR/issues"
@@ -187,19 +187,19 @@ generate_issue_aar() {
 
 ## Executive Summary
 
-<!-- Brief description of what was accomplished -->
+<!-- Brief description of what was accomplished -
 
 ## Context
 
 - **Issue Number**: #ISSUE_NUMBER
-- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->
-- **Priority**: <!-- Critical/High/Medium/Low -->
-- **Duration**: <!-- Start Date to End Date -->
-- **Participants**: <!-- @username1, @username2 -->
+- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -
+- **Priority**: <!-- Critical/High/Medium/Low -
+- **Duration**: <!-- Start Date to End Date -
+- **Participants**: <!-- @username1, @username2 -
 
 ## Timeline
 
-<!-- Key milestones and activities -->
+<!-- Key milestones and activities -
 
 - **Discovery**: Issue identified and initial triage
 - **Investigation**: Root cause analysis and research
@@ -208,7 +208,7 @@ generate_issue_aar() {
 
 ## What Worked Well
 
-<!-- Successful patterns and effective processes -->
+<!-- Successful patterns and effective processes -
 
 - Effective use of DevOnboarder automation tools
 - Good collaboration and communication
@@ -216,7 +216,7 @@ generate_issue_aar() {
 
 ## Areas for Improvement
 
-<!-- Process bottlenecks and improvement opportunities -->
+<!-- Process bottlenecks and improvement opportunities -
 
 - Earlier detection and prevention strategies
 - Documentation gaps that caused delays
@@ -224,7 +224,7 @@ generate_issue_aar() {
 
 ## Action Items
 
-<!-- Specific improvements to implement -->
+<!-- Specific improvements to implement -
 
 - [ ] Update documentation in [specific location] (@owner, due: DUE_DATE_1)
 - [ ] Enhance automation or monitoring (@owner, due: DUE_DATE_2)
@@ -232,7 +232,7 @@ generate_issue_aar() {
 
 ## Lessons Learned
 
-<!-- Key insights and knowledge gained -->
+<!-- Key insights and knowledge gained -
 
 - Technical insights discovered during resolution
 - Process improvements identified
@@ -240,20 +240,20 @@ generate_issue_aar() {
 
 ## DevOnboarder Integration Impact
 
-<!-- How this relates to project standards -->
+<!-- How this relates to project standards -
 
-- **Virtual Environment**: <!-- Any dependency or setup impacts -->
-- **CI/CD Pipeline**: <!-- Automation or workflow effects -->
-- **Code Quality**: <!-- Impact on coverage or standards -->
-- **Security**: <!-- Enhanced Potato Policy or security considerations -->
+- **Virtual Environment**: <!-- Any dependency or setup impacts -
+- **CI/CD Pipeline**: <!-- Automation or workflow effects -
+- **Code Quality**: <!-- Impact on coverage or standards -
+- **Security**: <!-- Enhanced Potato Policy or security considerations -
 
 ## Related Issues/PRs
 
-<!-- Cross-references to related work -->
+<!-- Cross-references to related work -
 
 - Resolves #ISSUE_NUMBER
-- Related to: <!-- #other-issues -->
-- Follow-up needed: <!-- #future-issues -->
+- Related to: <!-- #other-issues -
+- Follow-up needed: <!-- #future-issues -
 
 ---
 **AAR Created**: CREATION_DATE
@@ -263,11 +263,11 @@ EOF
 
     # Replace placeholders
     sed -i "s/ISSUE_NUMBER/$issue_num/g" "$aar_file"
-    sed -i "s/CREATION_DATE/$(date +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/REVIEW_DATE/$(date -d '+90 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_1/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_2/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
+    sed -i "s/CREATION_DATE/$(date %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/REVIEW_DATE/$(date -d '90 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_1/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_2/$(date -d '14 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_3/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
 
     echo "Issue AAR created: $aar_file"
 
@@ -276,7 +276,7 @@ EOF
         gh issue comment "$issue_num" --body "## After Actions Report Generated
 
 **AAR Location**: \`$aar_file\`
-**Generated**: $(date +%Y-%m-%d)
+**Generated**: $(date %Y-%m-%d)
 
 This AAR documents the resolution process and lessons learned. Please review and update with specific details.
 
@@ -343,9 +343,9 @@ This AAR documents the development and integration of PR #$pr_num.
 ## Context
 
 - **PR Number**: #$pr_num
-- **PR Type**: <!-- Feature/Bug Fix/Enhancement/Refactor/Infrastructure -->
+- **PR Type**: <!-- Feature/Bug Fix/Enhancement/Refactor/Infrastructure -
 - **Files Changed**: $files_changed
-- **Lines Added/Removed**: +$additions -$deletions
+- **Lines Added/Removed**: $additions -$deletions
 - **Author**: @$pr_author
 - **Merge Date**: $(date)
 
@@ -353,9 +353,9 @@ This AAR documents the development and integration of PR #$pr_num.
 
 ### Key Components Modified
 
-- **Backend Changes**: <!-- API endpoints, database changes, etc. -->
-- **Frontend Changes**: <!-- UI updates, component changes, etc. -->
-- **Infrastructure Changes**: <!-- CI/CD, deployment, configuration -->
+- **Backend Changes**: <!-- API endpoints, database changes, etc. -
+- **Frontend Changes**: <!-- UI updates, component changes, etc. -
+- **Infrastructure Changes**: <!-- CI/CD, deployment, configuration -
 
 ## What Worked Well
 
@@ -371,8 +371,8 @@ This AAR documents the development and integration of PR #$pr_num.
 
 ## Action Items
 
-- [ ] Update documentation (@$pr_author, due: $(date -d '+1 week' '+%Y-%m-%d'))
-- [ ] Share learnings with team (@$pr_author, due: $(date -d '+3 days' '+%Y-%m-%d'))
+- [ ] Update documentation (@$pr_author, due: $(date -d '1 week' '%Y-%m-%d'))
+- [ ] Share learnings with team (@$pr_author, due: $(date -d '3 days' '%Y-%m-%d'))
 
 ## Lessons Learned
 
@@ -404,7 +404,7 @@ This AAR documents the development process, technical decisions, and lessons lea
 
 # Function to generate sprint AAR
 generate_sprint_aar() {
-    local sprint_title="${1:-Sprint-$(date +%Y-%m-%d)}"
+    local sprint_title="${1:-Sprint-$(date %Y-%m-%d)}"
     local safe_title
     safe_title=$(echo "$sprint_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/sprints/$safe_title.md"
@@ -415,86 +415,86 @@ generate_sprint_aar() {
 # After Actions Report: SPRINT_TITLE
 
 ## Executive Summary
-<!-- High-level summary of sprint accomplishments and impact -->
+<!-- High-level summary of sprint accomplishments and impact -
 
 ## Sprint Context
 - **Sprint Name**: SPRINT_TITLE
-- **Duration**: <!-- Start Date to End Date -->
-- **Goals**: <!-- Primary objectives -->
-- **Team**: <!-- Participants -->
+- **Duration**: <!-- Start Date to End Date -
+- **Goals**: <!-- Primary objectives -
+- **Team**: <!-- Participants -
 
 ## Accomplishments
-<!-- What was delivered -->
+<!-- What was delivered -
 - Major features or enhancements completed
 - Infrastructure improvements
 - Process optimizations
 
 ## Metrics
-<!-- Quantitative assessment -->
-- **Issues Resolved**: <!-- Count and types -->
-- **PRs Merged**: <!-- Count and complexity -->
-- **Test Coverage**: <!-- Before/after percentages -->
-- **CI Health**: <!-- Pipeline stability metrics -->
+<!-- Quantitative assessment -
+- **Issues Resolved**: <!-- Count and types -
+- **PRs Merged**: <!-- Count and complexity -
+- **Test Coverage**: <!-- Before/after percentages -
+- **CI Health**: <!-- Pipeline stability metrics -
 
 ## What Worked Well
-<!-- Successful patterns during the sprint -->
+<!-- Successful patterns during the sprint -
 - Effective development workflows
 - Good use of DevOnboarder automation
 - Strong team collaboration
 - Quality standards maintenance
 
 ## Challenges & Solutions
-<!-- Problems encountered and how they were addressed -->
+<!-- Problems encountered and how they were addressed -
 - Technical challenges and resolutions
 - Process bottlenecks and improvements
 - Resource constraints and adaptations
 
 ## DevOnboarder Standards Impact
-<!-- How sprint work affected project standards -->
-- **Virtual Environment**: <!-- Any environment setup changes -->
-- **CI/CD Enhancements**: <!-- Pipeline improvements -->
-- **Automation**: <!-- New scripts or workflow improvements -->
-- **Documentation**: <!-- Knowledge base updates -->
-- **Security**: <!-- Enhanced Potato Policy or security updates -->
+<!-- How sprint work affected project standards -
+- **Virtual Environment**: <!-- Any environment setup changes -
+- **CI/CD Enhancements**: <!-- Pipeline improvements -
+- **Automation**: <!-- New scripts or workflow improvements -
+- **Documentation**: <!-- Knowledge base updates -
+- **Security**: <!-- Enhanced Potato Policy or security updates -
 
 ## Action Items for Next Sprint
-<!-- Specific improvements to implement -->
+<!-- Specific improvements to implement -
 - [ ] Process improvement 1 (@owner, due: DUE_DATE_1)
 - [ ] Tool enhancement (@owner, due: DUE_DATE_2)
 - [ ] Documentation update (@owner, due: DUE_DATE_3)
 
 ## Lessons Learned
-<!-- Strategic insights for future sprints -->
+<!-- Strategic insights for future sprints -
 - Development patterns that proved effective
 - Automation improvements that enhanced productivity
 - Quality practices that prevented issues
 
 ## Sprint Retrospective Notes
-<!-- Team feedback and observations -->
+<!-- Team feedback and observations -
 - What should we continue doing?
 - What should we start doing?
 - What should we stop doing?
 
 ---
 **AAR Created**: CREATION_DATE
-**Sprint Period**: <!-- Actual dates -->
+**Sprint Period**: <!-- Actual dates -
 **Next Review**: REVIEW_DATE
 EOF
 
     # Replace placeholders
     sed -i "s/SPRINT_TITLE/$sprint_title/g" "$aar_file"
-    sed -i "s/CREATION_DATE/$(date +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/REVIEW_DATE/$(date -d '+30 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_1/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_2/$(date -d '+21 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
+    sed -i "s/CREATION_DATE/$(date %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/REVIEW_DATE/$(date -d '30 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_1/$(date -d '14 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_2/$(date -d '21 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_3/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
 
     echo "Sprint AAR created: $aar_file"
 }
 
 # Function to generate incident AAR
 generate_incident_aar() {
-    local incident_title="${1:-Incident-$(date +%Y-%m-%d)}"
+    local incident_title="${1:-Incident-$(date %Y-%m-%d)}"
     local safe_title
     safe_title=$(echo "$incident_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/incidents/$safe_title.md"
@@ -505,73 +505,73 @@ generate_incident_aar() {
 # Incident After Actions Report: INCIDENT_TITLE
 
 ## Incident Summary
-<!-- Brief description of what happened -->
+<!-- Brief description of what happened -
 
 ## Timeline
-<!-- Detailed chronological breakdown -->
-- **Detection**: <!-- When/how incident was discovered -->
-- **Response**: <!-- Initial response actions -->
-- **Investigation**: <!-- Root cause analysis process -->
-- **Resolution**: <!-- How the incident was resolved -->
-- **Recovery**: <!-- Return to normal operations -->
+<!-- Detailed chronological breakdown -
+- **Detection**: <!-- When/how incident was discovered -
+- **Response**: <!-- Initial response actions -
+- **Investigation**: <!-- Root cause analysis process -
+- **Resolution**: <!-- How the incident was resolved -
+- **Recovery**: <!-- Return to normal operations -
 
 ## Impact Assessment
-<!-- What was affected -->
-- **Services**: <!-- Which services were impacted -->
-- **Users**: <!-- User impact and duration -->
-- **Operations**: <!-- Development/CI impact -->
-- **Data**: <!-- Any data integrity concerns -->
+<!-- What was affected -
+- **Services**: <!-- Which services were impacted -
+- **Users**: <!-- User impact and duration -
+- **Operations**: <!-- Development/CI impact -
+- **Data**: <!-- Any data integrity concerns -
 
 ## Root Cause Analysis
-<!-- Technical details of what caused the incident -->
-- **Primary Cause**: <!-- Main technical reason -->
-- **Contributing Factors**: <!-- Other factors that contributed -->
-- **Detection Gap**: <!-- Why wasn't this caught earlier -->
+<!-- Technical details of what caused the incident -
+- **Primary Cause**: <!-- Main technical reason -
+- **Contributing Factors**: <!-- Other factors that contributed -
+- **Detection Gap**: <!-- Why wasn't this caught earlier -
 
 ## Response Effectiveness
-<!-- How well did the response process work -->
-- **Detection Time**: <!-- Time to discovery -->
-- **Response Time**: <!-- Time to begin response -->
-- **Resolution Time**: <!-- Time to full resolution -->
-- **Communication**: <!-- How well was it communicated -->
+<!-- How well did the response process work -
+- **Detection Time**: <!-- Time to discovery -
+- **Response Time**: <!-- Time to begin response -
+- **Resolution Time**: <!-- Time to full resolution -
+- **Communication**: <!-- How well was it communicated -
 
 ## What Worked Well
-<!-- Positive aspects of incident response -->
+<!-- Positive aspects of incident response -
 - Effective incident response procedures
 - Good use of monitoring and alerting
 - Strong team coordination
 - Quick identification and resolution
 
 ## Areas for Improvement
-<!-- What could have been better -->
+<!-- What could have been better -
 - Earlier detection mechanisms needed
 - Response process optimization opportunities
 - Communication improvements
 - Prevention strategies
 
 ## DevOnboarder Infrastructure Impact
-<!-- How this relates to project infrastructure -->
-- **CI/CD Pipeline**: <!-- Any pipeline issues or improvements -->
-- **Automation**: <!-- Script or workflow failures/improvements -->
-- **Virtual Environment**: <!-- Environment-related issues -->
-- **Security**: <!-- Enhanced Potato Policy implications -->
+<!-- How this relates to project infrastructure -
+- **CI/CD Pipeline**: <!-- Any pipeline issues or improvements -
+- **Automation**: <!-- Script or workflow failures/improvements -
+- **Virtual Environment**: <!-- Environment-related issues -
+- **Security**: <!-- Enhanced Potato Policy implications -
 
 ## Corrective Actions
-<!-- Specific steps to prevent recurrence -->
+<!-- Specific steps to prevent recurrence -
 - [ ] Immediate fixes (@owner, due: DUE_DATE_1)
 - [ ] Monitoring enhancements (@owner, due: DUE_DATE_2)
 - [ ] Process improvements (@owner, due: DUE_DATE_3)
 - [ ] Documentation updates (@owner, due: DUE_DATE_4)
 
 ## Preventive Measures
-<!-- Long-term improvements to prevent similar incidents -->
+<!-- Long-term improvements to prevent similar incidents -
 - Enhanced monitoring and alerting
 - Improved testing and validation
 - Process automation improvements
 - Training and knowledge sharing
 
 ## Lessons Learned
-<!-- Key insights from the incident -->
+<!-- Key insights from the incident -
 - Technical knowledge gained
 - Process improvements identified
 - Prevention strategies discovered
@@ -579,24 +579,24 @@ generate_incident_aar() {
 ---
 **Incident Date**: CREATION_DATE
 **AAR Created**: CREATION_DATE
-**Severity**: <!-- High/Medium/Low -->
-**Status**: <!-- Resolved/Monitoring -->
+**Severity**: <!-- High/Medium/Low -
+**Status**: <!-- Resolved/Monitoring -
 EOF
 
     # Replace placeholders
     sed -i "s/INCIDENT_TITLE/$incident_title/g" "$aar_file"
-    sed -i "s/CREATION_DATE/$(date +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_1/$(date -d '+3 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_2/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_3/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_4/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
+    sed -i "s/CREATION_DATE/$(date %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_1/$(date -d '3 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_2/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_3/$(date -d '14 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_4/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
 
     echo "Incident AAR created: $aar_file"
 }
 
 # Function to generate automation AAR
 generate_automation_aar() {
-    local automation_title="${1:-Automation-Enhancement-$(date +%Y-%m-%d)}"
+    local automation_title="${1:-Automation-Enhancement-$(date %Y-%m-%d)}"
     local safe_title
     safe_title=$(echo "$automation_title" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
     local aar_file="$AAR_BASE_DIR/automation/$safe_title.md"
@@ -607,86 +607,86 @@ generate_automation_aar() {
 # Automation Enhancement AAR: AUTOMATION_TITLE
 
 ## Enhancement Summary
-<!-- Brief description of automation changes -->
+<!-- Brief description of automation changes -
 
 ## Context
-<!-- Why these automation changes were needed -->
-- **Problem Statement**: <!-- What issues were being addressed -->
-- **Goals**: <!-- What we wanted to achieve -->
-- **Scope**: <!-- What parts of the system were affected -->
+<!-- Why these automation changes were needed -
+- **Problem Statement**: <!-- What issues were being addressed -
+- **Goals**: <!-- What we wanted to achieve -
+- **Scope**: <!-- What parts of the system were affected -
 
 ## Changes Implemented
-<!-- Detailed list of what was changed -->
+<!-- Detailed list of what was changed -
 - Scripts modified or created
 - Workflow enhancements
 - CI/CD pipeline improvements
 - Monitoring and alerting updates
 
 ## Implementation Process
-<!-- How the changes were rolled out -->
-- **Development**: <!-- How changes were developed and tested -->
-- **Testing**: <!-- Validation process used -->
-- **Deployment**: <!-- How changes were rolled out -->
-- **Verification**: <!-- How success was confirmed -->
+<!-- How the changes were rolled out -
+- **Development**: <!-- How changes were developed and tested -
+- **Testing**: <!-- Validation process used -
+- **Deployment**: <!-- How changes were rolled out -
+- **Verification**: <!-- How success was confirmed -
 
 ## Results & Metrics
-<!-- Quantitative assessment of improvements -->
-- **Before/After Metrics**: <!-- Performance or reliability improvements -->
-- **Time Savings**: <!-- Development or operational efficiency gains -->
-- **Error Reduction**: <!-- Fewer manual errors or failures -->
-- **Coverage Improvement**: <!-- Better testing or monitoring coverage -->
+<!-- Quantitative assessment of improvements -
+- **Before/After Metrics**: <!-- Performance or reliability improvements -
+- **Time Savings**: <!-- Development or operational efficiency gains -
+- **Error Reduction**: <!-- Fewer manual errors or failures -
+- **Coverage Improvement**: <!-- Better testing or monitoring coverage -
 
 ## DevOnboarder Integration
-<!-- How changes fit into the overall project -->
-- **Virtual Environment**: <!-- Any environment-related improvements -->
-- **CI Health**: <!-- Impact on pipeline reliability -->
-- **Code Quality**: <!-- Effects on standards enforcement -->
-- **Developer Experience**: <!-- Improvements to development workflow -->
+<!-- How changes fit into the overall project -
+- **Virtual Environment**: <!-- Any environment-related improvements -
+- **CI Health**: <!-- Impact on pipeline reliability -
+- **Code Quality**: <!-- Effects on standards enforcement -
+- **Developer Experience**: <!-- Improvements to development workflow -
 
 ## What Worked Well
-<!-- Successful aspects of the enhancement -->
+<!-- Successful aspects of the enhancement -
 - Effective use of existing DevOnboarder patterns
 - Good integration with current workflows
 - Positive impact on team productivity
 - Maintained or improved reliability
 
 ## Challenges Encountered
-<!-- Problems faced and how they were solved -->
+<!-- Problems faced and how they were solved -
 - Technical challenges and solutions
 - Integration complexities
 - Unexpected side effects and mitigation
 
 ## Action Items
-<!-- Follow-up work needed -->
+<!-- Follow-up work needed -
 - [ ] Documentation updates (@owner, due: DUE_DATE_1)
 - [ ] Team training on new processes (@owner, due: DUE_DATE_2)
 - [ ] Monitoring setup for new automation (@owner, due: DUE_DATE_3)
 
 ## Lessons Learned
-<!-- Knowledge gained for future automation work -->
+<!-- Knowledge gained for future automation work -
 - Best practices confirmed or discovered
 - Anti-patterns to avoid
 - Integration strategies that work well
 
 ## Future Automation Opportunities
-<!-- Ideas for additional improvements -->
+<!-- Ideas for additional improvements -
 - Next logical automation enhancements
 - Related areas that could benefit
 - Long-term automation roadmap items
 
 ---
 **AAR Created**: CREATION_DATE
-**Implementation Date**: <!-- When changes went live -->
+**Implementation Date**: <!-- When changes went live -
 **Next Review**: REVIEW_DATE
 EOF
 
     # Replace placeholders
     sed -i "s/AUTOMATION_TITLE/$automation_title/g" "$aar_file"
-    sed -i "s/CREATION_DATE/$(date +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/REVIEW_DATE/$(date -d '+60 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_1/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_2/$(date -d '+14 days' +%Y-%m-%d)/g" "$aar_file"
-    sed -i "s/DUE_DATE_3/$(date -d '+7 days' +%Y-%m-%d)/g" "$aar_file"
+    sed -i "s/CREATION_DATE/$(date %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/REVIEW_DATE/$(date -d '60 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_1/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_2/$(date -d '14 days' %Y-%m-%d)/g" "$aar_file"
+    sed -i "s/DUE_DATE_3/$(date -d '7 days' %Y-%m-%d)/g" "$aar_file"
 
     echo "Automation AAR created: $aar_file"
 }
@@ -701,19 +701,19 @@ create_aar_templates() {
 
 ## Executive Summary
 
-<!-- Brief description of what was accomplished -->
+<!-- Brief description of what was accomplished -
 
 ## Context
 
 -   **Issue Number**: #[Issue Number]
--   **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->
--   **Priority**: <!-- Critical/High/Medium/Low -->
--   **Duration**: <!-- Start Date to End Date -->
--   **Participants**: <!-- @username1, @username2 -->
+-   **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -
+-   **Priority**: <!-- Critical/High/Medium/Low -
+-   **Duration**: <!-- Start Date to End Date -
+-   **Participants**: <!-- @username1, @username2 -
 
 ## Timeline
 
-<!-- Key milestones and activities -->
+<!-- Key milestones and activities -
 
 -   **Discovery**: Issue identified and initial triage
 -   **Investigation**: Root cause analysis and research
@@ -722,7 +722,7 @@ create_aar_templates() {
 
 ## What Worked Well
 
-<!-- Successful patterns and effective processes -->
+<!-- Successful patterns and effective processes -
 
 -   Effective use of DevOnboarder automation tools
 -   Good collaboration and communication
@@ -730,7 +730,7 @@ create_aar_templates() {
 
 ## Areas for Improvement
 
-<!-- Process bottlenecks and improvement opportunities -->
+<!-- Process bottlenecks and improvement opportunities -
 
 -   Earlier detection and prevention strategies
 -   Documentation gaps that caused delays
@@ -738,7 +738,7 @@ create_aar_templates() {
 
 ## Action Items
 
-<!-- Specific improvements to implement -->
+<!-- Specific improvements to implement -
 
 -   [ ] Update documentation in [specific location] (@owner, due: YYYY-MM-DD)
 -   [ ] Enhance automation or monitoring (@owner, due: YYYY-MM-DD)
@@ -746,7 +746,7 @@ create_aar_templates() {
 
 ## Lessons Learned
 
-<!-- Key insights and knowledge gained -->
+<!-- Key insights and knowledge gained -
 
 -   Technical insights discovered during resolution
 -   Process improvements identified
@@ -754,20 +754,20 @@ create_aar_templates() {
 
 ## DevOnboarder Integration Impact
 
-<!-- How this relates to project standards -->
+<!-- How this relates to project standards -
 
--   **Virtual Environment**: <!-- Any dependency or setup impacts -->
--   **CI/CD Pipeline**: <!-- Automation or workflow effects -->
--   **Code Quality**: <!-- Impact on coverage or standards -->
--   **Security**: <!-- Enhanced Potato Policy or security considerations -->
+-   **Virtual Environment**: <!-- Any dependency or setup impacts -
+-   **CI/CD Pipeline**: <!-- Automation or workflow effects -
+-   **Code Quality**: <!-- Impact on coverage or standards -
+-   **Security**: <!-- Enhanced Potato Policy or security considerations -
 
 ## Related Issues/PRs
 
-<!-- Cross-references to related work -->
+<!-- Cross-references to related work -
 
 -   Resolves #[Issue Number]
--   Related to: <!-- #other-issues -->
--   Follow-up needed: <!-- #future-issues -->
+-   Related to: <!-- #other-issues -
+-   Follow-up needed: <!-- #future-issues -
 
 ---
 
@@ -847,7 +847,7 @@ EOF
     # Replace placeholders with actual data
     sed -i "s/CURRENT_YEAR/$YEAR/g" "$index_file"
     sed -i "s/CURRENT_QUARTER/$QUARTER/g" "$index_file"
-    sed -i "s/LAST_UPDATED/$(date +%Y-%m-%d)/g" "$index_file"
+    sed -i "s/LAST_UPDATED/$(date %Y-%m-%d)/g" "$index_file"
 
     # Get AAR counts
     local total_aars
@@ -933,8 +933,8 @@ update_aar_index
 
 echo ""
 echo "AAR Generation Complete"
-echo "📁 AAR Location: $AAR_BASE_DIR"
-echo "📋 Index: .aar/index.md"
+echo " AAR Location: $AAR_BASE_DIR"
+echo " Index: .aar/index.md"
 echo "Log: $LOG_FILE"
 echo ""
 echo "Next steps:"

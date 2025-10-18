@@ -41,7 +41,7 @@ visibility: internal
 
 # DevOnboarder Code Quality Requirements
 
-## ⚠️ CRITICAL: Linting Rule Policy
+##  CRITICAL: Linting Rule Policy
 
 **NEVER modify linting configuration files without explicit human approval**:
 
@@ -67,7 +67,7 @@ visibility: internal
 
 **Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
 
-## ⚠️ MANDATORY: Markdown Standards Compliance
+##  MANDATORY: Markdown Standards Compliance
 
 **ALL markdown content MUST comply with project linting rules before creation**:
 
@@ -117,7 +117,7 @@ More content following the same pattern.
 
 **Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
 
-## ⚠️ CRITICAL: CI Hygiene & Artifact Management
+##  CRITICAL: CI Hygiene & Artifact Management
 
 **Root Artifact Guard System**: DevOnboarder enforces strict artifact hygiene to prevent repository pollution:
 
@@ -145,21 +145,21 @@ bash scripts/enforce_output_location.sh
 
 # Automatically blocks commits with violations
 
-# ❌ ./pytest-of-* directories in root
+#  ./pytest-of-* directories in root
 
-# ❌ ./.coverage* files in root (should be logs/)
+#  ./.coverage* files in root (should be logs/)
 
-# ❌ ./vale-results.json in root (should be logs/)
+#  ./vale-results.json in root (should be logs/)
 
-# ❌ ./node_modules in root (should be frontend/bot/)
+#  ./node_modules in root (should be frontend/bot/)
 
-# ❌ ./test.db or cache files in root
+#  ./test.db or cache files in root
 
 ```
 
 **CI Triage Guard Framework**: Comprehensive automation monitors and maintains CI health:
 
-- **22+ GitHub Actions workflows** provide complete automation coverage
+- **22 GitHub Actions workflows** provide complete automation coverage
 
 - **Auto-fixing**: Automatic formatting via `auto-fix.yml` workflow
 
@@ -175,12 +175,12 @@ bash scripts/enforce_output_location.sh
 
 ```bash
 
-# ✅ CORRECT - Install in service directories
+#  CORRECT - Install in service directories
 
 cd frontend && npm ci
 cd bot && npm ci
 
-# ❌ WRONG - Never install in repository root
+#  WRONG - Never install in repository root
 
 npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 
@@ -203,7 +203,7 @@ npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 - **Docstrings**: Required for all public functions (use NumPy style)
 
 ```python
-def greet(name: str) -> str:
+def greet(name: str)  str:
     """Return a friendly greeting.
 
     Parameters
@@ -230,13 +230,13 @@ def greet(name: str) -> str:
 
 - **Testing**: Jest for bot, Vitest for frontend
 
-- **ESLint + Prettier**: Enforced formatting
+- **ESLint  Prettier**: Enforced formatting
 
 - **100% coverage** for bot service
 
 ## Testing Requirements
 
-### ⚠️ CRITICAL: 95% Quality Control Rule
+###  CRITICAL: 95% Quality Control Rule
 
 **ALL changes must pass comprehensive QC validation before merging**:
 
@@ -276,11 +276,11 @@ git push
 
 ### Coverage Thresholds
 
-- **Python backend**: 96%+ (enforced in CI)
+- **Python backend**: 96% (enforced in CI)
 
 - **TypeScript bot**: 100% (enforced in CI)
 
-- **React frontend**: 100% statements, 98.43%+ branches
+- **React frontend**: 100% statements, 98.43% branches
 
 ### Test Commands (Virtual Environment Required)
 
@@ -370,13 +370,13 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 
 **FORBIDDEN Practices**:
 
-- ❌ Using `git commit` directly (bypasses validation)
+-  Using `git commit` directly (bypasses validation)
 
-- ❌ Using unapproved types like `MERGE`, `UPDATE`, `MISC`
+-  Using unapproved types like `MERGE`, `UPDATE`, `MISC`
 
-- ❌ Missing scope in commit messages
+-  Missing scope in commit messages
 
-- ❌ Using `--no-verify` without explicit Potato Approval
+-  Using `--no-verify` without explicit Potato Approval
 
 ## Commit Message Standards
 

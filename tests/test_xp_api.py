@@ -41,7 +41,7 @@ def _seed_data():
         db.commit()
 
 
-def _create_token(username: str) -> str:
+def _create_token(username: str)  str:
     with auth_service.SessionLocal() as db:
         user = auth_service.User(username=username, password_hash="x")
         db.add(user)
@@ -408,5 +408,5 @@ def test_multiple_contributions_accumulate_xp():
     assert resp.status_code == 200  # noqa: B101
 
     # 3 contributions * CONTRIBUTION_XP(50) = 150 XP = level 2
-    expected_level = (3 * auth_service.CONTRIBUTION_XP) // 100 + 1
+    expected_level = (3 * auth_service.CONTRIBUTION_XP) // 100  1
     assert resp.json() == {"level": expected_level}  # noqa: B101

@@ -3,7 +3,7 @@
 DevOnboarder CI Health Dashboard Engine
 
 Real-time monitoring, failure prediction, and automated remediation for DevOnboarder's
-45+ GitHub Actions workflows. Built upon Token Architecture v2.1 and integrated with
+45 GitHub Actions workflows. Built upon Token Architecture v2.1 and integrated with
 the AAR system for proactive CI health management.
 
 Architecture: docs/CI_DASHBOARD_INTEGRATION_ARCHITECTURE.md
@@ -48,9 +48,9 @@ class TokenLoader:
         self.token = None
         self.token_source = None
 
-    def load_token(self) -> Optional[str]:
+    def load_token(self)  Optional[str]:
         """Load GitHub token using Token Architecture v2.1 hierarchy"""
-        # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+        # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
         token_hierarchy = ["CI_ISSUE_AUTOMATION_TOKEN", "CI_BOT_TOKEN", "GITHUB_TOKEN"]
 
         # First try environment variables
@@ -106,7 +106,7 @@ class PRCommentAnalyzer:
         self.project_root = project_root
         self.comments_script = project_root / "scripts" / "check_pr_inline_comments.sh"
 
-    def get_pr_comments(self, pr_number: int) -> Dict[str, Any]:
+    def get_pr_comments(self, pr_number: int)  Dict[str, Any]:
         """Get PR inline comments using existing DevOnboarder infrastructure"""
         try:
             # Use existing script to get JSON output
@@ -132,7 +132,7 @@ class PRCommentAnalyzer:
             logger.error(f"Error analyzing PR comments: {e}")
             return {"total_comments": 0, "copilot_suggestions": [], "error": str(e)}
 
-    def _process_comments_data(self, comments_data: List[Dict]) -> Dict[str, Any]:
+    def _process_comments_data(self, comments_data: List[Dict])  Dict[str, Any]:
         """Process raw comments data into structured analysis"""
         copilot_suggestions = []
         suggestion_patterns = []
@@ -171,7 +171,7 @@ class PRCommentAnalyzer:
             "analysis_timestamp": datetime.now().isoformat(),
         }
 
-    def _extract_suggestion(self, comment_body: str) -> Optional[str]:
+    def _extract_suggestion(self, comment_body: str)  Optional[str]:
         """Extract code suggestion from comment body"""
         lines = comment_body.split("\n")
         in_suggestion = False
@@ -188,7 +188,7 @@ class PRCommentAnalyzer:
 
         return "\n".join(suggestion_lines) if suggestion_lines else None
 
-    def _identify_failure_patterns(self, comment: str, suggestion: str) -> List[str]:
+    def _identify_failure_patterns(self, comment: str, suggestion: str)  List[str]:
         """Identify patterns in comments that might correlate with CI failures"""
         patterns = []
 
@@ -218,7 +218,7 @@ class PRCommentAnalyzer:
 
     def correlate_with_ci_failures(
         self, pr_comments: Dict[str, Any], ci_status: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Correlate PR comment suggestions with actual CI failures"""
         correlations = []
 
@@ -262,7 +262,7 @@ class PRCommentAnalyzer:
 
     def _calculate_correlation_strength(
         self, suggestion: Dict, failed_check: Dict, file_path: str
-    ) -> float:
+    )  float:
         """Calculate correlation strength between suggestion and CI failure"""
         strength = 0.0
 
@@ -273,7 +273,7 @@ class PRCommentAnalyzer:
         file_in_check = file_path in check_name
         path_parts_match = any(part in check_name for part in file_path.split("/"))
         if file_in_check or path_parts_match:
-            strength += 0.3
+            strength = 0.3
 
         # Pattern-based correlation
         correlation_patterns = {
@@ -287,11 +287,11 @@ class PRCommentAnalyzer:
         for pattern, keywords in correlation_patterns.items():
             if pattern in check_name:
                 if any(keyword in suggestion_comment for keyword in keywords):
-                    strength += 0.4
+                    strength = 0.4
 
         return min(strength, 1.0)  # Cap at 100%
 
-    def _generate_recommendation(self, suggestion: Dict, failed_check: Dict) -> str:
+    def _generate_recommendation(self, suggestion: Dict, failed_check: Dict)  str:
         """Generate actionable recommendation based on suggestion and failure"""
         file_path = suggestion.get("file", "")
         line_number = suggestion.get("line", 0)
@@ -319,13 +319,13 @@ class DetachedHeadPredictor:
         self.patterns = {
             "detached_head": [
                 r"fatal: You are in 'detached HEAD' state",
-                r"HEAD is now at [a-f0-9]+ .*",
+                r"HEAD is now at [a-f0-9] .*",
                 r"You are in detached HEAD state",
                 r"git checkout -b <new-branch-name>",
             ],
             "signature_verification": [
                 r"signature verification failed",
-                r"commit [a-f0-9]+ has a bad GPG signature",
+                r"commit [a-f0-9] has a bad GPG signature",
                 r"error: could not verify the tag",
                 r"gpg: signature verification failed",
             ],
@@ -343,7 +343,7 @@ class DetachedHeadPredictor:
             ],
         }
 
-    def _load_critical_workflows(self, config_file: Optional[Path] = None) -> List[str]:
+    def _load_critical_workflows(self, config_file: Optional[Path] = None)  List[str]:
         """Load critical workflows from configuration file or environment variable"""
         # Try environment variable first
         env_workflows = os.getenv("DEVONBOARDER_CRITICAL_WORKFLOWS")
@@ -362,7 +362,7 @@ class DetachedHeadPredictor:
         # Default fallback
         return ["ci.yml", "auto-fix.yml"]
 
-    def predict_failure(self, workflow_logs: str, workflow_name: str) -> Dict[str, Any]:
+    def predict_failure(self, workflow_logs: str, workflow_name: str)  Dict[str, Any]:
         """
         Predict workflow failure with confidence scoring and actionable solutions
 
@@ -438,7 +438,7 @@ class DetachedHeadPredictor:
 
         return prediction
 
-    def _get_recommended_actions(self, failure_type: str) -> List[str]:
+    def _get_recommended_actions(self, failure_type: str)  List[str]:
         """Get actionable recommendations based on failure type"""
         actions = {
             "detached_head": [
@@ -470,7 +470,7 @@ class DetachedHeadPredictor:
             failure_type, ["Review workflow logs for specific error patterns"]
         )
 
-    def _estimate_cost_savings(self, failure_type: str, workflow_name: str) -> int:
+    def _estimate_cost_savings(self, failure_type: str, workflow_name: str)  int:
         """Estimate cost savings in minutes if workflow is cancelled early"""
         # Based on typical DevOnboarder workflow durations
         workflow_durations = {
@@ -509,7 +509,7 @@ class CIHealthDashboard:
 
     def get_workflow_runs(
         self, branch: Optional[str] = None, limit: int = 10
-    ) -> Optional[List[Dict]]:
+    )  Optional[List[Dict]]:
         """Get recent workflow runs using GitHub CLI"""
         cmd = [
             "gh",
@@ -535,7 +535,7 @@ class CIHealthDashboard:
             logger.error(f"Failed to get workflow runs: {e}")
             return None
 
-    def get_workflow_logs(self, run_id: str) -> str:
+    def get_workflow_logs(self, run_id: str)  str:
         """Get workflow logs for analysis"""
         try:
             result = subprocess.run(
@@ -548,7 +548,7 @@ class CIHealthDashboard:
 
         return ""
 
-    def analyze_active_workflows(self) -> Dict[str, Any]:
+    def analyze_active_workflows(self)  Dict[str, Any]:
         """Analyze currently active workflows for failure prediction"""
         analysis = {
             "timestamp": datetime.now().isoformat(),
@@ -591,7 +591,7 @@ class CIHealthDashboard:
                             "actions": prediction["recommended_actions"],
                         }
                     )
-                    analysis["total_cost_savings_potential"] += prediction[
+                    analysis["total_cost_savings_potential"] = prediction[
                         "cost_savings_minutes"
                     ]
 
@@ -609,7 +609,7 @@ class CIHealthDashboard:
 
         return analysis
 
-    def analyze_pr_with_ci_integration(self, pr_number: int) -> Dict[str, Any]:
+    def analyze_pr_with_ci_integration(self, pr_number: int)  Dict[str, Any]:
         """
         Integrated PR analysis combining comment review with CI health diagnosis
         This is the main integration point between PR comments and CI failures
@@ -653,7 +653,7 @@ class CIHealthDashboard:
 
         return analysis
 
-    def _get_pr_ci_status(self, pr_number: int) -> Dict[str, Any]:
+    def _get_pr_ci_status(self, pr_number: int)  Dict[str, Any]:
         """Get CI status for a specific PR"""
         try:
             # Fields for pr checks command
@@ -703,8 +703,8 @@ class CIHealthDashboard:
 
     def _generate_integrated_recommendations(
         self, pr_comments: Dict, ci_status: Dict, correlations: Dict
-    ) -> List[str]:
-        """Generate integrated recommendations based on PR comments + CI status"""
+    )  List[str]:
+        """Generate integrated recommendations based on PR comments  CI status"""
         recommendations = []
 
         # High-confidence correlations get priority
@@ -720,7 +720,7 @@ class CIHealthDashboard:
         pending_checks = len(ci_status.get("pending_checks", []))
         if copilot_suggestions > 0 and pending_checks > 0:
             recommendations.append(
-                f"🔄 PROACTIVE: Apply {copilot_suggestions} Copilot suggestions "
+                f"SYNC: PROACTIVE: Apply {copilot_suggestions} Copilot suggestions "
                 f"before {pending_checks} checks complete"
             )
 
@@ -728,7 +728,7 @@ class CIHealthDashboard:
         failure_patterns = pr_comments.get("failure_patterns", [])
         if "linting" in failure_patterns:
             recommendations.append(
-                "🔧 QUICK FIX: Copilot identified linting issues - "
+                " QUICK  Copilot identified linting issues - "
                 "apply suggestions to prevent CI failures"
             )
 
@@ -741,13 +741,13 @@ class CIHealthDashboard:
         failed_checks = len(ci_status.get("failed_checks", []))
         if failed_checks > 0:
             recommendations.append(
-                f"❌ FAILURES: {failed_checks} CI checks failed - "
+                f" FAILURES: {failed_checks} CI checks failed - "
                 f"review correlations with comments"
             )
 
         if not recommendations:
             recommendations.append(
-                "✅ STATUS: No immediate issues detected - "
+                " STATUS: No immediate issues detected - "
                 "PR appears ready for review"
             )
 
@@ -755,32 +755,32 @@ class CIHealthDashboard:
 
     def _calculate_priority_score(
         self, pr_comments: Dict, ci_status: Dict, correlations: Dict
-    ) -> float:
+    )  float:
         """Calculate priority score (0-1) for the PR based on integrated analysis"""
         score = 0.0
 
         # High-confidence correlations significantly increase priority
         high_conf = correlations.get("high_confidence_correlations", 0)
-        score += min(high_conf * 0.3, 0.6)  # Max 0.6 from correlations
+        score = min(high_conf * 0.3, 0.6)  # Max 0.6 from correlations
 
         # Failed CI checks increase priority
         failed_checks = len(ci_status.get("failed_checks", []))
-        score += min(failed_checks * 0.1, 0.3)  # Max 0.3 from failures
+        score = min(failed_checks * 0.1, 0.3)  # Max 0.3 from failures
 
         # Security-related patterns increase priority
         patterns = pr_comments.get("failure_patterns", [])
         if "security" in patterns:
-            score += 0.2
+            score = 0.2
         if "syntax_error" in patterns:
-            score += 0.15
+            score = 0.15
 
         # Multiple Copilot suggestions increase urgency
         suggestions_count = len(pr_comments.get("copilot_suggestions", []))
-        score += min(suggestions_count * 0.05, 0.2)  # Max 0.2
+        score = min(suggestions_count * 0.05, 0.2)  # Max 0.2
 
         return min(score, 1.0)  # Cap at 1.0
 
-    def analyze_workflow_health(self, runs: List[Dict]) -> float:
+    def analyze_workflow_health(self, runs: List[Dict])  float:
         """Analyze workflow health and return health score (0-100)"""
         if not runs:
             return 0.0  # No runs = no health data = 0 score
@@ -792,7 +792,7 @@ class CIHealthDashboard:
 
         return health_score
 
-    def detect_anomalies(self, runs: List[Dict]) -> List[str]:
+    def detect_anomalies(self, runs: List[Dict])  List[str]:
         """Detect anomalies in workflow runs"""
         if not runs:
             return []
@@ -838,7 +838,7 @@ class CIHealthDashboard:
 
                             # Consider runs within 24 hours as "recent"
                             if time_diff_hours < 24:
-                                recent_run_count += 1
+                                recent_run_count = 1
                     except (ValueError, TypeError):
                         # If we can't parse the timestamp, skip this run
                         continue
@@ -849,7 +849,7 @@ class CIHealthDashboard:
 
         return anomalies
 
-    def calculate_success_rate(self, runs: List[Dict]) -> float:
+    def calculate_success_rate(self, runs: List[Dict])  float:
         """Calculate success rate from workflow runs"""
         if not runs:
             return 0.0  # 0% success rate if no runs
@@ -857,7 +857,7 @@ class CIHealthDashboard:
         successful_runs = sum(1 for run in runs if run.get("conclusion") == "success")
         return (successful_runs / len(runs)) * 100.0  # Return as percentage
 
-    def calculate_average_duration(self, runs: List[Dict]) -> float:
+    def calculate_average_duration(self, runs: List[Dict])  float:
         """Calculate average duration of workflow runs in minutes"""
         if not runs:
             return 0.0
@@ -871,10 +871,10 @@ class CIHealthDashboard:
             if created_field and updated_field:
                 try:
                     created = datetime.fromisoformat(
-                        created_field.replace("Z", "+00:00")
+                        created_field.replace("Z", "00:00")
                     )
                     updated = datetime.fromisoformat(
-                        updated_field.replace("Z", "+00:00")
+                        updated_field.replace("Z", "00:00")
                     )
                     duration = (updated - created).total_seconds() / 60
                     durations.append(duration)
@@ -885,7 +885,7 @@ class CIHealthDashboard:
 
     def generate_health_report(
         self, workflow_data: Union[List[Dict], Dict]
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Generate comprehensive health report"""
         # Handle both list of runs directly or dict with 'runs'/'workflow_runs' key
         if isinstance(workflow_data, list):
@@ -938,7 +938,7 @@ class CIHealthDashboard:
 
         return report
 
-    def save_health_report(self, report: Dict[str, Any], filename: str) -> bool:
+    def save_health_report(self, report: Dict[str, Any], filename: str)  bool:
         """Save health report to file"""
         try:
             output_path = self.project_root / "logs" / filename
@@ -956,7 +956,7 @@ class CIHealthDashboard:
     def display_dashboard(self, branch: Optional[str] = None, live_mode: bool = False):
         """Display real-time CI health dashboard"""
         if live_mode:
-            logger.info("Starting live monitoring mode (Ctrl+C to exit)")
+            logger.info("Starting live monitoring mode (CtrlC to exit)")
 
         try:
             while True:
@@ -965,7 +965,7 @@ class CIHealthDashboard:
                     subprocess.run(["clear"], check=False)
 
                 print("=" * 80)
-                print("🏥 DevOnboarder CI Health Dashboard")
+                print("HOSPITAL: DevOnboarder CI Health Dashboard")
                 print("=" * 80)
                 print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                 print(f"Token Source: {self.token_loader.token_source or 'None'}")
@@ -986,7 +986,7 @@ class CIHealthDashboard:
 
                 # Display active workflows
                 if analysis["active_workflows"]:
-                    print("📊 Active Workflow Status:")
+                    print(" Active Workflow Status:")
                     print("-" * 40)
                     for workflow in analysis["active_workflows"]:
                         status_icon = (
@@ -999,7 +999,7 @@ class CIHealthDashboard:
                             and workflow["prediction"]["failure_predicted"]
                         ):
                             pred = workflow["prediction"]
-                            confidence_icon = "🚨" if pred["confidence"] > 0.8 else "⚠️"
+                            confidence_icon = "🚨" if pred["confidence"] > 0.8 else ""
                             print(
                                 f"   {confidence_icon} {pred['failure_type']} "
                                 f"({pred['confidence']:.1%} confidence)"
@@ -1012,7 +1012,7 @@ class CIHealthDashboard:
                     print("-" * 40)
                     for pred in analysis["predictions"]:
                         confidence_bar = "█" * int(pred["confidence"] * 10)
-                        print(f"⚡ {pred['workflow']}: {pred['failure_type']}")
+                        print(f"FAST: {pred['workflow']}: {pred['failure_type']}")
                         print(
                             f"   Confidence: [{confidence_bar:<10}] "
                             f"{pred['confidence']:.1%}"
@@ -1022,7 +1022,7 @@ class CIHealthDashboard:
 
                 # Display recommendations
                 if analysis["recommendations"]:
-                    print("💡 Recommendations:")
+                    print(" Recommendations:")
                     print("-" * 40)
                     for rec in analysis["recommendations"]:
                         print(f"• {rec}")
@@ -1031,7 +1031,7 @@ class CIHealthDashboard:
                 if not live_mode:
                     break
 
-                print("Live monitoring... (Ctrl+C to exit)")
+                print("Live monitoring... (CtrlC to exit)")
                 time.sleep(30)  # Update every 30 seconds
 
         except KeyboardInterrupt:
@@ -1039,7 +1039,7 @@ class CIHealthDashboard:
                 print("\nLive monitoring stopped.")
             return
 
-    def predict_only(self, branch: Optional[str] = None) -> Dict[str, Any]:
+    def predict_only(self, branch: Optional[str] = None)  Dict[str, Any]:
         """Run failure prediction only and return results"""
         analysis = self.analyze_active_workflows()
 
@@ -1095,7 +1095,7 @@ Examples:
         "--diagnose-pr",
         type=int,
         metavar="PR_NUMBER",
-        help="Integrated PR diagnosis: analyze comments + CI failures for specific PR",
+        help="Integrated PR diagnosis: analyze comments  CI failures for specific PR",
     )
 
     args = parser.parse_args()
@@ -1109,7 +1109,7 @@ Examples:
 
     if not dashboard.github_token:
         print(
-            "⚠️  Warning: No GitHub token available. Dashboard will "
+            "  Warning: No GitHub token available. Dashboard will "
             "have limited functionality."
         )
         print("   Please ensure TOKEN_ARCHITECTURE_V2.1 is properly configured.")
@@ -1123,22 +1123,22 @@ Examples:
             if args.json:
                 print(json.dumps(results, indent=2))
             else:
-                print(f"🔍 Integrated PR Analysis: #{results['pr_number']}")
+                print(f" Integrated PR Analysis: #{results['pr_number']}")
                 print("=" * 60)
 
                 # PR Comments Summary
                 pr_comments = results["pr_comments"]
-                print(f"📝 PR Comments: {pr_comments.get('total_comments', 0)} total")
+                print(f" PR Comments: {pr_comments.get('total_comments', 0)} total")
                 print(f"🤖 Copilot Comments: {pr_comments.get('copilot_comments', 0)}")
                 suggestions_count = len(pr_comments.get("copilot_suggestions", []))
-                print(f"💡 Code Suggestions: {suggestions_count}")
+                print(f" Code Suggestions: {suggestions_count}")
                 print()
 
                 # CI Status Summary
                 ci_status = results["ci_status"]
-                print(f"🏗️ CI Status: {ci_status.get('total_checks', 0)} total checks")
-                print(f"✅ Passed: {len(ci_status.get('passed_checks', []))}")
-                print(f"❌ Failed: {len(ci_status.get('failed_checks', []))}")
+                print(f"BUILD: CI Status: {ci_status.get('total_checks', 0)} total checks")
+                print(f" Passed: {len(ci_status.get('passed_checks', []))}")
+                print(f" Failed: {len(ci_status.get('failed_checks', []))}")
                 print(f"⏳ Pending: {len(ci_status.get('pending_checks', []))}")
                 print()
 
@@ -1146,27 +1146,27 @@ Examples:
                 correlations = results["correlations"]
                 total_corr = correlations.get("total_correlations", 0)
                 high_conf_corr = correlations.get("high_confidence_correlations", 0)
-                print(f"🔗 Comment-CI Correlations: {total_corr} found")
+                print(f"LINK: Comment-CI Correlations: {total_corr} found")
                 print(f"🎯 High Confidence: {high_conf_corr}")
                 print(f"🚨 Priority Score: {results['priority_score']:.2f}/1.0")
                 print()
 
                 # Recommendations
-                print("💡 Integrated Recommendations:")
+                print(" Integrated Recommendations:")
                 print("-" * 40)
                 for i, rec in enumerate(results["recommendations"], 1):
                     print(f"{i}. {rec}")
 
                 # Show high-confidence correlations
                 if high_conf_corr > 0:
-                    print("\n🔍 High-Confidence Correlations:")
+                    print("\n High-Confidence Correlations:")
                     print("-" * 40)
                     for corr in correlations.get("correlations", []):
                         if corr["correlation_strength"] > 0.7:
                             suggestion = corr["suggestion"]
-                            print(f"📁 {suggestion.get('file', 'Unknown')}")
-                            print(f"📍 Line {suggestion.get('line', 'Unknown')}")
-                            print(f"🔗 {corr['correlation_strength']:.1%} correlation")
+                            print(f" {suggestion.get('file', 'Unknown')}")
+                            print(f"LOCATION: Line {suggestion.get('line', 'Unknown')}")
+                            print(f"LINK: {corr['correlation_strength']:.1%} correlation")
                             print(f"💬 {corr['recommended_action']}")
                             print()
 

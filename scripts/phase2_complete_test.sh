@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.." || exit
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/phase2_complete_test_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/phase2_complete_test_$(date %Y%m%d_%H%M%S).log"
 
 echo "DevOnboarder Phase 2: Complete Integration Test"
 echo "Log file: $LOG_FILE"
@@ -28,7 +28,7 @@ else
     echo "1. Ensure Docker Desktop is running with WSL integration enabled"
     echo "2. Or install legacy docker-compose with:"
     echo "   sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-\$(uname -s)-\$(uname -m)\" -o /usr/local/bin/docker-compose"
-    echo "   sudo chmod +x /usr/local/bin/docker-compose"
+    echo "   sudo chmod x /usr/local/bin/docker-compose"
     exit 1
 fi
 
@@ -87,17 +87,17 @@ main() {
 
     # Phase 1: Validate configuration
     if ! run_phase1_validation; then
-        failures=$((failures + 1))
+        failures=$((failures  1))
     fi
 
     # Phase 2A: Validate CORS setup
     if ! run_phase2_cors_testing; then
-        failures=$((failures + 1))
+        failures=$((failures  1))
     fi
 
     # Phase 2B: Full service integration
     if ! run_phase2_service_integration; then
-        failures=$((failures + 1))
+        failures=$((failures  1))
     fi
 
     # Summary

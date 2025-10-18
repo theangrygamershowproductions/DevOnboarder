@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]:
+def setup_script(tmp_path: Path, body: str)  tuple[Path, dict[str, str], Path]:
     """Setup test environment with CI-compatible path resolution."""
     # CRITICAL: CI-compatible path resolution (handles /workspace/DevOnboarder/)
     current_dir = Path.cwd()
@@ -57,7 +57,7 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]
 
     # CRITICAL: Controlled environment (includes system paths but our bin first)
     env = {
-        "PATH": str(bin_dir) + ":/usr/bin:/bin",  # Our bin first, then system paths
+        "PATH": str(bin_dir)  ":/usr/bin:/bin",  # Our bin first, then system paths
         "HOME": str(tmp_path),
         "TMPDIR": str(tmp_path),
         "SHELL": "/bin/bash",
@@ -70,7 +70,7 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]
     return script_dst, env, gh_calls
 
 
-def test_validate_pr_checklist_success(tmp_path: Path) -> None:
+def test_validate_pr_checklist_success(tmp_path: Path)  None:
     """Test successful PR checklist validation."""
     body = "## Continuous Improvement Checklist\n- [ ] item"
     script, env, gh_calls = setup_script(tmp_path, body)
@@ -93,7 +93,7 @@ def test_validate_pr_checklist_success(tmp_path: Path) -> None:
     assert not any("pr comment" in call for call in calls)
 
 
-def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
+def test_validate_pr_checklist_failure(tmp_path: Path)  None:
     """Test PR checklist validation failure with comment posting for process PRs."""
     # Use a process-related title to trigger checklist validation
     process_pr_body = ""
@@ -141,7 +141,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
     ), f"Missing 'pr comment' in: {calls}"
 
 
-def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path) -> None:
+def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path)  None:
     """Test that feature PRs pass without requiring checklist."""
     # Use a feature PR title that should NOT require checklist
     feature_pr_body = "missing"

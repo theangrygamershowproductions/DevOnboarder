@@ -5,12 +5,12 @@ from unittest.mock import AsyncMock
 
 
 class FakeInteraction:
-    def __init__(self) -> None:
+    def __init__(self)  None:
         self.reply = AsyncMock()
         self.followUp = AsyncMock()
 
 
-async def send_checklist(interaction: FakeInteraction) -> None:
+async def send_checklist(interaction: FakeInteraction)  None:
     file_path = Path(__file__).resolve().parents[1] / "docs" / "QA_CHECKLIST.md"
     text = file_path.read_text(encoding="utf-8")
     chunks = re.findall(r"([\s\S]{1,2000})", text)

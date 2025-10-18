@@ -4,7 +4,7 @@ import sys
 import language_tool_python
 
 
-def check_file(path: str, tool: language_tool_python.LanguageTool) -> int:
+def check_file(path: str, tool: language_tool_python.LanguageTool)  int:
     """Check a single file and return the number of issues."""
     with open(path, encoding="utf-8") as f:
         text = f.read()
@@ -26,7 +26,7 @@ def check_file(path: str, tool: language_tool_python.LanguageTool) -> int:
     return 0
 
 
-def main(files: list[str]) -> None:
+def main(files: list[str])  None:
     url = os.environ.get("LANGUAGETOOL_URL", "https://api.languagetool.org/v2")
     try:
         tool = language_tool_python.LanguageTool("en-US", remote_server=url)
@@ -36,7 +36,7 @@ def main(files: list[str]) -> None:
 
     errors = 0
     for path in files:
-        errors += check_file(path, tool)
+        errors = check_file(path, tool)
     if errors:
         print(f"{errors} issues found.")
     else:

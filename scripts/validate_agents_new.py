@@ -9,13 +9,13 @@ from typing import Dict, Any
 from jsonschema import validate, ValidationError
 
 
-def load_schema(schema_path: Path) -> Dict[str, Any]:
+def load_schema(schema_path: Path)  Dict[str, Any]:
     """Load the JSON schema."""
     with open(schema_path) as f:
         return json.load(f)
 
 
-def extract_frontmatter(agent_file: Path) -> Dict[str, Any] | None:
+def extract_frontmatter(agent_file: Path)  Dict[str, Any] | None:
     """Extract YAML frontmatter from an agent file."""
     content = agent_file.read_text()
     lines = content.split("\n")
@@ -55,13 +55,13 @@ def main():
     print(f"   Schema file: {schema_file}")
 
     if not schema_file.exists():
-        print(f"❌ Agent schema not found: {schema_file}")
+        print(f" Agent schema not found: {schema_file}")
         sys.exit(1)
 
     try:
         schema = load_schema(schema_file)
     except Exception as e:
-        print(f"❌ Failed to load schema: {e}")
+        print(f" Failed to load schema: {e}")
         sys.exit(1)
 
     validation_errors = 0
@@ -87,37 +87,37 @@ def main():
         if not agent_file.is_file():
             continue
 
-        total_files += 1
+        total_files = 1
         agent_name = agent_file.stem
 
         # Extract frontmatter
         frontmatter = extract_frontmatter(agent_file)
 
         if frontmatter is None:
-            print(f"❌ {agent_name}: Failed to parse YAML frontmatter")
-            validation_errors += 1
+            print(f" {agent_name}: Failed to parse YAML frontmatter")
+            validation_errors = 1
             continue
 
         if not frontmatter:
-            print(f"⚠️  {agent_name}: No frontmatter found")
+            print(f"  {agent_name}: No frontmatter found")
             continue
 
         # Validate against schema
         try:
             validate(instance=frontmatter, schema=schema)
-            print(f"✅ {agent_name}: Valid")
+            print(f" {agent_name}: Valid")
         except ValidationError as e:
-            print(f"❌ {agent_name}: Schema validation failed")
+            print(f" {agent_name}: Schema validation failed")
             print(f"   Error: {e.message}")
             if e.path:
-                print(f"   Path: {' -> '.join(str(p) for p in e.path)}")
-            validation_errors += 1
+                print(f"   Path: {'  '.join(str(p) for p in e.path)}")
+            validation_errors = 1
         except Exception as e:
-            print(f"❌ {agent_name}: Validation error: {e}")
-            validation_errors += 1
+            print(f" {agent_name}: Validation error: {e}")
+            validation_errors = 1
 
     print()
-    print("📊 Agent Validation Summary:")
+    print(" Agent Validation Summary:")
     print(f"   Total files: {total_files}")
     print(f"   Validation errors: {validation_errors}")
 

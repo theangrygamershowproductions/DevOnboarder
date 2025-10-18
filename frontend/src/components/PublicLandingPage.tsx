@@ -111,10 +111,10 @@ export default function PublicLandingPage() {
                             it was built to work. Quietly. Reliably. And in service of those who need it."
                         </p>
                         <ul className="text-gray-600 space-y-2">
-                            <li>• <strong>Backend:</strong> Python 3.12 + FastAPI + SQLAlchemy</li>
-                            <li>• <strong>Frontend:</strong> React + Vite + TypeScript</li>
+                            <li>• <strong>Backend:</strong> Python 3.12  FastAPI  SQLAlchemy</li>
+                            <li>• <strong>Frontend:</strong> React  Vite  TypeScript</li>
                             <li>• <strong>Bot:</strong> Discord.js with role management</li>
-                            <li>• <strong>Infrastructure:</strong> Docker + Traefik + Cloudflare Tunnel</li>
+                            <li>• <strong>Infrastructure:</strong> Docker  Traefik  Cloudflare Tunnel</li>
                         </ul>
                     </div>
 
@@ -122,8 +122,8 @@ export default function PublicLandingPage() {
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Key Features</h2>
                         <ul className="text-gray-600 space-y-2">
                             <li>• Multi-environment Discord bot integration</li>
-                            <li>• Automated CI/CD with 22+ GitHub Actions workflows</li>
-                            <li>• Comprehensive test coverage (95%+ requirement)</li>
+                            <li>• Automated CI/CD with 22 GitHub Actions workflows</li>
+                            <li>• Comprehensive test coverage (95% requirement)</li>
                             <li>• Advanced CORS and security configuration</li>
                             <li>• Real-time service health monitoring</li>
                             <li>• Role-based access control</li>

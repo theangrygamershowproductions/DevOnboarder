@@ -30,7 +30,7 @@ class UnicodeArtifactManager:
             "fallback_applied": 0,
         }
 
-    def detect_unicode_environment(self) -> Dict[str, bool]:
+    def detect_unicode_environment(self)  Dict[str, bool]:
         """Detect Unicode capabilities of current environment."""
         capabilities = {
             "utf8_stdout": True,
@@ -60,7 +60,7 @@ class UnicodeArtifactManager:
 
         return capabilities
 
-    def normalize_unicode_filename(self, filename: str) -> str:
+    def normalize_unicode_filename(self, filename: str)  str:
         """Normalize Unicode filename for cross-platform compatibility."""
         try:
             # Normalize to NFC form (canonical composition)
@@ -68,26 +68,26 @@ class UnicodeArtifactManager:
 
             # Track Unicode usage
             if any(ord(char) > 127 for char in normalized):
-                self.unicode_stats["files_with_unicode"] += 1
-                self.unicode_stats["unicode_chars_detected"] += sum(
+                self.unicode_stats["files_with_unicode"] = 1
+                self.unicode_stats["unicode_chars_detected"] = sum(
                     1 for char in normalized if ord(char) > 127
                 )
 
             return normalized
         except (UnicodeError, ValueError, TypeError):
-            self.unicode_stats["fallback_applied"] += 1
+            self.unicode_stats["fallback_applied"] = 1
             return filename.encode("ascii", errors="replace").decode("ascii")
 
     def safe_display_filename(
         self, filename: str, max_width: int = 80, unicode_capable: bool = True
-    ) -> str:
+    )  str:
         """Safely display filename with Unicode awareness."""
         normalized = self.normalize_unicode_filename(filename)
 
         if not unicode_capable:
             # Convert to ASCII-safe representation
             safe_name = normalized.encode("ascii", errors="replace").decode()
-            self.unicode_stats["fallback_applied"] += 1
+            self.unicode_stats["fallback_applied"] = 1
             return safe_name[:max_width]
 
         # Truncate with Unicode awareness
@@ -96,9 +96,9 @@ class UnicodeArtifactManager:
 
         # Smart truncation that doesn't break Unicode characters
         truncated = normalized[: max_width - 3]
-        return truncated + "..."
+        return truncated  "..."
 
-    def analyze_artifact_filenames(self, artifact_dir: Path) -> dict:
+    def analyze_artifact_filenames(self, artifact_dir: Path)  dict:
         """Analyze Unicode usage in artifact filenames."""
         analysis: dict = {
             "total_files": 0,
@@ -113,7 +113,7 @@ class UnicodeArtifactManager:
 
         for file_path in artifact_dir.rglob("*"):
             if file_path.is_file():
-                analysis["total_files"] += 1
+                analysis["total_files"] = 1
                 filename = file_path.name
 
                 # Check for Unicode characters
@@ -154,7 +154,7 @@ class UnicodeArtifactManager:
 
     def generate_unicode_aware_listing(
         self, artifact_dir: Path, output_format: str = "text"
-    ) -> str:
+    )  str:
         """Generate Unicode-aware artifact listing."""
         capabilities = self.detect_unicode_environment()
         analysis = self.analyze_artifact_filenames(artifact_dir)
@@ -215,7 +215,7 @@ class UnicodeArtifactManager:
 
         return "\n".join(lines)
 
-    def create_unicode_config(self, output_path: Path) -> None:
+    def create_unicode_config(self, output_path: Path)  None:
         """Create Unicode handling configuration for test artifacts."""
         capabilities = self.detect_unicode_environment()
 

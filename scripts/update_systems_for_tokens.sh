@@ -11,7 +11,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-LOG_FILE="logs/system_token_update_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/system_token_update_$(date %Y%m%d_%H%M%S).log"
 
 # Ensure logs directory exists
 mkdir -p "$PROJECT_ROOT/logs"
@@ -19,7 +19,7 @@ mkdir -p "$PROJECT_ROOT/logs"
 # Logging function
 log() {
     local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    timestamp=$(date '%Y-%m-%d %H:%M:%S')
     printf "[%s] %s\n" "$timestamp" "$*" | tee -a "$LOG_FILE"
 }
 
@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            log "ERROR: Unknown option $1"
+            log " Unknown option $1"
             exit 1
             ;;
     esac
@@ -66,7 +66,7 @@ update_file() {
     fi
 
     # Create backup
-    cp "$file_path" "${file_path}.backup.$(date +%Y%m%d_%H%M%S)"
+    cp "$file_path" "${file_path}.backup.$(date %Y%m%d_%H%M%S)"
 }
 
 # Function to add token loader import to Python files
@@ -93,7 +93,7 @@ add_python_token_loader() {
     log "Adding token_loader integration to $py_file"
 
     # Create backup
-    cp "$py_file" "${py_file}.backup.$(date +%Y%m%d_%H%M%S)"
+    cp "$py_file" "${py_file}.backup.$(date %Y%m%d_%H%M%S)"
 
     # Create updated version
     {
@@ -361,7 +361,7 @@ $(find src/ -name "*.py" -type f | wc -l) Python files processed
 - bot/src/index.ts
 
 ## Migration Date
-$(date '+%Y-%m-%d %H:%M:%S')
+$(date '%Y-%m-%d %H:%M:%S')
 
 ## Next Steps
 

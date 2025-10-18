@@ -11,7 +11,7 @@ import re
 def validate_md007_compliance(file_path):
     """Validate MD007 (list indentation) compliance."""
     if not os.path.exists(file_path):
-        print(f"ERROR: File not found: {file_path}")
+        print(f" File not found: {file_path}")
         return False
 
     with open(file_path, "r", encoding="utf-8") as f:
@@ -22,7 +22,7 @@ def validate_md007_compliance(file_path):
     expected_base_indent = 0
 
     for line_num, line in enumerate(lines, 1):
-        list_match = re.match(r"^(\s*)-\s+(.*)$", line)
+        list_match = re.match(r"^(\s*)-\s(.*)$", line)
 
         if list_match:
             indent_spaces = len(list_match.group(1))
@@ -32,7 +32,7 @@ def validate_md007_compliance(file_path):
                 in_list = True
             else:
                 if indent_spaces > expected_base_indent:
-                    expected_nested = expected_base_indent + 4
+                    expected_nested = expected_base_indent  4
                     if indent_spaces != expected_nested:
                         msg = (
                             f"Line {line_num}: MD007 violation - nested list "
@@ -103,12 +103,12 @@ def main():
             basic_valid = validate_basic_markdown(template)
             all_valid = all_valid and md007_valid and basic_valid
         else:
-            print(f"ERROR: Template not found: {template}")
+            print(f" Template not found: {template}")
             all_valid = False
 
-    print("\n" + "=" * 30)
+    print("\n"  "=" * 30)
     if all_valid:
-        print("SUCCESS: All AAR templates are valid")
+        print(" All AAR templates are valid")
         exit(0)
     else:
         print("FAILED: AAR template validation failed")

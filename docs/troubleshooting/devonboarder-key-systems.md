@@ -49,7 +49,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 
 **Essential References**:
 
-- `PHASE_INDEX.md` - Comprehensive navigation guide for 7+ active phase systems
+- `PHASE_INDEX.md` - Comprehensive navigation guide for 7 active phase systems
 
 - `PHASE_ISSUE_INDEX.md` - Single pane of glass for phase-to-issue traceability
 
@@ -65,7 +65,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 **Phase 2 (Automation)**: 7 scripts including `monitor_ci_health.sh`, `ci_gh_issue_wrapper.sh`
 **Phase 3 (Developer)**: 3 scripts including `validate_token_architecture.sh`
 
-**Token Hierarchy**: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+**Token Hierarchy**: `CI_ISSUE_AUTOMATION_TOKEN`  `CI_BOT_TOKEN`  `GITHUB_TOKEN`
 
 **Key Scripts**:
 
@@ -75,7 +75,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 
 - `scripts/complete_system_validation.sh` - Validates entire token architecture
 
-## Essential Automation Scripts (100+)
+## Essential Automation Scripts (100)
 
 ### Quality Control
 
@@ -130,7 +130,7 @@ make aar-setup           # Complete AAR system setup
 
 make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
 
-make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR  GitHub issue
 
 ```
 

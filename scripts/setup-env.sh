@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Ensure required domains are reachable before continuing
@@ -103,7 +103,7 @@ EOF
     if [ -x "$SCRIPT_DIR/setup_github_gpg_keys.sh" ]; then
         echo "Setting up GitHub GPG keys..."
         "$SCRIPT_DIR/setup_github_gpg_keys.sh" || {
-            echo "WARNING: GitHub GPG key setup failed, but continuing..."
+            echo " GitHub GPG key setup failed, but continuing..."
             echo "This is non-critical for CI operation"
         }
     fi

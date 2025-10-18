@@ -3,7 +3,7 @@ import yaml
 import pytest
 
 
-def load_compose(file_name: str) -> dict:
+def load_compose(file_name: str)  dict:
     """Load a docker-compose YAML file."""
     root = Path(__file__).resolve().parents[1]
     path = root / file_name

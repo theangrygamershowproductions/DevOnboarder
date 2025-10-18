@@ -13,22 +13,22 @@ set -euo pipefail
 # Centralized logging
 LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/no_verify_validation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/no_verify_validation_$(date %Y%m%d_%H%M%S).log"
 
 log_info() {
-    echo "INFO: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_error() {
-    echo "ERROR: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_warning() {
-    echo "WARNING: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_success() {
-    echo "SUCCESS: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 # Files that legitimately contain --no-verify references (ignore list)
@@ -81,10 +81,10 @@ check_no_verify_usage() {
             # Check for Potato Approval comment
             if grep -B5 -A5 "git.*--no-verify" "$file" | grep -i "potato approval\|emergency approved\|# POTATO:" >/dev/null 2>&1; then
                 log_info "Emergency approval found for: $file"
-                ((emergency_approved++))
+                ((emergency_approved))
             else
                 log_error "VIOLATION: Unauthorized --no-verify usage in: $file"
-                ((violations++))
+                ((violations))
             fi
         fi
     done < <(find . -name "*.sh" -type f -print0)
@@ -138,14 +138,14 @@ check_git_aliases() {
     if git config --global --get-regexp alias 2>/dev/null | grep -E "(--no-verify|bypass|skip)" >/dev/null 2>&1; then
         log_error "VIOLATION: Global git aliases found that bypass hooks"
         git config --global --get-regexp alias | grep -E "(--no-verify|bypass|skip)"
-        ((alias_violations++))
+        ((alias_violations))
     fi
 
     # Check local git config
     if git config --local --get-regexp alias 2>/dev/null | grep -E "(--no-verify|bypass|skip)" >/dev/null 2>&1; then
         log_error "VIOLATION: Local git aliases found that bypass hooks"
         git config --local --get-regexp alias | grep -E "(--no-verify|bypass|skip)"
-        ((alias_violations++))
+        ((alias_violations))
     fi
 
     if [ "$alias_violations" -gt 0 ]; then
@@ -163,7 +163,7 @@ validate_emergency_approval() {
     local line_number="$2"
 
     # Check for proper emergency approval format within 5 lines
-    if sed -n "$((line_number-5)),$((line_number+5))p" "$file" | grep -E "# POTATO: EMERGENCY APPROVED|# Emergency Potato Approval|# CRITICAL: Potato approved" >/dev/null; then
+    if sed -n "$((line_number-5)),$((line_number5))p" "$file" | grep -E "# POTATO: EMERGENCY APPROVED|# Emergency Potato Approval|# CRITICAL: Potato approved" >/dev/null; then
         return 0
     else
         return 1

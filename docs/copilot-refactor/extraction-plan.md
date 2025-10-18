@@ -28,7 +28,7 @@ visibility: internal
 **Backup Created**: `.github/copilot-instructions.md.backup`
 **Status**: PRESERVE ORIGINAL UNTIL FULL VALIDATION
 
-## 📋 **Section Extraction Mapping**
+##  **Section Extraction Mapping**
 
 ### **CORE BOOTSTRAP (Keep in .github/copilot-instructions.md)**
 
@@ -212,7 +212,7 @@ visibility: internal
 
 - **Priority**: HIGH - Quality gates
 
-## 🔄 **Extraction Process**
+## SYNC: **Extraction Process**
 
 ### **Phase 1: Extract to Modules (PRESERVE ORIGINAL)**
 
@@ -254,7 +254,7 @@ visibility: internal
 
 4. Document new navigation patterns
 
-## ⚠️ **Safety Checkpoints**
+##  **Safety Checkpoints**
 
 - [ ] **Backup Created**: Original file backed up
 
@@ -268,7 +268,7 @@ visibility: internal
 
 - [ ] **Rollback Plan**: Restoration process documented
 
-## 📝 **Next Steps**
+##  **Next Steps**
 
 1. **Execute Phase 1**: Extract content to modules while preserving original
 

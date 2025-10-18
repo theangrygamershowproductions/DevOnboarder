@@ -20,7 +20,7 @@ PATTERNS = [
 ]
 
 
-def parse_log(path: Path) -> list[str]:
+def parse_log(path: Path)  list[str]:
     """Return lines matching :data:`PATTERNS` with context."""
     if not path.exists():
         return []
@@ -40,7 +40,7 @@ def parse_log(path: Path) -> list[str]:
     return matches
 
 
-def main() -> None:
+def main()  None:
     files = [Path(p) for p in sys.argv[1:]] or [Path("ci.log")]
 
     counts: Counter[str] = Counter()

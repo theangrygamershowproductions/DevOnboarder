@@ -4,8 +4,8 @@ import subprocess
 from pathlib import Path
 
 
-def parse_domains(doc_path: Path) -> list[str]:
-    pattern = re.compile(r"^[A-Za-z0-9.-]+\.(?:com|org|io|sh)$")
+def parse_domains(doc_path: Path)  list[str]:
+    pattern = re.compile(r"^[A-Za-z0-9.-]\.(?:com|org|io|sh)$")
     domains = []
     for line in doc_path.read_text(encoding="utf-8").splitlines():
         if line.startswith("- "):

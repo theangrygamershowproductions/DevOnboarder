@@ -8,7 +8,7 @@ consolidation_priority: P3
 
 # Shell Interpretation Safety Incident - September 19, 2025
 
-## 📋 Incident Summary
+##  Incident Summary
 
 **Date**: September 19, 2025
 **Type**: Terminal Command Safety Violation
@@ -49,7 +49,7 @@ zsh: command not found: .codespell-ignore
 
 4. **Tool Selection Error**: Used raw `gh pr create --body` instead of DevOnboarder's safe alternatives
 
-## ✅ Resolution Applied
+##  Resolution Applied
 
 ### Immediate Fix
 
@@ -77,12 +77,12 @@ zsh: command not found: .codespell-ignore
 
 ```bash
 
-# ❌ DANGEROUS: Complex content in shell commands
+#  DANGEROUS: Complex content in shell commands
 
 gh pr create --body "Content with *wildcards* and `special chars`"
 
 gh issue create --body "Multi-line content with $variables"
-echo "Complex text with emojis ✅ and *patterns*"
+echo "Complex text with emojis  and *patterns*"
 
 ```
 
@@ -92,12 +92,12 @@ echo "Complex text with emojis ✅ and *patterns*"
 
 ```bash
 
-# ✅ SAFE: Use file-based approaches
+#  SAFE: Use file-based approaches
 
 gh pr create --body-file template.md
 gh issue create --body-file issue_body.md
 
-# ✅ SAFE: Use DevOnboarder's automated tools
+#  SAFE: Use DevOnboarder's automated tools
 
 ./scripts/create_pr.sh --template chore --title "Safe title"
 ./scripts/safe_commit.sh "Simple commit message"
@@ -148,7 +148,7 @@ Create validation scripts to detect unsafe patterns:
 
 3. **Documentation**: Make safe tool usage more prominent in guidelines
 
-## 🔄 Follow-up Actions
+## SYNC: Follow-up Actions
 
 ### Immediate (Completed)
 
@@ -184,7 +184,7 @@ Create validation scripts to detect unsafe patterns:
 
 4. **Infrastructure Supports Recovery**: Project had safe alternatives ready
 
-## 📊 Impact Assessment
+##  Impact Assessment
 
 **Severity**: Medium - Tool usage error, not system compromise
 
@@ -197,7 +197,7 @@ Create validation scripts to detect unsafe patterns:
 
 ---
 
-## 🔍 Validation Results
+##  Validation Results
 
 **Shell Safety Validator Testing (2025-09-19):**
 
@@ -222,13 +222,13 @@ DETECTION RESULTS:
 
 **Key Achievements:**
 
-- ✅ Comprehensive shell safety detection system operational
+-  Comprehensive shell safety detection system operational
 
-- ✅ Pattern recognition accurately identifies incident-type vulnerabilities
+-  Pattern recognition accurately identifies incident-type vulnerabilities
 
-- ✅ Automated validation prevents future occurrences of similar issues
+-  Automated validation prevents future occurrences of similar issues
 
-- ✅ Educational framework helps developers understand shell interpretation risks
+-  Educational framework helps developers understand shell interpretation risks
 
 **Prevention Framework Deployed:**
 

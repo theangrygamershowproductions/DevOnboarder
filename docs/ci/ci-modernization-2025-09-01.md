@@ -21,13 +21,13 @@ visibility: internal
 
 # CI Modernization: Shellcheck Fixes & Infrastructure Updates
 
-<!-- ARCHIVED: DO NOT EDIT. Changes require @reesey275 approval. -->
+<!-- ARCHIVED: DO NOT EDIT. Changes require @reesey275 approval. -
 
 **Status:** Archived • **Owner:** @reesey275 • **Updated:** 2025-09-01
 
 ## Overview
 
-This document tracks the comprehensive CI modernization work that evolved from initial triage of PR #1184. The project expanded from fixing line length warnings to a complete overhaul of shellcheck compliance, terminal output policy enforcement, and infrastructure modernization across 25+ GitHub Actions workflows.
+This document tracks the comprehensive CI modernization work that evolved from initial triage of PR #1184. The project expanded from fixing line length warnings to a complete overhaul of shellcheck compliance, terminal output policy enforcement, and infrastructure modernization across 25 GitHub Actions workflows.
 
 ## 🎉 CI Modernization — Final Status
 
@@ -39,7 +39,7 @@ This document tracks the comprehensive CI modernization work that evolved from i
 
 **Checks:** 26/26 green on #1206
 
-**Files changed:** 61 • **Diff:** +936 / −488
+**Files changed:** 61 • **Diff:** 936 / −488
 
 **Coverage:** 95.95%
 
@@ -53,13 +53,13 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 **Evidence Snapshot:** All 26 CI checks passed including CodeQL, Vale, shellcheck, and test coverage (95.95%). GitHub may purge run logs after ~90 days; this snapshot preserves key verification details.
 
-| Checks | Files Changed | Diff (+/−) | Coverage | T.O. Violations |
+| Checks | Files Changed | Diff (/−) | Coverage | T.O. Violations |
 |--------|---------------|------------|----------|-----------------|
-| 26/26  | 61            | +936/−488  | 95.95%   | 0               |
+| 26/26  | 61            | 936/−488  | 95.95%   | 0               |
 
-### 🚀 **Mission Accomplished - CI Modernization Complete**
+###  **Mission Accomplished - CI Modernization Complete**
 
-#### ✅ ALL OBJECTIVES ACHIEVED
+####  ALL OBJECTIVES ACHIEVED
 
 - **Terminal Output Policy**: ZERO violations remaining
 
@@ -90,7 +90,7 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 ## Key Accomplishments
 
-### ✅ 1. Shellcheck Error Resolution (COMPLETED)
+###  1. Shellcheck Error Resolution (COMPLETED)
 
 **Fixed across 26 workflow files:**
 
@@ -106,7 +106,7 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 - **SC2215** (GitHub Actions templates) - Resolved by disabling shellcheck in actionlint
 
-### ✅ 2. Terminal Output Policy Compliance (COMPLETED)
+###  2. Terminal Output Policy Compliance (COMPLETED)
 
 **ZERO TOLERANCE violations eliminated:**
 
@@ -116,9 +116,9 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 - Ensured plain ASCII text only in terminal output
 
-- Fixed 15+ workflow files for complete compliance
+- Fixed 15 workflow files for complete compliance
 
-### ✅ 3. Infrastructure Modernization (COMPLETED)
+###  3. Infrastructure Modernization (COMPLETED)
 
 **Updated across all workflows:**
 
@@ -130,7 +130,7 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 - **Pre-commit optimization**: Modified config to disable shellcheck in actionlint
 
-### ✅ 4. Pre-commit Caching Resolution (COMPLETED)
+###  4. Pre-commit Caching Resolution (COMPLETED)
 
 **Resolved critical validation issue:**
 
@@ -140,15 +140,15 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 - **Validation reliability**: Ensured pre-commit hooks provide consistent, fresh results
 
-### ✅ 5. CI Fixes & Merges (COMPLETED)
+###  5. CI Fixes & Merges (COMPLETED)
 
 **Successfully resolved all CI blocking issues:**
 
-- **✅ PR #1193 Merged**: Successfully merged the CI fixes with all checks passing
+- ** PR #1193 Merged**: Successfully merged the CI fixes with all checks passing
 
-- **✅ PR #1206 Merged**: Successfully merged the comprehensive CI modernization with all 26 checks passing
+- ** PR #1206 Merged**: Successfully merged the comprehensive CI modernization with all 26 checks passing
 
-### ✅ 6. Quality Assurance Validation (COMPLETED)
+###  6. Quality Assurance Validation (COMPLETED)
 
 **All metrics achieved:**
 
@@ -162,7 +162,7 @@ Guard: scripts/validate_terminal_output.sh runs in every job; violations fail CI
 
 - **Root Artifact Guard** compliance maintained
 
-### ✅ 7. Commit Message Validation Enhancement (COMPLETED)
+###  7. Commit Message Validation Enhancement (COMPLETED)
 
 **Fixed performance and reliability issues:**
 
@@ -243,7 +243,7 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - **Identified**: SC2086, SC2102, SC2129, SC2146, SC2001, SC2215 errors across 26 workflows
 
-- **Identified**: Terminal output policy violations in 15+ workflow files
+- **Identified**: Terminal output policy violations in 15 workflow files
 
 - **Identified**: Outdated checkout actions (v3/v4) needing upgrade to v5
 
@@ -265,9 +265,9 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - **Completed**: Resolved SC2215 (GitHub Actions templates) by disabling shellcheck in actionlint
 
-- **Completed**: Replaced all `echo "$VAR"` with `printf "%s\n" "$VAR"` (15+ files)
+- **Completed**: Replaced all `echo "$VAR"` with `printf "%s\n" "$VAR"` (15 files)
 
-- **Completed**: Updated all `actions/checkout` from v3/v4 → v5
+- **Completed**: Updated all `actions/checkout` from v3/v4  v5
 
 - **Completed**: Removed empty `potato-policy.yml` workflow file
 
@@ -297,7 +297,7 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - **Scope Expansion**: Evolved from line length warnings to comprehensive CI modernization
 
-- **Files Modified**: 61 files changed (+936 −488 lines)
+- **Files Modified**: 61 files changed (936 −488 lines)
 
 - **Quality Maintained**: 100% QC score, 95.95% test coverage, all policies compliant
 
@@ -305,7 +305,7 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - **PR Merged**: [#1206](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1206) - comprehensive CI modernization
 
-### 📊 **Resolution Metrics**
+###  **Resolution Metrics**
 
 - **Shellcheck Errors**: 0 remaining (all SC2086, SC2102, SC2129, SC2146, SC2001, SC2215 fixed)
 
@@ -321,11 +321,11 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - **QC Score**: 100% (8/8 metrics passed)
 
-- **Files Modified**: 61 files (+936 −488 lines)
+- **Files Modified**: 61 files (936 −488 lines)
 
 - **Troubleshooting Tools**: Pre-commit cache troubleshooting script created
 
-### 🚀 **Impact**
+###  **Impact**
 
 - CI pipeline now compliant with all DevOnboarder quality standards
 
@@ -353,11 +353,11 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 - [x] Infrastructure updated (checkout v5, optimized configs)
 
-- [x] PR merged via #1206 (61 files changed, +936 −488 lines)
+- [x] PR merged via #1206 (61 files changed, 936 −488 lines)
 
 - [x] Pre-commit caching issue resolved and troubleshooting script created
 
-**Final Status**: ✅ **COMPLETE SUCCESS** - CI modernization fully implemented and validated, all 26 CI checks passing, ready for merge
+**Final Status**:  **COMPLETE SUCCESS** - CI modernization fully implemented and validated, all 26 CI checks passing, ready for merge
 
 **Committer**: reesey275
 **Commit Message**: "CHORE(ci): resolve shellcheck errors and update checkout actions"
@@ -365,7 +365,7 @@ The original plan focused on line length warnings but evolved into comprehensive
 
 **Merged PR**: [#1206](https://github.com/theangrygamershowproductions/DevOnboarder/pull/1206) - "CHORE(ci): resolve shellcheck errors and update checkout actions"
 
-**Current PR Status**: ✅ **ALL 26 CHECKS PASSING** - CI modernization complete and validated
+**Current PR Status**:  **ALL 26 CHECKS PASSING** - CI modernization complete and validated
 
 ## Recent PR Activity (August 30, 2025)
 
@@ -415,7 +415,7 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 - [ ] Fix **yamllint line-length** (>160) by splitting lines/moving script bodies
 
-- [ ] Ensure scripts are executable: `chmod +x scripts/*.sh`
+- [ ] Ensure scripts are executable: `chmod x scripts/*.sh`
 
 - [ ] **NEW — Concurrency control (repo-wide default in big workflows)**
 
@@ -453,7 +453,7 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 - [x] **CodeQL waiters** (JS/TS & Python)
 
-#### 2.a NEW — **CI_MODE gating (smoke → lint → unit → docs → full)**
+#### 2.a NEW — **CI_MODE gating (smoke  lint  unit  docs  full)**
 
 - [ ] Add repo variable **`CI_MODE`**
 
@@ -481,7 +481,7 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 - [ ] Introduce repo var: **`ENV_TARGET`** ∈ `{ci, dev, staging, prod}` (default: `ci`)
 
-- [ ] Precedence (leftmost wins): **GitHub Environment Secrets/Vars** → **Repo/Org Secrets/Vars** → **`.env.${ENV_TARGET}`** → **root `.env`**
+- [ ] Precedence (leftmost wins): **GitHub Environment Secrets/Vars**  **Repo/Org Secrets/Vars**  **`.env.${ENV_TARGET}`**  **root `.env`**
 
 - [ ] For PRs/forks: force **`ENV_TARGET=ci`** and **do not require secrets** (graceful reduced testing)
 
@@ -596,7 +596,7 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 ### 7) Rollout Plan
 
-- [ ] **Repo → Variables:** set `CI_MODE=smoke` and `ENV_TARGET=ci`
+- [ ] **Repo  Variables:** set `CI_MODE=smoke` and `ENV_TARGET=ci`
 
 - [ ] **Branch/PR policy:** PRs/forks run with `ENV_TARGET=ci` (no privileged secrets)
 
@@ -604,7 +604,7 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 - [ ] **Smoke check:** add a job that fails if a secret is referenced in PRs from forks
 
-- [ ] **PR 1:** Terminal Policy + action majors + `CI Sanity` + `CI_MODE=smoke`
+- [ ] **PR 1:** Terminal Policy  action majors  `CI Sanity`  `CI_MODE=smoke`
 
 - [ ] **PR 2:** Add `lint` gated by `CI_MODE`; flip var to `lint`; get 3 greens
 
@@ -612,13 +612,13 @@ The DevSecOps Manager has provided a comprehensive rebuild plan that integrates 
 
 - [ ] **PR 4:** Add `docs`; flip var; stabilize; promote
 
-- [ ] **PR 4a:** Add docs metadata plumbing (helper scripts + workflow); stabilize metadata emission
+- [ ] **PR 4a:** Add docs metadata plumbing (helper scripts  workflow); stabilize metadata emission
 
 - [ ] **PR 5:** Add `full`; flip var; stabilize; **switch required check to "CI / aggregator"**
 
 - [ ] **PR 6:** Execute metadata backfill for existing docs; validate metadata compliance
 
-- [ ] After a week of stable greens: **merge `ci-recovery → main`**, make **`main` default**, tag `ci-stable-YYYYMMDD`
+- [ ] After a week of stable greens: **merge `ci-recovery  main`**, make **`main` default**, tag `ci-stable-YYYYMMDD`
 
 ### 8) Verification / Acceptance
 
@@ -734,18 +734,18 @@ The following items represent future enhancements that were identified during th
 
 ## Appendix A — Workflow Inventory and Status
 
-Below is a complete inventory of all 50+ active workflows from the repository, organized by category. Each workflow includes a status checklist (Needs Reviewed, Working, Completed) and plain English descriptions of dependencies.
+Below is a complete inventory of all 50 active workflows from the repository, organized by category. Each workflow includes a status checklist (Needs Reviewed, Working, Completed) and plain English descriptions of dependencies.
 
 ### Core CI & Testing Workflows
 
 | Workflow Name | Needs Reviewed | Working | Completed | Dependencies |
 |---------------|----------------|---------|-----------|--------------|
-| CI | ☐ | ☐ | ✅ | Triggers on push/PR; depends on validate-yaml and filter jobs internally; triggers pr-automation.yml, auto-fix.yml, and ci-health.yml |
+| CI | ☐ | ☐ |  | Triggers on push/PR; depends on validate-yaml and filter jobs internally; triggers pr-automation.yml, auto-fix.yml, and ci-health.yml |
 | CI Health | ☐ | ☐ | ☐ | Monitors CI status; triggered by push/PR events; can trigger audit-retro-actions.yml |
 | CI Monitor | ☐ | ☐ | ☐ | Tracks CI performance; runs on schedule; triggers ci-health.yml |
-| CI Failure Analyzer | ☐ | ☐ | ✅ | Analyzes CI failures; triggered by CI failures; creates issues via codex.ci.yml |
+| CI Failure Analyzer | ☐ | ☐ |  | Analyzes CI failures; triggered by CI failures; creates issues via codex.ci.yml |
 | CI Dashboard Report Generator | ☐ | ☐ | ☐ | Creates CI status dashboards; triggered by push/PR; depends on CI completion |
-| Cleanup CI Failure | ☐ | ☐ | ✅ | Cleans up after CI failures; triggered by root-artifact-monitor.yml |
+| Cleanup CI Failure | ☐ | ☐ |  | Cleans up after CI failures; triggered by root-artifact-monitor.yml |
 
 ### PR & Automation Workflows
 
@@ -765,8 +765,8 @@ Below is a complete inventory of all 50+ active workflows from the repository, o
 | Enhanced Potato Policy Enforcement | ☐ | ☐ | ☐ | Enforces sensitive file protection; triggered by push/PR; independent but related to security-audit.yml |
 | ~~.github/workflows/potato-policy.yml~~ | ~~REMOVED~~ | ~~N/A~~ | ~~N/A~~ | *Removed in PR #1206; replaced by enhanced version above* |
 
-| No-Verify Policy Enforcement | ☐ | ☐ | ✅ | Prevents --no-verify flag usage; triggered by push/PR; independent |
-| Terminal Output Policy Enforcement | ☐ | ☐ | ✅ | Enforces terminal output standards; triggered by push/PR; independent |
+| No-Verify Policy Enforcement | ☐ | ☐ |  | Prevents --no-verify flag usage; triggered by push/PR; independent |
+| Terminal Output Policy Enforcement | ☐ | ☐ |  | Enforces terminal output standards; triggered by push/PR; independent |
 | Validate Permissions | ☐ | ☐ | ☐ | Validates bot permissions; triggered by push/PR; independent |
 | Secrets Alignment | ☐ | ☐ | ☐ | Aligns environment secrets; triggered by push/PR; can trigger env-doc-alignment.yml |
 
@@ -826,7 +826,7 @@ Below is a complete inventory of all 50+ active workflows from the repository, o
 | Pre-commit Validation | ☐ | ☐ | ☐ | Validates pre-commit hooks; triggered by push/PR; independent |
 | Dependabot Updates | ☐ | ☐ | ☐ | Manages dependency updates; triggered by Dependabot; independent |
 
-**Notes on Dependencies**: Dependencies are primarily event-driven (e.g., push/PR triggers multiple workflows). Job-level dependencies exist within workflows (e.g., validate-yaml → filter → test in CI). Use this table to systematically review and optimize workflows, starting with core dependencies like CI and PR Automation.
+**Notes on Dependencies**: Dependencies are primarily event-driven (e.g., push/PR triggers multiple workflows). Job-level dependencies exist within workflows (e.g., validate-yaml  filter  test in CI). Use this table to systematically review and optimize workflows, starting with core dependencies like CI and PR Automation.
 
 ## Original Validation Checklist (Reference)
 
@@ -846,7 +846,7 @@ Below is a complete inventory of all 50+ active workflows from the repository, o
 
 - [x] Virtual environment properly used throughout
 
-**Final Status**: ✅ **COMPLETED** - CI modernization successfully implemented with docs metadata plumbing integration
+**Final Status**:  **COMPLETED** - CI modernization successfully implemented with docs metadata plumbing integration
 
 **Committer**: reesey275
 **Commit Message**: "CHORE(ci): resolve shellcheck errors and update checkout actions"
@@ -862,10 +862,10 @@ Below is a complete inventory of all 50+ active workflows from the repository, o
 
 *Docs metadata plumbing system integrated into rollout plan for comprehensive documentation management.*
 
-*✅ **REBUILD PLAN UPDATED**: Completed items marked off systematically to reflect actual accomplishments.*
+* **REBUILD PLAN UPDATED**: Completed items marked off systematically to reflect actual accomplishments.*
 
 *📅 **STALENESS GUARD**: If `updated_at` > 30 days old, consider refreshing this archived document.*
 
 *🔮 **FRONT MATTER READY**: YAML front matter block available for future METADATA=1 activation.*
 
-*⚠️ **OPTIONAL STALENESS WORKFLOW**: Consider adding `.github/workflows/doc-staleness.yml` for automated freshness warnings.*
+* **OPTIONAL STALENESS WORKFLOW**: Consider adding `.github/workflows/doc-staleness.yml` for automated freshness warnings.*

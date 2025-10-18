@@ -34,7 +34,7 @@ update your firewall rules.
   [the releases page](https://github.com/errata-ai/vale/releases) on a machine
   with internet access.
 
-- Copy the binary to a directory in your `PATH` and make it executable with `chmod +x vale`.
+- Copy the binary to a directory in your `PATH` and make it executable with `chmod x vale`.
 
 - If you host your own mirror, set the `VALE_BINARY` environment variable to the downloaded path.
 

@@ -7,13 +7,13 @@ import llama2_agile_helper.api as agile_api
 
 def _stub_response(text: str):
     class StubResponse:
-        def __init__(self) -> None:
+        def __init__(self)  None:
             self.status_code = 200
 
-        def json(self) -> dict[str, str]:
+        def json(self)  dict[str, str]:
             return {"text": text}
 
-        def raise_for_status(self) -> None:
+        def raise_for_status(self)  None:
             pass
 
     return StubResponse()

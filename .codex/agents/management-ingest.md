@@ -38,7 +38,7 @@ trigger: executive commands
 
 # Management Ingest Agent
 
-> ⚠️ **This agent is currently in dry-run mode.** All outputs are logged, but no live actions are executed.
+>  **This agent is currently in dry-run mode.** All outputs are logged, but no live actions are executed.
 
 ## Overview
 

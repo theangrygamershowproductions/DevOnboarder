@@ -33,7 +33,7 @@ The Post-Merge Cleanup workflow (`post-merge-cleanup.yml`) automates the closure
 ```text
 Found PR number: 1339
 Closing issue #1344...
-SUCCESS: Added resolution comment to issue #1344
+ Added resolution comment to issue #1344
 FAILED: Failed to close issue #1344
 
 ```

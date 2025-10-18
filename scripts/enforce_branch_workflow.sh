@@ -26,25 +26,25 @@ enforce_branch_workflow() {
     if [[ "$PRE_COMMIT_MODE" == "true" ]]; then
         # Silent check for pre-commit hooks - just exit with error code
         if [[ "$current_branch" == "main" ]]; then
-            echo "ERROR: Cannot commit to main branch. Create a feature branch first."
+            echo " Cannot commit to main branch. Create a feature branch first."
             exit 1
         fi
         return 0
     fi
 
     echo
-    echo "🔍 DevOnboarder Branch Workflow Check"
+    echo " DevOnboarder Branch Workflow Check"
     echo "====================================="
 
     if [[ "$current_branch" == "main" ]]; then
         echo
         echo -e "${RED}🚨 CRITICAL WORKFLOW VIOLATION!${NC}"
-        echo -e "${RED}❌ You are on the 'main' branch${NC}"
-        echo -e "${GREEN}✅ DevOnboarder requires feature branch workflow${NC}"
+        echo -e "${RED} You are on the 'main' branch${NC}"
+        echo -e "${GREEN} DevOnboarder requires feature branch workflow${NC}"
         echo
-        echo "📋 This prevents the recurring issue of working directly on main"
+        echo " This prevents the recurring issue of working directly on main"
         echo
-        echo "🔧 Required actions:"
+        echo " Required actions:"
         echo "   [1] Create feature branch for your work"
         echo "   [2] Exit and follow proper workflow manually"
         echo
@@ -52,7 +52,7 @@ enforce_branch_workflow() {
 
         if [[ "$create_branch" =~ ^[Yy]$ ]]; then
             echo
-            echo "📝 Feature branch naming conventions:"
+            echo " Feature branch naming conventions:"
             echo "   feat/feature-description    - New features"
             echo "   fix/bug-description         - Bug fixes"
             echo "   docs/update-description     - Documentation"
@@ -65,10 +65,10 @@ enforce_branch_workflow() {
             if [[ -n "$branch_name" ]]; then
                 if git checkout -b "$branch_name" 2>/dev/null; then
                     echo
-                    echo -e "${GREEN}✅ SUCCESS: Created and switched to branch: $branch_name${NC}"
-                    echo -e "${GREEN}✅ Workflow compliance achieved${NC}"
+                    echo -e "${GREEN}  Created and switched to branch: $branch_name${NC}"
+                    echo -e "${GREEN} Workflow compliance achieved${NC}"
                     echo
-                    echo "📋 Next steps:"
+                    echo " Next steps:"
                     echo "   • Make your changes"
                     echo "   • Use ./scripts/safe_commit.sh for commits"
                     echo "   • Create PR when ready"
@@ -76,26 +76,26 @@ enforce_branch_workflow() {
                     return 0
                 else
                     echo
-                    echo -e "${RED}❌ Failed to create branch '$branch_name'${NC}"
+                    echo -e "${RED} Failed to create branch '$branch_name'${NC}"
                     echo "   Check if branch already exists or name is invalid"
                     return 1
                 fi
             else
                 echo
-                echo -e "${RED}❌ No branch name provided${NC}"
+                echo -e "${RED} No branch name provided${NC}"
                 echo "   Cannot proceed without proper branch"
                 return 1
             fi
         else
             echo
-            echo -e "${YELLOW}⚠️  Workflow violation not resolved${NC}"
+            echo -e "${YELLOW}  Workflow violation not resolved${NC}"
             echo "   Please create feature branch manually:"
             echo "   git checkout -b feat/your-feature-name"
             return 1
         fi
     else
         echo
-        echo -e "${GREEN}✅ Workflow compliance: Working on '$current_branch'${NC}"
+        echo -e "${GREEN} Workflow compliance: Working on '$current_branch'${NC}"
         echo "   You're following proper DevOnboarder branch workflow"
         return 0
     fi

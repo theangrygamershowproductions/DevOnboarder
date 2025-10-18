@@ -4,7 +4,7 @@ from fastapi import HTTPException
 
 
 def test_validate_password_accepts_short_passwords():
-    # 10 ASCII chars -> 10 bytes
+    # 10 ASCII chars  10 bytes
     auth_service._validate_password_for_bcrypt("shortpwd")
 
 

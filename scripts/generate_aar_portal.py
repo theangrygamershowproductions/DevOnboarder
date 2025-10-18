@@ -53,7 +53,7 @@ class AARPortalGenerator:
             autoescape=select_autoescape(["html", "xml"]),
         )
 
-    def discover_aar_structure(self) -> Dict[str, Any]:
+    def discover_aar_structure(self)  Dict[str, Any]:
         """Scan .aar directory and build comprehensive data structure.
 
         Returns
@@ -120,17 +120,17 @@ class AARPortalGenerator:
                             aar_data["quarters"][year][quarter][type_name].append(
                                 aar_info
                             )
-                            aar_data["total_aars"] += 1
-                            aar_data["types"][type_name] += 1
+                            aar_data["total_aars"] = 1
+                            aar_data["types"][type_name] = 1
 
                             # Aggregate metrics
-                            aar_data["metrics"]["total_files_changed"] += aar_info.get(
+                            aar_data["metrics"]["total_files_changed"] = aar_info.get(
                                 "files_changed", 0
                             )
-                            aar_data["metrics"]["total_agents_updated"] += aar_info.get(
+                            aar_data["metrics"]["total_agents_updated"] = aar_info.get(
                                 "agents_updated", 0
                             )
-                            aar_data["metrics"]["total_action_items"] += aar_info.get(
+                            aar_data["metrics"]["total_action_items"] = aar_info.get(
                                 "action_items", 0
                             )
 
@@ -138,7 +138,7 @@ class AARPortalGenerator:
 
     def parse_aar_file(
         self, file_path: Path, aar_type: str
-    ) -> Optional[Dict[str, Any]]:
+    )  Optional[Dict[str, Any]]:
         """Parse individual AAR file for metadata and content.
 
         Parameters
@@ -158,12 +158,12 @@ class AARPortalGenerator:
                 content = f.read()
 
             # Extract title from first heading
-            title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
+            title_match = re.search(r"^#\s(.)$", content, re.MULTILINE)
             title = title_match.group(1) if title_match else file_path.stem
 
             # Extract reference number
             ref_match = re.search(
-                r"(pr|issue|sprint|incident|automation)-(\d+|\w+)",
+                r"(pr|issue|sprint|incident|automation)-(\d|\w)",
                 file_path.stem,
                 re.IGNORECASE,
             )
@@ -196,7 +196,7 @@ class AARPortalGenerator:
                 "word_count": word_count,
                 "line_count": lines,
                 "content_preview": (
-                    content[:500] + "..." if len(content) > 500 else content
+                    content[:500]  "..." if len(content) > 500 else content
                 ),
             }
 
@@ -204,7 +204,7 @@ class AARPortalGenerator:
             print(f"Warning: Failed to parse {file_path}: {e}")
             return None
 
-    def extract_metrics_from_content(self, content: str) -> Dict[str, Any]:
+    def extract_metrics_from_content(self, content: str)  Dict[str, Any]:
         """Extract metrics from AAR content.
 
         Parameters
@@ -225,13 +225,13 @@ class AARPortalGenerator:
         }
 
         # Extract files changed
-        files_match = re.search(r"Files Changed:?\s*(\d+)", content, re.IGNORECASE)
+        files_match = re.search(r"Files Changed:?\s*(\d)", content, re.IGNORECASE)
         if files_match:
             metrics["files_changed"] = int(files_match.group(1))
 
         # Extract agents updated
         agents_match = re.search(
-            r"(?:Codex )?Agents Updated:?\s*(\d+)", content, re.IGNORECASE
+            r"(?:Codex )?Agents Updated:?\s*(\d)", content, re.IGNORECASE
         )
         if agents_match:
             metrics["agents_updated"] = int(agents_match.group(1))
@@ -251,7 +251,7 @@ class AARPortalGenerator:
 
         return metrics
 
-    def extract_labels_from_content(self, content: str) -> List[str]:
+    def extract_labels_from_content(self, content: str)  List[str]:
         """Extract labels/tags from AAR content.
 
         Parameters
@@ -287,7 +287,7 @@ class AARPortalGenerator:
 
         return labels
 
-    def calculate_trends(self, aar_data: Dict[str, Any]) -> Dict[str, Any]:
+    def calculate_trends(self, aar_data: Dict[str, Any])  Dict[str, Any]:
         """Calculate trend data for dashboard visualization.
 
         Parameters
@@ -319,9 +319,9 @@ class AARPortalGenerator:
 
                 for type_aars in types.values():
                     for aar in type_aars:
-                        quarter_files += aar.get("files_changed", 0)
-                        quarter_agents += aar.get("agents_updated", 0)
-                        quarter_actions += aar.get("action_items", 0)
+                        quarter_files = aar.get("files_changed", 0)
+                        quarter_agents = aar.get("agents_updated", 0)
+                        quarter_actions = aar.get("action_items", 0)
 
                 trends["quarterly_counts"].append(
                     {
@@ -454,7 +454,7 @@ class AARPortalGenerator:
 
 {% block content %}
 <div class="row">
-    <!-- Filters Sidebar -->
+    <!-- Filters Sidebar -
     <div class="col-md-3 filter-sidebar p-4">
         <div class="search-box">
             <h5><i class="bi bi-funnel"></i> Filters</h5>
@@ -495,7 +495,7 @@ class AARPortalGenerator:
             >Clear Filters</button>
         </div>
 
-        <!-- Summary Stats -->
+        <!-- Summary Stats -
         <div class="mt-4">
             <h6>Summary</h6>
             <ul class="list-unstyled">
@@ -507,7 +507,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- AAR Grid -->
+    <!-- AAR Grid -
     <div class="col-md-9">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2><i class="bi bi-grid"></i> After Action Reports</h2>
@@ -535,14 +535,14 @@ class AARPortalGenerator:
                                         <h6 class="card-title">{{ aar.title }}</h6>
                                         <p class="card-text small">{{ aar.content_preview[:150] }}...</p>
 
-                                        <!-- Metrics -->
+                                        <!-- Metrics -
                                         <div class="d-flex gap-2 mb-2">
                                             <span class="badge bg-secondary metric-badge">{{ aar.files_changed }} files</span>
                                             <span class="badge bg-info metric-badge">{{ aar.agents_updated }} agents</span>
                                             <span class="badge bg-warning metric-badge">{{ aar.action_items }} items</span>
                                         </div>
 
-                                        <!-- Labels -->
+                                        <!-- Labels -
                                         <div class="mb-2">
                                             {% for label in aar.labels %}
                                                 <span class="badge bg-light text-dark">{{ label }}</span>
@@ -602,7 +602,7 @@ class AARPortalGenerator:
             if (searchQuery && !title.includes(searchQuery) && !content.includes(searchQuery)) show = false;
 
             item.style.display = show ? 'block' : 'none';
-            if (show) visibleCount++;
+            if (show) visibleCount;
         });
 
         document.getElementById('resultCount').textContent = `${visibleCount} AARs`;
@@ -637,7 +637,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- Summary Cards -->
+    <!-- Summary Cards -
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="card bg-primary text-white">
@@ -673,7 +673,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- Charts Row -->
+    <!-- Charts Row -
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="card">

@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 
-def setup_logging() -> logging.Logger:
+def setup_logging()  logging.Logger:
     """Set up centralized logging per DevOnboarder standards."""
 
     # Create logs directory if it doesn't exist
@@ -57,7 +57,7 @@ def setup_logging() -> logging.Logger:
     return logger
 
 
-def detect_file_type(file_path: Path) -> str:
+def detect_file_type(file_path: Path)  str:
     """Detect the type of file based on path and content.
 
     Parameters
@@ -101,7 +101,7 @@ def detect_file_type(file_path: Path) -> str:
     return "documentation"
 
 
-def get_required_fields(file_type: str, file_path: Path) -> Dict[str, Any]:
+def get_required_fields(file_type: str, file_path: Path)  Dict[str, Any]:
     """Get required frontmatter fields based on file type.
 
     Parameters
@@ -185,7 +185,7 @@ def get_required_fields(file_type: str, file_path: Path) -> Dict[str, Any]:
         return base_fields
 
 
-def parse_frontmatter(content: str) -> tuple[Optional[Dict[str, Any]], str, str]:
+def parse_frontmatter(content: str)  tuple[Optional[Dict[str, Any]], str, str]:
     """Parse YAML frontmatter from markdown content.
 
     Parameters
@@ -220,7 +220,7 @@ def parse_frontmatter(content: str) -> tuple[Optional[Dict[str, Any]], str, str]
         return None, "", content
 
 
-def fix_frontmatter_content(content: str, file_path: Path) -> tuple[str, List[str]]:
+def fix_frontmatter_content(content: str, file_path: Path)  tuple[str, List[str]]:
     """Fix frontmatter in file content.
 
     Parameters
@@ -267,7 +267,7 @@ def fix_frontmatter_content(content: str, file_path: Path) -> tuple[str, List[st
     return new_content, issues_fixed
 
 
-def process_frontmatter_file(file_path: Path, create_backup: bool = True) -> bool:
+def process_frontmatter_file(file_path: Path, create_backup: bool = True)  bool:
     """Process a single markdown file for frontmatter fixing.
 
     Parameters
@@ -325,7 +325,7 @@ def process_frontmatter_file(file_path: Path, create_backup: bool = True) -> boo
         return False
 
 
-def find_markdown_files(path: Path) -> List[Path]:
+def find_markdown_files(path: Path)  List[Path]:
     """Find all markdown files in a directory or return single file.
 
     Parameters
@@ -412,10 +412,10 @@ def main():
     for file_path in files_to_process:
         if args.dry_run:
             logger.info("Would process: %s", file_path)
-            success_count += 1
+            success_count = 1
         else:
             if process_frontmatter_file(file_path, not args.no_backup):
-                success_count += 1
+                success_count = 1
 
     logger.info(
         "Successfully processed %d/%d files", success_count, len(files_to_process)

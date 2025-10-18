@@ -23,7 +23,7 @@ def setup_logging():
     return log_file
 
 
-def analyze_fastapi_routes(service_path: str) -> Dict[str, List[Dict[str, str]]]:
+def analyze_fastapi_routes(service_path: str)  Dict[str, List[Dict[str, str]]]:
     """Extract FastAPI routes and their details."""
     routes = {}
     service_path = Path(service_path)
@@ -58,7 +58,7 @@ def analyze_fastapi_routes(service_path: str) -> Dict[str, List[Dict[str, str]]]
 
 def extract_route_info(
     decorator, function_node, file_content: str
-) -> Optional[Dict[str, str]]:  # noqa: E501
+)  Optional[Dict[str, str]]:  # noqa: E501
     """Extract route information from FastAPI decorator."""
     route_info = None
 
@@ -114,7 +114,7 @@ def extract_route_info(
     return route_info
 
 
-def analyze_database_models(src_path: str = "src") -> Dict[str, List[str]]:
+def analyze_database_models(src_path: str = "src")  Dict[str, List[str]]:
     """Extract database model definitions and relationships."""
     models = {}
     src_path = Path(src_path)
@@ -128,7 +128,7 @@ def analyze_database_models(src_path: str = "src") -> Dict[str, List[str]]:
                     content = f.read()
 
                 # Extract class definitions that might be models
-                class_pattern = r"class\s+(\w+).*?:"
+                class_pattern = r"class\s(\w).*?:"
                 classes = re.findall(class_pattern, content)
 
                 # Look for SQLAlchemy patterns
@@ -154,7 +154,7 @@ def analyze_database_models(src_path: str = "src") -> Dict[str, List[str]]:
     return models
 
 
-def analyze_service_ports(src_path: str = "src") -> Dict[str, List[str]]:
+def analyze_service_ports(src_path: str = "src")  Dict[str, List[str]]:
     """Extract service port configurations."""
     ports = {}
     src_path = Path(src_path)
@@ -163,12 +163,12 @@ def analyze_service_ports(src_path: str = "src") -> Dict[str, List[str]]:
 
     # Common port patterns
     port_patterns = [
-        r'port["\s]*[:=]["\s]*(\d+)',
-        r'PORT["\s]*[:=]["\s]*(\d+)',
-        r"localhost:(\d+)",
-        r"127\.0\.0\.1:(\d+)",
-        r"uvicorn.*--port\s+(\d+)",
-        r"app\.run.*port=(\d+)",
+        r'port["\s]*[:=]["\s]*(\d)',
+        r'PORT["\s]*[:=]["\s]*(\d)',
+        r"localhost:(\d)",
+        r"127\.0\.0\.1:(\d)",
+        r"uvicorn.*--port\s(\d)",
+        r"app\.run.*port=(\d)",
     ]
 
     for py_file in src_path.rglob("*.py"):
@@ -193,7 +193,7 @@ def analyze_service_ports(src_path: str = "src") -> Dict[str, List[str]]:
     return ports
 
 
-def generate_service_contract_docs(routes: Dict, models: Dict, ports: Dict) -> str:
+def generate_service_contract_docs(routes: Dict, models: Dict, ports: Dict)  str:
     """Generate comprehensive service API contract documentation."""
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -223,39 +223,39 @@ strategic repository separation post-MVP.
         service_routes[service_name].extend(file_routes)
 
     for service_name, service_route_list in service_routes.items():
-        contract += f"\n### {service_name.title()} Service\n\n"
-        contract += (
+        contract = f"\n### {service_name.title()} Service\n\n"
+        contract = (
             f"**Endpoints**: {len(service_route_list)} API routes identified\n\n"
         )
 
         for route in service_route_list:
-            contract += (
+            contract = (
                 f"- **{route['method']} {route['path']}** - `{route['function']}()`\n"
             )
-            contract += f"  - {route['description']}\n"
+            contract = f"  - {route['description']}\n"
 
-        contract += "\n"
+        contract = "\n"
 
     # Database Models Section
-    contract += "## Database Models\n\n"
+    contract = "## Database Models\n\n"
 
     for file_path, model_classes in models.items():
         service_name = extract_service_name(file_path)
-        contract += f"### {service_name.title()} Models\n\n"
-        contract += f"**File**: `{file_path}`  \n"
-        contract += f"**Models**: {', '.join(model_classes)}\n\n"
+        contract = f"### {service_name.title()} Models\n\n"
+        contract = f"**File**: `{file_path}`  \n"
+        contract = f"**Models**: {', '.join(model_classes)}\n\n"
 
     # Service Ports Section
-    contract += "## Service Port Configuration\n\n"
+    contract = "## Service Port Configuration\n\n"
 
     for file_path, port_list in ports.items():
         service_name = extract_service_name(file_path)
-        contract += f"### {service_name.title()} Service\n\n"
-        contract += f"**File**: `{file_path}`  \n"
-        contract += f"**Ports**: {', '.join(port_list)}\n\n"
+        contract = f"### {service_name.title()} Service\n\n"
+        contract = f"**File**: `{file_path}`  \n"
+        contract = f"**Ports**: {', '.join(port_list)}\n\n"
 
     # Split Readiness Assessment
-    contract += """## Split Readiness Assessment
+    contract = """## Split Readiness Assessment
 
 ### Service Boundary Maturity
 
@@ -285,12 +285,12 @@ strategic repository separation post-MVP.
         else:
             risk = "LOW"
 
-        contract += (
+        contract = (
             f"| {service.title()} | {endpoint_count} | {model_count} "
             f"| {port_count} | **{risk}** |\n"
         )
 
-    contract += """
+    contract = """
 ### Recommendations
 
 1. **Low Risk Services**: Can be split immediately post-MVP
@@ -312,7 +312,7 @@ for post-MVP service boundary extraction.*
     return contract
 
 
-def extract_service_name(file_path: str) -> str:
+def extract_service_name(file_path: str)  str:
     """Extract service name from file path."""
     path_parts = Path(file_path).parts
 
@@ -407,7 +407,7 @@ def main():
     except Exception as e:
         print(f"Error during service interface extraction: {e}")
         with open(log_file, "a") as f:
-            f.write(f"ERROR: {e}\n")
+            f.write(f" {e}\n")
         return 1
 
     return 0

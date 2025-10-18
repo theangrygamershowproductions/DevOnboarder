@@ -6,10 +6,10 @@ set -euo pipefail
 
 # Logging setup
 mkdir -p logs
-LOG_FILE="logs/change_impact_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/change_impact_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🔍 DevOnboarder Change Impact Analysis"
+echo " DevOnboarder Change Impact Analysis"
 echo "======================================"
 echo "Timestamp: $(date)"
 echo "Log: $LOG_FILE"
@@ -34,12 +34,12 @@ ANALYSIS_PATHS=(
 
 # Reference patterns to detect
 REFERENCE_PATTERNS=(
-    "docs/[a-zA-Z0-9_/-]+\.md"          # Direct file references
-    "\[.*\]\(docs/[^)]+\)"              # Markdown links to docs
+    "docs/[a-zA-Z0-9_/-]\.md"          # Direct file references
+    "\[.*\]\(docs/[^)]\)"              # Markdown links to docs
     "\[.*\]\([^)]*\.md[^)]*\)"          # Markdown links to any .md files
-    "scripts/[a-zA-Z0-9_/-]+\.sh"       # Script references
-    "\.codex/[a-zA-Z0-9_/-]+\.md"       # Agent references
-    "schema/[a-zA-Z0-9_/-]+\.json"      # Schema references
+    "scripts/[a-zA-Z0-9_/-]\.sh"       # Script references
+    "\.codex/[a-zA-Z0-9_/-]\.md"       # Agent references
+    "schema/[a-zA-Z0-9_/-]\.json"      # Schema references
 )
 
 # Keywords and concepts for semantic analysis
@@ -75,7 +75,7 @@ find_all_docs() {
     for path in "${ANALYSIS_PATHS[@]}"; do
         if [ -d "$path" ]; then
             while IFS= read -r -d '' file; do
-                all_files+=("$file")
+                all_files=("$file")
             done < <(find "$path" -type f \( -name "*.md" -o -name "*.json" \) -print0)
         fi
     done
@@ -88,12 +88,12 @@ analyze_direct_references() {
     local source_file="$1"
     local references=()
 
-    echo "  📋 Analyzing direct references in: $(basename "$source_file")"
+    echo "   Analyzing direct references in: $(basename "$source_file")"
 
     for pattern in "${REFERENCE_PATTERNS[@]}"; do
         while IFS= read -r match; do
             if [ -n "$match" ]; then
-                references+=("$match")
+                references=("$match")
             fi
         done < <(grep -oE "$pattern" "$source_file" 2>/dev/null || true)
     done
@@ -116,7 +116,7 @@ analyze_semantic_references() {
         local target="${concept_pair##*:}"
 
         if grep -qi "$keyword" "$source_file" 2>/dev/null; then
-            concepts+=("$target")
+            concepts=("$target")
         fi
     done
 
@@ -139,7 +139,7 @@ find_reverse_dependencies() {
     while IFS= read -r file; do
         if [ "$file" != "$target_file" ] && [ -f "$file" ]; then
             if grep -q "$target_file\|$basename_target" "$file" 2>/dev/null; then
-                references+=("$file")
+                references=("$file")
             fi
         fi
     done < <(find_all_docs)
@@ -155,7 +155,7 @@ check_broken_references() {
     local source_file="$1"
     local broken_refs=()
 
-    echo "  ❌ Checking for broken references in: $(basename "$source_file")"
+    echo "   Checking for broken references in: $(basename "$source_file")"
 
     # Check markdown links
     while IFS= read -r link; do
@@ -183,10 +183,10 @@ check_broken_references() {
             fi
 
             if [ ! -f "$full_path" ] && [ ! -d "$full_path" ]; then
-                broken_refs+=("$path (from $source_file)")
+                broken_refs=("$path (from $source_file)")
             fi
         fi
-    done < <(grep -oE '\[.*\]\([^)]+\)' "$source_file" 2>/dev/null || true)
+    done < <(grep -oE '\[.*\]\([^)]\)' "$source_file" 2>/dev/null || true)
 
     if [ ${#broken_refs[@]} -gt 0 ]; then
         printf '%s\n' "${broken_refs[@]}"
@@ -198,7 +198,7 @@ suggest_related_docs() {
     local source_file="$1"
     local suggestions=()
 
-    echo "  💡 Suggesting related documentation for: $(basename "$source_file")"
+    echo "   Suggesting related documentation for: $(basename "$source_file")"
 
     # Analyze content for common patterns
     local content
@@ -206,34 +206,34 @@ suggest_related_docs() {
 
     # Check for common DevOnboarder patterns
     if echo "$content" | grep -qi "virtual environment\|venv\|pip install"; then
-        suggestions+=("docs/policies/virtual-environment-policy.md")
+        suggestions=("docs/policies/virtual-environment-policy.md")
     fi
 
     if echo "$content" | grep -qi "terminal\|echo\|output\|hanging"; then
-        suggestions+=("docs/policies/terminal-output-policy.md")
+        suggestions=("docs/policies/terminal-output-policy.md")
     fi
 
     if echo "$content" | grep -qi "commit\|git\|pre-commit\|quality"; then
-        suggestions+=("docs/policies/quality-control-policy.md")
+        suggestions=("docs/policies/quality-control-policy.md")
     fi
 
     if echo "$content" | grep -qi "ci\|github actions\|workflow\|test"; then
-        suggestions+=("docs/troubleshooting/common-issues-resolution.md")
+        suggestions=("docs/troubleshooting/common-issues-resolution.md")
     fi
 
     if echo "$content" | grep -qi "discord\|bot\|oauth\|integration"; then
-        suggestions+=("docs/development/architecture-overview.md")
+        suggestions=("docs/development/architecture-overview.md")
     fi
 
     if echo "$content" | grep -qi "security\|token\|secret\|auth"; then
-        suggestions+=("docs/policies/security-best-practices.md")
+        suggestions=("docs/policies/security-best-practices.md")
     fi
 
     # Remove duplicates and filter out non-existent files
     local valid_suggestions=()
     for suggestion in "${suggestions[@]}"; do
         if [ -f "$suggestion" ]; then
-            valid_suggestions+=("$suggestion")
+            valid_suggestions=("$suggestion")
         fi
     done
 
@@ -247,7 +247,7 @@ generate_impact_report() {
     local source_file="$1"
     local output_file="$2"
 
-    echo "📄 Generating impact analysis report for: $source_file"
+    echo "FILE: Generating impact analysis report for: $source_file"
 
     cat > "$output_file" << EOF
 # Change Impact Analysis Report
@@ -332,13 +332,13 @@ EOF
     local broken_refs
     broken_refs=$(check_broken_references "$source_file")
     if [ -n "$broken_refs" ]; then
-        echo "⚠️ **Found broken references that need attention:**" >> "$output_file"
+        echo " **Found broken references that need attention:**" >> "$output_file"
         echo "" >> "$output_file"
         echo "$broken_refs" | while read -r ref; do
-            echo "- ❌ $ref" >> "$output_file"
+            echo "-  $ref" >> "$output_file"
         done
     else
-        echo "✅ No broken references found." >> "$output_file"
+        echo " No broken references found." >> "$output_file"
     fi
 
     cat >> "$output_file" << EOF
@@ -385,7 +385,7 @@ EOF
 
 EOF
 
-    echo "   ✅ Report generated: $output_file"
+    echo "    Report generated: $output_file"
 }
 
 # Assess risk level based on analysis
@@ -396,17 +396,17 @@ assess_risk_level() {
     # Count direct references
     local direct_count
     direct_count=$(analyze_direct_references "$source_file" | wc -l)
-    risk_score=$((risk_score + direct_count))
+    risk_score=$((risk_score  direct_count))
 
     # Count reverse dependencies
     local reverse_count
     reverse_count=$(find_reverse_dependencies "$source_file" | wc -l)
-    risk_score=$((risk_score + reverse_count * 2))
+    risk_score=$((risk_score  reverse_count * 2))
 
     # Count broken references
     local broken_count
     broken_count=$(check_broken_references "$source_file" | wc -l)
-    risk_score=$((risk_score + broken_count * 3))
+    risk_score=$((risk_score  broken_count * 3))
 
     # Determine risk level
     if [ $risk_score -eq 0 ]; then
@@ -422,7 +422,7 @@ assess_risk_level() {
 
 # Analyze all files in batch mode
 batch_analysis() {
-    echo "🔄 Running batch analysis on all documentation..."
+    echo "SYNC: Running batch analysis on all documentation..."
 
     local total_files=0
     local high_risk_files=()
@@ -430,19 +430,19 @@ batch_analysis() {
 
     while IFS= read -r file; do
         echo ""
-        echo "📁 Analyzing: $file"
-        total_files=$((total_files + 1))
+        echo " Analyzing: $file"
+        total_files=$((total_files  1))
 
         local risk_level
         risk_level=$(assess_risk_level "$file")
 
         if [[ "$risk_level" =~ "HIGH"|"CRITICAL" ]]; then
-            high_risk_files+=("$file ($risk_level)")
+            high_risk_files=("$file ($risk_level)")
         fi
 
         local broken_count
         broken_count=$(check_broken_references "$file" | wc -l)
-        broken_refs_total=$((broken_refs_total + broken_count))
+        broken_refs_total=$((broken_refs_total  broken_count))
 
         echo "   Risk Level: $risk_level"
         echo "   Broken References: $broken_count"
@@ -450,14 +450,14 @@ batch_analysis() {
     done < <(find_all_docs)
 
     echo ""
-    echo "📊 Batch Analysis Summary:"
+    echo " Batch Analysis Summary:"
     echo "   Total Files Analyzed: $total_files"
     echo "   High-Risk Files: ${#high_risk_files[@]}"
     echo "   Total Broken References: $broken_refs_total"
 
     if [ ${#high_risk_files[@]} -gt 0 ]; then
         echo ""
-        echo "⚠️ High-Risk Files Requiring Attention:"
+        echo " High-Risk Files Requiring Attention:"
         for file in "${high_risk_files[@]}"; do
             echo "   - $file"
         done
@@ -474,10 +474,10 @@ case "${1:-help}" in
         fi
 
         source_file="$2"
-        output_file="${3:-logs/impact_analysis_$(basename "$source_file" .md)_$(date +%Y%m%d_%H%M%S).md}"
+        output_file="${3:-logs/impact_analysis_$(basename "$source_file" .md)_$(date %Y%m%d_%H%M%S).md}"
 
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            echo " File not found: $source_file"
             exit 1
         fi
 
@@ -488,9 +488,9 @@ case "${1:-help}" in
         generate_impact_report "$source_file" "$output_file"
 
         echo ""
-        echo "✅ Impact analysis completed!"
-        echo "   📄 Report: $output_file"
-        echo "   📄 Log: $LOG_FILE"
+        echo " Impact analysis completed!"
+        echo "   FILE: Report: $output_file"
+        echo "   FILE: Log: $LOG_FILE"
         ;;
 
     "batch")
@@ -506,18 +506,18 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            echo " File not found: $source_file"
             exit 1
         fi
 
-        echo "🔍 Checking references in: $source_file"
+        echo " Checking references in: $source_file"
         echo ""
 
-        echo "📋 Direct References:"
+        echo " Direct References:"
         analyze_direct_references "$source_file" || echo "   None found"
 
         echo ""
-        echo "❌ Broken References:"
+        echo " Broken References:"
         check_broken_references "$source_file" || echo "   None found"
         ;;
 
@@ -529,11 +529,11 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            echo " File not found: $source_file"
             exit 1
         fi
 
-        echo "💡 Suggesting related documentation for: $source_file"
+        echo " Suggesting related documentation for: $source_file"
         echo ""
         suggest_related_docs "$source_file"
         ;;
@@ -546,7 +546,7 @@ case "${1:-help}" in
 
         source_file="$2"
         if [ ! -f "$source_file" ]; then
-            echo "❌ File not found: $source_file"
+            echo " File not found: $source_file"
             exit 1
         fi
 

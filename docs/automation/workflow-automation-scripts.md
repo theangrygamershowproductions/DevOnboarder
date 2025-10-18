@@ -27,7 +27,7 @@ This document provides comprehensive documentation for the automated workflow sc
 
 ## Overview
 
-Following the principle "There should be absolutely no gaps in our instructions", these automation scripts transform time-consuming manual processes into reliable automated workflows, preventing the 5.5+ hour debugging sessions experienced in previous development cycles.
+Following the principle "There should be absolutely no gaps in our instructions", these automation scripts transform time-consuming manual processes into reliable automated workflows, preventing the 5.5 hour debugging sessions experienced in previous development cycles.
 
 ## Automation Scripts
 
@@ -165,7 +165,7 @@ scripts/automate_issue_discovery.sh --actions          # Generate triage action 
     - `"is:open milestone"`
     - `"is:open epic"`
 
-- **Stale Issue Analysis**: Identifies issues not updated in 30+ days:
+- **Stale Issue Analysis**: Identifies issues not updated in 30 days:
 
     - Cross-platform date calculation (GNU date vs BSD date)
     - Configurable staleness threshold
@@ -221,7 +221,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/script_name_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/script_name_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Load DevOnboarder environment
@@ -285,8 +285,8 @@ scripts/automate_issue_discovery.sh --ci --priority
 
 ### Eliminated Manual Processes
 
-1. **Post-Merge Cleanup**: Previously 30+ minutes of manual issue search and branch cleanup
-2. **Signature Verification**: Previously 5.5+ hours of debugging signature issues
+1. **Post-Merge Cleanup**: Previously 30 minutes of manual issue search and branch cleanup
+2. **Signature Verification**: Previously 5.5 hours of debugging signature issues
 3. **Issue Discovery**: Previously manual searching across multiple label categories and timeframes
 
 ### Prevented Time Waste

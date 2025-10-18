@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Load tokens using Token Architecture v2.1 with developer guidance
@@ -26,7 +26,7 @@ if [ -f .env ]; then
     source .env
 fi
 
-START_TIME="$(date '+%Y-%m-%d %H:%M:%S')"
+START_TIME="$(date '%Y-%m-%d %H:%M:%S')"
 printf "[%s] Starting Token Architecture v2.1 Validation\n" "$START_TIME"
 printf "\n"
 
@@ -88,7 +88,7 @@ for env in "${ENVIRONMENTS[@]}"; do
     for token in "${CICD_TOKENS[@]}"; do
         if grep -q "^${token}=" "$token_file" 2>/dev/null; then
             printf "    Found: %s\n" "$token"
-            ((cicd_count++))
+            ((cicd_count))
         fi
     done
 
@@ -104,7 +104,7 @@ for env in "${ENVIRONMENTS[@]}"; do
     for token in "${RUNTIME_TOKENS[@]}"; do
         if grep -q "^${token}=" "$env_file" 2>/dev/null; then
             printf "    Found: %s\n" "$token"
-            ((runtime_count++))
+            ((runtime_count))
         fi
     done
 
@@ -121,7 +121,7 @@ for env in "${ENVIRONMENTS[@]}"; do
     # Check for CI/CD tokens in .env (BAD)
     for token in "${CICD_TOKENS[@]}"; do
         if grep -q "^${token}=" "$env_file" 2>/dev/null; then
-            printf "    ERROR: CI/CD token %s found in %s (should be in %s)\n" "$token" "$env_file" "$token_file"
+            printf "     CI/CD token %s found in %s (should be in %s)\n" "$token" "$env_file" "$token_file"
             cross_contamination=true
         fi
     done
@@ -129,7 +129,7 @@ for env in "${ENVIRONMENTS[@]}"; do
     # Check for runtime tokens in .tokens (BAD)
     for token in "${RUNTIME_TOKENS[@]}"; do
         if grep -q "^${token}=" "$token_file" 2>/dev/null; then
-            printf "    ERROR: Runtime token %s found in %s (should be in %s)\n" "$token" "$token_file" "$env_file"
+            printf "     Runtime token %s found in %s (should be in %s)\n" "$token" "$token_file" "$env_file"
             cross_contamination=true
         fi
     done
@@ -151,7 +151,7 @@ if [[ -f ".env.ci" ]]; then
     if grep -q "test\|placeholder\|mock\|ci_" ".env.ci" 2>/dev/null; then
         printf "  Confirmed: Contains test/placeholder values\n"
     else
-        printf "  WARNING: May contain production values in CI environment\n"
+        printf "   May contain production values in CI environment\n"
     fi
     printf "\n"
 fi
@@ -160,10 +160,10 @@ fi
 if [[ -f ".env.prod" ]]; then
     printf "Production environment security check:\n"
     if [[ -r ".env.prod" ]]; then
-        printf "  INFO: Production environment file exists and is accessible\n"
+        printf "   Production environment file exists and is accessible\n"
         printf "  REMINDER: Ensure production secrets are properly secured\n"
     else
-        printf "  INFO: Production environment file has restricted access\n"
+        printf "   Production environment file has restricted access\n"
     fi
     printf "\n"
 fi
@@ -187,7 +187,7 @@ for env in "${ENVIRONMENTS[@]}"; do
     fi
 
     if [[ -f "$env_file" && -f "$token_file" ]]; then
-        total_environments=$((total_environments + 1))
+        total_environments=$((total_environments  1))
 
         # Check for proper separation
         has_contamination=false
@@ -207,7 +207,7 @@ for env in "${ENVIRONMENTS[@]}"; do
         done
 
         if [[ "$has_contamination" == false ]]; then
-            compliant_environments=$((compliant_environments + 1))
+            compliant_environments=$((compliant_environments  1))
             printf "Environment %s: COMPLIANT\n" "$env_name"
         else
             printf "Environment %s: NON-COMPLIANT (cross-contamination detected)\n" "$env_name"

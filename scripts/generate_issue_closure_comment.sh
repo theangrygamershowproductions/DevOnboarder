@@ -8,7 +8,7 @@ set -euo pipefail
 
 # Script logging
 SCRIPT_NAME="$(basename "$0" .sh)"
-LOG_FILE="logs/${SCRIPT_NAME}_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/${SCRIPT_NAME}_$(date %Y%m%d_%H%M%S).log"
 mkdir -p logs
 exec > >(tee -a "$LOG_FILE") 2>&1
 

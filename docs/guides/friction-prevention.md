@@ -40,13 +40,13 @@ Always include in PR descriptions:
 
 ```markdown
 
-## ✅ Copilot Feedback Resolution Status
+##  Copilot Feedback Resolution Status
 
-- [x] Comment 1: Issue description → Resolution method + commit hash
+- [x] Comment 1: Issue description  Resolution method  commit hash
 
-- [x] Comment 2: Issue description → Resolution method + commit hash
+- [x] Comment 2: Issue description  Resolution method  commit hash
 
-- [ ] Comment 3: Issue description → Planned resolution
+- [ ] Comment 3: Issue description  Planned resolution
 
 Last Updated: [DATE] - All critical comments resolved
 
@@ -244,7 +244,7 @@ git add . && pre-commit run --all-files
 echo "Checking for untracked files that need validation..."
 UNTRACKED=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh|yml|yaml)$')
 if [[ -n "$UNTRACKED" ]]; then
-    echo "WARNING: Untracked files found that bypass validation:"
+    echo " Untracked files found that bypass validation:"
     echo "$UNTRACKED"
     echo "Consider: git add . before running validation"
 fi
@@ -259,15 +259,15 @@ Updated QC pipeline to detect validation blind spots:
 
 # In scripts/qc_pre_push.sh - add untracked file detection
 
-echo "🔍 Checking for validation blind spots..."
+echo " Checking for validation blind spots..."
 UNTRACKED_IMPORTANT=$(git ls-files --others --exclude-standard | grep -E '\.(md|py|js|ts|sh)$')
 if [[ -n "$UNTRACKED_IMPORTANT" ]]; then
-    echo "⚠️  VALIDATION BLIND SPOT: Untracked files bypass quality checks"
+    echo "  VALIDATION BLIND SPOT: Untracked files bypass quality checks"
     echo "$UNTRACKED_IMPORTANT"
     read -r -p "Add files to git tracking for validation? [Y/n]: " track_files
     if [[ ! "$track_files" =~ ^[Nn]$ ]]; then
         git add "$UNTRACKED_IMPORTANT"
-        echo "✅ Files tracked - re-run QC for complete validation"
+        echo " Files tracked - re-run QC for complete validation"
 
     fi
 fi
@@ -284,13 +284,13 @@ Scripts using `find` search ALL files, including ignored directories like `node_
 
 ```bash
 
-# ❌ PROBLEM: Searches ignored directories causing pollution
+#  PROBLEM: Searches ignored directories causing pollution
 
 find . -name "*.md" | while read -r file; do
     process_file "$file"  # Processes files in node_modules/, .venv/, etc.
 done
 
-# Result: Script processes 1000+ irrelevant files, fails on binary content
+# Result: Script processes 1000 irrelevant files, fails on binary content
 
 ```
 
@@ -300,7 +300,7 @@ Use `git ls-files` to respect repository boundaries and `.gitignore` rules:
 
 ```bash
 
-# ✅ SOLUTION: Respects .gitignore and repository scope
+#  SOLUTION: Respects .gitignore and repository scope
 
 git ls-files '*.md' | while read -r file; do
     process_file "$file"  # Only processes tracked markdown files
@@ -484,11 +484,11 @@ check_duplicate_headings() {
     echo "Checking for duplicate headings..."
     DUPLICATES=$(grep -h "^###" "$1" | sort | uniq -d)
     if [[ -n "$DUPLICATES" ]]; then
-        echo "WARNING: Duplicate headings found:"
+        echo " Duplicate headings found:"
         echo "$DUPLICATES"
         return 1
     fi
-    echo "✅ No duplicate headings found"
+    echo " No duplicate headings found"
 }
 
 ```

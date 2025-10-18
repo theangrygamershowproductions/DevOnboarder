@@ -6,7 +6,7 @@
 # Protected patterns: .env, .pem, .key, secrets.yaml, Potato.md, and more
 # Because automation is better than hoping humans remember
 #
-# Philosophy: Pain → Protocol → Protection
+# Philosophy: Pain  Protocol  Protection
 # This script exists because someone, somewhere, leaked something they shouldn't have.
 # Now it's our job to make sure it never happens again.
 
@@ -27,13 +27,13 @@ for file in "${FILES[@]}"; do
                 echo "$entry" >> "$file"
             fi
         done
-        echo "✅ $file updated"
+        echo " $file updated"
     else
-        echo "⚠️  $file not found, creating..."
+        echo "  $file not found, creating..."
         for entry in "${REQUIRED[@]}"; do
             echo "$entry" >> "$file"
         done
-        echo "✅ $file created"
+        echo " $file created"
     fi
 done
 

@@ -36,13 +36,13 @@ show_terminal_policy() {
     echo "🚨 TERMINAL OUTPUT POLICY - ZERO TOLERANCE"
     echo "=========================================="
     echo ""
-    echo "❌ FORBIDDEN (causes immediate hanging):"
-    echo "  - echo \"✅ Task completed\"              # Emojis cause hanging"
-    echo "  - echo \"🚀 Deployment successful\"       # Unicode causes hanging"
+    echo " FORBIDDEN (causes immediate hanging):"
+    echo "  - echo \" Task completed\"              # Emojis cause hanging"
+    echo "  - echo \" Deployment successful\"       # Unicode causes hanging"
     echo "  - echo \"Status: \$STATUS_VAR\"           # Variable expansion causes hanging"
     printf "  - echo -e \"Line1\\nLine2\"                # Multi-line escape sequences\n"
     echo ""
-    echo "✅ REQUIRED PATTERNS:"
+    echo " REQUIRED PATTERNS:"
     echo "  - echo \"Task completed successfully\"    # Plain ASCII only"
     printf "  - printf \"Status: %%s\\n\" \"\$STATUS_VAR\" # Variables with printf\n"
     echo "  - Individual echo commands only          # No multi-line or here-doc"
@@ -52,17 +52,17 @@ show_terminal_policy() {
     echo "  - CI enforcement across all workflows"
     echo "  - Current violations: Run ./scripts/validate_terminal_output.sh"
     echo ""
-    echo "⚠️  REMEMBER: Terminal hanging is CRITICAL FAILURE in DevOnboarder"
+    echo "  REMEMBER: Terminal hanging is CRITICAL FAILURE in DevOnboarder"
 }
 
 show_triage_sop() {
-    echo "📋 ISSUE DISCOVERY & TRIAGE SOP"
+    echo " ISSUE DISCOVERY & TRIAGE SOP"
     echo "==============================="
     echo ""
-    echo "📊 DECISION FRAMEWORK (4 Steps):"
+    echo " DECISION FRAMEWORK (4 Steps):"
     echo "  1. Immediate Impact Assessment"
-    echo "     - Does this block current work? → Address immediately"
-    echo "     - No? → Proceed to Priority Stack evaluation"
+    echo "     - Does this block current work?  Address immediately"
+    echo "     - No?  Proceed to Priority Stack evaluation"
     echo ""
     echo "  2. Priority Stack Classification"
     echo "     - Tier 1: Strategic Foundation (meta-frameworks)"
@@ -73,14 +73,14 @@ show_triage_sop() {
     echo "  3. Scope Impact Evaluation"
     echo "     - Low (<5 files): Consider integrating with current work"
     echo "     - Medium (5-20 files): Usually create separate issue"
-    echo "     - High (20+ files): Always create separate issue"
+    echo "     - High (20 files): Always create separate issue"
     echo ""
     echo "  4. Integration Decision Matrix"
     echo "     - Tier 1: Always separate issue (strategic importance)"
-    echo "     - Tier 2+: Based on scope impact and current work"
+    echo "     - Tier 2: Based on scope impact and current work"
     echo ""
     echo "🎯 TARGET: <15 minute triage decisions"
-    echo "📍 REFERENCE: docs/ISSUE_DISCOVERY_TRIAGE_SOP.md"
+    echo "LOCATION: REFERENCE: docs/ISSUE_DISCOVERY_TRIAGE_SOP.md"
 }
 
 show_priority_framework() {
@@ -107,8 +107,8 @@ show_priority_framework() {
     echo "  - Archive & protection systems"
     echo "  - Nice-to-have improvements"
     echo ""
-    echo "📊 CURRENT DISTRIBUTION: ~22 issues across 4 tiers"
-    echo "📍 REFERENCE: docs/PRIORITY_STACK_FRAMEWORK_UPDATE.md"
+    echo " CURRENT DISTRIBUTION: ~22 issues across 4 tiers"
+    echo "LOCATION: REFERENCE: docs/PRIORITY_STACK_FRAMEWORK_UPDATE.md"
 }
 
 show_escalation_procedures() {
@@ -116,51 +116,51 @@ show_escalation_procedures() {
     echo "=================================="
     echo ""
     echo "🚨 POLICY VIOLATION ESCALATION:"
-    echo "  1. Detection → Classification → Notification"
-    echo "  2. Containment → Remediation → Follow-up"
+    echo "  1. Detection  Classification  Notification"
+    echo "  2. Containment  Remediation  Follow-up"
     echo ""
-    echo "⚡ RAPID RESPONSE FOR CI FAILURES:"
+    echo "FAST: RAPID RESPONSE FOR CI FAILURES:"
     echo "  - Issue detection via AAR system"
     echo "  - Clear escalation paths for critical issues"
     echo "  - Tested rollback and recovery procedures"
     echo ""
-    echo "🔧 EMERGENCY COMMANDS:"
+    echo " EMERGENCY COMMANDS:"
     echo "  - bash scripts/enhanced_ci_failure_analyzer.py"
     echo "  - python scripts/generate_aar.py --workflow-run-id <id>"
     echo "  - bash scripts/manage_ci_failure_issues.sh"
     echo ""
-    echo "📞 ESCALATION CONTACTS:"
+    echo " ESCALATION CONTACTS:"
     echo "  - Security Team: DevOnboarder Security Team"
     echo "  - Project Lead: DevOnboarder Project Lead"
     echo ""
-    echo "📍 REFERENCE: docs/policies/no-default-token-policy.md (Appendix C)"
+    echo "LOCATION: REFERENCE: docs/policies/no-default-token-policy.md (Appendix C)"
 }
 
 show_token_architecture() {
     echo "🔑 TOKEN ARCHITECTURE v2.1"
     echo "=========================="
     echo ""
-    echo "📊 HIERARCHY (Fallback Chain):"
+    echo " HIERARCHY (Fallback Chain):"
     echo "  1. CI_ISSUE_AUTOMATION_TOKEN (highest privilege)"
     echo "  2. CI_BOT_TOKEN (medium privilege)"
     echo "  3. GITHUB_TOKEN (default/basic)"
     echo ""
-    echo "🛠️ KEY SCRIPTS (15 Enhanced Scripts):"
+    echo " KEY SCRIPTS (15 Enhanced Scripts):"
     echo "  - scripts/enhanced_token_loader.sh     # Primary loader"
     echo "  - scripts/load_token_environment.sh    # Legacy fallback"
     echo "  - scripts/complete_system_validation.sh # Full validation"
     echo ""
-    echo "📋 IMPLEMENTATION PHASES:"
+    echo " IMPLEMENTATION PHASES:"
     echo "  - Phase 1 (Critical): 5 scripts including setup_discord_bot.sh"
     echo "  - Phase 2 (Automation): 7 scripts including monitor_ci_health.sh"
     echo "  - Phase 3 (Developer): 3 scripts including validate_token_architecture.sh"
     echo ""
-    echo "✅ SELF-CONTAINED: All scripts load tokens automatically"
-    echo "📍 REFERENCE: Token Architecture v2.1 documentation"
+    echo " SELF-CONTAINED: All scripts load tokens automatically"
+    echo "LOCATION: REFERENCE: Token Architecture v2.1 documentation"
 }
 
 check_violations() {
-    echo "🔍 POLICY VIOLATION CHECK"
+    echo " POLICY VIOLATION CHECK"
     echo "========================="
     echo ""
     echo "Running comprehensive policy validation..."
@@ -169,9 +169,9 @@ check_violations() {
     # Terminal output violations
     echo "1. Terminal Output Policy:"
     if ./scripts/validate_terminal_output.sh >/dev/null 2>&1; then
-        echo "   ✅ No terminal output violations found"
+        echo "    No terminal output violations found"
     else
-        echo "   ⚠️  Terminal output violations detected"
+        echo "     Terminal output violations detected"
         echo "      Run: ./scripts/validate_terminal_output.sh"
     fi
     echo ""
@@ -179,9 +179,9 @@ check_violations() {
     # Quality Control
     echo "2. Quality Control (95% threshold):"
     if ./scripts/qc_pre_push.sh >/dev/null 2>&1; then
-        echo "   ✅ All QC metrics passing"
+        echo "    All QC metrics passing"
     else
-        echo "   ⚠️  Quality control issues detected"
+        echo "     Quality control issues detected"
         echo "      Run: ./scripts/qc_pre_push.sh"
     fi
     echo ""
@@ -189,9 +189,9 @@ check_violations() {
     # Environment synchronization
     echo "3. Environment Variable Consistency:"
     if ./scripts/smart_env_sync.sh --validate-only >/dev/null 2>&1; then
-        echo "   ✅ Environment variables synchronized"
+        echo "    Environment variables synchronized"
     else
-        echo "   ⚠️  Environment inconsistencies detected"
+        echo "     Environment inconsistencies detected"
         echo "      Run: ./scripts/smart_env_sync.sh --validate-only"
     fi
     echo ""
@@ -199,9 +199,9 @@ check_violations() {
     # Potato Policy
     echo "4. Enhanced Potato Policy:"
     if ./scripts/check_potato_ignore.sh >/dev/null 2>&1; then
-        echo "   ✅ Potato Policy compliance verified"
+        echo "    Potato Policy compliance verified"
     else
-        echo "   ⚠️  Potato Policy violations detected"
+        echo "     Potato Policy violations detected"
         echo "      Run: ./scripts/check_potato_ignore.sh"
     fi
     echo ""
@@ -230,7 +230,7 @@ show_all_policies() {
     echo ""
     printf '=%.0s' {1..60}; echo
     echo ""
-    echo "🔍 For current policy violations, run: devonboarder-policy violations"
+    echo " For current policy violations, run: devonboarder-policy violations"
 }
 
 # Main logic

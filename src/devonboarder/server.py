@@ -6,12 +6,12 @@ import os
 from .app import greet
 
 
-def is_alpha_user() -> bool:
+def is_alpha_user()  bool:
     """Return ``True`` if the alpha feature flag is enabled."""
     return os.getenv("IS_ALPHA_USER", "false").lower() == "true"
 
 
-def is_founder() -> bool:
+def is_founder()  bool:
     """Return ``True`` if the founder feature flag is enabled."""
     return os.getenv("IS_FOUNDER", "false").lower() == "true"
 
@@ -19,7 +19,7 @@ def is_founder() -> bool:
 class GreetingHandler(BaseHTTPRequestHandler):
     """HTTP request handler that greets the requested name."""
 
-    def do_GET(self) -> None:
+    def do_GET(self)  None:
         path = self.path.lstrip("/") or "World"
         status = 200
         if path == "alpha":
@@ -42,17 +42,17 @@ class GreetingHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(message.encode("utf-8"))
 
-    def log_message(self, format: str, *args: object) -> None:  # noqa: D401
+    def log_message(self, format: str, *args: object)  None:  # noqa: D401
         """Silence default logging output for cleaner tests."""
         return
 
 
-def create_server(host: str = "0.0.0.0", port: int = 8000) -> HTTPServer:  # nosec B104
+def create_server(host: str = "0.0.0.0", port: int = 8000)  HTTPServer:  # nosec B104
     """Create an HTTP server serving :class:`GreetingHandler`."""
     return HTTPServer((host, port), GreetingHandler)
 
 
-def main() -> None:
+def main()  None:
     """Run the greeting HTTP server until interrupted."""
     server = create_server()
     host, port = server.server_address

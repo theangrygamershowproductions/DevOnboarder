@@ -10,7 +10,7 @@ parse_retro_actions = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(parse_retro_actions)
 
 
-def test_parse_actions(tmp_path: Path) -> None:
+def test_parse_actions(tmp_path: Path)  None:
     retro_dir = tmp_path / "docs" / "checklists" / "retros"
     retro_dir.mkdir(parents=True)
     file = retro_dir / "2024-07-16.md"
@@ -24,7 +24,7 @@ def test_parse_actions(tmp_path: Path) -> None:
     assert parse_retro_actions.extract_usernames(actions) == ["@alice", "@bob"]
 
 
-def test_cli_owners(tmp_path: Path, capsys) -> None:
+def test_cli_owners(tmp_path: Path, capsys)  None:
     retro_dir = tmp_path / "docs" / "checklists" / "retros"
     retro_dir.mkdir(parents=True)
     (retro_dir / "retro.md").write_text("- [ ] Example @user")

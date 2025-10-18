@@ -71,7 +71,7 @@ check in CI. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for details.
 
    diagnostics-sample.log (legacy reference) for the expected output.
 
-8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
+8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with CtrlC.
 
 9. Visit `http://localhost:8000` to see the greeting server.
 
@@ -469,7 +469,7 @@ from [`checklists/ci-checklist-snippet.md`](../checklists/ci-checklist-snippet.m
 
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
-    Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)
+    Add a `CI_BUILD_OPENAPI` secret under **Settings  Secrets and variables  Actions** (or `OPENAI_API_KEY` if unavailable)
 
     so the workflow can request a patch from OpenAI.
 

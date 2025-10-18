@@ -11,7 +11,7 @@ source scripts/project_root_wrapper.sh
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/setup_tunnel_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/setup_tunnel_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting Cloudflare tunnel setup"
@@ -41,15 +41,15 @@ validate_config() {
     local missing_files=()
 
     if [ ! -f "$CONFIG_DIR/tunnel-config.yml" ]; then
-        missing_files+=("$CONFIG_DIR/tunnel-config.yml")
+        missing_files=("$CONFIG_DIR/tunnel-config.yml")
     fi
 
     if [ ! -f "$CREDENTIALS_DIR/$TUNNEL_ID.json" ]; then
-        missing_files+=("$CREDENTIALS_DIR/$TUNNEL_ID.json")
+        missing_files=("$CREDENTIALS_DIR/$TUNNEL_ID.json")
     fi
 
     if [ ! -f "docker-compose.dev.yaml" ]; then
-        missing_files+=("docker-compose.dev.yaml")
+        missing_files=("docker-compose.dev.yaml")
     fi
 
     if [ ${#missing_files[@]} -gt 0 ]; then
@@ -111,7 +111,7 @@ start_tunnel() {
         fi
         echo "Waiting for services to start (${wait_time}s/${max_wait}s)"
         sleep 10
-        wait_time=$((wait_time + 10))
+        wait_time=$((wait_time  10))
     done
 
     # Show final status

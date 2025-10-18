@@ -7,10 +7,10 @@ import re
 from pathlib import Path
 
 ACTION_RE = re.compile(r"^\s*-\s*\[\s*\]\s*(.*)")
-USER_RE = re.compile(r"@[A-Za-z0-9_-]+")
+USER_RE = re.compile(r"@[A-Za-z0-9_-]")
 
 
-def parse_actions(directory: Path) -> list[str]:
+def parse_actions(directory: Path)  list[str]:
     """Return unresolved action item lines under ``directory``."""
     actions: list[str] = []
     for file in sorted(directory.glob("*.md")):
@@ -20,7 +20,7 @@ def parse_actions(directory: Path) -> list[str]:
     return actions
 
 
-def extract_usernames(actions: list[str]) -> list[str]:
+def extract_usernames(actions: list[str])  list[str]:
     """Return unique GitHub usernames mentioned in ``actions``."""
     users = set()
     for line in actions:
@@ -28,7 +28,7 @@ def extract_usernames(actions: list[str]) -> list[str]:
     return sorted(users)
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None)  int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "path",

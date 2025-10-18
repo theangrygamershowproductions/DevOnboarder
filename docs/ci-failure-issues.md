@@ -98,7 +98,7 @@ Install the CLI from <https://cli.github.com/> if it isn't already available.
 
 ```bash
 export GH_TOKEN=your_personal_token
-for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]+'); do
+for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]'); do
   gh issue close "$n" --reason completed
   echo "Closed CI-failure issue #$n"
 done
@@ -122,7 +122,7 @@ jobs:
             - name: Bulk close all open ci-failure issues
 
               run: |
-                  for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]+'); do
+                  for n in $(gh issue list --label ci-failure --state open | awk '{print $1}' | grep -Eo '[0-9]'); do
                     gh issue close "$n" --reason completed
                     echo "Closed CI-failure issue #$n"
                   done

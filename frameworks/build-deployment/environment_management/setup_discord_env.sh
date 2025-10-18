@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Discord Environment Setup"
@@ -37,7 +37,7 @@ create_env_file() {
 
     cat > "$env_file" << EOF
 # Discord Bot Configuration - $env_name Environment
-# Generated on $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+# Generated on $(date -u "%Y-%m-%d %H:%M:%S UTC")
 
 # Bot Authentication
 DISCORD_BOT_TOKEN=\${DISCORD_BOT_TOKEN:-changeme}
@@ -124,7 +124,7 @@ validate_config() {
 
     for var in "${required_vars[@]}"; do
         if ! grep -q "^${var}=" "$env_file"; then
-            missing_vars+=("$var")
+            missing_vars=("$var")
         fi
     done
 
@@ -275,8 +275,8 @@ npm start
 EOF
 
     # Make scripts executable
-    chmod +x "${BOT_DIR}/start-dev.sh"
-    chmod +x "${BOT_DIR}/start-prod.sh"
+    chmod x "${BOT_DIR}/start-dev.sh"
+    chmod x "${BOT_DIR}/start-prod.sh"
 
     echo "Deployment scripts created:"
     echo "   ${BOT_DIR}/start-dev.sh"

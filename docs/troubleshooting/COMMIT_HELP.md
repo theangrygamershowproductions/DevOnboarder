@@ -58,7 +58,7 @@ You have git utilities and documentation changes that need to be committed. Let'
 
 ## Option 3: Quick Reference
 
-For your current changes (git utilities + documentation), good commit messages would be:
+For your current changes (git utilities  documentation), good commit messages would be:
 
 ```bash
 

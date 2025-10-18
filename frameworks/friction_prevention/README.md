@@ -8,13 +8,13 @@ The Friction Prevention Framework is a comprehensive collection of automation an
 
 ```text
 frameworks/friction_prevention/
-├── automation/           # 20 scripts for automated processes
-├── workflow/            # 11 scripts for workflow enhancement
-├── productivity/        # 3 scripts for productivity tools
-├── developer_experience/# 2 scripts for developer experience
-├── docs/               # Documentation and guides
-├── config/             # Configuration files
-└── README.md           # This file
+── automation/           # 20 scripts for automated processes
+── workflow/            # 11 scripts for workflow enhancement
+── productivity/        # 3 scripts for productivity tools
+── developer_experience/# 2 scripts for developer experience
+── docs/               # Documentation and guides
+── config/             # Configuration files
+── README.md           # This file
 
 Note: Logs are centralized in the project root logs/ directory
 ```
@@ -159,7 +159,7 @@ This framework builds upon the Quality Assurance Framework located at `framework
 ### System Requirements
 
 - **Shell**: Bash/Zsh compatible
-- **Python**: 3.8+ (for Python scripts)
+- **Python**: 3.8 (for Python scripts)
 - **Git**: Version control operations
 - **Virtual Environment**: Mandatory for all operations
 
@@ -240,8 +240,8 @@ The framework is designed for extension:
 - **Framework Version**: 2.0.0
 - **Implementation Date**: 2025-01-27
 - **Last Updated**: 2025-01-27
-- **Total Scripts**: 36 (20 automation + 11 workflow + 3 productivity + 2 developer experience)
-- **Quality Threshold**: 95%+ validation compliance
+- **Total Scripts**: 36 (20 automation  11 workflow  3 productivity  2 developer experience)
+- **Quality Threshold**: 95% validation compliance
 
 ---
 

@@ -20,7 +20,7 @@ from typing import Dict, Tuple
 import re
 
 
-def run(cmd: list[str]) -> str:
+def run(cmd: list[str])  str:
     """Run a command and return its stdout (or stderr on failure).
 
     Returns an empty string if the command did not run or produced no
@@ -35,7 +35,7 @@ def run(cmd: list[str]) -> str:
         return ""
 
 
-def parse_versions(path: Path) -> Dict[str, str]:
+def parse_versions(path: Path)  Dict[str, str]:
     """Parse a simple key: value file into a dict.
 
     Only supports top-level scalar values. Comments and document
@@ -60,7 +60,7 @@ def parse_versions(path: Path) -> Dict[str, str]:
     return data
 
 
-def normalize_observed(key: str, observed: str) -> str:
+def normalize_observed(key: str, observed: str)  str:
     """Normalize common tool version output strings.
 
     Keep normalization conservative: prefer prefix match afterwards.
@@ -84,7 +84,7 @@ def normalize_observed(key: str, observed: str) -> str:
     return observed
 
 
-def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
+def run_checks(spec: Dict[str, str])  Tuple[bool, list[str]]:
     checks = [
         ("python", [sys.executable, "--version"]),
         ("node", ["node", "--version"]),
@@ -114,39 +114,39 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
         #  - major.minor: "x.y" (accept any patch)
         #  - major: "x" (accept any minor/patch)
         #  - simple range: ">=x.y.z,<X.Y.Z"
-        def parse_semver(v: str) -> tuple[int, int, int] | None:
-            m = re.match(r"^(\d+)\.(\d+)\.(\d+)", v)
+        def parse_semver(v: str)  tuple[int, int, int] | None:
+            m = re.match(r"^(\d)\.(\d)\.(\d)", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
 
-        def parse_major_minor(v: str) -> tuple[int, int] | None:
-            m = re.match(r"^(\d+)\.(\d+)$", v)
+        def parse_major_minor(v: str)  tuple[int, int] | None:
+            m = re.match(r"^(\d)\.(\d)$", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)))
 
-        def parse_major(v: str) -> int | None:
-            m = re.match(r"^(\d+)$", v)
+        def parse_major(v: str)  int | None:
+            m = re.match(r"^(\d)$", v)
             if not m:
                 return None
             return int(m.group(1))
 
-        def satisfies_range(spec_str: str, obs: tuple[int, int, int] | None) -> bool:
+        def satisfies_range(spec_str: str, obs: tuple[int, int, int] | None)  bool:
             """Support simple range like '>=x.y.z,<X.Y.Z'."""
             if not obs:
                 return False
             parts = [p.strip() for p in spec_str.split(",") if p.strip()]
             for p in parts:
                 if p.startswith(">="):
-                    m = re.match(r">=(\d+)\.(\d+)\.(\d+)$", p)
+                    m = re.match(r">=(\d)\.(\d)\.(\d)$", p)
                     if not m:
                         return False
                     lower = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
                     if obs < lower:
                         return False
                 elif p.startswith("<"):
-                    m = re.match(r"<(\d+)\.(\d+)\.(\d+)$", p)
+                    m = re.match(r"<(\d)\.(\d)\.(\d)$", p)
                     if not m:
                         return False
                     upper = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
@@ -172,11 +172,11 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
             ):
                 semver_ok = True
         elif exp_mm and obs_sem:
-            # expected major.minor -> accept observed with same major/minor
+            # expected major.minor  accept observed with same major/minor
             if exp_mm[0] == obs_sem[0] and exp_mm[1] == obs_sem[1]:
                 semver_ok = True
         elif exp_m and obs_sem:
-            # expected major only -> accept same major
+            # expected major only  accept same major
             if exp_m == obs_sem[0]:
                 semver_ok = True
         elif "," in expected:
@@ -191,16 +191,16 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
     return (len(failures) == 0, failures)
 
 
-def main() -> int:
+def main()  int:
     spec_path = Path("versions.yaml")
     if not spec_path.exists():
-        print("ERROR: versions.yaml not found at repo root", file=sys.stderr)
+        print(" versions.yaml not found at repo root", file=sys.stderr)
         return 2
 
     try:
         spec = parse_versions(spec_path)
     except Exception as exc:  # pragma: no cover - defensive
-        print(f"ERROR: unable to parse versions.yaml: {exc}", file=sys.stderr)
+        print(f" unable to parse versions.yaml: {exc}", file=sys.stderr)
         return 2
 
     ok, failures = run_checks(spec)

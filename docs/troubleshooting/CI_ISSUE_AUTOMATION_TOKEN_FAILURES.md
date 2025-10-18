@@ -82,7 +82,7 @@ Try authenticating with:  gh auth login
 
 ```text
 Token environment loaded successfully
-[timestamp] ERROR: Failed to create issue
+[timestamp]  Failed to create issue
 
 ```
 

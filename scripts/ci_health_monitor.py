@@ -50,22 +50,22 @@ class CIHealthMonitor:
             "flaky_test_rate": "Rate of intermittent test failures",
         }
 
-    def validate_virtual_environment(self) -> None:
+    def validate_virtual_environment(self)  None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
-            print("❌ Virtual environment not detected")
-            print("💡 DevOnboarder requires virtual environment isolation")
-            print("🔧 Run: python -m venv .venv && source .venv/bin/activate")
+            print(" Virtual environment not detected")
+            print(" DevOnboarder requires virtual environment isolation")
+            print(" Run: python -m venv .venv && source .venv/bin/activate")
             sys.exit(1)
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
-            print(f"❌ Virtual environment invalid: {self.venv_path}")
+            print(f" Virtual environment invalid: {self.venv_path}")
             sys.exit(1)
 
-        print(f"✅ Virtual environment validated: {self.venv_path}")
+        print(f" Virtual environment validated: {self.venv_path}")
 
-    def collect_ci_metrics(self, days_back: int = 7) -> Dict[str, Any]:
+    def collect_ci_metrics(self, days_back: int = 7)  Dict[str, Any]:
         """Collect CI metrics from GitHub Actions."""
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days_back)
@@ -104,7 +104,7 @@ class CIHealthMonitor:
             filtered_runs = []
             for run in runs_data:
                 created_at = datetime.fromisoformat(
-                    run["createdAt"].replace("Z", "+00:00")
+                    run["createdAt"].replace("Z", "00:00")
                 )
                 if start_date <= created_at <= end_date:
                     filtered_runs.append(run)
@@ -117,16 +117,16 @@ class CIHealthMonitor:
                 metrics["alerts"] = self._generate_health_alerts(summary_stats)
 
         except subprocess.CalledProcessError as e:
-            print(f"⚠️  GitHub CLI error: {e}")
-            print("💡 Ensure 'gh' is authenticated and available")
+            print(f"  GitHub CLI error: {e}")
+            print(" Ensure 'gh' is authenticated and available")
             metrics["error"] = str(e)
         except (json.JSONDecodeError, OSError) as e:
-            print(f"❌ Error collecting CI metrics: {e}")
+            print(f" Error collecting CI metrics: {e}")
             metrics["error"] = str(e)
 
         return metrics
 
-    def _calculate_summary_stats(self, runs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _calculate_summary_stats(self, runs: List[Dict[str, Any]])  Dict[str, Any]:
         """Calculate summary statistics from workflow runs."""
         if not runs:
             return {"total_runs": 0, "message": "No runs in period"}
@@ -145,10 +145,10 @@ class CIHealthMonitor:
             if run.get("updatedAt") and run.get("createdAt"):
                 try:
                     created = datetime.fromisoformat(
-                        run["createdAt"].replace("Z", "+00:00")
+                        run["createdAt"].replace("Z", "00:00")
                     )
                     updated = datetime.fromisoformat(
-                        run["updatedAt"].replace("Z", "+00:00")
+                        run["updatedAt"].replace("Z", "00:00")
                     )
                     duration = (updated - created).total_seconds()
                     durations.append(duration)
@@ -172,7 +172,7 @@ class CIHealthMonitor:
             "max_duration_seconds": max(durations) if durations else 0,
         }
 
-    def _calculate_health_score(self, stats: Dict[str, Any]) -> float:
+    def _calculate_health_score(self, stats: Dict[str, Any])  float:
         """Calculate overall CI health score (0-100)."""
         if not stats or stats.get("total_runs", 0) == 0:
             return 0.0
@@ -196,10 +196,10 @@ class CIHealthMonitor:
         cancelled_rate = stats.get("cancelled_runs", 0) / total_runs
         reliability_score = max(0, (1 - cancelled_rate) * reliability_weight * 100)
 
-        total_score = success_score + duration_score + reliability_score
+        total_score = success_score  duration_score  reliability_score
         return round(total_score, 1)
 
-    def _generate_health_alerts(self, stats: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _generate_health_alerts(self, stats: Dict[str, Any])  List[Dict[str, Any]]:
         """Generate health alerts based on thresholds."""
         alerts: List[Dict[str, Any]] = []
 
@@ -259,7 +259,7 @@ class CIHealthMonitor:
 
         return alerts
 
-    def generate_health_report(self, metrics: Dict[str, Any], output_path: str) -> None:
+    def generate_health_report(self, metrics: Dict[str, Any], output_path: str)  None:
         """Generate comprehensive CI health report."""
         report = {
             "ci_health_report": {
@@ -268,18 +268,18 @@ class CIHealthMonitor:
                 "virtual_env": self.venv_path,
                 "metrics": metrics,
                 "recommendations": self._generate_recommendations(metrics),
-                "next_monitoring": (datetime.now() + timedelta(hours=6)).isoformat(),
+                "next_monitoring": (datetime.now()  timedelta(hours=6)).isoformat(),
             }
         }
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"📊 Health report saved: {output_path}")
+        print(f" Health report saved: {output_path}")
 
     def _generate_recommendations(
         self, metrics: Dict[str, Any]
-    ) -> List[Dict[str, str]]:
+    )  List[Dict[str, str]]:
         """Generate actionable recommendations based on metrics."""
         recommendations: List[Dict[str, str]] = []
         stats = metrics.get("summary_stats", {})
@@ -334,10 +334,10 @@ class CIHealthMonitor:
 
     def monitor_continuously(
         self, interval_hours: int = 6, max_iterations: int = 0
-    ) -> None:
+    )  None:
         """Run continuous CI health monitoring."""
         print(
-            f"🔄 Starting continuous CI health monitoring "
+            f"SYNC: Starting continuous CI health monitoring "
             f"(interval: {interval_hours}h)"
         )
 
@@ -345,7 +345,7 @@ class CIHealthMonitor:
         while max_iterations == 0 or iteration < max_iterations:
             try:
                 print(
-                    f"\n⏰ Health check #{iteration + 1} "
+                    f"\n⏰ Health check #{iteration  1} "
                     f"at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 )
 
@@ -353,21 +353,21 @@ class CIHealthMonitor:
                 health_score = metrics.get("health_score", 0)
                 alerts = metrics.get("alerts", [])
 
-                print(f"🏥 CI Health Score: {health_score}/100")
+                print(f"HOSPITAL: CI Health Score: {health_score}/100")
 
                 if alerts:
                     print(f"🚨 Active Alerts: {len(alerts)}")
                     for alert in alerts[:3]:  # Show top 3 alerts
                         print(f"   • {alert['message']}")
                 else:
-                    print("✅ No active alerts")
+                    print(" No active alerts")
 
                 # Save monitoring report
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 report_path = f"logs/ci_health_{timestamp}.json"
                 self.generate_health_report(metrics, report_path)
 
-                iteration += 1
+                iteration = 1
 
                 if max_iterations == 0 or iteration < max_iterations:
                     print(f"⏳ Next check in {interval_hours} hours...")
@@ -377,8 +377,8 @@ class CIHealthMonitor:
                 print("\n🛑 Monitoring stopped by user")
                 break
             except (subprocess.CalledProcessError, FileNotFoundError) as e:
-                print(f"❌ Monitoring error: {e}")
-                print("🔄 Continuing monitoring...")
+                print(f" Monitoring error: {e}")
+                print("SYNC: Continuing monitoring...")
                 time.sleep(300)  # Wait 5 minutes before retry
 
 
@@ -422,13 +422,13 @@ def main():
     if args.continuous:
         monitor.monitor_continuously(args.interval, args.max_iterations)
     else:
-        print(f"🔍 Collecting CI metrics for last {args.days_back} days...")
+        print(f" Collecting CI metrics for last {args.days_back} days...")
         metrics = monitor.collect_ci_metrics(args.days_back)
 
         # Display summary
         stats = metrics.get("summary_stats", {})
         if stats:
-            print("\n📊 CI Health Summary:")
+            print("\n CI Health Summary:")
             print(f"   Total runs: {stats.get('total_runs', 0)}")
             print(f"   Success rate: {stats.get('success_rate', 0):.1%}")
             print(
@@ -443,12 +443,12 @@ def main():
             for alert in alerts:
                 print(f"   • [{alert['severity'].upper()}] {alert['message']}")
         else:
-            print("\n✅ No active health alerts")
+            print("\n No active health alerts")
 
         # Generate report
         monitor.generate_health_report(metrics, args.output)
 
-        print("\n✅ CI health monitoring complete")
+        print("\n CI health monitoring complete")
 
 
 if __name__ == "__main__":

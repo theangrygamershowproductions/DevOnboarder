@@ -27,8 +27,8 @@
 *.potato.*
 *.py[cod]
 *.sublime-*
-*.bak
-*.backup
+*.tmp
+*.temp
 docs-backup/
 .DS_Store
 .Trash-*
@@ -48,6 +48,7 @@ docs-backup/
 .ruff_cache/
 .terraform/
 .venv/
+.test_venv/
 .vscode-integrations/
 .vscode/
 /.coverage*

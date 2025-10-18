@@ -6,9 +6,9 @@
 
 Your pull request is from a fork, so some CI features work differently for security reasons:
 
-- ✅ **Tests run automatically** - Full validation and quality checks happen normally
-- ⚠️ **Auto-fixes are disabled** - Maintainers will help with any formatting or linting issues
-- 🔐 **Some workflows need manual approval** - Standard security practice for external contributions
+-  **Tests run automatically** - Full validation and quality checks happen normally
+-  **Auto-fixes are disabled** - Maintainers will help with any formatting or linting issues
+-  **Some workflows need manual approval** - Standard security practice for external contributions
 - 💬 **Manual maintainer comments** - We'll provide feedback if automated systems can't
 
 ## 📚 **Quick Resources**
@@ -23,7 +23,7 @@ Your pull request is from a fork, so some CI features work differently for secur
 
 - [External PR Security Guide](../docs/EXTERNAL_PR_SECURITY_GUIDE.md) - Technical details about three-tier security model
 
-## 🚀 **What happens next?**
+##  **What happens next?**
 
 1. **CI runs automatically** - Tests and quality checks validate your changes
 2. **Maintainer review** - A team member will review and provide feedback

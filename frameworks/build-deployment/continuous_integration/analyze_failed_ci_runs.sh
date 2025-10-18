@@ -2,7 +2,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -51,8 +51,8 @@ if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,cr
             }) |
             sort_by(-.count) |
             .[] |
-            "### \(.workflow) (\(.count) failures)\n" +
-            (.runs | map("- \(.title) (\(.event) - \(.created))\n  \(.url)") | join("\n")) +
+            "### \(.workflow) (\(.count) failures)\n" 
+            (.runs | map("- \(.title) (\(.event) - \(.created))\n  \(.url)") | join("\n")) 
             "\n"
         '
 

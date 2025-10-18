@@ -56,7 +56,7 @@ class FileVersionTracker:
         self.tracking_file.parent.mkdir(parents=True, exist_ok=True)
         self.version_data = self._load_version_data()
 
-    def _load_version_data(self) -> Dict[str, Any]:
+    def _load_version_data(self)  Dict[str, Any]:
         """Load existing version tracking data.
 
         Returns
@@ -74,12 +74,12 @@ class FileVersionTracker:
 
         return {"files": {}, "snapshots": {}}
 
-    def _save_version_data(self) -> None:
+    def _save_version_data(self)  None:
         """Save version tracking data to file."""
         with open(self.tracking_file, "w", encoding="utf-8") as file:
             json.dump(self.version_data, file, indent=2, ensure_ascii=False)
 
-    def _calculate_file_hash(self, file_path: Path) -> str:
+    def _calculate_file_hash(self, file_path: Path)  str:
         """Calculate SHA-256 hash of file content.
 
         Parameters
@@ -104,7 +104,7 @@ class FileVersionTracker:
 
     def scan_workspace_files(
         self, include_patterns: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Scan workspace files and record their current state.
 
         Parameters
@@ -168,7 +168,7 @@ class FileVersionTracker:
 
         return current_snapshot
 
-    def _should_exclude_file(self, file_path: Path) -> bool:
+    def _should_exclude_file(self, file_path: Path)  bool:
         """Check if file should be excluded from tracking.
 
         Parameters
@@ -208,7 +208,7 @@ class FileVersionTracker:
 
         return False
 
-    def _get_git_info(self) -> Dict[str, str]:
+    def _get_git_info(self)  Dict[str, str]:
         """Get current Git information.
 
         Returns
@@ -254,7 +254,7 @@ class FileVersionTracker:
 
         return git_info
 
-    def create_snapshot(self, snapshot_name: str) -> str:
+    def create_snapshot(self, snapshot_name: str)  str:
         """Create a named snapshot of current file state.
 
         Parameters
@@ -275,7 +275,7 @@ class FileVersionTracker:
 
         return snapshot_id
 
-    def compare_snapshots(self, snapshot1_id: str, snapshot2_id: str) -> Dict[str, Any]:
+    def compare_snapshots(self, snapshot1_id: str, snapshot2_id: str)  Dict[str, Any]:
         """Compare two snapshots to identify changes.
 
         Parameters
@@ -362,7 +362,7 @@ class FileVersionTracker:
 
         return comparison
 
-    def get_changes_since_commit(self, commit_hash: str) -> Dict[str, Any]:
+    def get_changes_since_commit(self, commit_hash: str)  Dict[str, Any]:
         """Get file changes since a specific Git commit.
 
         Parameters
@@ -421,7 +421,7 @@ class FileVersionTracker:
         except (subprocess.CalledProcessError, FileNotFoundError) as error:
             return {"error": f"Git diff failed: {error}"}
 
-    def generate_change_report(self, comparison_data: Dict[str, Any]) -> str:
+    def generate_change_report(self, comparison_data: Dict[str, Any])  str:
         """Generate human-readable change report.
 
         Parameters
@@ -479,7 +479,7 @@ class FileVersionTracker:
                 for file_info in comparison_data["modified_files"]:
                     size_change = file_info["size_change"]
                     change_indicator = (
-                        f"+{size_change}" if size_change >= 0 else str(size_change)
+                        f"{size_change}" if size_change >= 0 else str(size_change)
                     )
                     report_lines.append(
                         f"- `{file_info['path']}` ({change_indicator} bytes)"
@@ -519,7 +519,7 @@ class FileVersionTracker:
                         # Renamed files
                         for file_info in files:
                             report_lines.append(
-                                f"- `{file_info['old_path']}` → "
+                                f"- `{file_info['old_path']}`  "
                                 f"`{file_info['new_path']}`"
                             )
                     else:
@@ -531,7 +531,7 @@ class FileVersionTracker:
 
         return "\n".join(report_lines)
 
-    def cleanup_old_snapshots(self, keep_count: int = 50) -> int:
+    def cleanup_old_snapshots(self, keep_count: int = 50)  int:
         """Clean up old snapshots to prevent storage bloat.
 
         Parameters
@@ -594,7 +594,7 @@ def main():
 
     # Validate virtual environment
     if not sys.prefix.endswith(".venv"):
-        print("ERROR: Must run in virtual environment (.venv)")
+        print(" Must run in virtual environment (.venv)")
         print("Run: source .venv/bin/activate")
         sys.exit(1)
 
@@ -641,7 +641,7 @@ def main():
             print(f"Created current snapshot: {snapshot_id}")
 
     except Exception as error:
-        print(f"ERROR: File tracking failed: {error}")
+        print(f" File tracking failed: {error}")
         sys.exit(1)
 
 

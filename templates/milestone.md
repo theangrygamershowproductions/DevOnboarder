@@ -44,7 +44,7 @@ visibility: internal
 
 ## [Strategic Impact Analysis OR Technical Implementation]
 
-<!-- For organizational/process improvements, use Strategic Impact Analysis -->
+<!-- For organizational/process improvements, use Strategic Impact Analysis -
 
 ### Strategic Impact Analysis
 
@@ -56,7 +56,7 @@ visibility: internal
 
 | Quality Gates | Manual process | Automated validation | **Efficiency gain** |
 
-<!-- For technical milestones, use Technical Implementation -->
+<!-- For technical milestones, use Technical Implementation -
 
 ### Technical Implementation
 

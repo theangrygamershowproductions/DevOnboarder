@@ -34,17 +34,17 @@ This guide provides step-by-step, reproducible instructions for setting up DevOn
 
 **DevOnboarder Phases**:
 
-- ✅ **Phase 1**: Foundation Stabilization Framework
-- ✅ **Phase 2**: Terminal Output Compliance (Zero violations achieved)
-- ✅ **Phase 3**: Monitoring & Automation Framework (32+ scripts delivered)
+-  **Phase 1**: Foundation Stabilization Framework
+-  **Phase 2**: Terminal Output Compliance (Zero violations achieved)
+-  **Phase 3**: Monitoring & Automation Framework (32 scripts delivered)
 - ⏳ **Phase 4**: CI Triage Guard Intelligence (Next phase)
-- 📋 **Phase 5**: Advanced Orchestration + ML Analytics (Planned)
+-  **Phase 5**: Advanced Orchestration  ML Analytics (Planned)
 
-## 📋 Prerequisites
+##  Prerequisites
 
 ### System Requirements
 
-- **Operating System**: Ubuntu 20.04+ (or compatible Linux distribution)
+- **Operating System**: Ubuntu 20.04 (or compatible Linux distribution)
 
 - **Memory**: 8GB RAM minimum, 16GB recommended
 
@@ -59,11 +59,11 @@ This guide provides step-by-step, reproducible instructions for setting up DevOn
 | Python | 3.12 | `mise install` or `asdf install` |
 | Node.js | 22 | `mise install` or `asdf install` |
 | Docker | Latest | Package manager |
-| Docker Compose | v2+ | Package manager |
+| Docker Compose | v2 | Package manager |
 
-| Git | 2.34+ | Package manager |
+| Git | 2.34 | Package manager |
 
-## 🚀 Phase 1: Initial Setup
+##  Phase 1: Initial Setup
 
 ### 1.1 System Setup
 
@@ -136,9 +136,51 @@ bash scripts/setup_github_gpg_keys.sh
 
 # Verify installation
 
-python -c "import devonboarder; print('✅ DevOnboarder package installed')"
+python -c "import devonboarder; print(' DevOnboarder package installed')"
 
 ```
+
+#### Python Command Issues in Virtual Environments
+
+**Problem**: The `python` command may not work in virtual environments due to a shell function override.
+
+**Symptoms**:
+```bash
+$ python --version
+Python not found --version
+```
+
+**Root Cause**: A shell function `python() { echo -e "${YELLOW}PYTHON:${NC} $1"; }` overrides the virtual environment's python command.
+
+**Solution**: Use this smart python function in your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+# Smart python function that works with virtual environments
+python() {
+    # Check if we're in a virtual environment and the command looks like Python interpreter usage
+    if [[ -n "${VIRTUAL_ENV:-}" && ( "$1" == "--version" || "$1" == "-c" || "$1" == "-m" || "$1" =~ \.py$ || "$1" == "" ) ]]; then
+        # Run the actual python interpreter
+        command python "$@"
+    else
+        # Original behavior - show colored output
+        echo -e "${YELLOW}PYTHON:${NC} $1"
+    fi
+}
+```
+
+**Testing**:
+```bash
+# In virtual environment - runs Python interpreter
+python --version    #  Python 3.12.3
+
+# Outside virtual environment or with other args - shows colored output  
+python test         #  PYTHON: test
+```
+
+**Workarounds** (if you can't modify shell config):
+- Use `python3` instead of `python`
+- Use `unset -f python` in virtual environments
+- Use full path: `.venv/bin/python`
 
 ## 🔒 Phase 2: Enhanced Potato Policy Security
 
@@ -228,7 +270,7 @@ rm test_commit.txt
 
 ```
 
-## 🔍 Phase 4: CI Triage Guard Intelligence
+##  Phase 4: CI Triage Guard Intelligence
 
 ### 4.1 Enhanced CI Failure Analyzer Setup
 
@@ -237,7 +279,7 @@ rm test_commit.txt
 # Verify CI analysis dependencies
 
 source .venv/bin/activate
-python -c "import json, re, sys; print('✅ CI Analyzer dependencies available')"
+python -c "import json, re, sys; print(' CI Analyzer dependencies available')"
 
 # Test CI failure analysis (if logs exist)
 
@@ -261,11 +303,11 @@ python scripts/ci_health_monitor.py
 
 # Verify GitHub CLI integration (requires authentication)
 
-gh auth status || echo "⚠️ GitHub CLI authentication required for full CI monitoring"
+gh auth status || echo " GitHub CLI authentication required for full CI monitoring"
 
 ```
 
-## 🤖 Phase 5: Advanced Orchestration + ML Analytics
+## 🤖 Phase 5: Advanced Orchestration  ML Analytics
 
 ### 5.1 ML Dependencies Installation
 
@@ -274,7 +316,7 @@ gh auth status || echo "⚠️ GitHub CLI authentication required for full CI mo
 # Verify ML dependencies are installed
 
 source .venv/bin/activate
-python -c "import sklearn, aiohttp, psutil; print('✅ All Phase 5 dependencies available')"
+python -c "import sklearn, aiohttp, psutil; print(' All Phase 5 dependencies available')"
 
 # If dependencies missing, reinstall
 
@@ -293,7 +335,7 @@ python scripts/predictive_analytics.py
 
 # Expected output
 
-# ✅ Predictive Analytics virtual environment: /path/to/.venv
+#  Predictive Analytics virtual environment: /path/to/.venv
 
 # 🔮 DevOnboarder Predictive Analytics Results
 
@@ -301,7 +343,7 @@ python scripts/predictive_analytics.py
 
 #    Performance Forecast: XX.X/100
 
-# 📊 Prediction report saved: logs/predictive_analytics_report.json
+#  Prediction report saved: logs/predictive_analytics_report.json
 
 ```
 
@@ -316,19 +358,19 @@ python scripts/advanced_orchestrator.py
 
 # Expected behavior
 
-# ✅ Phase 5 Virtual environment validated
+#  Phase 5 Virtual environment validated
 
-# 🚀 Starting DevOnboarder Advanced Orchestration
+#  Starting DevOnboarder Advanced Orchestration
 
-# 🔄 Starting service: database
+# SYNC: Starting service: database
 
-# ⚠️ Health check failed for database (expected if PostgreSQL not running)
+#  Health check failed for database (expected if PostgreSQL not running)
 
-# ❌ Orchestration failed: Service database failed health check (expected)
+#  Orchestration failed: Service database failed health check (expected)
 
 ```
 
-## 🏗️ Service Deployment
+## BUILD: Service Deployment
 
 ### 6.1 Database Setup
 
@@ -402,7 +444,7 @@ cd bot && npm start
 
 ```
 
-## ✅ Verification & Testing
+##  Verification & Testing
 
 ### 7.1 Comprehensive System Test
 
@@ -518,7 +560,7 @@ python scripts/advanced_orchestrator.py
 
 ```
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues & Solutions
 
@@ -615,7 +657,7 @@ The following patterns require manual fixes:
 
 ```markdown
 
-# ✅ CORRECT - MD032 compliant
+#  CORRECT - MD032 compliant
 
 This is a paragraph.
 
@@ -629,7 +671,7 @@ This is a paragraph.
 
 Another paragraph after blank line.
 
-# ❌ WRONG - MD032 violation
+#  WRONG - MD032 violation
 
 This is a paragraph.
 
@@ -660,11 +702,11 @@ bash scripts/manage_logs.sh clean
 
 ```
 
-## 📊 Expected Outcomes
+##  Expected Outcomes
 
 After completing this setup guide, you should have:
 
-### ✅ Working Components
+###  Working Components
 
 - **Python 3.12** virtual environment with all dependencies
 
@@ -678,13 +720,13 @@ After completing this setup guide, you should have:
 
 - **Clean repository** with Root Artifact Guard
 
-- **Intelligent CI analysis** with 80%+ failure detection accuracy
+- **Intelligent CI analysis** with 80% failure detection accuracy
 
 - **ML-powered orchestration** with 84.1% prediction accuracy
 
-### ✅ Validated Features
+###  Validated Features
 
-- **Service orchestration**: `database → auth → backend → xp → bot → frontend`
+- **Service orchestration**: `database  auth  backend  xp  bot  frontend`
 
 - **Predictive analytics**: Real-time failure risk and performance forecasting
 
@@ -692,11 +734,11 @@ After completing this setup guide, you should have:
 
 - **Security policies**: Comprehensive protection against sensitive data exposure
 
-- **Quality assurance**: 95%+ test coverage with automated validation
+- **Quality assurance**: 95% test coverage with automated validation
 
 - **Markdown compliance**: All documentation follows MD032 and other linting rules
 
-### ✅ Production Readiness
+###  Production Readiness
 
 - **Automated deployment** via Docker Compose
 
@@ -710,7 +752,7 @@ After completing this setup guide, you should have:
 
 - **Linting compliance**: Pre-commit hooks enforce markdown standards including MD032
 
-## 🚀 Next Steps
+##  Next Steps
 
 1. **Team Onboarding**: Share this guide with team members
 
@@ -722,7 +764,7 @@ After completing this setup guide, you should have:
 
 5. **Customization**: Adapt configurations for your specific needs
 
-## 📝 Markdown Standards Compliance
+##  Markdown Standards Compliance
 
 When creating or editing markdown files in DevOnboarder, ensure compliance with these key rules:
 
@@ -730,7 +772,7 @@ When creating or editing markdown files in DevOnboarder, ensure compliance with 
 
 ```markdown
 
-# ✅ CORRECT
+#  CORRECT
 
 Paragraph text.
 
@@ -742,7 +784,7 @@ Paragraph text.
 
 Another paragraph.
 
-# ❌ WRONG
+#  WRONG
 
 Paragraph text.
 
@@ -774,7 +816,7 @@ npx markdownlint --fix *.md
 
 ---
 
-**All 5 Phases Complete**: ✅ Modern Infrastructure + Security + Hygiene + Intelligence + ML Orchestration
+**All 5 Phases Complete**:  Modern Infrastructure  Security  Hygiene  Intelligence  ML Orchestration
 
 **Status**: Production-ready autonomous development platform
 **Last Updated**: July 29, 2025

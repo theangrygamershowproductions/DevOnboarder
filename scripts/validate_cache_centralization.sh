@@ -40,7 +40,7 @@ fi
 
 # Verify centralized cache directories exist
 if [ ! -d "logs/.pytest_cache" ] && [ ! -d "logs/.mypy_cache" ]; then
-    echo "INFO: No cache directories in logs/ yet (will be created on first run)"
+    echo " No cache directories in logs/ yet (will be created on first run)"
 fi
 
 if [ "$POLLUTION_FOUND" = true ]; then
@@ -48,7 +48,7 @@ if [ "$POLLUTION_FOUND" = true ]; then
     echo "Solution: Run cache cleanup with: bash scripts/manage_logs.sh cache clean"
     exit 1
 else
-    echo "SUCCESS: No cache pollution found in repository root"
+    echo " No cache pollution found in repository root"
     echo "Centralized cache management compliance verified"
     exit 0
 fi

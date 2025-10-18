@@ -6,7 +6,7 @@ set -e
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Setting up DevOnboarder VS Code Integration..."
@@ -167,7 +167,7 @@ echo "   .vscode/tasks.json - DevOnboarder validation commands"
 echo "   .vscode/extensions.json - Recommended extensions"
 echo ""
 echo "Usage:"
-echo "   Ctrl+Shift+P → 'Tasks: Run Task' → Select DevOnboarder validation"
+echo "   CtrlShiftP  'Tasks: Run Task'  Select DevOnboarder validation"
 echo "   Install recommended extensions when prompted"
 echo "   YAML files now have consistent linting with CI"
 echo ""

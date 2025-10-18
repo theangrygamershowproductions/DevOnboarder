@@ -18,7 +18,7 @@ automation scripts while maintaining standalone execution capability.
 from datetime import datetime, timezone
 
 
-def get_utc_display_timestamp() -> str:
+def get_utc_display_timestamp()  str:
     """
     Fallback UTC timestamp function for standalone script execution.
 
@@ -33,7 +33,7 @@ def get_utc_display_timestamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 
-def get_utc_timestamp() -> str:
+def get_utc_timestamp()  str:
     """
     Fallback UTC timestamp in GitHub API compatible format.
 
@@ -48,7 +48,7 @@ def get_utc_timestamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def get_local_timestamp_for_filename() -> str:
+def get_local_timestamp_for_filename()  str:
     """
     Get local timestamp suitable for filename generation.
 

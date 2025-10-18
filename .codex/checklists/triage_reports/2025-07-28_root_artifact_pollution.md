@@ -26,7 +26,7 @@ tags:
 
 ---
 
-# 🔍 CI TRIAGE REPORT: Root Artifact Pollution
+#  CI TRIAGE REPORT: Root Artifact Pollution
 
 ## EXECUTIVE SUMMARY
 
@@ -36,7 +36,7 @@ tags:
 
 ---
 
-## 1. ✅ **Failing Hook Name(s)**
+## 1.  **Failing Hook Name(s)**
 
 - `root-artifact-guard` (enforce-no-root-artifacts)
 
@@ -46,18 +46,18 @@ tags:
 
 ---
 
-## 2. 📄 **File(s) or Line(s) Causing Failures**
+## 2. FILE: **File(s) or Line(s) Causing Failures**
 
 **Common Pollution Patterns**:
 
 ```markdown
-./vale-results.json → Should be logs/vale-results.json
-./test.db → Temporary file should be cleaned
-./.coverage* → Should be logs/.coverage
+./vale-results.json  Should be logs/vale-results.json
+./test.db  Temporary file should be cleaned
+./.coverage*  Should be logs/.coverage
 
-./config_backups/ → Unnecessary when committing changes
-./**pycache**/ → Should be cleaned after use
-./pytest-of-*/ → Pytest sandbox directories
+./config_backups/  Unnecessary when committing changes
+./**pycache**/  Should be cleaned after use
+./pytest-of-*/  Pytest sandbox directories
 
 ```
 
@@ -69,12 +69,12 @@ tags:
 
 ```markdown
 
-🔍 Root Artifact Guard: Scanning repository root for pollution artifacts...
-❌ VIOLATION: Vale results in root (should be in logs/)
-./vale-results.json → should be logs/vale-results.json
-❌ VIOLATION: Temporary database files in root
-./test.db → temporary file should be cleaned
-❌ Root Artifact Guard: Found 2 types of root pollution
+ Root Artifact Guard: Scanning repository root for pollution artifacts...
+ VIOLATION: Vale results in root (should be in logs/)
+./vale-results.json  should be logs/vale-results.json
+ VIOLATION: Temporary database files in root
+./test.db  temporary file should be cleaned
+ Root Artifact Guard: Found 2 types of root pollution
 
 ```
 
@@ -104,7 +104,7 @@ tags:
 
 ---
 
-## 5. 📌 **Cause Classification**
+## 5. PIN: **Cause Classification**
 
 - [x] **Artifact/sandbox pollution** – Tool output and temporary files
 
@@ -122,7 +122,7 @@ tags:
 
 ---
 
-## 6. ✅ **Confidence Level: HIGH**
+## 6.  **Confidence Level: HIGH**
 
 **Evidence**:
 
@@ -146,7 +146,7 @@ tags:
     rm -f vale-results.json test.db .coverage*
     rm -rf .pytest_cache __pycache__ .tox config_backups/
 
-    find . -name 'pytest-of-*' -type d -exec rm -rf {} +
+    find . -name 'pytest-of-*' -type d -exec rm -rf {} 
     ```
 
 2. **Verify clean state**:
@@ -237,13 +237,13 @@ mkdir -p logs && mv test.db logs/test.db
 
 Resolution is successful when:
 
-- ✅ **Zero root pollution**: No monitored artifacts in repository root
+-  **Zero root pollution**: No monitored artifacts in repository root
 
-- ✅ **Clean git status**: All files properly contained or ignored
+-  **Clean git status**: All files properly contained or ignored
 
-- ✅ **Pre-commit passing**: Root artifact guard validates clean state
+-  **Pre-commit passing**: Root artifact guard validates clean state
 
-- ✅ **Tool compliance**: All outputs directed to appropriate locations
+-  **Tool compliance**: All outputs directed to appropriate locations
 
 ### **Verification Commands**
 
@@ -272,7 +272,7 @@ trigger_patterns:
 
     - ".coverage files outside logs/"
 
-    - "Root Artifact Guard: Found [0-9]+ types of root pollution"
+    - "Root Artifact Guard: Found [0-9] types of root pollution"
 
 ```
 

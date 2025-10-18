@@ -163,7 +163,7 @@ git commit -m "Fix quality issues identified by QC"
 
 ## Examples
 
-### ❌ FORBIDDEN - Unauthorized Usage
+###  FORBIDDEN - Unauthorized Usage
 
 ```bash
 
@@ -175,7 +175,7 @@ git commit --no-verify -m "Skip linting"
 
 ```
 
-### ✅ AUTHORIZED - Emergency Usage
+###  AUTHORIZED - Emergency Usage
 
 ```bash
 
@@ -191,7 +191,7 @@ git commit --no-verify -m "EMERGENCY: Fix auth service crash in user validation"
 
 ```
 
-### ✅ PREFERRED - Proper Quality Resolution
+###  PREFERRED - Proper Quality Resolution
 
 ```bash
 

@@ -152,7 +152,7 @@ This is a **CRITICAL INFRASTRUCTURE REQUIREMENT** enforced by CI/CD pipelines:
 # MANDATORY: All scripts create logs in centralized location
 
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # MANDATORY: All workflows use centralized logging
@@ -179,23 +179,23 @@ command 2>&1 | tee logs/step-name.log
 
 ```bash
 
-# ✅ CORRECT - Simple text only (MANDATORY)
+#  CORRECT - Simple text only (MANDATORY)
 
 echo "Task completed successfully"
 echo "Files processed: 5"
 echo "Next steps: Review and commit"
 
-# ✅ CORRECT - Plain ASCII characters only
+#  CORRECT - Plain ASCII characters only
 
 echo "Status: Implementation complete"
 echo "Result: All tests passing"
 echo "Action: Ready for deployment"
 
-# ❌ FORBIDDEN - These WILL cause terminal hanging
+#  FORBIDDEN - These WILL cause terminal hanging
 
-echo "✅ Multi-line output here"        # Emojis cause hanging
+echo " Multi-line output here"        # Emojis cause hanging
 
-echo "📋 Works with emojis"             # Unicode causes hanging
+echo " Works with emojis"             # Unicode causes hanging
 
 echo "🎯 No escaping issues"            # Special chars cause hanging
 
@@ -230,13 +230,13 @@ echo -e "Line1\nLine2\nLine3"          # Escape sequences cause hanging
 
 **CRITICAL CHARACTER RESTRICTIONS**:
 
-- ❌ **NO EMOJIS**: ✅, ❌, 🎯, 🚀, 📋, 🔍, 📝, 💡, ⚠️, etc.
+-  **NO EMOJIS**: , , 🎯, , , , , , , etc.
 
-- ❌ **NO UNICODE**: Special symbols, arrows, bullets, etc.
+-  **NO UNICODE**: Special symbols, arrows, bullets, etc.
 
-- ❌ **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
+-  **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
 
-- ✅ **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
+-  **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
 
 **Safe Usage Patterns**:
 
@@ -285,13 +285,13 @@ DevOnboarder enforces strict git-aware scripting practices to prevent pollution 
 
 ```bash
 
-# ✅ CORRECT - Git-aware file discovery (respects .gitignore)
+#  CORRECT - Git-aware file discovery (respects .gitignore)
 
 git ls-files '*.md'                          # List tracked markdown files
 git ls-files --others --exclude-standard     # List untracked files (respects .gitignore)
 git ls-files src/ | grep '\.py$'            # Find Python files in src/
 
-# ❌ FORBIDDEN - Disk-based discovery (ignores .gitignore)
+#  FORBIDDEN - Disk-based discovery (ignores .gitignore)
 
 find . -name '*.md'                          # Searches ALL files including node_modules/
 find . -type f -name '*.py'                  # Bypasses .gitignore completely

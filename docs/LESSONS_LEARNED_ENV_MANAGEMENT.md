@@ -67,7 +67,7 @@ This document captures critical lessons learned during the implementation of Dev
 
 # .env.prod (19 production secrets, gitignored)
 
-# .env.ci (17 test values + 1 production value TOKEN_EXPIRE_SECONDS, committed)
+# .env.ci (17 test values  1 production value TOKEN_EXPIRE_SECONDS, committed)
 
 ```
 
@@ -83,7 +83,7 @@ This document captures critical lessons learned during the implementation of Dev
 
 **What We Learned**:
 
-- Manual environment file maintenance creates inconsistencies across 4+ files
+- Manual environment file maintenance creates inconsistencies across 4 files
 
 - `.env` as single source of truth with intelligent synchronization prevents drift
 
@@ -93,7 +93,7 @@ This document captures critical lessons learned during the implementation of Dev
 
 **Evidence**:
 
-- Fixed 53+ environment variable mismatches across files
+- Fixed 53 environment variable mismatches across files
 
 - Reduced manual maintenance from 4 files to 1 source file
 
@@ -334,7 +334,7 @@ Add after existing shellcheck patterns:
 
 ```markdown
 
-### ⚠️ NEW: Environment Variable Management for Agents
+###  NEW: Environment Variable Management for Agents
 
 **CRITICAL UNDERSTANDING**: DevOnboarder uses centralized environment variable management with security boundaries.
 
@@ -352,12 +352,12 @@ Add after existing shellcheck patterns:
 
 ```bash
 
-# ✅ CORRECT - Centralized management
+#  CORRECT - Centralized management
 
 echo "NEW_VARIABLE=value" >> .env
 bash scripts/smart_env_sync.sh --sync-all
 
-# ❌ WRONG - Manual multi-file editing
+#  WRONG - Manual multi-file editing
 
 echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 
@@ -375,27 +375,27 @@ Add to existing troubleshooting section:
 
 1. **Environment File Inconsistencies**:
 
-   - ✅ **Solution**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
+   -  **Solution**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
 
-   - ✅ **Fix**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
+   -  **Fix**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
 
-   - ❌ **NOT**: Manually edit individual environment files
+   -  **NOT**: Manually edit individual environment files
 
 2. **Security Audit Failures**:
 
-   - ✅ **Detection**: Run `bash scripts/env_security_audit.sh`
+   -  **Detection**: Run `bash scripts/env_security_audit.sh`
 
-   - ✅ **Pattern**: Production secrets in CI files (CRITICAL violation)
+   -  **Pattern**: Production secrets in CI files (CRITICAL violation)
 
-   - ✅ **Solution**: Move production secrets to gitignored files only
+   -  **Solution**: Move production secrets to gitignored files only
 
 3. **Tunnel Hostname Validation Failures**:
 
-   - ✅ **Pattern**: "ERROR: uses old multi-subdomain format"
+   -  **Pattern**: " uses old multi-subdomain format"
 
-   - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
+   -  **Solution**: Use single domain format (auth.theangrygamershow.com)
 
-   - ❌ **NOT**: Disable validation to avoid errors
+   -  **NOT**: Disable validation to avoid errors
 
 ```
 

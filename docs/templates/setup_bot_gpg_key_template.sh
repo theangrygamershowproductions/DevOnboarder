@@ -41,11 +41,11 @@ rm "$GPG_BATCH_FILE"
 KEY_ID=$(gpg --list-secret-keys --with-colons "$BOT_EMAIL" | awk -F: '/^sec:/ {print $5}')
 
 if [ -z "$KEY_ID" ]; then
-    echo "ERROR: Failed to generate or find GPG key"
+    echo " Failed to generate or find GPG key"
     exit 1
 fi
 
-echo "✅ GPG key generated successfully!"
+echo " GPG key generated successfully!"
 echo "Key ID: $KEY_ID"
 echo ""
 
@@ -59,16 +59,16 @@ PUBLIC_KEY=$(gpg --export --armor "$KEY_ID")
 
 echo ""
 echo "=========================================="
-echo "📋 GITHUB CONFIGURATION REQUIRED"
+echo " GITHUB CONFIGURATION REQUIRED"
 echo "=========================================="
 echo ""
-echo "1. ADD REPOSITORY SECRETS (Settings → Secrets and variables → Actions → Repository secrets):"
+echo "1. ADD REPOSITORY SECRETS (Settings  Secrets and variables  Actions  Repository secrets):"
 echo ""
 echo "   Secret Name: {BOT_NAME_UPPER}_GPG_PRIVATE"
 echo "   Secret Value:"
 echo "$PRIVATE_KEY_B64"
 echo ""
-echo "2. ADD REPOSITORY VARIABLES (Settings → Secrets and variables → Actions → Repository variables):"
+echo "2. ADD REPOSITORY VARIABLES (Settings  Secrets and variables  Actions  Repository variables):"
 echo ""
 echo "   Variable Name: {BOT_NAME_UPPER}_GPG_KEY_ID"
 echo "   Variable Value: $KEY_ID"
@@ -89,11 +89,11 @@ echo ""
 echo "4. UPDATE YOUR WORKFLOW:"
 echo ""
 echo "   Replace placeholders in your workflow file:"
-echo "   - {BOT_NAME} → {BOT_NAME_UPPER} (for secrets/variables)"
+echo "   - {BOT_NAME}  {BOT_NAME_UPPER} (for secrets/variables)"
 echo "   - Update env variables in GPG setup step"
 echo ""
 echo "=========================================="
-echo "✅ SETUP COMPLETE"
+echo " SETUP COMPLETE"
 echo "=========================================="
 echo ""
 echo "Your workflow should now use these environment variables:"

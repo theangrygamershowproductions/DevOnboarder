@@ -21,7 +21,7 @@ echo "Fetching remote branches..."
 # prune deleted remote refs
 git fetch origin --prune
 
-cutoff=$(date -d "${DAYS_STALE} days ago" +%s)
+cutoff=$(date -d "${DAYS_STALE} days ago" %s)
 
 # List merged branches
 while read -r branch; do

@@ -117,14 +117,14 @@ The automation integration implementation provides seamless coordination between
 
 ```mermaid
 graph TD
-    A[CI/CD Pipeline] --> B[Service Orchestration]
-    B --> C[Discord Bot]
-    B --> D[API Services]
-    B --> E[Frontend]
-    C --> F[Backend Integration]
-    D --> F
-    E --> F
-    F --> G[Database]
+    A[CI/CD Pipeline] - B[Service Orchestration]
+    B - C[Discord Bot]
+    B - D[API Services]
+    B - E[Frontend]
+    C - F[Backend Integration]
+    D - F
+    E - F
+    F - G[Database]
 
 ```
 

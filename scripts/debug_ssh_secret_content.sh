@@ -12,16 +12,16 @@ echo "================================="
 SSH_KEY_PATH="$HOME/.devonboarder-keys/pmbot_ed25519"
 
 if [[ ! -f "$SSH_KEY_PATH" ]]; then
-    echo "ERROR: SSH key not found at $SSH_KEY_PATH"
+    echo " SSH key not found at $SSH_KEY_PATH"
     echo "Run ./scripts/generate_persistent_gpg_keys.sh first"
     exit 1
 fi
 
 echo "1. Current local key validation:"
 if ssh-keygen -y -f "$SSH_KEY_PATH" > /dev/null 2>&1; then
-    echo "✅ Local key is valid"
+    echo " Local key is valid"
 else
-    echo "❌ Local key is invalid"
+    echo " Local key is invalid"
     exit 1
 fi
 
@@ -52,18 +52,18 @@ echo ""
 echo "5. Character analysis:"
 echo "   Contains Windows line endings (CRLF):"
 if grep -q $'\r' "$SSH_KEY_PATH"; then
-    echo "   ❌ YES - This could cause GitHub Actions issues!"
+    echo "    YES - This could cause GitHub Actions issues!"
     echo "   Run: dos2unix $SSH_KEY_PATH"
 else
-    echo "   ✅ NO - Uses Unix line endings (LF)"
+    echo "    NO - Uses Unix line endings (LF)"
 fi
 
 echo ""
 echo "   Contains null bytes:"
 if grep -q $'\0' "$SSH_KEY_PATH"; then
-    echo "   ❌ YES - This will cause issues!"
+    echo "    YES - This will cause issues!"
 else
-    echo "   ✅ NO - No null bytes found"
+    echo "    NO - No null bytes found"
 fi
 
 echo ""
@@ -74,9 +74,9 @@ printf '   printf method:\n'
 CONTENT=$(cat "$SSH_KEY_PATH")
 printf '%s\n' "$CONTENT" > /tmp/test_printf_method
 if ssh-keygen -y -f /tmp/test_printf_method > /dev/null 2>&1; then
-    echo "   ✅ printf method produces valid key"
+    echo "    printf method produces valid key"
 else
-    echo "   ❌ printf method produces invalid key"
+    echo "    printf method produces invalid key"
     echo "   Size: $(stat -c%s /tmp/test_printf_method) bytes"
     echo "   Lines: $(wc -l < /tmp/test_printf_method)"
 fi

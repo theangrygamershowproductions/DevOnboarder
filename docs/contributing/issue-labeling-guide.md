@@ -45,9 +45,9 @@ Effort labels estimate implementation complexity and time investment:
 |-------|-------------|----------------|-------|
 | `effort-small` | 1-2 day implementations | Quick fixes, minor enhancements | ![#c2e0c6](https://via.placeholder.com/15/c2e0c6/c2e0c6.png) Light Green |
 | `effort-medium` | 3-5 day implementations | Feature development, moderate refactoring | ![#fef2c0](https://via.placeholder.com/15/fef2c0/fef2c0.png) Light Yellow |
-| `effort-large` | 1+ week implementations | Major features, architectural changes | ![#f9d0c4](https://via.placeholder.com/15/f9d0c4/f9d0c4.png) Light Red |
+| `effort-large` | 1 week implementations | Major features, architectural changes | ![#f9d0c4](https://via.placeholder.com/15/f9d0c4/f9d0c4.png) Light Red |
 
-### 🏗️ Component Labels
+### BUILD: Component Labels
 
 Component labels categorize issues by technical area:
 
@@ -59,7 +59,7 @@ Component labels categorize issues by technical area:
 | `cross-platform` | Platform compatibility improvements | Windows support, macOS compatibility | ![#5319e7](https://via.placeholder.com/15/5319e7/5319e7.png) Purple |
 | `performance` | Speed and efficiency improvements | Optimization, caching, resource usage | ![#ff6600](https://via.placeholder.com/15/ff6600/ff6600.png) Orange |
 
-### 📋 Standard GitHub Labels
+###  Standard GitHub Labels
 
 DevOnboarder maintains standard GitHub labels for common issue types:
 
@@ -71,7 +71,7 @@ DevOnboarder maintains standard GitHub labels for common issue types:
 | `ci-hygiene` | CI/CD pipeline and infrastructure issues | Build failures, workflow improvements |
 | `automated` | Issues created by automation | Bot-generated issues, CI alerts |
 
-### 🔧 Technology Labels
+###  Technology Labels
 
 Technology labels identify the primary tech stack involved:
 
@@ -91,7 +91,7 @@ Technology labels identify the primary tech stack involved:
 
 ## Usage Guidelines
 
-### 🚀 For Issue Creation
+###  For Issue Creation
 
 When creating new issues, apply labels in this order:
 
@@ -117,13 +117,13 @@ When creating new issues, apply labels in this order:
 
 - `enhancement` (new feature)
 
-### 📊 For Project Planning
+###  For Project Planning
 
 **Sprint Planning**:
 
 - Filter by `effort-small` for quick wins
 
-- Combine `priority-high` + `effort-medium` for high-impact work
+- Combine `priority-high`  `effort-medium` for high-impact work
 
 - Use `effort-large` for dedicated sprint themes
 
@@ -143,7 +143,7 @@ When creating new issues, apply labels in this order:
 
 - `security-enhancement` issues for security specialists
 
-### 🔍 Filter Examples
+###  Filter Examples
 
 Common GitHub issue filter combinations:
 
@@ -193,7 +193,7 @@ is:open label:priority-medium label:effort-medium label:testing-infrastructure
 
 Systematic improvements to testing and development infrastructure.
 
-### Phase 3: Advanced Features (4+ weeks)
+### Phase 3: Advanced Features (4 weeks)
 
 ```bash
 is:open label:priority-high label:effort-large
@@ -256,7 +256,7 @@ gh issue list --label enhancement --json number --jq '.[].number' | \
 
 ## Best Practices
 
-### ✅ Do
+###  Do
 
 - **Apply multiple labels** - Issues often span multiple categories
 
@@ -268,7 +268,7 @@ gh issue list --label enhancement --json number --jq '.[].number' | \
 
 - **Document label changes** in issue comments when significant
 
-### ❌ Don't
+###  Don't
 
 - **Over-label** - Avoid more than 6-8 labels per issue
 

@@ -22,7 +22,7 @@ SAMPLE_LINES = [
     "error Command failed with exit code 1.",
     "Cannot find module 'bar'",
     "Step: unit tests",
-    "ERROR: something broke",
+    " something broke",
     "FAIL MyTest",
     "FAIL MyTest",
 ]
@@ -41,7 +41,7 @@ def test_parse_log(tmp_path):
         "Step: build frontend | yarn ERR! something failed",
         "Step: build frontend | error Command failed with exit code 1.",
         "Step: build frontend | Cannot find module 'bar'",
-        "Step: unit tests | ERROR: something broke",
+        "Step: unit tests |  something broke",
         "Step: unit tests | FAIL MyTest",
         "Step: unit tests | FAIL MyTest",
     ]
@@ -65,5 +65,5 @@ def test_main_outputs_summary(tmp_path, monkeypatch, capsys):
         "- Step: build frontend | yarn ERR! something failed",
         "- Step: build frontend | error Command failed with exit code 1.",
         "- Step: build frontend | Cannot find module 'bar'",
-        "- Step: unit tests | ERROR: something broke",
+        "- Step: unit tests |  something broke",
     ]

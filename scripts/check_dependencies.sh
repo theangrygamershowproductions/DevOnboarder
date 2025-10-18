@@ -53,7 +53,7 @@ check_python_module requests "Run 'pip install -r requirements-dev.txt'."
 check_python_module yaml "Run 'pip install -r requirements-dev.txt'."
 
 if [ "$missing" -eq 0 ]; then
-    echo "All optional dependencies installed ✅"
+    echo "All optional dependencies installed "
 else
     exit 1
 fi

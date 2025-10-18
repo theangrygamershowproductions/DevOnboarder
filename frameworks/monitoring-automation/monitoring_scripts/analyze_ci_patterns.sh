@@ -22,8 +22,8 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN"; then
-        echo "ERROR: Cannot proceed without required tokens for CI pattern analysis"
-        echo "TIP: CI pattern analysis requires GitHub API access for PR and workflow data"
+        echo " Cannot proceed without required tokens for CI pattern analysis"
+        echo " CI pattern analysis requires GitHub API access for PR and workflow data"
         exit 1
     fi
 fi
@@ -50,13 +50,13 @@ if [ -z "$PR_NUMBER" ]; then
     exit 1
 fi
 
-echo "INFO: CI Failure Pattern Analysis for PR #$PR_NUMBER"
+echo " CI Failure Pattern Analysis for PR #$PR_NUMBER"
 echo "================================================"
 
 # Check if GitHub CLI is authenticated
 if ! gh auth status >/dev/null 2>&1; then
-    echo "WARNING:  GitHub CLI not authenticated, using basic analysis"
-    echo "SUCCESS: Proceeding with simplified pattern analysis"
+    echo "  GitHub CLI not authenticated, using basic analysis"
+    echo " Proceeding with simplified pattern analysis"
     echo "BOT: Pattern Analysis Complete (simplified mode)"
     exit 0
 fi
@@ -65,53 +65,53 @@ fi
 FAILING_CHECKS=$(gh pr view "$PR_NUMBER" --json statusCheckRollup --jq '[.statusCheckRollup[] | select(.conclusion == "FAILURE")]' 2>/dev/null || echo "[]")
 
 if [ "$(echo "$FAILING_CHECKS" | jq length)" -eq 0 ]; then
-    echo "SUCCESS: No failing checks detected"
+    echo " No failing checks detected"
     exit 0
 fi
 
-echo "STATS: Failure Analysis:"
+echo " Failure Analysis:"
 echo
 
 # Categorize failures
 echo "$FAILING_CHECKS" | jq -r '.[] | "\(.name): \(.conclusion)"' | while read -r check; do
     check_name=$(echo "$check" | cut -d: -f1)
-    echo "ERROR: $check_name"
+    echo " $check_name"
 
     # Pattern matching for common failure types
     case "$check_name" in
         *"test"*)
             echo "   TEST: Category: TEST FAILURE"
-            echo "   INFO: Impact: Core functionality issues"
+            echo "    Impact: Core functionality issues"
             echo "   TOOL: Action: Investigate test failures, may need code fixes"
             ;;
         *"lint"*|*"format"*)
             echo "   STYLE: Category: FORMATTING/LINTING"
-            echo "   INFO: Impact: Code style issues"
+            echo "    Impact: Code style issues"
             echo "   TOOL: Action: Auto-fixable, run formatters/linters"
             ;;
         *"quality"*|*"markdown"*|*"Markdown"*)
-            echo "   NOTE: Category: DOCUMENTATION QUALITY"
-            echo "   INFO: Impact: Documentation standards"
+            echo "    Category: DOCUMENTATION QUALITY"
+            echo "    Impact: Documentation standards"
             echo "   TOOL: Action: Fix markdown formatting, likely auto-fixable"
             ;;
         *"security"*|*"audit"*)
-            echo "   SECURE: Category: SECURITY SCAN"
-            echo "   INFO: Impact: Security vulnerabilities"
+            echo "    Category: SECURITY SCAN"
+            echo "    Impact: Security vulnerabilities"
             echo "   TOOL: Action: Update dependencies, review security issues"
             ;;
         *"permission"*|*"check"*)
             echo "   🔑 Category: PERMISSIONS/VALIDATION"
-            echo "   INFO: Impact: Access or validation rules"
+            echo "    Impact: Access or validation rules"
             echo "   TOOL: Action: Review permissions, update configurations"
             ;;
         *"build"*|*"compile"*)
             echo "   BUILD:  Category: BUILD FAILURE"
-            echo "   INFO: Impact: Code compilation issues"
+            echo "    Impact: Code compilation issues"
             echo "   TOOL: Action: Fix syntax errors, dependency issues"
             ;;
         *)
             echo "   ❓ Category: UNKNOWN"
-            echo "   INFO: Impact: Requires investigation"
+            echo "    Impact: Requires investigation"
             echo "   TOOL: Action: Manual analysis needed"
             ;;
     esac
@@ -131,20 +131,20 @@ echo "  Auto-fixable: $AUTO_FIXABLE"
 echo "  Manual fixes needed: $MANUAL_FIXES"
 
 echo
-echo "TIP: Strategic Recommendation:"
+echo " Strategic Recommendation:"
 
 if [ "$AUTO_FIXABLE" -eq "$FAILURE_COUNT" ]; then
-    echo "  SUCCESS: ALL FAILURES AUTO-FIXABLE: Run automated fixes and continue"
+    echo "   ALL FAILURES AUTO-FIXABLE: Run automated fixes and continue"
     echo "  TOOL: Commands: markdownlint --fix, ruff --fix, pre-commit run --all-files"
 elif [ "$AUTO_FIXABLE" -gt "$MANUAL_FIXES" ]; then
     echo "  BALANCE:  MOSTLY AUTO-FIXABLE: Fix automatically, then address remaining issues"
     echo "  TOOL: Priority: Run auto-fixes first, then evaluate remaining failures"
 elif [ "$MANUAL_FIXES" -gt 3 ]; then
-    echo "  WARNING:  MANY MANUAL FIXES: Consider cost/benefit of continuing vs fresh start"
+    echo "    MANY MANUAL FIXES: Consider cost/benefit of continuing vs fresh start"
     echo "  🤔 Question: Has this PR achieved its core objective?"
 else
     echo "  TOOL: MANAGEABLE: Continue with targeted fixes"
-    echo "  INFO: Approach: Address each failure systematically"
+    echo "   Approach: Address each failure systematically"
 fi
 
 echo

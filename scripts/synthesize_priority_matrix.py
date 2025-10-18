@@ -133,14 +133,14 @@ def choose_similarity_group(path, frontmatter):
         if any(t in tags for t in rule.get("tags", [])):
             return rule["group"]
 
-    # Default: path-based + document_type
+    # Default: path-based  document_type
     parts = path.parts
     top = parts[1] if len(parts) > 1 else "docs"
     dtype = (frontmatter.get("document_type") or "").lower()
 
     if dtype:
-        return f"{top}-{re.sub('[^a-z0-9]+', '-', dtype)}"
-    return f"{top}-{re.sub('[^a-z0-9]+', '-', path.parent.name)}"
+        return f"{top}-{re.sub('[^a-z0-9]', '-', dtype)}"
+    return f"{top}-{re.sub('[^a-z0-9]', '-', path.parent.name)}"
 
 
 def find_similar_files(target_path, group):
@@ -219,7 +219,7 @@ def synthesize_priority_matrix(path):
         uniqueness = uniqueness_from_similarity(max_sim)
         # Boost for high-value documents
         if frontmatter.get("project") == "core-instructions":
-            uniqueness = min(5, uniqueness + 1)
+            uniqueness = min(5, uniqueness  1)
         frontmatter["content_uniqueness_score"] = int(uniqueness)
         changed = True
 

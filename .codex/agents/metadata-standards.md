@@ -281,7 +281,7 @@ authentication_required: true
 
 ```yaml
 ---
-title: "DevSecOps Handoff Report: core-instructions → DevOnboarder"
+title: "DevSecOps Handoff Report: core-instructions  DevOnboarder"
 
 description: "Formal handoff summary of the C-Suite Management Module, integration readiness, and security posture for activation by the DevOnboarder team"
 author: "TAGS Engineering"

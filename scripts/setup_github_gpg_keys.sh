@@ -29,7 +29,7 @@ NC='\033[0m' # No Color
 # ====================================
 
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "GitHub GPG Key Setup - $(date)"
@@ -146,9 +146,9 @@ show_imported_keys() {
 
     for key_id in "${!GITHUB_KEYS[@]}"; do
         if gpg --list-keys "$key_id" >/dev/null 2>&1; then
-            echo "✓ $key_id - ${GITHUB_KEYS[$key_id]}"
+            echo " $key_id - ${GITHUB_KEYS[$key_id]}"
         else
-            echo "✗ $key_id - ${GITHUB_KEYS[$key_id]} (import failed)"
+            echo " $key_id - ${GITHUB_KEYS[$key_id]} (import failed)"
         fi
     done
     echo
@@ -178,7 +178,7 @@ main() {
 
         if import_github_key "$key_id" "$description"; then
             verify_key_import "$key_id" "$description"
-            ((success_count++))
+            ((success_count))
         fi
         echo
     done

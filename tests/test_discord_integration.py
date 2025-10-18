@@ -11,7 +11,7 @@ def setup_function(function):
     auth_service.init_db()
 
 
-def _create_user(username: str, token: str) -> None:
+def _create_user(username: str, token: str)  None:
     with auth_service.SessionLocal() as db:
         user = auth_service.User(
             username=username, password_hash="x", discord_token=token
@@ -25,10 +25,10 @@ class StubResponse:
         self.data = data
         self.status_code = 200
 
-    def json(self) -> dict[str, str]:
+    def json(self)  dict[str, str]:
         return self.data
 
-    def raise_for_status(self) -> None:
+    def raise_for_status(self)  None:
         pass
 
 

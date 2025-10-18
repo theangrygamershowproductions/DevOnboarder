@@ -139,5 +139,5 @@ consolidation_priority: P3
 18. `scripts/run_local_checks.sh` - Local quality checks
 19. `scripts/check_pr_inline_comments.sh` - PR inline comment checking
 
-**Total**: 109 scripts (40 + 25 + 25 + 19)
+**Total**: 109 scripts (40  25  25  19)
 **Status**: Ready for framework implementation with comprehensive categorization

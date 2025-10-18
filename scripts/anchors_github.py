@@ -7,19 +7,19 @@ import json
 # GitHub-style anchor generation with duplicate handling
 slug_counts: dict[str, int] = {}
 anchors: list[str] = []
-heading_re = re.compile(r"^(#{1,6})\s+(.*)$")
+heading_re = re.compile(r"^(#{1,6})\s(.*)$")
 
 
-def slugify(s: str) -> str:
+def slugify(s: str)  str:
     """Convert heading text to GitHub-style anchor"""
-    # Lower, remove emojis/punct except hyphen/space, collapse spaces->hyphen
+    # Lower, remove emojis/punct except hyphen/space, collapse spaceshyphen
     s = s.lower()
     # Remove all non-word characters except hyphens and spaces
-    s = re.sub(r"[^\w\- ]+", "", s, flags=re.UNICODE)
+    s = re.sub(r"[^\w\- ]", "", s, flags=re.UNICODE)
     # Replace spaces with hyphens
-    s = re.sub(r"\s+", "-", s.strip())
+    s = re.sub(r"\s", "-", s.strip())
     # Collapse multiple hyphens and strip leading/trailing hyphens
-    s = re.sub(r"-+", "-", s).strip("-")
+    s = re.sub(r"-", "-", s).strip("-")
     return s
 
 
@@ -34,7 +34,7 @@ for line in sys.stdin:
         continue
 
     n = slug_counts.get(base, 0)
-    slug_counts[base] = n + 1
+    slug_counts[base] = n  1
 
     # GitHub behavior: first occurrence no suffix, subsequent get -1, -2, etc.
     final_anchor = base if n == 0 else f"{base}-{n}"

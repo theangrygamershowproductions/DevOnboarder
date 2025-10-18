@@ -5,7 +5,7 @@ README="README.md"
 
 get_expected() {
     local lang="$1"
-    grep -E "^\| ${lang//./\.}[[:space:]]+\|" "$README" | head -n1 | awk -F'|' '{gsub(/ /,"",$3); print $3}'
+    grep -E "^\| ${lang//./\.}[[:space:]]\|" "$README" | head -n1 | awk -F'|' '{gsub(/ /,"",$3); print $3}'
 }
 
 # Only check core required languages (as per .tool-versions)
@@ -43,8 +43,8 @@ check() {
 }
 
 # Only check core requirements that are enforced in .tool-versions
-check "Python" "$expected_python" "python --version" 'Python ([0-9]+\.[0-9]+)'
-check "Node.js" "$expected_node" "node --version" 'v([0-9]+)'
+check "Python" "$expected_python" "python --version" 'Python ([0-9]\.[0-9])'
+check "Node.js" "$expected_node" "node --version" 'v([0-9])'
 
 # Optional checks for additional tools (warn but don't fail)
 echo ""
@@ -75,10 +75,10 @@ expected_rust=$(get_expected "Rust" 2>/dev/null || echo "unknown")
 expected_go=$(get_expected "Go" 2>/dev/null || echo "unknown")
 expected_bun=$(get_expected "Bun" 2>/dev/null || echo "unknown")
 
-check_optional "Ruby" "$expected_ruby" "ruby --version" 'ruby ([0-9]+\.[0-9]+\.[0-9]+)'
-check_optional "Rust" "$expected_rust" "rustc --version" 'rustc ([0-9]+\.[0-9]+\.[0-9]+)'
-check_optional "Go" "$expected_go" "go version" 'go version go([0-9]+\.[0-9]+\.[0-9]+)'
-check_optional "Bun" "$expected_bun" "bun --version" '([0-9]+\.[0-9]+\.[0-9]+)'
+check_optional "Ruby" "$expected_ruby" "ruby --version" 'ruby ([0-9]\.[0-9]\.[0-9])'
+check_optional "Rust" "$expected_rust" "rustc --version" 'rustc ([0-9]\.[0-9]\.[0-9])'
+check_optional "Go" "$expected_go" "go version" 'go version go([0-9]\.[0-9]\.[0-9])'
+check_optional "Bun" "$expected_bun" "bun --version" '([0-9]\.[0-9]\.[0-9])'
 
 if [ "$errors" -ne 0 ]; then
     exit 1

@@ -23,7 +23,7 @@ visibility: internal
 
 ## Active Projects
 
-### 📋 [Team Planning](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1) - MVP Execution
+###  [Team Planning](https://github.com/orgs/theangrygamershowproductions/projects/4/views/1) - MVP Execution
 
 **Current Sprint**: Phase 1 Foundation Stabilization (Weeks 1-2)
 
@@ -35,7 +35,7 @@ visibility: internal
 
 - **Issue #1091**: [Staged Task Framework](https://github.com/theangrygamershowproductions/DevOnboarder/issues/1091) - 15 tasks
 
-### 🚀 [Feature Release](https://github.com/orgs/theangrygamershowproductions/projects/5/views/1) - Service Coordination
+###  [Feature Release](https://github.com/orgs/theangrygamershowproductions/projects/5/views/1) - Service Coordination
 
 **Purpose**: Multi-service integration and release management
 

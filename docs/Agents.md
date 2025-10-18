@@ -29,7 +29,7 @@ This document defines all agents (services, bots, integrations, and guards) in t
 Each entry describes the agent's purpose, configuration, and typical workflow so contributors
 and Codex automation can keep the platform healthy.
 
-<!-- This file is derived from the master merged draft provided during onboarding. -->
+<!-- This file is derived from the master merged draft provided during onboarding. -
 
 ## Table of Contents
 

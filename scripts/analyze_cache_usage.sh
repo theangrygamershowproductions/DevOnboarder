@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 SCRIPT_DIR=$(dirname "$0")
 LOG_DIR="$SCRIPT_DIR/../logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/cache_analysis_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/cache_analysis_$(date %Y%m%d_%H%M%S).log"
 
 # Redirect output to both console and log file
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -36,7 +36,7 @@ analyze_cache_usage() {
     fi
 
     # Calculate total size
-    total_bytes=$(jq -r '.[].sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum}')
+    total_bytes=$(jq -r '.[].sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum}')
     total_gb=$(echo "scale=2; $total_bytes / 1024 / 1024 / 1024" | bc)
     total_mb=$(echo "scale=0; $total_bytes / 1024 / 1024" | bc)
 
@@ -47,15 +47,15 @@ analyze_cache_usage() {
 
     # Playwright caches
     playwright_count=$(jq -r '.[] | select(.key | contains("playwright")) | .key' cache_data.json | wc -l)
-    playwright_size=$(jq -r '.[] | select(.key | contains("playwright")) | .sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
+    playwright_size=$(jq -r '.[] | select(.key | contains("playwright")) | .sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
 
     # Python caches
     python_count=$(jq -r '.[] | select(.key | contains("py3.") or contains("python")) | .key' cache_data.json | wc -l)
-    python_size=$(jq -r '.[] | select(.key | contains("py3.") or contains("python")) | .sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
+    python_size=$(jq -r '.[] | select(.key | contains("py3.") or contains("python")) | .sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
 
     # Node.js caches
     node_count=$(jq -r '.[] | select(.key | contains("node")) | .key' cache_data.json | wc -l)
-    node_size=$(jq -r '.[] | select(.key | contains("node")) | .sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
+    node_size=$(jq -r '.[] | select(.key | contains("node")) | .sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
 
     echo "  Playwright Caches: $playwright_count entries (~${playwright_size} MB)"
     echo "  Python Caches: $python_count entries (~${python_size} MB)"
@@ -63,11 +63,11 @@ analyze_cache_usage() {
 
     # Warning if approaching limit
     if (( $(echo "$total_gb > 8.0" | bc -l) )); then
-        echo -e "${RED}⚠️  WARNING: Cache usage is approaching 10GB limit!${NC}"
+        echo -e "${RED}   Cache usage is approaching 10GB limit!${NC}"
     elif (( $(echo "$total_gb > 6.0" | bc -l) )); then
-        echo -e "${YELLOW}⚠️  CAUTION: Cache usage is high. Consider cleanup.${NC}"
+        echo -e "${YELLOW}  CAUTION: Cache usage is high. Consider cleanup.${NC}"
     else
-        echo -e "${GREEN}✅ Cache usage is within acceptable limits.${NC}"
+        echo -e "${GREEN} Cache usage is within acceptable limits.${NC}"
     fi
 }
 
@@ -77,12 +77,12 @@ identify_cleanup_candidates() {
 
     # Find caches older than 7 days
     echo "Caches older than 7 days:"
-    stale_caches=$(jq -r --arg cutoff "$(date -d '7 days ago' -u +%Y-%m-%dT%H:%M:%SZ)" '.[] | select(.createdAt < $cutoff) | .id' cache_data.json)
+    stale_caches=$(jq -r --arg cutoff "$(date -d '7 days ago' -u %Y-%m-%dT%H:%M:%SZ)" '.[] | select(.createdAt < $cutoff) | .id' cache_data.json)
     stale_count=$(echo "$stale_caches" | grep -c . 2>/dev/null || echo "0")
 
     if [ "$stale_count" -gt 0 ]; then
         echo "  Found $stale_count stale caches"
-        stale_size=$(jq -r --arg cutoff "$(date -d '7 days ago' -u +%Y-%m-%dT%H:%M:%SZ)" '.[] | select(.createdAt < $cutoff) | .sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
+        stale_size=$(jq -r --arg cutoff "$(date -d '7 days ago' -u %Y-%m-%dT%H:%M:%SZ)" '.[] | select(.createdAt < $cutoff) | .sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum/1024/1024}' | bc 2>/dev/null || echo "0")
         echo "  Stale cache size: ~${stale_size} MB"
     else
         echo "  No stale caches found (older than 7 days)"
@@ -99,7 +99,7 @@ provide_recommendations() {
     echo -e "${BLUE}Cache Optimization Recommendations:${NC}"
 
     # Check if total usage is problematic
-    total_bytes=$(jq -r '.[].sizeInBytes' cache_data.json | awk '{sum+=$1} END {print sum}')
+    total_bytes=$(jq -r '.[].sizeInBytes' cache_data.json | awk '{sum=$1} END {print sum}')
     total_gb=$(echo "scale=2; $total_bytes / 1024 / 1024 / 1024" | bc)
 
     if (( $(echo "$total_gb > 7.0" | bc -l) )); then
@@ -148,7 +148,7 @@ emergency_cleanup() {
     for cache_id in $oldest_caches; do
         if gh cache delete "$cache_id" 2>/dev/null; then
             echo "Deleted cache: $cache_id"
-            deleted_count=$((deleted_count + 1))
+            deleted_count=$((deleted_count  1))
         else
             echo "Failed to delete cache: $cache_id"
         fi

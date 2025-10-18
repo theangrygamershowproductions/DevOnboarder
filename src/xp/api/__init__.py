@@ -17,7 +17,7 @@ router = APIRouter()
 @router.get("/api/user/onboarding-status")
 def onboarding_status(
     username: str, db: Session = Depends(auth_service.get_db)
-) -> dict[str, str]:
+)  dict[str, str]:
     """Return the user's onboarding status."""
     user = db.query(auth_service.User).filter_by(username=username).first()
     if user is None:
@@ -29,13 +29,13 @@ def onboarding_status(
 @router.get("/api/user/level")
 def user_level(
     username: str, db: Session = Depends(auth_service.get_db)
-) -> dict[str, int]:
+)  dict[str, int]:
     """Return the user's current level."""
     user = db.query(auth_service.User).filter_by(username=username).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     xp_total = sum(evt.xp for evt in user.events)
-    level = xp_total // 100 + 1
+    level = xp_total // 100  1
     return {"level": level}
 
 
@@ -44,7 +44,7 @@ def contribute(
     data: dict,
     current_user: auth_service.User = Depends(auth_service.get_current_user),
     db: Session = Depends(auth_service.get_db),
-) -> dict[str, str]:
+)  dict[str, str]:
     """Record a contribution and award XP."""
     try:
         description = data["description"]
@@ -61,7 +61,7 @@ def contribute(
     return {"recorded": description}
 
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     """Create a FastAPI application with the XP router."""
     app = FastAPI()
     cors_origins = get_cors_origins()
@@ -84,7 +84,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         """Return service health status."""
         return {"status": "ok"}
 
@@ -92,7 +92,7 @@ def create_app() -> FastAPI:
     return app
 
 
-def main() -> None:
+def main()  None:
     """Run the FastAPI application."""
     import uvicorn
 

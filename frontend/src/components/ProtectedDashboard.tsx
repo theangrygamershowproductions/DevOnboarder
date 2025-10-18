@@ -103,7 +103,7 @@ export default function ProtectedDashboard() {
                     <div className="mb-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
                         <div className="flex">
                             <div className="flex-shrink-0">
-                                <span className="text-yellow-400">⚠️</span>
+                                <span className="text-yellow-400"></span>
                             </div>
                             <div className="ml-3">
                                 <h3 className="text-sm font-medium text-yellow-800">Administrator Access</h3>

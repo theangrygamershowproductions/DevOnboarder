@@ -19,8 +19,8 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "STAGING_ORCHESTRATION_BOT_KEY"; then
-        echo "❌ Cannot proceed without required tokens for staging orchestration"
-        echo "💡 Staging orchestration requires API access to orchestration service"
+        echo " Cannot proceed without required tokens for staging orchestration"
+        echo " Staging orchestration requires API access to orchestration service"
         exit 1
     fi
 fi
@@ -29,8 +29,8 @@ fi
 ORCHESTRATION_KEY="${STAGING_ORCHESTRATION_BOT_KEY:-${ORCHESTRATION_KEY:-}}"
 
 if [ -z "${ORCHESTRATION_KEY}" ]; then
-    echo "❌ No orchestration key available"
-    echo "💡 Please ensure STAGING_ORCHESTRATION_BOT_KEY is set in your .tokens file"
+    echo " No orchestration key available"
+    echo " Please ensure STAGING_ORCHESTRATION_BOT_KEY is set in your .tokens file"
     exit 1
 fi
 

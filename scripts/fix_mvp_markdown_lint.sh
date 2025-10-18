@@ -46,7 +46,7 @@ def fix_markdown_issues(content):
         line = lines[i]
 
         # Fix MD022: Headings should be surrounded by blank lines
-        if re.match(r'^#{1,6}\s+', line):
+        if re.match(r'^#{1,6}\s', line):
             # Add blank line before heading if previous line is not blank
             if fixed_lines and fixed_lines[-1].strip() != '':
                 fixed_lines.append('')
@@ -54,39 +54,39 @@ def fix_markdown_issues(content):
             fixed_lines.append(line)
 
             # Add blank line after heading if next line exists and is not blank
-            if i + 1 < len(lines) and lines[i + 1].strip() != '':
+            if i  1 < len(lines) and lines[i  1].strip() != '':
                 fixed_lines.append('')
 
         # Fix MD032: Lists should be surrounded by blank lines
-        elif re.match(r'^(\s*[-*+]|\s*\d+\.)\s+', line):
+        elif re.match(r'^(\s*[-*]|\s*\d\.)\s', line):
             # Check if this is the start of a list
             prev_line = fixed_lines[-1] if fixed_lines else ''
-            if prev_line.strip() != '' and not re.match(r'^(\s*[-*+]|\s*\d+\.)\s+', prev_line):
+            if prev_line.strip() != '' and not re.match(r'^(\s*[-*]|\s*\d\.)\s', prev_line):
                 fixed_lines.append('')
 
             # Add the list item
             fixed_lines.append(line)
 
             # Check if this is the end of a list
-            if i + 1 < len(lines):
-                next_line = lines[i + 1]
+            if i  1 < len(lines):
+                next_line = lines[i  1]
                 if (next_line.strip() != '' and
-                    not re.match(r'^(\s*[-*+]|\s*\d+\.)\s+', next_line) and
-                    not re.match(r'^\s+[-*+]', next_line)):  # Not a sub-list
+                    not re.match(r'^(\s*[-*]|\s*\d\.)\s', next_line) and
+                    not re.match(r'^\s[-*]', next_line)):  # Not a sub-list
                     # Look ahead to see if we need a blank line
-                    j = i + 1
+                    j = i  1
                     while j < len(lines) and lines[j].strip() == '':
-                        j += 1
-                    if j < len(lines) and not re.match(r'^(\s*[-*+]|\s*\d+\.)\s+', lines[j]):
+                        j = 1
+                    if j < len(lines) and not re.match(r'^(\s*[-*]|\s*\d\.)\s', lines[j]):
                         fixed_lines.append('')
 
         # Fix MD007: Unordered list indentation (4 spaces for nested items)
-        elif re.match(r'^\s+[-*+]\s+', line):
+        elif re.match(r'^\s[-*]\s', line):
             # Count leading spaces before the list marker
             leading_spaces = len(line) - len(line.lstrip())
             if leading_spaces == 2:
                 # Fix 2-space indentation to 4-space
-                fixed_line = '    ' + line.strip()
+                fixed_line = '    '  line.strip()
                 fixed_lines.append(fixed_line)
             else:
                 fixed_lines.append(line)
@@ -100,21 +100,21 @@ def fix_markdown_issues(content):
             fixed_lines.append(line)
 
             # Find the closing fence
-            i += 1
+            i = 1
             while i < len(lines) and not lines[i].strip().startswith('```'):
                 fixed_lines.append(lines[i])
-                i += 1
+                i = 1
 
             # Add closing fence if found
             if i < len(lines):
                 fixed_lines.append(lines[i])
 
                 # Add blank line after code block if next line exists and is not blank
-                if i + 1 < len(lines) and lines[i + 1].strip() != '':
+                if i  1 < len(lines) and lines[i  1].strip() != '':
                     fixed_lines.append('')
 
         # Fix MD036: Emphasis used instead of a heading
-        elif re.match(r'^\*[^*]+\*$', line.strip()):
+        elif re.match(r'^\*[^*]\*$', line.strip()):
             # Convert *text* to **text** if it looks like it should be bold
             if 'Target:' in line or 'Timeline:' in line:
                 fixed_line = line.replace('*', '**')
@@ -128,11 +128,11 @@ def fix_markdown_issues(content):
             stripped = line.rstrip()
             if line.endswith('  ') and not line.endswith('   '):
                 # Keep intentional line break
-                fixed_lines.append(stripped + '  ')
+                fixed_lines.append(stripped  '  ')
             else:
                 fixed_lines.append(stripped)
 
-        i += 1
+        i = 1
 
     return '\n'.join(fixed_lines)
 
@@ -173,7 +173,7 @@ TOTAL_FILES=${#MVP_FILES[@]}
 
 for file in "${MVP_FILES[@]}"; do
     if fix_markdown_file "$file"; then
-        FIXED_COUNT=$((FIXED_COUNT + 1))
+        FIXED_COUNT=$((FIXED_COUNT  1))
     fi
 done
 
@@ -193,7 +193,7 @@ if command -v markdownlint >/dev/null 2>&1; then
         if [[ -f "$file" ]]; then
             if markdownlint "$file" >/dev/null 2>&1; then
                 echo "PASS: $file - No linting errors"
-                VALIDATION_PASSED=$((VALIDATION_PASSED + 1))
+                VALIDATION_PASSED=$((VALIDATION_PASSED  1))
             else
                 echo "WARN: $file - Still has linting errors"
                 echo "   Run: markdownlint $file"
@@ -207,12 +207,12 @@ if command -v markdownlint >/dev/null 2>&1; then
     echo "Files passing validation: $VALIDATION_PASSED/$FIXED_COUNT"
 
     if [[ $VALIDATION_PASSED -eq $FIXED_COUNT ]]; then
-        echo "SUCCESS: All MVP markdown files now pass linting"
+        echo " All MVP markdown files now pass linting"
     else
-        echo "WARNING: Some files may need manual review"
+        echo " Some files may need manual review"
     fi
 else
-    echo "WARNING: markdownlint not available - install with: npm install -g markdownlint-cli"
+    echo " markdownlint not available - install with: npm install -g markdownlint-cli"
 fi
 
 # Clean up backup files on success
@@ -229,11 +229,11 @@ fi
 
 echo
 if [[ $FIXED_COUNT -eq $TOTAL_FILES ]]; then
-    echo "SUCCESS: All MVP markdown files have been automatically fixed"
+    echo " All MVP markdown files have been automatically fixed"
     echo "Ready for commit and MVP development"
     exit 0
 else
-    echo "WARNING: Some files could not be fixed automatically"
+    echo " Some files could not be fixed automatically"
     echo "Manual review may be required"
     exit 1
 fi

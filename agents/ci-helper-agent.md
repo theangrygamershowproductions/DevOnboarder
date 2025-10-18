@@ -75,7 +75,7 @@ visibility: internal
 
 devonboarder-ci-health
 
-# Integrated PR + CI analysis
+# Integrated PR  CI analysis
 
 devonboarder-ci-health --diagnose-pr PR_NUMBER
 

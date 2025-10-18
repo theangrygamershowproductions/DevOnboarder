@@ -8,8 +8,8 @@ LIST_SECTIONS=false
 DRY_RUN=false
 
 show_usage() {
-    echo "🔍 DevOnboarder COMPREHENSIVE Local CI Validation"
-    echo "Running 90%+ of GitHub Actions pipeline locally..."
+    echo " DevOnboarder COMPREHENSIVE Local CI Validation"
+    echo "Running 90% of GitHub Actions pipeline locally..."
     echo
     echo "USAGE:"
     echo "  $0 [OPTIONS]"
@@ -67,29 +67,29 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            echo "❌ Unknown option: $1"
+            echo " Unknown option: $1"
             show_usage
             exit 1
             ;;
     esac
 done
 
-echo "🔍 DevOnboarder COMPREHENSIVE Local CI Validation"
+echo " DevOnboarder COMPREHENSIVE Local CI Validation"
 if [[ -n "$TARGET_SECTION" ]]; then
     echo "🎯 Running section: $TARGET_SECTION"
 elif [[ -n "$TARGET_STEP" ]]; then
     echo "🎯 Running step: $TARGET_STEP"
 elif [[ "$DRY_RUN" == "true" ]]; then
-    echo "🔍 DRY RUN MODE - Showing what would execute"
+    echo " DRY RUN MODE - Showing what would execute"
 else
-    echo "Running 90%+ of GitHub Actions pipeline locally..."
+    echo "Running 90% of GitHub Actions pipeline locally..."
 fi
 echo "This eliminates 'hit and miss' development completely!"
 echo
 
 # Ensure virtual environment
 if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "⚠️  Activating virtual environment..."
+    echo "  Activating virtual environment..."
     # shellcheck disable=SC1091 # Runtime source operation
     source .venv/bin/activate
 fi
@@ -100,11 +100,11 @@ PASSED_STEPS=0
 FAILED_STEPS=0
 
 # Create timestamped log file
-LOG_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG_TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="logs/comprehensive_ci_validation_${LOG_TIMESTAMP}.log"
 mkdir -p logs
 
-echo "📝 Comprehensive logging enabled: $LOG_FILE"
+echo " Comprehensive logging enabled: $LOG_FILE"
 echo "   Use 'tail -f $LOG_FILE' in another terminal for real-time monitoring"
 echo
 
@@ -114,7 +114,7 @@ cat > "$LOG_FILE" << EOF
 Started: $(date)
 Log File: $LOG_FILE
 
-This validation covers 90%+ of the GitHub Actions CI pipeline locally
+This validation covers 90% of the GitHub Actions CI pipeline locally
 to eliminate "hit and miss" development cycles.
 
 EOF
@@ -129,7 +129,7 @@ run_step() {
     local step_cmd="$2"
     local step_log
 
-    STEP_COUNTER=$((STEP_COUNTER + 1))
+    STEP_COUNTER=$((STEP_COUNTER  1))
     step_log="logs/step_${STEP_COUNTER}_$(echo "$step_name" | tr ' ' '_' | tr '[:upper:]' '[:lower:]').log"
 
     # Check if we should run this step based on targeting
@@ -158,7 +158,7 @@ run_step() {
     # Handle dry run mode
     if [[ "$DRY_RUN" == "true" ]]; then
         if [[ "$should_run" == "true" ]]; then
-            echo "🔍 Would run Step $STEP_COUNTER: $step_name"
+            echo " Would run Step $STEP_COUNTER: $step_name"
             echo "   Command: $step_cmd"
             echo
         fi
@@ -170,9 +170,9 @@ run_step() {
         return 0
     fi
 
-    TOTAL_STEPS=$((TOTAL_STEPS + 1))
+    TOTAL_STEPS=$((TOTAL_STEPS  1))
 
-    echo "🔍 Step $STEP_COUNTER: $step_name"
+    echo " Step $STEP_COUNTER: $step_name"
 
     # Write to log file with consistent error handling
     if [ -n "$LOG_FILE" ]; then
@@ -190,19 +190,19 @@ run_step() {
 
     # Run command with detailed logging
     if eval "$step_cmd" > "$step_log" 2>&1; then
-        echo "✅ $step_name: PASSED"
+        echo " $step_name: PASSED"
         [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: PASSED" >> "$LOG_FILE" 2>/dev/null; }
-        PASSED_STEPS=$((PASSED_STEPS + 1))
+        PASSED_STEPS=$((PASSED_STEPS  1))
     else
-        echo "❌ $step_name: FAILED"
+        echo " $step_name: FAILED"
         [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "Status: FAILED" >> "$LOG_FILE" 2>/dev/null; }
-        echo "   📋 See detailed output: $step_log"
+        echo "    See detailed output: $step_log"
         if [ -f "$step_log" ]; then
-            echo "   🔍 Quick view: tail -20 $step_log"
+            echo "    Quick view: tail -20 $step_log"
         else
-            echo "   🔍 No log file available (command may have failed early)"
+            echo "    No log file available (command may have failed early)"
         fi
-        FAILED_STEPS=$((FAILED_STEPS + 1))
+        FAILED_STEPS=$((FAILED_STEPS  1))
 
         # Add failure details to main log (with error handling)
         if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && [ -w "$LOG_FILE" ]; then
@@ -240,14 +240,14 @@ start_section() {
     echo "=== $section_name ==="
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        echo "📋 Section: $section_key"
+        echo " Section: $section_key"
         echo
     fi
 }
 
 # Handle list mode
 if [[ "$LIST_SECTIONS" == "true" ]]; then
-    echo "📋 Available sections and steps:"
+    echo " Available sections and steps:"
     echo
 fi
 
@@ -312,7 +312,7 @@ start_section "CORE BUILD & TEST PIPELINE" "build"
 run_step "Generate Secrets (CI)" "CI=true bash scripts/generate-secrets.sh"
 
 # Environment audit
-run_step "Environment Audit" "env -i PATH=\"\$PATH\" bash -c 'set -a; source .env.ci; set +a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' && missing=\$(python -c 'import json,sys;print(\"\".join(json.load(open(\"logs/env_audit.json\")).get(\"missing\", [])))') && extras=\$(python -c 'import json,sys;d=json.load(open(\"logs/env_audit.json\"));print(\"\".join(e for e in d.get(\"extra\", []) if e not in (\"PATH\",\"PWD\",\"SHLVL\",\"_\")))') && [ -z \"\$missing\" ] && [ -z \"\$extras\" ]"
+run_step "Environment Audit" "env -i PATH=\"\$PATH\" bash -c 'set -a; source .env.ci; set a; JSON_OUTPUT=logs/env_audit.json bash scripts/audit_env_vars.sh' && missing=\$(python -c 'import json,sys;print(\"\".join(json.load(open(\"logs/env_audit.json\")).get(\"missing\", [])))') && extras=\$(python -c 'import json,sys;d=json.load(open(\"logs/env_audit.json\"));print(\"\".join(e for e in d.get(\"extra\", []) if e not in (\"PATH\",\"PWD\",\"SHLVL\",\"_\")))') && [ -z \"\$missing\" ] && [ -z \"\$extras\" ]"
 
 # Environment docs alignment
 run_step "Environment Docs" "python scripts/check_env_docs.py"
@@ -321,7 +321,7 @@ run_step "Environment Docs" "python scripts/check_env_docs.py"
 run_step "QC Validation (8 metrics)" "bash scripts/qc_pre_push.sh"
 
 # Python tests with coverage (using CI environment)
-run_step "Python Tests (95% coverage)" "set -a; source .env.ci; [ -f .tokens.ci ] && source .tokens.ci; set +a; python -m pytest --cov=src --cov-fail-under=95 -q"
+run_step "Python Tests (95% coverage)" "set -a; source .env.ci; [ -f .tokens.ci ] && source .tokens.ci; set a; python -m pytest --cov=src --cov-fail-under=95 -q"
 
 start_section "FRONTEND TESTING" "frontend"
 
@@ -420,7 +420,7 @@ run_step "Stop Services" "docker compose -f docker-compose.ci.yaml --env-file .e
 # Exit early for list mode
 if [[ "$LIST_SECTIONS" == "true" ]]; then
     echo
-    echo "📋 To run specific sections or steps:"
+    echo " To run specific sections or steps:"
     echo "   • Full validation:        bash scripts/validate_ci_locally.sh"
     echo "   • Specific section:       bash scripts/validate_ci_locally.sh --section validation"
     echo "   • Specific step:          bash scripts/validate_ci_locally.sh --step \"Python Tests\""
@@ -432,7 +432,7 @@ fi
 # Exit early for dry run mode
 if [[ "$DRY_RUN" == "true" ]]; then
     echo
-    echo "🔍 DRY RUN COMPLETE - No commands were executed"
+    echo " DRY RUN COMPLETE - No commands were executed"
     echo "   Remove --dry-run flag to execute these steps"
     exit 0
 fi
@@ -454,50 +454,50 @@ Success Rate: $(( (PASSED_STEPS * 100) / TOTAL_STEPS ))%
 EOF
 fi
 
-echo "📊 RESULTS:"
+echo " RESULTS:"
 echo "   Total Steps: $TOTAL_STEPS"
-echo "   ✅ Passed: $PASSED_STEPS"
-echo "   ❌ Failed: $FAILED_STEPS"
-echo "   📈 Success Rate: $(( (PASSED_STEPS * 100) / TOTAL_STEPS ))%"
+echo "    Passed: $PASSED_STEPS"
+echo "    Failed: $FAILED_STEPS"
+echo "   GROW: Success Rate: $(( (PASSED_STEPS * 100) / TOTAL_STEPS ))%"
 echo
-echo "📝 COMPREHENSIVE LOGGING:"
+echo " COMPREHENSIVE LOGGING:"
 if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ]; then
-    echo "   📄 Main log: $LOG_FILE"
-    echo "   📁 Individual step logs: logs/step_*.log"
-    echo "   🔍 Quick troubleshooting:"
+    echo "   FILE: Main log: $LOG_FILE"
+    echo "    Individual step logs: logs/step_*.log"
+    echo "    Quick troubleshooting:"
     echo "      • Failed steps only: grep -A5 'Status: FAILED' $LOG_FILE"
     echo "      • View specific step: cat logs/step_N_stepname.log"
     echo "      • Real-time monitoring: tail -f $LOG_FILE"
 else
-    echo "   📁 Individual step logs: logs/step_*.log"
-    echo "   ⚠️  Main log unavailable: $LOG_FILE"
+    echo "    Individual step logs: logs/step_*.log"
+    echo "     Main log unavailable: $LOG_FILE"
 fi
 echo
-echo "🎉 COVERAGE: ~95%+ of GitHub Actions CI pipeline"
-echo "🚀 CONFIDENCE: $([ $FAILED_STEPS -eq 0 ] && echo "MAXIMUM" || echo "VERY HIGH") - Push safety validated"
+echo "🎉 COVERAGE: ~95% of GitHub Actions CI pipeline"
+echo " CONFIDENCE: $([ $FAILED_STEPS -eq 0 ] && echo "MAXIMUM" || echo "VERY HIGH") - Push safety validated"
 echo
 
 if [ $FAILED_STEPS -eq 0 ]; then
-    echo "✅ ALL CHECKS PASSED - Safe to push to GitHub!"
+    echo " ALL CHECKS PASSED - Safe to push to GitHub!"
     echo "   This eliminates the 'hit and miss' development cycle"
     [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "SUCCESS" >> "$LOG_FILE" 2>/dev/null; }
 else
-    echo "⚠️  $FAILED_STEPS step(s) failed - Fix before pushing"
+    echo "  $FAILED_STEPS step(s) failed - Fix before pushing"
     echo "   This prevents CI failures and saves development time"
     if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ]; then
-        echo "   📋 View failed steps: grep -B2 -A10 'Status: FAILED' $LOG_FILE"
+        echo "    View failed steps: grep -B2 -A10 'Status: FAILED' $LOG_FILE"
         { echo "FAILURES_DETECTED" >> "$LOG_FILE"; } 2>/dev/null
     fi
 
     # List failed step logs for easy access
-    echo "   🔧 Failed step logs:"
+    echo "    Failed step logs:"
     find logs -name "step_*.log" -exec grep -l "exit status\|error\|Error\|ERROR\|FAIL" {} \; 2>/dev/null | while read -r log; do
         echo "      • $log"
     done
 fi
 
 echo
-echo "💡 TROUBLESHOOTING TIPS:"
+echo " TROUBLESHOOTING TIPS:"
 echo "   • Run single step: bash scripts/validate_ci_locally.sh | grep 'Step N'"
 if [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ]; then
     echo "   • Monitor live: tail -f $LOG_FILE"

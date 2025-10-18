@@ -26,7 +26,7 @@ visibility: internal
 ### NEVER RUN FROM ROOT
 
 ```bash
-npm audit fix       # Creates 500+ package pollution
+npm audit fix       # Creates 500 package pollution
 
 npm install         # Violates Root Artifact Guard
 

@@ -10,7 +10,7 @@ echo
 
 # Get the current SSH private key in base64 format
 if [ ! -f ~/.devonboarder-keys/pmbot_ed25519 ]; then
-    echo "ERROR: SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
+    echo " SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
     exit 1
 fi
 

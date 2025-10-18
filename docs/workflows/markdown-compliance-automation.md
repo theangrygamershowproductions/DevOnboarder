@@ -46,7 +46,7 @@ Fixed markdown generation patterns:
 
 # Before (violation)
 
-echo "## 📊 Analysis Results"
+echo "##  Analysis Results"
 
 # After (compliant)
 
@@ -59,7 +59,7 @@ echo "## Analysis Results"
 **Before Implementation**:
 
 ```text
-FOUND: 32+ markdown compliance violations
+FOUND: 32 markdown compliance violations
 
 Scripts generating emoji-containing markdown
 
@@ -68,7 +68,7 @@ Scripts generating emoji-containing markdown
 **After Implementation**:
 
 ```text
-SUCCESS: No violations in script markdown generation
+ No violations in script markdown generation
 All automation scripts generate compliant content
 
 ```
@@ -130,7 +130,7 @@ All automation scripts generate compliant content
 
 **Impact**:
 
-- 20+ automation scripts now generate compliant markdown
+- 20 automation scripts now generate compliant markdown
 
 - Zero violations in new content generation
 

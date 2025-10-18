@@ -7,7 +7,7 @@ set -euo pipefail
 # Initialize logging
 LOG_DIR="logs/workflow-failures"
 mkdir -p "$LOG_DIR"
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/failure_${TIMESTAMP}.log"
 
 # Redirect all output to log file and console

@@ -89,11 +89,11 @@ class AdvancedOrchestrator:
         # Load service configurations
         self.load_service_configurations()
 
-    def validate_virtual_environment(self) -> None:
+    def validate_virtual_environment(self)  None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                "ERROR: Virtual environment not detected. "
+                " Virtual environment not detected. "
                 "DevOnboarder Phase 5 requires virtual environment isolation. "
                 "Run: python -m venv .venv && source .venv/bin/activate"
             )
@@ -101,12 +101,12 @@ class AdvancedOrchestrator:
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
             raise EnvironmentError(
-                f"ERROR: Virtual environment invalid: {self.venv_path}"
+                f" Virtual environment invalid: {self.venv_path}"
             )
 
-        print(f"SUCCESS: Phase 5 Virtual environment validated: {self.venv_path}")
+        print(f" Phase 5 Virtual environment validated: {self.venv_path}")
 
-    def setup_logging(self) -> None:
+    def setup_logging(self)  None:
         """Configure logging for orchestration events."""
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
@@ -121,7 +121,7 @@ class AdvancedOrchestrator:
         )
         self.logger = logging.getLogger("AdvancedOrchestrator")
 
-    def load_service_configurations(self) -> None:
+    def load_service_configurations(self)  None:
         """Load DevOnboarder service configurations."""
         # Core DevOnboarder services
         self.services = {
@@ -175,13 +175,13 @@ class AdvancedOrchestrator:
         # Calculate startup order
         self.calculate_startup_order()
 
-    def build_dependency_graph(self) -> None:
+    def build_dependency_graph(self)  None:
         """Build service dependency graph for orchestration."""
         self.dependency_graph = {}
         for service_name, config in self.services.items():
             self.dependency_graph[service_name] = config.dependencies.copy()
 
-    def calculate_startup_order(self) -> List[str]:
+    def calculate_startup_order(self)  List[str]:
         """Calculate optimal service startup order using topological sort."""
         # Topological sort for dependency resolution
         in_degree = {service: 0 for service in self.services}
@@ -190,7 +190,7 @@ class AdvancedOrchestrator:
         for service, deps in self.dependency_graph.items():
             for dep in deps:
                 if dep in in_degree:
-                    in_degree[service] += 1
+                    in_degree[service] = 1
 
         # Topological sort
         queue = [service for service, degree in in_degree.items() if degree == 0]
@@ -210,10 +210,10 @@ class AdvancedOrchestrator:
             raise ValueError("Circular dependency detected in service configuration")
 
         self.startup_order = startup_order
-        self.logger.info(f"Calculated startup order: {' → '.join(startup_order)}")
+        self.logger.info(f"Calculated startup order: {'  '.join(startup_order)}")
         return startup_order
 
-    async def start_orchestration(self) -> None:
+    async def start_orchestration(self)  None:
         """Start the advanced orchestration process."""
         self.logger.info("ACTION: Starting DevOnboarder Advanced Orchestration")
         self.is_running = True
@@ -234,10 +234,10 @@ class AdvancedOrchestrator:
         finally:
             await self.cleanup()
 
-    async def startup_services(self) -> None:
+    async def startup_services(self)  None:
         """Start services in calculated dependency order."""
         for service_name in self.startup_order:
-            self.logger.info(f"🔄 Starting service: {service_name}")
+            self.logger.info(f"SYNC: Starting service: {service_name}")
 
             # Wait for dependencies
             await self.wait_for_dependencies(service_name)
@@ -248,16 +248,16 @@ class AdvancedOrchestrator:
             # Verify health
             await self.verify_service_health(service_name)
 
-            self.logger.info(f"SUCCESS: Service started successfully: {service_name}")
+            self.logger.info(f" Service started successfully: {service_name}")
 
-    async def wait_for_dependencies(self, service_name: str) -> None:
+    async def wait_for_dependencies(self, service_name: str)  None:
         """Wait for all service dependencies to be healthy."""
         config = self.services[service_name]
 
         for dep_name in config.dependencies:
             self.logger.info(f"⏳ Waiting for dependency: {dep_name}")
 
-            timeout = time.time() + config.startup_timeout
+            timeout = time.time()  config.startup_timeout
             while time.time() < timeout:
                 if await self.check_service_health(dep_name):
                     break
@@ -267,7 +267,7 @@ class AdvancedOrchestrator:
                     f"Dependency {dep_name} not ready for {service_name}"
                 )
 
-    async def start_service(self, service_name: str) -> None:
+    async def start_service(self, service_name: str)  None:
         """Start a specific service (simulated)."""
         # In real implementation, this would:
         # 1. Execute service startup commands
@@ -278,7 +278,7 @@ class AdvancedOrchestrator:
         self.logger.info(f"Starting {service_name} service...")
         await asyncio.sleep(2)  # Simulate startup time
 
-    async def check_service_health(self, service_name: str) -> bool:
+    async def check_service_health(self, service_name: str)  bool:
         """Check health of a specific service."""
         if service_name not in self.services:
             return False
@@ -310,10 +310,10 @@ class AdvancedOrchestrator:
             self.update_service_metrics(service_name, ServiceStatus.UNHEALTHY, 0.0)
             return False
 
-    async def verify_service_health(self, service_name: str) -> None:
+    async def verify_service_health(self, service_name: str)  None:
         """Verify service is healthy after startup."""
         config = self.services[service_name]
-        timeout = time.time() + config.startup_timeout
+        timeout = time.time()  config.startup_timeout
 
         while time.time() < timeout:
             if await self.check_service_health(service_name):
@@ -324,7 +324,7 @@ class AdvancedOrchestrator:
 
     def update_service_metrics(
         self, service_name: str, status: ServiceStatus, response_time: float
-    ) -> None:
+    )  None:
         """Update metrics for a service."""
         now = datetime.now()
 
@@ -354,14 +354,14 @@ class AdvancedOrchestrator:
             except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
                 pass
 
-    def get_service_process(self, service_name: str) -> Optional[psutil.Process]:
+    def get_service_process(self, service_name: str)  Optional[psutil.Process]:
         """Get process information for a service."""
         # In real implementation, would track PIDs or use process discovery
         return None
 
-    async def continuous_monitoring(self) -> None:
+    async def continuous_monitoring(self)  None:
         """Continuous health monitoring and auto-recovery."""
-        self.logger.info("INFO: Starting continuous service monitoring")
+        self.logger.info(" Starting continuous service monitoring")
 
         while self.is_running:
             # Health check all services
@@ -382,27 +382,27 @@ class AdvancedOrchestrator:
             # Wait before next check cycle
             await asyncio.sleep(10)
 
-    async def handle_unhealthy_service(self, service_name: str) -> None:
+    async def handle_unhealthy_service(self, service_name: str)  None:
         """Handle unhealthy service with intelligent recovery."""
-        self.logger.warning(f"WARNING: Service unhealthy: {service_name}")
+        self.logger.warning(f" Service unhealthy: {service_name}")
 
         metrics = self.metrics.get(service_name)
         if not metrics:
             return
 
-        metrics.restart_count += 1
+        metrics.restart_count = 1
 
         # Implement restart strategy based on failure patterns
         if metrics.restart_count <= self.services[service_name].restart_threshold:
-            self.logger.info(f"🔄 Attempting restart for {service_name}")
+            self.logger.info(f"SYNC: Attempting restart for {service_name}")
             await self.restart_service(service_name)
         else:
             self.logger.error(
-                f"ERROR: Service {service_name} exceeded restart threshold"
+                f" Service {service_name} exceeded restart threshold"
             )
             # Could trigger alerts, create GitHub issues, etc.
 
-    async def restart_service(self, service_name: str) -> None:
+    async def restart_service(self, service_name: str)  None:
         """Restart a failed service."""
         # In real implementation:
         # 1. Gracefully stop service
@@ -413,7 +413,7 @@ class AdvancedOrchestrator:
         self.logger.info(f"Restarting {service_name}...")
         await asyncio.sleep(3)  # Simulate restart
 
-    async def generate_orchestration_report(self) -> None:
+    async def generate_orchestration_report(self)  None:
         """Generate comprehensive orchestration status report."""
         report = {
             "timestamp": datetime.now().isoformat(),
@@ -427,7 +427,7 @@ class AdvancedOrchestrator:
         unhealthy_count = 0
         for service_name, metrics in self.metrics.items():
             if metrics.status != ServiceStatus.HEALTHY:
-                unhealthy_count += 1
+                unhealthy_count = 1
 
             report["services"][service_name] = {
                 "status": metrics.status.value,
@@ -451,12 +451,12 @@ class AdvancedOrchestrator:
         with open(report_path, "w") as f:
             json.dump(report, f, indent=2)
 
-    async def cleanup(self) -> None:
+    async def cleanup(self)  None:
         """Clean up orchestrator resources."""
         self.is_running = False
         if self.session:
             await self.session.close()
-        self.logger.info("🔧 Orchestrator cleanup complete")
+        self.logger.info(" Orchestrator cleanup complete")
 
 
 # CLI Interface
@@ -469,7 +469,7 @@ async def main():
     except KeyboardInterrupt:
         print("\n🛑 Orchestration stopped by user")
     except Exception as e:
-        print(f"ERROR: Orchestration failed: {e}")
+        print(f" Orchestration failed: {e}")
         raise
 
 

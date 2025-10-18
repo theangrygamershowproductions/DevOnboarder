@@ -34,7 +34,7 @@ def setup_function(function):
     }
 
 
-def _create_token(username: str) -> str:
+def _create_token(username: str)  str:
     """Create a JWT token for a test user."""
     with auth_service.SessionLocal() as db:
         user = auth_service.User(username=username, password_hash="x")
@@ -44,7 +44,7 @@ def _create_token(username: str) -> str:
         return auth_service.create_token(user)
 
 
-def _create_user_with_attributes(username: str, **attributes) -> str:
+def _create_user_with_attributes(username: str, **attributes)  str:
     """Create a user with specific attributes and return JWT token."""
     with auth_service.SessionLocal() as db:
         user = auth_service.User(username=username, password_hash="x", **attributes)

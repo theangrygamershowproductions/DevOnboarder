@@ -28,15 +28,15 @@ notify_missing_tokens() {
     local ci_env="${CI:-}"
 
     echo ""
-    echo "⚠️  MISSING TOKENS DETECTED"
+    echo "  MISSING TOKENS DETECTED"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
     for token in "${missing_tokens[@]}"; do
-        echo "❌ $token"
+        echo " $token"
     done
 
     echo ""
-    echo "💡 TO FIX MISSING TOKENS:"
+    echo " TO FIX MISSING TOKENS:"
 
     if [ -n "$ci_env" ]; then
         echo "   CI Environment: Check .tokens.ci file has test values"
@@ -53,7 +53,7 @@ notify_missing_tokens() {
     echo "   Architecture: docs/TOKEN_ARCHITECTURE.md"
 
     echo ""
-    echo "🔍 ENVIRONMENT CHECK:"
+    echo " ENVIRONMENT CHECK:"
     echo "   APP_ENV: ${APP_ENV:-not set}"
     echo "   CI: ${CI:-not set}"
 }
@@ -64,7 +64,7 @@ require_tokens() {
     shift
     local required_tokens=("$@")
 
-    echo "🔐 $service_name: Validating required tokens..."
+    echo " $service_name: Validating required tokens..."
 
     local missing_tokens=()
     local available_tokens=()
@@ -72,9 +72,9 @@ require_tokens() {
     # Check each required token
     for token in "${required_tokens[@]}"; do
         if check_token "$token"; then
-            available_tokens+=("$token")
+            available_tokens=("$token")
         else
-            missing_tokens+=("$token")
+            missing_tokens=("$token")
         fi
     done
 
@@ -82,11 +82,11 @@ require_tokens() {
     if [ ${#missing_tokens[@]} -gt 0 ]; then
         notify_missing_tokens "${missing_tokens[@]}"
         echo ""
-        echo "❌ $service_name: CANNOT START - Missing required tokens"
+        echo " $service_name: CANNOT START - Missing required tokens"
         echo "   Missing: ${missing_tokens[*]}"
         return 1
     else
-        echo "✅ $service_name: All required tokens available"
+        echo " $service_name: All required tokens available"
         return 0
     fi
 }

@@ -29,7 +29,7 @@ router = APIRouter()
 def submit_feedback(
     data: dict[str, Any],
     db: Session = Depends(auth_service.get_db),
-) -> dict[str, Any]:
+)  dict[str, Any]:
     item = Feedback(
         type=data["type"],
         description=data["description"],
@@ -46,7 +46,7 @@ def update_status(
     item_id: int,
     data: dict[str, Any],
     db: Session = Depends(auth_service.get_db),
-) -> dict[str, Any]:
+)  dict[str, Any]:
     item = db.get(Feedback, item_id)
     if item is None:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -56,7 +56,7 @@ def update_status(
 
 
 @router.get("/feedback")
-def list_feedback(db: Session = Depends(auth_service.get_db)) -> dict[str, Any]:
+def list_feedback(db: Session = Depends(auth_service.get_db))  dict[str, Any]:
     items = db.query(Feedback).all()
     return {
         "feedback": [
@@ -72,7 +72,7 @@ def list_feedback(db: Session = Depends(auth_service.get_db)) -> dict[str, Any]:
 
 
 @router.get("/feedback/analytics")
-def analytics(db: Session = Depends(auth_service.get_db)) -> dict[str, Any]:
+def analytics(db: Session = Depends(auth_service.get_db))  dict[str, Any]:
     rows = (
         db.query(Feedback.type, Feedback.status, func.count(Feedback.id))
         .group_by(Feedback.type, Feedback.status)
@@ -85,7 +85,7 @@ def analytics(db: Session = Depends(auth_service.get_db)) -> dict[str, Any]:
     return {"total": total, "breakdown": summary}
 
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     if os.getenv("INIT_DB_ON_STARTUP"):
         auth_service.init_db()
         auth_service.Base.metadata.create_all(bind=auth_service.engine)
@@ -111,14 +111,14 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
     app.include_router(router)
     return app
 
 
-def main() -> None:  # pragma: no cover
+def main()  None:  # pragma: no cover
     import uvicorn
 
     uvicorn.run(create_app(), host="0.0.0.0", port=8090)  # nosec B104

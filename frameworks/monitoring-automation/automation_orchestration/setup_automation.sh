@@ -8,11 +8,11 @@ echo "====================================="
 
 # Create required directories
 mkdir -p {logs,reports,tmp}
-echo "SUCCESS: Created directories: logs, reports, tmp"
+echo " Created directories: logs, reports, tmp"
 
 # Make all scripts executable
-find scripts/ -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
-echo "SUCCESS: Made all scripts executable"
+find scripts/ -name "*.sh" -exec chmod x {} \; 2>/dev/null || true
+echo " Made all scripts executable"
 
 # Create automation configuration
 cat > .automation-config.json << 'EOF'
@@ -21,7 +21,7 @@ cat > .automation-config.json << 'EOF'
   "framework": "DevOnboarder PR Automation",
   "modes": {
     "analyze": "Analysis only - safe for all PRs",
-    "execute": "Analysis + automated fixes",
+    "execute": "Analysis  automated fixes",
     "full-auto": "Full automation including potential auto-merge"
   },
   "safety": {
@@ -36,7 +36,7 @@ cat > .automation-config.json << 'EOF'
   }
 }
 EOF
-echo "SUCCESS: Created automation configuration"
+echo " Created automation configuration"
 
 # Create automation alias
 cat > scripts/pr-auto << 'EOF'
@@ -44,39 +44,39 @@ cat > scripts/pr-auto << 'EOF'
 # Quick alias for PR automation
 bash scripts/automate_pr_process.sh "$@"
 EOF
-chmod +x scripts/pr-auto
-echo "SUCCESS: Created pr-auto alias"
+chmod x scripts/pr-auto
+echo " Created pr-auto alias"
 
 # Test basic dependencies
 echo ""
-echo "INFO: Checking dependencies..."
+echo " Checking dependencies..."
 
 if command -v gh >/dev/null 2>&1; then
-    echo "SUCCESS: GitHub CLI: Available"
+    echo " GitHub CLI: Available"
 else
-    echo "WARNING:  GitHub CLI: Not found - may need installation"
+    echo "  GitHub CLI: Not found - may need installation"
 fi
 
 if command -v jq >/dev/null 2>&1; then
-    echo "SUCCESS: jq: Available"
+    echo " jq: Available"
 else
-    echo "WARNING:  jq: Not found - may need installation"
+    echo "  jq: Not found - may need installation"
 fi
 
 if command -v markdownlint >/dev/null 2>&1; then
-    echo "SUCCESS: markdownlint: Available"
+    echo " markdownlint: Available"
 else
-    echo "WARNING:  markdownlint: Not found - formatting fixes will be skipped"
+    echo "  markdownlint: Not found - formatting fixes will be skipped"
 fi
 
 echo ""
-echo "SUCCESS: PR Automation Framework setup complete!"
+echo " PR Automation Framework setup complete!"
 echo ""
 echo "ACTION: Usage Examples:"
 echo "  # Analyze PR #966"
 echo "  bash scripts/automate_pr_process.sh 966 analyze"
 echo ""
-echo "  # Analyze + apply fixes"
+echo "  # Analyze  apply fixes"
 echo "  bash scripts/automate_pr_process.sh 966 execute"
 echo ""
 echo "  # Full automation (careful!)"

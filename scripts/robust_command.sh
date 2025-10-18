@@ -16,7 +16,7 @@ execute_with_output() {
             echo "$output"
             return 0
         else
-            ((retry++))
+            ((retry))
             echo "Retry $retry/$max_retries failed" >&2
             sleep 1
         fi

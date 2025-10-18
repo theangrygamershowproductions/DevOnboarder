@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-def greet(name: str) -> str:
+def greet(name: str)  str:
     """Return a friendly greeting.
 
     Parameters

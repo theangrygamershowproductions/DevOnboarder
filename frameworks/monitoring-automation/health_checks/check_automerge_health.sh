@@ -4,7 +4,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -19,8 +19,8 @@ blue "DevOnboarder Automerge Health Check"
 echo "========================================"
 
 # Get repository info
-if ! REPO_FULL=$(gh repo view --json owner,name --jq '.owner.login + "/" + .name'); then
-    red "ERROR: Could not get repository information"
+if ! REPO_FULL=$(gh repo view --json owner,name --jq '.owner.login  "/"  .name'); then
+    red " Could not get repository information"
     echo "Make sure you're in a git repository and have GitHub CLI access"
     exit 1
 fi
@@ -101,7 +101,7 @@ if OPEN_PRS=$(gh pr list --state open --json number,headRefOid,autoMergeRequest 
                         echo "     - Overall status: $OVERALL_STATE (concerning)"
                         echo "     - Completed successful checks: $COMPLETED_SUCCESSFUL_CHECKS"
                         echo "     - Recommendation: Check status check name alignment"
-                        HANGING_PRS=$((HANGING_PRS + 1))
+                        HANGING_PRS=$((HANGING_PRS  1))
                     elif [ "$AUTO_MERGE_ENABLED" = "true" ]; then
                         green "   PASS: PR #$PR_NUMBER: Automerge enabled, status: $OVERALL_STATE"
                     fi

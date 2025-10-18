@@ -11,7 +11,7 @@ from pathlib import Path
 KB_FILE = Path("docs/KEKB.md")
 
 
-def append_issue(issue_number: str) -> None:
+def append_issue(issue_number: str)  None:
     gh = shutil.which("gh") or "gh"
     out = subprocess.run(
         [gh, "issue", "view", issue_number, "--json", "title,body,state"],

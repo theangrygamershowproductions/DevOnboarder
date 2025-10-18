@@ -10,7 +10,7 @@ similarity_group: troubleshooting-troubleshooting
 
 Based on our recent successful dependency update process and resolution of Jest timeout issues, here are the recommended enhancements to improve identification and troubleshooting of dependency-related problems:
 
-## 🚀 Quick Win Improvements
+##  Quick Win Improvements
 
 ### 1. Enhanced Jest Configuration Documentation
 
@@ -53,23 +53,23 @@ Based on our recent successful dependency update process and resolution of Jest 
 
 ### Fast Track Criteria (Safe to Auto-Merge)
 
-- ✅ Patch version updates (1.2.3 → 1.2.4)
+-  Patch version updates (1.2.3  1.2.4)
 
-- ✅ Minor version updates with green CI
+-  Minor version updates with green CI
 
-- ✅ Test framework maintenance updates (@types/*, ts-jest)
+-  Test framework maintenance updates (@types/*, ts-jest)
 
 ### Requires Investigation
 
-- ⚠️ Major version jumps (5.8.x → 5.9.x)
+-  Major version jumps (5.8.x  5.9.x)
 
-- ⚠️ Framework core updates (TypeScript, Jest major versions)
+-  Framework core updates (TypeScript, Jest major versions)
 
-- ⚠️ Any PR with failing CI checks
+-  Any PR with failing CI checks
 
 ```
 
-## 🔧 Process Improvements
+##  Process Improvements
 
 ### 3. Enhanced CI Failure Detection
 
@@ -95,17 +95,17 @@ python -m pytest tests/            # Test backend directly
 #!/bin/bash
 echo "Checking Jest configuration for timeout settings..."
 if grep -q "testTimeout" bot/package.json; then
-    echo "✅ Jest timeout configured:"
+    echo " Jest timeout configured:"
     grep -A 2 "testTimeout" bot/package.json
 else
-    echo "❌ Jest timeout NOT configured - CI may hang"
+    echo " Jest timeout NOT configured - CI may hang"
 
     echo "Add 'testTimeout: 30000' to Jest config in bot/package.json"
 fi
 
 ```
 
-## 📋 Quick Reference Additions
+##  Quick Reference Additions
 
 ### 5. Dependency Issue Patterns
 
@@ -231,9 +231,9 @@ git diff HEAD~1 HEAD package.json  # See what changed
 
 1. **Incremental Recovery**:
 
-   - Merge patch updates first (1.2.3 → 1.2.4)
+   - Merge patch updates first (1.2.3  1.2.4)
 
-   - Then minor updates (1.2.x → 1.3.0)
+   - Then minor updates (1.2.x  1.3.0)
 
    - Major updates last with manual testing
 

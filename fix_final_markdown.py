@@ -11,21 +11,21 @@ def fix_markdown_file(filename):
         content = f.read()
 
     # Fix MD026: Remove trailing punctuation from headings
-    content = re.sub(r"^(#+\s+.*[^:]):$", r"\1", content, flags=re.MULTILINE)
+    content = re.sub(r"^(#\s.*[^:]):$", r"\1", content, flags=re.MULTILINE)
 
     # Fix MD022: Add blank lines around headings
     # Add blank line before headings (but not at start of file)
-    content = re.sub(r"(?<!^)(?<!\n)\n(#{1,6}\s+[^\n]+)", r"\n\n\1", content)
+    content = re.sub(r"(?<!^)(?<!\n)\n(#{1,6}\s[^\n])", r"\n\n\1", content)
     # Add blank line after headings
-    content = re.sub(r"(#{1,6}\s+[^\n]+)\n(?!\n)([^\n#])", r"\1\n\n\2", content)
+    content = re.sub(r"(#{1,6}\s[^\n])\n(?!\n)([^\n#])", r"\1\n\n\2", content)
 
     # Fix MD032: Add blank lines around lists
     # Add blank line before lists
-    content = re.sub(r"(?<!\n)\n([-*+]\s+[^\n]+)", r"\n\n\1", content)
-    content = re.sub(r"(?<!\n)\n(\d+\.\s+[^\n]+)", r"\n\n\1", content)
+    content = re.sub(r"(?<!\n)\n([-*]\s[^\n])", r"\n\n\1", content)
+    content = re.sub(r"(?<!\n)\n(\d\.\s[^\n])", r"\n\n\1", content)
     # Add blank line after lists (before non-list content)
-    content = re.sub(r"([-*+]\s+[^\n]+)\n(?!\n)(?![-*+\d]\s)", r"\1\n\n", content)
-    content = re.sub(r"(\d+\.\s+[^\n]+)\n(?!\n)(?![-*+\d]\s)", r"\1\n\n", content)
+    content = re.sub(r"([-*]\s[^\n])\n(?!\n)(?![-*\d]\s)", r"\1\n\n", content)
+    content = re.sub(r"(\d\.\s[^\n])\n(?!\n)(?![-*\d]\s)", r"\1\n\n", content)
 
     # Fix MD031: Add blank lines around fenced code blocks
     # Add blank line before code blocks
@@ -37,7 +37,7 @@ def fix_markdown_file(filename):
     content = re.sub(r"\n{3,}", "\n\n", content)
 
     # Ensure file ends with single newline
-    content = content.rstrip() + "\n"
+    content = content.rstrip()  "\n"
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)

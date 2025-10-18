@@ -5,15 +5,15 @@ status: complete
 date: 2025-07-05
 ---
 
-### ✅ Task: Confirm Documentation Updates and Ethics Reference
+###  Task: Confirm Documentation Updates and Ethics Reference
 
-**Status:** ✅ Completed
+**Status:**  Completed
 
 **Scope:** Ethics dossier visibility, journal log, and frontend coverage documentation
 
 ---
 
-#### ✅ Ethics Dossier Visibility
+####  Ethics Dossier Visibility
 
 - `README.md` (line 67) links to `docs/builder_ethics_dossier.md`
 
@@ -23,7 +23,7 @@ date: 2025-07-05
 
 ---
 
-#### ✅ Journal Entry Coverage
+####  Journal Entry Coverage
 
 - `docs/builder_ethics_dossier.md` includes:
 
@@ -35,7 +35,7 @@ date: 2025-07-05
 
 ---
 
-#### ✅ Frontend Coverage Command
+####  Frontend Coverage Command
 
 - `frontend/README.md` includes:
 

@@ -16,10 +16,10 @@ readonly TEMPLATE_DIR="milestones/templates"
 readonly LOGS_DIR="logs"
 
 # Create directories if they don't exist
-mkdir -p "$MILESTONE_DIR/$(date +%Y-%m)" "$TEMPLATE_DIR" "$LOGS_DIR"
+mkdir -p "$MILESTONE_DIR/$(date %Y-%m)" "$TEMPLATE_DIR" "$LOGS_DIR"
 
 # Log file for this script
-LOG_FILE="$LOGS_DIR/milestone_generation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOGS_DIR/milestone_generation_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 function print_header() {
@@ -61,11 +61,11 @@ function detect_context() {
     branch_name=$(git branch --show-current 2>/dev/null || echo "main")
 
     # Extract issue/PR numbers from branch name
-    if [[ $branch_name =~ issue-([0-9]+) ]]; then
+    if [[ $branch_name =~ issue-([0-9]) ]]; then
         issue_number="${BASH_REMATCH[1]}"
     fi
 
-    if [[ $branch_name =~ pr-([0-9]+) ]]; then
+    if [[ $branch_name =~ pr-([0-9]) ]]; then
         pr_number="${BASH_REMATCH[1]}"
     fi
 
@@ -86,7 +86,7 @@ function generate_milestone_id() {
     local title="$2"
     local date_str
 
-    date_str=$(date +%Y-%m-%d)
+    date_str=$(date %Y-%m-%d)
 
     # Sanitize title for filename
     local clean_title
@@ -135,7 +135,7 @@ function capture_performance_metrics() {
 
     commit_count=$(git rev-list --count HEAD ^"$base_ref" 2>/dev/null || echo "0")
     files_changed=$(git diff --name-only "$base_ref"..HEAD 2>/dev/null | wc -l || echo "0")
-    total_changes=$(git diff --stat "$base_ref"..HEAD 2>/dev/null | tail -1 | awk '{print $4 + $6}' 2>/dev/null || echo "0")
+    total_changes=$(git diff --stat "$base_ref"..HEAD 2>/dev/null | tail -1 | awk '{print $4  $6}' 2>/dev/null || echo "0")
 
     # Recent test results
     local test_duration=""
@@ -190,7 +190,7 @@ function create_milestone_file() {
     local milestone_file
     local complexity="moderate"  # Default
 
-    milestone_file="$MILESTONE_DIR/$(date +%Y-%m)/${milestone_id}.md"
+    milestone_file="$MILESTONE_DIR/$(date %Y-%m)/${milestone_id}.md"
 
     echo "Creating milestone file: $milestone_file"
 
@@ -198,10 +198,10 @@ function create_milestone_file() {
     cat > "$milestone_file" << EOF
 ---
 milestone_id: "$milestone_id"
-date: "$(date +%Y-%m-%d)"
+date: "$(date %Y-%m-%d)"
 type: "$type"
-issue_number: "${issue_number:+#$issue_number}"
-pr_number: "${pr_number:+#$pr_number}"
+issue_number: "${issue_number:#$issue_number}"
+pr_number: "${pr_number:#$pr_number}"
 priority: "$priority"
 complexity: "$complexity"
 generated_by: "scripts/generate_milestone.sh"
@@ -327,8 +327,8 @@ echo "Issues prevented: [X]"
 | Metric | DevOnboarder | Industry Standard | Competitive Edge |
 |--------|--------------|------------------|------------------|
 | Resolution Time | [X] | [Y] | [Z]x faster |
-| Success Rate | [X]% | [Y]% | +[Z] percentage points |
-| Automation Level | [X]% | [Y]% | +[Z] percentage points |
+| Success Rate | [X]% | [Y]% | [Z] percentage points |
+| Automation Level | [X]% | [Y]% | [Z] percentage points |
 | Developer Velocity | [X] | [Y] | [Z]x improvement |
 
 ---
@@ -344,7 +344,7 @@ EOF
         capture_performance_metrics "$milestone_file"
     fi
 
-    echo -e "${GREEN}✅ Milestone file created: $milestone_file${NC}"
+    echo -e "${GREEN} Milestone file created: $milestone_file${NC}"
 }
 
 function main() {
@@ -458,7 +458,7 @@ function main() {
     echo "3. Document competitive advantages achieved"
     echo "4. Add to monthly milestone summary"
     echo ""
-    echo "File location: $MILESTONE_DIR/$(date +%Y-%m)/${milestone_id}.md"
+    echo "File location: $MILESTONE_DIR/$(date %Y-%m)/${milestone_id}.md"
 }
 
 # Only run main if script is executed directly

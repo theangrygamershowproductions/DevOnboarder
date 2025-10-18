@@ -145,7 +145,7 @@ curl -s https://github.com/web-flow.gpg | gpg --import
 You may still see warnings like:
 
 ```text
-gpg: WARNING: This key is not certified with a trusted signature!
+gpg:  This key is not certified with a trusted signature!
 
 ```
 
@@ -228,4 +228,4 @@ For CI environments that need signature verification:
 **Last Updated**: 2025-01-27
 
 **Related Issues**: Signature verification, GPG key management, GitHub merge commits
-**Solution Status**: ✅ Resolved with automated script
+**Solution Status**:  Resolved with automated script

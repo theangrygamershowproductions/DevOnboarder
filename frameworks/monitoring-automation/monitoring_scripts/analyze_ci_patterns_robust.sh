@@ -3,7 +3,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -28,7 +28,7 @@ get_failing_checks() {
             return 0
         fi
 
-        ((retry++))
+        ((retry))
         echo "Retry $retry/$max_retries for check data..." >&2
         sleep 2
     done
@@ -37,71 +37,71 @@ get_failing_checks() {
     return 1
 }
 
-echo "INFO: Analyzing CI failure patterns..."
+echo " Analyzing CI failure patterns..."
 FAILING_CHECKS=$(get_failing_checks)
 
 if [ -z "$FAILING_CHECKS" ]; then
-    echo "SUCCESS: No failing checks detected or unable to retrieve data"
-    echo "STATS: Pattern Analysis: All checks passing or data unavailable"
+    echo " No failing checks detected or unable to retrieve data"
+    echo " Pattern Analysis: All checks passing or data unavailable"
     exit 0
 fi
 
-echo "ERROR: Failing Checks Detected:"
+echo " Failing Checks Detected:"
 while read -r check; do
     [ -n "$check" ] && echo "  - $check"
 done <<< "$FAILING_CHECKS"
 
 echo ""
-echo "INFO: Pattern Analysis:"
+echo " Pattern Analysis:"
 
 # Enhanced pattern detection with categories
 PATTERNS=()
 
 # Test failures
 if echo "$FAILING_CHECKS" | grep -qi "test\|spec\|pytest\|jest\|mocha\|unit\|integration"; then
-    PATTERNS+=("TESTING")
+    PATTERNS=("TESTING")
     echo "  TEST: TESTING FAILURES: Unit/integration test issues detected"
 fi
 
 # Code quality failures
 if echo "$FAILING_CHECKS" | grep -qi "lint\|format\|style\|quality\|eslint\|prettier\|black\|ruff"; then
-    PATTERNS+=("CODE_QUALITY")
-    echo "  NOTE: CODE QUALITY: Linting/formatting issues detected"
+    PATTERNS=("CODE_QUALITY")
+    echo "   CODE QUALITY: Linting/formatting issues detected"
 fi
 
 # Security failures
 if echo "$FAILING_CHECKS" | grep -qi "security\|audit\|vulnerability\|snyk\|safety"; then
-    PATTERNS+=("SECURITY")
-    echo "  SECURE: SECURITY ISSUES: Security scan failures detected"
+    PATTERNS=("SECURITY")
+    echo "   SECURITY ISSUES: Security scan failures detected"
 fi
 
 # Build failures
 if echo "$FAILING_CHECKS" | grep -qi "build\|compile\|webpack\|rollup\|tsc\|make"; then
-    PATTERNS+=("BUILD")
+    PATTERNS=("BUILD")
     echo "  BUILD: BUILD FAILURES: Compilation/build issues detected"
 fi
 
 # Documentation failures
 if echo "$FAILING_CHECKS" | grep -qi "docs\|documentation\|markdown\|readme"; then
-    PATTERNS+=("DOCUMENTATION")
+    PATTERNS=("DOCUMENTATION")
     echo "  📚 DOCUMENTATION: Documentation quality issues detected"
 fi
 
 # Infrastructure failures
 if echo "$FAILING_CHECKS" | grep -qi "deploy\|infrastructure\|terraform\|ansible"; then
-    PATTERNS+=("INFRASTRUCTURE")
+    PATTERNS=("INFRASTRUCTURE")
     echo "  BUILD: INFRASTRUCTURE: Deployment/infrastructure issues detected"
 fi
 
 # Generic check failures
 if echo "$FAILING_CHECKS" | grep -qi "^check\|validate\|verify"; then
-    PATTERNS+=("VALIDATION")
-    echo "  SUCCESS: VALIDATION: General validation failures detected"
+    PATTERNS=("VALIDATION")
+    echo "   VALIDATION: General validation failures detected"
 fi
 
 # Unknown patterns
 if [ ${#PATTERNS[@]} -eq 0 ]; then
-    PATTERNS+=("UNKNOWN")
+    PATTERNS=("UNKNOWN")
     echo "  ❓ UNKNOWN PATTERNS: Unrecognized failure types"
 fi
 
@@ -114,10 +114,10 @@ for pattern in "${PATTERNS[@]}"; do
             echo "  TEST: TESTING: Review test logs, fix failing assertions, verify test data"
             ;;
         "CODE_QUALITY")
-            echo "  NOTE: CODE_QUALITY: Run formatters (black, prettier), fix linting errors"
+            echo "   CODE_QUALITY: Run formatters (black, prettier), fix linting errors"
             ;;
         "SECURITY")
-            echo "  SECURE: SECURITY: Update dependencies, patch vulnerabilities, review security policies"
+            echo "   SECURITY: Update dependencies, patch vulnerabilities, review security policies"
             ;;
         "BUILD")
             echo "  BUILD: BUILD: Check dependencies, fix compilation errors, verify configurations"
@@ -129,7 +129,7 @@ for pattern in "${PATTERNS[@]}"; do
             echo "  BUILD: INFRASTRUCTURE: Verify deployment configs, check environment variables"
             ;;
         "VALIDATION")
-            echo "  SUCCESS: VALIDATION: Check workflow permissions, verify environment setup"
+            echo "   VALIDATION: Check workflow permissions, verify environment setup"
             ;;
         "UNKNOWN")
             echo "  ❓ UNKNOWN: Manual investigation required, check individual CI logs"
@@ -140,12 +140,12 @@ done
 echo ""
 echo "BOT: Auto-fix Potential Assessment:"
 if [[ " ${PATTERNS[*]} " =~ " CODE_QUALITY " ]] || [[ " ${PATTERNS[*]} " =~ " DOCUMENTATION " ]]; then
-    echo "  SUCCESS: HIGH: Code quality and documentation issues are auto-fixable"
+    echo "   HIGH: Code quality and documentation issues are auto-fixable"
 elif [[ " ${PATTERNS[*]} " =~ " TESTING " ]] && [[ " ${PATTERNS[*]} " =~ " BUILD " ]]; then
-    echo "  WARNING: MEDIUM: Mixed issues - some auto-fixable, some require manual intervention"
+    echo "   MEDIUM: Mixed issues - some auto-fixable, some require manual intervention"
 else
-    echo "  ERROR: LOW: Manual intervention likely required for most issues"
+    echo "   LOW: Manual intervention likely required for most issues"
 fi
 
 echo ""
-echo "SUCCESS: Pattern analysis complete"
+echo " Pattern analysis complete"

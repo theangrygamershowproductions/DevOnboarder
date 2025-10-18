@@ -15,7 +15,7 @@ CLEANED=0
 REPORTS_DIR="reports"
 AAR_DIR=".aar"
 LOGS_DIR="logs"
-BACKUP_DIR="$LOGS_DIR/markdown_cleanup_backup_$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="$LOGS_DIR/markdown_cleanup_backup_$(date %Y%m%d_%H%M%S)"
 
 # Create backup and logs directories
 mkdir -p "$BACKUP_DIR" "$LOGS_DIR"
@@ -32,9 +32,9 @@ clean_file_emojis() {
     cp "$file" "$backup_file"
 
     # Remove common emojis used in DevOnboarder markdown generation
-    sed -i 's/📊//g; s/📋//g; s/🎯//g; s/✅//g; s/❌//g; s/⚠️//g; s/🚀//g; s/📝//g; s/💡//g; s/🔍//g' "$file"
+    sed -i 's///g; s///g; s/🎯//g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
 
-    CLEANED=$((CLEANED + 1))
+    CLEANED=$((CLEANED  1))
 }
 
 echo "Phase 1: Cleaning reports directory"
@@ -44,7 +44,7 @@ if [[ -d "$REPORTS_DIR" ]]; then
     echo "Processing $REPORTS_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+        if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
@@ -58,7 +58,7 @@ if [[ -d "$AAR_DIR" ]]; then
     echo "Processing $AAR_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+        if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$AAR_DIR" -name "*.md" -type f -print0)
@@ -71,12 +71,12 @@ echo "==================="
 # Run validation to confirm cleanup
 if ./scripts/validate_markdown_compliance.sh; then
     echo ""
-    echo "SUCCESS: All markdown compliance violations cleaned"
+    echo " All markdown compliance violations cleaned"
     echo "Files cleaned: $CLEANED"
     echo "Backup location: $BACKUP_DIR"
 else
     echo ""
-    echo "WARNING: Some violations may still exist"
+    echo " Some violations may still exist"
     echo "Manual review may be needed"
 fi
 

@@ -98,13 +98,13 @@ monitoring_triggers:
 
 ```markdown
 
-## 🔍 CI Status Report - PR #{{pr_number}}
+##  CI Status Report - PR #{{pr_number}}
 
 **Last Updated:** {{timestamp}}
 
 **Pipeline Status:** {{overall_status}}
 
-### ✅ Completed Successfully
+###  Completed Successfully
 
 {{#successful_checks}}
 
@@ -112,7 +112,7 @@ monitoring_triggers:
 
   {{/successful_checks}}
 
-### 🔄 In Progress
+### SYNC: In Progress
 
 {{#in_progress_checks}}
 
@@ -120,7 +120,7 @@ monitoring_triggers:
 
   {{/in_progress_checks}}
 
-### ❌ Failed
+###  Failed
 
 {{#failed_checks}}
 
@@ -134,7 +134,7 @@ monitoring_triggers:
 
       {{/failed_checks}}
 
-### 📊 Key Metrics
+###  Key Metrics
 
 - **Total Duration:** {{total_duration}}
 
@@ -348,7 +348,7 @@ jobs:
 
 **Operational Excellence KPIs:**
 
-- 95%+ accurate failure classification
+- 95% accurate failure classification
 
 - <5 minute status update latency
 

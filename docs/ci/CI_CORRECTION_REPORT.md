@@ -97,7 +97,7 @@ This document provides a comprehensive report on CI pipeline corrections and imp
 
 - Average build time: 8-10 minutes
 
-- Pipeline reliability: 95%+
+- Pipeline reliability: 95%
 
 ## Monitoring and Maintenance
 

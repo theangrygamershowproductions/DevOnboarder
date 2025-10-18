@@ -19,7 +19,7 @@ updated_at: '2025-09-12'
 visibility: internal
 ---
 
-# 🛠️ DevOnboarder Tools & Maintenance Dashboard
+#  DevOnboarder Tools & Maintenance Dashboard
 
 **Last Updated**: 2025-08-01
 **Status**: Active Maintenance Guide
@@ -33,27 +33,27 @@ visibility: internal
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
-| `scripts/quick_branch_cleanup.sh` | Safe, routine branch cleanup | `bash scripts/quick_branch_cleanup.sh` | ✅ High (dry-run default) |
-| `scripts/comprehensive_branch_cleanup.sh` | Thorough branch analysis | `bash scripts/comprehensive_branch_cleanup.sh` | ✅ High (configurable) |
-| `scripts/manual_branch_cleanup.sh` | Interactive branch management | `bash scripts/manual_branch_cleanup.sh` | ⚠️ Medium (manual review) |
+| `scripts/quick_branch_cleanup.sh` | Safe, routine branch cleanup | `bash scripts/quick_branch_cleanup.sh` |  High (dry-run default) |
+| `scripts/comprehensive_branch_cleanup.sh` | Thorough branch analysis | `bash scripts/comprehensive_branch_cleanup.sh` |  High (configurable) |
+| `scripts/manual_branch_cleanup.sh` | Interactive branch management | `bash scripts/manual_branch_cleanup.sh` |  Medium (manual review) |
 
 ### Artifact Cleanup
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
-| `scripts/enhanced_root_artifact_guard.sh` | Repository pollution detection | `bash scripts/enhanced_root_artifact_guard.sh --check` | ✅ High |
-| `scripts/clean_pytest_artifacts.sh` | Python test artifact cleanup | `bash scripts/clean_pytest_artifacts.sh` | ✅ High |
-| `scripts/enforce_output_location.sh` | Root directory protection | `bash scripts/enforce_output_location.sh` | ✅ High |
+| `scripts/enhanced_root_artifact_guard.sh` | Repository pollution detection | `bash scripts/enhanced_root_artifact_guard.sh --check` |  High |
+| `scripts/clean_pytest_artifacts.sh` | Python test artifact cleanup | `bash scripts/clean_pytest_artifacts.sh` |  High |
+| `scripts/enforce_output_location.sh` | Root directory protection | `bash scripts/enforce_output_location.sh` |  High |
 
 ---
 
-## 📋 **Issue Management Tools**
+##  **Issue Management Tools**
 
 ### PR Review & Feedback Integration
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
-| `scripts/check_pr_inline_comments.sh` | Extract Copilot comments + resolution tracking | `bash scripts/check_pr_inline_comments.sh --summary <PR>` | ✅ High (read-only display, annotation storage) |
+| `scripts/check_pr_inline_comments.sh` | Extract Copilot comments  resolution tracking | `bash scripts/check_pr_inline_comments.sh --summary <PR>` |  High (read-only display, annotation storage) |
 
 ```bash
 
@@ -78,21 +78,21 @@ visibility: internal
 
 | Tool | Purpose | Usage | Safety Level |
 |------|---------|-------|-------------|
-| `scripts/review_resolved_issues.sh` | Systematic issue review | `bash scripts/review_resolved_issues.sh` | ✅ High (read-only) |
-| `scripts/list_open_ci_issues.py` | List CI failure issues | `python scripts/list_open_ci_issues.py` | ✅ High (read-only) |
-| `gh issue close <number>` | Close resolved issues | `gh issue close 1050 --comment "Resolved: details"` | ⚠️ Medium (manual) |
+| `scripts/review_resolved_issues.sh` | Systematic issue review | `bash scripts/review_resolved_issues.sh` |  High (read-only) |
+| `scripts/list_open_ci_issues.py` | List CI failure issues | `python scripts/list_open_ci_issues.py` |  High (read-only) |
+| `gh issue close <number>` | Close resolved issues | `gh issue close 1050 --comment "Resolved: details"` |  Medium (manual) |
 
 ### Issue Patterns Resolved Today
 
-- ✅ **CI Failure Issues**: Check for merged PRs → Close automatically
+-  **CI Failure Issues**: Check for merged PRs  Close automatically
 
-- ✅ **Artifact Pollution**: Run artifact guard → Close if clean
+-  **Artifact Pollution**: Run artifact guard  Close if clean
 
-- 🔍 **Dependency Issues**: Review update status → Close if complete
+-  **Dependency Issues**: Review update status  Close if complete
 
 ---
 
-## 🔧 **Maintenance Workflows**
+##  **Maintenance Workflows**
 
 ### Daily/Weekly Maintenance
 
@@ -136,7 +136,7 @@ bash scripts/run_tests.sh
 
 ---
 
-## 📊 **Monitoring & Diagnostics**
+##  **Monitoring & Diagnostics**
 
 ### CI Health Monitoring
 
@@ -151,13 +151,13 @@ bash scripts/run_tests.sh
 | Tool | Purpose | Usage |
 |------|---------|-------|
 | `scripts/manage_logs.sh list` | List all logs | `bash scripts/manage_logs.sh list` |
-| `scripts/manage_logs.sh clean` | Clean old logs (7+ days) | `bash scripts/manage_logs.sh clean` |
+| `scripts/manage_logs.sh clean` | Clean old logs (7 days) | `bash scripts/manage_logs.sh clean` |
 
 | `scripts/manage_logs.sh archive` | Archive current logs | `bash scripts/manage_logs.sh archive` |
 
 ---
 
-## 🔐 **Security & Compliance Tools**
+##  **Security & Compliance Tools**
 
 ### Enhanced Potato Policy
 
@@ -176,7 +176,7 @@ bash scripts/run_tests.sh
 
 ---
 
-## 📝 **After Action Reporting (AAR)**
+##  **After Action Reporting (AAR)**
 
 ### AAR System Tools
 
@@ -189,17 +189,17 @@ bash scripts/run_tests.sh
 
 ### AAR Workflow
 
-1. **CI Failure Occurs** → Automatic issue creation via `codex.ci.yml`
+1. **CI Failure Occurs**  Automatic issue creation via `codex.ci.yml`
 
-2. **Generate AAR** → `python scripts/generate_aar.py --create-issue`
+2. **Generate AAR**  `python scripts/generate_aar.py --create-issue`
 
-3. **Security Audit** → `python scripts/aar_security.py audit_token_usage`
+3. **Security Audit**  `python scripts/aar_security.py audit_token_usage`
 
-4. **Close Issue** → When root cause resolved
+4. **Close Issue**  When root cause resolved
 
 ---
 
-## 🚀 **Quick Reference Commands**
+##  **Quick Reference Commands**
 
 ### Most Common Maintenance Tasks
 
@@ -246,27 +246,27 @@ bash scripts/review_resolved_issues.sh
 
 ---
 
-## 📈 **Automation Status**
+## GROW: **Automation Status**
 
 ### Currently Automated
 
-- ✅ **CI Failure Detection**: Automatic issue creation
+-  **CI Failure Detection**: Automatic issue creation
 
-- ✅ **Artifact Pollution Monitoring**: Scheduled checks
+-  **Artifact Pollution Monitoring**: Scheduled checks
 
-- ✅ **Branch Protection**: Pre-commit hooks enforce standards
+-  **Branch Protection**: Pre-commit hooks enforce standards
 
-- ✅ **Log Centralization**: Mandatory policy enforcement
+-  **Log Centralization**: Mandatory policy enforcement
 
-- ✅ **Security Policy**: Enhanced Potato Policy v2.0
+-  **Security Policy**: Enhanced Potato Policy v2.0
 
 ### Manual Processes (Candidates for Automation)
 
-- 🔧 **Issue Resolution Review**: Could be automated based on status patterns
+-  **Issue Resolution Review**: Could be automated based on status patterns
 
-- 🔧 **Branch Cleanup**: Could be scheduled weekly
+-  **Branch Cleanup**: Could be scheduled weekly
 
-- 🔧 **Log Archival**: Could be automated monthly
+-  **Log Archival**: Could be automated monthly
 
 ---
 

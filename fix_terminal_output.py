@@ -10,19 +10,19 @@ import sys
 from pathlib import Path
 
 
-def fix_terminal_output(content: str) -> str:
+def fix_terminal_output(content: str)  str:
     """Fix terminal output violations in shell scripts."""
     # Define emoji and Unicode patterns to remove/replace
     emoji_patterns = [
-        r"🔍\s*",  # Magnifying glass
-        r"✅\s*",  # Check mark
-        r"❌\s*",  # X mark
+        r"\s*",  # Magnifying glass
+        r"\s*",  # Check mark
+        r"\s*",  # X mark
         r"🚫\s*",  # Prohibited sign
-        r"⚠️\s*",  # Warning sign
+        r"\s*",  # Warning sign
         r"🎯\s*",  # Target
-        r"📋\s*",  # Clipboard
-        r"🚀\s*",  # Rocket
-        r"💡\s*",  # Light bulb
+        r"\s*",  # Clipboard
+        r"\s*",  # Rocket
+        r"\s*",  # Light bulb
     ]
 
     result = content
@@ -34,8 +34,8 @@ def fix_terminal_output(content: str) -> str:
     result = re.sub(r"\s{2,}", " ", result)
 
     # Clean up leading/trailing spaces in echo statements
-    result = re.sub(r'echo\s+"(\s+)', r'echo "\1', result)
-    result = re.sub(r'(\s+)"\s*$', r'\1"', result)
+    result = re.sub(r'echo\s"(\s)', r'echo "\1', result)
+    result = re.sub(r'(\s)"\s*$', r'\1"', result)
 
     return result
 

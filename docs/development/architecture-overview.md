@@ -60,13 +60,13 @@ All services depend on shared PostgreSQL database (port 5432) and use consistent
 
 ## Core Services
 
-- **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
+- **Backend**: Python 3.12  FastAPI  SQLAlchemy (Port 8001)
 
-- **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
+- **Discord Bot**: TypeScript  Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
 
-- **Frontend**: React + Vite + TypeScript (Port 8081)
+- **Frontend**: React  Vite  TypeScript (Port 8081)
 
-- **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
+- **Auth Service**: FastAPI  JWT  Discord OAuth (Port 8002)
 
 - **XP System**: Gamification API with user levels and contributions tracking
 
@@ -92,7 +92,7 @@ All FastAPI services follow a consistent pattern for health checks and CORS:
 
 # Standard service creation pattern (src/llama2_agile_helper/api.py, src/xp/api/__init__.py)
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()  # From utils.cors
 
@@ -106,7 +106,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```

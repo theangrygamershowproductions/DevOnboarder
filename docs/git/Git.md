@@ -86,13 +86,13 @@ Our current structure:
 
 ```markdown
 /company-project
-├── .gitignore
-├── frontend/ ← Separate Git repo (ignored)
-├── backend/ ← Separate Git repo (ignored)
+── .gitignore
+── frontend/ ← Separate Git repo (ignored)
+── backend/ ← Separate Git repo (ignored)
 
 ```
 
-- `frontend/`: React + TypeScript + Tailwind stack
+- `frontend/`: React  TypeScript  Tailwind stack
 
 - `backend/`: Auth microservice
 
@@ -349,7 +349,7 @@ Hooks ensure:
 
     ```sh
     touch pre-commit
-    chmod +x pre-commit
+    chmod x pre-commit
     ```
 
 3. Example pre-commit

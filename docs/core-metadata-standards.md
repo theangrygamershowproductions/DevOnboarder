@@ -375,7 +375,7 @@ live_triggers_enabled: false # During draft mode
 
 ### GitHub Actions Integration
 
-The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workflows**:
+The metadata standards integrate with DevOnboarder's **22 GitHub Actions workflows**:
 
 - **ci.yml**: Main test pipeline with metadata validation
 
@@ -394,7 +394,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 1. **Virtual Environment Missing**:
 
     ```bash
-    # ✅ Solution
+    #  Solution
 
     source .venv/bin/activate
     pip install -e .[test]
@@ -404,7 +404,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 2. **Markdown Compliance Failures**:
 
     ```bash
-    # ✅ Check and fix
+    #  Check and fix
 
     npx markdownlint-cli2 "docs/your-file.md" --fix
     ```
@@ -412,7 +412,7 @@ The metadata standards integrate with DevOnboarder's **22+ GitHub Actions workfl
 3. **YAML Syntax Errors**:
 
     ```bash
-    # ✅ Validate YAML structure
+    #  Validate YAML structure
 
     python -c "import yaml; yaml.safe_load(open('docs/file.md').read().split('---')[1])"
     ```
@@ -440,19 +440,19 @@ python scripts/ci-monitor.py --integration-status
 
 ### For DevOnboarder Project
 
-✅ **Consistent Discovery**: Automated agent and document indexing
-✅ **Quality Assurance**: Enforced standards via CI/CD pipeline
-✅ **Integration Ready**: Compatible with existing automation
-✅ **Security Compliant**: Follows Enhanced Potato Policy
-✅ **Environment Safe**: Virtual environment compatibility
+ **Consistent Discovery**: Automated agent and document indexing
+ **Quality Assurance**: Enforced standards via CI/CD pipeline
+ **Integration Ready**: Compatible with existing automation
+ **Security Compliant**: Follows Enhanced Potato Policy
+ **Environment Safe**: Virtual environment compatibility
 
 ### for Development Teams
 
-✅ **Clear Structure**: Predictable metadata patterns
-✅ **Automated Validation**: Pre-commit and CI enforcement
-✅ **Self-Documenting**: Metadata provides context and purpose
-✅ **Integration Path**: Clear path from draft to production
-✅ **Quality Gates**: Automatic compliance checking
+ **Clear Structure**: Predictable metadata patterns
+ **Automated Validation**: Pre-commit and CI enforcement
+ **Self-Documenting**: Metadata provides context and purpose
+ **Integration Path**: Clear path from draft to production
+ **Quality Gates**: Automatic compliance checking
 
 ---
 

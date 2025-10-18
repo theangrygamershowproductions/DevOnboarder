@@ -27,12 +27,12 @@ test_token_exists() {
     # shellcheck disable=SC2034
     local description="$2"
 
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    TOTAL_TESTS=$((TOTAL_TESTS  1))
 
     local token_value="${!token_name:-}"
     if [ -n "$token_value" ]; then
         echo "   Status: Available"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
+        PASSED_TESTS=$((PASSED_TESTS  1))
     else
         echo "   Status: Error: MISSING"
     fi
@@ -46,7 +46,7 @@ test_github_api() {
     # shellcheck disable=SC2034
     local description="$3"
 
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    TOTAL_TESTS=$((TOTAL_TESTS  1))
 
     local token_value="${!token_name:-}"
     if [ -z "$token_value" ]; then
@@ -61,12 +61,12 @@ test_github_api() {
 
     if GH_TOKEN="$token_value" gh api "$endpoint" > /dev/null 2>&1; then
         echo "   Status: Success: API WORKING"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
+        PASSED_TESTS=$((PASSED_TESTS  1))
     else
         # Check for propagation delay in the API error message
         if echo "$result" | grep -qi "propagation delay\|token not yet active\|bad credentials"; then
             echo "   Status: ⏳ PROPAGATION DELAY"
-            PROPAGATION_DELAYS=$((PROPAGATION_DELAYS + 1))
+            PROPAGATION_DELAYS=$((PROPAGATION_DELAYS  1))
         else
             echo "   Status: Error: API FAILED"
         fi

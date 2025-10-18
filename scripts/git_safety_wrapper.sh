@@ -13,22 +13,22 @@ set -euo pipefail
 # Centralized logging
 LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/git_safety_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/git_safety_$(date %Y%m%d_%H%M%S).log"
 
 log_info() {
-    echo "INFO: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_error() {
-    echo "ERROR: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_warning() {
-    echo "WARNING: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_success() {
-    echo "SUCCESS: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 # Check for Potato Approval file
@@ -43,7 +43,7 @@ check_potato_approval() {
     local approval_time
     approval_time=$(stat -c %Y "$approval_file" 2>/dev/null || echo 0)
     local current_time
-    current_time=$(date +%s)
+    current_time=$(date %s)
     local time_diff=$((current_time - approval_time))
 
     # 1 hour = 3600 seconds
@@ -144,7 +144,7 @@ request_potato_approval() {
         echo "# Reason: $emergency_reason"
         echo "# Impact: $impact"
         echo "# Rollback: $rollback_plan"
-        echo "# Valid until: $(date -d '+1 hour')"
+        echo "# Valid until: $(date -d '1 hour')"
     } > .potato_emergency_approval
 
     log_success "Emergency approval granted for 1 hour"

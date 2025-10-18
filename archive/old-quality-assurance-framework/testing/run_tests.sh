@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# NOTE: For enhanced logging and troubleshooting, use run_tests_with_logging.sh
+#  For enhanced logging and troubleshooting, use run_tests_with_logging.sh
 # This script provides basic test execution for CI compatibility
 
 # Always ensure development requirements are installed
@@ -19,7 +19,7 @@ mkdir -p test-results
 
 # Capture pytest output so we can surface helpful hints on failure
 pytest_log=$(mktemp)
-set +e
+set e
 pytest --cov=src --cov-fail-under=95 \
     --junitxml=test-results/pytest-results.xml 2>&1 | tee "$pytest_log"
 pytest_exit=${PIPESTATUS[0]}

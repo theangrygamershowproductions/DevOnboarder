@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import List
 
 
-def setup_logging() -> None:
+def setup_logging()  None:
     """Set up centralized logging per DevOnboarder standards."""
     import logging
 
@@ -48,7 +48,7 @@ def setup_logging() -> None:
     )
 
 
-def fix_markdown_content(content: str) -> tuple[str, List[str]]:
+def fix_markdown_content(content: str)  tuple[str, List[str]]:
     """
     Fix common markdown formatting issues in content.
 
@@ -66,33 +66,33 @@ def fix_markdown_content(content: str) -> tuple[str, List[str]]:
 
     # Fix MD026: Remove trailing punctuation from headings
     before_punctuation = content
-    content = re.sub(r"^(#+\s+.*[^:]):$", r"\1", content, flags=re.MULTILINE)
+    content = re.sub(r"^(#\s.*[^:]):$", r"\1", content, flags=re.MULTILINE)
     if content != before_punctuation:
         issues_fixed.append("MD026: Removed trailing punctuation from headings")
 
     # Remove trailing spaces (MD009)
-    before_spaces = len(re.findall(r" +$", content, flags=re.MULTILINE))
-    content = re.sub(r" +$", "", content, flags=re.MULTILINE)
+    before_spaces = len(re.findall(r" $", content, flags=re.MULTILINE))
+    content = re.sub(r" $", "", content, flags=re.MULTILINE)
     if before_spaces > 0:
         issues_fixed.append(f"MD009: Fixed {before_spaces} trailing space issues")
 
     # Fix MD022: Add blank lines around headings
     before_headings = content
     # Add blank line before headings (but not at start of file)
-    content = re.sub(r"(?<!^)(?<!\n)\n(#{1,6}\s+[^\n]+)", r"\n\n\1", content)
+    content = re.sub(r"(?<!^)(?<!\n)\n(#{1,6}\s[^\n])", r"\n\n\1", content)
     # Add blank line after headings
-    content = re.sub(r"(#{1,6}\s+[^\n]+)\n(?!\n)([^\n#])", r"\1\n\n\2", content)
+    content = re.sub(r"(#{1,6}\s[^\n])\n(?!\n)([^\n#])", r"\1\n\n\2", content)
     if content != before_headings:
         issues_fixed.append("MD022: Fixed heading spacing issues")
 
     # Fix MD032: Add blank lines around lists
     before_lists = content
     # Add blank line before lists
-    content = re.sub(r"(?<!\n)\n([-*+]\s+[^\n]+)", r"\n\n\1", content)
-    content = re.sub(r"(?<!\n)\n(\d+\.\s+[^\n]+)", r"\n\n\1", content)
+    content = re.sub(r"(?<!\n)\n([-*]\s[^\n])", r"\n\n\1", content)
+    content = re.sub(r"(?<!\n)\n(\d\.\s[^\n])", r"\n\n\1", content)
     # Add blank line after lists (before non-list content)
-    content = re.sub(r"([-*+]\s+[^\n]+)\n(?!\n)(?![-*+\d]\s)", r"\1\n\n", content)
-    content = re.sub(r"(\d+\.\s+[^\n]+)\n(?!\n)(?![-*+\d]\s)", r"\1\n\n", content)
+    content = re.sub(r"([-*]\s[^\n])\n(?!\n)(?![-*\d]\s)", r"\1\n\n", content)
+    content = re.sub(r"(\d\.\s[^\n])\n(?!\n)(?![-*\d]\s)", r"\1\n\n", content)
     if content != before_lists:
         issues_fixed.append("MD032: Fixed list spacing issues")
 
@@ -112,12 +112,12 @@ def fix_markdown_content(content: str) -> tuple[str, List[str]]:
         issues_fixed.append("Cleaned up excessive blank lines")
 
     # Ensure file ends with single newline
-    content = content.rstrip() + "\n"
+    content = content.rstrip()  "\n"
 
     return content, issues_fixed
 
 
-def process_markdown_file(file_path: Path, create_backup: bool = True) -> bool:
+def process_markdown_file(file_path: Path, create_backup: bool = True)  bool:
     """
     Process a single markdown file.
 
@@ -180,7 +180,7 @@ def process_markdown_file(file_path: Path, create_backup: bool = True) -> bool:
         return False
 
 
-def find_markdown_files(path: Path) -> List[Path]:
+def find_markdown_files(path: Path)  List[Path]:
     """
     Find all markdown files in a path.
 
@@ -212,7 +212,7 @@ def find_markdown_files(path: Path) -> List[Path]:
     return sorted(markdown_files)
 
 
-def main() -> int:
+def main()  int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="DevOnboarder Markdown Auto-Formatter",
@@ -287,10 +287,10 @@ def main() -> int:
     for file_path in files_to_process:
         if args.dry_run:
             logger.info(f"Would process: {file_path}")
-            success_count += 1
+            success_count = 1
         else:
             if process_markdown_file(file_path, not args.no_backup):
-                success_count += 1
+                success_count = 1
 
     logger.info(f"Successfully processed {success_count}/{len(files_to_process)} files")
 

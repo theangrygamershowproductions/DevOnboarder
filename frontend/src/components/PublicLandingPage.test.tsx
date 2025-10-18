@@ -43,12 +43,12 @@ describe("PublicLandingPage Component", () => {
 
     it("shows automation feature", () => {
         render(<PublicLandingPage />);
-        expect(screen.getByText(/Automated CI\/CD with 22\+ GitHub Actions workflows/)).toBeInTheDocument();
+        expect(screen.getByText(/Automated CI\/CD with 22\ GitHub Actions workflows/)).toBeInTheDocument();
     });
 
     it("shows test coverage feature", () => {
         render(<PublicLandingPage />);
-        expect(screen.getByText(/Comprehensive test coverage \(95%\+ requirement\)/)).toBeInTheDocument();
+        expect(screen.getByText(/Comprehensive test coverage \(95%\ requirement\)/)).toBeInTheDocument();
     });
 
     it("handles view source button", () => {
@@ -81,7 +81,7 @@ describe("PublicLandingPage Component", () => {
 
     it("shows backend technology stack", () => {
         render(<PublicLandingPage />);
-        expect(screen.getByText(/Python 3.12 \+ FastAPI \+ SQLAlchemy/)).toBeInTheDocument();
+        expect(screen.getByText(/Python 3.12 \ FastAPI \ SQLAlchemy/)).toBeInTheDocument();
     });
 
     it("displays project philosophy", () => {
@@ -146,7 +146,7 @@ describe("PublicLandingPage Component", () => {
         render(<PublicLandingPage />);
 
         // Wait for response time to be displayed - expect multiple services to show response time
-        const responseTimeElements = await screen.findAllByText(/Response: \d+ms/, { exact: false }, { timeout: 3000 });
+        const responseTimeElements = await screen.findAllByText(/Response: \dms/, { exact: false }, { timeout: 3000 });
         expect(responseTimeElements).toHaveLength(4); // 4 services should show response time
     });
 });

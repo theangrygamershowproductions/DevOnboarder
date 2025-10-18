@@ -7,7 +7,7 @@ set -euo pipefail
 suggest_branch_name() {
     local context="$1"
     local timestamp
-    timestamp=$(date +%Y%m%d)
+    timestamp=$(date %Y%m%d)
 
     case "$context" in
         "fix")
@@ -53,10 +53,10 @@ create_clean_branch() {
     if [[ -f "$SIGNING_KEY_PATH" ]]; then
         git config --local user.signingkey "$SIGNING_KEY_PATH"
     else
-        echo "⚠️  Signing key not found at $SIGNING_KEY_PATH; skipping user.signingkey config."
+        echo "  Signing key not found at $SIGNING_KEY_PATH; skipping user.signingkey config."
     fi
 
-    echo "✅ Branch $branch_name created and ready"
+    echo " Branch $branch_name created and ready"
     echo "   Current branch: $(git branch --show-current)"
 }
 
@@ -105,7 +105,7 @@ main() {
     local description="$*"
 
     if [[ -z "$description" ]]; then
-        echo "❌ Description required"
+        echo " Description required"
         echo "Usage: $0 $type 'your description here'"
         exit 1
     fi

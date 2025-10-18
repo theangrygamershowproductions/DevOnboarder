@@ -12,9 +12,9 @@ consolidation_priority: P3
 
 **Key Behavior Learned from PR #1715:**
 
-✅ **Immediate "Outdated" Marking**: GitHub immediately marks Copilot review comments as "Outdated" when code changes address the issues, regardless of when the comments were originally made.
+ **Immediate "Outdated" Marking**: GitHub immediately marks Copilot review comments as "Outdated" when code changes address the issues, regardless of when the comments were originally made.
 
-❌ **Common Misconception**: Comments are NOT based on stale commit hashes - GitHub's review system actively tracks resolution status in real-time.
+ **Common Misconception**: Comments are NOT based on stale commit hashes - GitHub's review system actively tracks resolution status in real-time.
 
 ### Review Resolution Process
 

@@ -83,6 +83,6 @@ gh pr create --title "$PR_TITLE" --body-file "$TEMP_BODY"
 # Cleanup
 rm "$TEMP_BODY"
 
-echo "✅ Fix PR created successfully!"
+echo " Fix PR created successfully!"
 echo "Branch: $BRANCH_NAME"
 echo "Next steps: Review and merge when CI passes"

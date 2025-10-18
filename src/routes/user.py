@@ -10,7 +10,7 @@ router = APIRouter()
 @router.get("/api/user")
 def user_info(
     current_user: auth_service.User = Depends(auth_service.get_current_user),
-) -> dict[str, object]:
+)  dict[str, object]:
     """Return the current user's Discord profile and role flags."""
     roles = getattr(current_user, "roles", {})
     return {

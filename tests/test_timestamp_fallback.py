@@ -37,7 +37,7 @@ class TestTimestampFallback:
         assert "T" in result
 
         # Should be parseable as ISO format
-        parsed = datetime.fromisoformat(result.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(result.replace("Z", "00:00"))
         assert parsed.tzinfo is not None
 
     def test_get_local_timestamp_for_filename_format(self):

@@ -16,23 +16,23 @@ Begin implementation of DevOnboarder Phase 2 rollout based on the August 2025 re
 
 ---
 
-## ✅ Tasks to Execute
+##  Tasks to Execute
 
-### 🛠 CI/CD + Automation
+### 🛠 CI/CD  Automation
 
-- [x] Replace `GITHUB_TOKEN` usage in `validate_pr_checklist.sh` with `CHECKLIST_BOT_TOKEN` ✅ (script doesn't use GITHUB_TOKEN)
+- [x] Replace `GITHUB_TOKEN` usage in `validate_pr_checklist.sh` with `CHECKLIST_BOT_TOKEN`  (script doesn't use GITHUB_TOKEN)
 
-- [x] Refactor `close-codex-issues.yml` to remove `jq`/regex; use `gh --json` instead ✅ (replaced with --jq)
+- [x] Refactor `close-codex-issues.yml` to remove `jq`/regex; use `gh --json` instead  (replaced with --jq)
 
-- [x] Patch `check_docs.sh` to gracefully handle offline environments (Vale fallback) ✅ (already implemented)
+- [x] Patch `check_docs.sh` to gracefully handle offline environments (Vale fallback)  (already implemented)
 
-- [x] Add `pip check` to `scripts/run_tests.sh` to detect broken installs ✅ (already implemented)
+- [x] Add `pip check` to `scripts/run_tests.sh` to detect broken installs  (already implemented)
 
-### 🔐 Token Hygiene & Security
+###  Token Hygiene & Security
 
-- [ ] Rotate and validate all write-scope GitHub tokens (bots + CI)
+- [ ] Rotate and validate all write-scope GitHub tokens (bots  CI)
 
-- [x] Ensure `.env.example` placeholders remain safe and never real credentials ✅ (verified safe)
+- [x] Ensure `.env.example` placeholders remain safe and never real credentials  (verified safe)
 
 ### 🧱 Modular Extraction
 
@@ -44,19 +44,19 @@ Begin implementation of DevOnboarder Phase 2 rollout based on the August 2025 re
 
 ### 📚 Documentation Refactor
 
-- [x] Migrate all Markdown files into versioned `docs/v1/` structure ✅ (core files migrated)
+- [x] Migrate all Markdown files into versioned `docs/v1/` structure  (core files migrated)
 
-- [x] Update CI to lint against `docs/v1/` directory ✅ (markdownlint.yml updated)
+- [x] Update CI to lint against `docs/v1/` directory  (markdownlint.yml updated)
 
 - [ ] Re-index `.codex/agents/` metadata for doc links if paths change
 
-### ⚙️ Codex Agent Certification
+###  Codex Agent Certification
 
-- [x] Validate YAML frontmatter schema for all `.codex/agents/**` prompts ✅ (all 7 agents certified)
+- [x] Validate YAML frontmatter schema for all `.codex/agents/**` prompts  (all 7 agents certified)
 
-- [x] Flag missing metadata fields, incorrect roles, or non-routable agents ✅ (validation script created)
+- [x] Flag missing metadata fields, incorrect roles, or non-routable agents  (validation script created)
 
-- [x] Log readiness status per agent in `docs/v1/agent_certification_log.md` ✅ (log created and populated)
+- [x] Log readiness status per agent in `docs/v1/agent_certification_log.md`  (log created and populated)
 
 ---
 
@@ -64,7 +64,7 @@ Begin implementation of DevOnboarder Phase 2 rollout based on the August 2025 re
 
 - Prepare orchestration test for multi-agent Codex runtime under simulated load
 
-- Validate Discord bot + backend API response under concurrent workflows
+- Validate Discord bot  backend API response under concurrent workflows
 
 ---
 

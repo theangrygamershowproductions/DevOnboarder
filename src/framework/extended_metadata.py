@@ -366,14 +366,14 @@ class ExtendedMetadata:
         if self.similarity_group not in valid_similarity_groups:
             raise ValueError(f"Invalid similarity_group: {self.similarity_group}")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self)  Dict[str, Any]:
         """Convert to dictionary for serialization"""
         from dataclasses import asdict
 
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ExtendedMetadata":
+    def from_dict(cls, data: Dict[str, Any])  "ExtendedMetadata":
         """Create from dictionary for deserialization"""
         # Create a copy to avoid modifying original data
         data = data.copy()
@@ -463,7 +463,7 @@ class ExtendedMetadata:
 # Utility functions for metadata management
 def create_default_metadata(
     script_name: str, similarity_group: str
-) -> ExtendedMetadata:
+)  ExtendedMetadata:
     """Create default extended metadata for a script"""
     return ExtendedMetadata(
         script_name=script_name,

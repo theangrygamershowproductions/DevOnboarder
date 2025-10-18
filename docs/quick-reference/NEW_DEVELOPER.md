@@ -95,7 +95,7 @@ git checkout -b feat/your-feature-name
 
 ### **Problem**: `ModuleNotFoundError` when running tests
 
-**Solution**: `docs/troubleshooting/common-issues-resolution.md` → Virtual Environment section
+**Solution**: `docs/troubleshooting/common-issues-resolution.md`  Virtual Environment section
 
 **Quick Fix**:
 
@@ -107,7 +107,7 @@ pip install -e .[test]
 
 ### **Problem**: Commit fails with pre-commit errors
 
-**Solution**: `docs/development/development-workflow.md` → Safe Commit section
+**Solution**: `docs/development/development-workflow.md`  Safe Commit section
 
 **Quick Fix**:
 
@@ -121,7 +121,7 @@ pip install -e .[test]
 
 ### **Problem**: Tests pass locally but fail in CI
 
-**Solution**: `docs/troubleshooting/common-issues-resolution.md` → CI Differences section
+**Solution**: `docs/troubleshooting/common-issues-resolution.md`  CI Differences section
 
 **Common Causes**:
 
@@ -131,15 +131,15 @@ pip install -e .[test]
 
 ### **Problem**: Terminal output causes hanging
 
-**Solution**: `docs/policies/terminal-output-policy.md` → Safe Patterns section
+**Solution**: `docs/policies/terminal-output-policy.md`  Safe Patterns section
 
 **Remember**:
 
-- ❌ Never use emojis in echo commands
+-  Never use emojis in echo commands
 
-- ❌ Never use multi-line echo
+-  Never use multi-line echo
 
-- ✅ Use individual echo commands with plain text
+-  Use individual echo commands with plain text
 
 ## 📚 **Essential Reading Order**
 
@@ -171,7 +171,7 @@ pip install -e .[test]
 
 - **`enhanced-potato-policy.md`** - When handling sensitive files
 
-## ⚡ **Development Workflow Cheat Sheet**
+## FAST: **Development Workflow Cheat Sheet**
 
 ### **Starting New Work**
 
@@ -230,7 +230,7 @@ git push origin feat/your-branch
 
 ```
 
-## 🔧 **Essential Scripts for New Developers**
+##  **Essential Scripts for New Developers**
 
 ### **Quality Control**
 
@@ -252,7 +252,7 @@ git push origin feat/your-branch
 
 - `./scripts/manage_logs.sh list` - Check log files
 
-## 📞 **Getting Help**
+##  **Getting Help**
 
 ### **Documentation Issues**
 

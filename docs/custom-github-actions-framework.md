@@ -62,12 +62,12 @@ uses: actions/setup-node@v4  # Instead of outdated third-party
 
 ```text
 .github/actions/action-name/
-├── action.yml          # Action metadata and interface
-├── README.md          # Usage documentation
-├── src/               # Source code (if composite action)
-│   └── main.sh
-└── tests/             # Action testing
-    └── test.yml
+── action.yml          # Action metadata and interface
+── README.md          # Usage documentation
+── src/               # Source code (if composite action)
+│   ── main.sh
+── tests/             # Action testing
+    ── test.yml
 ```
 
 ### Quality Requirements
@@ -143,11 +143,11 @@ uses: actions/setup-node@v4  # Instead of outdated third-party
 
 **Benefits**:
 
-- ✅ No Node.js version conflicts
-- ✅ Explicit version control
-- ✅ Cross-platform compatibility
-- ✅ Proper error handling
-- ✅ DevOnboarder quality standards
+-  No Node.js version conflicts
+-  Explicit version control
+-  Cross-platform compatibility
+-  Proper error handling
+-  DevOnboarder quality standards
 
 ## Migration Strategy
 

@@ -111,7 +111,7 @@ This retrospective analyzes the CI documentation quality improvements implemente
 
 ## Success Metrics
 
-- Documentation validation pass rate: Target 98%+
+- Documentation validation pass rate: Target 98%
 
 - Time to fix documentation issues: <5 minutes
 

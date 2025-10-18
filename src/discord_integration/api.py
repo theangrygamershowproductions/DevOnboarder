@@ -23,7 +23,7 @@ router = APIRouter()
 @router.post("/oauth")
 def exchange_oauth(
     data: dict[str, Any], db: Session = Depends(auth_service.get_db)
-) -> dict[str, str]:
+)  dict[str, str]:
     """Exchange a Discord OAuth code for a token and store it."""
     try:
         username = data["username"]
@@ -87,7 +87,7 @@ def exchange_oauth(
 @router.get("/roles")
 def get_roles(
     username: str, db: Session = Depends(auth_service.get_db)
-) -> dict[str, Any]:
+)  dict[str, Any]:
     """Get Discord roles for a user."""
     try:
         user = db.query(auth_service.User).filter_by(username=username).first()
@@ -114,7 +114,7 @@ def get_roles(
         raise HTTPException(status_code=500, detail="Database error") from exc
 
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     """Build the Discord Integration FastAPI application."""
 
     app = FastAPI()
@@ -138,14 +138,14 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
     app.include_router(router)
     return app
 
 
-def main() -> None:
+def main()  None:
     """Run the Discord Integration service."""
     import uvicorn
 

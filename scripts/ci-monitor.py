@@ -37,7 +37,7 @@ class CIMonitor:
         """Initialize CI monitor for specific PR."""
         self.pr_number = pr_number
 
-    def get_failed_workflow_runs(self) -> Dict[str, Any]:
+    def get_failed_workflow_runs(self)  Dict[str, Any]:
         """Fetch recent failed workflow runs for additional context."""
         cmd = [
             "gh",
@@ -54,13 +54,13 @@ class CIMonitor:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return {"failed_runs": json.loads(result.stdout)}
         except subprocess.CalledProcessError as e:
-            print(f"⚠️  Failed to fetch failed workflow runs: {e}")
+            print(f"  Failed to fetch failed workflow runs: {e}")
             return {"failed_runs": []}
         except json.JSONDecodeError as e:
-            print(f"❌ Error parsing failed workflow runs: {e}")
+            print(f" Error parsing failed workflow runs: {e}")
             return {"failed_runs": []}
 
-    def get_pr_data(self) -> Dict[str, Any]:
+    def get_pr_data(self)  Dict[str, Any]:
         """Fetch PR data and CI status from GitHub API."""
         cmd = [
             "gh",
@@ -74,15 +74,15 @@ class CIMonitor:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
-            print(f"⚠️  GitHub CLI error for PR #{self.pr_number}")
+            print(f"  GitHub CLI error for PR #{self.pr_number}")
             print(f"   Error: {e}")
             # Try alternative approach with less data
             return self._try_fallback_pr_data()
         except json.JSONDecodeError as e:
-            print(f"❌ Error parsing PR data: {e}")
+            print(f" Error parsing PR data: {e}")
             return self._create_minimal_pr_data()
 
-    def _try_fallback_pr_data(self) -> Dict[str, Any]:
+    def _try_fallback_pr_data(self)  Dict[str, Any]:
         """Try simpler GitHub CLI commands as fallback."""
         try:
             # Try basic PR view without checks
@@ -144,7 +144,7 @@ class CIMonitor:
         except subprocess.CalledProcessError:
             return self._create_minimal_pr_data()
 
-    def _create_minimal_pr_data(self) -> Dict[str, Any]:
+    def _create_minimal_pr_data(self)  Dict[str, Any]:
         """Create minimal PR data when GitHub CLI fails."""
         base_url = "https://github.com/theangrygamershowproductions"
         pr_url = f"{base_url}/DevOnboarder/pull/{self.pr_number}"
@@ -155,14 +155,14 @@ class CIMonitor:
             "statusCheckRollup": [],
         }
 
-    def categorize_check(self, check_name: str) -> str:
+    def categorize_check(self, check_name: str)  str:
         """Categorize CI checks by type."""
         name = check_name.lower()
 
         # Infrastructure and setup
         install_terms = ["install", "setup", "cache", "docker"]
         if any(term in name for term in install_terms):
-            return "🔧 Infrastructure"
+            return " Infrastructure"
 
         # Code quality
         format_terms = ["format", "style", "black", "prettier"]
@@ -176,16 +176,16 @@ class CIMonitor:
 
         # Build and deployment
         if any(term in name for term in ["build", "compile", "deploy"]):
-            return "🏗️ Build"
+            return "BUILD: Build"
 
         # Security
         security_terms = ["security", "audit", "policy", "permissions"]
         if any(term in name for term in security_terms):
             return "🔒 Security"
 
-        return "⚙️ Other"
+        return " Other"
 
-    def analyze_ci_status(self, checks: list) -> Dict[str, Any]:
+    def analyze_ci_status(self, checks: list)  Dict[str, Any]:
         """Analyze CI status and provide insights."""
         if not checks:
             return {"status": "no_checks", "message": "No CI checks found"}
@@ -229,7 +229,7 @@ class CIMonitor:
             categories[category].append(check)
         return categories
 
-    def generate_status_report(self, pr_data: Dict[str, Any]) -> str:
+    def generate_status_report(self, pr_data: Dict[str, Any])  str:
         """Generate comprehensive status report."""
         title = pr_data.get("title", "Unknown PR")
         state = pr_data.get("state", "UNKNOWN")
@@ -257,59 +257,59 @@ class CIMonitor:
         # After: get_utc_display_timestamp()  # Actually uses UTC
         # Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
         timestamp = get_utc_display_timestamp()
-        report = f"# 🔍 CI Status Report - PR #{self.pr_number}\n\n"
-        report += f"**Title**: {title}\n"
-        report += f"**State**: {state}\n"
-        report += f"**URL**: {url}\n"
-        report += f"**Generated**: {timestamp}\n\n"
+        report = f"#  CI Status Report - PR #{self.pr_number}\n\n"
+        report = f"**Title**: {title}\n"
+        report = f"**State**: {state}\n"
+        report = f"**URL**: {url}\n"
+        report = f"**Generated**: {timestamp}\n\n"
 
         # Overall status
         status_emoji = {
-            "success": "✅",
-            "failed": "❌",
+            "success": "",
+            "failed": "",
             "pending": "🟡",
             "no_checks": "⚪",
         }.get(analysis["status"], "❓")
 
-        report += f"## {status_emoji} Overall Status\n\n"
+        report = f"## {status_emoji} Overall Status\n\n"
 
         if analysis["status"] == "no_checks":
-            report += "⚠️  **No CI checks data available**\n\n"
-            report += "This could mean:\n"
-            report += "- GitHub CLI authentication issues\n"
-            report += "- Repository access permissions\n"
-            report += "- CI checks are still being configured\n"
-            report += "- No automated checks configured for this PR\n\n"
+            report = "  **No CI checks data available**\n\n"
+            report = "This could mean:\n"
+            report = "- GitHub CLI authentication issues\n"
+            report = "- Repository access permissions\n"
+            report = "- CI checks are still being configured\n"
+            report = "- No automated checks configured for this PR\n\n"
 
             # Add manual check suggestions
-            report += "## 🔧 Manual Status Check Options\n\n"
-            report += "Since automated CI data is unavailable, "
-            report += "you can check status manually:\n\n"
-            report += "1. **Visit PR directly**: "
-            report += f"[PR #{self.pr_number}]({url})\n"
-            report += "2. **Check GitHub Actions**: "
+            report = "##  Manual Status Check Options\n\n"
+            report = "Since automated CI data is unavailable, "
+            report = "you can check status manually:\n\n"
+            report = "1. **Visit PR directly**: "
+            report = f"[PR #{self.pr_number}]({url})\n"
+            report = "2. **Check GitHub Actions**: "
             repo_base = url.replace(f"/pull/{self.pr_number}", "")
-            report += f"[Actions]({repo_base}/actions)\n"
-            report += "3. **Run local tests**:\n"
-            report += "   ```bash\n"
-            report += "   source .venv/bin/activate\n"
-            report += "   pip install -e .[test]\n"
-            report += "   python -m pytest --cov=src --cov-fail-under=95\n"
-            report += "   python -m ruff check src/\n"
-            report += "   ```\n\n"
+            report = f"[Actions]({repo_base}/actions)\n"
+            report = "3. **Run local tests**:\n"
+            report = "   ```bash\n"
+            report = "   source .venv/bin/activate\n"
+            report = "   pip install -e .[test]\n"
+            report = "   python -m pytest --cov=src --cov-fail-under=95\n"
+            report = "   python -m ruff check src/\n"
+            report = "   ```\n\n"
             return report
 
         # Statistics
-        report += f"- **Total Checks**: {analysis['total']}\n"
-        report += f"- **Successful**: {analysis['successful']}\n"
-        report += f"- **Failed**: {analysis['failed']}\n"
-        report += f"- **Pending**: {analysis['pending']}\n"
-        report += f"- **Success Rate**: {analysis['success_rate']:.1f}%\n\n"
+        report = f"- **Total Checks**: {analysis['total']}\n"
+        report = f"- **Successful**: {analysis['successful']}\n"
+        report = f"- **Failed**: {analysis['failed']}\n"
+        report = f"- **Pending**: {analysis['pending']}\n"
+        report = f"- **Success Rate**: {analysis['success_rate']:.1f}%\n\n"
 
         # Detailed check results by category
         checks_by_category = analysis["checks_by_category"]
         for category, category_checks in checks_by_category.items():
-            report += f"### {category}\n\n"
+            report = f"### {category}\n\n"
 
             for check in category_checks:
                 name = check.get("name", "Unknown")
@@ -317,31 +317,31 @@ class CIMonitor:
                 status = check.get("status", "UNKNOWN")
 
                 if conclusion == "SUCCESS":
-                    icon = "✅"
+                    icon = ""
                 elif conclusion in ["FAILURE", "CANCELLED"]:
-                    icon = "❌"
+                    icon = ""
                 elif status == "IN_PROGRESS":
                     icon = "🟡"
                 else:
                     icon = "⚪"
 
                 duration = self._format_duration(check)
-                report += f"- {icon} **{name}**: {conclusion} {duration}\n"
+                report = f"- {icon} **{name}**: {conclusion} {duration}\n"
 
-            report += "\n"
+            report = "\n"
 
         # Recommendations
         if analysis["status"] == "failed":
-            report += "## 🔧 Recommended Actions\n\n"
-            report += "1. **Review failed checks** above for specific errors\n"
-            report += "2. **Run tests locally**: " "Activate virtual environment\n"
-            report += "3. **Install dependencies**: `pip install -e .[test]`\n"
-            report += "4. **Run quality checks**: " "`python -m pytest --cov=src`\n"
-            report += "5. **Check linting**: `python -m ruff check src/`\n\n"
+            report = "##  Recommended Actions\n\n"
+            report = "1. **Review failed checks** above for specific errors\n"
+            report = "2. **Run tests locally**: " "Activate virtual environment\n"
+            report = "3. **Install dependencies**: `pip install -e .[test]`\n"
+            report = "4. **Run quality checks**: " "`python -m pytest --cov=src`\n"
+            report = "5. **Check linting**: `python -m ruff check src/`\n\n"
 
             # Add recent failed workflow context if available
             if failed_workflows.get("failed_runs"):
-                report += "### 🚨 Recent Failed Workflow Runs\n\n"
+                report = "### 🚨 Recent Failed Workflow Runs\n\n"
                 for run in failed_workflows["failed_runs"][:5]:  # Show top 5
                     workflow_name = run.get("workflowName", "Unknown")
                     display_title = run.get("displayTitle", "No title")
@@ -351,7 +351,7 @@ class CIMonitor:
                     if created_at:
                         try:
                             created = datetime.fromisoformat(
-                                created_at.replace("Z", "+00:00")
+                                created_at.replace("Z", "00:00")
                             )
                             time_ago = (
                                 datetime.now().replace(tzinfo=created.tzinfo) - created
@@ -366,32 +366,32 @@ class CIMonitor:
                     else:
                         time_str = ""
 
-                    report += (
-                        f"- ❌ **{workflow_name}**: " f"{display_title}{time_str}\n"
+                    report = (
+                        f"-  **{workflow_name}**: " f"{display_title}{time_str}\n"
                     )
                     if url:
-                        report += f"  [View Run]({url})\n"
-                report += "\n"
+                        report = f"  [View Run]({url})\n"
+                report = "\n"
 
         elif analysis["status"] == "pending":
-            report += "## ⏳ Status: In Progress\n\n"
-            report += "CI checks are still running. "
-            report += "Check back in a few minutes.\n\n"
+            report = "## ⏳ Status: In Progress\n\n"
+            report = "CI checks are still running. "
+            report = "Check back in a few minutes.\n\n"
         else:
-            report += "## 🎉 All Checks Passing!\n\n"
-            report += "PR is ready for review and merge.\n\n"
+            report = "## 🎉 All Checks Passing!\n\n"
+            report = "PR is ready for review and merge.\n\n"
 
         return report
 
-    def _format_duration(self, check: Dict[str, Any]) -> str:
+    def _format_duration(self, check: Dict[str, Any])  str:
         """Format check duration for display."""
         started = check.get("startedAt")
         completed = check.get("completedAt")
 
         if started and completed:
             try:
-                start_time = datetime.fromisoformat(started.replace("Z", "+00:00"))
-                end_time = datetime.fromisoformat(completed.replace("Z", "+00:00"))
+                start_time = datetime.fromisoformat(started.replace("Z", "00:00"))
+                end_time = datetime.fromisoformat(completed.replace("Z", "00:00"))
                 duration = end_time - start_time
                 return f"({duration.total_seconds():.0f}s)"
             except (ValueError, AttributeError):
@@ -399,17 +399,17 @@ class CIMonitor:
 
         return ""
 
-    def post_status_comment(self, report: str) -> None:
+    def post_status_comment(self, report: str)  None:
         """Post status report as PR comment."""
         try:
             cmd = ["gh", "pr", "comment", str(self.pr_number), "--body", report]
             subprocess.run(cmd, check=True)  # nosec B603
-            print(f"✅ Posted status comment to PR #{self.pr_number}")
+            print(f" Posted status comment to PR #{self.pr_number}")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to post comment: {e}")
+            print(f" Failed to post comment: {e}")
 
 
-def get_current_pr_number() -> Optional[int]:
+def get_current_pr_number()  Optional[int]:
     """Try to detect current PR number from git context."""
     try:
         cmd = ["gh", "pr", "view", "--json", "number"]
@@ -422,15 +422,15 @@ def get_current_pr_number() -> Optional[int]:
         return None
 
 
-def prompt_for_pr_number() -> int:
+def prompt_for_pr_number()  int:
     """Prompt user for PR number with helpful suggestions."""
-    print("🔍 CI Monitor Agent - Enhanced DevOnboarder CI Analysis")
+    print(" CI Monitor Agent - Enhanced DevOnboarder CI Analysis")
     print("=" * 60)
 
     # Try to detect current PR
     current_pr = get_current_pr_number()
     if current_pr:
-        print(f"📍 Detected current PR: #{current_pr}")
+        print(f"LOCATION: Detected current PR: #{current_pr}")
         print("\nOptions:")
         print(f"  1. Monitor current PR #{current_pr}")
         print("  2. Choose a different PR")
@@ -447,13 +447,13 @@ def prompt_for_pr_number() -> int:
                     print("👋 Monitoring cancelled")
                     sys.exit(0)
                 else:
-                    print("❌ Please enter 1, 2, or 3")
+                    print(" Please enter 1, 2, or 3")
             except KeyboardInterrupt:
                 print("\n👋 Monitoring cancelled")
                 sys.exit(0)
 
     # List recent PRs for reference
-    print("\n📋 Recent Pull Requests:")
+    print("\n Recent Pull Requests:")
     try:
         cmd = ["gh", "pr", "list", "--limit", "5", "--json", "number,title,state"]
         result = subprocess.run(  # nosec B603
@@ -471,21 +471,21 @@ def prompt_for_pr_number() -> int:
         print("   (Unable to fetch recent PRs)")
 
     # Prompt for PR number with better guidance
-    print("\n💡 Tip: You can also run this script with:")
+    print("\n Tip: You can also run this script with:")
     print("   python ci-monitor.py <PR_NUMBER>")
     while True:
         try:
             pr_input = input("\n🎯 Enter PR number to monitor: ").strip()
             if not pr_input:
-                print("❌ PR number is required")
+                print(" PR number is required")
                 continue
             pr_number = int(pr_input)
             if pr_number <= 0:
-                print("❌ PR number must be positive")
+                print(" PR number must be positive")
                 continue
             return pr_number
         except ValueError:
-            print("❌ Please enter a valid number")
+            print(" Please enter a valid number")
         except KeyboardInterrupt:
             print("\n👋 Monitoring cancelled")
             sys.exit(0)
@@ -533,7 +533,7 @@ def main():
         if args.output:
             with open(args.output, "w", encoding="utf-8") as f:
                 f.write(report)
-            print(f"✅ Report saved to {args.output}")
+            print(f" Report saved to {args.output}")
         else:
             print(report)
 
@@ -542,10 +542,10 @@ def main():
             monitor.post_status_comment(report)
 
     except KeyboardInterrupt:
-        print("\n❌ Monitoring interrupted")
+        print("\n Monitoring interrupted")
         sys.exit(1)
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         sys.exit(1)
 
 

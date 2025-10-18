@@ -1,18 +1,18 @@
 # Summary
 
-<!-- Provide a concise description of the change. Highlight major updates or new functionality. -->
+<!-- Provide a concise description of the change. Highlight major updates or new functionality. -
 
 # Linked Issues
 
-<!-- List related issues. Use the `Closes #issue-number` syntax when applicable. -->
+<!-- List related issues. Use the `Closes #issue-number` syntax when applicable. -
 
 # Screenshots
 
-<!-- Include before/after screenshots or GIFs if the change affects UI. -->
+<!-- Include before/after screenshots or GIFs if the change affects UI. -
 
 # Testing Steps
 
-<!-- Detail how a reviewer can verify the change. Include any setup commands. -->
+<!-- Detail how a reviewer can verify the change. Include any setup commands. -
 
 ```bash
 pip install -e .  # or `pip install -r requirements.txt` if present

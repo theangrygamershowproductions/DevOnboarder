@@ -47,19 +47,19 @@ visibility: internal
 
 ### 1. ModuleNotFoundError
 
-- ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+-  **Solution**: `source .venv/bin/activate && pip install -e .[test]`
 
-- ❌ **NOT**: Install to system Python
+-  **NOT**: Install to system Python
 
 ### 2. GitHub CLI PR Creation Fails on zsh
 
-- ✅ **Symptom**: `zsh: command not found: ├──` and similar errors when creating PRs
+-  **Symptom**: `zsh: command not found: ──` and similar errors when creating PRs
 
-- ✅ **Root Cause**: zsh interprets markdown special characters in PR body as shell commands
+-  **Root Cause**: zsh interprets markdown special characters in PR body as shell commands
 
-- ✅ **Solution**: Use `scripts/create_pr_safe.sh` or `--body-file` flag
+-  **Solution**: Use `scripts/create_pr_safe.sh` or `--body-file` flag
 
-- ✅ **Safe Pattern**:
+-  **Safe Pattern**:
 
   ```bash
   # Create PR body file first
@@ -68,41 +68,41 @@ visibility: internal
   rm pr_body.md
   ```
 
-- ✅ **DevOnboarder Utility**: `bash scripts/create_pr_safe.sh "Title" "body.md"`
+-  **DevOnboarder Utility**: `bash scripts/create_pr_safe.sh "Title" "body.md"`
 
-- ❌ **NOT**: Use `--body "complex markdown"` directly with zsh
+-  **NOT**: Use `--body "complex markdown"` directly with zsh
 
 ### 2. Command not found (black, pytest, etc.)
 
-- ✅ **Solution**: Use `python -m command` syntax in virtual environment
+-  **Solution**: Use `python -m command` syntax in virtual environment
 
-- ❌ **NOT**: Install globally with `pip install --user`
+-  **NOT**: Install globally with `pip install --user`
 
 ### 3. MyPy passes locally but fails in CI
 
-- ✅ **Symptom**: "Library stubs not installed for 'requests' [import-untyped]"
+-  **Symptom**: "Library stubs not installed for 'requests' [import-untyped]"
 
-- ✅ **Solution**: Add missing `types-*` packages to `pyproject.toml` test dependencies
+-  **Solution**: Add missing `types-*` packages to `pyproject.toml` test dependencies
 
 - 📚 **Documentation**: `docs/troubleshooting/CI_MYPY_TYPE_STUBS.md`
 
-- ❌ **NOT**: Install type stubs only locally
+-  **NOT**: Install type stubs only locally
 
 ### 4. Automerge hangs indefinitely (CRITICAL INFRASTRUCTURE ISSUE)
 
-- ✅ **Symptom**: All checks pass, automerge enabled, but PR shows "BLOCKED" indefinitely
+-  **Symptom**: All checks pass, automerge enabled, but PR shows "BLOCKED" indefinitely
 
-- ✅ **Root Cause**: Repository default branch mismatch OR status check name misalignment
+-  **Root Cause**: Repository default branch mismatch OR status check name misalignment
 
-- ✅ **Quick Check**: `gh api repos/OWNER/REPO --jq '.default_branch'` (should be "main")
+-  **Quick Check**: `gh api repos/OWNER/REPO --jq '.default_branch'` (should be "main")
 
-- ✅ **Solution**: Fix default branch + align status check names with actual check runs
+-  **Solution**: Fix default branch  align status check names with actual check runs
 
 - 📚 **Documentation**: `docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md`
 
-- 🛠️ **Health Check**: `bash scripts/check_automerge_health.sh`
+-  **Health Check**: `bash scripts/check_automerge_health.sh`
 
-- ❌ **NOT**: Assume it's a temporary GitHub issue - this requires configuration fixes
+-  **NOT**: Assume it's a temporary GitHub issue - this requires configuration fixes
 
 ### 5. Coverage failures
 
@@ -118,31 +118,31 @@ Check GitHub CLI availability and error handling
 
 ### 8. Cache pollution in repository root
 
-- ✅ **Detection**: Run `bash scripts/validate_cache_centralization.sh`
+-  **Detection**: Run `bash scripts/validate_cache_centralization.sh`
 
-- ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
+-  **Solution**: Run `bash scripts/manage_logs.sh cache clean`
 
-- ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
+-  **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
 ### 9. Jest Test Timeouts in CI
 
-- ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
+-  **Symptom**: Tests hang indefinitely in CI causing workflow failures
 
-- ✅ **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
+-  **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
 
-- ✅ **Location**: `bot/package.json` Jest configuration block
+-  **Location**: `bot/package.json` Jest configuration block
 
-- ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
+-  **Validation**: Run `bash scripts/check_jest_config.sh`
 
 ### 10. Dependency Update Failures
 
-- ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
+-  **Pattern**: "Tests hang in CI but pass locally"  Missing Jest timeout configuration
 
-- ✅ **Pattern**: "TypeScript compilation errors after upgrade" → Breaking changes in major versions
+-  **Pattern**: "TypeScript compilation errors after upgrade"  Breaking changes in major versions
 
-- ✅ **Pattern**: "Dependabot PR fails immediately" → Lock file conflicts or incompatible versions
+-  **Pattern**: "Dependabot PR fails immediately"  Lock file conflicts or incompatible versions
 
-- ✅ **Emergency Rollback**: `git revert <commit-hash> && git push origin main`
+-  **Emergency Rollback**: `git revert <commit-hash> && git push origin main`
 
 ## Dependency Crisis Management
 
@@ -172,9 +172,9 @@ Check GitHub CLI availability and error handling
 
 3. **Incremental Recovery**:
 
-   - Merge patch updates first (1.2.3 → 1.2.4)
+   - Merge patch updates first (1.2.3  1.2.4)
 
-   - Then minor updates (1.2.x → 1.3.0)
+   - Then minor updates (1.2.x  1.3.0)
 
    - Major updates last with manual testing
 
@@ -192,19 +192,19 @@ Check GitHub CLI availability and error handling
 
 **Fast Track Criteria (Safe to Auto-Merge)**:
 
-- ✅ Patch version updates (1.2.3 → 1.2.4)
+-  Patch version updates (1.2.3  1.2.4)
 
-- ✅ Minor version updates with green CI
+-  Minor version updates with green CI
 
-- ✅ Test framework maintenance updates (@types/*, ts-jest)
+-  Test framework maintenance updates (@types/*, ts-jest)
 
 **Requires Investigation**:
 
-- ⚠️ Major version jumps (5.8.x → 5.9.x)
+-  Major version jumps (5.8.x  5.9.x)
 
-- ⚠️ Framework core updates (TypeScript, Jest major versions)
+-  Framework core updates (TypeScript, Jest major versions)
 
-- ⚠️ Any PR with failing CI checks
+-  Any PR with failing CI checks
 
 ## Environment Variable Management Issues
 
@@ -212,55 +212,55 @@ Check GitHub CLI availability and error handling
 
 - **Environment File Inconsistencies**:
 
-    - ✅ **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
+    -  **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
 
-    - ✅ **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
+    -  **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
 
-    - ❌ **NOT**: Manually edit individual environment files
+    -  **NOT**: Manually edit individual environment files
 
 - **Security Audit Failures**:
 
-    - ✅ **Detection**: Run `bash scripts/env_security_audit.sh`
+    -  **Detection**: Run `bash scripts/env_security_audit.sh`
 
-    - ✅ **Pattern**: Production secrets in CI files (CRITICAL violation)
+    -  **Pattern**: Production secrets in CI files (CRITICAL violation)
 
-    - ✅ **Solution**: Move production secrets to gitignored files only
+    -  **Solution**: Move production secrets to gitignored files only
 
-    - ⚠️ **Emergency**: Never commit production secrets to CI environment
+    -  **Emergency**: Never commit production secrets to CI environment
 
 - **Tunnel Hostname Validation Failures**:
 
-    - ✅ **Pattern**: "ERROR: uses old multi-subdomain format"
+    -  **Pattern**: " uses old multi-subdomain format"
 
-    - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
+    -  **Solution**: Use single domain format (auth.theangrygamershow.com)
 
-    - ❌ **NOT**: Disable validation to avoid errors
+    -  **NOT**: Disable validation to avoid errors
 
 - **Discord Bot Authentication Failures in Docker**:
 
-    - ✅ **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
+    -  **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
 
-    - ✅ **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
+    -  **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
 
-    - ✅ **Solution**: Ensure compose file env_file matches volume mount (.env.dev → /app/.env:ro)
+    -  **Solution**: Ensure compose file env_file matches volume mount (.env.dev  /app/.env:ro)
 
-    - ✅ **Verification**: Check container logs with `docker compose logs bot`
+    -  **Verification**: Check container logs with `docker compose logs bot`
 
 - **Missing Bot Environment Variables**:
 
-    - ✅ **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
+    -  **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
 
-    - ✅ **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
+    -  **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
 
-    - ❌ **NOT**: Manually edit .env.dev or docker-specific files directly
+    -  **NOT**: Manually edit .env.dev or docker-specific files directly
 
 - **Multi-Service Container Failures**:
 
-    - ✅ **Diagnostic Pattern**: Check `docker compose ps` → logs → environment sync → security audit
+    -  **Diagnostic Pattern**: Check `docker compose ps`  logs  environment sync  security audit
 
-    - ✅ **Service Order**: Database fails → Auth fails → Backend fails → Bot fails
+    -  **Service Order**: Database fails  Auth fails  Backend fails  Bot fails
 
-    - ✅ **Environment Consistency**: All services should reference same environment file in compose
+    -  **Environment Consistency**: All services should reference same environment file in compose
 
 ## Validation-Driven Resolution Pattern
 
@@ -282,7 +282,7 @@ bash scripts/manage_logs.sh cache clean
 
 bash scripts/validate_cache_centralization.sh
 
-# Output: "SUCCESS: No cache pollution found in repository root"
+# Output: " No cache pollution found in repository root"
 
 ```
 

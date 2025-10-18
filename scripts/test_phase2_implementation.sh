@@ -23,7 +23,7 @@ test_script() {
     local test_description="$2"
     local expected_pattern="${3:-Loaded.*tokens from Token Architecture}"
 
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    TOTAL_TESTS=$((TOTAL_TESTS  1))
 
     echo "Testing: $test_description"
     printf "   Script: %s\n" "$script_path"
@@ -31,15 +31,15 @@ test_script() {
     if output=$(bash "$script_path" 2>&1 | head -5); then
         if echo "$output" | grep -q "$expected_pattern"; then
             echo "   Result: PASS - Token loading successful"
-            PASSED_TESTS=$((PASSED_TESTS + 1))
+            PASSED_TESTS=$((PASSED_TESTS  1))
         else
             echo "   Result: FAIL - Token loading not detected"
             printf "   Output: %s\n" "$output"
-            FAILED_TESTS+=("$script_path: $test_description")
+            FAILED_TESTS=("$script_path: $test_description")
         fi
     else
         echo "   Result: FAIL - Script execution failed"
-        FAILED_TESTS+=("$script_path: $test_description (execution failed)")
+        FAILED_TESTS=("$script_path: $test_description (execution failed)")
     fi
     echo ""
 }
@@ -67,7 +67,7 @@ printf "Failed: %d\n" "${#FAILED_TESTS[@]}"
 echo ""
 
 if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
-    echo "SUCCESS: All Phase 2 automation scripts enhanced successfully!"
+    echo " All Phase 2 automation scripts enhanced successfully!"
     echo "Option 1 implementation working perfectly across CI/CD scripts"
     echo ""
     printf "Enhanced Scripts Count: %d\n" "$PASSED_TESTS"
@@ -93,4 +93,4 @@ echo "   VERIFIED: Copy-paste solutions for missing tokens"
 echo "   VERIFIED: CI/CD compatibility with automatic token discovery"
 echo "   VERIFIED: Performance: Minimal overhead (~200ms per script)"
 echo ""
-printf "Progress: Phase 1 (5 scripts) + Phase 2 (%d scripts) = %d total enhanced\n" "$PASSED_TESTS" "$((5 + PASSED_TESTS))"
+printf "Progress: Phase 1 (5 scripts)  Phase 2 (%d scripts) = %d total enhanced\n" "$PASSED_TESTS" "$((5  PASSED_TESTS))"

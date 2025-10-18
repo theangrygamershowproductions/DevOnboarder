@@ -28,4 +28,4 @@ find . -maxdepth 1 \( \
     -name "Thumbs.db" -o \
     -name ".DS_Store" \
 \) -not -path "./.venv/*" -not -path "./.git/*" -not -path "./logs/*" \
--exec rm -rf {} +
+-exec rm -rf {} 

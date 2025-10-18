@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 
-def main() -> int:
+def main()  int:
     result = subprocess.run(
         [
             "gh",

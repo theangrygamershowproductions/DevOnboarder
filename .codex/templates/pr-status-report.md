@@ -16,7 +16,7 @@ similarity_group: codex-codex
 
 # PR Status Report Template
 
-## 🔍 CI Status Report - PR #{{pr_number}}
+##  CI Status Report - PR #{{pr_number}}
 
 **Last Updated:** {{timestamp}}
 
@@ -28,7 +28,7 @@ similarity_group: codex-codex
 
 ---
 
-### ✅ Completed Successfully ({{successful_count}})
+###  Completed Successfully ({{successful_count}})
 
 {{#successful_checks}}
 
@@ -42,7 +42,7 @@ similarity_group: codex-codex
 
 {{/successful_checks}}
 
-### 🔄 In Progress ({{in_progress_count}})
+### SYNC: In Progress ({{in_progress_count}})
 
 {{#in_progress_checks}}
 
@@ -56,7 +56,7 @@ similarity_group: codex-codex
 
 {{/in_progress_checks}}
 
-### ❌ Failed ({{failed_count}})
+###  Failed ({{failed_count}})
 
 {{#failed_checks}}
 
@@ -76,7 +76,7 @@ similarity_group: codex-codex
 
 ---
 
-### 📊 Pipeline Metrics
+###  Pipeline Metrics
 
 | Metric                    | Value                      |
 | ------------------------- | -------------------------- |
@@ -100,12 +100,12 @@ similarity_group: codex-codex
 🚨 **CRITICAL:** {{action}}
 
 {{else}}
-💡 **Suggestion:** {{action}}
+ **Suggestion:** {{action}}
 
 {{/if}}
 {{/recommendations}}
 
-### 🔍 Failure Analysis
+###  Failure Analysis
 
 {{#if has_infrastructure_failures}}
 
@@ -157,7 +157,7 @@ _These enforce organizational standards and security._
 
 ---
 
-### 📈 Historical Context
+### GROW: Historical Context
 
 - **Previous Run:** {{previous_run_status}} ({{previous_run_time}})
 
@@ -165,7 +165,7 @@ _These enforce organizational standards and security._
 
 - **Pattern:** {{pattern_detection}}
 
-### 🔗 Quick Links
+### LINK: Quick Links
 
 - [Full Pipeline Run]({{pipeline_url}})
 
@@ -187,7 +187,7 @@ Next update in {{next_update_interval}}
 
 ## For Developers
 
-### ⚡ Quick Fix Commands
+### FAST: Quick Fix Commands
 
 {{#quick_fixes}}
 
@@ -201,7 +201,7 @@ Next update in {{next_update_interval}}
 
 {{/quick_fixes}}
 
-### 📋 Pre-Push Checklist
+###  Pre-Push Checklist
 
 Before pushing changes, ensure:
 

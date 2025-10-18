@@ -11,7 +11,7 @@ echo "DevOnboarder Workflow Permissions Validator"
 echo "==========================================="
 
 if [[ ! -d "$WORKFLOW_DIR" ]]; then
-    echo "ERROR: No workflows directory found at $WORKFLOW_DIR"
+    echo " No workflows directory found at $WORKFLOW_DIR"
     exit 1
 fi
 
@@ -28,10 +28,10 @@ for workflow in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
 
     # Check if workflow has permissions at any level
     if grep -q "permissions:" "$workflow"; then
-        echo "✅ $workflow_name - Has permissions"
+        echo " $workflow_name - Has permissions"
     else
-        echo "❌ $workflow_name - MISSING permissions (security risk)"
-        VIOLATIONS+=("$workflow_name")
+        echo " $workflow_name - MISSING permissions (security risk)"
+        VIOLATIONS=("$workflow_name")
         EXIT_CODE=1
     fi
 done
@@ -48,7 +48,7 @@ else
     echo
     echo "SECURITY ISSUE: These workflows use overly broad default permissions"
     echo
-    echo "FIX: Add explicit permissions to each job or workflow:"
+    echo " Add explicit permissions to each job or workflow:"
     echo "permissions:"
     echo "  contents: read"
     echo "  # Add other minimal permissions as needed"

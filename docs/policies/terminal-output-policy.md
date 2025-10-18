@@ -43,7 +43,7 @@ visibility: internal
 
 # DevOnboarder Terminal Output Policy - ZERO TOLERANCE
 
-## ⚠️ CRITICAL: Terminal Output Policy - ZERO TOLERANCE
+##  CRITICAL: Terminal Output Policy - ZERO TOLERANCE
 
 **TERMINAL HANGING PREVENTION - ABSOLUTE REQUIREMENTS:**
 
@@ -53,13 +53,13 @@ DevOnboarder has a **ZERO TOLERANCE POLICY** for terminal output violations that
 
 ```bash
 
-# ❌ FORBIDDEN - WILL CAUSE IMMEDIATE HANGING
+#  FORBIDDEN - WILL CAUSE IMMEDIATE HANGING
 
-echo "✅ Task completed"              # Emojis cause hanging
+echo " Task completed"              # Emojis cause hanging
 
-echo "🚀 Deployment successful"       # Unicode causes hanging
+echo " Deployment successful"       # Unicode causes hanging
 
-echo "📋 Checklist: $(get_items)"    # Command substitution in echo
+echo " Checklist: $(get_items)"    # Command substitution in echo
 
 echo -e "Line1\nLine2\nLine3"        # Multi-line escape sequences
 
@@ -68,7 +68,7 @@ cat << 'EOF'                         # Here-doc patterns
 Multi-line content
 EOF
 
-# ❌ FORBIDDEN - Variable expansion in echo
+#  FORBIDDEN - Variable expansion in echo
 
 echo "Status: $STATUS_VAR"           # Variable expansion causes hanging
 
@@ -82,19 +82,19 @@ echo "Result: $(command_output)"     # Command substitution causes hanging
 
 ```bash
 
-# ✅ REQUIRED - Individual echo commands with plain ASCII only
+#  REQUIRED - Individual echo commands with plain ASCII only
 
 echo "Task completed successfully"
 echo "Deployment finished"
 echo "Processing file"
 echo "Operation complete"
 
-# ✅ REQUIRED - Variable handling with printf
+#  REQUIRED - Variable handling with printf
 
 printf "Status: %s\n" "$STATUS_VAR"
 printf "Files processed: %d\n" "$FILE_COUNT"
 
-# ✅ REQUIRED - Store command output first, then echo
+#  REQUIRED - Store command output first, then echo
 
 RESULT=$(command_here)
 echo "Command completed"

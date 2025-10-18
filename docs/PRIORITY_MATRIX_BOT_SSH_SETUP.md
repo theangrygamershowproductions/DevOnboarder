@@ -52,7 +52,7 @@ ssh-keygen -t ed25519 -C "Priority Matrix Bot <priority-matrix@theangrygamershow
 
    - Login to the machine user account
 
-   - Go to **Settings → SSH and GPG keys → New signing key**
+   - Go to **Settings  SSH and GPG keys  New signing key**
 
    - **Important**: Choose "Signing key" (not regular SSH key)
 
@@ -68,7 +68,7 @@ ssh-keygen -t ed25519 -C "Priority Matrix Bot <priority-matrix@theangrygamershow
 
 ### Repository Secrets
 
-Add this secret to your repository (**Settings → Secrets and variables → Actions → Secrets**):
+Add this secret to your repository (**Settings  Secrets and variables  Actions  Secrets**):
 
 | Secret Name | Description | Value |
 |-------------|-------------|-------|
@@ -76,7 +76,7 @@ Add this secret to your repository (**Settings → Secrets and variables → Act
 
 ### Repository Variables
 
-Add these variables to your repository (**Settings → Secrets and variables → Actions → Variables**):
+Add these variables to your repository (**Settings  Secrets and variables  Actions  Variables**):
 
 | Variable Name | Description | Value |
 |---------------|-------------|-------|

@@ -30,13 +30,13 @@ visibility: internal
 
 ---
 
-## 📊 CI Status Overview
+##  CI Status Overview
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ **Successful** | 26 | 89.7% |
+|  **Successful** | 26 | 89.7% |
 
-| ❌ **Failed** | 1 | 3.4% |
+|  **Failed** | 1 | 3.4% |
 
 | ⏳ **Pending/In Progress** | 2 | 6.9% |
 
@@ -44,7 +44,7 @@ visibility: internal
 
 ---
 
-## ❌ Active Failures
+##  Active Failures
 
 ### 1. PR Issue Automation Failure
 
@@ -88,25 +88,25 @@ gh auth login --with-token <<< "$GITHUB_TOKEN"
 
 ---
 
-## ✅ Successful Checks (26/29)
+##  Successful Checks (26/29)
 
 All major quality gates are passing:
 
-- ✅ **Code Quality**: CodeQL analysis (3 languages)
+-  **Code Quality**: CodeQL analysis (3 languages)
 
-- ✅ **Security**: Automated code review, no-verify policy enforcement
+-  **Security**: Automated code review, no-verify policy enforcement
 
-- ✅ **Documentation**: Quality assessment, markdownlint validation
+-  **Documentation**: Quality assessment, markdownlint validation
 
-- ✅ **Infrastructure**: Root artifact guard, quality gate monitoring
+-  **Infrastructure**: Root artifact guard, quality gate monitoring
 
-- ✅ **Permissions**: Validation workflows
+-  **Permissions**: Validation workflows
 
-- ✅ **Formatting**: All linting checks
+-  **Formatting**: All linting checks
 
 ---
 
-## 🔍 DevOnboarder Analysis
+##  DevOnboarder Analysis
 
 ### Enhanced CI Failure Analyzer Results
 
@@ -134,7 +134,7 @@ All major quality gates are passing:
 
 ---
 
-## 📁 Monitoring Files Generated
+##  Monitoring Files Generated
 
 All monitoring data saved to `logs/pr-monitoring/`:
 
@@ -148,7 +148,7 @@ All monitoring data saved to `logs/pr-monitoring/`:
 
 ---
 
-## 🚀 Monitoring Commands
+##  Monitoring Commands
 
 ### Continuous Monitoring
 
@@ -203,11 +203,11 @@ python scripts/ci_health_monitor.py --days-back 1
 
 **Recommendation**:
 
-- ✅ PR is safe to proceed with development
+-  PR is safe to proceed with development
 
-- 🔧 Address authentication issue for complete automation
+-  Address authentication issue for complete automation
 
-- 📊 Excellent CI coverage and quality standards maintained
+-  Excellent CI coverage and quality standards maintained
 
 ---
 

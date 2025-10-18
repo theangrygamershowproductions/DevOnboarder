@@ -28,15 +28,15 @@ echo "Validating agent files..."
 
 # Find all agent markdown files
 while IFS= read -r -d '' agent_file; do
-    TOTAL_AGENTS=$((TOTAL_AGENTS + 1))
+    TOTAL_AGENTS=$((TOTAL_AGENTS  1))
     agent_name=$(basename "$agent_file" .md)
 
     echo "Validating: $agent_name"
 
     # Check if file has YAML frontmatter
     if ! head -n 1 "$agent_file" | grep -q "^---$"; then
-        echo "  ERROR: Missing YAML frontmatter"
-        FAILED_AGENTS=$((FAILED_AGENTS + 1))
+        echo "   Missing YAML frontmatter"
+        FAILED_AGENTS=$((FAILED_AGENTS  1))
         continue
     fi
 
@@ -47,16 +47,16 @@ while IFS= read -r -d '' agent_file; do
     missing_fields=()
     for field in "${REQUIRED_FIELDS[@]}"; do
         if ! echo "$frontmatter" | grep -q "^$field:"; then
-            missing_fields+=("$field")
+            missing_fields=("$field")
         fi
     done
 
     if [ ${#missing_fields[@]} -eq 0 ]; then
-        echo "  SUCCESS: All required fields present"
-        CERTIFIED_AGENTS=$((CERTIFIED_AGENTS + 1))
+        echo "   All required fields present"
+        CERTIFIED_AGENTS=$((CERTIFIED_AGENTS  1))
     else
-        echo "  ERROR: Missing fields: ${missing_fields[*]}"
-        FAILED_AGENTS=$((FAILED_AGENTS + 1))
+        echo "   Missing fields: ${missing_fields[*]}"
+        FAILED_AGENTS=$((FAILED_AGENTS  1))
     fi
 
 done < <(find "$AGENTS_DIR" -name "*.md" -not -name "README.md" -print0)

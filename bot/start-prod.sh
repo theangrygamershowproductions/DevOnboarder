@@ -10,7 +10,7 @@ export ENVIRONMENT=prod
 
 # Check if .env.prod exists
 if [[ ! -f ".env.prod" ]]; then
-    echo "❌ Production environment file not found: .env.prod"
+    echo " Production environment file not found: .env.prod"
     echo "   Run: bash ../scripts/setup_discord_env.sh prod"
     exit 1
 fi
@@ -24,5 +24,5 @@ npm ci --only=production
 # Build for production
 npm run build
 
-echo "🚀 Starting bot in production mode..."
+echo " Starting bot in production mode..."
 npm start

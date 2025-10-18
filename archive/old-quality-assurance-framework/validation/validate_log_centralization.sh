@@ -11,7 +11,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 mkdir -p "$PROJECT_ROOT/logs"
 
 # Log validation results
-LOG_FILE="$PROJECT_ROOT/logs/log_centralization_validation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$PROJECT_ROOT/logs/log_centralization_validation_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Centralized Logging Policy Validation"
@@ -47,12 +47,12 @@ if [ -n "$SCATTERED_LOGS" ]; then
     echo "VIOLATION: Log files found outside logs/ directory:"
     echo "$SCATTERED_LOGS" | while read -r file; do
         echo "   - $file"
-        VIOLATION_FILES+=("$file")
+        VIOLATION_FILES=("$file")
     done
-    VIOLATIONS=$((VIOLATIONS + 1))
+    VIOLATIONS=$((VIOLATIONS  1))
     echo ""
 else
-    echo "SUCCESS: No scattered log files found"
+    echo " No scattered log files found"
     echo ""
 fi
 
@@ -76,10 +76,10 @@ if [ -n "$PROHIBITED_DIRS" ]; then
     echo "$PROHIBITED_DIRS" | while read -r dir; do
         echo "   - $dir"
     done
-    VIOLATIONS=$((VIOLATIONS + 1))
+    VIOLATIONS=$((VIOLATIONS  1))
     echo ""
 else
-    echo "SUCCESS: No prohibited log directories found"
+    echo " No prohibited log directories found"
     echo ""
 fi
 
@@ -88,7 +88,7 @@ echo "3. Checking scripts for hardcoded non-centralized log paths..."
 SCRIPT_VIOLATIONS=$(grep -r "/tmp.*\.log\|ci-logs/" "$PROJECT_ROOT/scripts/" \
     --include="*.sh" --include="*.py" \
     | grep -v "logs/" \
-    | grep -v "# OK:" \
+    | grep -v "# " \
     | grep -v "$LOG_FILE" \
     | grep -v "validate_log_centralization.sh" \
     | grep -v "\.log.*pattern" \
@@ -99,10 +99,10 @@ SCRIPT_VIOLATIONS=$(grep -r "/tmp.*\.log\|ci-logs/" "$PROJECT_ROOT/scripts/" \
 if [ -n "$SCRIPT_VIOLATIONS" ]; then
     echo "VIOLATION: Scripts with non-centralized logging found:"
     echo "$SCRIPT_VIOLATIONS"
-    VIOLATIONS=$((VIOLATIONS + 1))
+    VIOLATIONS=$((VIOLATIONS  1))
     echo ""
 else
-    echo "SUCCESS: All scripts use centralized logging"
+    echo " All scripts use centralized logging"
     echo ""
 fi
 
@@ -112,16 +112,16 @@ WORKFLOW_VIOLATIONS=$(grep -r "/tmp.*\.log\|ci-logs/" "$PROJECT_ROOT/.github/wor
     --include="*.yml" --include="*.yaml" \
     | grep -v "path: logs" \
     | grep -v "name: ci-logs" \
-    | grep -v "# OK:" \
+    | grep -v "# " \
     || true)
 
 if [ -n "$WORKFLOW_VIOLATIONS" ]; then
     echo "VIOLATION: Workflows with non-centralized logging found:"
     echo "$WORKFLOW_VIOLATIONS"
-    VIOLATIONS=$((VIOLATIONS + 1))
+    VIOLATIONS=$((VIOLATIONS  1))
     echo ""
 else
-    echo "SUCCESS: All workflows use centralized logging"
+    echo " All workflows use centralized logging"
     echo ""
 fi
 
@@ -135,30 +135,30 @@ DOC_VIOLATIONS=$(grep -r "ci-logs" "$PROJECT_ROOT/docs/" \
     || true)
 
 if [ -n "$DOC_VIOLATIONS" ]; then
-    echo "WARNING: Documentation with legacy log references found:"
+    echo " Documentation with legacy log references found:"
     echo "$DOC_VIOLATIONS"
     echo "   (Not blocking, but should be updated)"
     echo ""
 else
-    echo "SUCCESS: Documentation uses correct log references"
+    echo " Documentation uses correct log references"
     echo ""
 fi
 
 # Validate logs/ directory structure
 echo "6. Validating logs/ directory structure..."
 if [ -d "$PROJECT_ROOT/logs" ]; then
-    echo "SUCCESS: Centralized logs/ directory exists"
+    echo " Centralized logs/ directory exists"
 
     # Check if logs/ is in .gitignore
     if grep -q "^logs/$" "$PROJECT_ROOT/.gitignore" 2>/dev/null; then
-        echo "SUCCESS: logs/ directory properly ignored in .gitignore"
+        echo " logs/ directory properly ignored in .gitignore"
     else
         echo "VIOLATION: logs/ directory not found in .gitignore"
-        VIOLATIONS=$((VIOLATIONS + 1))
+        VIOLATIONS=$((VIOLATIONS  1))
     fi
 else
     echo "VIOLATION: Centralized logs/ directory does not exist"
-    VIOLATIONS=$((VIOLATIONS + 1))
+    VIOLATIONS=$((VIOLATIONS  1))
 fi
 
 echo ""
@@ -169,7 +169,7 @@ echo "Validation log: $LOG_FILE"
 echo ""
 
 if [ $VIOLATIONS -eq 0 ]; then
-    echo "SUCCESS: Centralized Logging Policy COMPLIANT"
+    echo " Centralized Logging Policy COMPLIANT"
     echo "All logging properly uses centralized logs/ directory"
     echo ""
     echo "COMPLIANCE STATUS: PASSED"

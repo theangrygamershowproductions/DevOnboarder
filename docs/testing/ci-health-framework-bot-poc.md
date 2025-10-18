@@ -112,7 +112,7 @@ jobs:
           cat > .test-ci-health-framework-bot/test-results.md << 'EOF'
           # CI Health Framework Bot Test Results
 
-          **Test Run**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Test Run**: $(date -u '%Y-%m-%d %H:%M:%S UTC')
           **Framework**: CI Health Framework Bot
           **Email**: ci-health@theangrygamershow.com
 
@@ -219,23 +219,23 @@ Replace AAR Bot sections with CI Health Framework Bot pattern.
 
 ### **Proceed with Full Framework Architecture If:**
 
-- ✅ All POC success metrics achieved
-- ✅ No operational disruption observed
-- ✅ Corporate governance requirements met
-- ✅ Team confidence in framework approach
+-  All POC success metrics achieved
+-  No operational disruption observed
+-  Corporate governance requirements met
+-  Team confidence in framework approach
 
 ### **Refine Approach If:**
 
-- ⚠️ Minor issues with setup/configuration
-- ⚠️ Documentation needs improvement
-- ⚠️ Process optimization opportunities identified
+-  Minor issues with setup/configuration
+-  Documentation needs improvement
+-  Process optimization opportunities identified
 
 ### **Halt Framework Migration If:**
 
-- ❌ GPG signing consistently fails
-- ❌ Significant operational disruption
-- ❌ Corporate governance concerns
-- ❌ Framework isolation not working
+-  GPG signing consistently fails
+-  Significant operational disruption
+-  Corporate governance concerns
+-  Framework isolation not working
 
 ## Next Steps After POC
 

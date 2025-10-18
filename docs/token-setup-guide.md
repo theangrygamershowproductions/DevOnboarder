@@ -32,39 +32,39 @@ visibility: internal
 
 **AAR_TOKEN** needs:
 
-- ✅ `contents:read` (already has)
+-  `contents:read` (already has)
 
-- ❌ **MISSING**: `actions:read` (to access workflow runs, jobs, artifacts)
+-  **MISSING**: `actions:read` (to access workflow runs, jobs, artifacts)
 
-- ❌ **MISSING**: `issues:write` (to create AAR issues)
+-  **MISSING**: `issues:write` (to create AAR issues)
 
 ### For CI Automation
 
 **CI_ISSUE_AUTOMATION_TOKEN** needs:
 
-- ✅ `contents:read` (already has)
+-  `contents:read` (already has)
 
-- ❌ **MISSING**: `issues:write` (to create CI failure issues)
+-  **MISSING**: `issues:write` (to create CI failure issues)
 
-- ❌ **MISSING**: `pull_requests:write` (to manage PR automation)
+-  **MISSING**: `pull_requests:write` (to manage PR automation)
 
 **CI_BOT_TOKEN** needs:
 
-- ✅ `contents:read` (already has)
+-  `contents:read` (already has)
 
-- ❌ **MISSING**: `actions:read` (for CI health monitoring)
+-  **MISSING**: `actions:read` (for CI health monitoring)
 
 ### For Orchestration Operations
 
 **DEV_ORCHESTRATION_BOT_KEY** needs:
 
-- ✅ `contents:read` (already has)
+-  `contents:read` (already has)
 
-- ❌ **MISSING**: `actions:write` (for workflow coordination)
+-  **MISSING**: `actions:write` (for workflow coordination)
 
-- ❌ **MISSING**: `pull_requests:write` (for automated PRs)
+-  **MISSING**: `pull_requests:write` (for automated PRs)
 
-- ❌ **MISSING**: `issues:write` (for orchestration issues)
+-  **MISSING**: `issues:write` (for orchestration issues)
 
 ## Quick Fix for AAR System
 
@@ -84,7 +84,7 @@ visibility: internal
 
 To update token permissions:
 
-1. Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens
+1. Go to GitHub  Settings  Developer settings  Personal access tokens  Fine-grained tokens
 
 2. Find the `AAR_TOKEN`
 
@@ -117,9 +117,9 @@ Expected result after fix:
 
 ```bash
 🎯 Operation Coverage:
-   ✅ actions_api: 1 suitable tokens
+    actions_api: 1 suitable tokens
       Available: AAR_TOKEN
-   ✅ issue_management: 1 suitable tokens
+    issue_management: 1 suitable tokens
       Available: AAR_TOKEN
 
 ```bash
@@ -128,13 +128,13 @@ Expected result after fix:
 
 | Token Name | actions:read | issues:write | contents:read | pull_requests:write |
 |------------|--------------|--------------|---------------|---------------------|
-| `AAR_TOKEN` | **NEEDED** | **NEEDED** | ✅ Has | Recommended |
+| `AAR_TOKEN` | **NEEDED** | **NEEDED** |  Has | Recommended |
 
-| `CI_ISSUE_AUTOMATION_TOKEN` | Nice-to-have | **NEEDED** | ✅ Has | **NEEDED** |
+| `CI_ISSUE_AUTOMATION_TOKEN` | Nice-to-have | **NEEDED** |  Has | **NEEDED** |
 
-| `CI_BOT_TOKEN` | **NEEDED** | Nice-to-have | ✅ Has | Nice-to-have |
+| `CI_BOT_TOKEN` | **NEEDED** | Nice-to-have |  Has | Nice-to-have |
 
-| `DEV_ORCHESTRATION_BOT_KEY` | **NEEDED** | **NEEDED** | ✅ Has | **NEEDED** |
+| `DEV_ORCHESTRATION_BOT_KEY` | **NEEDED** | **NEEDED** |  Has | **NEEDED** |
 
 ## Long-term Strategy
 

@@ -27,7 +27,7 @@ class FrontmatterContentValidator:
             "warnings": 0,
         }
 
-    def parse_frontmatter(self, file_path: Path) -> Tuple[Dict[str, Any], str]:
+    def parse_frontmatter(self, file_path: Path)  Tuple[Dict[str, Any], str]:
         """Extract frontmatter and content from markdown file"""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -42,8 +42,8 @@ class FrontmatterContentValidator:
             if not end_match:
                 return {}, content
 
-            frontmatter_content = content[4 : end_match.start() + 4]
-            document_content = content[end_match.end() + 4 :]
+            frontmatter_content = content[4 : end_match.start()  4]
+            document_content = content[end_match.end()  4 :]
 
             try:
                 frontmatter = yaml.safe_load(frontmatter_content)
@@ -62,10 +62,10 @@ class FrontmatterContentValidator:
             {"file": str(file_path), "severity": severity, "message": message}
         )
         if severity == "CRITICAL":
-            self.stats["critical_issues"] += 1
+            self.stats["critical_issues"] = 1
         elif severity == "WARNING":
-            self.stats["warnings"] += 1
-        self.stats["issues_found"] += 1
+            self.stats["warnings"] = 1
+        self.stats["issues_found"] = 1
 
     def validate_title_consistency(
         self, file_path: Path, frontmatter: Dict, content: str
@@ -77,7 +77,7 @@ class FrontmatterContentValidator:
             return
 
         # Extract H1 title from content
-        h1_match = re.search(r"^#\s+(.+?)$", content, re.MULTILINE)
+        h1_match = re.search(r"^#\s(.?)$", content, re.MULTILINE)
         if h1_match:
             content_title = h1_match.group(1).strip()
 
@@ -266,9 +266,9 @@ class FrontmatterContentValidator:
             if field not in frontmatter or not str(frontmatter[field]).strip():
                 self.add_issue(file_path, "WARNING", f"Missing required field: {field}")
 
-    def validate_file(self, file_path: Path) -> bool:
+    def validate_file(self, file_path: Path)  bool:
         """Validate a single markdown file"""
-        self.stats["files_processed"] += 1
+        self.stats["files_processed"] = 1
 
         frontmatter, content = self.parse_frontmatter(file_path)
 
@@ -287,7 +287,7 @@ class FrontmatterContentValidator:
 
         return True
 
-    def generate_report(self) -> str:
+    def generate_report(self)  str:
         """Generate validation report"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = self.log_dir / f"frontmatter_validation_report_{timestamp}.md"
@@ -301,7 +301,7 @@ class FrontmatterContentValidator:
             f.write(f"**Warnings**: {self.stats['warnings']}\n\n")
 
             if self.stats["issues_found"] == 0:
-                f.write("✅ **No validation issues found!**\n\n")
+                f.write(" **No validation issues found!**\n\n")
             else:
                 f.write("## Validation Issues\n\n")
 
@@ -326,16 +326,16 @@ class FrontmatterContentValidator:
             f.write("## Summary\n\n")
             if self.stats["critical_issues"] > 0:
                 f.write(
-                    f"❌ **Validation failed** with "
+                    f" **Validation failed** with "
                     f"{self.stats['critical_issues']} critical issues.\n\n"
                 )
             elif self.stats["warnings"] > 0:
                 f.write(
-                    f"⚠️ **Validation completed** with "
+                    f" **Validation completed** with "
                     f"{self.stats['warnings']} warnings.\n\n"
                 )
             else:
-                f.write("✅ **All validations passed successfully!**\n\n")
+                f.write(" **All validations passed successfully!**\n\n")
 
             f.write("## Recommendations\n\n")
             f.write(
@@ -421,7 +421,7 @@ def main():
         return 0
 
     print(
-        f"🔍 Validating frontmatter content consistency for "
+        f" Validating frontmatter content consistency for "
         f"{len(files_to_validate)} files..."
     )
     print()
@@ -438,13 +438,13 @@ def main():
     report_file = validator.generate_report()
 
     print()
-    print("📊 Validation Summary:")
+    print(" Validation Summary:")
     print(f"   Files processed: {validator.stats['files_processed']}")
     print(f"   Issues found: {validator.stats['issues_found']}")
     print(f"   Critical issues: {validator.stats['critical_issues']}")
     print(f"   Warnings: {validator.stats['warnings']}")
     print()
-    print(f"📄 Detailed report: {report_file}")
+    print(f"FILE: Detailed report: {report_file}")
 
     # Return appropriate exit code
     if validator.stats["critical_issues"] > 0:

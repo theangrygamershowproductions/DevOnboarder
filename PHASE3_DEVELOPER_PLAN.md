@@ -20,7 +20,7 @@ similarity_group: docs-
 
 ## 🎯 **Phase 3 Scope: Developer Utility & Validation Scripts**
 
-### **Priority 1: Development Setup & Environment Scripts** 🛠️
+### **Priority 1: Development Setup & Environment Scripts** 
 
 1. **`scripts/dev_setup.sh`** - Development environment initialization
 
@@ -44,7 +44,7 @@ similarity_group: docs-
 
 5. **`scripts/validate_pr_checklist.sh`** - PR checklist validation
 
-### **Priority 3: Quality Assurance & Validation Scripts** 📋
+### **Priority 3: Quality Assurance & Validation Scripts** 
 
 1. **`scripts/validate_agents.sh`** - Agent configuration validation
 
@@ -56,7 +56,7 @@ similarity_group: docs-
 
 5. **`scripts/quick_validate.sh`** - Quick validation suite
 
-## 🔧 **Token Requirements by Script Category**
+##  **Token Requirements by Script Category**
 
 ### **Development Setup Scripts**
 
@@ -82,7 +82,7 @@ similarity_group: docs-
 
 - **Quality Gates**: Typically no tokens, but may access GitHub API for status
 
-## 🚀 **Implementation Strategy**
+##  **Implementation Strategy**
 
 ### **Pattern: Smart Token Detection**
 
@@ -114,7 +114,7 @@ fi
 
 if command -v require_tokens >/dev/null 2>&1 && [ "${REQUIRES_TOKENS:-}" = "true" ]; then
     if ! require_tokens "$@"; then
-        echo "❌ Cannot proceed without required tokens for this operation"
+        echo " Cannot proceed without required tokens for this operation"
         exit 1
     fi
 fi
@@ -123,17 +123,17 @@ fi
 
 ### **Enhanced Features for Developer Scripts**
 
-1. ✅ **Conditional Token Loading** - Only load tokens when actually needed
+1.  **Conditional Token Loading** - Only load tokens when actually needed
 
-2. ✅ **Developer-Friendly Errors** - Clear guidance for setup issues
+2.  **Developer-Friendly Errors** - Clear guidance for setup issues
 
-3. ✅ **Environment Detection** - Automatic development vs CI detection
+3.  **Environment Detection** - Automatic development vs CI detection
 
-4. ✅ **Validation Reporting** - Comprehensive validation output
+4.  **Validation Reporting** - Comprehensive validation output
 
-5. ✅ **Self-Contained Execution** - No external dependencies required
+5.  **Self-Contained Execution** - No external dependencies required
 
-## 📋 **Implementation Approach**
+##  **Implementation Approach**
 
 ### **Batch 1: Setup Scripts** (Scripts 1-5)
 
@@ -149,19 +149,19 @@ Complete validation and quality assurance scripts with comprehensive reporting.
 
 ## 🎯 **Success Metrics for Phase 3**
 
-- ✅ **15 developer scripts enhanced** with smart token loading
+-  **15 developer scripts enhanced** with smart token loading
 
-- ✅ **Conditional token requirements** - Only load when needed
+-  **Conditional token requirements** - Only load when needed
 
-- ✅ **Developer experience optimized** - Clear setup guidance
+-  **Developer experience optimized** - Clear setup guidance
 
-- ✅ **CI/CD compatibility maintained** - Works in all environments
+-  **CI/CD compatibility maintained** - Works in all environments
 
-- ✅ **Zero breaking changes** - Existing workflows preserved
+-  **Zero breaking changes** - Existing workflows preserved
 
-- ✅ **Comprehensive validation** - Token architecture compliance verified
+-  **Comprehensive validation** - Token architecture compliance verified
 
-## 🔄 **Phase 3 vs Previous Phases**
+## SYNC: **Phase 3 vs Previous Phases**
 
 **Phase 1 (Critical)**: 5 scripts - Always need tokens, mission-critical operations
 
@@ -171,6 +171,6 @@ Complete validation and quality assurance scripts with comprehensive reporting.
 
 **Key Difference**: Phase 3 scripts have **conditional token requirements** - they only load tokens when the specific operation requires them, making them more efficient for development workflows.
 
-## 🚀 **Ready to Implement Batch 1: Setup Scripts**
+##  **Ready to Implement Batch 1: Setup Scripts**
 
-Starting with development environment setup scripts that establish the foundation for local development! 🛠️
+Starting with development environment setup scripts that establish the foundation for local development! 

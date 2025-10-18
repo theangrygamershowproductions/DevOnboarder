@@ -15,7 +15,7 @@ echo "Testing AAR_TOKEN Fine-Grained permissions..."
 echo ""
 
 if [ -z "$AAR_TOKEN" ]; then
-    echo "ERROR: AAR_TOKEN not found"
+    echo " AAR_TOKEN not found"
     exit 1
 fi
 
@@ -34,7 +34,7 @@ test_actions_endpoint() {
 
     if response=$(GH_TOKEN="$AAR_TOKEN" gh api "$endpoint" 2>&1); then
         if echo "$response" | grep -q -E '("total_count"|"workflow_runs"|"workflows"|"jobs")'; then
-            echo "   SUCCESS: Endpoint accessible"
+            echo "    Endpoint accessible"
             return 0
         else
             echo "   FAILED: Unexpected response format"
@@ -46,7 +46,7 @@ test_actions_endpoint() {
         # Parse the error message
         if echo "$response" | grep -q "Resource not accessible"; then
             echo "   Error: Resource not accessible by personal access token"
-            printf "   NOTE: This suggests missing '%s' permission\n" "$required_permission"
+            printf "    This suggests missing '%s' permission\n" "$required_permission"
         elif echo "$response" | grep -q "Bad credentials"; then
             echo "   Error: Authentication failed"
         elif echo "$response" | grep -q "Not Found"; then
@@ -79,11 +79,11 @@ if latest_run=$(GH_TOKEN="$AAR_TOKEN" gh api "$REPO/actions/runs?per_page=1" 2>/
         test_actions_endpoint "$REPO/actions/runs/$latest_run/jobs" "Workflow Run Jobs" "Actions: Read"
         test_actions_endpoint "$REPO/actions/runs/$latest_run/logs" "Workflow Run Logs" "Actions: Read"
     else
-        echo "   WARNING: No workflow runs found"
+        echo "    No workflow runs found"
         echo ""
     fi
 else
-    echo "   ERROR: Cannot retrieve workflow runs for detailed testing"
+    echo "    Cannot retrieve workflow runs for detailed testing"
     echo ""
 fi
 

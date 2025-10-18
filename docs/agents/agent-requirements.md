@@ -200,11 +200,11 @@ For complete implementation guide, see: `docs/agents/external-toolkit-integratio
 
 ```bash
 
-# ✅ CORRECT - Use safe commit wrapper
+#  CORRECT - Use safe commit wrapper
 
 scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 
-# ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
+#  WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
 
 git commit -m "message"
 
@@ -232,12 +232,12 @@ git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypass
 
 ```bash
 
-# ✅ CORRECT - Centralized management
+#  CORRECT - Centralized management
 
 echo "NEW_VARIABLE=value" >> .env
 bash scripts/smart_env_sync.sh --sync-all
 
-# ❌ WRONG - Manual multi-file editing
+#  WRONG - Manual multi-file editing
 
 echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 
@@ -267,13 +267,13 @@ echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 
 ```bash
 
-# ✅ CORRECT - Covered by global .shellcheckrc
+#  CORRECT - Covered by global .shellcheckrc
 
 source .venv/bin/activate
 source scripts/load_token_environment.sh
 source scripts/enhanced_token_loader.sh
 
-# ✅ CORRECT - Only for unusual external dependencies
+#  CORRECT - Only for unusual external dependencies
 
 # shellcheck source=custom-external-config.sh disable=SC1091
 

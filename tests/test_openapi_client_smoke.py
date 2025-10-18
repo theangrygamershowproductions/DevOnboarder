@@ -16,7 +16,7 @@ def test_openapi_spec_valid_yaml():
     with open(spec_path, "r", encoding="utf-8") as f:
         spec = yaml.safe_load(f)
 
-    # Basic OpenAPI 3.0+ structure validation
+    # Basic OpenAPI 3.0 structure validation
     assert "openapi" in spec, "Missing 'openapi' field"  # noqa: S101
     assert "info" in spec, "Missing 'info' field"  # noqa: S101
     assert "title" in spec["info"], "Missing 'info.title' field"  # noqa: S101

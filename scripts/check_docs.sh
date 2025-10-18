@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Run markdownlint-cli2 on all Markdown files before Vale
-set +e
+set e
 npx -y markdownlint-cli2 "**/*.md"
 ml_status=$?
 set -e
@@ -34,7 +34,7 @@ elif ! command -v "$VALE_CMD" >/dev/null 2>&1; then
       exit 0
     fi
     mv "$TMP_DIR/vale" ./vale
-    chmod +x ./vale
+    chmod x ./vale
     VALE_CMD="./vale"
   else
     echo "::warning file=scripts/check_docs.sh,line=$LINENO::Unable to download Vale. Install version $VALE_VERSION manually and set VALE_BINARY to its path. Skipping documentation style check"
@@ -47,7 +47,7 @@ if ! "$VALE_CMD" --version >/dev/null 2>&1; then
   exit 0
 fi
 
-set +e
+set e
 "$VALE_CMD" --output=JSON "$FILES" >"$RESULTS_FILE"
 status=$?
 set -e

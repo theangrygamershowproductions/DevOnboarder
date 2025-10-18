@@ -14,7 +14,7 @@ echo "===================================="
 
 # Check if we're in the right directory
 if [[ ! -f "scripts/qc_pre_push.sh" ]]; then
-    echo "ERROR: Not in DevOnboarder root directory"
+    echo " Not in DevOnboarder root directory"
     echo "Please run from the repository root"
     exit 1
 fi
@@ -43,7 +43,7 @@ autofix-python:
 	source .venv/bin/activate && python scripts/comprehensive_auto_fixer.py --python
 
 EOF
-    echo "✅ Added auto-fixer make targets"
+    echo " Added auto-fixer make targets"
 else
     echo "ℹ️  Auto-fixer make targets already exist"
 fi
@@ -126,8 +126,8 @@ echo "Running DevOnboarder QC validation..."
 exec ./scripts/qc_pre_push.sh
 EOF
 
-chmod +x scripts/qc_with_autofix.sh
-echo "✅ Created QC integration script: scripts/qc_with_autofix.sh"
+chmod x scripts/qc_with_autofix.sh
+echo " Created QC integration script: scripts/qc_with_autofix.sh"
 
 # Update README with auto-fixer information
 if [[ -f "README.md" ]] && ! grep -q "auto-fixer" README.md; then
@@ -151,7 +151,7 @@ if [[ -f "README.md" ]] && ! grep -q "auto-fixer" README.md; then
     echo "" >> README.md
     echo "See [docs/tools/auto-fixers.md](docs/tools/auto-fixers.md) for complete documentation." >> README.md
 
-    echo "✅ Updated README.md with auto-fixer information"
+    echo " Updated README.md with auto-fixer information"
 else
     echo "ℹ️  README.md already contains auto-fixer information or doesn't exist"
 fi

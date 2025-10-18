@@ -15,7 +15,7 @@ readonly NC='\033[0m' # No Color
 readonly SCRIPT_NAME
 SCRIPT_NAME=$(basename "$0")
 readonly LOG_FILE
-LOG_FILE="logs/${SCRIPT_NAME%.*}_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/${SCRIPT_NAME%.*}_$(date %Y%m%d_%H%M%S).log"
 
 # Create logs directory and setup logging
 mkdir -p logs
@@ -74,9 +74,9 @@ DevOnboarder enforces a **ZERO TOLERANCE POLICY** for terminal output violations
    bash scripts/validate_terminal_output_simple.sh
 
    # Fix violations using safe patterns:
-   # ✅ SAFE: echo "Task completed successfully"
-   # ❌ FORBIDDEN: echo "✅ Task completed" (emojis cause hanging)
-   # ❌ FORBIDDEN: echo -e "Line1\nLine2" (multi-line causes hanging)
+   #  SAFE: echo "Task completed successfully"
+   #  FORBIDDEN: echo " Task completed" (emojis cause hanging)
+   #  FORBIDDEN: echo -e "Line1\nLine2" (multi-line causes hanging)
    ```
 
 2. **Validation Requirements:**
@@ -119,8 +119,8 @@ if issue_url=$(gh issue create \
     --label "terminal-policy-violation,critical,zero-tolerance" \
     --assignee "@me" 2>&1); then
 
-    echo -e "${GREEN}✅ GitHub issue created successfully${NC}"
-    echo -e "${BLUE}🔗 Issue URL: $issue_url${NC}"
+    echo -e "${GREEN} GitHub issue created successfully${NC}"
+    echo -e "${BLUE}LINK: Issue URL: $issue_url${NC}"
 
     # Log success
     echo "ISSUE_CREATED: $(date -Iseconds)"
@@ -130,7 +130,7 @@ if issue_url=$(gh issue create \
 
     exit 0
 else
-    echo -e "${RED}❌ Failed to create GitHub issue${NC}"
+    echo -e "${RED} Failed to create GitHub issue${NC}"
     echo "Error output: $issue_url"
     exit 1
 fi

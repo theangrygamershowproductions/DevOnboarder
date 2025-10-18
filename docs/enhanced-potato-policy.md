@@ -36,7 +36,7 @@ visibility: internal
 
 ## Philosophy
 
-**"Every rule has a scar behind it"** - The Enhanced Potato Policy was born from real-world security incidents and implements the principle: **Pain → Protocol → Protection**.
+**"Every rule has a scar behind it"** - The Enhanced Potato Policy was born from real-world security incidents and implements the principle: **Pain  Protocol  Protection**.
 
 This automated security mechanism protects sensitive files from accidental exposure through comprehensive enforcement, monitoring, and violation reporting.
 
@@ -146,7 +146,7 @@ This automated security mechanism protects sensitive files from accidental expos
 
   name: Enhanced Potato Policy Enforcement
   entry: bash
-  args: ["-c", "mkdir -p logs && source .venv/bin/activate && bash scripts/enhanced_potato_check.sh 2>&1 | tee logs/potato_check_$(date +%Y%m%d_%H%M%S).log"]
+  args: ["-c", "mkdir -p logs && source .venv/bin/activate && bash scripts/enhanced_potato_check.sh 2>&1 | tee logs/potato_check_$(date %Y%m%d_%H%M%S).log"]
   language: system
   always_run: true
 
@@ -154,13 +154,13 @@ This automated security mechanism protects sensitive files from accidental expos
 
 **Behavior**:
 
-- ✅ **Blocks commits** that violate policy
+-  **Blocks commits** that violate policy
 
-- ✅ **Auto-fixes** missing ignore entries where possible
+-  **Auto-fixes** missing ignore entries where possible
 
-- ✅ **Logs violations** for audit trail
+-  **Logs violations** for audit trail
 
-- ✅ **Virtual environment validation** before execution
+-  **Virtual environment validation** before execution
 
 ### 2. CI/CD Pipeline Integration
 
@@ -202,11 +202,11 @@ jobs:
 
 **Capabilities**:
 
-- 🔍 **Real-time scanning** for exposed sensitive files
+-  **Real-time scanning** for exposed sensitive files
 
-- 📋 **Automatic issue creation** in GitHub when violations detected
+-  **Automatic issue creation** in GitHub when violations detected
 
-- 📊 **Audit logging** with timestamp and context tracking
+-  **Audit logging** with timestamp and context tracking
 
 - 🚨 **Alert generation** for critical security events
 
@@ -216,13 +216,13 @@ jobs:
 
 **Features**:
 
-- ✅ **Comprehensive file pattern scanning**
+-  **Comprehensive file pattern scanning**
 
-- ✅ **Ignore file consistency validation**
+-  **Ignore file consistency validation**
 
-- ✅ **Virtual environment compliance checking**
+-  **Virtual environment compliance checking**
 
-- ✅ **Integration with CI monitoring framework**
+-  **Integration with CI monitoring framework**
 
 ## Enhanced Security Features
 
@@ -235,13 +235,13 @@ jobs:
 # Enhanced detection patterns
 
 SENSITIVE_PATTERNS=(
-    "password\s*[:=]\s*['\"][^'\"]+['\"]"     # Password assignments
+    "password\s*[:=]\s*['\"][^'\"]['\"]"     # Password assignments
 
-    "api[_-]?key\s*[:=]\s*['\"][^'\"]+['\"]"  # API key assignments
+    "api[_-]?key\s*[:=]\s*['\"][^'\"]['\"]"  # API key assignments
 
-    "token\s*[:=]\s*['\"][^'\"]+['\"]"        # Token assignments
+    "token\s*[:=]\s*['\"][^'\"]['\"]"        # Token assignments
 
-    "secret\s*[:=]\s*['\"][^'\"]+['\"]"       # Secret assignments
+    "secret\s*[:=]\s*['\"][^'\"]['\"]"       # Secret assignments
 
     "DISCORD_.*TOKEN.*"                        # Discord tokens
 
@@ -259,9 +259,9 @@ SENSITIVE_PATTERNS=(
 
 - 🎯 **False positive reduction**: Ignores test/mock data patterns
 
-- 📈 **Learning system**: Improves detection based on historical data
+- GROW: **Learning system**: Improves detection based on historical data
 
-- 🔄 **Feedback loop**: Incorporates manual review results
+- SYNC: **Feedback loop**: Incorporates manual review results
 
 ### 3. Automated Remediation
 
@@ -285,13 +285,13 @@ SENSITIVE_PATTERNS=(
 
 **Audit Trail Generation**:
 
-- 📊 **Policy compliance metrics** with trend analysis
+-  **Policy compliance metrics** with trend analysis
 
-- 📈 **Violation frequency reporting** for pattern identification
+- GROW: **Violation frequency reporting** for pattern identification
 
 - 🎯 **Risk assessment scoring** based on file sensitivity
 
-- 📋 **Executive summary reports** for stakeholder communication
+-  **Executive summary reports** for stakeholder communication
 
 ## Integration with DevOnboarder Ecosystem
 
@@ -301,7 +301,7 @@ SENSITIVE_PATTERNS=(
 
 ```bash
 
-# CI Monitor + Potato Policy integration
+# CI Monitor  Potato Policy integration
 
 source .venv/bin/activate
 python scripts/ci-monitor.py --include-security-scan
@@ -339,7 +339,7 @@ virtual_env_required: true
 
 - 🔒 **Access control**: Validates file permissions and ownership
 
-- 📁 **Directory structure enforcement**: Maintains secure directory organization
+-  **Directory structure enforcement**: Maintains secure directory organization
 
 ## Virtual Environment Requirements
 
@@ -371,7 +371,7 @@ pip install -e .[test]
 # All Potato Policy scripts include
 
 if [ -z "${VIRTUAL_ENV:-}" ]; then
-    echo "❌ Virtual environment required for Potato Policy operations"
+    echo " Virtual environment required for Potato Policy operations"
     echo "Run: source .venv/bin/activate"
     exit 1
 fi
@@ -501,7 +501,7 @@ done
 1. **Virtual Environment Missing**:
 
     ```bash
-    # ✅ Solution
+    #  Solution
 
     python -m venv .venv
     source .venv/bin/activate
@@ -511,7 +511,7 @@ done
 2. **Policy Check Failures**:
 
     ```bash
-    # ✅ Diagnosis
+    #  Diagnosis
 
     source .venv/bin/activate
     bash scripts/enhanced_potato_check.sh --verbose --dry-run
@@ -520,7 +520,7 @@ done
 3. **CI Integration Issues**:
 
     ```bash
-    # ✅ Validation
+    #  Validation
 
     source .venv/bin/activate
     bash scripts/validate_potato_ci.sh
@@ -578,13 +578,13 @@ bash scripts/enhanced_potato_check.sh
 
 **Optimized File Operations**:
 
-- 🚀 **Parallel processing**: Multiple files scanned concurrently
+-  **Parallel processing**: Multiple files scanned concurrently
 
-- 📊 **Caching system**: Results cached to avoid redundant scans
+-  **Caching system**: Results cached to avoid redundant scans
 
 - 🎯 **Smart filtering**: Skip known-safe files and directories
 
-- ⚡ **Incremental scanning**: Only scan changed files when possible
+- FAST: **Incremental scanning**: Only scan changed files when possible
 
 ### 2. Resource Management
 
@@ -592,9 +592,9 @@ bash scripts/enhanced_potato_check.sh
 
 - 💾 **Memory efficiency**: Streaming file processing for large repositories
 
-- 🔄 **CPU optimization**: Balanced workload distribution
+- SYNC: **CPU optimization**: Balanced workload distribution
 
-- 📁 **I/O minimization**: Reduced file system operations
+-  **I/O minimization**: Reduced file system operations
 
 - ⏱️ **Timeout handling**: Prevents resource exhaustion from long operations
 
@@ -602,37 +602,37 @@ bash scripts/enhanced_potato_check.sh
 
 ### Security Benefits
 
-✅ **99.9% Reduction** in accidental secret exposure
+ **99.9% Reduction** in accidental secret exposure
 
-✅ **Automated compliance** with security policies
+ **Automated compliance** with security policies
 
-✅ **Rapid incident detection** and response
+ **Rapid incident detection** and response
 
-✅ **Comprehensive audit trail** for compliance requirements
+ **Comprehensive audit trail** for compliance requirements
 
-✅ **Proactive threat prevention** vs reactive incident response
+ **Proactive threat prevention** vs reactive incident response
 
 ### Operational Benefits
 
-✅ **Zero manual oversight** required for basic compliance
+ **Zero manual oversight** required for basic compliance
 
-✅ **Consistent enforcement** across all environments
+ **Consistent enforcement** across all environments
 
-✅ **Reduced security review time** through automation
+ **Reduced security review time** through automation
 
-✅ **Improved developer experience** with clear guidance
+ **Improved developer experience** with clear guidance
 
-✅ **Scalable security framework** for growing teams
+ **Scalable security framework** for growing teams
 
 ### Cost Benefits
 
-✅ **Prevention costs** significantly lower than incident response
+ **Prevention costs** significantly lower than incident response
 
-✅ **Reduced audit preparation time** through automated reporting
+ **Reduced audit preparation time** through automated reporting
 
-✅ **Lower insurance premiums** through demonstrable security controls
+ **Lower insurance premiums** through demonstrable security controls
 
-✅ **Faster compliance certification** with comprehensive documentation
+ **Faster compliance certification** with comprehensive documentation
 
 ---
 

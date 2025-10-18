@@ -31,7 +31,7 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **ZERO TOLERANCE POLICY: Never use emojis, Unicode characters, or special formatting in terminal output commands. This WILL cause immediate terminal hanging in DevOnboarder environment. Use only plain ASCII text with individual echo commands.**
 
-## ⚠️ CRITICAL: Virtual Environment Requirements
+##  CRITICAL: Virtual Environment Requirements
 
 ### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
 
@@ -115,7 +115,7 @@ bash scripts/potato_policy_enforce.sh
 
 ```bash
 
-# ✅ CORRECT - Virtual environment usage
+#  CORRECT - Virtual environment usage
 
 source .venv/bin/activate
 pip install -e .[test]
@@ -123,7 +123,7 @@ python -m pytest
 python -m black .
 python -m openapi_spec_validator src/devonboarder/openapi.json
 
-# ❌ WRONG - System installation
+#  WRONG - System installation
 
 sudo pip install package
 pip install --user package
@@ -164,13 +164,13 @@ pip install -e .[test]
 
 ### Core Services
 
-- **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
+- **Backend**: Python 3.12  FastAPI  SQLAlchemy (Port 8001)
 
-- **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
+- **Discord Bot**: TypeScript  Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
 
-- **Frontend**: React + Vite + TypeScript (Port 8081)
+- **Frontend**: React  Vite  TypeScript (Port 8081)
 
-- **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
+- **Auth Service**: FastAPI  JWT  Discord OAuth (Port 8002)
 
 - **XP System**: Gamification API with user levels and contributions tracking
 
@@ -184,7 +184,7 @@ All FastAPI services follow a consistent pattern for health checks and CORS:
 
 # Standard service creation pattern (src/llama2_agile_helper/api.py, src/xp/api/__init__.py)
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()  # From utils.cors
 
@@ -198,7 +198,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```
@@ -225,7 +225,7 @@ All services follow the same FastAPI pattern:
 
 # Standard service creation pattern
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()
 
@@ -233,7 +233,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```
@@ -275,7 +275,7 @@ This is a **CRITICAL INFRASTRUCTURE REQUIREMENT** enforced by CI/CD pipelines:
 # MANDATORY: All scripts create logs in centralized location
 
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # MANDATORY: All workflows use centralized logging
@@ -302,23 +302,23 @@ command 2>&1 | tee logs/step-name.log
 
 ```bash
 
-# ✅ CORRECT - Simple text only (MANDATORY)
+#  CORRECT - Simple text only (MANDATORY)
 
 echo "Task completed successfully"
 echo "Files processed: 5"
 echo "Next steps: Review and commit"
 
-# ✅ CORRECT - Plain ASCII characters only
+#  CORRECT - Plain ASCII characters only
 
 echo "Status: Implementation complete"
 echo "Result: All tests passing"
 echo "Action: Ready for deployment"
 
-# ❌ FORBIDDEN - These WILL cause terminal hanging
+#  FORBIDDEN - These WILL cause terminal hanging
 
-echo "✅ Multi-line output here"        # Emojis cause hanging
+echo " Multi-line output here"        # Emojis cause hanging
 
-echo "📋 Works with emojis"             # Unicode causes hanging
+echo " Works with emojis"             # Unicode causes hanging
 
 echo "🎯 No escaping issues"            # Special chars cause hanging
 
@@ -353,13 +353,13 @@ echo -e "Line1\nLine2\nLine3"          # Escape sequences cause hanging
 
 **CRITICAL CHARACTER RESTRICTIONS**:
 
-- ❌ **NO EMOJIS**: ✅, ❌, 🎯, 🚀, 📋, 🔍, 📝, 💡, ⚠️, etc.
+-  **NO EMOJIS**: , , 🎯, , , , , , , etc.
 
-- ❌ **NO UNICODE**: Special symbols, arrows, bullets, etc.
+-  **NO UNICODE**: Special symbols, arrows, bullets, etc.
 
-- ❌ **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
+-  **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
 
-- ✅ **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
+-  **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
 
 **Safe Usage Patterns**:
 
@@ -414,7 +414,7 @@ echo "Deployment complete"
 
 ### 3. Code Quality Requirements
 
-### ⚠️ CRITICAL: Linting Rule Policy
+###  CRITICAL: Linting Rule Policy
 
 **NEVER modify linting configuration files without explicit human approval**:
 
@@ -440,7 +440,7 @@ echo "Deployment complete"
 
 **Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
 
-### ⚠️ MANDATORY: Markdown Standards Compliance
+###  MANDATORY: Markdown Standards Compliance
 
 **ALL markdown content MUST comply with project linting rules before creation**:
 
@@ -536,7 +536,7 @@ More content following the same pattern.
 
 **Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
 
-### ⚠️ CRITICAL: CI Hygiene & Artifact Management
+###  CRITICAL: CI Hygiene & Artifact Management
 
 **Root Artifact Guard System**: DevOnboarder enforces strict artifact hygiene to prevent repository pollution:
 
@@ -564,21 +564,21 @@ bash scripts/enforce_output_location.sh
 
 # Automatically blocks commits with violations
 
-# ❌ ./pytest-of-* directories in root
+#  ./pytest-of-* directories in root
 
-# ❌ ./.coverage* files in root (should be logs/)
+#  ./.coverage* files in root (should be logs/)
 
-# ❌ ./vale-results.json in root (should be logs/)
+#  ./vale-results.json in root (should be logs/)
 
-# ❌ ./node_modules in root (should be frontend/bot/)
+#  ./node_modules in root (should be frontend/bot/)
 
-# ❌ ./test.db or cache files in root
+#  ./test.db or cache files in root
 
 ```
 
 **CI Triage Guard Framework**: Comprehensive automation monitors and maintains CI health:
 
-- **22+ GitHub Actions workflows** provide complete automation coverage
+- **22 GitHub Actions workflows** provide complete automation coverage
 
 - **Auto-fixing**: Automatic formatting via `auto-fix.yml` workflow
 
@@ -594,12 +594,12 @@ bash scripts/enforce_output_location.sh
 
 ```bash
 
-# ✅ CORRECT - Install in service directories
+#  CORRECT - Install in service directories
 
 cd frontend && npm ci
 cd bot && npm ci
 
-# ❌ WRONG - Never install in repository root
+#  WRONG - Never install in repository root
 
 npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 
@@ -622,7 +622,7 @@ npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 - **Docstrings**: Required for all public functions (use NumPy style)
 
 ```python
-def greet(name: str) -> str:
+def greet(name: str)  str:
     """Return a friendly greeting.
 
     Parameters
@@ -649,7 +649,7 @@ def greet(name: str) -> str:
 
 - **Testing**: Jest for bot, Vitest for frontend
 
-- **ESLint + Prettier**: Enforced formatting
+- **ESLint  Prettier**: Enforced formatting
 
 - **100% coverage** for bot service
 
@@ -657,11 +657,11 @@ def greet(name: str) -> str:
 
 #### Coverage Thresholds
 
-- **Python backend**: 96%+ (enforced in CI)
+- **Python backend**: 96% (enforced in CI)
 
 - **TypeScript bot**: 100% (enforced in CI)
 
-- **React frontend**: 100% statements, 98.43%+ branches
+- **React frontend**: 100% statements, 98.43% branches
 
 #### Test Commands (Virtual Environment Required)
 
@@ -756,27 +756,27 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ### Directory Layout
 
 ```text
-├── .venv/                     # Python virtual environment (NEVER commit)
+── .venv/                     # Python virtual environment (NEVER commit)
 
-├── src/devonboarder/          # Python backend application
+── src/devonboarder/          # Python backend application
 
-├── bot/                       # Discord bot (TypeScript)
+── bot/                       # Discord bot (TypeScript)
 
-├── frontend/                  # React application
+── frontend/                  # React application
 
-├── auth/                      # Authentication service
+── auth/                      # Authentication service
 
-├── tests/                     # Test suites
+── tests/                     # Test suites
 
-├── docs/                      # Documentation
+── docs/                      # Documentation
 
-├── scripts/                   # Automation scripts
+── scripts/                   # Automation scripts
 
-├── .github/workflows/         # GitHub Actions (22+ workflows)
+── .github/workflows/         # GitHub Actions (22 workflows)
 
-├── config/                    # Configuration files
+── config/                    # Configuration files
 
-└── plugins/                   # Optional Python extensions
+── plugins/                   # Optional Python extensions
 
 ```
 
@@ -845,7 +845,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **Startup logging**: Bot provides detailed environment info on startup
 
-- **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
+- **ESLint v9 flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 
@@ -921,7 +921,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 ### Automation Ecosystem
 
-DevOnboarder includes 100+ automation scripts in `scripts/` covering:
+DevOnboarder includes 100 automation scripts in `scripts/` covering:
 
 - **CI Health Monitoring**: `monitor_ci_health.sh`, `analyze_ci_patterns.sh`
 
@@ -991,7 +991,7 @@ All CI commands use proper virtual environment context:
 
 - **Token security**: Secure Discord bot token storage
 
-- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 - **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
 
@@ -1073,7 +1073,7 @@ useEffect(() => {
 # FastAPI endpoint with proper documentation
 
 @app.get("/api/user/status", response_model=UserStatus)
-async def get_user_status(user_id: int) -> UserStatus:
+async def get_user_status(user_id: int)  UserStatus:
     """Get user onboarding status.
 
     Returns user's current onboarding progress and level.
@@ -1116,7 +1116,7 @@ async def get_user_status(user_id: int) -> UserStatus:
 def user_level(username: str, db: Session = Depends(auth_service.get_db)):
     user = db.query(auth_service.User).filter_by(username=username).first()
     xp_total = sum(evt.xp for evt in user.events)
-    level = xp_total // 100 + 1
+    level = xp_total // 100  1
 
     return {"level": level}
 
@@ -1211,15 +1211,15 @@ python -m pytest plugins/example_plugin/
 
 1. **ModuleNotFoundError**:
 
-    - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+    -  **Solution**: `source .venv/bin/activate && pip install -e .[test]`
 
-    - ❌ **NOT**: Install to system Python
+    -  **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
 
-    - ✅ **Solution**: Use `python -m command` syntax in virtual environment
+    -  **Solution**: Use `python -m command` syntax in virtual environment
 
-    - ❌ **NOT**: Install globally with `pip install --user`
+    -  **NOT**: Install globally with `pip install --user`
 
 3. **Coverage failures**: Check test quality, not just quantity
 
@@ -1518,12 +1518,12 @@ bash scripts/validate-bot-permissions.sh
 
 **Last Updated**: 2025-07-28 (Enhanced with Agent Validation & Infrastructure Repair)
 
-**Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
-**Active Environments**: Development + Production Discord integration
+**Coverage Status**: Backend 96%, Bot 100%, Frontend 100%
+**Active Environments**: Development  Production Discord integration
 
-**CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
+**CI Framework**: 22 GitHub Actions workflows with comprehensive automation
 
-**Security**: Enhanced Potato Policy + Root Artifact Guard active
+**Security**: Enhanced Potato Policy  Root Artifact Guard active
 
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
 **Review Required**: Follow PR template and maintain quality standards

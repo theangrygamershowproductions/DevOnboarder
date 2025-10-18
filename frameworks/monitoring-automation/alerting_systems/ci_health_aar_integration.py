@@ -56,7 +56,7 @@ class CIHealthAARIntegrator:
     def _setup_token_environment(self):
         """
         Setup token environment following Token Architecture v2.1 hierarchy
-        CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+        CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
         """
         # Check for CI_ISSUE_AUTOMATION_TOKEN first
         token = os.getenv("CI_ISSUE_AUTOMATION_TOKEN")
@@ -74,11 +74,11 @@ class CIHealthAARIntegrator:
         if os.getenv("GITHUB_TOKEN"):
             print("Using GITHUB_TOKEN for GitHub operations")
         else:
-            print("WARNING: No GitHub token available - AAR generation may fail")
+            print(" No GitHub token available - AAR generation may fail")
 
     def get_ci_health_logs(
         self, workflow_id: str | None = None
-    ) -> List[Dict[str, Any]]:
+    )  List[Dict[str, Any]]:
         """Get CI health monitoring logs for analysis"""
         ci_logs = []
         logs_dir = self.project_root / "logs"
@@ -102,7 +102,7 @@ class CIHealthAARIntegrator:
 
         return ci_logs
 
-    def _parse_ci_health_log(self, content: str, filename: str) -> Dict[str, Any]:
+    def _parse_ci_health_log(self, content: str, filename: str)  Dict[str, Any]:
         """Parse CI health log content into structured data"""
         log_data = {
             "filename": filename,
@@ -169,7 +169,7 @@ class CIHealthAARIntegrator:
 
     def generate_enhanced_aar(
         self, workflow_id: str, create_issue: bool = False
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Generate AAR with integrated CI health data"""
         logger.info(f"Generating enhanced AAR for workflow {workflow_id}")
 
@@ -195,7 +195,7 @@ class CIHealthAARIntegrator:
 
     def _analyze_ci_health_patterns(
         self, ci_logs: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Analyze CI health patterns for AAR insights"""
         analysis = {
             "total_predictions": len(ci_logs),
@@ -214,19 +214,19 @@ class CIHealthAARIntegrator:
             pred = log["prediction_results"]
 
             if pred["failure_predicted"]:
-                analysis["failure_predictions"] += 1
+                analysis["failure_predictions"] = 1
 
             if pred["confidence"] > 0.8:
-                analysis["high_confidence_predictions"] += 1
+                analysis["high_confidence_predictions"] = 1
 
-            confidence_sum += pred["confidence"]
-            analysis["total_cost_savings_potential"] += pred["cost_savings"]
+            confidence_sum = pred["confidence"]
+            analysis["total_cost_savings_potential"] = pred["cost_savings"]
 
             # Track pattern frequency
             failure_type = pred["failure_type"]
             if failure_type != "none":
                 analysis["pattern_frequency"][failure_type] = (
-                    analysis["pattern_frequency"].get(failure_type, 0) + 1
+                    analysis["pattern_frequency"].get(failure_type, 0)  1
                 )
 
             patterns_found.extend(log["patterns_detected"])
@@ -258,7 +258,7 @@ class CIHealthAARIntegrator:
 
     def _generate_base_aar(
         self, workflow_id: str, create_issue: bool
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Generate base AAR using existing DevOnboarder AAR system"""
         try:
             # Use make command to generate AAR with proper variable passing
@@ -286,7 +286,7 @@ class CIHealthAARIntegrator:
 
     def _enhance_aar_with_ci_health(
         self, aar_result: Dict[str, Any], analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Enhance AAR with CI health analysis data"""
         enhanced = {
             "workflow_id": aar_result["workflow_id"],
@@ -298,7 +298,7 @@ class CIHealthAARIntegrator:
 
         return enhanced
 
-    def _generate_integration_summary(self, analysis: Dict[str, Any]) -> str:
+    def _generate_integration_summary(self, analysis: Dict[str, Any])  str:
         """Generate human-readable integration summary"""
         summary_lines = [
             "# CI Health Dashboard Integration Summary",
@@ -354,12 +354,12 @@ class CIHealthAARIntegrator:
                 # Write base AAR information
                 f.write("## Base AAR Results\n\n")
                 if enhanced_aar["base_aar"]["success"]:
-                    f.write("SUCCESS: Base AAR generated successfully\n\n")
+                    f.write(" Base AAR generated successfully\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"]["stdout"])
                     f.write("\n```\n")
                 else:
-                    f.write("ERROR: Base AAR generation failed\n\n")
+                    f.write(" Base AAR generation failed\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"].get("stderr", "Unknown error"))
                     f.write("\n```\n")
@@ -419,7 +419,7 @@ Examples:
                 args.workflow_id, args.create_issue
             )
 
-            print("SUCCESS: Enhanced AAR generated successfully")
+            print(" Enhanced AAR generated successfully")
             print(f"Workflow ID: {result['workflow_id']}")
             print(
                 f"CI Health Predictions: "
@@ -441,7 +441,7 @@ Examples:
             ci_logs = integrator.get_ci_health_logs()
             analysis = integrator._analyze_ci_health_patterns(ci_logs)
 
-            print("STATS: CI Health Pattern Analysis")
+            print(" CI Health Pattern Analysis")
             print("=" * 40)
             print(f"Total Logs Analyzed: {analysis['total_predictions']}")
             print(f"Failure Predictions: {analysis['failure_predictions']}")

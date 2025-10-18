@@ -6,7 +6,7 @@ if [ -f .env.ci ]; then
     set -a
     # shellcheck source=.env.ci disable=SC1091
     source .env.ci
-    set +a
+    set a
 fi
 
 database_url="${DATABASE_URL:-}"

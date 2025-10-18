@@ -10,7 +10,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit
 mkdir -p reports
 
 # Generate timestamped report filename
-TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
+TIMESTAMP=$(date '%Y%m%d_%H%M%S')
 REPORT_FILE="reports/token-audit-${TIMESTAMP}.md"
 
 echo "Generating Token Architecture v2.1 Audit Report..."
@@ -20,7 +20,7 @@ echo "Report will be saved to: ${REPORT_FILE}"
 cat > "$REPORT_FILE" << 'EOF'
 # Token Architecture v2.1 - Security Audit Report
 
-**Report Generated:** $(date '+%Y-%m-%d %H:%M:%S %Z')
+**Report Generated:** $(date '%Y-%m-%d %H:%M:%S %Z')
 
 **DevOnboarder Repository:** [theangrygamershowproductions/DevOnboarder](https://github.com/theangrygamershowproductions/DevOnboarder)
 
@@ -46,7 +46,7 @@ The audit was conducted using automated tools from the DevOnboarder Token Archit
 EOF
 
 # Add current date to the report
-sed -i "s/\$(date '+%Y-%m-%d %H:%M:%S %Z')/$(date '+%Y-%m-%d %H:%M:%S %Z')/g" "$REPORT_FILE"
+sed -i "s/\$(date '%Y-%m-%d %H:%M:%S %Z')/$(date '%Y-%m-%d %H:%M:%S %Z')/g" "$REPORT_FILE"
 
 # shellcheck disable=SC2129 # Grouped redirects are intentional for performance
 {
@@ -55,7 +55,7 @@ sed -i "s/\$(date '+%Y-%m-%d %H:%M:%S %Z')/$(date '+%Y-%m-%d %H:%M:%S %Z')/g" "$
 } >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 echo "\`\`\`bash" >> "$REPORT_FILE"
-echo "# Token health check executed at: $(date '+%Y-%m-%d %H:%M:%S')" >> "$REPORT_FILE"
+echo "# Token health check executed at: $(date '%Y-%m-%d %H:%M:%S')" >> "$REPORT_FILE"
 echo "\`\`\`" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
@@ -206,7 +206,7 @@ cat >> "$REPORT_FILE" << EOF
 - **Report ID:** token-audit-${TIMESTAMP}
 - **Auditor:** Automated Token Audit System
 - **Review Status:** Pending human validation
-- **Next Scheduled Audit:** $(date -d "+1 month" '+%Y-%m-%d')
+- **Next Scheduled Audit:** $(date -d "1 month" '%Y-%m-%d')
 
 ---
 

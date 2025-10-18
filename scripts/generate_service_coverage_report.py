@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Tuple, Any
 
 
-def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
+def extract_coverage_from_log(log_path: Path)  Tuple[float, str]:
     """Extract coverage percentage from pytest log file.
 
     Parameters
@@ -21,7 +21,7 @@ def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
         Coverage percentage and status emoji.
     """
     if not log_path.exists():
-        return 0.0, "❌"
+        return 0.0, ""
 
     try:
         with open(log_path, "r", encoding="utf-8") as f:
@@ -29,9 +29,9 @@ def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
 
         # Look for coverage percentage in various formats
         patterns = [
-            r"TOTAL\s+\d+\s+\d+\s+(\d+)%",  # Standard pytest-cov output
-            r"coverage:\s*(\d+(?:\.\d+)?)%",  # Alternative format
-            r"(\d+(?:\.\d+)?)%\s+coverage",  # Another format
+            r"TOTAL\s\d\s\d\s(\d)%",  # Standard pytest-cov output
+            r"coverage:\s*(\d(?:\.\d)?)%",  # Alternative format
+            r"(\d(?:\.\d)?)%\scoverage",  # Another format
         ]
 
         for pattern in patterns:
@@ -50,10 +50,10 @@ def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
     except Exception as e:
         print(f"Error reading {log_path}: {e}", file=sys.stderr)
 
-    return 0.0, "❌"
+    return 0.0, ""
 
 
-def get_service_info() -> Dict[str, Dict[str, Any]]:
+def get_service_info()  Dict[str, Dict[str, Any]]:
     """Get service configuration and expected thresholds.
 
     Returns
@@ -96,7 +96,7 @@ def get_service_info() -> Dict[str, Dict[str, Any]]:
     }
 
 
-def generate_markdown_report() -> str:
+def generate_markdown_report()  str:
     """Generate markdown coverage report.
 
     Returns
@@ -108,12 +108,12 @@ def generate_markdown_report() -> str:
     logs_dir = Path("logs")
 
     # Header
-    report = "# 📊 DevOnboarder Per-Service Coverage Report\n\n"
-    report += "## Service Quality Overview\n\n"
+    report = "#  DevOnboarder Per-Service Coverage Report\n\n"
+    report = "## Service Quality Overview\n\n"
 
     # Table header
-    report += "| Service | Coverage | Threshold | Status | Description | Priority |\n"
-    report += "|---------|----------|-----------|--------|-------------|----------|\n"
+    report = "| Service | Coverage | Threshold | Status | Description | Priority |\n"
+    report = "|---------|----------|-----------|--------|-------------|----------|\n"
 
     total_coverage = 0.0
     services_count = 0
@@ -148,27 +148,27 @@ def generate_markdown_report() -> str:
 
         service_desc = config["description"]
         service_priority = config["priority"]
-        report += (
+        report = (
             f"| {service_name} | {coverage:.1f}% | {threshold}% | "
             f"{status} | {service_desc} | {service_priority} |\n"
         )
 
-        total_coverage += coverage
-        services_count += 1
+        total_coverage = coverage
+        services_count = 1
 
     # Overall metrics
     avg_coverage = total_coverage / services_count if services_count > 0 else 0
 
-    report += "\n## Overall Metrics\n\n"
-    report += f"- **Average Coverage**: {avg_coverage:.1f}%\n"
-    report += f"- **Services Tested**: {services_count}\n"
-    report += f"- **Services Passing**: {services_count - len(failed_services)}\n"
-    report += f"- **Services Failing**: {len(failed_services)}\n"
+    report = "\n## Overall Metrics\n\n"
+    report = f"- **Average Coverage**: {avg_coverage:.1f}%\n"
+    report = f"- **Services Tested**: {services_count}\n"
+    report = f"- **Services Passing**: {services_count - len(failed_services)}\n"
+    report = f"- **Services Failing**: {len(failed_services)}\n"
 
     # Failure analysis
     if failed_services:
-        report += "\n## 🎯 Strategic Improvement Opportunities\n\n"
-        report += "Focus testing efforts on these services for maximum ROI:\n\n"
+        report = "\n## 🎯 Strategic Improvement Opportunities\n\n"
+        report = "Focus testing efforts on these services for maximum ROI:\n\n"
 
         # Sort by gap size for strategic prioritization
         failed_services.sort(key=lambda x: x["gap"], reverse=True)
@@ -178,26 +178,26 @@ def generate_markdown_report() -> str:
             svc_name = service["name"]
             svc_coverage = service["coverage"]
             svc_threshold = service["threshold"]
-            report += (
+            report = (
                 f"{i}. **{svc_name}**: {svc_coverage:.1f}% "
-                f"(needs +{gap:.1f}% to reach {svc_threshold}%)\n"
+                f"(needs {gap:.1f}% to reach {svc_threshold}%)\n"
             )
 
-        report += (
-            "\n💡 **Recommendation**: Start with services having the "
+        report = (
+            "\n **Recommendation**: Start with services having the "
             "largest coverage gaps for maximum improvement impact.\n"
         )
     else:
-        report += "\n## 🎉 Excellent Quality Achievement!\n\n"
+        report = "\n## 🎉 Excellent Quality Achievement!\n\n"
         all_services_msg = (
             "All services are meeting or exceeding their "
             "coverage thresholds. DevOnboarder maintains "
             "high quality across all components.\n"
         )
-        report += all_services_msg
+        report = all_services_msg
 
     # Quality insights
-    report += "\n## 🔍 Quality Insights\n\n"
+    report = "\n##  Quality Insights\n\n"
     critical_services = [s for s, c in services.items() if c["priority"] == "critical"]
     high_services = [s for s, c in services.items() if c["priority"] == "high"]
 
@@ -207,11 +207,11 @@ def generate_markdown_report() -> str:
 
     crit_count = len(critical_services)
     high_count = len(high_services)
-    report += (
+    report = (
         f"- **Critical Services**: {critical_passing}/{crit_count} "
         f"passing (95% threshold)\n"
     )
-    report += (
+    report = (
         f"- **High Priority Services**: {high_passing}/{high_count} "
         f"passing (90% threshold)\n"
     )
@@ -219,7 +219,7 @@ def generate_markdown_report() -> str:
     return report
 
 
-def main() -> None:
+def main()  None:
     """Generate and save coverage report."""
     report = generate_markdown_report()
 
@@ -231,7 +231,7 @@ def main() -> None:
     print(f"Per-service coverage report generated: {output_file}")
 
     # Also print to stdout for CI visibility
-    print("\n" + report)
+    print("\n"  report)
 
 
 if __name__ == "__main__":

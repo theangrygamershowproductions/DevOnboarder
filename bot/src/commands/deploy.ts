@@ -53,7 +53,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     if (!hasAdminRole && !dryRunMode) {
         const embed = new EmbedBuilder()
-            .setTitle('❌ Access Denied')
+            .setTitle(' Access Denied')
             .setDescription(
                 'You need admin or developer role to use deploy commands.',
             )
@@ -65,7 +65,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     // Create deployment embed
     const embed = new EmbedBuilder()
-        .setTitle(`🚀 DevOnboarder Deployment`)
+        .setTitle(` DevOnboarder Deployment`)
         .setColor(dryRunMode ? 0xffa500 : 0x00ff00)
         .addFields([
             {
@@ -73,7 +73,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 value:
                     service === 'all'
                         ? 'All Services'
-                        : service.charAt(0).toUpperCase() + service.slice(1),
+                        : service.charAt(0).toUpperCase()  service.slice(1),
                 inline: true,
             },
             {
@@ -106,7 +106,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: false,
                 },
                 {
-                    name: '📊 Expected Results',
+                    name: ' Expected Results',
                     value: [
                         `• ${service} service would be deployed to ${targetEnv}`,
                         '• CI/CD pipeline would execute',
@@ -128,7 +128,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     } else if (liveTriggersEnabled) {
         // Live deployment (would integrate with actual deployment system)
         embed
-            .setDescription('🚀 **LIVE MODE**: Initiating deployment...')
+            .setDescription(' **LIVE MODE**: Initiating deployment...')
             .addFields([
                 {
                     name: '⏳ Deployment Status',
@@ -151,7 +151,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             };
 
             console.log(
-                `🚀 LIVE: Initiating deployment via API`,
+                ` LIVE: Initiating deployment via API`,
                 deploymentPayload,
             );
 
@@ -166,7 +166,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log('✅ Deployment API call successful:', result);
+                console.log(' Deployment API call successful:', result);
 
                 // Update embed with deployment ID if provided
                 if (result.deploymentId) {
@@ -180,7 +180,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 }
             } else {
                 console.error(
-                    '❌ Deployment API call failed:',
+                    ' Deployment API call failed:',
                     response.status,
                     response.statusText,
                 );
@@ -188,19 +188,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 // Update embed to indicate API failure
                 embed.setColor(0xff8800).addFields([
                     {
-                        name: '⚠️ API Status',
+                        name: ' API Status',
                         value: 'Deployment API unavailable - logged for manual processing',
                         inline: false,
                     },
                 ]);
             }
         } catch (error) {
-            console.error('❌ Error calling deployment API:', error);
+            console.error(' Error calling deployment API:', error);
 
             // Fallback to logging when API is unavailable
             embed.setColor(0xff8800).addFields([
                 {
-                    name: '⚠️ Fallback Mode',
+                    name: ' Fallback Mode',
                     value: 'Deployment logged for manual processing',
                     inline: false,
                 },
@@ -211,7 +211,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (config.webhookUrl) {
             try {
                 const webhookPayload = {
-                    content: '🚀 DevOnboarder Deployment Notification',
+                    content: ' DevOnboarder Deployment Notification',
                     embeds: [
                         {
                             title: 'Deployment Initiated',
@@ -251,19 +251,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     console.log('📡 Webhook notification sent successfully');
                 } else {
                     console.error(
-                        '❌ Webhook notification failed:',
+                        ' Webhook notification failed:',
                         response.status,
                         response.statusText,
                     );
                 }
             } catch (error) {
-                console.error('❌ Error sending webhook notification:', error);
+                console.error(' Error sending webhook notification:', error);
             }
         }
     } else {
         // Safety mode - triggers not enabled
         embed
-            .setDescription('⚠️ **SAFETY MODE**: Live triggers not enabled')
+            .setDescription(' **SAFETY MODE**: Live triggers not enabled')
             .addFields([
                 {
                     name: '🛡️ Safety Notice',

@@ -20,15 +20,15 @@ similarity_group: troubleshooting-troubleshooting
 
 ### Primary Indicators
 
-- ✅ All required status checks show as "SUCCESS" and "COMPLETED"
+-  All required status checks show as "SUCCESS" and "COMPLETED"
 
-- ✅ Automerge is enabled on pull request
+-  Automerge is enabled on pull request
 
-- ❌ PR shows "BLOCKED" merge state indefinitely
+-  PR shows "BLOCKED" merge state indefinitely
 
-- ❌ GitHub shows "7 Required checks that are still waiting for status to be reported"
+-  GitHub shows "7 Required checks that are still waiting for status to be reported"
 
-- ❌ Status checks appear as "Expected — Waiting for status to be reported" despite completing
+-  Status checks appear as "Expected — Waiting for status to be reported" despite completing
 
 ### Secondary Indicators
 
@@ -40,7 +40,7 @@ similarity_group: troubleshooting-troubleshooting
 
 - CI workflows complete successfully but merge eligibility not recognized
 
-## 🔍 Root Cause Analysis
+##  Root Cause Analysis
 
 ### Critical Infrastructure Misconfigurations
 
@@ -86,7 +86,7 @@ gh api repos/OWNER/REPO --jq '.default_branch'
 
 **Impact:** GitHub waits for status checks that will never report because the names don't match.
 
-## 🛠️ Step-by-Step Resolution
+##  Step-by-Step Resolution
 
 ### Phase 1: Diagnostic Commands
 
@@ -127,7 +127,7 @@ gh pr view ISSUE_NUMBER --json statusCheckRollup --jq '.statusCheckRollup[].name
 
 gh api repos/OWNER/REPO/commits/$(git rev-parse HEAD)/status --jq '.state'
 
-# If "pending" despite completed checks → Configuration mismatch confirmed
+# If "pending" despite completed checks  Configuration mismatch confirmed
 
 ```
 
@@ -210,26 +210,26 @@ gh pr view ISSUE_NUMBER --json mergeStateStatus,mergeable
 
 ```
 
-## 🔧 Prevention Strategies
+##  Prevention Strategies
 
 ### Repository Setup Checklist
 
 **When setting up new repositories:**
 
-1. **✅ Set correct default branch immediately:**
+1. ** Set correct default branch immediately:**
 
    ```bash
 
    gh api repos/OWNER/REPO -X PATCH --field default_branch=main
    ```
 
-2. **✅ Configure branch protection with actual check names:**
+2. ** Configure branch protection with actual check names:**
 
    - Use check run names, not workflow/job combinations
 
    - Test with a sample PR before enforcing
 
-3. **✅ Validate configuration:**
+3. ** Validate configuration:**
 
    ```bash
 
@@ -256,7 +256,7 @@ gh pr view ISSUE_NUMBER --json mergeStateStatus,mergeable
 
 DEFAULT_BRANCH=$(gh api repos/$GITHUB_REPOSITORY --jq -r '.default_branch')
 if [ "$DEFAULT_BRANCH" != "main" ]; then
-    echo "⚠️  WARNING: Default branch is $DEFAULT_BRANCH, not main"
+    echo "   Default branch is $DEFAULT_BRANCH, not main"
 fi
 
 # Check for pending status with completed checks
@@ -275,7 +275,7 @@ fi
 
 ```
 
-## 📋 Quick Reference Commands
+##  Quick Reference Commands
 
 ### Diagnostic One-Liners
 
@@ -318,19 +318,19 @@ gh pr merge ISSUE_NUMBER --auto --merge
 
 **Initial State:**
 
-- Default branch: `ci-recovery` ❌
+- Default branch: `ci-recovery` 
 
-- Required checks: `CodeQL/Analyze (python) (dynamic)` ❌
+- Required checks: `CodeQL/Analyze (python) (dynamic)` 
 
-- PR state: `BLOCKED` indefinitely ❌
+- PR state: `BLOCKED` indefinitely 
 
 **Resolution Applied:**
 
-- Default branch: `main` ✅
+- Default branch: `main` 
 
-- Required checks: `CodeQL` ✅
+- Required checks: `CodeQL` 
 
-- PR state: `UNKNOWN` → recalculating ✅
+- PR state: `UNKNOWN`  recalculating 
 
 **Outcome:**
 
@@ -340,7 +340,7 @@ gh pr merge ISSUE_NUMBER --auto --merge
 
 - Infrastructure aligned and stable
 
-## 🚀 Related Documentation
+##  Related Documentation
 
 - [Branch Protection Guide](../git/README.md)
 

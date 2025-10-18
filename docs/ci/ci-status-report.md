@@ -21,7 +21,7 @@ visibility: internal
 
 # CI Status Report - PR #970
 
-## 🔍 CI Status Report - PR #970
+##  CI Status Report - PR #970
 
 **Last Updated:** 2025-07-28 18:22:21 UTC
 
@@ -31,7 +31,7 @@ visibility: internal
 
 ---
 
-### ✅ Completed Successfully (16)
+###  Completed Successfully (16)
 
 - **validate-yaml**: SUCCESS (~2min)
 
@@ -55,11 +55,11 @@ visibility: internal
 
 - ... and 6 more successful checks
 
-### ❌ Failed (2)
+###  Failed (2)
 
 - **test (3.12, 22)**: FAILURE
 
-    - 💡 **Type:** Code Quality
+    -  **Type:** Code Quality
 
     - **Action:** Fix code issues and run tests locally
 
@@ -67,7 +67,7 @@ visibility: internal
 
 - **test (3.12, 22)**: FAILURE
 
-    - 💡 **Type:** Code Quality
+    -  **Type:** Code Quality
 
     - **Action:** Fix code issues and run tests locally
 
@@ -75,7 +75,7 @@ visibility: internal
 
 ---
 
-### 📊 Pipeline Metrics
+###  Pipeline Metrics
 
 | Metric                    | Value |
 | ------------------------- | ----- |
@@ -92,7 +92,7 @@ visibility: internal
 
 ### 🎯 Recommended Actions
 
-📝 **Code Quality Issues:**
+ **Code Quality Issues:**
 
 - Run tests locally: `pytest --cov=src --cov-fail-under=95`
 
@@ -102,7 +102,7 @@ visibility: internal
 
 ---
 
-### 🔗 Quick Links
+### LINK: Quick Links
 
 - [Full Pipeline](https://github.com/theangrygamershowproductions/DevOnboarder/pull/970)
 

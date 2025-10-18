@@ -26,7 +26,7 @@ if [ -f ~/.devonboarder-keys/pmbot_ed25519 ]; then
 
     # Read the public key and email
     PUBLIC_KEY=$(cat /tmp/extracted_public_key.pub)
-    EMAIL="bot+priority-matrix@theangrygamershow.com"
+    EMAIL="botpriority-matrix@theangrygamershow.com"
 
     # Update .gitsigners file
     echo "$EMAIL $PUBLIC_KEY" > .gitsigners
@@ -39,6 +39,6 @@ if [ -f ~/.devonboarder-keys/pmbot_ed25519 ]; then
 
     echo "SSH public key extraction complete"
 else
-    echo "ERROR: SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
+    echo " SSH private key not found at ~/.devonboarder-keys/pmbot_ed25519"
     exit 1
 fi

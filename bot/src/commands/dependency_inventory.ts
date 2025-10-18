@@ -21,7 +21,7 @@ async function parsePyproject(root: string): Promise<InventoryItem[]> {
     const items: InventoryItem[] = [];
     const deps: string[] = data?.project?.dependencies ?? [];
     for (const dep of deps) {
-        const match = dep.match(/^([^\s<>=!]+)(.*)$/);
+        const match = dep.match(/^([^\s<>=!])(.*)$/);
         const name = match ? match[1] : dep;
         const version = match && match[2] ? match[2] : '';
         items.push({
@@ -41,7 +41,7 @@ async function parseRequirements(root: string): Promise<InventoryItem[]> {
     for (const line of text.split(/\r?\n/)) {
         const trimmed = line.split('#')[0].trim();
         if (!trimmed) continue;
-        const match = trimmed.match(/^([^=<>!]+)(.*)$/);
+        const match = trimmed.match(/^([^=<>!])(.*)$/);
         if (!match) continue;
         const name = match[1];
         const version = match[2] || '';
@@ -109,7 +109,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 `"${item.Type}","${item.File}","${item.Package}","${item.Version}"`,
         )
         .join('\n');
-    const csvContent = csvHeader + csvRows;
+    const csvContent = csvHeader  csvRows;
 
     const outPath = path.join(root, 'dependency_inventory.csv');
     await writeFile(outPath, csvContent, 'utf8');

@@ -38,7 +38,7 @@ def _get_token(
     password: str,
     *,
     discord_token: str = "dtoken",
-) -> str:
+)  str:
     resp = client.post(
         "/api/login",
         json={
@@ -388,7 +388,7 @@ class StubResponse:
     def json(self):
         return self._json
 
-    def raise_for_status(self) -> None:
+    def raise_for_status(self)  None:
         if self.status_code >= 400:
             raise httpx.HTTPStatusError("error", request=None, response=None)
 
@@ -1041,7 +1041,7 @@ def test_jwt_secret_key_validation_in_production():
 
 
 def test_is_safe_redirect_url_exception_paths():
-    """Test exception paths in is_safe_redirect_url to achieve 95%+ coverage."""
+    """Test exception paths in is_safe_redirect_url to achieve 95% coverage."""
     from devonboarder.auth_service import is_safe_redirect_url
     from unittest.mock import patch
 
@@ -1094,7 +1094,7 @@ def test_environment_validation_coverage():
 
 
 def test_additional_auth_service_coverage():
-    """Test additional code paths to achieve 95%+ coverage."""
+    """Test additional code paths to achieve 95% coverage."""
     from devonboarder.auth_service import is_safe_redirect_url, create_app
     import os
 
@@ -1436,7 +1436,7 @@ def test_password_truncation_for_bcrypt():
     client = TestClient(app)
 
     # Create a password longer than 72 bytes (100 characters)
-    long_password = "a" * 50 + "b" * 50  # 100 chars, >72 bytes
+    long_password = "a" * 50  "b" * 50  # 100 chars, >72 bytes
     assert len(long_password.encode("utf-8")) > 72  # Verify it's >72 bytes
 
     # Register with long password

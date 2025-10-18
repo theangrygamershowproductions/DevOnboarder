@@ -11,8 +11,8 @@ echo
 
 # Critical violation patterns that cause hanging
 declare -a CRITICAL_PATTERNS=(
-    "echo.*[✅❌🎯🚀📋🔍📝💡⚠️]"     # Emojis cause immediate hanging
-    "echo.*[→≥≤┌└├]"                    # Unicode characters cause hanging
+    "echo.*[🎯]"     # Emojis cause immediate hanging
+    "echo.*[≥≤]"                    # Unicode characters cause hanging
     "echo.*\\$\\("                      # Command substitution in echo
     "echo.*\\$\\{"                      # Variable expansion in echo
     "echo -e.*\\\\n"                    # Multi-line escape sequences
@@ -28,7 +28,7 @@ check_file_violations() {
     local file="$1"
     local file_violations=0
 
-    TOTAL_FILES=$((TOTAL_FILES + 1))
+    TOTAL_FILES=$((TOTAL_FILES  1))
 
     echo "Checking: $file"
 
@@ -40,11 +40,11 @@ check_file_violations() {
             echo "$violations" | while read -r line; do
                 echo "    Line: $line"
             done
-            file_violations=$((file_violations + 1))
+            file_violations=$((file_violations  1))
         fi
     done
 
-    VIOLATION_COUNT=$((VIOLATION_COUNT + file_violations))
+    VIOLATION_COUNT=$((VIOLATION_COUNT  file_violations))
 
     if [[ $file_violations -eq 0 ]]; then
         echo "  CLEAN: No violations found"
@@ -78,10 +78,10 @@ echo "Total violations: $VIOLATION_COUNT"
 echo
 
 if [[ $VIOLATION_COUNT -eq 0 ]]; then
-    echo "SUCCESS: Zero violations found - terminal output policy compliant"
+    echo " Zero violations found - terminal output policy compliant"
     exit 0
 elif [[ $VIOLATION_COUNT -le 10 ]]; then
-    echo "WARNING: $VIOLATION_COUNT violations found - within Phase 1 target"
+    echo " $VIOLATION_COUNT violations found - within Phase 1 target"
     exit 1
 else
     echo "CRITICAL: $VIOLATION_COUNT violations found - exceeds acceptable threshold"

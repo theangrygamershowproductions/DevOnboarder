@@ -18,7 +18,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 LOG_DIR="$PROJECT_ROOT/logs"
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 MONITOR_LOG="$LOG_DIR/workflow_monitor_$TIMESTAMP.log"
 
 # Ensure log directory exists
@@ -28,7 +28,7 @@ mkdir -p "$LOG_DIR"
 exec > >(tee -a "$MONITOR_LOG") 2>&1
 
 echo "=== Enhanced Workflow Monitoring System ==="
-echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S UTC')"
+echo "Timestamp: $(date '%Y-%m-%d %H:%M:%S UTC')"
 echo "Monitor Log: $MONITOR_LOG"
 echo
 
@@ -105,15 +105,15 @@ monitor_recent_failures() {
 
     # Generate specific recommendations
     if [ "$auto_fix_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: Auto Fix showing recurring failures - review patch generation logic"
+        echo "  HIGH: Auto Fix showing recurring failures - review patch generation logic"
     fi
 
     if [ "$ci_monitor_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: CI Monitor failing repeatedly - check artifact availability and authentication"
+        echo "  HIGH: CI Monitor failing repeatedly - check artifact availability and authentication"
     fi
 
     if [ "$ci_failure_analyzer_failures" -gt 2 ]; then
-        echo "⚠️  HIGH: CI Failure Analyzer not functioning - verify GitHub CLI authentication"
+        echo "  HIGH: CI Failure Analyzer not functioning - verify GitHub CLI authentication"
     fi
 
     return 0
@@ -155,9 +155,9 @@ check_workflow_health() {
             if [ "$success_rate" -lt 80 ]; then
                 echo "  🔴 CRITICAL: Success rate below 80%"
             elif [ "$success_rate" -lt 90 ]; then
-                echo "  🟡 WARNING: Success rate below 90%"
+                echo "  🟡  Success rate below 90%"
             else
-                echo "  ✅ HEALTHY: Success rate above 90%"
+                echo "   HEALTHY: Success rate above 90%"
             fi
         else
             echo "  No conclusive runs found"
@@ -174,7 +174,7 @@ generate_monitoring_summary() {
     cat > "$summary_file" << EOF
 # Workflow Health Monitoring Report
 
-**Generated**: $(date '+%Y-%m-%d %H:%M:%S UTC')
+**Generated**: $(date '%Y-%m-%d %H:%M:%S UTC')
 **Monitoring Session**: $TIMESTAMP
 
 ## Recent Activity
@@ -191,9 +191,9 @@ $(gh run list --limit 10 --json workflowName,conclusion,createdAt,databaseId | j
 
 Based on recent patterns:
 
-1. **Auto Fix Workflow**: $([ "$auto_fix_failures" -gt 2 ] && echo "⚠️ Requires attention - recurring failures detected" || echo "✅ Operating normally")
-2. **CI Monitor Workflow**: $([ "$ci_monitor_failures" -gt 2 ] && echo "⚠️ Requires attention - check artifact handling" || echo "✅ Operating normally")
-3. **CI Failure Analyzer**: $([ "$ci_failure_analyzer_failures" -gt 2 ] && echo "⚠️ Requires attention - verify authentication" || echo "✅ Operating normally")
+1. **Auto Fix Workflow**: $([ "$auto_fix_failures" -gt 2 ] && echo " Requires attention - recurring failures detected" || echo " Operating normally")
+2. **CI Monitor Workflow**: $([ "$ci_monitor_failures" -gt 2 ] && echo " Requires attention - check artifact handling" || echo " Operating normally")
+3. **CI Failure Analyzer**: $([ "$ci_failure_analyzer_failures" -gt 2 ] && echo " Requires attention - verify authentication" || echo " Operating normally")
 
 ## Next Steps
 
@@ -213,7 +213,7 @@ EOF
 
     cat > "$json_summary" << EOF
 {
-    "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "timestamp": "$(date -u %Y-%m-%dT%H:%M:%SZ)",
     "monitoring_session": "$TIMESTAMP",
     "recent_failures": {
         "auto_fix": $auto_fix_failures,
@@ -221,8 +221,8 @@ EOF
         "ci_failure_analyzer": $ci_failure_analyzer_failures
     },
     "health_status": {
-        "overall": "$([ $((auto_fix_failures + ci_monitor_failures + ci_failure_analyzer_failures)) -lt 3 ] && echo "healthy" || echo "attention_required")",
-        "critical_workflows": $([ $((auto_fix_failures + ci_monitor_failures + ci_failure_analyzer_failures)) -gt 5 ] && echo "true" || echo "false")
+        "overall": "$([ $((auto_fix_failures  ci_monitor_failures  ci_failure_analyzer_failures)) -lt 3 ] && echo "healthy" || echo "attention_required")",
+        "critical_workflows": $([ $((auto_fix_failures  ci_monitor_failures  ci_failure_analyzer_failures)) -gt 5 ] && echo "true" || echo "false")
     },
     "log_files": {
         "monitor_log": "$MONITOR_LOG",
@@ -245,17 +245,17 @@ main() {
 
     # Run monitoring functions to set actual failure counts
     if monitor_recent_failures; then
-        echo "✅ Recent failure monitoring completed"
+        echo " Recent failure monitoring completed"
     else
-        echo "⚠️ Recent failure monitoring encountered issues"
+        echo " Recent failure monitoring encountered issues"
     fi
 
     echo
 
     if check_workflow_health; then
-        echo "✅ Workflow health assessment completed"
+        echo " Workflow health assessment completed"
     else
-        echo "⚠️ Workflow health assessment encountered issues"
+        echo " Workflow health assessment encountered issues"
     fi
 
     echo
@@ -268,14 +268,14 @@ main() {
     echo "Monitor log: $MONITOR_LOG"
 
     # Return status based on overall health
-    if [ $((auto_fix_failures + ci_monitor_failures + ci_failure_analyzer_failures)) -gt 5 ]; then
+    if [ $((auto_fix_failures  ci_monitor_failures  ci_failure_analyzer_failures)) -gt 5 ]; then
         echo "🔴 CRITICAL: Multiple workflow systems require immediate attention"
         return 1
-    elif [ $((auto_fix_failures + ci_monitor_failures + ci_failure_analyzer_failures)) -gt 2 ]; then
-        echo "🟡 WARNING: Some workflow systems may need attention"
+    elif [ $((auto_fix_failures  ci_monitor_failures  ci_failure_analyzer_failures)) -gt 2 ]; then
+        echo "🟡  Some workflow systems may need attention"
         return 0
     else
-        echo "✅ HEALTHY: All monitored workflows operating within normal parameters"
+        echo " HEALTHY: All monitored workflows operating within normal parameters"
         return 0
     fi
 }

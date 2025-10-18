@@ -52,7 +52,7 @@ echo ""
 blue "Checking for existing AAR Bot keys..."
 
 if gpg --list-keys "$BOT_EMAIL" >/dev/null 2>&1; then
-    yellow "WARNING: GPG key already exists for $BOT_EMAIL"
+    yellow " GPG key already exists for $BOT_EMAIL"
     echo ""
     echo "Existing key found. Options:"
     echo "1. Continue with existing key (recommended)"
@@ -121,7 +121,7 @@ EOF
     if gpg --batch --gen-key "$BATCH_FILE"; then
         green "GPG key generated successfully!"
     else
-        red "ERROR: Failed to generate GPG key"
+        red " Failed to generate GPG key"
         rm -f "$BATCH_FILE"
         exit 1
     fi
@@ -138,7 +138,7 @@ fi
 NEW_KEY_ID=$(gpg --list-keys --with-colons "$BOT_EMAIL" | awk -F: '/^pub/ {print $5}' | head -1)
 
 if [[ -z "$NEW_KEY_ID" ]]; then
-    red "ERROR: Could not retrieve key ID"
+    red " Could not retrieve key ID"
     exit 1
 fi
 
@@ -190,7 +190,7 @@ yellow "2. Corporate Account Setup (MANDATORY):"
 echo ""
 echo "   Upload the public key to the corporate GitHub account:"
 echo "   - Account: developer@theangrygamershow.com (scarabofthespudheap)"
-echo "   - Navigate to: Settings -> SSH and GPG keys -> New GPG key"
+echo "   - Navigate to: Settings  SSH and GPG keys  New GPG key"
 echo "   - Upload content from: aar-bot-public.gpg"
 echo "   - Verify the key appears in the account GPG keys list"
 echo ""
@@ -198,7 +198,7 @@ yellow "3. Test the AAR Implementation:"
 echo ""
 echo "   Test the AAR workflows:"
 echo "   - Workflows: aar-portal.yml, aar-automation.yml"
-echo "   - Execute via: Actions -> Generate AAR Portal -> Run workflow"
+echo "   - Execute via: Actions  Generate AAR Portal  Run workflow"
 echo "   - Verify: GPG signature, email attribution, commit verification"
 echo ""
 yellow "4. Security Cleanup:"

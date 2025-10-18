@@ -64,7 +64,7 @@ visibility: internal
 
 - **`ci-hygiene-artifact-management.md`** - Root Artifact Guard, cleanup policies
 
-## 🛠️ **Development Modules**
+##  **Development Modules**
 
 ### **Workflow & Standards**
 
@@ -82,7 +82,7 @@ visibility: internal
 
 - **`api-conventions.md`** - FastAPI patterns, health checks, CORS
 
-## 🔧 **Troubleshooting & Support**
+##  **Troubleshooting & Support**
 
 ### **Issue Resolution**
 
@@ -124,7 +124,7 @@ visibility: internal
 
 3. `api-conventions.md` - Backend integration
 
-## 🔍 **Keyword Search Guide**
+##  **Keyword Search Guide**
 
 ### **Environment Issues**
 
@@ -168,61 +168,61 @@ visibility: internal
 
 **Modules**: `testing-requirements.md`, `code-quality-requirements.md`, `quality-control-policy.md`
 
-## ⚡ **Common Workflows**
+## FAST: **Common Workflows**
 
 ### **Setup New Development Environment**
 
-1. `virtual-environment-policy.md` → Setup commands
+1. `virtual-environment-policy.md`  Setup commands
 
-2. `development-workflow.md` → Git configuration
+2. `development-workflow.md`  Git configuration
 
-3. `quality-control-policy.md` → QC validation
+3. `quality-control-policy.md`  QC validation
 
 ### **Troubleshoot CI Failure**
 
-1. `ci-troubleshooting-framework.md` → AAR analysis
+1. `ci-troubleshooting-framework.md`  AAR analysis
 
-2. `quality-control-policy.md` → QC requirements
+2. `quality-control-policy.md`  QC requirements
 
-3. `common-issues-resolution.md` → Known solutions
+3. `common-issues-resolution.md`  Known solutions
 
 ### **Add New Feature**
 
-1. `development-workflow.md` → Branch strategy
+1. `development-workflow.md`  Branch strategy
 
-2. `testing-requirements.md` → Coverage requirements
+2. `testing-requirements.md`  Coverage requirements
 
-3. `commit-message-standards.md` → Commit format
+3. `commit-message-standards.md`  Commit format
 
 ### **Fix Security Issue**
 
-1. `enhanced-potato-policy.md` → Security policies
+1. `enhanced-potato-policy.md`  Security policies
 
-2. `environment-variable-management.md` → Secret handling
+2. `environment-variable-management.md`  Secret handling
 
-3. `ci-hygiene-artifact-management.md` → Artifact cleanup
+3. `ci-hygiene-artifact-management.md`  Artifact cleanup
 
 ## 🚨 **Emergency Quick Actions**
 
 ### **Terminal Hanging**
 
-**Solution**: `terminal-output-policy.md` → Safe patterns section
+**Solution**: `terminal-output-policy.md`  Safe patterns section
 
 ### **Virtual Environment Issues**
 
-**Solution**: `virtual-environment-policy.md` → Setup commands
+**Solution**: `virtual-environment-policy.md`  Setup commands
 
 ### **Commit Failures**
 
-**Solution**: `development-workflow.md` → Safe commit wrapper
+**Solution**: `development-workflow.md`  Safe commit wrapper
 
 ### **CI Failures**
 
-**Solution**: `ci-troubleshooting-framework.md` → AAR generation
+**Solution**: `ci-troubleshooting-framework.md`  AAR generation
 
 ### **Coverage Drops**
 
-**Solution**: `testing-requirements.md` → Coverage requirements
+**Solution**: `testing-requirements.md`  Coverage requirements
 
 ---
 

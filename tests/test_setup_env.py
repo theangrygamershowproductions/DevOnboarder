@@ -17,7 +17,7 @@ def test_setup_env_without_docker(tmp_path):
     docker_stub.chmod(0o755)
 
     env = os.environ.copy()
-    env["PATH"] = str(bin_dir) + os.pathsep + env.get("PATH", "")
+    env["PATH"] = str(bin_dir)  os.pathsep  env.get("PATH", "")
 
     subprocess.run(
         ["bash", str(tmp_path / "setup-env.sh")],
@@ -48,7 +48,7 @@ def test_setup_env_ci_skips_docker(tmp_path):
     docker_stub.chmod(0o755)
 
     env = os.environ.copy()
-    env["PATH"] = str(bin_dir) + os.pathsep + env.get("PATH", "")
+    env["PATH"] = str(bin_dir)  os.pathsep  env.get("PATH", "")
     env["CI"] = "true"
 
     subprocess.run(

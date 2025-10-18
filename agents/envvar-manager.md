@@ -67,7 +67,7 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 
 ## \U0001F4CC Markdown Standards
 
-- We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38+ to enforce style and consistency.
+- We use [`markdownlint`](https://github.com/DavidAnson/markdownlint) v0.38 to enforce style and consistency.
 
 - Configured via `.markdownlint.json` with all rules enabled by default.
 
@@ -88,6 +88,6 @@ If environment misalignment persists longer than 24 hours, notify the DevOps lea
 - To disable rules in a file, add:
 
     ```markdown
-    <!-- markdownlint-disable-file MD### -->
+    <!-- markdownlint-disable-file MD### -
 
     ```

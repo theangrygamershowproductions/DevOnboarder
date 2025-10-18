@@ -27,21 +27,21 @@ echo ""
 echo "CI/CD Tokens (.tokens file):"
 if [ -n "${AAR_TOKEN:-}" ]; then
     echo "  Status: AAR_TOKEN: Available"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 else
     echo "  Error: AAR_TOKEN: Missing"
 fi
 
 if [ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]; then
     printf "Value: %s\n" "$"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 else
     echo "  Error: CI_ISSUE_AUTOMATION_TOKEN: Missing"
 fi
 
 if [ -n "${CI_BOT_TOKEN:-}" ]; then
     printf "Value: %s\n" "$"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 else
     echo "  Error: CI_BOT_TOKEN: Missing"
 fi
@@ -51,7 +51,7 @@ echo ""
 echo "Runtime Tokens (.env file):"
 if [ -n "${DISCORD_BOT_TOKEN:-}" ]; then
     printf "Value: %s\n" "$"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 else
     echo "  Error: DISCORD_BOT_TOKEN: Missing"
 fi
@@ -61,17 +61,17 @@ echo ""
 echo "Additional Service Tokens:"
 if [ -n "${TUNNEL_TOKEN:-}" ]; then
     printf "Value: %s\n" "$"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 fi
 
 if [ -n "${DATABASE_URL:-}" ]; then
     echo "  Success: DATABASE_URL: Configured"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 fi
 
 if [ -n "${JWT_SECRET:-}" ]; then
     echo "  Success: JWT_SECRET: Configured"
-    LOADED_TOKENS=$((LOADED_TOKENS + 1))
+    LOADED_TOKENS=$((LOADED_TOKENS  1))
 fi
 
 echo ""
@@ -84,10 +84,10 @@ echo "Testing AAR_TOKEN (Actions API):"
 if [ -n "${AAR_TOKEN:-}" ]; then
     if GH_TOKEN="$AAR_TOKEN" gh api repos/theangrygamershowproductions/DevOnboarder/actions >/dev/null 2>&1; then
         echo "  Success: Actions API: Working perfectly"
-        API_WORKING=$((API_WORKING + 1))
+        API_WORKING=$((API_WORKING  1))
     else
         echo "  PENDING: Actions API: Propagation delay (normal for updated tokens)"
-        API_PENDING=$((API_PENDING + 1))
+        API_PENDING=$((API_PENDING  1))
     fi
 else
     echo "  Error: Token not available for testing"
@@ -99,10 +99,10 @@ echo "Testing CI_ISSUE_AUTOMATION_TOKEN (Issues API):"
 if [ -n "${CI_ISSUE_AUTOMATION_TOKEN:-}" ]; then
     if GH_TOKEN="$CI_ISSUE_AUTOMATION_TOKEN" gh api repos/theangrygamershowproductions/DevOnboarder/issues >/dev/null 2>&1; then
         echo "  Success: Issues API: Working perfectly"
-        API_WORKING=$((API_WORKING + 1))
+        API_WORKING=$((API_WORKING  1))
     else
         echo "  PENDING: Issues API: Propagation delay (normal for updated tokens)"
-        API_PENDING=$((API_PENDING + 1))
+        API_PENDING=$((API_PENDING  1))
     fi
 else
     echo "  Error: Token not available for testing"
@@ -114,10 +114,10 @@ echo "Testing CI_BOT_TOKEN (User API):"
 if [ -n "${CI_BOT_TOKEN:-}" ]; then
     if GH_TOKEN="$CI_BOT_TOKEN" gh api user >/dev/null 2>&1; then
         echo "  Success: User API: Working perfectly"
-        API_WORKING=$((API_WORKING + 1))
+        API_WORKING=$((API_WORKING  1))
     else
         echo "  PENDING: User API: Propagation delay (normal for updated tokens)"
-        API_PENDING=$((API_PENDING + 1))
+        API_PENDING=$((API_PENDING  1))
     fi
 else
     echo "  Error: Token not available for testing"

@@ -21,13 +21,13 @@ run_test() {
     echo "Testing: $test_name"
     echo "Command: $command"
 
-    ((tests_total++))
+    ((tests_total))
 
     if eval "$command" >/dev/null 2>&1; then
         output=$(eval "$command" 2>&1)
         if echo "$output" | grep -q "$expected_pattern"; then
             echo "PASS - Token loading successful"
-            tests_passed=$((tests_passed + 1))
+            tests_passed=$((tests_passed  1))
         else
             echo "FAIL - Token loading pattern not found"
             echo "Expected pattern: $expected_pattern"

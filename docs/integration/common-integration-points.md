@@ -147,7 +147,7 @@ useEffect(() => {
 # FastAPI endpoint with proper documentation
 
 @app.get("/api/user/status", response_model=UserStatus)
-async def get_user_status(user_id: int) -> UserStatus:
+async def get_user_status(user_id: int)  UserStatus:
     """Get user onboarding status.
 
     Returns user's current onboarding progress and level.
@@ -190,7 +190,7 @@ async def get_user_status(user_id: int) -> UserStatus:
 def user_level(username: str, db: Session = Depends(auth_service.get_db)):
     user = db.query(auth_service.User).filter_by(username=username).first()
     xp_total = sum(evt.xp for evt in user.events)
-    level = xp_total // 100 + 1
+    level = xp_total // 100  1
 
     return {"level": level}
 

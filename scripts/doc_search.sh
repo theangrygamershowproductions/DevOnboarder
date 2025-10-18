@@ -6,14 +6,14 @@ set -euo pipefail
 
 # Logging setup
 mkdir -p logs
-LOG_FILE="logs/doc_search_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/doc_search_$(date %Y%m%d_%H%M%S).log"
 
 # Function for smart documentation search
 devonboarder-search() {
     local query="$1"
     local verbose="${2:-false}"
 
-    echo "🔍 DevOnboarder Documentation Search"
+    echo " DevOnboarder Documentation Search"
     echo "Query: '$query'"
     echo "======================================"
 
@@ -25,8 +25,8 @@ devonboarder-search() {
     case "$query_lower" in
         *"modulenotfounderror"*|*"virtual environment"*|*"venv"*)
             echo "📚 Primary Match: Virtual Environment Issues"
-            echo "   → docs/policies/virtual-environment-policy.md"
-            echo "   → docs/troubleshooting/common-issues-resolution.md"
+            echo "    docs/policies/virtual-environment-policy.md"
+            echo "    docs/troubleshooting/common-issues-resolution.md"
             echo ""
             echo "Quick Fix Commands:"
             echo "   source .venv/bin/activate"
@@ -35,18 +35,18 @@ devonboarder-search() {
 
         *"terminal hanging"*|*"emoji"*|*"unicode"*)
             echo "📚 Primary Match: Terminal Output Issues"
-            echo "   → docs/policies/terminal-output-policy.md"
+            echo "    docs/policies/terminal-output-policy.md"
             echo ""
             echo "Critical Rules:"
-            echo "   ❌ Never use emojis in echo commands"
-            echo "   ❌ Never use multi-line echo"
-            echo "   ✅ Use individual echo commands with plain text"
+            echo "    Never use emojis in echo commands"
+            echo "    Never use multi-line echo"
+            echo "    Use individual echo commands with plain text"
             ;;
 
         *"commit message"*|*"safe commit"*)
             echo "📚 Primary Match: Git & Commit Standards"
-            echo "   → docs/development/commit-message-standards.md"
-            echo "   → docs/development/development-workflow.md"
+            echo "    docs/development/commit-message-standards.md"
+            echo "    docs/development/development-workflow.md"
             echo ""
             echo "Quick Fix Commands:"
             echo "   ./scripts/safe_commit.sh 'TYPE(scope): description'"
@@ -55,8 +55,8 @@ devonboarder-search() {
 
         *"potato policy"*|*"secret"*|*".env"*)
             echo "📚 Primary Match: Security & File Protection"
-            echo "   → docs/policies/enhanced-potato-policy.md"
-            echo "   → docs/policies/environment-variable-management.md"
+            echo "    docs/policies/enhanced-potato-policy.md"
+            echo "    docs/policies/environment-variable-management.md"
             echo ""
             echo "Key Points:"
             echo "   - Potato.md contains SSH keys and setup"
@@ -66,9 +66,9 @@ devonboarder-search() {
 
         *"ci failure"*|*"quality control"*|*"pre-commit"*)
             echo "📚 Primary Match: CI/CD & Quality Control"
-            echo "   → docs/policies/quality-control-policy.md"
-            echo "   → docs/troubleshooting/ci-troubleshooting-framework.md"
-            echo "   → docs/policies/ci-hygiene-artifact-management.md"
+            echo "    docs/policies/quality-control-policy.md"
+            echo "    docs/troubleshooting/ci-troubleshooting-framework.md"
+            echo "    docs/policies/ci-hygiene-artifact-management.md"
             echo ""
             echo "Quick Fix Commands:"
             echo "   ./scripts/qc_pre_push.sh"
@@ -77,8 +77,8 @@ devonboarder-search() {
 
         *"discord"*|*"bot"*)
             echo "📚 Primary Match: Discord Bot Development"
-            echo "   → docs/development/discord-bot-patterns.md"
-            echo "   → docs/development/service-integration-patterns.md"
+            echo "    docs/development/discord-bot-patterns.md"
+            echo "    docs/development/service-integration-patterns.md"
             echo ""
             echo "Key Info:"
             echo "   - Multi-guild support (dev/prod)"
@@ -88,8 +88,8 @@ devonboarder-search() {
 
         *"fastapi"*|*"api"*|*"cors"*)
             echo "📚 Primary Match: API & Service Integration"
-            echo "   → docs/development/api-conventions.md"
-            echo "   → docs/development/service-integration-patterns.md"
+            echo "    docs/development/api-conventions.md"
+            echo "    docs/development/service-integration-patterns.md"
             echo ""
             echo "Service Ports:"
             echo "   - Auth Service: 8002"
@@ -100,8 +100,8 @@ devonboarder-search() {
 
         *"database"*|*"alembic"*|*"sqlalchemy"*)
             echo "📚 Primary Match: Database Management"
-            echo "   → docs/development/database-patterns.md"
-            echo "   → docs/development/service-integration-patterns.md"
+            echo "    docs/development/database-patterns.md"
+            echo "    docs/development/service-integration-patterns.md"
             echo ""
             echo "Common Commands:"
             echo "   - Migrations: Alembic for schema changes"
@@ -110,27 +110,27 @@ devonboarder-search() {
 
         *"testing"*|*"pytest"*|*"coverage"*)
             echo "📚 Primary Match: Testing & Coverage"
-            echo "   → docs/development/testing-requirements.md"
-            echo "   → docs/policies/quality-control-policy.md"
+            echo "    docs/development/testing-requirements.md"
+            echo "    docs/policies/quality-control-policy.md"
             echo ""
             echo "Coverage Thresholds:"
-            echo "   - Python backend: 96%+"
+            echo "   - Python backend: 96%"
             echo "   - TypeScript bot: 100%"
             echo "   - React frontend: 100% statements"
             ;;
 
         *"linting"*|*"black"*|*"ruff"*)
             echo "📚 Primary Match: Code Quality & Linting"
-            echo "   → docs/development/code-quality-requirements.md"
-            echo "   → docs/policies/quality-control-policy.md"
+            echo "    docs/development/code-quality-requirements.md"
+            echo "    docs/policies/quality-control-policy.md"
             echo ""
             echo "Tools:"
             echo "   - Python: ruff (linting), black (formatting)"
-            echo "   - TypeScript: ESLint + Prettier"
+            echo "   - TypeScript: ESLint  Prettier"
             ;;
 
         *)
-            echo "🔍 No direct keyword match found. Searching content..."
+            echo " No direct keyword match found. Searching content..."
 
             # Full-text search across documentation
             local search_results=""
@@ -140,7 +140,7 @@ devonboarder-search() {
 
             if [ -n "$search_results" ]; then
                 echo ""
-                echo "📄 Content Matches Found:"
+                echo "FILE: Content Matches Found:"
                 echo "$search_results" | head -10 | while IFS= read -r line; do
                     echo "   $line"
                 done
@@ -152,9 +152,9 @@ devonboarder-search() {
                 fi
             else
                 echo ""
-                echo "❌ No matches found for '$query'"
+                echo " No matches found for '$query'"
                 echo ""
-                echo "💡 Try these common searches:"
+                echo " Try these common searches:"
                 echo "   devonboarder-search 'virtual environment'"
                 echo "   devonboarder-search 'ci failure'"
                 echo "   devonboarder-search 'terminal hanging'"
@@ -172,13 +172,13 @@ devonboarder-search() {
 
     # Check git status for context
     if git status --porcelain 2>/dev/null | grep -q .; then
-        echo "   📝 Uncommitted changes detected"
+        echo "    Uncommitted changes detected"
         echo "      Consider: devonboarder-search 'commit message'"
     fi
 
     # Check if in virtual environment
     if [ -z "${VIRTUAL_ENV:-}" ]; then
-        echo "   ⚠️  Virtual environment not active"
+        echo "     Virtual environment not active"
         echo "      Consider: devonboarder-search 'virtual environment'"
     fi
 
@@ -206,7 +206,7 @@ devonboarder-search() {
 
 # Interactive search mode
 interactive-doc-search() {
-    echo "🔍 DevOnboarder Interactive Documentation Search"
+    echo " DevOnboarder Interactive Documentation Search"
     echo "=============================================="
     echo ""
     echo "Type your search query or 'quit' to exit:"

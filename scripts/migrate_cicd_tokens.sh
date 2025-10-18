@@ -13,7 +13,7 @@ set -euo pipefail
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-LOG_FILE="logs/cicd_token_migration_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/cicd_token_migration_$(date %Y%m%d_%H%M%S).log"
 
 # Ensure logs directory exists
 mkdir -p "$PROJECT_ROOT/logs"
@@ -21,7 +21,7 @@ mkdir -p "$PROJECT_ROOT/logs"
 # Logging function
 log() {
     local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    timestamp=$(date '%Y-%m-%d %H:%M:%S')
     printf "[%s] %s\n" "$timestamp" "$*" | tee -a "$LOG_FILE"
 }
 
@@ -104,7 +104,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            log "ERROR: Unknown option $1"
+            log " Unknown option $1"
             exit 1
             ;;
     esac
@@ -129,13 +129,13 @@ migrate_cicd_tokens() {
     log "Processing CI/CD tokens for environment: ${env_suffix:-"(default)"}"
 
     if [[ ! -f "$env_file" ]]; then
-        log "WARNING: Environment file not found: $env_file"
+        log " Environment file not found: $env_file"
         return 0
     fi
 
     # Check if tokens file already exists
     if [[ -f "$tokens_file" && "$FORCE_OVERWRITE" != "true" ]]; then
-        log "WARNING: Tokens file already exists: $tokens_file"
+        log " Tokens file already exists: $tokens_file"
         log "Use --force to overwrite or manually merge"
         return 0
     fi
@@ -149,7 +149,7 @@ migrate_cicd_tokens() {
         token_value=$(extract_token "$env_file" "$token_key")
 
         if [[ -n "$token_value" ]]; then
-            extracted_cicd_tokens+=("${token_key}=${token_value}")
+            extracted_cicd_tokens=("${token_key}=${token_value}")
             cicd_tokens_found=true
             log "Found CI/CD token: $token_key"
         fi
@@ -182,7 +182,7 @@ migrate_cicd_tokens() {
 # Security: MUST be added to .gitignore (except .tokens.ci)
 # Management: Use scripts/token_loader.py --type=cicd for loading
 #
-# NOTE: Application runtime tokens (Discord, etc.) stay in .env files
+#  Application runtime tokens (Discord, etc.) stay in .env files
 # =============================================================================
 
 EOF
@@ -213,8 +213,8 @@ EOF
         local temp_file="${env_file}.tmp"
 
         # Create backup
-        cp "$env_file" "${env_file}.backup.$(date +%Y%m%d_%H%M%S)"
-        log "Created backup: ${env_file}.backup.$(date +%Y%m%d_%H%M%S)"
+        cp "$env_file" "${env_file}.backup.$(date %Y%m%d_%H%M%S)"
+        log "Created backup: ${env_file}.backup.$(date %Y%m%d_%H%M%S)"
 
         # Remove only CI/CD token keys from env file
         while IFS= read -r line; do
@@ -254,8 +254,8 @@ verify_runtime_tokens() {
     local runtime_tokens_remaining=0
     for runtime_token in "${RUNTIME_TOKEN_KEYS[@]}"; do
         if grep -q "^${runtime_token}=" "$env_file" 2>/dev/null; then
-            ((runtime_tokens_remaining++))
-            log "✓ Runtime token preserved: $runtime_token"
+            ((runtime_tokens_remaining))
+            log " Runtime token preserved: $runtime_token"
         fi
     done
 
@@ -302,23 +302,23 @@ if [[ -n "$TARGET_ENV" ]]; then
             verify_runtime_tokens ""
             ;;
         *)
-            log "ERROR: Unknown environment: $TARGET_ENV"
+            log " Unknown environment: $TARGET_ENV"
             log "Valid environments: dev, prod, ci, default"
             exit 1
             ;;
     esac
 else
     # Migrate all environments
-    migrate_cicd_tokens ""        # .env -> .tokens
+    migrate_cicd_tokens ""        # .env  .tokens
     verify_runtime_tokens ""
 
-    migrate_cicd_tokens ".dev"    # .env.dev -> .tokens.dev
+    migrate_cicd_tokens ".dev"    # .env.dev  .tokens.dev
     verify_runtime_tokens ".dev"
 
-    migrate_cicd_tokens ".prod"   # .env.prod -> .tokens.prod
+    migrate_cicd_tokens ".prod"   # .env.prod  .tokens.prod
     verify_runtime_tokens ".prod"
 
-    migrate_cicd_tokens ".ci"     # .env.ci -> .tokens.ci
+    migrate_cicd_tokens ".ci"     # .env.ci  .tokens.ci
     verify_runtime_tokens ".ci"
 fi
 
@@ -330,9 +330,9 @@ if [[ "$DRY_RUN" == "false" ]]; then
     if command -v python3 > /dev/null; then
         log "Testing CI/CD token loading system..."
         if python3 "$PROJECT_ROOT/scripts/token_loader.py" info > /dev/null 2>&1; then
-            log "SUCCESS: Token loading system validated"
+            log " Token loading system validated"
         else
-            log "WARNING: Token loading system validation failed"
+            log " Token loading system validation failed"
         fi
     fi
 
@@ -343,14 +343,14 @@ if [[ "$DRY_RUN" == "false" ]]; then
             cicd_tokens_in_env=0
             for cicd_token in "${CICD_TOKEN_KEYS[@]}"; do
                 if grep -q "^${cicd_token}=" "$PROJECT_ROOT/$env_file" 2>/dev/null; then
-                    ((cicd_tokens_in_env++))
+                    ((cicd_tokens_in_env))
                 fi
             done
 
             if [[ $cicd_tokens_in_env -eq 0 ]]; then
                 log "No CI/CD tokens found in $env_file (correct)"
             else
-                log "WARNING: $cicd_tokens_in_env CI/CD tokens still in $env_file"
+                log " $cicd_tokens_in_env CI/CD tokens still in $env_file"
             fi
         fi
     done

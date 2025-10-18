@@ -21,7 +21,7 @@ SERVICE_VARS = {
 }
 
 
-def check_packages() -> list[str]:
+def check_packages()  list[str]:
     """Import required packages and return any failures."""
     failures: list[str] = []
     for pkg in REQUIRED_PACKAGES:
@@ -35,14 +35,14 @@ def check_packages() -> list[str]:
     return failures
 
 
-def _get_services() -> dict[str, tuple[str, str]]:
+def _get_services()  dict[str, tuple[str, str]]:
     """Return service mapping based on TAGS_MODE flag."""
     if os.getenv("TAGS_MODE", "false").lower() == "true":
         return SERVICE_VARS
     return {"auth": SERVICE_VARS["auth"]}
 
 
-def check_health() -> dict[str, str]:
+def check_health()  dict[str, str]:
     """Call each service's `/health` endpoint and return statuses."""
     statuses: dict[str, str] = {}
     for name, (env_var, default) in _get_services().items():
@@ -57,7 +57,7 @@ def check_health() -> dict[str, str]:
     return statuses
 
 
-def audit_env() -> dict[str, list[str]]:
+def audit_env()  dict[str, list[str]]:
     """Run `scripts/audit_env_vars.sh` and return its summary."""
     tmp = Path("env_audit.json")
     env = os.environ.copy()
@@ -80,7 +80,7 @@ def audit_env() -> dict[str, list[str]]:
     return data
 
 
-def main() -> None:
+def main()  None:
     """Run all diagnostic checks."""
     check_packages()
     check_health()

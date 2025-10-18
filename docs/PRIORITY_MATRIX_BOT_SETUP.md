@@ -65,7 +65,7 @@ gpg --output pmbot-revocation.crt --gen-revoke $KEYID
 
    - Login to the machine user account
 
-   - Go to **Settings → SSH and GPG keys → New GPG key**
+   - Go to **Settings  SSH and GPG keys  New GPG key**
 
    - Upload contents of `pmbot-public.asc`
 
@@ -77,7 +77,7 @@ gpg --output pmbot-revocation.crt --gen-revoke $KEYID
 
 ## Required GitHub Actions Secrets
 
-Add these secrets to your repository (**Settings → Secrets and variables → Actions**):
+Add these secrets to your repository (**Settings  Secrets and variables  Actions**):
 
 ### Core GPG Configuration
 

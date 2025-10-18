@@ -107,7 +107,7 @@ sync_to_file() {
         fi
 
         # Parse token lines
-        if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
+        if [[ "$line" =~ ^([^=])=(.*)$ ]]; then
             local token_name="${BASH_REMATCH[1]}"
             local token_value="${BASH_REMATCH[2]}"
 
@@ -116,12 +116,12 @@ sync_to_file() {
                 # Use test placeholder for CI
                 local ci_placeholder="ci_test_${token_name,,}_placeholder"
                 update_token_in_file "$token_name" "$ci_placeholder" "$target_file"
-                ((excluded_count++))
+                ((excluded_count))
                 printf "  Protected: %s (using CI placeholder)\n" "$token_name"
             else
                 # Use actual value
                 update_token_in_file "$token_name" "$token_value" "$target_file"
-                ((synced_count++))
+                ((synced_count))
                 printf "  Synced: %s\n" "$token_name"
             fi
         fi
@@ -160,7 +160,7 @@ validate_sync() {
                 continue
             fi
 
-            if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
+            if [[ "$line" =~ ^([^=])=(.*)$ ]]; then
                 local token_name="${BASH_REMATCH[1]}"
                 local expected_value="${BASH_REMATCH[2]}"
 
@@ -173,7 +173,7 @@ validate_sync() {
                     local ci_placeholder="ci_test_${token_name,,}_placeholder"
                     if [ "$actual_value" != "$ci_placeholder" ]; then
                         printf "  Error: %s: Expected CI placeholder, got: %s\n" "$token_name" "$actual_value"
-                        ((validation_errors++))
+                        ((validation_errors))
                     else
                         printf "  Protected: %s: CI placeholder correct\n" "$token_name"
                     fi
@@ -181,7 +181,7 @@ validate_sync() {
                     # Should match source value
                     if [ "$actual_value" != "$expected_value" ]; then
                         printf "  Error: %s: Mismatch detected\n" "$token_name"
-                        ((validation_errors++))
+                        ((validation_errors))
                     else
                         printf "  Success: %s: Synchronized correctly\n" "$token_name"
                     fi

@@ -82,9 +82,9 @@ validate_milestone_status() {
             "3") milestone_number="1090" ;;
             *)
                 # If already a milestone number, use as-is
-                if ! [[ "$milestone_number" =~ ^[0-9]+$ ]]; then
-                    echo -e "  ${RED}✗${NC} Invalid milestone identifier: $milestone_number"
-                    ((VALIDATION_ERRORS++))
+                if ! [[ "$milestone_number" =~ ^[0-9]$ ]]; then
+                    echo -e "  ${RED}${NC} Invalid milestone identifier: $milestone_number"
+                    ((VALIDATION_ERRORS))
                     return
                 fi
                 ;;
@@ -94,8 +94,8 @@ validate_milestone_status() {
         actual_status=$(gh api "repos/$GITHUB_ORG/$GITHUB_REPO/milestones/$milestone_number" --jq '.state' 2>/dev/null || echo "not_found")
 
         if [[ "$actual_status" == "not_found" ]]; then
-            echo -e "  ${RED}✗${NC} Milestone #$milestone_number not found in GitHub"
-            ((VALIDATION_ERRORS++))
+            echo -e "  ${RED}${NC} Milestone #$milestone_number not found in GitHub"
+            ((VALIDATION_ERRORS))
             return
         fi
 
@@ -108,11 +108,11 @@ validate_milestone_status() {
         esac
 
         if [[ "$readme_status" == "$expected_status" ]]; then
-            echo -e "  ${GREEN}✓${NC} Status matches: $expected_status"
+            echo -e "  ${GREEN}${NC} Status matches: $expected_status"
         else
-            echo -e "  ${RED}✗${NC} Status mismatch: README shows '$expected_status', GitHub shows '$readme_status'"
+            echo -e "  ${RED}${NC} Status mismatch: README shows '$expected_status', GitHub shows '$readme_status'"
             echo "      Milestone #$milestone_number should be updated in README.md"
-            ((VALIDATION_ERRORS++))
+            ((VALIDATION_ERRORS))
         fi
     else
         echo -e "  ${YELLOW}⚠${NC} GitHub CLI not available, skipping milestone validation"
@@ -130,14 +130,14 @@ validate_project_links() {
         actual_name=$(gh api "orgs/$GITHUB_ORG/projects/$project_number" --jq '.title' 2>/dev/null || echo "not_found")
 
         if [[ "$actual_name" == "not_found" ]]; then
-            echo -e "  ${RED}✗${NC} Project #$project_number not found in GitHub"
-            ((VALIDATION_ERRORS++))
+            echo -e "  ${RED}${NC} Project #$project_number not found in GitHub"
+            ((VALIDATION_ERRORS))
             return
         fi
 
         # Check if README name matches or is acceptable variant
         if [[ "$actual_name" == "$readme_name" ]] || [[ "$readme_name" == *"$actual_name"* ]] || [[ "$actual_name" == *"$readme_name"* ]]; then
-            echo -e "  ${GREEN}✓${NC} Project name acceptable: '$readme_name' (GitHub: '$actual_name')"
+            echo -e "  ${GREEN}${NC} Project name acceptable: '$readme_name' (GitHub: '$actual_name')"
         else
             echo -e "  ${YELLOW}⚠${NC} Project name differs: README '$readme_name', GitHub '$actual_name'"
             echo "      Consider updating for consistency"
@@ -160,10 +160,10 @@ check_readme_phase_statuses() {
             local milestone_desc
             milestone_desc="$(get_milestone_description "1")"
             if echo "$phase1_line" | grep -q "Complete"; then
-                echo -e "  ${GREEN}✓${NC} Phase 1 shows Complete status"
+                echo -e "  ${GREEN}${NC} Phase 1 shows Complete status"
                 validate_milestone_status "1" "Complete" "$milestone_desc"
             elif echo "$phase1_line" | grep -q "Active"; then
-                echo -e "  ${RED}✗${NC} Phase 1 shows Active status"
+                echo -e "  ${RED}${NC} Phase 1 shows Active status"
                 validate_milestone_status "1" "Active" "$milestone_desc"
             else
                 echo -e "  ${YELLOW}⚠${NC} Phase 1 status unclear in README"
@@ -173,8 +173,8 @@ check_readme_phase_statuses() {
         fi
 
     else
-        echo -e "  ${RED}✗${NC} README.md not found at $README_FILE"
-        ((VALIDATION_ERRORS++))
+        echo -e "  ${RED}${NC} README.md not found at $README_FILE"
+        ((VALIDATION_ERRORS))
     fi
 }
 
@@ -194,11 +194,11 @@ generate_summary() {
     echo "=================="
 
     if [[ $VALIDATION_ERRORS -eq 0 ]]; then
-        echo -e "${GREEN}✓ All documentation accuracy checks passed!${NC}"
+        echo -e "${GREEN} All documentation accuracy checks passed!${NC}"
         echo "README.md accurately reflects GitHub project status."
         return 0
     else
-        echo -e "${RED}✗ Found $VALIDATION_ERRORS documentation accuracy issue(s)${NC}"
+        echo -e "${RED} Found $VALIDATION_ERRORS documentation accuracy issue(s)${NC}"
         echo ""
         echo "Recommended actions:"
         echo "1. Review the issues listed above"

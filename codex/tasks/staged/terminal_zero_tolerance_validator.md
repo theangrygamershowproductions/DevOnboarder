@@ -62,11 +62,11 @@ The validator will be implemented as `scripts/terminal_zero_tolerance_validator.
 **Emojis and Unicode** (Immediate terminal hanging):
 
 ```bash
-echo "✅ Task completed"              # CRITICAL - causes hanging
+echo " Task completed"              # CRITICAL - causes hanging
 
-echo "🚀 Deployment successful"       # CRITICAL - causes hanging
+echo " Deployment successful"       # CRITICAL - causes hanging
 
-echo "📋 Checklist: items"           # CRITICAL - causes hanging
+echo " Checklist: items"           # CRITICAL - causes hanging
 
 ```
 

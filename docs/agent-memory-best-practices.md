@@ -25,13 +25,13 @@ visibility: internal
 
 DevOnboarder uses a **comprehensive frontmatter infrastructure** for agent memory and context management. This document establishes best practices to prevent duplication and repository pollution.
 
-## ✅ **Approved Memory Patterns**
+##  **Approved Memory Patterns**
 
 ### **1. Agent Frontmatter System (Primary)**
 
 **Schema Validation**: `schema/agent-schema.json` (133 lines)
 
-**Agent Registry**: `.codex/agents/index.json` (27+ registered agents)
+**Agent Registry**: `.codex/agents/index.json` (27 registered agents)
 
 **CI Integration**: `scripts/validate_agents.py` (pre-commit enforcement)
 
@@ -74,7 +74,7 @@ permissions:
 **Purpose**: Systematic context loading for new conversations
 **Features**: Cross-session memory patterns, anti-duplication guidance
 
-## ❌ **Prohibited Memory Patterns**
+##  **Prohibited Memory Patterns**
 
 ### **SESSION_HANDOFF.md Files (ELIMINATED)**
 
@@ -130,25 +130,25 @@ permissions:
 
 ### **All Memory Documentation Must**
 
-- ✅ Pass markdown linting validation (MD022, MD032, MD031, MD007, MD009)
+-  Pass markdown linting validation (MD022, MD032, MD031, MD007, MD009)
 
-- ✅ Include proper trailing newlines
+-  Include proper trailing newlines
 
-- ✅ Use blank lines around headings and lists
+-  Use blank lines around headings and lists
 
-- ✅ Follow DevOnboarder documentation standards
+-  Follow DevOnboarder documentation standards
 
 ### **Schema Validation Required**
 
-- ✅ Agent frontmatter must validate against `schema/agent-schema.json`
+-  Agent frontmatter must validate against `schema/agent-schema.json`
 
-- ✅ CI validation via `scripts/validate_agents.py`
+-  CI validation via `scripts/validate_agents.py`
 
-- ✅ Pre-commit hooks enforce compliance
+-  Pre-commit hooks enforce compliance
 
-- ✅ 100% agent registry coverage maintained
+-  100% agent registry coverage maintained
 
-## 📋 **Implementation Checklist**
+##  **Implementation Checklist**
 
 ### **For New Agents**
 

@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_cors_origins() -> List[str]:
+def get_cors_origins()  List[str]:
     """Get CORS origins for the dashboard service."""
     return [
         "http://localhost:8081",
@@ -111,7 +111,7 @@ class DashboardService:
         # Ensure logs directory exists
         self.logs_dir.mkdir(parents=True, exist_ok=True)
 
-    def discover_scripts(self) -> List[ScriptInfo]:
+    def discover_scripts(self)  List[ScriptInfo]:
         """Discover all executable scripts in the scripts directory.
 
         Returns
@@ -161,7 +161,7 @@ class DashboardService:
 
         return sorted(scripts, key=lambda s: (s.category, s.name))
 
-    def _extract_description(self, script_path: Path) -> str:
+    def _extract_description(self, script_path: Path)  str:
         """Extract description from script header comments.
 
         Parameters
@@ -214,7 +214,7 @@ class DashboardService:
             logger.warning("Failed to extract description from %s: %s", script_path, e)
             return "Description unavailable"
 
-    def _categorize_script(self, script_path: Path) -> str:
+    def _categorize_script(self, script_path: Path)  str:
         """Categorize script based on path and name.
 
         Parameters
@@ -247,7 +247,7 @@ class DashboardService:
         else:
             return "general"
 
-    async def execute_script(self, request: ExecutionRequest) -> ExecutionResult:
+    async def execute_script(self, request: ExecutionRequest)  ExecutionResult:
         """Execute a script with the given parameters.
 
         Parameters
@@ -314,7 +314,7 @@ class DashboardService:
             if request.args:
                 for arg in request.args:
                     # Basic sanitization - allow alphanumeric, hyphens, dots
-                    if not re.match(r"^[a-zA-Z0-9._-]+$", str(arg)):
+                    if not re.match(r"^[a-zA-Z0-9._-]$", str(arg)):
                         raise HTTPException(
                             status_code=400,
                             detail=f"Invalid argument format: {arg}. "
@@ -325,11 +325,11 @@ class DashboardService:
 
             # Prepare command with validated script path and sanitized arguments
             if script_path.suffix == ".py":
-                cmd = ["python", str(script_path)] + safe_args
+                cmd = ["python", str(script_path)]  safe_args
             elif script_path.suffix in {".sh", ".bash"}:
-                cmd = ["bash", str(script_path)] + safe_args
+                cmd = ["bash", str(script_path)]  safe_args
             else:
-                cmd = [str(script_path)] + safe_args
+                cmd = [str(script_path)]  safe_args
 
             # Create log file
             log_file = self.logs_dir / f"dashboard_execution_{execution_id}.log"
@@ -466,7 +466,7 @@ class DashboardService:
         for ws in disconnected:
             self.websocket_connections.remove(ws)
 
-    def get_execution_status(self, execution_id: str) -> Optional[ExecutionResult]:
+    def get_execution_status(self, execution_id: str)  Optional[ExecutionResult]:
         """Get the status of a specific execution.
 
         Parameters
@@ -481,7 +481,7 @@ class DashboardService:
         """
         return self.active_executions.get(execution_id)
 
-    def list_active_executions(self) -> List[ExecutionResult]:
+    def list_active_executions(self)  List[ExecutionResult]:
         """List all active executions.
 
         Returns
@@ -492,7 +492,7 @@ class DashboardService:
         return list(self.active_executions.values())
 
 
-def create_dashboard_app() -> FastAPI:
+def create_dashboard_app()  FastAPI:
     """Create the FastAPI dashboard application.
 
     Returns
@@ -520,7 +520,7 @@ def create_dashboard_app() -> FastAPI:
     dashboard_service = DashboardService()
 
     @app.get("/health")
-    def health() -> Dict[str, str]:
+    def health()  Dict[str, str]:
         """Health check endpoint."""
         return {"status": "ok"}
 
@@ -543,7 +543,7 @@ def create_dashboard_app() -> FastAPI:
         }
 
     @app.get("/login/discord")
-    def discord_login() -> RedirectResponse:
+    def discord_login()  RedirectResponse:
         """Redirect to Discord OAuth with dashboard return URL."""
         dashboard_url = os.getenv(
             "VITE_DASHBOARD_URL", "https://dashboard.theangrygamershow.com"
@@ -557,7 +557,7 @@ def create_dashboard_app() -> FastAPI:
         return RedirectResponse(f"{auth_url}/login/discord?{urlencode(params)}")
 
     @app.get("/auth/callback")
-    def auth_callback(token: Optional[str] = None) -> dict[str, str]:
+    def auth_callback(token: Optional[str] = None)  dict[str, str]:
         """Handle authentication callback from Discord OAuth."""
         if token:
             return {
@@ -570,7 +570,7 @@ def create_dashboard_app() -> FastAPI:
             return {"status": "error", "message": "No authentication token received"}
 
     @app.get("/policy/no-verify")
-    def no_verify_policy_status() -> Dict[str, str]:
+    def no_verify_policy_status()  Dict[str, str]:
         """Get --no-verify policy enforcement status."""
         # Import only what we need for security
         import subprocess  # noqa: B404
@@ -591,7 +591,7 @@ def create_dashboard_app() -> FastAPI:
             # Check if validation script exists and is executable
             validation_script = Path("scripts/validate_no_verify_usage.sh")
             if validation_script.exists() and os.access(validation_script, os.X_OK):
-                components["validation_script"] = "✅ Available"
+                components["validation_script"] = " Available"
 
                 # Run the validation with trusted script path - security validated
                 result = subprocess.run(  # noqa: B603
@@ -612,14 +612,14 @@ def create_dashboard_app() -> FastAPI:
                     if "Emergency approved usages:" in output:
                         import re
 
-                        match = re.search(r"Emergency approved usages: (\d+)", output)
+                        match = re.search(r"Emergency approved usages: (\d)", output)
                         if match:
                             status["emergency_approvals"] = match.group(1)
 
                     if "Unauthorized violations:" in output:
                         import re
 
-                        match = re.search(r"Unauthorized violations: (\d+)", output)
+                        match = re.search(r"Unauthorized violations: (\d)", output)
                         if match:
                             violations = match.group(1)
                             status["violations"] = violations
@@ -631,14 +631,14 @@ def create_dashboard_app() -> FastAPI:
                     status["compliance_score"] = "0.0"
                     status["error"] = result.stderr
             else:
-                components["validation_script"] = "❌ Missing"
+                components["validation_script"] = " Missing"
 
             # Check safety wrapper
             safety_wrapper = Path("scripts/git_safety_wrapper.sh")
             if safety_wrapper.exists() and os.access(safety_wrapper, os.X_OK):
-                components["safety_wrapper"] = "✅ Available"
+                components["safety_wrapper"] = " Available"
             else:
-                components["safety_wrapper"] = "❌ Missing"
+                components["safety_wrapper"] = " Missing"
 
             # Check pre-commit hook
             precommit_config = Path(".pre-commit-config.yaml")
@@ -646,18 +646,18 @@ def create_dashboard_app() -> FastAPI:
                 with open(precommit_config, "r", encoding="utf-8") as f:
                     config_content = f.read()
                     if "validate-no-verify" in config_content:
-                        components["precommit_hook"] = "✅ Configured"
+                        components["precommit_hook"] = " Configured"
                     else:
-                        components["precommit_hook"] = "❌ Not configured"
+                        components["precommit_hook"] = " Not configured"
             else:
-                components["precommit_hook"] = "❌ Missing"
+                components["precommit_hook"] = " Missing"
 
             # Check CI workflow
             ci_workflow = Path(".github/workflows/no-verify-policy.yml")
             if ci_workflow.exists():
-                components["ci_workflow"] = "✅ Active"
+                components["ci_workflow"] = " Active"
             else:
-                components["ci_workflow"] = "❌ Missing"
+                components["ci_workflow"] = " Missing"
 
             # Check policy documentation
             policy_doc = Path("docs/NO_VERIFY_POLICY.md")
@@ -670,9 +670,9 @@ def create_dashboard_app() -> FastAPI:
                 docs_status.append("Quick Reference")
 
             if docs_status:
-                components["documentation"] = f"✅ {', '.join(docs_status)}"
+                components["documentation"] = f" {', '.join(docs_status)}"
             else:
-                components["documentation"] = "❌ Missing"
+                components["documentation"] = " Missing"
 
         except subprocess.TimeoutExpired:
             status["status"] = "ERROR"
@@ -686,17 +686,17 @@ def create_dashboard_app() -> FastAPI:
         return status
 
     @app.get("/scripts", response_model=List[ScriptInfo])
-    def list_scripts() -> List[ScriptInfo]:
+    def list_scripts()  List[ScriptInfo]:
         """List all discovered scripts."""
         return dashboard_service.discover_scripts()
 
     @app.post("/execute", response_model=ExecutionResult)
-    async def execute_script(request: ExecutionRequest) -> ExecutionResult:
+    async def execute_script(request: ExecutionRequest)  ExecutionResult:
         """Execute a script."""
         return await dashboard_service.execute_script(request)
 
     @app.get("/execution/{execution_id}", response_model=ExecutionResult)
-    def get_execution_status(execution_id: str) -> ExecutionResult:
+    def get_execution_status(execution_id: str)  ExecutionResult:
         """Get execution status."""
         result = dashboard_service.get_execution_status(execution_id)
         if not result:
@@ -704,7 +704,7 @@ def create_dashboard_app() -> FastAPI:
         return result
 
     @app.get("/executions", response_model=List[ExecutionResult])
-    def list_executions() -> List[ExecutionResult]:
+    def list_executions()  List[ExecutionResult]:
         """List all active executions."""
         return dashboard_service.list_active_executions()
 

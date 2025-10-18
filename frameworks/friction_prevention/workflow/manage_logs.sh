@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 LOGS_DIR="logs"
@@ -88,7 +88,7 @@ fi
 mkdir -p "$LOGS_DIR"
 
 list_logs() {
-    echo "Log files in $LOGS_DIR:"
+    echo "Log files in $LOGS_"
     if [ -d "$LOGS_DIR" ] && [ "$(ls -A "$LOGS_DIR" 2>/dev/null)" ]; then
         # Use find instead of ls | grep to avoid shellcheck warning
         find "$LOGS_DIR" -maxdepth 1 -type f -exec ls -lah {} \;
@@ -208,7 +208,7 @@ clean_build_artifacts() {
     if [ "$pytest_count" -gt 0 ]; then
         echo "   Removing $pytest_count pytest directories..."
         if [ "$DRY_RUN" = "false" ]; then
-            find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {} + 2>/dev/null || true
+            find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {}  2>/dev/null || true
             echo "   Pytest directories cleaned"
         else
             echo "   DRY RUN: Would remove $pytest_count pytest directories"
@@ -268,13 +268,13 @@ smart_clean_logs() {
             cleaned=$((count_before - count_after))
             if [ "$cleaned" -gt 0 ]; then
                 echo "   Cleaned $cleaned files matching: $pattern"
-                total_cleaned=$((total_cleaned + cleaned))
+                total_cleaned=$((total_cleaned  cleaned))
             fi
         else
             count=$(find "$LOGS_DIR" -name "$pattern" 2>/dev/null | wc -l)
             if [ "$count" -gt 0 ]; then
                 echo "   DRY RUN: Would clean $count files matching: $pattern"
-                total_cleaned=$((total_cleaned + count))
+                total_cleaned=$((total_cleaned  count))
             fi
         fi
     done
@@ -283,14 +283,14 @@ smart_clean_logs() {
     if [ "$DRY_RUN" = "false" ]; then
         pytest_count=$(find "$LOGS_DIR" -type d -name "pytest-of-*" 2>/dev/null | wc -l)
         if [ "$pytest_count" -gt 0 ]; then
-            find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {} + 2>/dev/null || true
+            find "$LOGS_DIR" -type d -name "pytest-of-*" -exec rm -rf {}  2>/dev/null || true
             echo "   Cleaned $pytest_count pytest directories"
-            total_cleaned=$((total_cleaned + pytest_count))
+            total_cleaned=$((total_cleaned  pytest_count))
         fi
 
         cache_count=$(find "$LOGS_DIR" -type d -name "*cache*" 2>/dev/null | wc -l)
         if [ "$cache_count" -gt 0 ]; then
-            find "$LOGS_DIR" -type d -name "*cache*" -exec rm -rf {} + 2>/dev/null || true
+            find "$LOGS_DIR" -type d -name "*cache*" -exec rm -rf {}  2>/dev/null || true
             echo "   Cleaned $cache_count cache directories"
         fi
     else
@@ -306,7 +306,7 @@ smart_clean_logs() {
         count=$(find "$LOGS_DIR" -name "$pattern" 2>/dev/null | wc -l)
         if [ "$count" -gt 0 ]; then
             echo "     - $count files matching: $pattern"
-            preserved_count=$((preserved_count + count))
+            preserved_count=$((preserved_count  count))
         fi
     done
 
@@ -334,7 +334,7 @@ clean_logs() {
     fi
 
     # Find files older than specified days
-    old_files=$(find "$LOGS_DIR" -type f -mtime +"$DAYS_TO_KEEP" 2>/dev/null || true)
+    old_files=$(find "$LOGS_DIR" -type f -mtime "$DAYS_TO_KEEP" 2>/dev/null || true)
 
     if [ -z "$old_files" ]; then
         echo "   No old log files to clean"
@@ -383,7 +383,7 @@ purge_logs() {
 }
 
 archive_logs() {
-    timestamp=$(date +"%Y%m%d_%H%M%S")
+    timestamp=$(date "%Y%m%d_%H%M%S")
     archive_name="logs_archive_${timestamp}.tar.gz"
 
     echo "Creating log archive: $archive_name"
@@ -430,7 +430,7 @@ manage_cache_logs() {
                 return 0
             fi
 
-            old_caches=$(find "$LOGS_DIR" -name "*cache*" -type d -mtime +"$DAYS_TO_KEEP" 2>/dev/null || true)
+            old_caches=$(find "$LOGS_DIR" -name "*cache*" -type d -mtime "$DAYS_TO_KEEP" 2>/dev/null || true)
             if [ -n "$old_caches" ]; then
                 echo "   Found $(echo "$old_caches" | wc -l) old cache directories:"
                 echo "$old_caches" | while read -r dir; do

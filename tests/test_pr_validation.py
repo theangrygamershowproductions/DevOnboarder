@@ -17,20 +17,20 @@ def test_validation():
     pr_summary_path = project_root / "PR_SUMMARY.md"
 
     if not pr_summary_path.exists():
-        print(f"❌ PR_SUMMARY.md not found at {pr_summary_path}")
+        print(f" PR_SUMMARY.md not found at {pr_summary_path}")
         raise FileNotFoundError("PR_SUMMARY.md not found")
 
     is_valid, errors = validate_pr_summary(pr_summary_path)
 
-    print(f"📋 Validation Results for {pr_summary_path}")
-    print(f"✅ Valid: {is_valid}")
+    print(f" Validation Results for {pr_summary_path}")
+    print(f" Valid: {is_valid}")
 
     if errors:
-        print("❌ Errors found:")
+        print(" Errors found:")
         for error in errors:
             print(f"  • {error}")
     else:
-        print("✅ No errors found")
+        print(" No errors found")
 
     if not is_valid:
         raise AssertionError(f"Validation failed with errors: {errors}")

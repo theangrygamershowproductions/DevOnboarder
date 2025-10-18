@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/signature_verification_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/signature_verification_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting automated signature verification workflow"
@@ -33,14 +33,14 @@ check_signature_status() {
 
     while read -r line; do
         if [[ "$line" =~ ^gpg:.*Good\ signature ]]; then
-            ((good_signatures++))
+            ((good_signatures))
         elif [[ "$line" =~ ^gpg:.*Can\'t\ check\ signature ]]; then
-            ((unverified_signatures++))
+            ((unverified_signatures))
         elif [[ "$line" =~ ^gpg:.*BAD\ signature ]]; then
-            ((bad_signatures++))
+            ((bad_signatures))
         elif [[ "$line" =~ ^[a-f0-9]{7,}[[:space:]] ]]; then
             # Commit line without signature info means no signature
-            ((no_signatures++))
+            ((no_signatures))
         fi
     done <<< "$signature_output"
 
@@ -72,14 +72,14 @@ import_github_keys() {
         if gpg --keyserver keys.openpgp.org --recv-keys "$key" 2>/dev/null; then
             echo "Successfully imported key: $key"
         else
-            echo "WARNING: Failed to import key: $key"
+            echo " Failed to import key: $key"
         fi
     done
 
     # Check if automated setup script exists
     if [[ -f "scripts/setup_github_gpg_keys.sh" ]]; then
         echo "Running automated GitHub GPG key setup"
-        bash scripts/setup_github_gpg_keys.sh || echo "WARNING: Automated key setup failed"
+        bash scripts/setup_github_gpg_keys.sh || echo " Automated key setup failed"
     fi
 }
 
@@ -139,7 +139,7 @@ verify_git_config() {
 
     # Check if configuration is complete
     if [[ "$user_email" == "NOT_CONFIGURED" || "$signing_key" == "NOT_CONFIGURED" ]]; then
-        echo "WARNING: Git signing configuration incomplete"
+        echo " Git signing configuration incomplete"
         echo "RECOMMENDED ACTIONS:"
         echo "1. Set user email: git config user.email 'your-email@example.com'"
         echo "2. Set signing key: git config user.signingkey 'your-key-id'"

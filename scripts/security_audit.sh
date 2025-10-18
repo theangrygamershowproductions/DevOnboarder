@@ -16,7 +16,7 @@ OUT="docs/security-audit-${DATE}.md"
 
   # Check for ignored vulnerabilities and report them
   if [ -f ".pip-audit-ignore" ]; then
-    echo "### ⚠️ Ignored Vulnerabilities (Require Periodic Review)"
+    echo "###  Ignored Vulnerabilities (Require Periodic Review)"
     echo
     echo "The following vulnerabilities are currently ignored:"
     echo
@@ -25,7 +25,7 @@ OUT="docs/security-audit-${DATE}.md"
     echo "\`\`\`"
     echo
     echo "**ACTION REQUIRED**: These ignored vulnerabilities should be reviewed quarterly."
-    echo "Next review due: $(date -d '+3 months' '+%Y-%m-%d')"
+    echo "Next review due: $(date -d '3 months' '%Y-%m-%d')"
     echo
   fi
 
@@ -83,10 +83,10 @@ with open("$OUT", 'r') as f:
     content = f.read()
 
 # Remove multiple consecutive blank lines (replace with single blank line)
-content = re.sub(r'\n\s*\n\s*\n+', '\n\n', content)
+content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
 
 # Ensure single trailing newline
-content = content.rstrip() + '\n'
+content = content.rstrip()  '\n'
 
 # Write back to file
 with open("$OUT", 'w') as f:

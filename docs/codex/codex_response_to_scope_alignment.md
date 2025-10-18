@@ -23,7 +23,7 @@ visibility: internal
 
 ## Strategic Clarification on Architectural Growth
 
-### ✅ Refined Response
+###  Refined Response
 
 You're right to surface that kind of question—it's not about doubting the system, it's about making sure we don't drift.
 

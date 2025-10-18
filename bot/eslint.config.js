@@ -1,5 +1,5 @@
 // ESLint flat configuration for Discord Bot (TypeScript/Node.js)
-// Compatible with ESLint v9+ flat config format
+// Compatible with ESLint v9 flat config format
 // DevOnboarder Project Standards: Compliant with copilot-instructions.md
 
 import js from "@eslint/js";

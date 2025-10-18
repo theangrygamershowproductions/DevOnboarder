@@ -7,22 +7,22 @@ echo "🎯 FINISHING STRONG - CI FAILURE ANALYSIS FOR PR #968"
 echo "=================================================="
 
 # Get current status
-echo "📊 Current Status Check:"
+echo " Current Status Check:"
 gh pr checks 968 --json name,conclusion,detailsUrl | jq -r '.[] | "- \(.name): \(.conclusion)"'
 
 echo ""
-echo "🔍 Detailed Failure Analysis:"
+echo " Detailed Failure Analysis:"
 
 # Get the specific failing checks
 FAILING_CHECKS=$(gh pr checks 968 --json name,conclusion | jq -r '.[] | select(.conclusion == "failure") | .name')
 
-echo "❌ Currently Failing:"
+echo " Currently Failing:"
 echo "$FAILING_CHECKS" | while read -r check; do
     echo "  • $check"
 done
 
 echo ""
-echo "🔧 TARGETED FIXES FOR EACH FAILURE:"
+echo " TARGETED FIXES FOR EACH FAILURE:"
 
 # Fix Unicode comment issues first
 echo "1. 🔤 Unicode Comment Fix:"
@@ -41,7 +41,7 @@ echo "   - Ensure test isolation"
 
 # Fix check failures
 echo ""
-echo "3. ✅ Check Failure Resolution:"
+echo "3.  Check Failure Resolution:"
 echo "   - Review workflow permissions"
 echo "   - Verify environment variables"
 echo "   - Check tool availability"
@@ -53,16 +53,16 @@ echo "================================"
 # Current health score
 CURRENT_HEALTH=$(bash scripts/assess_pr_health.sh 968 2>/dev/null | grep "PR Health Score:" | sed 's/.*: \([0-9]*\)%.*/\1/' || echo "75")
 
-echo "📊 Current Health: ${CURRENT_HEALTH}%"
+echo " Current Health: ${CURRENT_HEALTH}%"
 echo "🎯 Target Health: 95%"
-echo "📈 Gap to Close: $((95 - CURRENT_HEALTH)) percentage points"
+echo "GROW: Gap to Close: $((95 - CURRENT_HEALTH)) percentage points"
 
 echo ""
-echo "🚀 FINAL PUSH STRATEGY:"
+echo " FINAL PUSH STRATEGY:"
 echo "1. Apply all automated fixes in sequence"
 echo "2. Commit each fix separately for tracking"
 echo "3. Monitor health score improvement"
-echo "4. Target 95%+ before merge approval"
+echo "4. Target 95% before merge approval"
 
 echo ""
-echo "✅ Ready to execute final push to 95% compliance"
+echo " Ready to execute final push to 95% compliance"

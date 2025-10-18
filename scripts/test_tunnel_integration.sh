@@ -11,7 +11,7 @@ source scripts/project_root_wrapper.sh
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/tunnel_integration_test_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/tunnel_integration_test_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting Phase 2: Service Integration & CORS Testing"
@@ -35,22 +35,22 @@ TESTS_WARNINGS=0
 log_test_start() {
     echo ""
     echo "=== TEST: $1 ==="
-    TESTS_TOTAL=$((TESTS_TOTAL + 1))
+    TESTS_TOTAL=$((TESTS_TOTAL  1))
 }
 
 log_test_pass() {
     echo "PASS: $1"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
+    TESTS_PASSED=$((TESTS_PASSED  1))
 }
 
 log_test_fail() {
     echo "FAIL: $1"
-    TESTS_FAILED=$((TESTS_FAILED + 1))
+    TESTS_FAILED=$((TESTS_FAILED  1))
 }
 
 log_test_warning() {
-    echo "WARNING: $1"
-    TESTS_WARNINGS=$((TESTS_WARNINGS + 1))
+    echo " $1"
+    TESTS_WARNINGS=$((TESTS_WARNINGS  1))
 }
 
 # Check if services are running
@@ -72,7 +72,7 @@ check_services_running() {
     for service in "${required_services[@]}"; do
         if docker ps --filter "name=$service" --filter "status=running" --format "table {{.Names}}" | grep -q "$service"; then
             log_test_pass "Service $service is running"
-            services_running=$((services_running + 1))
+            services_running=$((services_running  1))
         else
             log_test_fail "Service $service is not running"
         fi
@@ -100,12 +100,12 @@ test_tunnel_connectivity() {
         # Test with curl (timeout 10 seconds)
         if curl -s --max-time 10 --head "$url" >/dev/null 2>&1; then
             log_test_pass "URL accessible: $url"
-            urls_accessible=$((urls_accessible + 1))
+            urls_accessible=$((urls_accessible  1))
         else
             # Try with longer timeout for slower connections
             if curl -s --max-time 30 --head "$url" >/dev/null 2>&1; then
                 log_test_warning "URL accessible but slow: $url"
-                urls_accessible=$((urls_accessible + 1))
+                urls_accessible=$((urls_accessible  1))
             else
                 log_test_fail "URL not accessible: $url"
             fi
@@ -143,7 +143,7 @@ test_health_endpoints() {
 
         if echo "$response" | grep -q '"status".*"ok"'; then
             log_test_pass "Health check passed: $endpoint"
-            healthy_services=$((healthy_services + 1))
+            healthy_services=$((healthy_services  1))
         else
             log_test_fail "Health check failed: $endpoint (Response: $response)"
         fi
@@ -184,7 +184,7 @@ test_cors_headers() {
 
         if echo "$cors_headers" | grep -qi "access-control-allow-origin"; then
             log_test_pass "CORS headers present: $url"
-            cors_compliant=$((cors_compliant + 1))
+            cors_compliant=$((cors_compliant  1))
 
             # Show CORS headers for debugging
             echo "$cors_headers" | grep -i "access-control" | while read -r header; do
@@ -286,17 +286,17 @@ test_response_times() {
         local end_time
         local response_time
 
-        start_time=$(date +%s%N)
+        start_time=$(date %s%N)
         curl -s --max-time 10 "$url" >/dev/null 2>&1
         local curl_exit_code=$?
-        end_time=$(date +%s%N)
+        end_time=$(date %s%N)
 
         if [ $curl_exit_code -eq 0 ]; then
             response_time=$(( (end_time - start_time) / 1000000 ))  # Convert to milliseconds
 
             if [ $response_time -lt 2000 ]; then  # Less than 2 seconds
                 log_test_pass "Fast response ($response_time ms): $url"
-                fast_responses=$((fast_responses + 1))
+                fast_responses=$((fast_responses  1))
             else
                 log_test_warning "Slow response ($response_time ms): $url"
             fi
@@ -338,7 +338,7 @@ generate_test_report() {
     if [ $TESTS_FAILED -eq 0 ]; then
         if [ $TESTS_WARNINGS -eq 0 ]; then
             echo ""
-            echo "SUCCESS: All integration tests passed!"
+            echo " All integration tests passed!"
             echo "Phase 2 is complete. Ready for Phase 3: Production Optimization"
             return 0
         else

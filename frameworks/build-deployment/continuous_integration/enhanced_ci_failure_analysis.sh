@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,7 +13,7 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 LOG_DIR="${PROJECT_ROOT}/logs"
 mkdir -p "$LOG_DIR"
 
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 ANALYSIS_FILE="${LOG_DIR}/enhanced_failure_analysis_${TIMESTAMP}.md"
 
 # Initialize analysis report with placeholders
@@ -196,32 +196,32 @@ analyze_qc_failure() {
 
         # Check for specific failure patterns
         if grep -q "coverage.*failed\|coverage.*below" "$latest_qc_log" 2>/dev/null; then
-            qc_content+="
+            qc_content="
 Coverage Issue: Test coverage below threshold"
         fi
 
         if grep -q "timeout\|timed out\|killed" "$latest_qc_log" 2>/dev/null; then
-            qc_content+="
+            qc_content="
 Timeout Issue: Process exceeded time limit"
         fi
 
         if grep -q "memory\|out of memory\|OOM" "$latest_qc_log" 2>/dev/null; then
-            qc_content+="
+            qc_content="
 Memory Issue: Insufficient memory available"
         fi
 
         if grep -q "permission denied\|not permitted" "$latest_qc_log" 2>/dev/null; then
-            qc_content+="
+            qc_content="
 Permission Issue: Access denied to required resources"
         fi
 
         if grep -q "No module named\|ModuleNotFoundError" "$latest_qc_log" 2>/dev/null; then
-            qc_content+="
+            qc_content="
 Dependency Issue: Missing Python modules"
         fi
 
         # Add last few lines of QC log for context
-        qc_content+="
+        qc_content="
 
 #### Last Lines of QC Log:
 \`\`\`
@@ -277,7 +277,7 @@ add_technical_details() {
 
     # Environment variables (CI-specific)
     if [[ "${CI:-}" == "true" ]]; then
-        details+="
+        details="
 
 ### CI Environment Variables:
 - **Runner OS**: ${RUNNER_OS:-unknown}
@@ -287,7 +287,7 @@ add_technical_details() {
     fi
 
     # Available logs
-    details+="
+    details="
 
 ### Available Diagnostic Files:"
     if [[ -d "$LOG_DIR" ]]; then
@@ -295,11 +295,11 @@ add_technical_details() {
         log_files=$(find "$LOG_DIR" -name "*${TIMESTAMP}*" -type f 2>/dev/null | head -5)
         if [[ -n "$log_files" ]]; then
             echo "$log_files" | while read -r logfile; do
-                details+="
+                details="
 - $(basename "$logfile")"
             done
         else
-            details+="
+            details="
 - No diagnostic files found for this timestamp"
         fi
     fi

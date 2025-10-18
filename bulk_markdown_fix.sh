@@ -9,10 +9,10 @@ echo "Starting markdown fixes..."
 for file in $(find . -name "*.md" -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*"); do
     echo "Processing: $file"
 
-    # MD030: Fix list marker spacing (dash + 3 spaces -> dash + 1 space)
+    # MD030: Fix list marker spacing (dash  3 spaces  dash  1 space)
     sed -i 's/^-   /- /g' "$file"
 
-    # MD007: Fix nested list indentation (2 spaces -> 4 spaces)
+    # MD007: Fix nested list indentation (2 spaces  4 spaces)
     sed -i 's/^  - /    - /g' "$file"
 
     # Fix other common patterns

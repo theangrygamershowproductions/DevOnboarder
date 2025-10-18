@@ -44,41 +44,41 @@ visibility: internal
 ## Directory Layout
 
 ```text
-├── .venv/                     # Python virtual environment (NEVER commit)
+── .venv/                     # Python virtual environment (NEVER commit)
 
-├── src/devonboarder/          # Python backend application
+── src/devonboarder/          # Python backend application
 
-├── src/xp/                    # XP/gamification service
+── src/xp/                    # XP/gamification service
 
-├── src/discord_integration/   # Discord OAuth and role management service
+── src/discord_integration/   # Discord OAuth and role management service
 
-├── src/feedback_service/      # User feedback collection service
+── src/feedback_service/      # User feedback collection service
 
-├── src/llama2_agile_helper/   # LLM integration service
+── src/llama2_agile_helper/   # LLM integration service
 
-├── src/routes/                # Additional API routes
+── src/routes/                # Additional API routes
 
-├── src/utils/                 # Shared utilities (CORS, Discord, roles)
+── src/utils/                 # Shared utilities (CORS, Discord, roles)
 
-├── bot/                       # Discord bot (TypeScript)
+── bot/                       # Discord bot (TypeScript)
 
-├── frontend/                  # React application
+── frontend/                  # React application
 
-├── auth/                      # Authentication service
+── auth/                      # Authentication service
 
-├── tests/                     # Test suites
+── tests/                     # Test suites
 
-├── docs/                      # Documentation
+── docs/                      # Documentation
 
-├── scripts/                   # Automation scripts (100+ scripts)
+── scripts/                   # Automation scripts (100 scripts)
 
-├── .github/workflows/         # GitHub Actions (22+ workflows)
+── .github/workflows/         # GitHub Actions (22 workflows)
 
-├── config/                    # Configuration files
+── config/                    # Configuration files
 
-├── codex/                     # Agent documentation and tasks
+── codex/                     # Agent documentation and tasks
 
-└── plugins/                   # Optional Python extensions
+── plugins/                   # Optional Python extensions
 
 ```
 

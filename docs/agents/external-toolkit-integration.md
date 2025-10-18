@@ -15,7 +15,7 @@ canonical_url:
 codex_scope: tags/devonboarder
 codex_role: devsecops
 codex_type: policy
-codex_runtime: ci+local
+codex_runtime: cilocal
 tags: [security, detection, agents, mcp]
 similarity_group: "security-framework"
 content_uniqueness_score: 4
@@ -140,7 +140,7 @@ case "$ENHANCED_MODE" in
 esac
 ```
 
-## 📋 Implementation Checklist
+##  Implementation Checklist
 
 ### For Existing Agents
 
@@ -156,21 +156,21 @@ esac
 - [ ] Maintain security boundaries
 - [ ] Document internal vs external capabilities
 
-## 🔍 Security Validation
+##  Security Validation
 
 ### What Agents Should NEVER Do
 
-- ❌ Reference specific toolkit file paths in public repo
-- ❌ Expose premium feature details in commits
-- ❌ Hardcode external tool dependencies
-- ❌ Leak competitive advantage information
+-  Reference specific toolkit file paths in public repo
+-  Expose premium feature details in commits
+-  Hardcode external tool dependencies
+-  Leak competitive advantage information
 
 ### What Agents Should Do
 
-- ✅ Detect toolkit availability dynamically
-- ✅ Degrade gracefully when tools unavailable
-- ✅ Maintain functionality in both modes
-- ✅ Use environment-based feature flags
+-  Detect toolkit availability dynamically
+-  Degrade gracefully when tools unavailable
+-  Maintain functionality in both modes
+-  Use environment-based feature flags
 
 ## 🎯 Example Implementation
 

@@ -19,9 +19,9 @@ updated_at: '2025-09-12'
 visibility: internal
 ---
 
-# 🛠️ Onboarding: Documentation Quality Checks & Contribution Guide
+#  Onboarding: Documentation Quality Checks & Contribution Guide
 
-## 🚀 Quickstart for Contributors
+##  Quickstart for Contributors
 
 Please review our [Code of Conduct](../CODE_OF_CONDUCT.md) before contributing.
 Welcome to the project! Documentation style is checked with **markdownlint** and
@@ -175,7 +175,7 @@ locally before opening a pull request to avoid CI failures.
 
 The project now defines ignore patterns in `.vale.ini` to skip fenced code
 blocks, indented code, YAML frontmatter, and `auto-gen` sections. If a snippet
-still triggers warnings, wrap it between `<!-- vale off -->` and `<!-- vale on -->`.
+still triggers warnings, wrap it between `<!-- vale off -` and `<!-- vale on -`.
 
 `.pre-commit-config.yaml` runs Vale and Codespell automatically once you execute
 `pre-commit install`, so every commit is checked for style issues and typos.
@@ -235,7 +235,7 @@ and commit the change with your documentation update.
 
   Add valid project terms to `.codespell-ignore` and use Vale suppression
 
-  comments (`<!-- vale off -->` ... `<!-- vale on -->`) for persistent warnings
+  comments (`<!-- vale off -` ... `<!-- vale on -`) for persistent warnings
 
   in code blocks or technical docs.
 

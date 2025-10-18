@@ -7,7 +7,7 @@ echo "============================================"
 echo "1. Fixing shellcheck issues..."
 
 # Fix backup_docs.sh quoting issues
-sed -i 's/mtime +$RETENTION_DAYS/mtime +"$RETENTION_DAYS"/g' scripts/backup_docs.sh
+sed -i 's/mtime $RETENTION_DAYS/mtime "$RETENTION_DAYS"/g' scripts/backup_docs.sh
 
 # Fix detect_content_duplication.sh issues
 # Remove unused variable declaration
@@ -41,20 +41,20 @@ with open('PRIORITY_MATRIX_FIXES_COMPLETE.md', 'r') as f:
 
 # Fix MD032 (lists surrounded by blank lines)
 # Add blank line before lists
-content = re.sub(r'([^\n])\n(- [^\n]+)', r'\1\n\n\2', content)
-content = re.sub(r'([^\n])\n(\d+\. [^\n]+)', r'\1\n\n\2', content)
+content = re.sub(r'([^\n])\n(- [^\n])', r'\1\n\n\2', content)
+content = re.sub(r'([^\n])\n(\d\. [^\n])', r'\1\n\n\2', content)
 
 # Add blank line after lists (before non-list content)
-content = re.sub(r'(- [^\n]+)\n([^-\d\n][^\n]*)', r'\1\n\n\2', content)
-content = re.sub(r'(\d+\. [^\n]+)\n([^-\d\n][^\n]*)', r'\1\n\n\2', content)
+content = re.sub(r'(- [^\n])\n([^-\d\n][^\n]*)', r'\1\n\n\2', content)
+content = re.sub(r'(\d\. [^\n])\n([^-\d\n][^\n]*)', r'\1\n\n\2', content)
 
 # Fix MD031 (fenced code blocks surrounded by blank lines)
 content = re.sub(r'([^\n])\n(```[^\n]*)', r'\1\n\n\2', content)
 content = re.sub(r'(```)\n([^`\n][^\n]*)', r'\1\n\n\2', content)
 
 # Fix MD022 (headings surrounded by blank lines)
-content = re.sub(r'([^\n])\n(#{1,6} [^\n]+)', r'\1\n\n\2', content)
-content = re.sub(r'(#{1,6} [^\n]+)\n([^#\n][^\n]*)', r'\1\n\n\2', content)
+content = re.sub(r'([^\n])\n(#{1,6} [^\n])', r'\1\n\n\2', content)
+content = re.sub(r'(#{1,6} [^\n])\n([^#\n][^\n]*)', r'\1\n\n\2', content)
 
 # Write back
 with open('PRIORITY_MATRIX_FIXES_COMPLETE.md', 'w') as f:
@@ -72,11 +72,11 @@ def fix_heading_style(filename):
         content = f.read()
 
     # Convert ATX headings to setext style for h2 and h3
-    # H2: ## Title -> Title\n========
-    content = re.sub(r'^## (.+)$', r'\1\n' + '=' * 50, content, flags=re.MULTILINE)
+    # H2: ## Title  Title\n========
+    content = re.sub(r'^## (.)$', r'\1\n'  '=' * 50, content, flags=re.MULTILINE)
 
-    # H3: ### Title -> Title\n--------
-    content = re.sub(r'^### (.+)$', r'\1\n' + '-' * 30, content, flags=re.MULTILINE)
+    # H3: ### Title  Title\n--------
+    content = re.sub(r'^### (.)$', r'\1\n'  '-' * 30, content, flags=re.MULTILINE)
 
     with open(filename, 'w') as f:
         f.write(content)

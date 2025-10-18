@@ -35,7 +35,7 @@ The system automatically creates missing `.tokens` files with appropriate templa
 
 - **🌍 Environment-Aware**: Creates templates for dev, CI, and production environments
 
-- **📝 Complete Placeholders**: All standard DevOnboarder tokens included
+- ** Complete Placeholders**: All standard DevOnboarder tokens included
 
 - **🔔 User Guidance**: Clear instructions for next steps
 

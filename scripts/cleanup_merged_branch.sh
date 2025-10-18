@@ -13,20 +13,20 @@ get_merged_branches() {
 
 # Function to detect merged branches
 detect_merged_branches() {
-    echo "🔍 Detecting merged branches..."
+    echo " Detecting merged branches..."
 
     # Get branches that have been merged to main
     local merged_branches
     merged_branches=$(get_merged_branches)
 
     if [[ -n "$merged_branches" ]]; then
-        echo "📋 Merged branches found:"
+        echo " Merged branches found:"
         echo "$merged_branches" | tr ' ' '\n' | while read -r branch; do
             echo "  - $branch"
         done
         return 0
     else
-        echo "✅ No merged branches to clean up"
+        echo " No merged branches to clean up"
         return 1
     fi
 }
@@ -43,23 +43,23 @@ cleanup_local_branches() {
             echo "   Deleting local branch: $branch"
             git branch -d "$branch"
         done
-        echo "✅ Local branches cleaned up"
+        echo " Local branches cleaned up"
     fi
 }
 
 # Function to clean up remote tracking branches
 cleanup_remote_branches() {
-    echo "🌐 Cleaning up remote tracking branches..."
+    echo " Cleaning up remote tracking branches..."
 
     echo "   Pruning remote tracking branches..."
     git remote prune origin
 
-    echo "✅ Remote tracking branches cleaned up"
+    echo " Remote tracking branches cleaned up"
 }
 
 # Function to update main branch
 update_main_branch() {
-    echo "🔄 Updating main branch..."
+    echo "SYNC: Updating main branch..."
 
     local current_branch
     current_branch=$(git branch --show-current)
@@ -72,7 +72,7 @@ update_main_branch() {
     echo "   Pulling latest changes..."
     git pull origin main
 
-    echo "✅ Main branch updated"
+    echo " Main branch updated"
 }
 
 # Function to clean up logs and artifacts
@@ -89,17 +89,17 @@ cleanup_artifacts() {
         bash scripts/clean_pytest_artifacts.sh
     fi
 
-    echo "✅ Artifacts cleaned up"
+    echo " Artifacts cleaned up"
 }
 
 # Function to show cleanup summary
 show_summary() {
     echo "================================="
-    echo "📊 Cleanup Summary:"
+    echo " Cleanup Summary:"
     echo "   Current branch: $(git branch --show-current)"
     echo "   Local branches: $(git branch | wc -l) total"
     echo "   Working directory: $(git status --porcelain | wc -l) changes"
-    echo "✅ Post-merge cleanup complete"
+    echo " Post-merge cleanup complete"
 }
 
 # Main execution

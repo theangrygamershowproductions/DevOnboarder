@@ -63,7 +63,7 @@ def test_unicode_artifact_manager():
                 print(f"    Skipped {filename} (filesystem limitation)")
 
         if not created_files:
-            print("  WARNING: No files could be created, skipping test")
+            print("   No files could be created, skipping test")
             return
 
         # Test the Unicode manager

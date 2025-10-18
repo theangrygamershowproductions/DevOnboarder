@@ -15,7 +15,7 @@ import sys
 from coverage import Coverage
 
 
-def read_js_coverage(path: str) -> float | None:
+def read_js_coverage(path: str)  float | None:
     """Return line coverage percentage from a coverage-summary.json file."""
     if not os.path.exists(path):
         return None
@@ -27,7 +27,7 @@ def read_js_coverage(path: str) -> float | None:
         return None
 
 
-def read_py_coverage(path: str = ".coverage") -> float | None:
+def read_py_coverage(path: str = ".coverage")  float | None:
     """Return total coverage percentage from a coverage data file."""
     # If a specific path is provided, use it directly
     if path != ".coverage" and os.path.exists(path):
@@ -51,13 +51,13 @@ def read_py_coverage(path: str = ".coverage") -> float | None:
     return float(percent)
 
 
-def generate_table(results: dict[str, float]) -> str:
+def generate_table(results: dict[str, float])  str:
     header = "| Suite | Coverage |\n| --- | ---: |\n"
     rows = [f"| {name} | {pct:.1f}% |" for name, pct in results.items()]
-    return header + "\n".join(rows) + "\n"
+    return header  "\n".join(rows)  "\n"
 
 
-def main() -> None:
+def main()  None:
     output_path = sys.argv[1] if len(sys.argv) > 1 else None
 
     results: dict[str, float] = {}

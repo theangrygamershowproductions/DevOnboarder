@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 try:
     from token_loader import require_tokens
 except ImportError:
-    print("ERROR: Cannot import token_loader - ensure you're in DevOnboarder root")
+    print(" Cannot import token_loader - ensure you're in DevOnboarder root")
     sys.exit(1)
 
 
@@ -28,17 +28,17 @@ class ExampleService:
         """Initialize service with token validation."""
         self.service_name = "Example DevOnboarder Service"
 
-    def start(self) -> bool:
+    def start(self)  bool:
         """Start the service with token validation."""
         print(f"Starting {self.service_name}...")
 
         # Validate required tokens with automatic notifications
         if not require_tokens(self.REQUIRED_TOKENS, self.service_name):
-            print(f"ERROR: {self.service_name}: Startup failed due to missing tokens")
+            print(f" {self.service_name}: Startup failed due to missing tokens")
             return False
 
         # Service-specific initialization would go here
-        print(f"SUCCESS: {self.service_name}: Started successfully")
+        print(f" {self.service_name}: Started successfully")
         return True
 
 
@@ -47,7 +47,7 @@ def main():
     service = ExampleService()
 
     if not service.start():
-        print("\nTO FIX: Set up your tokens as described above")
+        print("\nTO  Set up your tokens as described above")
         sys.exit(1)
 
     print(f"\n{service.service_name} is running...")

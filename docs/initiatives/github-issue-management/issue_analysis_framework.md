@@ -230,7 +230,7 @@ Based on existing Priority Stack Framework (#1264), mapping issues to tiers:
 
 ### Dependencies Identified
 
-- Service Discovery phases must be sequential (2→3→4)
+- Service Discovery phases must be sequential (234)
 
 - Dashboard modernization phases have dependencies
 
@@ -284,9 +284,9 @@ Based on existing Priority Stack Framework (#1264), mapping issues to tiers:
 
 - **Issues Completed per Sprint**: Target 3-5 based on effort
 
-- **Sprint Goal Achievement**: Target 90%+ success rate
+- **Sprint Goal Achievement**: Target 90% success rate
 
-- **Issue Cycle Time**: Track open→closed duration
+- **Issue Cycle Time**: Track openclosed duration
 
 ### Strategic Metrics
 
@@ -298,7 +298,7 @@ Based on existing Priority Stack Framework (#1264), mapping issues to tiers:
 
 ---
 
-**Analysis Framework**: DevOnboarder Priority Stack + Issue Health Assessment
+**Analysis Framework**: DevOnboarder Priority Stack  Issue Health Assessment
 
 **Update Frequency**: Bi-weekly issue health review
 **Owner**: Development Team Lead

@@ -3,7 +3,7 @@
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "IMMEDIATE NEXT STEPS - ROBUST CI INFRASTRUCTURE DEPLOYMENT"
@@ -85,7 +85,7 @@ echo "4. Quality gates function reliably despite environment issues"
 echo "5. Complete documentation available for ongoing maintenance"
 echo ""
 
-echo "ENVIRONMENT NOTE:"
+echo "ENVIRONMENT "
 echo "================="
 echo "Terminal communication issues may persist at system level."
 echo "Our robust infrastructure is designed to handle these gracefully."

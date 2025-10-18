@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import List
 
 
-def setup_logging() -> None:
+def setup_logging()  None:
     """Set up centralized logging per DevOnboarder standards."""
     import logging
 
@@ -45,7 +45,7 @@ def setup_logging() -> None:
     )
 
 
-def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
+def fix_shell_script_content(content: str)  tuple[str, List[str]]:
     """
     Fix common shell script issues.
 
@@ -64,13 +64,13 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
     # SC2086: Fix unquoted variables in common patterns
     before_quotes = content
 
-    # Fix mtime +$VAR patterns
-    content = re.sub(r"mtime \+\$([A-Z_]+)", r'mtime +"$\1"', content)
+    # Fix mtime $VAR patterns
+    content = re.sub(r"mtime \\$([A-Z_])", r'mtime "$\1"', content)
 
     # Fix common variable expansions that need quoting
     patterns = [
-        (r"\$([A-Z_]+)", r'"$\1"'),  # Basic variable refs
-        (r"\$\{([A-Z_]+)\}", r'"${\1}"'),  # Brace expansions
+        (r"\$([A-Z_])", r'"$\1"'),  # Basic variable refs
+        (r"\$\{([A-Z_])\}", r'"${\1}"'),  # Brace expansions
     ]
 
     for pattern, replacement in patterns:
@@ -82,7 +82,7 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
 
     # SC2126: Replace grep | wc -l with grep -c
     before_grep = content
-    content = re.sub(r"grep ([^|]+) \| wc -l", r"grep -c \1", content)
+    content = re.sub(r"grep ([^|]) \| wc -l", r"grep -c \1", content)
     if content != before_grep:
         issues_fixed.append("SC2126: Replaced grep | wc -l with grep -c")
 
@@ -97,22 +97,22 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
         line = lines[i].strip()
 
         # Look for echo >> file pattern
-        match = re.match(r'(\s*)(echo\s+[^>]+)\s+>>\s+"([^"]+)"', line)
+        match = re.match(r'(\s*)(echo\s[^>])\s>>\s"([^"])"', line)
         if match:
             indent, echo_cmd, filename = match.groups()
 
             # Look ahead for more redirects to same file
             redirect_group = [echo_cmd]
-            j = i + 1
+            j = i  1
 
             while j < len(lines):
                 next_line = lines[j].strip()
                 next_match = re.match(
-                    r'(\s*)(echo\s+[^>]+)\s+>>\s+"([^"]+)"', next_line
+                    r'(\s*)(echo\s[^>])\s>>\s"([^"])"', next_line
                 )
                 if next_match and next_match.group(3) == filename:
                     redirect_group.append(next_match.group(2))
-                    j += 1
+                    j = 1
                 else:
                     break
 
@@ -126,17 +126,17 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
                 issues_fixed.append("SC2129: Grouped redirect operations")
             else:
                 fixed_lines.append(lines[i])
-                i += 1
+                i = 1
         else:
             fixed_lines.append(lines[i])
-            i += 1
+            i = 1
 
     content = "\n".join(fixed_lines)
 
     # SC2034: Comment unused variables (conservative approach)
     # Look for declare statements that might be unused
     # This is tricky to do automatically, so we'll just flag them for review
-    unused_declares = re.findall(r"^declare -A ([A-Z_]+)=", content, flags=re.MULTILINE)
+    unused_declares = re.findall(r"^declare -A ([A-Z_])=", content, flags=re.MULTILINE)
     if unused_declares:
         # Add comments about potential unused variables
         for var in unused_declares:
@@ -154,7 +154,7 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
     return content, issues_fixed
 
 
-def process_shell_script(file_path: Path, create_backup: bool = True) -> bool:
+def process_shell_script(file_path: Path, create_backup: bool = True)  bool:
     """
     Process a single shell script file.
 
@@ -217,7 +217,7 @@ def process_shell_script(file_path: Path, create_backup: bool = True) -> bool:
         return False
 
 
-def find_shell_scripts(path: Path) -> List[Path]:
+def find_shell_scripts(path: Path)  List[Path]:
     """
     Find all shell script files in a path.
 
@@ -249,7 +249,7 @@ def find_shell_scripts(path: Path) -> List[Path]:
     return sorted(shell_scripts)
 
 
-def main() -> int:
+def main()  int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="DevOnboarder Shell Script Auto-Fixer",
@@ -314,10 +314,10 @@ def main() -> int:
     for file_path in files_to_process:
         if args.dry_run:
             logger.info("Would process: %s", file_path)
-            success_count += 1
+            success_count = 1
         else:
             if process_shell_script(file_path, not args.no_backup):
-                success_count += 1
+                success_count = 1
 
     logger.info(
         "Successfully processed %d/%d files", success_count, len(files_to_process)

@@ -23,11 +23,11 @@ visibility: internal
 
 **Version**: 2.0 - Enhanced Token Governance
 
-**Last Updated**: $(date +%Y-%m-%d)
+**Last Updated**: $(date %Y-%m-%d)
 **Policy**: No Default Token Policy v1.0
 **Classification**: Internal Use - Security Critical
 
-## 📋 Complete Token Authorization Guide
+##  Complete Token Authorization Guide
 
 Following the **No Default Token Policy**, this matrix defines exact permissions and usage patterns for all DevOnboarder automation tokens. This document serves as the authoritative reference for token governance, security auditing, and compliance validation.
 
@@ -53,7 +53,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 
 - **🟢 LOW**: Read-only or minimal scope permissions
 
-## 🔐 Primary CI Automation Tokens
+##  Primary CI Automation Tokens
 
 | Token Name | Bot Identity | Classification | Risk | GitHub Permissions | Authorized Usage | Active Workflows |
 |------------|--------------|----------------|------|-------------------|------------------|------------------|
@@ -61,7 +61,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 | `DIAGNOSTICS_BOT_KEY` | `devonboarder-diagnostics` | CI_AUTOMATION | 🟢 LOW | `issues:write`, `contents:read`, `actions:read`, `metadata:read` | Root Artifact Guard, CI health monitoring, log parsing, diagnostic reporting | `ci.yml`, `diagnostics-post.yml`, `enforce-output-location.yml` |
 | `CI_BOT_TOKEN` | `devonboarder-ci-fallback` | CI_AUTOMATION | 🟡 MEDIUM | `actions:read`, `contents:read`, `metadata:read`, `packages:read` | CI pipeline support, artifact access, fallback automation | `ci.yml`, `auto-fix.yml` |
 
-## 🔍 Specialized Automation Tokens
+##  Specialized Automation Tokens
 
 | Token Name | Bot Identity | Classification | Risk | GitHub Permissions | Authorized Usage | Active Scripts |
 |------------|--------------|----------------|------|-------------------|------------------|----------------|
@@ -69,7 +69,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 | `AAR_BOT_TOKEN` | `devonboarder-aar` | SPECIALIZED_BOT | 🟡 MEDIUM | `issues:write`, `pull_requests:read`, `contents:read`, `metadata:read` | After Actions Report generation, post-merge reporting, incident analysis | `generate_aar.sh`, `audit_retro_actions.sh` |
 | `CI_HEALTH_KEY` | `devonboarder-health` | MONITORING | 🟢 LOW | `actions:read`, `issues:write`, `metadata:read` | CI pipeline health monitoring, stability metrics, performance tracking | `monitor_ci_health.sh`, `update_ci_dashboard.sh` |
 
-## 🔐 Advanced Governance Tokens
+##  Advanced Governance Tokens
 
 | Token Name | Bot Identity | Classification | Risk | GitHub Permissions | Authorized Usage | Integration Points |
 |------------|--------------|----------------|------|-------------------|------------------|--------------------|
@@ -89,7 +89,7 @@ Following the **No Default Token Policy**, this matrix defines exact permissions
 | `REVIEW_KNOWN_ERRORS_KEY` | `devonboarder-reviewer` | `contents:read`, `issues:write` | Pattern recognition for recurring issues | Error runbook maintenance |
 | `CI_HELPER_AGENT_KEY` | `devonboarder-helper` | `contents:write`, `actions:read` | Dashboard updates, CI assistance | Status reporting and documentation |
 
-### 🏗️ Orchestration Tokens (Restricted)
+### BUILD: Orchestration Tokens (Restricted)
 
 | Token Name | Bot Identity | Environment | GitHub Permissions | Usage Restrictions |
 |------------|--------------|-------------|-------------------|-------------------|

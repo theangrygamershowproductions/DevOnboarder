@@ -204,8 +204,8 @@ echo "Issues prevented: X"
 | Metric | DevOnboarder | Industry Standard | Competitive Edge |
 |--------|--------------|------------------|------------------|
 | Resolution Time | X | Y | Zx faster |
-| Success Rate | X% | Y% | +Z percentage points |
-| Automation Level | X% | Y% | +Z percentage points |
+| Success Rate | X% | Y% | Z percentage points |
+| Automation Level | X% | Y% | Z percentage points |
 | Developer Velocity | X | Y | Zx improvement |
 
 ---
@@ -224,7 +224,7 @@ echo "Issues prevented: X"
 # Start milestone tracking
 
 echo "---" > milestone_temp.md
-echo "milestone_id: \"$(date +%Y-%m-%d)-$(git branch --show-current)\"" >> milestone_temp.md
+echo "milestone_id: \"$(date %Y-%m-%d)-$(git branch --show-current)\"" >> milestone_temp.md
 echo "start_time: \"$(date -Iseconds)\"" >> milestone_temp.md
 
 ```
@@ -264,11 +264,11 @@ Update existing scripts to automatically capture performance data:
 
 # Add to qc_pre_push.sh
 
-MILESTONE_START=$(date +%s)
+MILESTONE_START=$(date %s)
 
 # ... existing validation ...
 
-MILESTONE_END=$(date +%s)
+MILESTONE_END=$(date %s)
 MILESTONE_DURATION=$((MILESTONE_END - MILESTONE_START))
 
 echo "QC Duration: ${MILESTONE_DURATION}s" >> logs/milestone_metrics.log
@@ -293,18 +293,18 @@ echo "QC Duration: ${MILESTONE_DURATION}s" >> logs/milestone_metrics.log
 
 ```text
 milestones/
-├── 2025-09/
-│   ├── 2025-09-09-coverage-masking-solution.md
-│   ├── 2025-09-08-ci-failure-resolution.md
-│   └── monthly-summary.md
-├── templates/
-│   ├── bug-milestone-template.md
-│   ├── feature-milestone-template.md
-│   └── enhancement-milestone-template.md
-└── dashboards/
-    ├── competitive-advantages.md
-    ├── performance-trends.md
-    └── roi-analysis.md
+── 2025-09/
+│   ── 2025-09-09-coverage-masking-solution.md
+│   ── 2025-09-08-ci-failure-resolution.md
+│   ── monthly-summary.md
+── templates/
+│   ── bug-milestone-template.md
+│   ── feature-milestone-template.md
+│   ── enhancement-milestone-template.md
+── dashboards/
+    ── competitive-advantages.md
+    ── performance-trends.md
+    ── roi-analysis.md
 
 ```
 
@@ -326,7 +326,7 @@ bash scripts/generate_monthly_milestones.sh 2025-09
 
 # - Cumulative time saved: X hours
 
-# - Success rate improvement: +X percentage points
+# - Success rate improvement: X percentage points
 
 ```
 

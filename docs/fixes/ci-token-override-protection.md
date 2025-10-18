@@ -70,13 +70,13 @@ if (
 
 ## Impact
 
-- ✅ GitHub Actions secrets are protected from override
+-  GitHub Actions secrets are protected from override
 
-- ✅ Normal token loading still works in development
+-  Normal token loading still works in development
 
-- ✅ Test placeholders work correctly when no real tokens exist
+-  Test placeholders work correctly when no real tokens exist
 
-- ✅ Backward compatible with existing workflows
+-  Backward compatible with existing workflows
 
 ## Testing
 

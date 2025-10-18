@@ -83,15 +83,15 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 
 ```markdown
 
-- ❌ Lint: 3 Python files have PEP8 errors (see ruff logs)
+-  Lint: 3 Python files have PEP8 errors (see ruff logs)
 
-- ❌ Test: 1 backend test failed (see test-results/pytest-results.xml)
+-  Test: 1 backend test failed (see test-results/pytest-results.xml)
 
-- ⚠️ Docs: 12 Vale warnings (docs/README.md)
+-  Docs: 12 Vale warnings (docs/README.md)
 
-- ⚠️ Security: 1 dependency flagged by pip-audit
+-  Security: 1 dependency flagged by pip-audit
 
-- ✅ All workflows run with correct tool versions
+-  All workflows run with correct tool versions
 
 ```
 
@@ -100,7 +100,7 @@ After you comment `@codex run full-qa`, Codex replies directly to your comment w
 Each line links to the CI logs or artifacts so you can jump straight to the problem.
 
 Codex posts this checklist as a reply to your `@codex run full-qa` comment. If
-you see `⚠️ Docs: Lint skipped`, the documentation step failed (usually due to
+you see ` Docs: Lint skipped`, the documentation step failed (usually due to
 network issues). You may merge if all other checks pass, but run
 `bash scripts/check_docs.sh` locally when possible.
 
@@ -126,7 +126,7 @@ Tests run only on **Python 3.12**. Run `mise use -g python 3.12`
 (or `asdf install python 3.12`) before installing packages.
 
 If Vale or the optional LanguageTool cannot run due to network errors, Codex
-marks the documentation step as a "⚠️ Docs: Lint skipped" warning. LanguageTool
+marks the documentation step as a " Docs: Lint skipped" warning. LanguageTool
 only runs when `LANGUAGETOOL_URL` is set. You can still merge if all other
 required checks pass, but please run docs checks locally later to catch
 formatting errors.

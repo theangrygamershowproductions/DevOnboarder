@@ -75,7 +75,7 @@ DevOnboarder includes several git utility scripts to streamline common git opera
 
 - Branch cleanup: `"FEAT(scripts): add comprehensive branch cleanup utilities"`
 
-- Config changes: `"CONFIG: update configuration files"`
+- Config changes: `" update configuration files"`
 
 ### 2. `scripts/commit_message_guide.sh`
 
@@ -155,13 +155,13 @@ DevOnboarder includes several git utility scripts to streamline common git opera
 
 **Safety Features**:
 
-- ✅ Validates git repository
+-  Validates git repository
 
-- ✅ Checks for uncommitted changes before pulling
+-  Checks for uncommitted changes before pulling
 
-- ✅ Handles merge conflicts gracefully
+-  Handles merge conflicts gracefully
 
-- ✅ Provides clear error messages and recovery instructions
+-  Provides clear error messages and recovery instructions
 
 ### 3. `scripts/simple_sync.sh`
 
@@ -241,15 +241,15 @@ DevOnboarder includes several git utility scripts to streamline common git opera
 
 **Safety Features**:
 
-- ✅ Validates repository and branch state
+-  Validates repository and branch state
 
-- ✅ Interactive confirmation for all deletions
+-  Interactive confirmation for all deletions
 
-- ✅ Protects important branches (main, active features)
+-  Protects important branches (main, active features)
 
-- ✅ Handles pre-commit hook failures gracefully
+-  Handles pre-commit hook failures gracefully
 
-- ✅ Provides recovery instructions for commit issues
+-  Provides recovery instructions for commit issues
 
 ### 5. `scripts/git_commit_utils.sh`
 
@@ -287,21 +287,21 @@ stage_changes_with_confirmation "automation script updates"
 
 | Feature | commit_changes.sh | commit_message_guide.sh | sync_with_remote.sh | simple_sync.sh | quick_branch_cleanup.sh |
 |---------|-------------------|-------------------------|---------------------|----------------|-------------------------|
-| **Interactive** | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
+| **Interactive** |  Yes |  Yes |  Yes |  No |  Yes |
 
-| **Educational** | ❌ No | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Educational** |  No |  Yes |  No |  No |  No |
 
-| **Message Suggestions** | ✅ Multiple smart options | ✅ Examples + builder | ❌ No | ❌ No | ✅ Automated for cleanup |
+| **Message Suggestions** |  Multiple smart options |  Examples  builder |  No |  No |  Automated for cleanup |
 
-| **File Analysis** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Branch analysis |
+| **File Analysis** |  Yes |  Yes |  No |  No |  Branch analysis |
 
-| **Conflict Handling** | ❌ No | ❌ No | ✅ Yes | ❌ No | ✅ Branch conflicts |
+| **Conflict Handling** |  No |  No |  Yes |  No |  Branch conflicts |
 
-| **Safety Checks** | ✅ Moderate | ❌ No | ✅ Comprehensive | ❌ Minimal | ✅ Comprehensive |
+| **Safety Checks** |  Moderate |  No |  Comprehensive |  Minimal |  Comprehensive |
 
-| **Branch Awareness** | ✅ Current branch | ❌ No | ✅ Current branch | ❌ main only | ✅ All branches |
+| **Branch Awareness** |  Current branch |  No |  Current branch |  main only |  All branches |
 
-| **Pre-commit Log Review** | ✅ Yes | ❌ No | ❌ No | ❌ No | ✅ Yes |
+| **Pre-commit Log Review** |  Yes |  No |  No |  No |  Yes |
 
 | **Use Case** | Committing changes | Learning conventions | Sync conflicts | Quick sync | Branch maintenance |
 
@@ -508,19 +508,19 @@ All scripts include comprehensive error handling:
 1. **Not in git repository**:
 
    ```text
-   ❌ Not in a git repository
+    Not in a git repository
    ```
 
 1. **Uncommitted changes during sync**:
 
    ```text
-   ❌ You have uncommitted changes. Please commit or stash them first.
+    You have uncommitted changes. Please commit or stash them first.
    ```
 
 1. **Merge conflicts**:
 
    ```text
-   ❌ Pull failed - there may be conflicts
+    Pull failed - there may be conflicts
 
    Please resolve conflicts manually and try again.
    ```
@@ -528,7 +528,7 @@ All scripts include comprehensive error handling:
 1. **Push failures**:
 
    ```text
-   ❌ Push failed
+    Push failed
    ```
 
 ### Recovery Actions
@@ -571,17 +571,17 @@ All scripts include comprehensive error handling:
 
 ```bash
 
-# ✅ RECOMMENDED: Comprehensive workflow
+#  RECOMMENDED: Comprehensive workflow
 
 ./scripts/commit_changes.sh       # Commit your changes
 
 ./scripts/sync_with_remote.sh     # Safe sync with conflict handling
 
-# ✅ ACCEPTABLE: Quick workflow (low-risk scenarios)
+#  ACCEPTABLE: Quick workflow (low-risk scenarios)
 
 ./scripts/simple_sync.sh          # Quick sync when confident
 
-# ❌ AVOID: Manual commands without safety checks
+#  AVOID: Manual commands without safety checks
 
 git pull origin main && git push origin main
 
@@ -595,7 +595,7 @@ git pull origin main && git push origin main
 
 # Make sure scripts are executable
 
-chmod +x scripts/*.sh
+chmod x scripts/*.sh
 
 ```
 

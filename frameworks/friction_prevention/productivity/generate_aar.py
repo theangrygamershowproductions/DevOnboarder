@@ -50,7 +50,7 @@ class AARGenerator:
         self.token_manager = AARTokenManager()
         self.logger = self._setup_logging()
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self)  Dict[str, Any]:
         """Load AAR configuration from file.
 
         Returns
@@ -76,7 +76,7 @@ class AARGenerator:
                 ],
             }
 
-    def _setup_logging(self) -> logging.Logger:
+    def _setup_logging(self)  logging.Logger:
         """Set up centralized logging following DevOnboarder standards.
 
         Returns
@@ -113,7 +113,7 @@ class AARGenerator:
 
     def collect_ci_failure_data(
         self, workflow_run_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Collect comprehensive CI failure data using token hierarchy.
 
         Parameters
@@ -179,7 +179,7 @@ class AARGenerator:
 
     def _get_workflow_run_data(
         self, workflow_run_id: str, token: str
-    ) -> Dict[str, Any]:
+    )  Dict[str, Any]:
         """Get detailed workflow run data.
 
         Parameters
@@ -220,7 +220,7 @@ class AARGenerator:
             self.logger.error(f"Failed to get workflow run data: {error}")
             return {"error": str(error)}
 
-    def _get_recent_failures(self, token: str) -> List[Dict[str, Any]]:
+    def _get_recent_failures(self, token: str)  List[Dict[str, Any]]:
         """Get recent workflow failures.
 
         Parameters
@@ -265,7 +265,7 @@ class AARGenerator:
 
     def _get_job_logs(
         self, workflow_run_id: Optional[str], token: str
-    ) -> Dict[str, str]:
+    )  Dict[str, str]:
         """Get job logs for workflow run.
 
         Parameters
@@ -319,7 +319,7 @@ class AARGenerator:
             self.logger.error(f"Failed to get job logs: {error}")
             return {}
 
-    def _get_job_log_content(self, job_id: str, token: str) -> str:
+    def _get_job_log_content(self, job_id: str, token: str)  str:
         """Get log content for specific job.
 
         Parameters
@@ -362,7 +362,7 @@ class AARGenerator:
 
     def _get_artifacts(
         self, workflow_run_id: Optional[str], token: str
-    ) -> List[Dict[str, Any]]:
+    )  List[Dict[str, Any]]:
         """Get artifacts for workflow run.
 
         Parameters
@@ -407,7 +407,7 @@ class AARGenerator:
             self.logger.error(f"Failed to get artifacts: {error}")
             return []
 
-    def generate_aar_report(self, failure_data: Dict[str, Any]) -> str:
+    def generate_aar_report(self, failure_data: Dict[str, Any])  str:
         """Generate AAR report from failure data.
 
         Parameters
@@ -434,7 +434,7 @@ class AARGenerator:
 
 **Generated**: {timestamp}
 
-**DevOnboarder No Default Token Policy Compliance**: ✅ VALIDATED
+**DevOnboarder No Default Token Policy Compliance**:  VALIDATED
 
 ## Executive Summary
 
@@ -478,7 +478,7 @@ class AARGenerator:
 ## Token Governance Compliance
 
 ### Policy Adherence
-- No Default Token Policy v1.0: ✅ COMPLIANT
+- No Default Token Policy v1.0:  COMPLIANT
 - Token Hierarchy Used: {failure_data.get('token_used', 'CI_ISSUE_AUTOMATION_TOKEN')}
 - Security Audit: {len(failure_data.get('security_audit', {}))} checks performed
 
@@ -490,7 +490,7 @@ class AARGenerator:
 
         return report_content
 
-    def _format_security_audit(self, audit_data: Dict[str, Any]) -> str:
+    def _format_security_audit(self, audit_data: Dict[str, Any])  str:
         """Format security audit section.
 
         Parameters
@@ -509,14 +509,14 @@ class AARGenerator:
         lines = []
         for key, value in audit_data.items():
             if isinstance(value, bool):
-                status = "✅ PASS" if value else "❌ FAIL"
+                status = " PASS" if value else " FAIL"
                 lines.append(f"- {key}: {status}")
             else:
                 lines.append(f"- {key}: {value}")
 
         return "\n".join(lines)
 
-    def _format_recent_failures(self, failures: List[Dict[str, Any]]) -> str:
+    def _format_recent_failures(self, failures: List[Dict[str, Any]])  str:
         """Format recent failures section.
 
         Parameters
@@ -541,7 +541,7 @@ class AARGenerator:
 
         return "\n".join(lines)
 
-    def _format_job_analysis(self, job_logs: Dict[str, str]) -> str:
+    def _format_job_analysis(self, job_logs: Dict[str, str])  str:
         """Format job analysis section.
 
         Parameters
@@ -568,7 +568,7 @@ class AARGenerator:
 
         return "\n".join(lines)
 
-    def _format_artifacts(self, artifacts: List[Dict[str, Any]]) -> str:
+    def _format_artifacts(self, artifacts: List[Dict[str, Any]])  str:
         """Format artifacts section.
 
         Parameters
@@ -592,7 +592,7 @@ class AARGenerator:
 
         return "\n".join(lines)
 
-    def _analyze_failure_points(self, failure_data: Dict[str, Any]) -> str:
+    def _analyze_failure_points(self, failure_data: Dict[str, Any])  str:
         """Analyze primary failure points.
 
         Parameters
@@ -623,7 +623,7 @@ class AARGenerator:
 
         return "\n".join(points)
 
-    def _analyze_contributing_factors(self, failure_data: Dict[str, Any]) -> str:
+    def _analyze_contributing_factors(self, failure_data: Dict[str, Any])  str:
         """Analyze contributing factors.
 
         Parameters
@@ -645,7 +645,7 @@ class AARGenerator:
 
         return "\n".join(factors)
 
-    def _generate_immediate_actions(self, failure_data: Dict[str, Any]) -> str:
+    def _generate_immediate_actions(self, failure_data: Dict[str, Any])  str:
         """Generate immediate action recommendations.
 
         Parameters
@@ -667,7 +667,7 @@ class AARGenerator:
 
         return "\n".join(actions)
 
-    def _generate_long_term_improvements(self, failure_data: Dict[str, Any]) -> str:
+    def _generate_long_term_improvements(self, failure_data: Dict[str, Any])  str:
         """Generate long-term improvement recommendations.
 
         Parameters
@@ -691,7 +691,7 @@ class AARGenerator:
 
     def save_aar_report(
         self, report_content: str, filename: Optional[str] = None
-    ) -> str:
+    )  str:
         """Save AAR report to centralized logs directory.
 
         Parameters
@@ -726,7 +726,7 @@ class AARGenerator:
 
     def create_github_issue(
         self, report_content: str, workflow_run_id: Optional[str] = None
-    ) -> Optional[str]:
+    )  Optional[str]:
         """Create GitHub issue for AAR report using token hierarchy.
 
         Parameters
@@ -754,7 +754,7 @@ class AARGenerator:
             timestamp = datetime.now().strftime("%Y-%m-%d")
             title = f"AAR: CI Failure Analysis - {timestamp}"
             if workflow_run_id:
-                title += f" (Run #{workflow_run_id})"
+                title = f" (Run #{workflow_run_id})"
 
             # Create issue labels (use existing repository labels)
             labels = ["automation", "ci-failure"]
@@ -768,7 +768,7 @@ class AARGenerator:
 
 **Auto-generated by DevOnboarder AAR System**
 **Token Used**: Token hierarchy compliant
-**Compliance**: No Default Token Policy v1.0 ✅
+**Compliance**: No Default Token Policy v1.0 
 """
 
             # Create issue using GitHub CLI with proper token
@@ -832,7 +832,7 @@ def main():
 
     # Validate virtual environment
     if not sys.prefix.endswith(".venv"):
-        print("ERROR: Must run in virtual environment (.venv)")
+        print(" Must run in virtual environment (.venv)")
         print("Run: source .venv/bin/activate")
         sys.exit(1)
 
@@ -870,7 +870,7 @@ def main():
         print("AAR generation completed successfully")
 
     except Exception as error:
-        print(f"ERROR: AAR generation failed: {error}")
+        print(f" AAR generation failed: {error}")
         sys.exit(1)
 
 
