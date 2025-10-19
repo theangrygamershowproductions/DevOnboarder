@@ -23,7 +23,7 @@
         "deploy": "bash deploy.sh"
     },
     "dependencies": {
-        "discord.js": "^14.22.1",
+        "discord.js": "^14.23.2",
         "dotenv": "^17.2.3",
         "toml": "^3.0.0"
     },
