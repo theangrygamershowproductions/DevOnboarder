@@ -17,7 +17,7 @@ ENV_FILES = [
 
 def read_doc_vars(path: Path) -> set[str]:
     """Return variable names listed in the docs table."""
-    pattern = re.compile(r"^\|\s*([A-Z0-9_]+)\b")
+    pattern = re.compile(r"^\|\s*([A-Z0-9_])\b")
     vars: set[str] = set()
     with path.open("r", encoding="utf-8") as f:
         for line in f:

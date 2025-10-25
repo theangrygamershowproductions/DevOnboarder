@@ -37,30 +37,30 @@ DevOnboarder enforces **ZERO TOLERANCE** for terminal output violations that cau
 
 ```bash
 
-# ❌ FORBIDDEN - Emojis cause immediate hanging
+#  FORBIDDEN - Emojis cause immediate hanging
 
-echo "✅ Task completed"
-echo "🛠️ Processing"
-echo "📊 Results ready"
+echo " Task completed"
+echo " Processing"
+echo " Results ready"
 
-# ❌ FORBIDDEN - Command substitution in echo
+#  FORBIDDEN - Command substitution in echo
 
 echo "Files found: $(find . -name '*.py' | wc -l)"
 echo "Size: $(du -h file.txt)"
 
-# ❌ FORBIDDEN - Multi-line echo variables
+#  FORBIDDEN - Multi-line echo variables
 
 COMMENT="Line 1
 Line 2
 Line 3"
 echo "$COMMENT"
 
-# ❌ FORBIDDEN - Variable expansion in echo
+#  FORBIDDEN - Variable expansion in echo
 
 echo "Processing $FILE_NAME"
 echo "Status: $BUILD_STATUS"
 
-# ❌ FORBIDDEN - Escape sequences
+#  FORBIDDEN - Escape sequences
 
 echo -e "Line1\nLine2\nLine3"
 echo "Tab\there"
@@ -71,13 +71,13 @@ echo "Tab\there"
 
 ```bash
 
-# ✅ APPROVED - Individual echo with plain ASCII
+#  APPROVED - Individual echo with plain ASCII
 
 echo "Task completed successfully"
 echo "Processing file"
 echo "Results ready for review"
 
-# ✅ APPROVED - File-based output for complex content
+#  APPROVED - File-based output for complex content
 
 cat > output.txt << 'EOF'
 Line 1
@@ -85,13 +85,13 @@ Line 2
 Line 3
 EOF
 
-# ✅ APPROVED - Separate commands
+#  APPROVED - Separate commands
 
 echo "Files found:"
 find . -name '*.py' | wc -l
 echo "Processing complete"
 
-# ✅ APPROVED - Plain text only
+#  APPROVED - Plain text only
 
 echo "Operation finished"
 echo "Check logs for details"
@@ -119,23 +119,23 @@ purple "Special message"      # For special cases
 bold "Section header"         # For emphasis and headers
 
 # High-level semantic functions
-error "Something went wrong"      # Formatted with ERROR: prefix
-success "Operation completed"     # Formatted with SUCCESS: prefix
-warn "Potential issue detected"   # Formatted with WARNING: prefix
-info "Processing step 1"          # Formatted with INFO: prefix
+error "Something went wrong"      # Formatted with  prefix
+success "Operation completed"     # Formatted with  prefix
+warn "Potential issue detected"   # Formatted with  prefix
+info "Processing step 1"          # Formatted with  prefix
 section "Main Configuration"      # Formatted section header
 ```
 
 ### Migration from Raw ANSI
 
 ```bash
-# ❌ FORBIDDEN - Raw ANSI variables
+#  FORBIDDEN - Raw ANSI variables
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 echo -e "${RED}Error occurred${NC}"
 
-# ✅ APPROVED - Centralized color functions
+#  APPROVED - Centralized color functions
 source scripts/color_utils.sh
 error "Error occurred"
 ```
@@ -199,15 +199,15 @@ Bot automatically rejects PRs containing forbidden patterns.
 
 ```bash
 
-# Before: echo "✅ Success"
+# Before: echo " Success"
 
 # After:  echo "Success"
 
-# Before: echo "🛠️ Building"
+# Before: echo " Building"
 
 # After:  echo "Building application"
 
-# Before: echo "⚠️ Warning"
+# Before: echo " Warning"
 
 # After:  echo "Warning: Check configuration"
 
@@ -254,7 +254,7 @@ EOF
 
 ```yaml
 
-# ✅ APPROVED
+#  APPROVED
 
 - name: Comment on PR
 
@@ -268,12 +268,12 @@ EOF
     EOF
     gh pr comment $PR_NUMBER --body-file comment.md
 
-# ❌ FORBIDDEN
+#  FORBIDDEN
 
 - name: Comment on PR
 
   run: |
-    gh pr comment $PR_NUMBER --body "✅ Build complete! Found $(ls | wc -l) files"
+    gh pr comment $PR_NUMBER --body " Build complete! Found $(ls | wc -l) files"
 
 ```
 
@@ -281,7 +281,7 @@ EOF
 
 ```yaml
 
-# ✅ APPROVED
+#  APPROVED
 
 - name: Create summary
 
@@ -290,13 +290,13 @@ EOF
     echo "Status: Complete" >> $GITHUB_STEP_SUMMARY
     echo "Next: Review artifacts" >> $GITHUB_STEP_SUMMARY
 
-# ❌ FORBIDDEN
+#  FORBIDDEN
 
 - name: Create summary
 
   run: |
-    echo "🛠️ Build Summary: $(date)" >> $GITHUB_STEP_SUMMARY
-    echo "📊 Files: $(find . -name '*.py' | wc -l)" >> $GITHUB_STEP_SUMMARY
+    echo " Build Summary: $(date)" >> $GITHUB_STEP_SUMMARY
+    echo " Files: $(find . -name '*.py' | wc -l)" >> $GITHUB_STEP_SUMMARY
 
 ```
 
@@ -304,7 +304,7 @@ EOF
 
 If terminal hanging occurs:
 
-1. **Immediate**: Kill hanging process with Ctrl+C
+1. **Immediate**: Kill hanging process with CtrlC
 
 2. **Identify**: Check recent changes for forbidden patterns
 
@@ -330,7 +330,7 @@ Test your understanding:
 
 # Which is safe?
 
-# A: echo "✅ Done"
+# A: echo " Done"
 
 # B: echo "Done"
 

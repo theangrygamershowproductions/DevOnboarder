@@ -5,41 +5,41 @@
 
 set -e
 
-echo "🔧 Comprehensive markdown linting fixes..."
+echo " Comprehensive markdown linting fixes..."
 
 # Function to fix all common markdown issues in a file
 fix_markdown_file() {
     local file="$1"
 
     if [[ ! -f "$file" ]]; then
-        echo "⚠️  File not found: $file"
+        echo "  File not found: $file"
         return
     fi
 
     echo "🔨 Fixing: $file"
 
     # Fix MD030: list-marker-space issues
-    # Replace "-   " (dash + 3 spaces) with "- " (dash + 1 space)
+    # Replace "-   " (dash  3 spaces) with "- " (dash  1 space)
     sed -i 's/^-   /- /g' "$file"
 
     # Fix nested list items with various indentation patterns
-    sed -i 's/^    -   /  - /g' "$file"   # 4 spaces + dash + 3 spaces -> 2 spaces + dash + 1 space
-    sed -i 's/^        -   /    - /g' "$file" # 8 spaces + dash + 3 spaces -> 4 spaces + dash + 1 space
+    sed -i 's/^    -   /  - /g' "$file"   # 4 spaces  dash  3 spaces  2 spaces  dash  1 space
+    sed -i 's/^        -   /    - /g' "$file" # 8 spaces  dash  3 spaces  4 spaces  dash  1 space
 
     # Fix numbered lists with extra spaces
-    sed -i 's/^\([0-9]\+\)\.   /\1\. /g' "$file"
+    sed -i 's/^\([0-9]\\)\.   /\1\. /g' "$file"
 
     # Fix asterisk list markers
     sed -i 's/^\*   /* /g' "$file"
     sed -i 's/^    \*   /  * /g' "$file"
 
     # Fix plus list markers
-    sed -i 's/^+   /+ /g' "$file"
-    sed -i 's/^    +   /  + /g' "$file"
+    sed -i 's/^   / /g' "$file"
+    sed -i 's/^       /   /g' "$file"
 }
 
 # Fix all markdown files in the repository
-echo "🔍 Finding all markdown files..."
+echo " Finding all markdown files..."
 
 # Find all .md files excluding node_modules, .venv, etc.
 find . -name "*.md" -type f \
@@ -55,7 +55,7 @@ find . -name "*.md" -type f \
     fix_markdown_file "$file"
 done
 
-echo "✅ Markdown fixes complete!"
+echo " Markdown fixes complete!"
 echo "🧪 Testing with markdownlint..."
 
 # Test a few key files to see if issues are resolved

@@ -29,15 +29,15 @@ DevOnboarder implements a centralized cache management strategy to maintain repo
 
 ```text
 logs/
-├── .pytest_cache/          # Pytest execution cache
+── .pytest_cache/          # Pytest execution cache
 
-├── .mypy_cache/            # MyPy type checking cache
+── .mypy_cache/            # MyPy type checking cache
 
-├── htmlcov/                # Coverage HTML reports
+── htmlcov/                # Coverage HTML reports
 
-├── test_run_*.log          # Test execution logs
+── test_run_*.log          # Test execution logs
 
-└── coverage_*.log          # Coverage data logs
+── coverage_*.log          # Coverage data logs
 
 ```
 

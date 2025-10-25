@@ -627,7 +627,7 @@ describe('Dashboard Component', () => {
 
   it('truncates long output and error messages', async () => {
     const longOutput = 'A'.repeat(300); // Output longer than 200 chars
-    const longError = 'Error: ' + 'B'.repeat(300); // Error longer than 200 chars
+    const longError = 'Error: '  'B'.repeat(300); // Error longer than 200 chars
 
     const longExecutions = [
       {
@@ -660,8 +660,8 @@ describe('Dashboard Component', () => {
 
     // Should display truncated output and error with ellipsis
     await waitFor(() => {
-      expect(screen.getByText(text => text.includes('A'.repeat(200) + '...'))).toBeInTheDocument();
-      expect(screen.getByText(text => text.includes('Error: ' + 'B'.repeat(193) + '...'))).toBeInTheDocument();
+      expect(screen.getByText(text => text.includes('A'.repeat(200)  '...'))).toBeInTheDocument();
+      expect(screen.getByText(text => text.includes('Error: '  'B'.repeat(193)  '...'))).toBeInTheDocument();
     });
   });
 
@@ -799,7 +799,7 @@ describe('Dashboard Component', () => {
 
     // Should display truncated description with ellipsis
     await waitFor(() => {
-      expect(screen.getByText('A'.repeat(80) + '...')).toBeInTheDocument();
+      expect(screen.getByText('A'.repeat(80)  '...')).toBeInTheDocument();
     });
   });
 

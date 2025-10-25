@@ -31,7 +31,7 @@ This document outlines the plan for extracting the Discord bot and frontend comp
 
 ## Extraction Targets
 
-### 1. Discord Bot → `tags-discord-bot`
+### 1. Discord Bot  `tags-discord-bot`
 
 **Source Directory**: `/bot/`
 **Target Repository**: `tags-discord-bot`
@@ -71,7 +71,7 @@ This document outlines the plan for extracting the Discord bot and frontend comp
 
 - Deployment scripts
 
-### 2. Frontend → `tags-devonboarder-ui`
+### 2. Frontend  `tags-devonboarder-ui`
 
 **Source Directory**: `/frontend/`
 **Target Repository**: `tags-devonboarder-ui`
@@ -79,7 +79,7 @@ This document outlines the plan for extracting the Discord bot and frontend comp
 
 - Node.js 22
 
-- React + Vite
+- React  Vite
 
 - TypeScript
 
@@ -237,7 +237,7 @@ If extraction causes issues:
 
 ---
 
-## 🔗 GitHub Issue Tracking
+## LINK: GitHub Issue Tracking
 
 **Phase 2 DevOnboarder Readiness Issues**:
 

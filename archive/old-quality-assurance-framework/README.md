@@ -8,11 +8,11 @@ The Quality Assurance Framework systematically organizes DevOnboarder's quality 
 
 ```text
 frameworks/quality_assurance/
-├── validation/     # 35 scripts - System validation and compliance checking
-├── testing/        # 19 scripts - Test execution and coverage validation
-├── compliance/     # 25 scripts - Policy enforcement and auditing
-├── quality_control/# 12 scripts - Quality gates and automation
-└── README.md       # This documentation
+── validation/     # 35 scripts - System validation and compliance checking
+── testing/        # 19 scripts - Test execution and coverage validation
+── compliance/     # 25 scripts - Policy enforcement and auditing
+── quality_control/# 12 scripts - Quality gates and automation
+── README.md       # This documentation
 ```
 
 ## Categories

@@ -28,13 +28,13 @@ echo
 
 # Check if AAR_TOKEN exists
 if [ -z "${AAR_TOKEN:-}" ]; then
-    echo "ERROR: AAR_TOKEN not found in environment"
+    echo " AAR_TOKEN not found in environment"
     echo "SOLUTION: Please ensure AAR_TOKEN is set in your .tokens file"
     echo "ALTERNATIVE: Or run: python3 scripts/token_loader.py validate AAR_TOKEN"
     exit 1
 fi
 
-printf "SUCCESS: AAR_TOKEN found (length: %d)\n" "${#AAR_TOKEN}"
+printf " AAR_TOKEN found (length: %d)\n" "${#AAR_TOKEN}"
 
 # Test current permissions
 echo
@@ -79,10 +79,10 @@ fi
 echo
 echo "Diagnosis:"
 if [ "$ACTIONS_READ" = true ] && [ "$WORKFLOW_RUNS" = true ]; then
-    echo "SUCCESS: AAR_TOKEN has sufficient permissions for Actions API"
+    echo " AAR_TOKEN has sufficient permissions for Actions API"
     echo "READY: You can now run: make aar-generate WORKFLOW_ID=17464386031"
 else
-    echo "ERROR: AAR_TOKEN missing required permissions"
+    echo " AAR_TOKEN missing required permissions"
     echo
 
     # Check if this might be a propagation delay

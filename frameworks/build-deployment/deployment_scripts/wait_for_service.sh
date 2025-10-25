@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 URL=${1:?"usage: $0 URL [retries] [sleep] [service]"}
@@ -12,7 +12,7 @@ RETRIES=${2:-30}
 SLEEP=${3:-2}
 SERVICE=${4:-auth}
 
-for ((i=1; i<=RETRIES; i++)); do
+for ((i=1; i<=RETRIES; i)); do
   if curl -fs "$URL" >/dev/null; then
     echo "Service is up!"
     exit 0

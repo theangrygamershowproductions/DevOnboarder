@@ -41,7 +41,7 @@ visibility: internal
 
 - Documented Discord bot integration achievements (100% service coverage)
 
-- Maintained high technical standards (96%+ backend coverage, 100% bot/frontend coverage)
+- Maintained high technical standards (96% backend coverage, 100% bot/frontend coverage)
 
 ## What Didn't Go Well
 

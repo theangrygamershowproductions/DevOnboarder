@@ -93,18 +93,17 @@ class AdvancedOrchestrator:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                "ERROR: Virtual environment not detected. "
-                "DevOnboarder Phase 5 requires virtual environment isolation. "
+                " Virtual environment not detected. " + "DevOnboarder Phase 5 requires virtual environment isolation. "
                 "Run: python -m venv .venv && source .venv/bin/activate"
             )
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
             raise EnvironmentError(
-                f"ERROR: Virtual environment invalid: {self.venv_path}"
+                f" Virtual environment invalid: {self.venv_path}"
             )
 
-        print(f"SUCCESS: Phase 5 Virtual environment validated: {self.venv_path}")
+        print(f" Phase 5 Virtual environment validated: {self.venv_path}")
 
     def setup_logging(self) -> None:
         """Configure logging for orchestration events."""
@@ -190,7 +189,7 @@ class AdvancedOrchestrator:
         for service, deps in self.dependency_graph.items():
             for dep in deps:
                 if dep in in_degree:
-                    in_degree[service] += 1
+                    in_degree[service] = 1
 
         # Topological sort
         queue = [service for service, degree in in_degree.items() if degree == 0]
@@ -210,7 +209,7 @@ class AdvancedOrchestrator:
             raise ValueError("Circular dependency detected in service configuration")
 
         self.startup_order = startup_order
-        self.logger.info(f"Calculated startup order: {' → '.join(startup_order)}")
+        self.logger.info(f"Calculated startup order: {'  '.join(startup_order)}")
         return startup_order
 
     async def start_orchestration(self) -> None:
@@ -237,7 +236,7 @@ class AdvancedOrchestrator:
     async def startup_services(self) -> None:
         """Start services in calculated dependency order."""
         for service_name in self.startup_order:
-            self.logger.info(f"🔄 Starting service: {service_name}")
+            self.logger.info(f"SYNC: Starting service: {service_name}")
 
             # Wait for dependencies
             await self.wait_for_dependencies(service_name)
@@ -248,7 +247,7 @@ class AdvancedOrchestrator:
             # Verify health
             await self.verify_service_health(service_name)
 
-            self.logger.info(f"SUCCESS: Service started successfully: {service_name}")
+            self.logger.info(f" Service started successfully: {service_name}")
 
     async def wait_for_dependencies(self, service_name: str) -> None:
         """Wait for all service dependencies to be healthy."""
@@ -257,7 +256,7 @@ class AdvancedOrchestrator:
         for dep_name in config.dependencies:
             self.logger.info(f"⏳ Waiting for dependency: {dep_name}")
 
-            timeout = time.time() + config.startup_timeout
+            timeout = time.time()  config.startup_timeout
             while time.time() < timeout:
                 if await self.check_service_health(dep_name):
                     break
@@ -313,7 +312,7 @@ class AdvancedOrchestrator:
     async def verify_service_health(self, service_name: str) -> None:
         """Verify service is healthy after startup."""
         config = self.services[service_name]
-        timeout = time.time() + config.startup_timeout
+        timeout = time.time()  config.startup_timeout
 
         while time.time() < timeout:
             if await self.check_service_health(service_name):
@@ -361,7 +360,7 @@ class AdvancedOrchestrator:
 
     async def continuous_monitoring(self) -> None:
         """Continuous health monitoring and auto-recovery."""
-        self.logger.info("INFO: Starting continuous service monitoring")
+        self.logger.info(" Starting continuous service monitoring")
 
         while self.is_running:
             # Health check all services
@@ -384,21 +383,21 @@ class AdvancedOrchestrator:
 
     async def handle_unhealthy_service(self, service_name: str) -> None:
         """Handle unhealthy service with intelligent recovery."""
-        self.logger.warning(f"WARNING: Service unhealthy: {service_name}")
+        self.logger.warning(f" Service unhealthy: {service_name}")
 
         metrics = self.metrics.get(service_name)
         if not metrics:
             return
 
-        metrics.restart_count += 1
+        metrics.restart_count = 1
 
         # Implement restart strategy based on failure patterns
         if metrics.restart_count <= self.services[service_name].restart_threshold:
-            self.logger.info(f"🔄 Attempting restart for {service_name}")
+            self.logger.info(f"SYNC: Attempting restart for {service_name}")
             await self.restart_service(service_name)
         else:
             self.logger.error(
-                f"ERROR: Service {service_name} exceeded restart threshold"
+                f" Service {service_name} exceeded restart threshold"
             )
             # Could trigger alerts, create GitHub issues, etc.
 
@@ -427,7 +426,7 @@ class AdvancedOrchestrator:
         unhealthy_count = 0
         for service_name, metrics in self.metrics.items():
             if metrics.status != ServiceStatus.HEALTHY:
-                unhealthy_count += 1
+                unhealthy_count = 1
 
             report["services"][service_name] = {
                 "status": metrics.status.value,
@@ -456,7 +455,7 @@ class AdvancedOrchestrator:
         self.is_running = False
         if self.session:
             await self.session.close()
-        self.logger.info("🔧 Orchestrator cleanup complete")
+        self.logger.info(" Orchestrator cleanup complete")
 
 
 # CLI Interface
@@ -469,7 +468,7 @@ async def main():
     except KeyboardInterrupt:
         print("\n🛑 Orchestration stopped by user")
     except Exception as e:
-        print(f"ERROR: Orchestration failed: {e}")
+        print(f" Orchestration failed: {e}")
         raise
 
 

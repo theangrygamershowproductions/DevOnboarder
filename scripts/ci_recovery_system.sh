@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Configuration
-LOG_FILE="logs/ci_recovery_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/ci_recovery_$(date %Y%m%d_%H%M%S).log"
 readonly LOG_FILE
 readonly RECOVERY_REPORT="milestones/2025-09/2025-09-09-ci-recovery-report.md"
 
@@ -22,7 +22,7 @@ echo "=========================================="
 # Function to get failure count
 # shellcheck disable=SC2120  # Function can be called with or without arguments
 count_failures() {
-    local target_date=${1:-$(date +%Y-%m-%d)}
+    local target_date=${1:-$(date %Y-%m-%d)}
     gh run list --limit 100 --json conclusion,createdAt | \
         jq --arg date "$target_date" "map(select(.conclusion == \"failure\" and (.createdAt | startswith(\$date)))) | length"
 }
@@ -30,11 +30,11 @@ count_failures() {
 # Function to get success rate for recent runs
 # shellcheck disable=SC2120  # Function can be called with or without arguments
 get_recent_success_rate() {
-    local target_date=${1:-$(date +%Y-%m-%d)}
-    local hour_filter=${2:-$(date +%H)}
+    local target_date=${1:-$(date %Y-%m-%d)}
+    local hour_filter=${2:-$(date %H)}
     gh run list --limit 20 --json conclusion,createdAt | \
         jq --arg date "$target_date" --arg hour "$hour_filter" "
-            map(select(.createdAt | startswith(\$date + \"T\" + \$hour) or startswith(\$date + \"T\" + (\$hour | tonumber - 1 | tostring)))) |
+            map(select(.createdAt | startswith(\$date  \"T\"  \$hour) or startswith(\$date  \"T\"  (\$hour | tonumber - 1 | tostring)))) |
             group_by(.conclusion) |
             map({conclusion: .[0].conclusion, count: length}) |
             map(select(.conclusion == \"success\")) |
@@ -52,10 +52,10 @@ echo "Total failures today: $TOTAL_FAILURES"
 echo "Recent successes (last 15 min): $RECENT_SUCCESS_COUNT"
 
 if [[ $RECENT_SUCCESS_COUNT -gt 5 ]]; then
-    echo "✅ CI Health: RECOVERED - Recent runs succeeding"
+    echo " CI Health: RECOVERED - Recent runs succeeding"
     RECOVERY_STATUS="RECOVERED"
 else
-    echo "⚠️  CI Health: UNSTABLE - Issues may persist"
+    echo "  CI Health: UNSTABLE - Issues may persist"
     RECOVERY_STATUS="UNSTABLE"
 fi
 
@@ -79,7 +79,7 @@ cat > "$RECOVERY_REPORT" << EOF
 - **Total Failures**: $TOTAL_FAILURES workflows failed today
 - **Affected Workflows**: PR Merge Cleanup, Potato Policy, CI Monitor, Auto Fix, others
 - **Duration**: Approximately 2-3 hours of intermittent failures
-- **Recovery Method**: Natural GitHub API propagation + validation
+- **Recovery Method**: Natural GitHub API propagation  validation
 
 ## Resolution Timeline
 
@@ -90,12 +90,12 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Lessons Learned
 
-### What Worked Well ✅
+### What Worked Well 
 - **Token Architecture v2.1**: Robust design handled the transition
 - **Systematic Debugging**: Clear identification of root cause
 - **Professional Response**: Immediate investigation and documentation
 
-### Areas for Improvement 🔧
+### Areas for Improvement 
 - **Propagation Monitoring**: Add checks for API propagation delays
 - **Failure Cascade Prevention**: Implement circuit breakers for token issues
 - **Recovery Automation**: Automated detection and reporting of systematic failures
@@ -108,13 +108,13 @@ cat > "$RECOVERY_REPORT" << EOF
 
 ## Impact Assessment
 
-**Professional Impact**: ✅ RESOLVED
+**Professional Impact**:  RESOLVED
 - All critical quality gates maintained functionality
 - Recent runs demonstrate full system recovery
 - No compromise to code quality standards
 - Clean CI status restored
 
-**Technical Impact**: ✅ MITIGATED
+**Technical Impact**:  MITIGATED
 - Zero actual system reliability issues
 - No code quality degradation
 - All automation systems functioning normally
@@ -126,7 +126,7 @@ The DevOnboarder CI system has successfully recovered from token propagation del
 All workflows are now operating normally with clean status indicators.
 EOF
 
-echo "✅ Recovery report generated: $RECOVERY_REPORT"
+echo " Recovery report generated: $RECOVERY_REPORT"
 
 # Step 3: Validation Test
 echo ""
@@ -135,9 +135,9 @@ echo "=========================="
 
 echo "Testing workflow dispatch capability..."
 if gh workflow list --limit 1 >/dev/null 2>&1; then
-    echo "✅ GitHub API access: WORKING"
+    echo " GitHub API access: WORKING"
 else
-    echo "❌ GitHub API access: FAILED"
+    echo " GitHub API access: FAILED"
 fi
 
 # Step 4: Summary
@@ -152,10 +152,10 @@ echo "Timestamp: $(date)"
 echo ""
 
 if [[ "$RECOVERY_STATUS" == "RECOVERED" ]]; then
-    echo "🎉 SUCCESS: DevOnboarder CI infrastructure is healthy!"
+    echo "🎉  DevOnboarder CI infrastructure is healthy!"
     echo "   • Clean status indicators restored"
     echo "   • Professional reputation maintained"
     echo "   • All systems operating normally"
 else
-    echo "⚠️  PARTIAL: Some issues may remain - manual investigation recommended"
+    echo "  PARTIAL: Some issues may remain - manual investigation recommended"
 fi

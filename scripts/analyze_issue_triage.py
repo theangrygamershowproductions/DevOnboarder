@@ -25,7 +25,7 @@ def load_issues():
                 if line.strip():
                     line = line.strip()
                     if not line.endswith("}"):
-                        line += "}"
+                        line = "}"
                     try:
                         issue = json.loads(line)
                         issues.append(issue)
@@ -36,7 +36,7 @@ def load_issues():
                         )
             return issues
     except FileNotFoundError:
-        print("ERROR: Issues file not found", file=sys.stderr)
+        print(" Issues file not found", file=sys.stderr)
         return []
 
 
@@ -126,20 +126,20 @@ def analyze_priority_gaps(issues):
 
         for label in labels:
             if "priority-high" in label:
-                priority_stats["high"] += 1
+                priority_stats["high"] = 1
                 has_priority = True
                 break
             elif "priority-medium" in label:
-                priority_stats["medium"] += 1
+                priority_stats["medium"] = 1
                 has_priority = True
                 break
             elif "priority-low" in label:
-                priority_stats["low"] += 1
+                priority_stats["low"] = 1
                 has_priority = True
                 break
 
         if not has_priority:
-            priority_stats["unlabeled"] += 1
+            priority_stats["unlabeled"] = 1
             unlabeled_priority.append(issue)
 
     return priority_stats, unlabeled_priority
@@ -250,8 +250,7 @@ def generate_triage_report(categories, priority_stats, unlabeled_priority, issue
         and any("priority-high" in label.lower() for label in issue["labels"])
     ]
     print(
-        f"- Assign owners to {len(high_priority_unassigned)} "
-        "high-priority unassigned issues"
+        f"- Assign owners to {len(high_priority_unassigned)} " + "high-priority unassigned issues"
     )
     print("- Consider team capacity for bridge platform and service discovery work")
     print("- Distribute infrastructure work across team members")

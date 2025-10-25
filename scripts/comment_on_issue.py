@@ -61,7 +61,7 @@ def get_aar_summary(aar_path: str) -> dict[str, str]:
                 action_count = 0
                 for j in range(i + 1, min(i + 20, len(lines))):
                     if lines[j].strip().startswith("- [ ]"):
-                        action_count += 1
+                        action_count = 1
                 summary["action_items"] = str(action_count)
             elif "Codex Alignment:" in line:
                 # Check alignment status
@@ -103,11 +103,11 @@ def create_structured_comment(
 
     comment = f"""## {icon} {title}
 
-### 📊 Summary
+###  Summary
 
 {summary_table}
 
-### 📁 Resources
+###  Resources
 
 **AAR Location**: `{aar_path}`
 **Follow-up Issue**: Automatically created with action items
@@ -120,7 +120,7 @@ def create_structured_comment(
 - **Lessons Learned**: Best practices and gotchas identified
 - **Action Items**: {aar_summary.get('action_items', '0')} items tracked for follow-up
 
-### 💡 For Developers
+###  For Developers
 
 This AAR is immediately accessible in VSCode via:
 - GitHub Issues/PRs panel

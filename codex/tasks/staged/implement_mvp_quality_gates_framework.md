@@ -124,7 +124,7 @@ Implement the comprehensive quality gates framework defined in `codex/mvp/mvp_qu
 
 ### **Security & Token Management**
 
-- Token hierarchy: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+- Token hierarchy: `CI_ISSUE_AUTOMATION_TOKEN`  `CI_BOT_TOKEN`  `GITHUB_TOKEN`
 
 - Enhanced Potato Policy compliance
 

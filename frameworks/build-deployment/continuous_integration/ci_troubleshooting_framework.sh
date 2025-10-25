@@ -1,13 +1,13 @@
 #!/bin/bash
 # scripts/ci_troubleshooting_framework.sh
 # Systematic CI Pipeline Troubleshooting Framework
-# Implements: diagnose → log → fix → test → validate cycle
+# Implements: diagnose  log  fix  test  validate cycle
 
 set -e
 
 # Enhanced centralized logging for troubleshooting
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder CI Troubleshooting Framework"
@@ -93,7 +93,7 @@ check_failed_workflows() {
     echo "Checking recent workflow failures..."
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "ERROR: GitHub CLI not available"
+        echo " GitHub CLI not available"
         PROBLEMS_DETECTED["gh_cli_missing"]="GitHub CLI not installed or not in PATH"
         return 1
     fi
@@ -138,7 +138,7 @@ validate_workflow_configs() {
     # Check AAR Automation workflow
     if [[ -f ".github/workflows/aar-automation.yml" ]]; then
         if grep -q "git add logs/" ".github/workflows/aar-automation.yml"; then
-            workflow_issues+=("AAR Automation: Attempting to commit gitignored logs/ directory")
+            workflow_issues=("AAR Automation: Attempting to commit gitignored logs/ directory")
             PROBLEMS_DETECTED["aar_logs_issue"]="AAR workflow tries to commit gitignored logs"
         fi
     fi
@@ -151,7 +151,7 @@ validate_workflow_configs() {
             if ! grep -q "jq.*||.*error" ".github/workflows/pr-merge-cleanup.yml" && \
                ! grep -q "if ! .*jq.*2>/dev/null" ".github/workflows/pr-merge-cleanup.yml" && \
                ! grep -q "jq empty" ".github/workflows/pr-merge-cleanup.yml"; then
-                workflow_issues+=("PR Merge Cleanup: Missing error handling for jq JSON parsing")
+                workflow_issues=("PR Merge Cleanup: Missing error handling for jq JSON parsing")
                 PROBLEMS_DETECTED["json_parsing_issue"]="PR cleanup lacks JSON parsing error handling"
             else
                 echo "PR Merge Cleanup: JSON error handling detected and adequate"
@@ -315,7 +315,7 @@ fix_aar_logs_issue() {
         echo "AAR logs issue fix applied"
         FIXES_APPLIED["aar_logs_issue"]="Removed git add logs/ from AAR workflow"
     else
-        echo "ERROR: AAR workflow file not found"
+        echo " AAR workflow file not found"
         return 1
     fi
 }
@@ -394,21 +394,21 @@ jobs:
                   if [[ "$ISSUE_SEARCH" != "[]" ]]; then
                     # Validate JSON before parsing
                     if ! echo "$ISSUE_SEARCH" | jq empty 2>/dev/null; then
-                        echo "ERROR: Invalid JSON response from GitHub API"
+                        echo " Invalid JSON response from GitHub API"
                         printf "Response content: %s\n" "$ISSUE_SEARCH"
                         exit 1
                     fi
 
                     # Parse issue number with error handling
                     if ! ISSUE_NUMBER=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].number' 2>/dev/null); then
-                        echo "ERROR: Failed to parse issue number from search results"
+                        echo " Failed to parse issue number from search results"
                         printf "Search results: %s\n" "$ISSUE_SEARCH"
                         exit 1
                     fi
 
                     # Parse issue title with error handling
                     if ! ISSUE_TITLE=$(printf -- '%s' "$ISSUE_SEARCH" | jq -r '.[0].title' 2>/dev/null); then
-                        echo "ERROR: Failed to parse issue title from search results"
+                        echo " Failed to parse issue title from search results"
                         printf "Search results: %s\n" "$ISSUE_SEARCH"
                         exit 1
                     fi                      printf 'Found tracking issue: %s\n' "$ISSUE_TITLE"
@@ -444,7 +444,7 @@ EOF
         echo "JSON parsing error handling applied to PR merge cleanup workflow"
         FIXES_APPLIED["json_parsing_issue"]="Added comprehensive JSON validation and error handling"
     else
-        echo "ERROR: PR merge cleanup workflow not found"
+        echo " PR merge cleanup workflow not found"
         return 1
     fi
 }

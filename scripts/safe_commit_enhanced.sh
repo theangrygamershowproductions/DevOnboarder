@@ -47,7 +47,7 @@ handle_precommit_modifications() {
     unstaged_changes=$(git diff --name-only)
 
     if [[ -n "$unstaged_changes" ]]; then
-        echo "WARNING: Unstaged changes detected alongside hook modifications"
+        echo " Unstaged changes detected alongside hook modifications"
         echo "Unstaged files:"
         printf "%s\n" "$unstaged_changes" | sed 's/^/  /'
     fi
@@ -66,10 +66,10 @@ handle_precommit_modifications() {
     while IFS= read -r file; do
         if [[ -f "$file" ]]; then
             if git add "$file"; then
-                printf "  ✓ Re-staged: %s\n" "$file"
-                ((restaged_count++))
+                printf "   Re-staged: %s\n" "$file"
+                ((restaged_count))
             else
-                printf "  ❌ Failed to re-stage: %s\n" "$file"
+                printf "   Failed to re-stage: %s\n" "$file"
                 return 1
             fi
         else
@@ -81,7 +81,7 @@ handle_precommit_modifications() {
 
     # Assert clean delta to avoid silent drift
     if ! git diff --quiet --cached; then
-        echo "FATAL ERROR: Re-stage incomplete: staged delta remains." >&2
+        echo "FATAL  Re-stage incomplete: staged delta remains." >&2
         echo "This indicates a critical issue with pre-commit hook modifications." >&2
         echo "Repository state may be inconsistent." >&2
         git status --porcelain
@@ -99,7 +99,7 @@ handle_precommit_modifications() {
     expected_staged=$(echo "$original_staged_files" | sort)
 
     if [[ "$post_restage_staged" != "$expected_staged" ]]; then
-        echo "WARNING: Re-staged files don't match original staging"
+        echo " Re-staged files don't match original staging"
         echo "Expected:"
         printf "%s\n" "$expected_staged" | sed 's/^/  /'
         echo "Actually staged:"
@@ -118,16 +118,16 @@ handle_precommit_modifications() {
     exit_code=$?
 
     if [[ $exit_code -eq 0 ]]; then
-        echo "✅ Enhanced re-staging commit successful!"
+        echo " Enhanced re-staging commit successful!"
         echo "$commit_output"
         return 0
     else
         if [[ $exit_code -eq 124 ]]; then
-            echo "❌ Enhanced re-staging commit timed out after 60 seconds"
+            echo " Enhanced re-staging commit timed out after 60 seconds"
             echo "This may indicate hanging pre-commit hooks or slow validation processes"
             echo "Timeout occurred during commit operation"
         else
-            echo "❌ Enhanced re-staging commit failed (exit code: $exit_code)"
+            echo " Enhanced re-staging commit failed (exit code: $exit_code)"
             echo "$commit_output"
         fi
 
@@ -178,7 +178,7 @@ safe_handle_precommit_modifications() {
         exit $exit_code
     fi
 
-    echo "✅ Pre-commit modifications handled successfully"
+    echo " Pre-commit modifications handled successfully"
 
     # Clean up environment variable
     unset SAFE_COMMIT_ERROR_HANDLING

@@ -11,7 +11,7 @@ source scripts/project_root_wrapper.sh
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting Cloudflare tunnel configuration validation"
@@ -29,19 +29,19 @@ VALIDATION_WARNINGS=0
 
 # Helper function to log errors
 log_error() {
-    echo "ERROR: $1"
-    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+    echo " $1"
+    VALIDATION_ERRORS=$((VALIDATION_ERRORS  1))
 }
 
 # Helper function to log warnings
 log_warning() {
-    echo "WARNING: $1"
-    VALIDATION_WARNINGS=$((VALIDATION_WARNINGS + 1))
+    echo " $1"
+    VALIDATION_WARNINGS=$((VALIDATION_WARNINGS  1))
 }
 
 # Helper function to log success
 log_success() {
-    echo "SUCCESS: $1"
+    echo " $1"
 }
 
 # Validate file existence
@@ -262,7 +262,7 @@ generate_report() {
     if [ $VALIDATION_ERRORS -eq 0 ]; then
         if [ $VALIDATION_WARNINGS -eq 0 ]; then
             echo ""
-            echo "SUCCESS: All validations passed!"
+            echo " All validations passed!"
             echo "You can now start the tunnel with:"
             echo "  bash scripts/setup_tunnel.sh --start"
         else

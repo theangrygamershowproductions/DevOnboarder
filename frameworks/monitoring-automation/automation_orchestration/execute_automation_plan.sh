@@ -21,8 +21,8 @@ fi
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "AAR_TOKEN" "CI_ISSUE_AUTOMATION_TOKEN"; then
-        echo "ERROR: Cannot proceed without required tokens for PR automation"
-        echo "TIP: PR automation requires GitHub API access for health assessment"
+        echo " Cannot proceed without required tokens for PR automation"
+        echo " PR automation requires GitHub API access for health assessment"
         exit 1
     fi
 fi
@@ -36,13 +36,13 @@ echo "Mode: $MODE"
 echo ""
 
 # Step 1: Health Assessment
-echo "STATS: Step 1: Health Assessment"
+echo " Step 1: Health Assessment"
 HEALTH_SCORE=$(bash scripts/assess_pr_health.sh $PR_NUMBER | grep "PR Health Score:" | grep -o '[0-9]*%' | tr -d '%')
 echo "Health Score: ${HEALTH_SCORE}%"
 echo ""
 
 # Step 2: Pattern Analysis
-echo "INFO: Step 2: CI Pattern Analysis"
+echo " Step 2: CI Pattern Analysis"
 bash scripts/simple_pattern_analysis.sh $PR_NUMBER
 echo "Pattern analysis saved to reports/pattern_analysis_$PR_NUMBER.txt"
 echo ""
@@ -51,22 +51,22 @@ echo ""
 echo "🧠 Step 3: Strategic Decision"
 if [[ $HEALTH_SCORE -ge 80 ]]; then
     DECISION="MERGE"
-    echo "SUCCESS: RECOMMENDATION: MERGE (Health Score: ${HEALTH_SCORE}%)"
-    echo "   → PR is healthy and ready for merge"
+    echo " RECOMMENDATION: MERGE (Health Score: ${HEALTH_SCORE}%)"
+    echo "    PR is healthy and ready for merge"
 elif [[ $HEALTH_SCORE -ge 40 ]]; then
     DECISION="FIX_AND_MERGE"
     echo "TOOL: RECOMMENDATION: FIX AND MERGE (Health Score: ${HEALTH_SCORE}%)"
-    echo "   → Apply targeted fixes, then merge"
+    echo "    Apply targeted fixes, then merge"
 else
     DECISION="NEW_PR"
     echo "🆕 RECOMMENDATION: NEW PR (Health Score: ${HEALTH_SCORE}%)"
-    echo "   → Consider creating a new PR with focused changes"
+    echo "    Consider creating a new PR with focused changes"
 fi
 echo ""
 
 # Step 4: Execute Actions Based on Mode
 if [[ "$MODE" == "analyze" ]]; then
-    echo "INFO: ANALYZE MODE: Recommendations only"
+    echo " ANALYZE MODE: Recommendations only"
     echo "Current Assessment: $DECISION"
 
 elif [[ "$MODE" == "execute" ]]; then
@@ -78,7 +78,7 @@ elif [[ "$MODE" == "execute" ]]; then
         if command -v markdownlint >/dev/null 2>&1; then
             # Run markdownlint fix on agent files
             find agents/ -name "*.md" -exec markdownlint --fix {} \; 2>/dev/null || true
-            echo "   SUCCESS: Applied markdownlint fixes to agents/"
+            echo "    Applied markdownlint fixes to agents/"
         fi
     fi
 
@@ -93,11 +93,11 @@ elif [[ "$MODE" == "execute" ]]; then
         fi
     fi
 
-    echo "   SUCCESS: Automated fixes applied"
+    echo "    Automated fixes applied"
 
 elif [[ "$MODE" == "full-auto" ]]; then
     echo "BOT: FULL-AUTO MODE: Complete automation"
-    echo "WARNING:  This would apply fixes AND potentially auto-merge"
+    echo "  This would apply fixes AND potentially auto-merge"
     echo "SHIELD:  Safety check: Potato.md protection active"
 
     # Safety check
@@ -106,9 +106,9 @@ elif [[ "$MODE" == "full-auto" ]]; then
         exit 1
     fi
 
-    echo "   → Would execute: $DECISION"
+    echo "    Would execute: $DECISION"
 fi
 
 echo ""
-echo "SUCCESS: Automation execution complete for PR #966"
-echo "STATS: Final Status: Health Score ${HEALTH_SCORE}% | Recommendation: $DECISION"
+echo " Automation execution complete for PR #966"
+echo " Final Status: Health Score ${HEALTH_SCORE}% | Recommendation: $DECISION"

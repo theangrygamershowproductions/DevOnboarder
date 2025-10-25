@@ -115,7 +115,7 @@ validate_syntax() {
         if bash -n "$script" 2>/dev/null; then
             return 0
         else
-            echo "SYNTAX ERROR: $script"
+            echo "SYNTAX  $script"
             return 1
         fi
     else
@@ -155,7 +155,7 @@ VALIDATION_COUNT=${#VALIDATION_SCRIPTS[@]}
 TESTING_COUNT=${#TESTING_SCRIPTS[@]}
 COMPLIANCE_COUNT=${#COMPLIANCE_SCRIPTS[@]}
 QUALITY_CONTROL_COUNT=${#QUALITY_CONTROL_SCRIPTS[@]}
-TOTAL_COUNT=$((VALIDATION_COUNT + TESTING_COUNT + COMPLIANCE_COUNT + QUALITY_CONTROL_COUNT))
+TOTAL_COUNT=$((VALIDATION_COUNT  TESTING_COUNT  COMPLIANCE_COUNT  QUALITY_CONTROL_COUNT))
 
 echo "ACTUAL Quality Assurance Script Inventory:"
 echo "  - Validation Scripts: $VALIDATION_COUNT"
@@ -172,28 +172,28 @@ SYNTAX_ERRORS=0
 echo "Validating Validation Scripts ($VALIDATION_COUNT)..."
 for script in "${VALIDATION_SCRIPTS[@]}"; do
     if ! validate_syntax "$script"; then
-        ((SYNTAX_ERRORS++))
+        ((SYNTAX_ERRORS))
     fi
 done
 
 echo "Validating Testing Scripts ($TESTING_COUNT)..."
 for script in "${TESTING_SCRIPTS[@]}"; do
     if ! validate_syntax "$script"; then
-        ((SYNTAX_ERRORS++))
+        ((SYNTAX_ERRORS))
     fi
 done
 
 echo "Validating Compliance Scripts ($COMPLIANCE_COUNT)..."
 for script in "${COMPLIANCE_SCRIPTS[@]}"; do
     if ! validate_syntax "$script"; then
-        ((SYNTAX_ERRORS++))
+        ((SYNTAX_ERRORS))
     fi
 done
 
 echo "Validating Quality Control Scripts ($QUALITY_CONTROL_COUNT)..."
 for script in "${QUALITY_CONTROL_SCRIPTS[@]}"; do
     if ! validate_syntax "$script"; then
-        ((SYNTAX_ERRORS++))
+        ((SYNTAX_ERRORS))
     fi
 done
 
@@ -201,7 +201,7 @@ echo ""
 echo "Syntax Validation Summary:"
 echo "Scripts with syntax errors: $SYNTAX_ERRORS"
 if [ $SYNTAX_ERRORS -eq 0 ]; then
-    echo "SUCCESS: All Quality Assurance scripts pass syntax validation"
+    echo " All Quality Assurance scripts pass syntax validation"
 else
     echo "ATTENTION: $SYNTAX_ERRORS scripts need syntax fixes"
 fi
@@ -216,28 +216,28 @@ SHELLCHECK_ERRORS=0
 echo "Validating Validation Scripts ($VALIDATION_COUNT)..."
 for script in "${VALIDATION_SCRIPTS[@]}"; do
     if ! validate_shellcheck "$script"; then
-        ((SHELLCHECK_ERRORS++))
+        ((SHELLCHECK_ERRORS))
     fi
 done
 
 echo "Validating Testing Scripts ($TESTING_COUNT)..."
 for script in "${TESTING_SCRIPTS[@]}"; do
     if ! validate_shellcheck "$script"; then
-        ((SHELLCHECK_ERRORS++))
+        ((SHELLCHECK_ERRORS))
     fi
 done
 
 echo "Validating Compliance Scripts ($COMPLIANCE_COUNT)..."
 for script in "${COMPLIANCE_SCRIPTS[@]}"; do
     if ! validate_shellcheck "$script"; then
-        ((SHELLCHECK_ERRORS++))
+        ((SHELLCHECK_ERRORS))
     fi
 done
 
 echo "Validating Quality Control Scripts ($QUALITY_CONTROL_COUNT)..."
 for script in "${QUALITY_CONTROL_SCRIPTS[@]}"; do
     if ! validate_shellcheck "$script"; then
-        ((SHELLCHECK_ERRORS++))
+        ((SHELLCHECK_ERRORS))
     fi
 done
 
@@ -245,7 +245,7 @@ echo ""
 echo "Shellcheck Validation Summary:"
 echo "Scripts with shellcheck issues: $SHELLCHECK_ERRORS"
 if [ $SHELLCHECK_ERRORS -eq 0 ]; then
-    echo "SUCCESS: All Quality Assurance scripts pass shellcheck validation"
+    echo " All Quality Assurance scripts pass shellcheck validation"
 else
     echo "ATTENTION: $SHELLCHECK_ERRORS scripts need shellcheck review"
 fi

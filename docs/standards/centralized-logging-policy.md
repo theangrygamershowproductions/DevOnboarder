@@ -45,37 +45,37 @@ This is a **CRITICAL INFRASTRUCTURE REQUIREMENT** enforced by CI/CD pipelines an
 
 - **Appeal Process**: Requires project lead approval with architectural justification
 
-## 📁 **DIRECTORY STRUCTURE REQUIREMENTS**
+##  **DIRECTORY STRUCTURE REQUIREMENTS**
 
-### ✅ **APPROVED: Single Centralized Location**
+###  **APPROVED: Single Centralized Location**
 
 ```text
 
 logs/                           # THE ONLY approved log directory
 
-├── test_run_*.log             # Test execution logs
+── test_run_*.log             # Test execution logs
 
-├── coverage_data_*            # Coverage reports
+── coverage_data_*            # Coverage reports
 
-├── ci_diagnostic_*.log        # CI diagnostic logs
+── ci_diagnostic_*.log        # CI diagnostic logs
 
-├── pytest.log                # Pytest output (CI)
+── pytest.log                # Pytest output (CI)
 
-├── pip-install*.log          # Package installation logs
+── pip-install*.log          # Package installation logs
 
-├── docker-build.log          # Docker build logs
+── docker-build.log          # Docker build logs
 
-├── enhanced_potato_check_*.log # Security audit logs
+── enhanced_potato_check_*.log # Security audit logs
 
-├── potato_violations.log     # Security violation logs
+── potato_violations.log     # Security violation logs
 
-├── vale_*.log                # Documentation linting
+── vale_*.log                # Documentation linting
 
-└── [script-name]_*.log       # All other script logs
+── [script-name]_*.log       # All other script logs
 
 ```
 
-### ❌ **PROHIBITED: All Other Log Locations**
+###  **PROHIBITED: All Other Log Locations**
 
 ```text
 
@@ -97,7 +97,7 @@ tests/logs/                   # Test-specific logs - PROHIBITED
 
 ```
 
-## 🛠️ **IMPLEMENTATION REQUIREMENTS**
+##  **IMPLEMENTATION REQUIREMENTS**
 
 ### **Script Logging Standards**
 
@@ -113,7 +113,7 @@ mkdir -p logs
 
 # MANDATORY: Use centralized logging with timestamps
 
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 
 # MANDATORY: Log all output to centralized location
 
@@ -124,7 +124,7 @@ echo "📅 Started at: $(date -Iseconds)"
 
 # Your script logic here...
 
-echo "✅ Completed at: $(date -Iseconds)"
+echo " Completed at: $(date -Iseconds)"
 
 ```
 
@@ -186,7 +186,7 @@ logger.info(f"🗒️ Logging to: {log_file}")
 
 ```
 
-## 🔍 **VALIDATION & ENFORCEMENT**
+##  **VALIDATION & ENFORCEMENT**
 
 ### **Pre-commit Hook Validation**
 
@@ -195,7 +195,7 @@ logger.info(f"🗒️ Logging to: {log_file}")
 # Check for prohibited log locations
 
 if find . -name "*.log" -not -path "./logs/*" -not -path "./.git/*" -not -path "./.venv/*"; then
-    echo "❌ CRITICAL: Logs found outside logs/ directory"
+    echo " CRITICAL: Logs found outside logs/ directory"
     echo "🚨 VIOLATION: Centralized Logging Policy"
     exit 1
 fi
@@ -222,7 +222,7 @@ The centralized `logs/` directory integrates with:
 
 - **Security Auditing**: Enhanced Potato Policy monitors `logs/`
 
-## 📊 **COMPLIANCE MONITORING**
+##  **COMPLIANCE MONITORING**
 
 ### **Automated Compliance Checks**
 
@@ -254,7 +254,7 @@ bash scripts/validate_log_centralization.sh
 
 5. **Verification**: Re-run compliance checks before proceeding
 
-## 🚀 **MIGRATION GUIDE**
+##  **MIGRATION GUIDE**
 
 ### **For Existing Scripts**
 
@@ -289,29 +289,29 @@ echo "logs/" >> .gitignore
 
 ```
 
-## 📈 **BENEFITS OF CENTRALIZED LOGGING**
+## GROW: **BENEFITS OF CENTRALIZED LOGGING**
 
 ### **Operational Benefits**
 
-- ✅ **Single Source of Truth**: All logs in one location
+-  **Single Source of Truth**: All logs in one location
 
-- ✅ **Easier Diagnosis**: No hunting across directories
+-  **Easier Diagnosis**: No hunting across directories
 
-- ✅ **Consistent Management**: Single log retention policy
+-  **Consistent Management**: Single log retention policy
 
-- ✅ **CI Integration**: Simplified artifact collection
+-  **CI Integration**: Simplified artifact collection
 
-- ✅ **Security Monitoring**: Centralized audit trail
+-  **Security Monitoring**: Centralized audit trail
 
 ### **Developer Experience**
 
-- ✅ **Predictable Location**: Always check `logs/` first
+-  **Predictable Location**: Always check `logs/` first
 
-- ✅ **Automated Cleanup**: `scripts/manage_logs.sh` handles retention
+-  **Automated Cleanup**: `scripts/manage_logs.sh` handles retention
 
-- ✅ **CI Debugging**: Download single artifact with all logs
+-  **CI Debugging**: Download single artifact with all logs
 
-- ✅ **Local Development**: Consistent with CI environment
+-  **Local Development**: Consistent with CI environment
 
 ## 🔒 **SECURITY IMPLICATIONS**
 
@@ -325,7 +325,7 @@ echo "logs/" >> .gitignore
 
 - **Compliance**: Aligns with DevOnboarder security standards
 
-## 📋 **ENFORCEMENT CHECKLIST**
+##  **ENFORCEMENT CHECKLIST**
 
 ### **For Script Authors**
 
@@ -365,7 +365,7 @@ echo "logs/" >> .gitignore
 
 ## 🚨 **VIOLATION EXAMPLES & FIXES**
 
-### ❌ **VIOLATION: Scattered Logging**
+###  **VIOLATION: Scattered Logging**
 
 ```bash
 
@@ -377,14 +377,14 @@ docker build . > /tmp/build.log
 
 ```
 
-### ✅ **COMPLIANT: Centralized Logging**
+###  **COMPLIANT: Centralized Logging**
 
 ```bash
 
 # CORRECT - All logs in centralized location
 
 mkdir -p logs
-echo "Starting..." | tee logs/script_$(date +%Y%m%d_%H%M%S).log
+echo "Starting..." | tee logs/script_$(date %Y%m%d_%H%M%S).log
 python test.py 2>&1 | tee logs/test_output.log
 docker build . 2>&1 | tee logs/docker_build.log
 

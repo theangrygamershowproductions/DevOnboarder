@@ -48,13 +48,13 @@ This approach completely eliminates complex content from terminal commands.
 
 ```text
 templates/issue-closure/
-├── pr-completion.md        # For PR-resolved issues
+── pr-completion.md        # For PR-resolved issues
 
-├── bug-fix.md             # For bug resolutions
+── bug-fix.md             # For bug resolutions
 
-├── ci-failure-fix.md      # For CI/build failures
+── ci-failure-fix.md      # For CI/build failures
 
-└── feature-completion.md  # For feature implementations
+── feature-completion.md  # For feature implementations
 
 ```
 
@@ -289,5 +289,5 @@ gh issue close 1234 --reason completed
 
 **Sprint**: Sprint 1 - Foundation Fixes
 
-**Status**: ✅ Complete
+**Status**:  Complete
 **Next Steps**: Deploy to all automation scripts, train team on workflow

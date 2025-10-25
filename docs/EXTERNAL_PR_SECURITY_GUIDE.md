@@ -51,40 +51,40 @@ DevOnboarder addresses these challenges through a **three-tier security architec
 Each tier provides increasing levels of access while maintaining strict security boundaries between untrusted external contributions and sensitive repository operations.
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
+─────────────────────────────────────────────────────────────┐
 │                    SECURITY TIER 1                          │
 │                   Safe Execution Zone                       │
-│  ┌─────────────────────────────────────────────────────┐    │
+│  ─────────────────────────────────────────────────────┐    │
 │  │  pull_request trigger                               │    │
 │  │  • Read-only GITHUB_TOKEN                           │    │
 │  │  • No secrets access                                │    │
 │  │  • Executes untrusted code safely                   │    │
 │  │  • Testing, linting, basic validation               │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+│  ─────────────────────────────────────────────────────┘    │
+─────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────┐
+─────────────────────────────────────────────────────────────┐
 │                    SECURITY TIER 2                          │
 │                 Privileged Execution Zone                   │
-│  ┌─────────────────────────────────────────────────────┐    │
+│  ─────────────────────────────────────────────────────┐    │
 │  │  workflow_run trigger                               │    │
 │  │  • Full GITHUB_TOKEN permissions                    │    │
 │  │  • Access to secrets                                │    │
 │  │  • Only trusted code execution                      │    │
 │  │  • Issue creation, PR comments, auto-fixes          │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+│  ─────────────────────────────────────────────────────┘    │
+─────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────┐
+─────────────────────────────────────────────────────────────┐
 │                    SECURITY TIER 3                          │
 │                  Maintainer Override Zone                   │
-│  ┌─────────────────────────────────────────────────────┐    │
+│  ─────────────────────────────────────────────────────┐    │
 │  │  Manual intervention with personal tokens           │    │
 │  │  • Full repository permissions                      │    │
 │  │  • Manual workflow dispatch                         │    │
 │  │  • Emergency procedures                             │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+│  ─────────────────────────────────────────────────────┘    │
+─────────────────────────────────────────────────────────────┘
 ```
 
 ## Workflow Trigger Patterns
@@ -115,11 +115,11 @@ jobs:
 
 **Security characteristics:**
 
-- ✅ Executes untrusted code from forks safely
-- ✅ GITHUB_TOKEN is read-only
-- ✅ No access to repository secrets
-- ❌ Cannot comment on PRs or create issues
-- ❌ Cannot update repository state
+-  Executes untrusted code from forks safely
+-  GITHUB_TOKEN is read-only
+-  No access to repository secrets
+-  Cannot comment on PRs or create issues
+-  Cannot update repository state
 
 ### 2. `workflow_run` Trigger (Tier 2 - Privileged Zone)
 
@@ -153,18 +153,18 @@ jobs:
 
 **Security characteristics:**
 
-- ✅ Full GITHUB_TOKEN permissions
-- ✅ Access to repository secrets
-- ✅ Can comment on PRs and create issues
-- ⚠️ Only executes trusted code from default branch
-- ❌ Cannot directly access fork PR code
+-  Full GITHUB_TOKEN permissions
+-  Access to repository secrets
+-  Can comment on PRs and create issues
+-  Only executes trusted code from default branch
+-  Cannot directly access fork PR code
 
 ### 3. `pull_request_target` Trigger (High Risk - Avoided)
 
 **Pattern avoided in DevOnboarder:**
 
 ```yaml
-# ❌ NOT USED - Security risk
+#  NOT USED - Security risk
 on:
   pull_request_target:  # Dangerous for external PRs
 
@@ -356,16 +356,16 @@ External PRs trigger the same quality gates as internal PRs, but with different 
 2. **Python Linting (Ruff)**: Code quality enforcement
 3. **Python Formatting (Black)**: Consistent code style
 4. **Type Checking (MyPy)**: Type safety validation
-5. **Test Coverage**: 95%+ coverage requirement
+5. **Test Coverage**: 95% coverage requirement
 6. **Documentation Quality (Vale)**: Writing standards enforcement
 7. **Commit Message Format**: Conventional commit validation
 8. **Security Scanning (Bandit)**: Vulnerability detection
 
 **External PR Limitations:**
 
-- ✅ All quality gates run and report results
-- ❌ Auto-fixes cannot be applied directly to fork PRs
-- ⚠️ Failures require manual contributor action or maintainer intervention
+-  All quality gates run and report results
+-  Auto-fixes cannot be applied directly to fork PRs
+-  Failures require manual contributor action or maintainer intervention
 
 ### Safe Commit Wrapper (`safe_commit.sh`)
 
@@ -418,13 +418,13 @@ DevOnboarder's branch protection affects external PRs in several ways:
 ```yaml
 # Branch protection characteristics for external PRs
 required_status_checks:
-  - CI (pull_request trigger) ✅ Runs for external PRs
-  - Quality Gates ✅ Validates external PRs
-  - Security Scans ✅ Applies to external PRs
+  - CI (pull_request trigger)  Runs for external PRs
+  - Quality Gates  Validates external PRs
+  - Security Scans  Applies to external PRs
 
 required_reviews:
-  - CODEOWNERS approval ⚠️ Requires maintainer review
-  - Status check passage ✅ Must pass for external PRs
+  - CODEOWNERS approval  Requires maintainer review
+  - Status check passage  Must pass for external PRs
 ```
 
 **Special Branch Protections:**
@@ -933,7 +933,7 @@ FILE_PATTERNS:
     - additional: security impact assessment
 
   Security Files:
-    - reviewers: "security team + maintainers"
+    - reviewers: "security team  maintainers"
     - count: 2 required
     - additional: security audit required
 ```
@@ -974,7 +974,7 @@ protection_levels:
 1. External contributor modifies archived AAR document
 2. Pre-commit hook warns but allows commit (external environment)
 3. PR created and triggers protection workflow
-4. Workflow detects external PR + archived document changes:
+4. Workflow detects external PR  archived document changes:
    - Blocks merge automatically
    - Requires "approved-crit-change" label
    - Requires @reesey275 approval
@@ -998,7 +998,7 @@ APPROVAL_STAGES:
   Stage 1 - Automated Validation:
     - CI pipeline execution (pull_request trigger)
     - Quality gates validation (95% threshold)
-    - Security scanning (Potato Policy + Bandit)
+    - Security scanning (Potato Policy  Bandit)
     - Status: Required before human review
 
   Stage 2 - Code Review:
@@ -1085,7 +1085,7 @@ HIGH_RISK_INDICATORS:
 # Enhanced review process for high-risk external PRs:
 1. Automatic security team notification
 2. Enhanced security scanning
-3. Staged review approach (technical -> security -> final)
+3. Staged review approach (technical  security  final)
 4. Extended review period (minimum 48h)
 5. Post-merge monitoring for 7 days
 ```

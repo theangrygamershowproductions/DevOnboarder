@@ -10,10 +10,10 @@ assignees: ''
 
 ## Missing variables
 
-<!-- List required variables that are missing from the environment. -->
+<!-- List required variables that are missing from the environment. -
 
 ## Extra variables
 
-<!-- List variables present but not documented. -->
+<!-- List variables present but not documented. -
 
 - [ ] I manually reviewed the variables against [agents/index.md](../../agents/index.md)

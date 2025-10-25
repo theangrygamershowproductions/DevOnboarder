@@ -11,6 +11,6 @@ consolidation_priority: P3
 | Auth | 97.5% |
 | Bot | 100.0% |
 
-### 📊 Coverage Summary
+###  Coverage Summary
 
 [Full coverage reports](https://github.com/theangrygamershowproductions/DevOnboarder/actions/runs/18264949850)

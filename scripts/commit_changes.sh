@@ -9,12 +9,12 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}🔍 Checking Git Status${NC}"
+echo -e "${GREEN} Checking Git Status${NC}"
 echo "======================="
 
 # Check if we're in a git repo
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
-    echo -e "${RED}❌ Not in a git repository${NC}"
+    echo -e "${RED} Not in a git repository${NC}"
     exit 1
 fi
 
@@ -37,7 +37,7 @@ echo ""
 
 # Check if there are any changes to commit
 if git diff --staged --quiet; then
-    echo -e "${YELLOW}⚠️  No staged changes to commit${NC}"
+    echo -e "${YELLOW}  No staged changes to commit${NC}"
 
     # Check if there are unstaged changes that could be staged
     if ! git diff --quiet; then
@@ -46,10 +46,10 @@ if git diff --staged --quiet; then
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             git add .
-            echo -e "${GREEN}✅ Staged all changes${NC}"
+            echo -e "${GREEN} Staged all changes${NC}"
         fi
     else
-        echo -e "${GREEN}✅ Working directory is clean${NC}"
+        echo -e "${GREEN} Working directory is clean${NC}"
         exit 0
     fi
 fi
@@ -64,7 +64,7 @@ echo ""
 changed_files=$(git diff --staged --name-only)
 changed_count=$(echo "$changed_files" | wc -l)
 
-echo -e "${YELLOW}📝 Analyzing changes for commit message suggestions...${NC}"
+echo -e "${YELLOW} Analyzing changes for commit message suggestions...${NC}"
 echo ""
 
 # Analyze file types and changes
@@ -87,49 +87,49 @@ suggestions=()
 
 if [ "$script_files" -gt 0 ]; then
     if echo "$changed_files" | grep -q "git\|sync\|commit"; then
-        suggestions+=("FEAT(scripts): add git workflow utilities for safer sync operations")
-        suggestions+=("CHORE(scripts): enhance git utilities with conflict detection")
+        suggestions=("FEAT(scripts): add git workflow utilities for safer sync operations")
+        suggestions=("CHORE(scripts): enhance git utilities with conflict detection")
     elif echo "$changed_files" | grep -q "branch\|cleanup"; then
-        suggestions+=("FEAT(scripts): add comprehensive branch cleanup utilities")
-        suggestions+=("CHORE(scripts): enhance branch management automation")
+        suggestions=("FEAT(scripts): add comprehensive branch cleanup utilities")
+        suggestions=("CHORE(scripts): enhance branch management automation")
     else
-        suggestions+=("CHORE(scripts): update automation scripts")
+        suggestions=("CHORE(scripts): update automation scripts")
     fi
 fi
 
 if [ "$doc_files" -gt 0 ]; then
     if echo "$changed_files" | grep -q "README"; then
-        suggestions+=("DOCS: update README with new utilities and workflow guidance")
+        suggestions=("DOCS: update README with new utilities and workflow guidance")
     elif echo "$changed_files" | grep -q "git-utilities"; then
-        suggestions+=("DOCS: add comprehensive git utilities documentation")
+        suggestions=("DOCS: add comprehensive git utilities documentation")
     elif echo "$changed_files" | grep -q "scripts"; then
-        suggestions+=("DOCS: document new script utilities and usage examples")
+        suggestions=("DOCS: document new script utilities and usage examples")
     else
-        suggestions+=("DOCS: update documentation files")
+        suggestions=("DOCS: update documentation files")
     fi
 fi
 
 if [ "$config_files" -gt 0 ]; then
-    suggestions+=("CONFIG: update configuration files")
+    suggestions=(" update configuration files")
 fi
 
 if [ "$python_files" -gt 0 ]; then
-    suggestions+=("FEAT: update Python components")
+    suggestions=("FEAT: update Python components")
 fi
 
 if [ "$js_ts_files" -gt 0 ]; then
-    suggestions+=("FEAT: update TypeScript/JavaScript components")
+    suggestions=("FEAT: update TypeScript/JavaScript components")
 fi
 
 # Default fallback
 if [ ${#suggestions[@]} -eq 0 ]; then
-    suggestions+=("CHORE: update project files")
+    suggestions=("CHORE: update project files")
 fi
 
 # Show suggestions
-echo -e "${YELLOW}💡 Suggested commit messages:${NC}"
+echo -e "${YELLOW} Suggested commit messages:${NC}"
 for i in "${!suggestions[@]}"; do
-    echo "  $((i+1)). ${suggestions[$i]}"
+    echo "  $((i1)). ${suggestions[$i]}"
 done
 echo "  0. Enter custom message"
 echo ""
@@ -153,10 +153,10 @@ fi
 
 # Commit the changes
 echo ""
-echo -e "${GREEN}📝 Committing changes...${NC}"
+echo -e "${GREEN} Committing changes...${NC}"
 
 if git commit -m "$commit_msg"; then
-    echo -e "${GREEN}✅ Commit successful!${NC}"
+    echo -e "${GREEN} Commit successful!${NC}"
 
     # Show the latest commit
     echo ""
@@ -167,27 +167,27 @@ if git commit -m "$commit_msg"; then
     echo -e "${GREEN}🎉 All changes committed successfully!${NC}"
 else
     echo ""
-    echo -e "${RED}⚠️  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES${NC}"
+    echo -e "${RED}  COMMIT FAILED - PRE-COMMIT HOOKS DETECTED ISSUES${NC}"
     echo "====================================================="
     echo ""
-    echo -e "${YELLOW}🔍 LOG REVIEW REQUIRED:${NC}"
+    echo -e "${YELLOW} LOG REVIEW REQUIRED:${NC}"
     echo "Pre-commit hooks have flagged issues that must be fixed before commit."
     echo ""
-    echo -e "${YELLOW}📋 Common Issues to Check:${NC}"
+    echo -e "${YELLOW} Common Issues to Check:${NC}"
     echo "  • Markdown violations (MD022: headings need blank lines, MD032: lists need blank lines)"
     echo "  • Bash shellcheck warnings (formatting, quoting, etc.)"
     echo "  • File formatting issues (trailing spaces, line endings)"
     echo "  • Python linting errors (ruff, black formatting)"
     echo "  • TypeScript/JavaScript ESLint violations"
     echo ""
-    echo -e "${YELLOW}🛠️  To Fix Issues:${NC}"
+    echo -e "${YELLOW}  To Fix Issues:${NC}"
     echo "  1. Review the error output above carefully"
     echo "  2. Fix all reported violations in the affected files"
     echo "  3. Stage your fixes: git add ."
     echo "  4. Re-attempt commit: git commit -m \"$commit_msg\""
     echo "  5. Or use: git commit --amend --no-edit (to amend this commit)"
     echo ""
-    echo -e "${YELLOW}🔄 Alternative Recovery Options:${NC}"
+    echo -e "${YELLOW}SYNC: Alternative Recovery Options:${NC}"
     echo "  • Reset this commit: git reset --soft HEAD~1"
     echo "  • Check what's staged: git status"
     echo "  • Run this script again: ./scripts/commit_changes.sh"
@@ -196,8 +196,8 @@ else
 
     read -r -p "⏸️  Press Enter after you've reviewed the errors and are ready to proceed..."
     echo ""
-    echo -e "${YELLOW}💡 Remember: All issues must be fixed for the commit to succeed.${NC}"
+    echo -e "${YELLOW} Remember: All issues must be fixed for the commit to succeed.${NC}"
     echo "   DevOnboarder enforces strict quality standards via pre-commit hooks."
     echo ""
-    echo -e "${GREEN}🚀 Once fixed, you can retry with: git commit -m \"$commit_msg\"${NC}"
+    echo -e "${GREEN} Once fixed, you can retry with: git commit -m \"$commit_msg\"${NC}"
 fi

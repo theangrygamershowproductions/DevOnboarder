@@ -2,7 +2,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -31,4 +31,4 @@ find . -maxdepth 1 \( \
     -name "Thumbs.db" -o \
     -name ".DS_Store" \
 \) -not -path "./.venv/*" -not -path "./.git/*" -not -path "./logs/*" \
--exec rm -rf {} +
+-exec rm -rf {} 

@@ -33,17 +33,17 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 
 | Service | API Stability | Test Coverage | Database Coupling | Infrastructure Dependencies | Split Risk |
 |---------|---------------|---------------|-------------------|----------------------------|------------|
-| **Discord Bot** | ✅ Stable | ✅ 100% | ❌ None | 🟡 Discord API only | **VERY LOW** |
+| **Discord Bot** |  Stable |  100% |  None | 🟡 Discord API only | **VERY LOW** |
 
-| **Auth Service** | ✅ Stable | ✅ 96%+ | 🔴 High (Shared DB) | 🔴 Core dependency | **MEDIUM** |
+| **Auth Service** |  Stable |  96% | 🔴 High (Shared DB) | 🔴 Core dependency | **MEDIUM** |
 
-| **Frontend** | ⚠️ Evolving | ✅ 100% | ❌ None | 🟡 Build-only | **LOW-MEDIUM** |
+| **Frontend** |  Evolving |  100% |  None | 🟡 Build-only | **LOW-MEDIUM** |
 
-| **XP System** | ⚠️ New | ✅ 95%+ | 🔴 High (Shared DB) | 🔴 Cross-service API | **HIGH** |
+| **XP System** |  New |  95% | 🔴 High (Shared DB) | 🔴 Cross-service API | **HIGH** |
 
-| **Discord Integration** | ✅ Stable | ✅ 95%+ | 🟡 Medium | 🟡 OAuth flow | **MEDIUM** |
+| **Discord Integration** |  Stable |  95% | 🟡 Medium | 🟡 OAuth flow | **MEDIUM** |
 
-| **Feedback Service** | ⚠️ New | ✅ 95%+ | 🟡 Medium | 🟡 Analytics deps | **MEDIUM-HIGH** |
+| **Feedback Service** |  New |  95% | 🟡 Medium | 🟡 Analytics deps | **MEDIUM-HIGH** |
 
 ### Risk Level Definitions
 
@@ -63,13 +63,13 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 
 **Current State**:
 
-- ✅ **API Stability**: Mature Discord.js integration with stable command structure
+-  **API Stability**: Mature Discord.js integration with stable command structure
 
-- ✅ **Test Coverage**: 100% coverage with comprehensive Jest test suite
+-  **Test Coverage**: 100% coverage with comprehensive Jest test suite
 
-- ✅ **Dependencies**: Self-contained with only Discord API external dependency
+-  **Dependencies**: Self-contained with only Discord API external dependency
 
-- ✅ **Infrastructure**: Independent deployment, no shared database
+-  **Infrastructure**: Independent deployment, no shared database
 
 **Split Readiness**: **IMMEDIATE POST-MVP**
 
@@ -97,15 +97,15 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 
 **Current State**:
 
-- ⚠️ **API Stability**: UI evolving based on user feedback, API contracts stabilizing
+-  **API Stability**: UI evolving based on user feedback, API contracts stabilizing
 
-- ✅ **Test Coverage**: 100% statements, 98.43%+ branches
+-  **Test Coverage**: 100% statements, 98.43% branches
 
-- ✅ **Dependencies**: Build-only, clear HTTP API boundaries
+-  **Dependencies**: Build-only, clear HTTP API boundaries
 
-- ✅ **Infrastructure**: Independent React/Vite build system
+-  **Infrastructure**: Independent React/Vite build system
 
-**Split Readiness**: **POST-MVP + 2-3 WEEKS**
+**Split Readiness**: **POST-MVP  2-3 WEEKS**
 
 **Split Benefits**:
 
@@ -139,15 +139,15 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 
 **Current State**:
 
-- ✅ **API Stability**: Core authentication patterns established
+-  **API Stability**: Core authentication patterns established
 
-- ✅ **Test Coverage**: 96%+ with comprehensive integration tests
+-  **Test Coverage**: 96% with comprehensive integration tests
 
 - 🔴 **Database Coupling**: Shared PostgreSQL database with user models
 
 - 🔴 **Core Dependency**: All other services depend on authentication
 
-**Split Readiness**: **POST-MVP + 4-6 WEEKS**
+**Split Readiness**: **POST-MVP  4-6 WEEKS**
 
 **Split Benefits**:
 
@@ -183,15 +183,15 @@ This document provides a comprehensive risk assessment framework for DevOnboarde
 
 **Current State**:
 
-- ⚠️ **API Stability**: New services with evolving feature requirements
+-  **API Stability**: New services with evolving feature requirements
 
-- ✅ **Test Coverage**: 95%+ but limited production usage
+-  **Test Coverage**: 95% but limited production usage
 
 - 🔴 **Database Coupling**: Extensive shared database integration
 
 - 🔴 **Cross-Service Dependencies**: Complex integration with auth and user systems
 
-**Split Readiness**: **DEFER UNTIL API MATURITY (POST-MVP + 8-12 WEEKS)**
+**Split Readiness**: **DEFER UNTIL API MATURITY (POST-MVP  8-12 WEEKS)**
 
 **Why Defer**:
 
@@ -405,7 +405,7 @@ bash scripts/qc_pre_push.sh
 
 - **Build Independence**: Each service builds without external dependencies
 
-- **Test Coverage**: Maintain 95%+ coverage across all split services
+- **Test Coverage**: Maintain 95% coverage across all split services
 
 - **Integration Health**: End-to-end tests pass across service boundaries
 

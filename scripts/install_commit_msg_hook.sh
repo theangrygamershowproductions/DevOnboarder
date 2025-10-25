@@ -10,5 +10,5 @@ if [ ! -d "$(git rev-parse --git-dir)" ]; then
 fi
 
 cp "$repo_hook" "$hook_dest"
-chmod +x "$hook_dest"
+chmod x "$hook_dest"
 echo "Installed commit-msg hook to $hook_dest"

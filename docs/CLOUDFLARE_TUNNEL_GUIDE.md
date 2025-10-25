@@ -27,7 +27,7 @@ DevOnboarder uses **Cloudflare Tunnel** for secure external access in production
 
 ## Architecture Decision
 
-### ✅ Production (Primary Use Case)
+###  Production (Primary Use Case)
 
 - **Always enabled** in production for external access
 
@@ -37,7 +37,7 @@ DevOnboarder uses **Cloudflare Tunnel** for secure external access in production
 
 - **DDoS protection** and rate limiting
 
-### 🔧 Development (Optional Testing)
+###  Development (Optional Testing)
 
 - **Profile-gated** - only runs when explicitly requested
 
@@ -101,10 +101,10 @@ TUNNEL_UUID=your_dev_tunnel_uuid_here
 In Cloudflare dashboard, add CNAME records:
 
 ```text
-devonboarder.your-domain.com -> tunnel-uuid.cfargotunnel.com
-api.devonboarder.your-domain.com -> tunnel-uuid.cfargotunnel.com
-auth.devonboarder.your-domain.com -> tunnel-uuid.cfargotunnel.com
-discord.devonboarder.your-domain.com -> tunnel-uuid.cfargotunnel.com
+devonboarder.your-domain.com  tunnel-uuid.cfargotunnel.com
+api.devonboarder.your-domain.com  tunnel-uuid.cfargotunnel.com
+auth.devonboarder.your-domain.com  tunnel-uuid.cfargotunnel.com
+discord.devonboarder.your-domain.com  tunnel-uuid.cfargotunnel.com
 
 ```
 
@@ -224,13 +224,13 @@ curl -H "Host: devonboarder.your-domain.com" http://localhost/health
 
 ### Production Requirements
 
-- ✅ Always use credentials file (not inline tokens)
+-  Always use credentials file (not inline tokens)
 
-- ✅ Rotate tunnel tokens regularly
+-  Rotate tunnel tokens regularly
 
-- ✅ Monitor tunnel access logs
+-  Monitor tunnel access logs
 
-- ✅ Use Cloudflare Access for admin endpoints
+-  Use Cloudflare Access for admin endpoints
 
 ### Development Safety
 

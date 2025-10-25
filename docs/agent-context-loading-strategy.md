@@ -31,7 +31,7 @@ This document provides a systematic approach for AI agents to efficiently load D
 
 DevOnboarder uses a comprehensive frontmatter metadata system instead of temporary session files:
 
-**Agent Registry**: `.codex/agents/index.json` contains 27+ registered agents with complete metadata
+**Agent Registry**: `.codex/agents/index.json` contains 27 registered agents with complete metadata
 
 **Schema Validation**: `schema/agent-schema.json` ensures consistent frontmatter structure
 **CI Integration**: `scripts/validate_agents.py` enforces frontmatter compliance
@@ -51,13 +51,13 @@ When resuming work across sessions, agents should:
 
 ### Memory Anti-Patterns (AVOID)
 
-- ❌ Creating SESSION_HANDOFF.md files in repository root (causes pollution)
+-  Creating SESSION_HANDOFF.md files in repository root (causes pollution)
 
-- ❌ Duplicating metadata that exists in frontmatter system
+-  Duplicating metadata that exists in frontmatter system
 
-- ❌ Manual session files that bypass established validation
+-  Manual session files that bypass established validation
 
-- ✅ **USE**: Existing agent registry and session documentation in `docs/sessions/`
+-  **USE**: Existing agent registry and session documentation in `docs/sessions/`
 
 ## 📚 Context Loading Sequence (New Conversations)
 
@@ -124,7 +124,7 @@ semantic_search "service ports architecture Token Architecture"
 
 ```
 
-## 🗂️ Knowledge Navigation Map
+## FOLDER: Knowledge Navigation Map
 
 ### Critical Reference Documents (Memorize These Locations)
 
@@ -212,7 +212,7 @@ semantic_search "service ports architecture Token Architecture"
 
 - CI health: `scripts/monitor_ci_health.sh`
 
-## 🔍 Information Location Strategies
+##  Information Location Strategies
 
 ### 1. Semantic Search Patterns
 
@@ -280,7 +280,7 @@ semantic_search "virtual environment dependency installation"
 
 ```
 
-## 🚀 Autonomous Navigation Protocol
+##  Autonomous Navigation Protocol
 
 ### When You Don't Know Where to Find Information
 
@@ -296,23 +296,23 @@ semantic_search "virtual environment dependency installation"
 
 ### Pattern Recognition
 
-**Policy Questions** → `docs/policies/[specific-policy].md`
+**Policy Questions**  `docs/policies/[specific-policy].md`
 
-**Development Setup** → `docs/development/development-workflow.md`
+**Development Setup**  `docs/development/development-workflow.md`
 
-**Integration Patterns** → `docs/integration/service-integration-patterns.md`
+**Integration Patterns**  `docs/integration/service-integration-patterns.md`
 
-**Agent Compliance** → `docs/agents/agent-requirements.md`
+**Agent Compliance**  `docs/agents/agent-requirements.md`
 
-**Problem Solving** → `docs/troubleshooting/common-issues-resolution.md`
+**Problem Solving**  `docs/troubleshooting/common-issues-resolution.md`
 
-**Architecture Questions** → `docs/development/architecture-overview.md`
+**Architecture Questions**  `docs/development/architecture-overview.md`
 
-**Quality Control** → `docs/policies/quality-control-policy.md`
+**Quality Control**  `docs/policies/quality-control-policy.md`
 
-**Security Issues** → `docs/policies/potato-policy.md` + `docs/policies/security-best-practices.md`
+**Security Issues**  `docs/policies/potato-policy.md`  `docs/policies/security-best-practices.md`
 
-**Current Status** → `PHASE_INDEX.md` + `PHASE_ISSUE_INDEX.md`
+**Current Status**  `PHASE_INDEX.md`  `PHASE_ISSUE_INDEX.md`
 
 ## 🎯 Accuracy Maintenance Principles
 
@@ -340,7 +340,7 @@ semantic_search "virtual environment dependency installation"
 
 - **Reference established patterns**: Show examples from existing codebase
 
-## 🛠️ Quick Context Loading Automation
+##  Quick Context Loading Automation
 
 ### New Conversation Startup Script
 
@@ -393,7 +393,7 @@ echo "Use 'docs/MODULAR_DOCUMENTATION_INDEX.md' for detailed navigation."
 
 ```
 
-## 📈 Success Metrics
+## GROW: Success Metrics
 
 - **Reduced context loading time**: <2 minutes to project readiness
 
@@ -403,7 +403,7 @@ echo "Use 'docs/MODULAR_DOCUMENTATION_INDEX.md' for detailed navigation."
 
 - **Consistent patterns**: Always use established DevOnboarder approaches
 
-## 🔄 Continuous Learning
+## SYNC: Continuous Learning
 
 - **Track reference patterns**: Note which documents are most useful for different question types
 

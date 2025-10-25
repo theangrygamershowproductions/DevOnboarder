@@ -58,12 +58,12 @@ bash scripts/setup_YOUR_BOT_NAME_gpg_key.sh
 
 The script will output the required GitHub configuration. Add these to your repository:
 
-**Required Secrets** (Repository Settings → Secrets and variables → Actions → Repository secrets):
+**Required Secrets** (Repository Settings  Secrets and variables  Actions  Repository secrets):
 
 - `{BOT_NAME}_GPG_PRIVATE`: Base64-encoded GPG private key
 - Store this value from the script output
 
-**Required Variables** (Repository Settings → Secrets and variables → Actions → Repository variables):
+**Required Variables** (Repository Settings  Secrets and variables  Actions  Repository variables):
 
 - `{BOT_NAME}_GPG_KEY_ID`: GPG key ID for signing
 - `{BOT_NAME}_NAME`: Bot display name for git commits
@@ -88,11 +88,11 @@ vim .github/workflows/your-automation.yml
 
 1. **Replace placeholders**:
 
-   - `{WORKFLOW_NAME}` → Your workflow's display name
-   - `{BOT_NAME}` → Your bot name (UPPERCASE for secrets)
-   - `{scope}` → Commit scope (docs, automation, etc.)
-   - `{task_description}` → What your automation does
-   - `{Bot_Name}` → Your bot's display name
+   - `{WORKFLOW_NAME}`  Your workflow's display name
+   - `{BOT_NAME}`  Your bot name (UPPERCASE for secrets)
+   - `{scope}`  Commit scope (docs, automation, etc.)
+   - `{task_description}`  What your automation does
+   - `{Bot_Name}`  Your bot's display name
 
 2. **Configure triggers**:
 
@@ -235,7 +235,7 @@ git commit --allow-empty -m "Test GPG signing" -S
 
 - Check token permissions in workflow
 - Verify branch protection rules allow bot pushes
-- Ensure token hierarchy: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+- Ensure token hierarchy: `CI_ISSUE_AUTOMATION_TOKEN`  `CI_BOT_TOKEN`  `GITHUB_TOKEN`
 
 ## Workflow not triggering
 

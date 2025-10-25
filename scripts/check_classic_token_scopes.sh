@@ -43,7 +43,7 @@ check_classic_token() {
 
     # Test repository access
     echo ""
-    echo "   🏠 Repository Access:"
+    echo "   HOME: Repository Access:"
     if GH_TOKEN="$token_value" gh api repos/theangrygamershowproductions/DevOnboarder >/dev/null 2>&1; then
         echo "      Success: Repository metadata: Accessible"
     else
@@ -52,7 +52,7 @@ check_classic_token() {
 
     # Test actions scope
     echo ""
-    echo "   ⚡ Actions Scope (workflow scope):"
+    echo "   FAST: Actions Scope (workflow scope):"
     if GH_TOKEN="$token_value" gh api repos/theangrygamershowproductions/DevOnboarder/actions/workflows >/dev/null 2>&1; then
         echo "      Success: Workflows: Accessible"
     else
@@ -107,7 +107,7 @@ check_classic_token() {
 check_classic_token "AAR_TOKEN"
 
 echo ""
-echo "🔧 Classic Token Troubleshooting Guide:"
+echo " Classic Token Troubleshooting Guide:"
 echo "======================================="
 echo ""
 echo "For Classic Personal Access Tokens, you need these scopes:"

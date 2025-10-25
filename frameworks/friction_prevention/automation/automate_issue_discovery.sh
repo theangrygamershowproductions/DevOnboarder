@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/issue_discovery_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/issue_discovery_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Load DevOnboarder environment
@@ -24,7 +24,7 @@ discover_ci_issues() {
     echo "=== Discovering CI failure issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping CI issue discovery"
+        echo " GitHub CLI not available, skipping CI issue discovery"
         return 1
     fi
 
@@ -40,7 +40,7 @@ discover_ci_issues() {
             echo "Found issues with label '$label':"
             while read -r issue_line; do
                 if [[ -n "$issue_line" ]]; then
-                    ci_issues+=("$issue_line")
+                    ci_issues=("$issue_line")
                     echo "  $issue_line"
                 fi
             done <<< "$issues"
@@ -56,7 +56,7 @@ discover_tracking_issues() {
     echo "=== Discovering tracking issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping tracking issue discovery"
+        echo " GitHub CLI not available, skipping tracking issue discovery"
         return 1
     fi
 
@@ -93,7 +93,7 @@ discover_tracking_issues() {
                     done
 
                     if [[ "$already_found" == false ]]; then
-                        tracking_issues+=("$issue_line")
+                        tracking_issues=("$issue_line")
                         echo "  $issue_line"
                     fi
                 fi
@@ -110,7 +110,7 @@ discover_stale_issues() {
     echo "=== Discovering stale issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping stale issue discovery"
+        echo " GitHub CLI not available, skipping stale issue discovery"
         return 1
     fi
 
@@ -119,20 +119,20 @@ discover_stale_issues() {
     if command -v date >/dev/null 2>&1; then
         if date --version 2>/dev/null | grep -q GNU; then
             # GNU date
-            thirty_days_ago=$(date -d "30 days ago" +%Y-%m-%d)
+            thirty_days_ago=$(date -d "30 days ago" %Y-%m-%d)
         else
             # BSD date (macOS)
-            thirty_days_ago=$(date -v-30d +%Y-%m-%d)
+            thirty_days_ago=$(date -v-30d %Y-%m-%d)
         fi
     else
-        echo "WARNING: Date command not available, attempting to use Python for date calculation"
+        echo " Date command not available, attempting to use Python for date calculation"
         if command -v python3 >/dev/null 2>&1; then
             thirty_days_ago=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
         elif command -v python >/dev/null 2>&1; then
             thirty_days_ago=$(python -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'))")
         else
-            echo "WARNING: Neither date nor Python available, using today's date as fallback"
-            thirty_days_ago=$(date +%Y-%m-%d 2>/dev/null || echo "1970-01-01")
+            echo " Neither date nor Python available, using today's date as fallback"
+            thirty_days_ago=$(date %Y-%m-%d 2>/dev/null || echo "1970-01-01")
         fi
     fi
 
@@ -148,7 +148,7 @@ discover_stale_issues() {
         while read -r issue_line; do
             if [[ -n "$issue_line" ]]; then
                 echo "  $issue_line"
-                ((stale_count++))
+                ((stale_count))
             fi
         done <<< "$stale_issues"
         echo "Total stale issues found: $stale_count"
@@ -164,7 +164,7 @@ discover_priority_issues() {
     echo "=== Discovering high priority issues ==="
 
     if ! command -v gh >/dev/null 2>&1; then
-        echo "WARNING: GitHub CLI not available, skipping priority issue discovery"
+        echo " GitHub CLI not available, skipping priority issue discovery"
         return 1
     fi
 
@@ -180,7 +180,7 @@ discover_priority_issues() {
             echo "Found priority issues with label '$label':"
             while read -r issue_line; do
                 if [[ -n "$issue_line" ]]; then
-                    priority_issues+=("$issue_line")
+                    priority_issues=("$issue_line")
                     echo "  $issue_line"
                 fi
             done <<< "$issues"
@@ -204,7 +204,7 @@ analyze_issue_health() {
     echo "Stale issues: $stale_count"
     echo "Priority issues: $priority_count"
 
-    local total_issues=$((ci_count + tracking_count + stale_count + priority_count))
+    local total_issues=$((ci_count  tracking_count  stale_count  priority_count))
     echo "Total issues requiring attention: $total_issues"
 
     # Determine health status
@@ -254,7 +254,7 @@ generate_triage_actions() {
     echo "=== Generating Triage Actions ==="
 
     local actions_file
-    actions_file="logs/triage_actions_$(date +%Y%m%d_%H%M%S).txt"
+    actions_file="logs/triage_actions_$(date %Y%m%d_%H%M%S).txt"
 
     cat > "$actions_file" << 'EOF'
 # Issue Triage Action Plan
@@ -271,7 +271,7 @@ generate_triage_actions() {
 [ ] Create automation for recurring CI problems
 
 ## Stale Issue Actions
-[ ] Review issues not updated in 30+ days
+[ ] Review issues not updated in 30 days
 [ ] Close issues that are no longer relevant
 [ ] Update or re-prioritize still-relevant issues
 

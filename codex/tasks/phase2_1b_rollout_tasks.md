@@ -24,7 +24,7 @@ Track and execute all required tasks for DevOnboarder Phase 2.1B rollout, focusi
 
 ---
 
-## 🗂️ Phase 2.1B - Core Task List
+## FOLDER: Phase 2.1B - Core Task List
 
 ### 📚 Documentation Versioning
 
@@ -68,7 +68,7 @@ Track and execute all required tasks for DevOnboarder Phase 2.1B rollout, focusi
 
 ---
 
-## 🔐 Dependencies
+##  Dependencies
 
 * Phase 1B repo separation must be complete
 

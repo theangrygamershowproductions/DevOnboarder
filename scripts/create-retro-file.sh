@@ -3,11 +3,11 @@ set -euo pipefail
 
 RETRO_DIR="docs/checklists/retros"
 TEMPLATE="docs/checklists/retrospective-template.md"
-DATE="$(date +%Y-%m-%d)"
+DATE="$(date %Y-%m-%d)"
 NEW_FILE="$RETRO_DIR/$DATE.md"
 
 if [ -f "$NEW_FILE" ]; then
-  echo "ERROR: $NEW_FILE already exists" >&2
+  echo " $NEW_FILE already exists" >&2
   exit 1
 fi
 

@@ -6,10 +6,10 @@ set -euo pipefail
 
 # Configuration
 DOCS_ROOT="${DOCS_ROOT:-docs}"
-LOG_DIR="${LOG_DIR:-logs}"
+LOG_DIR="${LOG_-logs}"
 MONITORING_THRESHOLD="${MONITORING_THRESHOLD:-75}"
 MAX_DUPLICATIONS="${MAX_DUPLICATIONS:-10}"
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/duplication_monitoring_$TIMESTAMP.log"
 
 # Ensure logging directory exists
@@ -27,7 +27,7 @@ echo
 
 # Function: Quick duplication check (optimized for speed)
 quick_duplication_check() {
-    echo "INFO: Running quick duplication check..."
+    echo " Running quick duplication check..."
 
     local pattern_count=0
     local critical_patterns=("virtual environment" "terminal output" "quality control" "commit message")
@@ -38,10 +38,10 @@ quick_duplication_check() {
         file_count=$(grep -r -l "$pattern" "$DOCS_ROOT" 2>/dev/null | wc -l || echo "0")
 
         if [[ "$file_count" -gt "$MAX_DUPLICATIONS" ]]; then
-            echo "   WARNING:  Pattern '$pattern' found in $file_count files (threshold: $MAX_DUPLICATIONS)"
-            ((pattern_count++))
+            echo "     Pattern '$pattern' found in $file_count files (threshold: $MAX_DUPLICATIONS)"
+            ((pattern_count))
         else
-            echo "   SUCCESS: Pattern '$pattern' found in $file_count files (within threshold)"
+            echo "    Pattern '$pattern' found in $file_count files (within threshold)"
         fi
     done
 
@@ -70,7 +70,7 @@ monitor_pattern_growth() {
     # Record current data
     echo "$TIMESTAMP,$venv_count,$terminal_count,$qc_count,$commit_count,$total_files" >> "$monitoring_file"
 
-    echo "   STATS: Current pattern distribution:"
+    echo "    Current pattern distribution:"
     echo "      - Virtual environment: $venv_count files"
     echo "      - Terminal output: $terminal_count files"
     echo "      - Quality control: $qc_count files"
@@ -84,7 +84,7 @@ monitor_pattern_growth() {
     if [[ -n "$previous_entry" ]]; then
         echo "   TREND: Growth analysis available in: $monitoring_file"
     else
-        echo "   NOTE: First monitoring entry recorded"
+        echo "    First monitoring entry recorded"
     fi
 }
 
@@ -114,28 +114,28 @@ for pattern in "${CRITICAL_PATTERNS[@]}"; do
     file_count=$(grep -r -l "$pattern" docs 2>/dev/null | wc -l || echo "0")
 
     if [[ "$file_count" -gt "$MAX_CRITICAL_DUPLICATIONS" ]]; then
-        echo "ERROR: FAIL: Pattern '$pattern' found in $file_count files (max: $MAX_CRITICAL_DUPLICATIONS)"
-        ((failure_count++))
+        echo " FAIL: Pattern '$pattern' found in $file_count files (max: $MAX_CRITICAL_DUPLICATIONS)"
+        ((failure_count))
     else
-        echo "SUCCESS: PASS: Pattern '$pattern' found in $file_count files"
+        echo " PASS: Pattern '$pattern' found in $file_count files"
     fi
 done
 
 if [[ "$failure_count" -gt 0 ]]; then
     echo
-    echo "ERROR: Quality gate FAILED: $failure_count critical duplication patterns exceeded threshold"
-    echo "TIP: Suggestion: Run './scripts/detect_content_duplication.sh suggest' for consolidation guidance"
+    echo " Quality gate FAILED: $failure_count critical duplication patterns exceeded threshold"
+    echo " Suggestion: Run './scripts/detect_content_duplication.sh suggest' for consolidation guidance"
     exit 1
 else
     echo
-    echo "SUCCESS: Quality gate PASSED: All duplication patterns within acceptable limits"
+    echo " Quality gate PASSED: All duplication patterns within acceptable limits"
     exit 0
 fi
 EOF
 
-    chmod +x "$quality_gate_script"
-    echo "   SUCCESS: Quality gate script created: $quality_gate_script"
-    echo "   TIP: Usage: Add to CI pipeline or pre-commit hooks"
+    chmod x "$quality_gate_script"
+    echo "    Quality gate script created: $quality_gate_script"
+    echo "    Usage: Add to CI pipeline or pre-commit hooks"
 }
 
 # Function: Automated alerting for duplication growth
@@ -161,7 +161,7 @@ echo "=================================="
 monitoring_file="logs/pattern_growth_tracking.csv"
 
 if [[ ! -f "$monitoring_file" ]]; then
-    echo "NOTE: No monitoring data available yet"
+    echo " No monitoring data available yet"
     exit 0
 fi
 
@@ -170,7 +170,7 @@ current_data=$(tail -1 "$monitoring_file" 2>/dev/null || echo "")
 previous_data=$(tail -2 "$monitoring_file" | head -1 2>/dev/null || echo "")
 
 if [[ -z "$previous_data" || "$current_data" == "$previous_data" ]]; then
-    echo "STATS: Insufficient data for growth analysis"
+    echo " Insufficient data for growth analysis"
     exit 0
 fi
 
@@ -179,14 +179,14 @@ IFS=',' read -r prev_ts prev_venv prev_terminal prev_qc prev_commit prev_total <
 IFS=',' read -r curr_ts curr_venv curr_terminal curr_qc curr_commit curr_total <<< "$current_data"
 
 # Calculate growth percentages
-venv_growth=$(( (curr_venv - prev_venv) * 100 / (prev_venv + 1) ))
-terminal_growth=$(( (curr_terminal - prev_terminal) * 100 / (prev_terminal + 1) ))
-qc_growth=$(( (curr_qc - prev_qc) * 100 / (prev_qc + 1) ))
+venv_growth=$(( (curr_venv - prev_venv) * 100 / (prev_venv  1) ))
+terminal_growth=$(( (curr_terminal - prev_terminal) * 100 / (prev_terminal  1) ))
+qc_growth=$(( (curr_qc - prev_qc) * 100 / (prev_qc  1) ))
 
 echo "TREND: Growth Analysis:"
-echo "   Virtual Environment: $venv_growth% (${prev_venv} → ${curr_venv})"
-echo "   Terminal Output: $terminal_growth% (${prev_terminal} → ${curr_terminal})"
-echo "   Quality Control: $qc_growth% (${prev_qc} → ${curr_qc})"
+echo "   Virtual Environment: $venv_growth% (${prev_venv}  ${curr_venv})"
+echo "   Terminal Output: $terminal_growth% (${prev_terminal}  ${curr_terminal})"
+echo "   Quality Control: $qc_growth% (${prev_qc}  ${curr_qc})"
 
 # Check for concerning growth
 alerts_triggered=0
@@ -194,36 +194,36 @@ alerts_triggered=0
 if [[ "$venv_growth" -gt "$GROWTH_THRESHOLD" ]]; then
     echo "ALERT: ALERT: Virtual environment duplication grew by $venv_growth%"
     echo "$(date): Virtual environment duplication growth: $venv_growth%" >> "$ALERT_LOG"
-    ((alerts_triggered++))
+    ((alerts_triggered))
 fi
 
 if [[ "$terminal_growth" -gt "$GROWTH_THRESHOLD" ]]; then
     echo "ALERT: ALERT: Terminal output duplication grew by $terminal_growth%"
     echo "$(date): Terminal output duplication growth: $terminal_growth%" >> "$ALERT_LOG"
-    ((alerts_triggered++))
+    ((alerts_triggered))
 fi
 
 if [[ "$qc_growth" -gt "$GROWTH_THRESHOLD" ]]; then
     echo "ALERT: ALERT: Quality control duplication grew by $qc_growth%"
     echo "$(date): Quality control duplication growth: $qc_growth%" >> "$ALERT_LOG"
-    ((alerts_triggered++))
+    ((alerts_triggered))
 fi
 
 if [[ "$alerts_triggered" -gt 0 ]]; then
     echo
-    echo "WARNING:  $alerts_triggered duplication growth alerts triggered"
-    echo "TIP: Consider running consolidation workflow: ./scripts/auto_consolidate_content.sh"
+    echo "  $alerts_triggered duplication growth alerts triggered"
+    echo " Consider running consolidation workflow: ./scripts/auto_consolidate_content.sh"
     exit 1
 else
     echo
-    echo "SUCCESS: No concerning duplication growth detected"
+    echo " No concerning duplication growth detected"
     exit 0
 fi
 EOF
 
-    chmod +x "$alert_script"
-    echo "   SUCCESS: Alert script created: $alert_script"
-    echo "   TIP: Usage: Run periodically via cron or CI monitoring"
+    chmod x "$alert_script"
+    echo "    Alert script created: $alert_script"
+    echo "    Usage: Run periodically via cron or CI monitoring"
 }
 
 # Function: GitHub Actions integration
@@ -262,7 +262,7 @@ jobs:
     - name: Set up monitoring environment
       run: |
         mkdir -p logs
-        chmod +x scripts/monitor_duplication.sh scripts/qc_duplication_gate.sh
+        chmod x scripts/monitor_duplication.sh scripts/qc_duplication_gate.sh
 
     - name: Run duplication monitoring
       run: |
@@ -303,7 +303,7 @@ jobs:
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `## STATS: Content Duplication Monitoring Results\n\n\`\`\`\n${summary}\n\`\`\`\n\n[Full monitoring logs available in artifacts]`
+                body: `##  Content Duplication Monitoring Results\n\n\`\`\`\n${summary}\n\`\`\`\n\n[Full monitoring logs available in artifacts]`
               });
             }
           } catch (error) {
@@ -311,7 +311,7 @@ jobs:
           }
 EOF
 
-    echo "   SUCCESS: GitHub Actions workflow created: $workflow_file"
+    echo "    GitHub Actions workflow created: $workflow_file"
     echo "   BOT: Automated monitoring will run on docs changes and daily"
 }
 
@@ -422,15 +422,15 @@ main() {
     # Run quick duplication check
     local duplication_issues=0
     if quick_duplication_check; then
-        echo "SUCCESS: Quick duplication check passed"
+        echo " Quick duplication check passed"
     else
         duplication_issues=$?
-        echo "WARNING:  Quick duplication check found $duplication_issues issues"
+        echo "  Quick duplication check found $duplication_issues issues"
     fi
 
     # Skip additional steps if quick-check mode
     if [[ "$quick_check" == "true" ]]; then
-        echo "STATS: Quick check complete - skipping additional monitoring setup"
+        echo " Quick check complete - skipping additional monitoring setup"
         exit "$duplication_issues"
     fi
 
@@ -451,13 +451,13 @@ main() {
     fi
 
     echo
-    echo "SUCCESS: Content duplication monitoring complete!"
+    echo " Content duplication monitoring complete!"
     echo "   DOC: Log: $LOG_FILE"
-    echo "   STATS: Monitoring data: $LOG_DIR/pattern_growth_tracking.csv"
+    echo "    Monitoring data: $LOG_DIR/pattern_growth_tracking.csv"
 
     if [[ "$duplication_issues" -gt 0 ]]; then
-        echo "   WARNING:  $duplication_issues duplication issues detected"
-        echo "   TIP: Run './scripts/auto_consolidate_content.sh' for consolidation"
+        echo "     $duplication_issues duplication issues detected"
+        echo "    Run './scripts/auto_consolidate_content.sh' for consolidation"
     fi
 
     exit "$duplication_issues"

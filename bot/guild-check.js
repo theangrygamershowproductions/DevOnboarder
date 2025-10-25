@@ -9,7 +9,7 @@ const client = new Client({
 
 client.once("ready", () => {
     console.log(`🤖 Bot logged in as ${client.user?.tag}`);
-    console.log("🏠 Available Guilds:");
+    console.log("HOME: Available Guilds:");
 
     client.guilds.cache.forEach((guild) => {
         console.log(`   - ${guild.name} (ID: ${guild.id})`);
@@ -28,10 +28,10 @@ client.once("ready", () => {
     targetGuilds.forEach((target) => {
         const guild = client.guilds.cache.get(target.id);
         if (guild) {
-            console.log(`   ✅ ${target.name}: Found - ${guild.name}`);
+            console.log(`    ${target.name}: Found - ${guild.name}`);
         } else {
             console.log(
-                `   ❌ ${target.name}: Not accessible or bot not invited`,
+                `    ${target.name}: Not accessible or bot not invited`,
             );
         }
     });

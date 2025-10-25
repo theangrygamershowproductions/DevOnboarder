@@ -29,7 +29,7 @@ Welcome to the DevOnboarder documentation! This directory contains all project d
 
 For immediate setup instructions, see the main [README.md](../README.md) and [SETUP.md](../SETUP.md) in the project root.
 
-## 📁 Modular Documentation Structure (Updated September 2025)
+##  Modular Documentation Structure (Updated September 2025)
 
 DevOnboarder documentation follows a modular structure for improved navigation and agent integration:
 
@@ -53,7 +53,7 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
 - [`security-best-practices.md`](policies/security-best-practices.md) - Security requirements and access control
 
-#### 🔧 Development Guides (`docs/development/`)
+####  Development Guides (`docs/development/`)
 
 - [`architecture-overview.md`](development/architecture-overview.md) - TAGS stack integration and service architecture
 
@@ -65,7 +65,7 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
 - [`plugin-development.md`](development/plugin-development.md) - Plugin creation guidelines
 
-#### 🔗 Integration Patterns (`docs/integration/`)
+#### LINK: Integration Patterns (`docs/integration/`)
 
 - [`service-integration-patterns.md`](integration/service-integration-patterns.md) - API conventions and Discord bot patterns
 
@@ -73,7 +73,7 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
 - [`common-integration-points.md`](integration/common-integration-points.md) - Feature development workflows
 
-#### 📋 Development Processes (`docs/processes/`)
+####  Development Processes (`docs/processes/`)
 
 - [`pr-ci-integration-guide.md`](processes/pr-ci-integration-guide.md) - PR comment analysis and CI correlation workflows
 
@@ -81,7 +81,7 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
 - [`agent-requirements.md`](agents/agent-requirements.md) - AI agent guidelines and compliance requirements
 
-#### 🔧 Troubleshooting (`docs/troubleshooting/`)
+####  Troubleshooting (`docs/troubleshooting/`)
 
 - [`common-issues-resolution.md`](troubleshooting/common-issues-resolution.md) - Problem resolution patterns
 
@@ -144,7 +144,7 @@ DevOnboarder documentation follows a modular structure for improved navigation a
 
    [diagnostics-sample.log](diagnostics-sample.log) for the expected output.
 
-8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with Ctrl+C.
+8. Alternatively, run `devonboarder-server` to start the app without Docker. Stop the server with CtrlC.
 
 9. Visit `http://localhost:8000` to see the greeting server.
 
@@ -546,7 +546,7 @@ from [`checklists/ci-checklist-snippet.md`](checklists/ci-checklist-snippet.md).
 
     asks OpenAI for a YAML patch using `yamllint` output, applies it, then requests a
     broader fix and opens a pull request with `peter-evans/create-pull-request`.
-    Add a `CI_BUILD_OPENAPI` secret under **Settings → Secrets and variables → Actions** (or `OPENAI_API_KEY` if unavailable)
+    Add a `CI_BUILD_OPENAPI` secret under **Settings  Secrets and variables  Actions** (or `OPENAI_API_KEY` if unavailable)
 
     so the workflow can request a patch from OpenAI.
 
@@ -581,7 +581,7 @@ The script runs `pip-audit`, `bandit -r src -ll`, and `npm audit --audit-level=h
 
 This docs directory has been reorganized for better navigation and maintainability:
 
-### 📊 Implementation Documentation
+###  Implementation Documentation
 
 **Location**: `implementation/`
 
@@ -593,7 +593,7 @@ This docs directory has been reorganized for better navigation and maintainabili
 
 - Security policy enforcements
 
-### 🏗️ Phase Documentation
+### BUILD: Phase Documentation
 
 **Location**: `phases/`
 
@@ -605,7 +605,7 @@ This docs directory has been reorganized for better navigation and maintainabili
 
 - Infrastructure improvement phases
 
-### 🔧 CI/CD Documentation
+###  CI/CD Documentation
 
 **Location**: `ci/`
 
@@ -615,7 +615,7 @@ This docs directory has been reorganized for better navigation and maintainabili
 
 - Status monitoring reports
 
-### 📈 Reports & Analysis
+### GROW: Reports & Analysis
 
 **Location**: `reports/`
 
@@ -637,7 +637,7 @@ This docs directory has been reorganized for better navigation and maintainabili
 
 - Project planning documents
 
-### 📋 AAR (After Action Reports)
+###  AAR (After Action Reports)
 
 **Location**: Root of `docs/` (AAR_*.md files)
 
@@ -653,7 +653,7 @@ After Action Reports documenting major implementations and lessons learned.
 
 - `contributing/` - Community guidelines and contributor resources
 
-## 🔍 Quick Navigation
+##  Quick Navigation
 
 - **New Contributors**: Start with root README.md, then SETUP.md
 

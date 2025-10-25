@@ -29,7 +29,7 @@ This document outlines the recommended approach for handling external dependenci
 
 - Handles common, well-known external dependencies
 
-- Reduces boilerplate across 60+ Token Architecture scripts
+- Reduces boilerplate across 60 Token Architecture scripts
 
 - Covers: .venv/bin/activate, standard project loaders
 
@@ -63,7 +63,7 @@ source scripts/load_token_environment.sh
 
 ## Benefits of Hybrid Approach
 
-- Reduces 60+ repetitive comments for standard patterns
+- Reduces 60 repetitive comments for standard patterns
 
 - Preserves explicit documentation for unusual dependencies
 

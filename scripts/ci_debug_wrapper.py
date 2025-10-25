@@ -81,8 +81,7 @@ class CIDebugWrapper:
                 "run",
                 "list",
                 "--json",
-                "status,conclusion,headSha,createdAt,updatedAt,"
-                "headBranch,databaseId",
+                "status,conclusion,headSha,createdAt,updatedAt," + "headBranch,databaseId",
                 "--limit",
                 str(limit),
             ]
@@ -220,8 +219,8 @@ class CIDebugWrapper:
 
             # Calculate duration
             try:
-                created_dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                updated_dt = datetime.fromisoformat(updated.replace("Z", "+00:00"))
+                created_dt = datetime.fromisoformat(created.replace("Z", "00:00"))
+                updated_dt = datetime.fromisoformat(updated.replace("Z", "00:00"))
                 duration = updated_dt - created_dt
                 duration_str = f"{duration.seconds}s"
             except Exception:

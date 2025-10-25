@@ -52,13 +52,13 @@ branch_context: "feat/smart-log-cleanup-system"
 
 ## SCOPE LOCK ENFORCEMENT
 
-- ❌ **NO additional objectives** can be added to Phase 2
+-  **NO additional objectives** can be added to Phase 2
 
-- ❌ **NO other "Phase 2"** definitions are valid
+-  **NO other "Phase 2"** definitions are valid
 
-- ❌ **NO scope expansion** without explicit unlock
+-  **NO scope expansion** without explicit unlock
 
-- ✅ **ONLY the canonical definition** in `.codex/tasks/phase2_terminal_output_compliance.md` is valid
+-  **ONLY the canonical definition** in `.codex/tasks/phase2_terminal_output_compliance.md` is valid
 
 ## VIOLATION TRACKING
 
@@ -78,7 +78,7 @@ branch_context: "feat/smart-log-cleanup-system"
 
 - **Target**: 0 violations in repository root
 
-- **Enforcement**: Pre-commit hooks + CI validation
+- **Enforcement**: Pre-commit hooks  CI validation
 
 ### Smart Log Cleanup System
 
@@ -92,17 +92,17 @@ branch_context: "feat/smart-log-cleanup-system"
 
 Phase 2 is complete when ALL conditions are met:
 
-1. ✅ Terminal violations ≤10 (validated by `bash scripts/validation_summary.sh`)
+1.  Terminal violations ≤10 (validated by `bash scripts/validation_summary.sh`)
 
-2. ✅ Root Artifact Guard passes with 0 violations
+2.  Root Artifact Guard passes with 0 violations
 
-3. ✅ Smart Log Cleanup System deployed and functional
+3.  Smart Log Cleanup System deployed and functional
 
-4. ✅ All GitHub Actions workflows pass terminal output validation
+4.  All GitHub Actions workflows pass terminal output validation
 
-5. ✅ Copilot instructions enforced in CI pipeline
+5.  Copilot instructions enforced in CI pipeline
 
-6. ✅ 95%+ QC score maintained throughout
+6.  95% QC score maintained throughout
 
 ## NEXT PHASE UNLOCK CONDITIONS
 

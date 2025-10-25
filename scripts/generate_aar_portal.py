@@ -120,17 +120,17 @@ class AARPortalGenerator:
                             aar_data["quarters"][year][quarter][type_name].append(
                                 aar_info
                             )
-                            aar_data["total_aars"] += 1
-                            aar_data["types"][type_name] += 1
+                            aar_data["total_aars"] = 1
+                            aar_data["types"][type_name] = 1
 
                             # Aggregate metrics
-                            aar_data["metrics"]["total_files_changed"] += aar_info.get(
+                            aar_data["metrics"]["total_files_changed"] = aar_info.get(
                                 "files_changed", 0
                             )
-                            aar_data["metrics"]["total_agents_updated"] += aar_info.get(
+                            aar_data["metrics"]["total_agents_updated"] = aar_info.get(
                                 "agents_updated", 0
                             )
-                            aar_data["metrics"]["total_action_items"] += aar_info.get(
+                            aar_data["metrics"]["total_action_items"] = aar_info.get(
                                 "action_items", 0
                             )
 
@@ -158,12 +158,12 @@ class AARPortalGenerator:
                 content = f.read()
 
             # Extract title from first heading
-            title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
+            title_match = re.search(r"^#\s(.)$", content, re.MULTILINE)
             title = title_match.group(1) if title_match else file_path.stem
 
             # Extract reference number
             ref_match = re.search(
-                r"(pr|issue|sprint|incident|automation)-(\d+|\w+)",
+                r"(pr|issue|sprint|incident|automation)-(\d|\w)",
                 file_path.stem,
                 re.IGNORECASE,
             )
@@ -196,7 +196,7 @@ class AARPortalGenerator:
                 "word_count": word_count,
                 "line_count": lines,
                 "content_preview": (
-                    content[:500] + "..." if len(content) > 500 else content
+                    content[:500]  "..." if len(content) > 500 else content
                 ),
             }
 
@@ -225,13 +225,13 @@ class AARPortalGenerator:
         }
 
         # Extract files changed
-        files_match = re.search(r"Files Changed:?\s*(\d+)", content, re.IGNORECASE)
+        files_match = re.search(r"Files Changed:?\s*(\d)", content, re.IGNORECASE)
         if files_match:
             metrics["files_changed"] = int(files_match.group(1))
 
         # Extract agents updated
         agents_match = re.search(
-            r"(?:Codex )?Agents Updated:?\s*(\d+)", content, re.IGNORECASE
+            r"(?:Codex )?Agents Updated:?\s*(\d)", content, re.IGNORECASE
         )
         if agents_match:
             metrics["agents_updated"] = int(agents_match.group(1))
@@ -319,9 +319,9 @@ class AARPortalGenerator:
 
                 for type_aars in types.values():
                     for aar in type_aars:
-                        quarter_files += aar.get("files_changed", 0)
-                        quarter_agents += aar.get("agents_updated", 0)
-                        quarter_actions += aar.get("action_items", 0)
+                        quarter_files = aar.get("files_changed", 0)
+                        quarter_agents = aar.get("agents_updated", 0)
+                        quarter_actions = aar.get("action_items", 0)
 
                 trends["quarterly_counts"].append(
                     {
@@ -364,97 +364,63 @@ class AARPortalGenerator:
             '    <meta charset="UTF-8">\n'
             '    <meta name="viewport" content="width=device-width, '
             'initial-scale=1.0">\n'
-            "    <title>{% block title %}DevOnboarder AAR Portal"
-            "{% endblock %}</title>\n"
+            "    <title>{% block title %}DevOnboarder AAR Portal" + "{% endblock %}</title>\n"
             '    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/'
             'bootstrap.min.css" rel="stylesheet">\n'
             '    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/'
             'font/bootstrap-icons.css" rel="stylesheet">\n'
-            "    <style>\n"
-            "        .aar-card {\n"
-            "            transition: transform 0.2s;\n"
-            "            height: 100%;\n"
-            "        }\n"
-            "        .aar-card:hover {\n"
-            "            transform: translateY(-2px);\n"
-            "            box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n"
-            "        }\n"
-            "        .metric-badge {\n"
-            "            font-size: 0.8em;\n"
-            "        }\n"
-            "        .search-box {\n"
-            "            position: sticky;\n"
-            "            top: 20px;\n"
-            "            z-index: 100;\n"
-            "        }\n"
-            "        .filter-sidebar {\n"
-            "            background-color: #f8f9fa;\n"
-            "            min-height: 100vh;\n"
-            "        }\n"
-            "        .trend-chart {\n"
-            "            height: 300px;\n"
-            "        }\n"
-            "        .navbar-brand {\n"
-            "            font-weight: bold;\n"
-            "        }\n"
-            "        .footer {\n"
-            "            background-color: #343a40;\n"
-            "            color: white;\n"
-            "            padding: 20px 0;\n"
-            "            margin-top: 50px;\n"
-            "        }\n"
-            "        .type-pull_requests { border-left: 4px solid #0d6efd; }\n"
-            "        .type-issues { border-left: 4px solid #198754; }\n"
-            "        .type-sprints { border-left: 4px solid #ffc107; }\n"
-            "        .type-incidents { border-left: 4px solid #dc3545; }\n"
-            "        .type-automation { border-left: 4px solid #6f42c1; }\n"
-            "    </style>\n"
-            "    {% block extra_head %}{% endblock %}\n"
-            "</head>\n"
-            "<body>\n"
+            "    <style>\n" + "        .aar-card {\n"
+            "            transition: transform 0.2s;\n" + "            height: 100%;\n"
+            "        }\n" + "        .aar-card:hover {\n"
+            "            transform: translateY(-2px);\n" + "            box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n"
+            "        }\n" + "        .metric-badge {\n"
+            "            font-size: 0.8em;\n" + "        }\n"
+            "        .search-box {\n" + "            position: sticky;\n"
+            "            top: 20px;\n" + "            z-index: 100;\n"
+            "        }\n" + "        .filter-sidebar {\n"
+            "            background-color: #f8f9fa;\n" + "            min-height: 100vh;\n"
+            "        }\n" + "        .trend-chart {\n"
+            "            height: 300px;\n" + "        }\n"
+            "        .navbar-brand {\n" + "            font-weight: bold;\n"
+            "        }\n" + "        .footer {\n"
+            "            background-color: #343a40;\n" + "            color: white;\n"
+            "            padding: 20px 0;\n" + "            margin-top: 50px;\n"
+            "        }\n" + "        .type-pull_requests { border-left: 4px solid #0d6efd; }\n"
+            "        .type-issues { border-left: 4px solid #198754; }\n" + "        .type-sprints { border-left: 4px solid #ffc107; }\n"
+            "        .type-incidents { border-left: 4px solid #dc3545; }\n" + "        .type-automation { border-left: 4px solid #6f42c1; }\n"
+            "    </style>\n" + "    {% block extra_head %}{% endblock %}\n"
+            "</head>\n" + "<body>\n"
             '    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">\n'
             '        <div class="container">\n'
             '            <a class="navbar-brand" href="index.html">\n'
             '                <i class="bi bi-journal-text"></i> '
-            "DevOnboarder AAR Portal\n"
-            "            </a>\n"
+            "DevOnboarder AAR Portal\n" + "            </a>\n"
             '            <div class="navbar-nav ms-auto">\n'
             '                <a class="nav-link" href="index.html">Browse</a>\n'
             '                <a class="nav-link" href="trends.html">Trends</a>\n'
             '                <a class="nav-link" href="search.html">Search</a>\n'
-            "            </div>\n"
-            "        </div>\n"
-            "    </nav>\n"
-            "\n"
+            "            </div>\n" + "        </div>\n"
+            "    </nav>\n" + "\n"
             '    <main class="container-fluid mt-4">\n'
-            "        {% block content %}{% endblock %}\n"
-            "    </main>\n"
+            "        {% block content %}{% endblock %}\n" + "    </main>\n"
             "\n"
             '    <footer class="footer">\n'
             '        <div class="container text-center">\n'
-            "            <p>&copy; 2025 DevOnboarder AAR Portal - Generated on "
-            "{{ generation_date }}</p>\n"
-            "            <p><small>Total AARs: {{ total_aars }} | Last Updated: "
-            "{{ last_updated }}</small></p>\n"
-            "        </div>\n"
-            "    </footer>\n"
+            "            <p>&copy; 2025 DevOnboarder AAR Portal - Generated on " + "{{ generation_date }}</p>\n"
+            "            <p><small>Total AARs: {{ total_aars }} | Last Updated: " + "{{ last_updated }}</small></p>\n"
+            "        </div>\n" + "    </footer>\n"
             "\n"
             '    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/'
             'bootstrap.bundle.min.js"></script>\n'
             '    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\n'
-            "    {% block extra_scripts %}{% endblock %}\n"
-            "</body>\n"
+            "    {% block extra_scripts %}{% endblock %}\n" + "</body>\n"
             "</html>"
         )
 
         # Index template
-        index_template = """{% extends "base.html" %}
-
-{% block title %}AAR Browser - DevOnboarder{% endblock %}
-
-{% block content %}
+        index_template = """{% extends "base.html" %} | {% block title %}AAR Browser - DevOnboarder{% endblock %} | {% block content %}
 <div class="row">
-    <!-- Filters Sidebar -->
+    <!-- Filters Sidebar -
     <div class="col-md-3 filter-sidebar p-4">
         <div class="search-box">
             <h5><i class="bi bi-funnel"></i> Filters</h5>
@@ -463,13 +429,11 @@ class AARPortalGenerator:
                 <label for="quarterFilter" class="form-label">Quarter</label>
                 <select class="form-select" id="quarterFilter">
                     <option value="">All Quarters</option>
-                    {% for year, quarters in aar_data.quarters.items() %}
-                        {% for quarter in quarters.keys() %}
+                    {% for year, quarters in aar_data.quarters.items() %} | {% for quarter in quarters.keys() %}
                             <option value="{{ quarter }}-{{ year }}">
                                 {{ quarter }} {{ year }}
                             </option>
-                        {% endfor %}
-                    {% endfor %}
+                        {% endfor %} | {% endfor %}
                 </select>
             </div>
 
@@ -495,7 +459,7 @@ class AARPortalGenerator:
             >Clear Filters</button>
         </div>
 
-        <!-- Summary Stats -->
+        <!-- Summary Stats -
         <div class="mt-4">
             <h6>Summary</h6>
             <ul class="list-unstyled">
@@ -507,7 +471,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- AAR Grid -->
+    <!-- AAR Grid -
     <div class="col-md-9">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2><i class="bi bi-grid"></i> After Action Reports</h2>
@@ -515,10 +479,7 @@ class AARPortalGenerator:
         </div>
 
         <div class="row" id="aarGrid">
-            {% for year, quarters in aar_data.quarters.items() %}
-                {% for quarter, types in quarters.items() %}
-                    {% for type_name, aars in types.items() %}
-                        {% for aar in aars %}
+            {% for year, quarters in aar_data.quarters.items() %} | {% for quarter, types in quarters.items() %} | {% for type_name, aars in types.items() %} | {% for aar in aars %}
                             <div class="col-lg-4 col-md-6 mb-4 aar-item"
                                  data-quarter="{{ quarter }}-{{ year }}"
                                  data-type="{{ type_name }}"
@@ -535,14 +496,14 @@ class AARPortalGenerator:
                                         <h6 class="card-title">{{ aar.title }}</h6>
                                         <p class="card-text small">{{ aar.content_preview[:150] }}...</p>
 
-                                        <!-- Metrics -->
+                                        <!-- Metrics -
                                         <div class="d-flex gap-2 mb-2">
                                             <span class="badge bg-secondary metric-badge">{{ aar.files_changed }} files</span>
                                             <span class="badge bg-info metric-badge">{{ aar.agents_updated }} agents</span>
                                             <span class="badge bg-warning metric-badge">{{ aar.action_items }} items</span>
                                         </div>
 
-                                        <!-- Labels -->
+                                        <!-- Labels -
                                         <div class="mb-2">
                                             {% for label in aar.labels %}
                                                 <span class="badge bg-light text-dark">{{ label }}</span>
@@ -564,10 +525,7 @@ class AARPortalGenerator:
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
+                        {% endfor %} | {% endfor %} | {% endfor %} | {% endfor %}
         </div>
 
         <div id="noResults" class="text-center mt-5" style="display: none;">
@@ -577,9 +535,7 @@ class AARPortalGenerator:
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} | {% block extra_scripts %}
 <script>
     function filterAARs() {
         const quarterFilter = document.getElementById('quarterFilter').value;
@@ -602,7 +558,7 @@ class AARPortalGenerator:
             if (searchQuery && !title.includes(searchQuery) && !content.includes(searchQuery)) show = false;
 
             item.style.display = show ? 'block' : 'none';
-            if (show) visibleCount++;
+            if (show) visibleCount;
         });
 
         document.getElementById('resultCount').textContent = `${visibleCount} AARs`;
@@ -624,11 +580,7 @@ class AARPortalGenerator:
 {% endblock %}"""
 
         # Trends template
-        trends_template = """{% extends "base.html" %}
-
-{% block title %}Trends Dashboard - DevOnboarder AAR Portal{% endblock %}
-
-{% block content %}
+        trends_template = """{% extends "base.html" %} | {% block title %}Trends Dashboard - DevOnboarder AAR Portal{% endblock %} | {% block content %}
 <div class="container">
     <div class="row mb-4">
         <div class="col-12">
@@ -637,7 +589,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- Summary Cards -->
+    <!-- Summary Cards -
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="card bg-primary text-white">
@@ -673,7 +625,7 @@ class AARPortalGenerator:
         </div>
     </div>
 
-    <!-- Charts Row -->
+    <!-- Charts Row -
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="card">
@@ -710,9 +662,7 @@ class AARPortalGenerator:
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} | {% block extra_scripts %}
 <script>
     // Type Distribution Chart
     const typeCtx = document.getElementById('typeChart').getContext('2d');

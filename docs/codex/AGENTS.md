@@ -215,7 +215,7 @@ If you notice that CI failure issues (`ci-failure` or `ci-health`) are not being
 
 - **To check:**
 
-    - Go to your repo → **Settings** → **Actions** → **General** → **Workflow permissions**.
+    - Go to your repo  **Settings**  **Actions**  **General**  **Workflow permissions**.
 
     - Ensure “Read and write permissions” is enabled for `GITHUB_TOKEN`.
 

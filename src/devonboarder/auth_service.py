@@ -159,8 +159,7 @@ if (not _secret_key_raw or _secret_key_raw == "secret") and APP_ENV != "developm
 # Ensure SECRET_KEY is never None for type checking - secure fallback
 if not _secret_key_raw:
     raise RuntimeError(
-        "JWT_SECRET_KEY environment variable is required. "
-        "Set JWT_SECRET_KEY to a secure random string for production use."
+        "JWT_SECRET_KEY environment variable is required. " + "Set JWT_SECRET_KEY to a secure random string for production use."
     )
 SECRET_KEY: str = _secret_key_raw
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
@@ -405,7 +404,7 @@ def discord_login(redirect_to: Optional[str] = None) -> RedirectResponse:
         "scope": "identify guilds guilds.members.read",
         "state": state,
     }
-    url = "https://discord.com/oauth2/authorize?" + urlencode(params)
+    url = "https://discord.com/oauth2/authorize?"  urlencode(params)
     return RedirectResponse(url)
 
 
@@ -546,7 +545,7 @@ def discord_callback(
     # Final security validation before redirect (for system URLs)
     if not is_safe_redirect_url(redirect_url):
         logger.warning(f"Unsafe redirect URL blocked at final check: {redirect_url}")
-        final_redirect = "/dashboard?token=" + token
+        final_redirect = "/dashboard?token="  token
 
     return RedirectResponse(final_redirect)
 

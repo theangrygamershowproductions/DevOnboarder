@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Establish PROJECT_ROOT for reliable operation
@@ -14,7 +14,7 @@ fi
 
 # Validate PROJECT_ROOT and change to it
 if [ -z "${PROJECT_ROOT:-}" ] || [ ! -d "$PROJECT_ROOT" ]; then
-    echo "ERROR: PROJECT_ROOT not set or invalid: ${PROJECT_ROOT:-<unset>}"
+    echo " PROJECT_ROOT not set or invalid: ${PROJECT_ROOT:-<unset>}"
     exit 1
 fi
 cd "$PROJECT_ROOT"
@@ -44,30 +44,30 @@ fi
 log_and_display "Checking pip dependencies..."
 if command -v pip >/dev/null 2>&1; then
     if ! pip check 2>&1; then
-        log_and_display "WARNING: Pip dependency check failed"
+        log_and_display " Pip dependency check failed"
     fi
 else
-    log_and_display "WARNING: pip not found, skipping dependency check"
+    log_and_display " pip not found, skipping dependency check"
 fi
 
 log_and_display "Running ruff linting..."
 if command -v ruff >/dev/null 2>&1; then
     if ! ruff check . 2>&1; then
-        log_and_display "WARNING: Ruff linting found issues"
+        log_and_display " Ruff linting found issues"
     fi
 else
-    log_and_display "WARNING: ruff not found, skipping linting"
+    log_and_display " ruff not found, skipping linting"
 fi
 
 log_and_display "Running Python tests with centralized cache configuration..."
-set +e
+set e
 pytest --junitxml=test-results/pytest-results.xml -v 2>&1
 pytest_exit=${PIPESTATUS[0]}
 set -e
 
 # Verify coverage report was generated
 if [ ! -d "logs/htmlcov" ]; then
-    log_and_display "WARNING: Coverage HTML report not found in logs/htmlcov"
+    log_and_display " Coverage HTML report not found in logs/htmlcov"
     log_and_display "Coverage configuration in pyproject.toml may need verification"
 fi
 
@@ -95,7 +95,7 @@ if command -v coverage > /dev/null 2>&1; then
 fi
 
 if [ "$pytest_exit" -eq 0 ]; then
-    log_and_display "SUCCESS: Python tests passed!"
+    log_and_display " Python tests passed!"
 else
     log_and_display "FAILED: Python tests failed with exit code: $pytest_exit"
 
@@ -111,7 +111,7 @@ else
         log_and_display ""
         log_and_display "TROUBLESHOOTING: Pytest import file mismatch"
         log_and_display "   Solution: Remove duplicate directories or __pycache__"
-        log_and_display "   Command: find . -name '__pycache__' -type d -exec rm -rf {} +"
+        log_and_display "   Command: find . -name '__pycache__' -type d -exec rm -rf {} "
     fi
 fi
 
@@ -120,7 +120,7 @@ if [ -d bot ] && [ -f bot/package.json ]; then
     log_and_display "Running bot tests..."
     if npm ci --prefix bot 2>&1; then
         if (cd bot && npm run coverage 2>&1); then
-            log_and_display "SUCCESS: Bot tests passed!"
+            log_and_display " Bot tests passed!"
         else
             log_and_display "FAILED: Bot tests failed"
             pytest_exit=1
@@ -137,7 +137,7 @@ if [ -d frontend ] && [ -f frontend/package.json ]; then
         log_and_display "Running frontend tests..."
         if npm ci --prefix frontend 2>&1; then
             if (cd frontend && npm run coverage 2>&1); then
-                log_and_display "SUCCESS: Frontend tests passed!"
+                log_and_display " Frontend tests passed!"
             else
                 log_and_display "FAILED: Frontend tests failed"
                 pytest_exit=1
@@ -152,7 +152,7 @@ fi
 # Final summary
 if [ "$pytest_exit" -eq 0 ]; then
     log_and_display ""
-    log_and_display "SUCCESS: All tests completed successfully!"
+    log_and_display " All tests completed successfully!"
     log_and_display "Test results: test-results/pytest-results.xml"
     log_and_display "Full log: $TEST_LOG"
 else

@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ACTION_RE = re.compile(r"^\s*-\s*\[\s*\]\s*(.*)")
-USER_RE = re.compile(r"@[A-Za-z0-9_-]+")
+USER_RE = re.compile(r"@[A-Za-z0-9_-]")
 
 
 def parse_actions(directory: Path) -> list[str]:

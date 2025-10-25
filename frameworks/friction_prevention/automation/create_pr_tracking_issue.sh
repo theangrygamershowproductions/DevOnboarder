@@ -44,8 +44,8 @@ echo "Branch: $PR_BRANCH"
 # Check for required tokens with enhanced guidance
 if command -v require_tokens >/dev/null 2>&1; then
     if ! require_tokens "CI_ISSUE_AUTOMATION_TOKEN" "CI_BOT_TOKEN"; then
-        echo "❌ Cannot create PR tracking issue without required tokens"
-        echo "💡 Please add the missing tokens and re-run this script"
+        echo " Cannot create PR tracking issue without required tokens"
+        echo " Please add the missing tokens and re-run this script"
         exit 1
     fi
 fi
@@ -55,7 +55,7 @@ mkdir -p logs
 
 # Log file for tracking
 LOG_FILE="logs/pr_issue_creation_${PR_NUMBER}.log"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(date '%Y-%m-%d %H:%M:%S')
 
 log() {
     echo "[$TIMESTAMP] $1" | tee -a "$LOG_FILE"
@@ -91,11 +91,11 @@ ISSUE_TITLE="Track PR #$PR_NUMBER: $PR_TITLE"
 ISSUE_BODY=$(cat << EOF
 # PR Tracking Issue: #$PR_NUMBER
 
-## 📋 Overview
+##  Overview
 
 This issue tracks the development and review progress of **Pull Request #$PR_NUMBER**.
 
-### 🔗 PR Details
+### LINK: PR Details
 
 - **Title**: $PR_TITLE
 - **Author**: @$PR_AUTHOR
@@ -103,7 +103,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - **Type**: $ISSUE_TYPE
 - **Priority**: $PRIORITY
 
-### 📊 Development Progress
+###  Development Progress
 
 - [ ] **Initial Implementation**: Code changes committed to feature branch
 - [ ] **Code Review**: PR reviewed by maintainers
@@ -121,14 +121,14 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - No breaking changes or proper migration provided
 - Follows DevOnboarder quality standards
 
-### 🔧 Technical Details
+###  Technical Details
 
 **Implementation Scope**:
 - Feature/fix implementation in \`$PR_BRANCH\`
 - Integration with existing DevOnboarder architecture
 - Compliance with project coding standards
 
-### 📝 Notes
+###  Notes
 
 - This issue will be automatically closed when PR #$PR_NUMBER is merged
 - Progress updates will be posted as comments
@@ -137,7 +137,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 ---
 
 **Automated Tracking**: This issue was created automatically by DevOnboarder PR Issue Automation
-**Created**: $(date '+%Y-%m-%d %H:%M:%S')
+**Created**: $(date '%Y-%m-%d %H:%M:%S')
 **PR Link**: https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER
 EOF
 )
@@ -151,8 +151,8 @@ elif [[ -n "${CI_BOT_TOKEN:-}" ]]; then
 elif [[ -n "${GITHUB_TOKEN:-}" ]]; then
     log "Using GITHUB_TOKEN for issue creation"
 else
-    echo "ERROR: No GitHub token available for issue creation"
-    log "ERROR: No GitHub token available"
+    echo " No GitHub token available for issue creation"
+    log " No GitHub token available"
     exit 1
 fi
 
@@ -164,7 +164,7 @@ if ISSUE_URL=$(gh issue create \
     --body "$ISSUE_BODY" \
     --label "$LABELS" 2>&1); then
 
-    ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -o '[0-9]\+$')
+    ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -o '[0-9]\$')
     echo -e "${GREEN}Issue #$ISSUE_NUMBER created successfully${NC}"
     echo "URL: $ISSUE_URL"
 
@@ -174,11 +174,11 @@ if ISSUE_URL=$(gh issue create \
     echo "Issue #$ISSUE_NUMBER" >> "$LOG_FILE"
 
     # Add initial progress comment
-    PROGRESS_COMMENT="## 🚀 Development Started
+    PROGRESS_COMMENT="##  Development Started
 
 PR #$PR_NUMBER has been opened and is now being tracked.
 
-### 📈 Current Status
+### GROW: Current Status
 - **Development Phase**: Implementation in progress
 - **Branch**: \`$PR_BRANCH\`
 - **Author**: @$PR_AUTHOR
@@ -194,7 +194,7 @@ Development progress will be updated as the PR advances through review and valid
 else
     echo -e "${RED}Failed to create GitHub issue${NC}"
     echo "Error: $ISSUE_URL"
-    log "ERROR: Failed to create issue - $ISSUE_URL"
+    log " Failed to create issue - $ISSUE_URL"
     exit 1
 fi
 

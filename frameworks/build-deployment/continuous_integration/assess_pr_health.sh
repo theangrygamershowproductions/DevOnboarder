@@ -4,7 +4,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -44,7 +44,7 @@ echo "  State: $STATE"
 echo "  Mergeable: $MERGEABLE"
 echo "  Commits: $COMMIT_COUNT"
 echo "  Changed Files: $CHANGED_FILES"
-echo "  Lines Added: +$ADDITIONS"
+echo "  Lines Added: $ADDITIONS"
 echo "  Lines Deleted: -$DELETIONS"
 echo
 

@@ -71,7 +71,7 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 - **Do-Not-Merge**: `dnm/<topic>` — long-running spikes or reference drafts; merging blocked by policy.
 - **Release (optional)**: `release/<yymmdd>-<codename>` — frozen bundles queued for promotion.
 
-> **Rule**: All agent instruction development starts on `sandbox/*` and is promoted via PR to `staging` → baked → PR to `main`.
+> **Rule**: All agent instruction development starts on `sandbox/*` and is promoted via PR to `staging`  baked  PR to `main`.
 
 ---
 
@@ -79,11 +79,11 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 
 1. **`main`**
    - Require PR with reviews (≥1), status checks passing, linear history.
-   - Block pushes from `sandbox/*` or `dnm/*` via CODEOWNERS + branch rules.
+   - Block pushes from `sandbox/*` or `dnm/*` via CODEOWNERS  branch rules.
    - Require signed commits (bots included) and verified authors.
 
 2. **`staging`**
-   - Require PR + checks; allow squash merges only.
+   - Require PR  checks; allow squash merges only.
 
 3. **Pattern Protections**
    - Disallow merges from branches matching: `sandbox/**`, `dnm/**`.
@@ -100,7 +100,7 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 - **Instruction Diff Sentinel**: On PRs, detect changes in `.codex/agents/**` and require:
     - Checklist confirmation (see PR Template)
     - Updated `updated_at` timestamps
-    - No unscaffolded routing tags (generate soft warning + issue if missing)
+    - No unscaffolded routing tags (generate soft warning  issue if missing)
 - **Environment Toggle Test**: In `staging` workflows, exercise agents with sandbox inputs; in `main`, run smoke-only.
 
 ---
@@ -115,7 +115,7 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 ### Config Surfaces
 
 - ENV vars: `CODEX_AGENT_BRANCH`, `CODEX_ENV` in runner containers.
-- Fallback precedence: `CODEX_AGENT_BRANCH` → current git branch → `main`.
+- Fallback precedence: `CODEX_AGENT_BRANCH`  current git branch  `main`.
 
 ### Secrets
 
@@ -136,8 +136,8 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 
 - Keep private notes/scripts untracked via `.git/info/exclude`.
 - For ephemeral edits you don't want in history, use `git stash` (preferred) or emergency-only sandbox commits.
-<!-- POTATO: EMERGENCY APPROVED - documentation-example-20250921 -->
-<!-- Emergency context: `git commit --no-verify` reference in sandbox branch workflow documentation -->
+<!-- POTATO: EMERGENCY APPROVED - documentation-example-20250921 -
+<!-- Emergency context: `git commit --no-verify` reference in sandbox branch workflow documentation -
 
 ---
 
@@ -191,9 +191,9 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 ## Promotion Workflow
 
 1. **Develop** on `sandbox/<topic>`; commit granular changes.
-2. **Open PR → `staging`** with template; CI runs full instruction validation + integration tests.
+2. **Open PR  `staging`** with template; CI runs full instruction validation  integration tests.
 3. **Bake** in `staging` for 24–72 hours of usage/tests (configurable).
-4. **Open PR → `main`**; run smoke tests and governance checks.
+4. **Open PR  `main`**; run smoke tests and governance checks.
 5. **Tag release** (optional): `vYYYY.MM.DD-<codename>`; runners may pin to tags.
 6. **Cleanup**: auto-delete `sandbox/*` branches upon merge/close.
 
@@ -203,7 +203,7 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 
 - **Schema**: Reject PRs modifying `.codex/**` if required metadata missing or dates not updated.
 - **Naming**: Enforce `agent_devonboarder_<role>.md` etc.
-- **Branch**: Block direct PRs from `sandbox/*` → `main`.
+- **Branch**: Block direct PRs from `sandbox/*`  `main`.
 - **Labels**: Auto-label PRs touching `.codex/**` with `area:agents`.
 - **Issues**: If routing tags missing, open issue "Scaffold missing agent routing" with context.
 - **Docs**: Update changelog and `MILESTONE_LOG.md` when instruction files change.
@@ -216,9 +216,9 @@ Establish a safe, repeatable method to develop and stage **agent instruction cha
 2. Create `staging` branch from `main` if absent.
 3. Apply branch protection rules and CODEOWNERS.
 4. Add workflows: `ci_triage_guard`, `codex_doc_validator`, instruction diff sentinel.
-5. Update runners to respect `CODEX_AGENT_BRANCH` + `CODEX_ENV`.
-6. Draft `branch-protection.md` + export GitHub settings for audit.
-7. Run a test cycle: sandbox → staging → main with a trivial metadata update.
+5. Update runners to respect `CODEX_AGENT_BRANCH`  `CODEX_ENV`.
+6. Draft `branch-protection.md`  export GitHub settings for audit.
+7. Run a test cycle: sandbox  staging  main with a trivial metadata update.
 
 ---
 
@@ -241,7 +241,7 @@ gh pr create --base main --head staging -t "Release: agent instruction batch" -b
 
 ## Acceptance Criteria (for Claude)
 
-- Repo contains `staging` + protections; `main` locked; pattern rules for `sandbox/**` + `dnm/**`.
+- Repo contains `staging`  protections; `main` locked; pattern rules for `sandbox/**`  `dnm/**`.
 - CI fails on invalid `.codex/**` metadata or naming.
 - PR template present and auto-applied for `.codex/**` changes.
 - CODEOWNERS enforce reviews by `@tags-devsecops`.

@@ -11,7 +11,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-echo "INFO: PR Health Assessment for #$PR_NUMBER"
+echo " PR Health Assessment for #$PR_NUMBER"
 echo "=================================="
 
 # Get PR details
@@ -33,13 +33,13 @@ TOTAL_CHECKS=$(echo "$PR_DATA" | jq '.statusCheckRollup | length')
 FAILED_COUNT=$(echo "$PR_DATA" | jq '[.statusCheckRollup[] | select(.conclusion == "FAILURE")] | length')
 PASSED_COUNT=$(echo "$PR_DATA" | jq '[.statusCheckRollup[] | select(.conclusion == "SUCCESS")] | length')
 
-echo "STATS: PR Metrics:"
+echo " PR Metrics:"
 echo "  Title: $TITLE"
 echo "  State: $STATE"
 echo "  Mergeable: $MERGEABLE"
 echo "  Commits: $COMMIT_COUNT"
 echo "  Changed Files: $CHANGED_FILES"
-echo "  Lines Added: +$ADDITIONS"
+echo "  Lines Added: $ADDITIONS"
 echo "  Lines Deleted: -$DELETIONS"
 echo
 
@@ -50,11 +50,11 @@ echo "  Failing: $FAILED_COUNT"
 echo
 
 if [ "$FAILED_COUNT" -gt 0 ]; then
-    echo "ERROR: Failing Checks: $FAILING_CHECKS"
+    echo " Failing Checks: $FAILING_CHECKS"
 fi
 
 if [ "$PASSED_COUNT" -gt 0 ]; then
-    echo "SUCCESS: Passing Checks: $PASSING_CHECKS"
+    echo " Passing Checks: $PASSING_CHECKS"
 fi
 
 echo
@@ -73,22 +73,22 @@ echo
 echo "TARGET: Recommendations:"
 
 if [ "$HEALTH_PERCENTAGE" -ge 80 ]; then
-    echo "  SUCCESS: HIGH HEALTH: PR is in good shape, consider proceeding with merge"
+    echo "   HIGH HEALTH: PR is in good shape, consider proceeding with merge"
     if [ "$FAILED_COUNT" -gt 0 ]; then
         echo "  TOOL: Minor fixes needed for remaining $FAILED_COUNT failing checks"
     fi
 elif [ "$HEALTH_PERCENTAGE" -ge 50 ]; then
-    echo "  WARNING:  MEDIUM HEALTH: PR has significant value but needs attention"
+    echo "    MEDIUM HEALTH: PR has significant value but needs attention"
     echo "  🤔 Consider: Is core objective achieved? If yes, prepare for merge"
     echo "  TOOL: Address critical failures, consider new PR for complex issues"
 elif [ "$HEALTH_PERCENTAGE" -ge 20 ]; then
-    echo "  WARNING:  LOW HEALTH: Major issues present"
+    echo "    LOW HEALTH: Major issues present"
     echo "  RELOAD: Recommendation: Fresh start with new PR might be more efficient"
     echo "  SAVE: Preserve valuable work from this PR for reuse"
 else
-    echo "  ERROR: CRITICAL: Extensive failures detected"
+    echo "   CRITICAL: Extensive failures detected"
     echo "  🆕 STRONG RECOMMENDATION: Start fresh with new PR"
-    echo "  INFO: Extract lessons learned and valuable code changes"
+    echo "   Extract lessons learned and valuable code changes"
 fi
 
 # Check for scope indicators
@@ -101,7 +101,7 @@ if [ "$CHANGED_FILES" -gt 20 ]; then
 fi
 
 if [ "$ADDITIONS" -gt 1000 ]; then
-    echo "  STATS: LARGE CHANGESET: Significant code additions, careful review needed"
+    echo "   LARGE CHANGESET: Significant code additions, careful review needed"
 fi
 
 echo

@@ -249,7 +249,7 @@ class TestHealthReporting:
         # Verify the file was opened with correct path and encoding
         from pathlib import Path
 
-        expected_path = Path("/home/potato/DevOnboarder/logs/test_report.json")
+        expected_path = Path("/home/potato/TAGS/ecosystem/DevOnboarder/logs/test_report.json")
         mock_file.assert_called_once_with(expected_path, "w", encoding="utf-8")
         mock_file().write.assert_called()
 

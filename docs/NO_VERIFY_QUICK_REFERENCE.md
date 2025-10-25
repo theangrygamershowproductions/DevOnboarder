@@ -25,7 +25,7 @@ visibility: internal
 
 DevOnboarder has **ZERO TOLERANCE** for unauthorized `--no-verify` usage.
 
-## ❌ FORBIDDEN
+##  FORBIDDEN
 
 ```bash
 
@@ -37,7 +37,7 @@ git commit --no-verify -m "Skip linting"
 
 ```
 
-## ✅ EMERGENCY PROCESS
+##  EMERGENCY PROCESS
 
 **Only for true emergencies** (production outage, security fix):
 
@@ -61,7 +61,7 @@ This triggers:
 
 - Comprehensive audit logging
 
-## ✅ PREFERRED SOLUTION
+##  PREFERRED SOLUTION
 
 **Fix the actual issues instead of bypassing:**
 
@@ -86,7 +86,7 @@ git commit -m "Fix quality gate violations"
 
 ```
 
-## 🔍 CHECK COMPLIANCE
+##  CHECK COMPLIANCE
 
 ```bash
 
@@ -100,7 +100,7 @@ git commit -m "Fix quality gate violations"
 
 ```
 
-## 📋 EMERGENCY APPROVAL FORMAT
+##  EMERGENCY APPROVAL FORMAT
 
 ```bash
 

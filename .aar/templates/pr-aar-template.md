@@ -27,29 +27,29 @@ visibility: internal
 
 ## Executive Summary
 
-<!-- Brief description of what was accomplished in this PR -->
+<!-- Brief description of what was accomplished in this PR -
 
 ## Context
 
 - **PR Number**: #[PR Number]
 
-- **PR Type**: <!-- Feature/Bug Fix/Enhancement/Refactor/Infrastructure -->
+- **PR Type**: <!-- Feature/Bug Fix/Enhancement/Refactor/Infrastructure -
 
-- **Priority**: <!-- Critical/High/Medium/Low -->
+- **Priority**: <!-- Critical/High/Medium/Low -
 
 - **Files Changed**: [Files Changed Count]
 
-- **Lines Added/Removed**: +[Added] -[Removed]
+- **Lines Added/Removed**: [Added] -[Removed]
 
-- **Duration**: <!-- Open Date to Merge Date -->
+- **Duration**: <!-- Open Date to Merge Date -
 
 - **Author**: @[Author]
 
-- **Reviewers**: <!-- @reviewer1, @reviewer2 -->
+- **Reviewers**: <!-- @reviewer1, @reviewer2 -
 
 ## Timeline
 
-<!-- Key milestones and activities -->
+<!-- Key milestones and activities -
 
 - **PR Creation**: Initial implementation and draft
 
@@ -61,21 +61,21 @@ visibility: internal
 
 ## Technical Changes
 
-<!-- Summary of technical implementation -->
+<!-- Summary of technical implementation -
 
 ### Key Components Modified
 
-- **Backend Changes**: <!-- API endpoints, database changes, etc. -->
+- **Backend Changes**: <!-- API endpoints, database changes, etc. -
 
-- **Frontend Changes**: <!-- UI updates, component changes, etc. -->
+- **Frontend Changes**: <!-- UI updates, component changes, etc. -
 
-- **Infrastructure Changes**: <!-- CI/CD, deployment, configuration -->
+- **Infrastructure Changes**: <!-- CI/CD, deployment, configuration -
 
-- **Documentation Updates**: <!-- README, docs, comments -->
+- **Documentation Updates**: <!-- README, docs, comments -
 
 ### Architectural Decisions
 
-<!-- Important technical decisions made during development -->
+<!-- Important technical decisions made during development -
 
 - **Design Pattern**: Choice of implementation approach
 
@@ -87,7 +87,7 @@ visibility: internal
 
 ## What Worked Well
 
-<!-- Successful patterns and effective processes -->
+<!-- Successful patterns and effective processes -
 
 - Effective code review process and collaboration
 
@@ -99,7 +99,7 @@ visibility: internal
 
 ## Areas for Improvement
 
-<!-- Process bottlenecks and improvement opportunities -->
+<!-- Process bottlenecks and improvement opportunities -
 
 - Earlier feedback on design decisions
 
@@ -111,7 +111,7 @@ visibility: internal
 
 ## Testing Approach
 
-<!-- How the changes were validated -->
+<!-- How the changes were validated -
 
 - **Unit Tests**: Coverage and new test cases
 
@@ -123,7 +123,7 @@ visibility: internal
 
 ## Action Items
 
-<!-- Specific improvements to implement -->
+<!-- Specific improvements to implement -
 
 - [ ] Update documentation in [specific location] (@owner, due: YYYY-MM-DD)
 
@@ -135,7 +135,7 @@ visibility: internal
 
 ## Lessons Learned
 
-<!-- Key insights and knowledge gained -->
+<!-- Key insights and knowledge gained -
 
 ### Technical Learnings
 
@@ -155,7 +155,7 @@ visibility: internal
 
 ## Knowledge Sharing
 
-<!-- Information to share with the team -->
+<!-- Information to share with the team -
 
 - **Reusable Components**: Components/functions that can be reused
 
@@ -165,7 +165,7 @@ visibility: internal
 
 ## Follow-up Work
 
-<!-- Related work that should be prioritized -->
+<!-- Related work that should be prioritized -
 
 - **Technical Debt**: Issues identified but not addressed
 

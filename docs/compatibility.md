@@ -33,11 +33,11 @@ This document outlines compatibility requirements and supported platforms for De
 
 ### Operating Systems
 
-- Linux (Ubuntu 20.04+, RHEL 8+)
+- Linux (Ubuntu 20.04, RHEL 8)
 
-- macOS (10.15+)
+- macOS (10.15)
 
-- Windows (10+) with WSL2
+- Windows (10) with WSL2
 
 ### Language Versions
 
@@ -49,22 +49,22 @@ This document outlines compatibility requirements and supported platforms for De
 
 ### Containers
 
-- Docker Engine 20.10+
+- Docker Engine 20.10
 
-- Docker Compose 2.0+
+- Docker Compose 2.0
 
 ## Browser Support
 
-- Chrome 90+
+- Chrome 90
 
-- Firefox 88+
+- Firefox 88
 
-- Safari 14+
+- Safari 14
 
-- Edge 90+
+- Edge 90
 
 ## Database Compatibility
 
-- PostgreSQL 13+ (production)
+- PostgreSQL 13 (production)
 
-- SQLite 3.31+ (development)
+- SQLite 3.31 (development)

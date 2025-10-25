@@ -137,13 +137,13 @@ def main():
     print(f"   Schema file: {schema_file}")
 
     if not schema_file.exists():
-        print(f"❌ Agent schema not found: {schema_file}")
+        print(f" Agent schema not found: {schema_file}")
         sys.exit(1)
 
     try:
         schema = load_schema(schema_file)
     except Exception as e:
-        print(f"❌ Failed to load schema: {e}")
+        print(f" Failed to load schema: {e}")
         sys.exit(1)
 
     validation_errors = 0
@@ -168,19 +168,19 @@ def main():
         if not agent_file.is_file():
             continue
 
-        total_files += 1
+        total_files = 1
         agent_name = agent_file.stem
 
         # Extract frontmatter
         frontmatter = extract_frontmatter(agent_file)
 
         if frontmatter is None:
-            print(f"❌ {agent_name}: Failed to parse YAML frontmatter")
-            validation_errors += 1
+            print(f" {agent_name}: Failed to parse YAML frontmatter")
+            validation_errors = 1
             continue
 
         if not frontmatter:
-            print(f"⚠️  {agent_name}: No frontmatter found")
+            print(f"  {agent_name}: No frontmatter found")
             print(f"   File: {agent_file}")
             continue
 
@@ -189,33 +189,33 @@ def main():
         try:
             validate(instance=frontmatter, schema=schema)
         except ValidationError as e:
-            print(f"❌ {agent_name}: Schema validation failed")
+            print(f" {agent_name}: Schema validation failed")
             print(f"   File: {agent_file}")
             print(f"   Error: {e.message}")
             if e.path:
-                print(f"   Path: {' -> '.join(str(p) for p in e.path)}")
-            validation_errors += 1
+                print(f"   Path: {'  '.join(str(p) for p in e.path)}")
+            validation_errors = 1
             schema_valid = False
         except Exception as e:
-            print(f"❌ {agent_name}: Validation error: {e}")
-            validation_errors += 1
+            print(f" {agent_name}: Validation error: {e}")
+            validation_errors = 1
             schema_valid = False
 
         # DevOnboarder-specific validation
         devonboarder_errors = validate_devonboarder_metadata(frontmatter, agent_name)
         if devonboarder_errors:
-            print(f"❌ {agent_name}: DevOnboarder validation failed")
+            print(f" {agent_name}: DevOnboarder validation failed")
             print(f"   File: {agent_file}")
             for error in devonboarder_errors:
                 print(f"   • {error}")
-            validation_errors += 1
+            validation_errors = 1
             schema_valid = False
 
         if schema_valid and not devonboarder_errors:
-            print(f"✅ {agent_name}: Valid")
+            print(f" {agent_name}: Valid")
 
     print()
-    print("📊 Agent Validation Summary:")
+    print(" Agent Validation Summary:")
     print(f"   Total files: {total_files}")
     print(f"   Validation errors: {validation_errors}")
     print("   Validation includes:")
@@ -226,8 +226,8 @@ def main():
 
     if validation_errors == 0:
         print("🎉 All agent files are valid!")
-        print("   ✅ Schema validation passed")
-        print("   ✅ DevOnboarder standards met")
+        print("    Schema validation passed")
+        print("    DevOnboarder standards met")
         sys.exit(0)
     else:
         print(f"💥 {validation_errors} agent file(s) failed validation")

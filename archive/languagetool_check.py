@@ -36,7 +36,7 @@ def main(files: list[str]) -> None:
 
     errors = 0
     for path in files:
-        errors += check_file(path, tool)
+        errors = check_file(path, tool)
     if errors:
         print(f"{errors} issues found.")
     else:

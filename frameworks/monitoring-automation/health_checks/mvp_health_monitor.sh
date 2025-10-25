@@ -30,7 +30,7 @@ log_message() {
     local level="$1"
     local message="$2"
     local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    timestamp=$(date '%Y-%m-%d %H:%M:%S')
 
     echo "[$timestamp] [$level] $message" | tee -a "$LOG_FILE"
 }
@@ -52,13 +52,13 @@ check_service_health() {
             return 0
         else
             # Unexpected output
-            failure_counts["$service_name"]=$((${failure_counts[$service_name]:-0} + 1))
+            failure_counts["$service_name"]=$((${failure_counts[$service_name]:-0}  1))
             log_message "WARN" "$service_name: UNHEALTHY - Unexpected output: $(echo "$output" | head -1)"
             return 1
         fi
     else
         # Command failed
-        failure_counts["$service_name"]=$((${failure_counts[$service_name]:-0} + 1))
+        failure_counts["$service_name"]=$((${failure_counts[$service_name]:-0}  1))
         log_message "ERROR" "$service_name: FAILED - Command error: $(echo "$output" | head -1)"
         return 1
     fi
@@ -94,7 +94,7 @@ This is an automated alert from the MVP health monitoring system.
 # Performance monitoring function
 monitor_performance() {
     local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    timestamp=$(date '%Y-%m-%d %H:%M:%S')
 
     # API response times
     auth_time=$(curl -w '%{time_total}' -s -o /dev/null http://localhost:8002/health 2>/dev/null || echo "999")
@@ -119,7 +119,7 @@ monitor_performance() {
 # System resource monitoring
 monitor_resources() {
     local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    timestamp=$(date '%Y-%m-%d %H:%M:%S')
 
     # Disk usage
     disk_usage=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
@@ -138,7 +138,7 @@ monitor_resources() {
     fi
 
     if [[ $container_count -lt 2 ]]; then
-        log_message "WARN" "Low container count: $container_count (expected: 2+)"
+        log_message "WARN" "Low container count: $container_count (expected: 2)"
     fi
 }
 
@@ -154,7 +154,7 @@ trap cleanup SIGINT SIGTERM
 log_message "INFO" "Health monitoring started"
 
 while true; do
-    echo "INFO: Health Check - $(date '+%H:%M:%S')"
+    echo " Health Check - $(date '%H:%M:%S')"
 
     # Service health checks
     check_service_health "auth-service" "curl -sf http://localhost:8002/health" "healthy\\|ok\\|running"
@@ -185,16 +185,16 @@ while true; do
 
     for service in auth-service xp-api frontend database discord-bot; do
         if [[ "${last_status[$service]}" == "HEALTHY" ]]; then
-            healthy_count=$((healthy_count + 1))
+            healthy_count=$((healthy_count  1))
         fi
     done
 
-    echo "STATS: Status: $healthy_count/$total_services services healthy"
+    echo " Status: $healthy_count/$total_services services healthy"
 
     if [[ $healthy_count -eq $total_services ]]; then
-        echo "SUCCESS: All services operational"
+        echo " All services operational"
     else
-        echo "WARNING:  Some services need attention"
+        echo "  Some services need attention"
     fi
 
     echo "TIME: Next check in ${MONITOR_INTERVAL}s..."

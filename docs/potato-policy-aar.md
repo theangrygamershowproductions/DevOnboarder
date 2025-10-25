@@ -41,7 +41,7 @@ The **Potato Policy** isn't just another automation script. It's a battle-tested
 
 The Potato Policy embodies a fundamental truth about engineering:
 
-### Pain → Protocol → Protection
+### Pain  Protocol  Protection
 
 - **It's not just about avoiding pain now**
 
@@ -55,15 +55,15 @@ The Potato Policy embodies a fundamental truth about engineering:
 
 What started as a potential security nightmare became:
 
-✅ **8 file patterns protected** - No more accidental secret exposure
+ **8 file patterns protected** - No more accidental secret exposure
 
-✅ **Automated enforcement** - Humans don't have to remember
+ **Automated enforcement** - Humans don't have to remember
 
-✅ **Violation reporting** - GitHub issues track any attempts
+ **Violation reporting** - GitHub issues track any attempts
 
-✅ **Audit trails** - 90-day CI artifact retention for compliance
+ **Audit trails** - 90-day CI artifact retention for compliance
 
-✅ **Real-time monitoring** - Badge shows status at a glance
+ **Real-time monitoring** - Badge shows status at a glance
 
 ## 🎖️ Battle-Tested Certification
 
@@ -88,7 +88,7 @@ Every automated check prevents a midnight crisis.
 
 **The best security policies aren't theoretical** — they're the ones written at 2 AM after someone just learned the hard way that Git never forgets, Docker builds persist, and the internet is forever.
 
-## 🚀 From Pain to Power
+##  From Pain to Power
 
 So yeah, it may have hurt building this.
 Someone probably learned these lessons the hard way.

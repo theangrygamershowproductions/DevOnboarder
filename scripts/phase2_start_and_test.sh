@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.." || exit
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/phase2_integration_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/phase2_integration_$(date %Y%m%d_%H%M%S).log"
 
 echo "Phase 2: Service Integration & CORS Testing - Start and Test"
 echo "Log file: $LOG_FILE"
@@ -43,7 +43,7 @@ wait_for_services() {
         fi
 
         sleep $HEALTH_CHECK_INTERVAL
-        wait_time=$((wait_time + HEALTH_CHECK_INTERVAL))
+        wait_time=$((wait_time  HEALTH_CHECK_INTERVAL))
     done
 
     if [ "$services_healthy" = "true" ]; then
@@ -135,16 +135,16 @@ generate_phase2_report() {
     echo ""
 
     if [ "${TESTS_SUCCESSFUL:-false}" = "true" ]; then
-        echo "SUCCESS: Phase 2 Integration & CORS Testing Complete"
+        echo " Phase 2 Integration & CORS Testing Complete"
         echo ""
         echo "Achievements:"
-        echo "  ✓ Multi-subdomain tunnel configuration validated"
-        echo "  ✓ All services started successfully"
-        echo "  ✓ Service health checks passed"
-        echo "  ✓ CORS configuration validated"
-        echo "  ✓ Cross-service communication tested"
-        echo "  ✓ Tunnel connectivity verified"
-        echo "  ✓ Response time performance validated"
+        echo "   Multi-subdomain tunnel configuration validated"
+        echo "   All services started successfully"
+        echo "   Service health checks passed"
+        echo "   CORS configuration validated"
+        echo "   Cross-service communication tested"
+        echo "   Tunnel connectivity verified"
+        echo "   Response time performance validated"
         echo ""
         echo "Ready for Phase 3: Production Optimization & Monitoring"
         echo ""
@@ -156,7 +156,7 @@ generate_phase2_report() {
 
         # Create completion marker
         cat > CLOUDFLARE_TUNNEL_PHASE2_COMPLETE.md << 'EOF'
-# Cloudflare Tunnel Phase 2 Implementation - COMPLETE ✅
+# Cloudflare Tunnel Phase 2 Implementation - COMPLETE 
 
 ## Integration & CORS Testing Results
 
@@ -186,17 +186,17 @@ generate_phase2_report() {
    - No proxy overhead from Traefik elimination
    - Clean subdomain separation maintained
 
-### 🚀 **Live Architecture**
+###  **Live Architecture**
 
 ```
-auth.dev.theangrygamershow.com     → auth-service:8002 ✓
-api.dev.theangrygamershow.com      → backend:8001 ✓
-discord.dev.theangrygamershow.com  → discord-integration:8081 ✓
-dashboard.dev.theangrygamershow.com → dashboard-service:8003 ✓
-dev.theangrygamershow.com          → frontend:3000 ✓
+auth.dev.theangrygamershow.com      auth-service:8002 
+api.dev.theangrygamershow.com       backend:8001 
+discord.dev.theangrygamershow.com   discord-integration:8081 
+dashboard.dev.theangrygamershow.com  dashboard-service:8003 
+dev.theangrygamershow.com           frontend:3000 
 ```
 
-### 📊 **Test Results Summary**
+###  **Test Results Summary**
 
 - **Service Health**: 5/5 services healthy
 - **URL Connectivity**: 5/5 tunnel URLs accessible

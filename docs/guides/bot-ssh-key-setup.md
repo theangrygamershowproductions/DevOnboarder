@@ -51,7 +51,7 @@ echo "$PMBOT_SSH_PRIVATE" | ssh-keygen -y -f /dev/stdin
 
    - Log in as `scarabofthespudhead`
 
-   - Navigate to: Settings → SSH and GPG keys
+   - Navigate to: Settings  SSH and GPG keys
 
 2. **Add SSH Key**:
 

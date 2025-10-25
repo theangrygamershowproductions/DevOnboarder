@@ -58,7 +58,7 @@ env:
 
 ### 2. Workflow Security Audit
 
-- Review all 22+ GitHub Actions workflows
+- Review all 22 GitHub Actions workflows
 
 - Identify token usage patterns
 

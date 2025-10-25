@@ -4,7 +4,7 @@
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Quick CI Dashboard"
@@ -76,7 +76,7 @@ echo ""
 # 6. Dashboard hint
 if [ -f "logs/ci_dashboard_report.html" ]; then
     REPORT_AGE=$(stat -c %Y logs/ci_dashboard_report.html)
-    CURRENT_TIME=$(date +%s)
+    CURRENT_TIME=$(date %s)
     AGE_HOURS=$(( (CURRENT_TIME - REPORT_AGE) / 3600 ))
 
     echo "Dashboard Report:"

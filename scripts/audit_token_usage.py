@@ -14,7 +14,7 @@ import argparse
 try:
     import yaml
 except ImportError:
-    print("❌ PyYAML not found. Install with: pip install PyYAML")
+    print(" PyYAML not found. Install with: pip install PyYAML")
     sys.exit(1)
 
 # Define constants to avoid hardcoded strings
@@ -42,16 +42,16 @@ class TokenAuditor:
         registry_path = self.project_root / ".codex" / "tokens" / "token_scope_map.yaml"
 
         if not registry_path.exists():
-            print(f"❌ Bot registry not found: {registry_path}")
+            print(f" Bot registry not found: {registry_path}")
             sys.exit(1)
 
         try:
             with open(registry_path, "r") as f:
                 self.bot_registry = yaml.safe_load(f)
             token_count = len(self._get_all_tokens())
-            print(f"✅ Loaded bot registry: {token_count} registered tokens")
+            print(f" Loaded bot registry: {token_count} registered tokens")
         except Exception as e:
-            print(f"❌ Failed to load bot registry: {e}")
+            print(f" Failed to load bot registry: {e}")
             sys.exit(1)
 
     def _get_all_tokens(self) -> Dict[str, Dict]:
@@ -139,8 +139,7 @@ class TokenAuditor:
                                     "token": token_name,
                                     "line": token_usage.get("line", "unknown"),
                                     "message": (
-                                        "Using GITHUB_TOKEN for readonly "
-                                        "operations (acceptable)"
+                                        "Using GITHUB_TOKEN for readonly " + "operations (acceptable)"
                                     ),
                                     "severity": "WARNING",
                                     "context": context,
@@ -207,7 +206,7 @@ class TokenAuditor:
                                 "file": str(workflow_path),
                                 "token": token_name,
                                 "bot_identity": token_info["bot_identity"],
-                                "message": f"✅ Correctly using {token_name}",
+                                "message": f" Correctly using {token_name}",
                             }
                         )
 
@@ -233,7 +232,7 @@ class TokenAuditor:
         )
 
         # Pattern 2: env: GH_TOKEN or GITHUB_TOKEN
-        env_pattern = re.compile(r"^\s*(GH_TOKEN|GITHUB_TOKEN):\s*(.+)$", re.MULTILINE)
+        env_pattern = re.compile(r"^\s*(GH_TOKEN|GITHUB_TOKEN):\s*(.)$", re.MULTILINE)
 
         lines = content.split("\n")
 
@@ -306,10 +305,10 @@ class TokenAuditor:
         workflows_dir = self.project_root / ".github" / "workflows"
 
         if not workflows_dir.exists():
-            print(f"⚠️  No workflows directory found: {workflows_dir}")
+            print(f"  No workflows directory found: {workflows_dir}")
             return
 
-        print(f"🔍 Auditing workflows in {workflows_dir}")
+        print(f" Auditing workflows in {workflows_dir}")
 
         for workflow_file in workflows_dir.glob("*.yml"):
             violations = self.audit_workflow_file(workflow_file)
@@ -356,13 +355,13 @@ class TokenAuditor:
 
         # Summary
         if summary["audit_passed"]:
-            print("✅ AUDIT PASSED - No critical violations found")
+            print(" AUDIT PASSED - No critical violations found")
         else:
             critical = summary["critical_violations"]
             errors = summary["error_violations"]
-            print(f"❌ AUDIT FAILED - {critical} critical, {errors} errors")
+            print(f" AUDIT FAILED - {critical} critical, {errors} errors")
 
-        print("📊 Summary:")
+        print(" Summary:")
         print(f"   • Total violations: {summary['total_violations']}")
         print(f"   • Critical: {summary['critical_violations']}")
         print(f"   • Errors: {summary['error_violations']}")
@@ -371,9 +370,9 @@ class TokenAuditor:
 
         # Critical violations
         if report["violations"]:
-            print("\n❌ VIOLATIONS:")
+            print("\n VIOLATIONS:")
             for violation in report["violations"]:
-                severity_icon = "🚨" if violation.get("severity") == "CRITICAL" else "⚠️"
+                severity_icon = "🚨" if violation.get("severity") == "CRITICAL" else ""
                 print(f"   {severity_icon} {violation['file']}")
                 print(f"      Type: {violation['type']}")
                 print(f"      Message: {violation['message']}")
@@ -387,13 +386,13 @@ class TokenAuditor:
 
         # Warnings
         if report["warnings"]:
-            print("\n⚠️  WARNINGS:")
+            print("\n + WARNINGS:")
             for warning in report["warnings"]:
                 print(f"   • {warning['file']}: {warning['message']}")
 
         # Compliant items
         if report["compliant"]:
-            print("\n✅ COMPLIANT ITEMS:")
+            print("\n COMPLIANT ITEMS:")
             for compliant in report["compliant"][:10]:  # Show first 10
                 print(f"   • {compliant['message']}")
             if len(report["compliant"]) > 10:
@@ -401,7 +400,7 @@ class TokenAuditor:
                 print(f"   ... and {remaining} more")
 
         # Token registry status
-        print("\n📋 TOKEN REGISTRY STATUS:")
+        print("\n TOKEN REGISTRY STATUS:")
         print(f"   • Registered tokens: {len(report['registered_tokens'])}")
         print(f"   • Prohibited tokens: {len(report['prohibited_tokens'])}")
 
@@ -434,7 +433,7 @@ def main():
     if args.json_output:
         with open(args.json_output, "w") as f:
             json.dump(report, f, indent=2)
-        print(f"\n📄 JSON report saved to: {args.json_output}")
+        print(f"\nFILE: JSON report saved to: {args.json_output}")
 
     # Exit with error if violations found and requested
     if args.fail_on_violations and not report["summary"]["audit_passed"]:

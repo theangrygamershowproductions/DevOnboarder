@@ -182,7 +182,7 @@ All templates use standardized action versions per DevOnboarder requirements:
 
 ```yaml
 
-# ✅ REQUIRED - Current standardized versions
+#  REQUIRED - Current standardized versions
 
 - uses: actions/checkout@v5        # Repository checkout
 

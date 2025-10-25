@@ -37,7 +37,7 @@ Successfully integrated CI failure issue tracking and resolution into the DevOnb
 
 - **Content**: Full CI analysis and failure details
 
-- **Token Hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **Token Hierarchy**: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 ### 2. Dashboard Generation (ci-dashboard-generator.yml)
 
@@ -79,7 +79,7 @@ Both creation and closure use identical format:
 All workflows use the same token hierarchy:
 
 ```text
-CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 ```
 
@@ -105,7 +105,7 @@ All operations target issues with `ci-failure` label for precise targeting.
 
 ## Benefits
 
-1. **Complete Lifecycle**: CI failure → Issue creation → Dashboard → Resolution
+1. **Complete Lifecycle**: CI failure  Issue creation  Dashboard  Resolution
 
 2. **Automatic Cleanup**: No manual issue management required
 
@@ -117,7 +117,7 @@ All operations target issues with `ci-failure` label for precise targeting.
 
 ## Implementation Status
 
-✅ **COMPLETE**: All three workflow components integrated and ready for deployment
+ **COMPLETE**: All three workflow components integrated and ready for deployment
 
 - CI failure issue creation (existing, validated)
 

@@ -75,7 +75,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **Startup logging**: Bot provides detailed environment info on startup
 
-- **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
+- **ESLint v9 flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 

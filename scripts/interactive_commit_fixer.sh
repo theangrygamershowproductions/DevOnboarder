@@ -33,7 +33,7 @@ convert_to_conventional() {
             ;;
         *)
             # Try to auto-detect and suggest format
-            if [[ "$original" =~ ^[A-Z]+: ]]; then
+            if [[ "$original" =~ ^[A-Z]: ]]; then
                 # Already has type, just need scope
                 TYPE=$(echo "$original" | cut -d: -f1)
                 DESCRIPTION=$(echo "$original" | cut -d: -f2- | sed 's/^ *//')
@@ -59,10 +59,10 @@ convert_to_conventional() {
 }
 
 # Get commits that need fixing
-echo "🔍 Analyzing commits from origin/main to HEAD..."
+echo " Analyzing commits from origin/main to HEAD..."
 COMMITS=$(git log --pretty=format:'%h %s' origin/main..HEAD)
 
-echo "📋 Current commits:"
+echo " Current commits:"
 echo "$COMMITS"
 echo
 
@@ -75,11 +75,11 @@ while IFS= read -r line; do
         MSG=$(echo "$line" | cut -d' ' -f2-)
 
         # Check if message follows conventional format
-        if [[ ! "$MSG" =~ ^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|REVERT|CI|PERF|BUILD)\([a-z-]+\):.+ ]]; then
-            echo "❌ Non-conventional: $MSG"
+        if [[ ! "$MSG" =~ ^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|REVERT|CI|PERF|BUILD)\([a-z-]\):. ]]; then
+            echo " Non-conventional: $MSG"
             NEEDS_FIXING=true
         else
-            echo "✅ Conventional: $MSG"
+            echo " Conventional: $MSG"
         fi
     fi
 done <<< "$COMMITS"
@@ -90,21 +90,21 @@ if [ "$NEEDS_FIXING" = false ]; then
 fi
 
 echo
-read -p "🚀 Would you like to auto-fix these commit messages? (y/N): " -n 1 -r
+read -p " Would you like to auto-fix these commit messages? (y/N): " -n 1 -r
 echo
 
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Operation cancelled."
+    echo " Operation cancelled."
     exit 1
 fi
 
 # Create backup
-BACKUP_BRANCH="backup-interactive-fix-$(date +%Y%m%d-%H%M%S)"
+BACKUP_BRANCH="backup-interactive-fix-$(date %Y%m%d-%H%M%S)"
 echo "💾 Creating backup: $BACKUP_BRANCH"
 git branch "$BACKUP_BRANCH"
 
 # Start interactive rebase with auto-generated messages
-echo "🔧 Starting interactive rebase with message fixes..."
+echo " Starting interactive rebase with message fixes..."
 
 # Create temporary rebase script
 REBASE_SCRIPT=$(mktemp)
@@ -134,7 +134,7 @@ NEW_MSG=$(convert_message "$ORIGINAL_MSG")
 echo "$NEW_MSG" > "$1"
 EOF
 
-chmod +x "$REBASE_SCRIPT"
+chmod x "$REBASE_SCRIPT"
 
 # Set the commit message editor to our script
 export GIT_EDITOR="$REBASE_SCRIPT"
@@ -145,11 +145,11 @@ git rebase -i origin/main
 # Clean up
 rm -f "$REBASE_SCRIPT"
 
-echo "✅ Interactive rebase completed!"
-echo "🔍 Checking results..."
+echo " Interactive rebase completed!"
+echo " Checking results..."
 git log --oneline origin/main..HEAD | head -5
 
 echo
 echo "🎉 Commit message fixing complete!"
-echo "📋 Backup available at: $BACKUP_BRANCH"
-echo "🚀 Run: git push --force-with-lease origin $(git branch --show-current)"
+echo " Backup available at: $BACKUP_BRANCH"
+echo " Run: git push --force-with-lease origin $(git branch --show-current)"

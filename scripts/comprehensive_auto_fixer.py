@@ -186,12 +186,12 @@ def generate_report(results: List[Dict[str, Any]]) -> None:
 
     logger.info("Successful fixes: %d", len(successful_fixes))
     for fix in successful_fixes:
-        logger.info("  ✅ %s", fix["description"])
+        logger.info("   %s", fix["description"])
 
     if failed_fixes:
         logger.warning("Failed fixes: %d", len(failed_fixes))
         for fix in failed_fixes:
-            logger.warning("  ❌ %s", fix["description"])
+            logger.warning("   %s", fix["description"])
             if fix["stderr"]:
                 logger.warning("     Error: %s", fix["stderr"])
 

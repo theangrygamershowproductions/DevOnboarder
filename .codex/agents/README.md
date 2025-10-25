@@ -144,7 +144,7 @@ The infrastructure supports adding:
 
 ## Validation Status
 
-✅ **Current Status**: All prompts are Codex-ready
+ **Current Status**: All prompts are Codex-ready
 
 - YAML frontmatter validated
 

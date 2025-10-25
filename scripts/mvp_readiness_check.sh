@@ -21,32 +21,32 @@ check_command() {
     local command="$2"
     local expected_pattern="$3"
 
-    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    TOTAL_CHECKS=$((TOTAL_CHECKS  1))
 
-    echo -n "🔍 $description... "
+    echo -n " $description... "
 
     if output=$(eval "$command" 2>&1); then
         if [[ -z "$expected_pattern" ]] || echo "$output" | grep -q "$expected_pattern"; then
-            echo "✅ PASS"
-            PASSED_CHECKS=$((PASSED_CHECKS + 1))
+            echo " PASS"
+            PASSED_CHECKS=$((PASSED_CHECKS  1))
             return 0
         else
-            echo "❌ FAIL (unexpected output)"
+            echo " FAIL (unexpected output)"
             echo "   Expected pattern: $expected_pattern"
             echo "   Actual output: $(echo "$output" | head -1)"
-            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            FAILED_CHECKS=$((FAILED_CHECKS  1))
             return 1
         fi
     else
-        echo "❌ FAIL (command failed)"
+        echo " FAIL (command failed)"
         echo "   Error: $(echo "$output" | head -1)"
-        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECKS=$((FAILED_CHECKS  1))
         return 1
     fi
 }
 
 # 1. Service Health Checks
-echo "🏥 Service Health Validation"
+echo "HOSPITAL: Service Health Validation"
 echo "=============================="
 
 check_command "Auth Service Health" "curl -sf http://localhost:8002/health" "healthy\\|ok\\|running"
@@ -71,11 +71,11 @@ setup_python_env() {
         # Add virtual environment to PATH
         export PATH=".venv/bin:$PATH"
     elif command -v python3 >/dev/null 2>&1; then
-        echo "⚠️  Virtual environment not found, using system Python"
+        echo "  Virtual environment not found, using system Python"
         export PYTHON_CMD="python3"
         export PIP_CMD="pip3"
     else
-        echo "❌ Python not found - please install Python or set up virtual environment"
+        echo " Python not found - please install Python or set up virtual environment"
         exit 1
     fi
 }
@@ -90,7 +90,7 @@ check_command "Security Scanning" "safety check --json | jq '.vulnerabilities | 
 echo
 
 # 3. Integration Testing
-echo "🔄 Integration Testing"
+echo "SYNC: Integration Testing"
 echo "====================="
 
 check_command "Python Integration Tests" "$PYTHON_CMD -m pytest tests/integration/ --tb=no -q" "passed"
@@ -104,7 +104,7 @@ fi
 echo
 
 # 4. Performance Validation
-echo "⚡ Performance Validation"
+echo "FAST: Performance Validation"
 echo "========================"
 
 # Check API response times
@@ -124,25 +124,25 @@ echo "========================"
 if command -v vale >/dev/null 2>&1; then
     check_command "Documentation Style (Vale)" "vale docs/ --no-exit" "0 errors\\|No issues found"
 else
-    echo "⚠️  Vale not installed - skipping documentation style check"
+    echo "  Vale not installed - skipping documentation style check"
 fi
 
 if command -v markdownlint >/dev/null 2>&1; then
     check_command "Markdown Linting" "markdownlint docs/ README.md" ""
 else
-    echo "⚠️  Markdownlint not installed - skipping markdown linting"
+    echo "  Markdownlint not installed - skipping markdown linting"
 fi
 
 echo
 
 # 6. CI/CD Pipeline Health
-echo "🚀 CI/CD Pipeline Health"
+echo " CI/CD Pipeline Health"
 echo "========================"
 
 if command -v gh >/dev/null 2>&1; then
     check_command "Recent CI Success Rate" "gh run list --limit=10 --json status,conclusion | jq '[.[] | select(.status==\"completed\")] | map(select(.conclusion==\"success\")) | length' | awk '{print (\$1 >= 8 ? \"PASS\" : \"FAIL\")}'" "PASS"
 else
-    echo "⚠️  GitHub CLI not available - skipping CI pipeline health check"
+    echo "  GitHub CLI not available - skipping CI pipeline health check"
 fi
 
 echo
@@ -154,13 +154,13 @@ echo "======================"
 check_command "Python Dependencies Security" "pip-audit --desc --format=json | jq '.vulnerabilities | length'" "^0$"
 
 if [[ -f "bot/package.json" ]]; then
-    check_command "Node.js Dependencies Security" "cd bot && npm audit --audit-level high --json | jq '.metadata.vulnerabilities.high + .metadata.vulnerabilities.critical'" "^0$"
+    check_command "Node.js Dependencies Security" "cd bot && npm audit --audit-level high --json | jq '.metadata.vulnerabilities.high  .metadata.vulnerabilities.critical'" "^0$"
 fi
 
 echo
 
 # 8. Demo Environment Readiness
-echo "🎬 Demo Environment Readiness"
+echo " Demo Environment Readiness"
 echo "============================="
 
 check_command "Environment Variables" "printenv | grep -E '^(DISCORD_|DATABASE_|AUTH_)' | wc -l | awk '{print (\$1 >= 3 ? \"PASS\" : \"FAIL\")}'" "PASS"
@@ -169,7 +169,7 @@ check_command "Docker Services" "docker-compose ps | grep -E '(Up|running)' | wc
 echo
 
 # Final Results Summary
-echo "📊 MVP Readiness Summary"
+echo " MVP Readiness Summary"
 echo "========================"
 echo "Total Checks: $TOTAL_CHECKS"
 echo "Passed: $PASSED_CHECKS"
@@ -181,14 +181,14 @@ echo "Success Rate: $SUCCESS_RATE%"
 echo
 if [[ $PASSED_CHECKS -eq $TOTAL_CHECKS ]]; then
     echo "🎉 ALL CHECKS PASSED - MVP IS READY FOR DEMO!"
-    echo "✅ DevOnboarder MVP meets all quality and readiness criteria"
+    echo " DevOnboarder MVP meets all quality and readiness criteria"
     exit 0
 elif [[ $(echo "$SUCCESS_RATE >= 90" | bc) -eq 1 ]]; then
-    echo "⚠️  MVP MOSTLY READY - Minor issues need attention"
-    echo "🔧 $FAILED_CHECKS checks failed but success rate is above 90%"
+    echo "  MVP MOSTLY READY - Minor issues need attention"
+    echo " $FAILED_CHECKS checks failed but success rate is above 90%"
     exit 1
 else
-    echo "❌ MVP NOT READY - Critical issues must be resolved"
+    echo " MVP NOT READY - Critical issues must be resolved"
     echo "🚨 $FAILED_CHECKS checks failed - success rate below 90%"
     exit 2
 fi

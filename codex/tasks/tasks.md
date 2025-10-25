@@ -4,7 +4,7 @@ This master task index tracks all rollout phases for DevOnboarder’s modulariza
 
 ---
 
-## 📦 Phase 1B – Repo Extraction (Status: 🚧 In Progress)
+## 📦 Phase 1B – Repo Extraction (Status: WORK: In Progress)
 
 > Split core components into standalone repositories to enable modular orchestration.
 
@@ -24,7 +24,7 @@ This master task index tracks all rollout phases for DevOnboarder’s modulariza
 
 ---
 
-## 🔮 Future Considerations (Phase 2.2+ Planning)
+## 🔮 Future Considerations (Phase 2.2 Planning)
 
 - [ ] Add GitLab/Bitbucket compatibility branch planning
 

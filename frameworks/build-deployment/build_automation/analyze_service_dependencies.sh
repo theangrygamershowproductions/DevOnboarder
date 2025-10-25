@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 mkdir -p logs
 exec > >(tee -a "$LOG_FILE") 2>&1
 
@@ -38,12 +38,12 @@ echo "Analyzing HTTP calls between services..."
 echo "Services making HTTP requests:"
 find src/ -name "*.py" -exec grep -l "requests\|httpx\|fetch\|urllib" {} \; 2>/dev/null | while read -r file; do
     echo "File: $file"
-    grep -n "localhost:[0-9]\+\|http://.*:[0-9]\+\|api/.*/" "$file" 2>/dev/null | head -3 | sed 's/^/  /'
+    grep -n "localhost:[0-9]\\|http://.*:[0-9]\\|api/.*/" "$file" 2>/dev/null | head -3 | sed 's/^/  /'
     echo ""
 done
 
 echo "Port usage analysis:"
-grep -r "localhost:[0-9]\+" src/ 2>/dev/null | cut -d: -f3 | cut -d'/' -f1 | sort | uniq -c | sort -nr
+grep -r "localhost:[0-9]\" src/ 2>/dev/null | cut -d: -f3 | cut -d'/' -f1 | sort | uniq -c | sort -nr
 
 echo ""
 
@@ -77,7 +77,7 @@ for service_dir in src/*/; do
         echo "  External imports: $external_imports"
 
         if [ "$external_imports" -gt 0 ] && [ "$internal_imports" -gt 0 ]; then
-            coupling_ratio=$(echo "scale=2; $external_imports / ($internal_imports + $external_imports)" | bc 2>/dev/null || echo "N/A")
+            coupling_ratio=$(echo "scale=2; $external_imports / ($internal_imports  $external_imports)" | bc 2>/dev/null || echo "N/A")
             echo "  Coupling ratio: $coupling_ratio (lower is better for splitting)"
         fi
         echo ""

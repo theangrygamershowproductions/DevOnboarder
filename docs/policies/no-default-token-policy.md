@@ -9,7 +9,7 @@ similarity_group: policies-policies
 # No Default Token Policy v1.0
 
 **Policy Version**: 1.0
-**Effective Date**: $(date +%Y-%m-%d)
+**Effective Date**: $(date %Y-%m-%d)
 **Classification**: Security Critical - Internal Use
 
 **Review Cycle**: Quarterly
@@ -177,7 +177,7 @@ Security measures for all tokens:
 
 ```yaml
 
-# ✅ CORRECT: Using specialized token with defined scope
+#  CORRECT: Using specialized token with defined scope
 
 steps:
     - name: Automated Issue Management
@@ -194,7 +194,7 @@ steps:
 
 ```yaml
 
-# ❌ PROHIBITED: Using default GITHUB_TOKEN for API operations
+#  PROHIBITED: Using default GITHUB_TOKEN for API operations
 
 steps:
     - name: Issue Management
@@ -211,7 +211,7 @@ steps:
 
 ```yaml
 
-# ✅ ACCEPTABLE: Fallback to specialized token (not GITHUB_TOKEN)
+#  ACCEPTABLE: Fallback to specialized token (not GITHUB_TOKEN)
 
 steps:
     - name: CI Operations
@@ -597,7 +597,7 @@ See [Token Permissions Matrix](../security/token-permissions-matrix.md) for comp
 
 **Document Classification**: Security Critical - Internal Use
 
-**Next Review Date**: $(date -d "+3 months" +%Y-%m-%d)
+**Next Review Date**: $(date -d "3 months" %Y-%m-%d)
 **Policy Owner**: DevOnboarder Security Team
 **Approved By**: DevOnboarder Project Lead
-**Implementation Date**: $(date +%Y-%m-%d)
+**Implementation Date**: $(date %Y-%m-%d)

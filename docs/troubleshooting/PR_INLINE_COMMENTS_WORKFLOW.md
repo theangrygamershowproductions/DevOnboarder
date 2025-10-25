@@ -12,7 +12,7 @@ similarity_group: troubleshooting-troubleshooting
 
 Efficient extraction, review, and resolution tracking of GitHub Copilot and reviewer inline comments for improved code quality, faster feedback integration, and comprehensive learning documentation.
 
-## 🛠️ Quick Reference
+##  Quick Reference
 
 ### Essential Commands
 
@@ -84,7 +84,7 @@ Efficient extraction, review, and resolution tracking of GitHub Copilot and revi
 
 ```
 
-## 📋 Workflow Integration
+##  Workflow Integration
 
 ### 1. PR Creation Workflow
 
@@ -160,7 +160,7 @@ PR_NUMBER=$(gh pr list --author @me --limit 1 --json number --jq '.[0].number')
 
 ```
 
-## 🔍 Advanced Features
+##  Advanced Features
 
 ### Comment Filtering
 
@@ -181,61 +181,61 @@ PR_NUMBER=$(gh pr list --author @me --limit 1 --json number --jq '.[0].number')
 ### Enhanced Display with Resolutions
 
 ```bash
-┌─────────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────────
 │ 💬 Comment ID: 2418567890
 │ 👤 User: github-copilot[bot]
 │ 📅 Date: 2025-09-10 14:30
-│ 📁 File: scripts/devonboarder_policy_check.sh
-│ 📍 Line: 42
-│ 🔗 URL: https://github.com/owner/repo/pull/1330#r2418567890
-├─────────────────────────────────────────────────────────────
+│  File: scripts/devonboarder_policy_check.sh
+│ LOCATION: Line: 42
+│ LINK: URL: https://github.com/owner/repo/pull/1330#r2418567890
+─────────────────────────────────────────────────────────────
 │ 🤖 Comment:
 │ Use printf instead of echo with multiplication:
 │ printf '=%.0s' {1..60}; echo
 │
-│ ✅ RESOLUTION:
-│   ⚡ Action: Applied - replaced echo "=" * 60 with printf pattern
+│  RESOLUTION:
+│   FAST: Action: Applied - replaced echo "=" * 60 with printf pattern
 
-│   💡 Reason: Invalid bash syntax fix per Copilot suggestion
-│   📝 Notes: Tested locally, passes shellcheck validation
-│   🔗 Commit: abc123def
-└─────────────────────────────────────────────────────────────
+│    Reason: Invalid bash syntax fix per Copilot suggestion
+│    Notes: Tested locally, passes shellcheck validation
+│   LINK: Commit: abc123def
+─────────────────────────────────────────────────────────────
 
 ```
 
 ### Resolution Summary Format
 
 ```bash
-📋 RESOLUTION SUMMARY for PR #1330
+ RESOLUTION SUMMARY for PR #1330
 Repository: owner/repo
 
-✅ RESOLVED (5/5 comments - 100%)
+ RESOLVED (5/5 comments - 100%)
 
-❌ NO RESOLUTION (0 comments)
+ NO RESOLUTION (0 comments)
 
-📊 SUMMARY: 5/5 comments resolved (100%)
+ SUMMARY: 5/5 comments resolved (100%)
 
 ```
 
 ### Example Output
 
 ```bash
-📊 INLINE COMMENTS SUMMARY
+ INLINE COMMENTS SUMMARY
 ==========================
 Total comments: 5
 Filtered comments: 5
 
-📁 COMMENTS BY FILE:
+ COMMENTS BY FILE:
    5  scripts/devonboarder_policy_check.sh
 
 👤 COMMENTS BY USER:
    5  Copilot
 
-💡 Code suggestions: 5
+ Code suggestions: 5
 
 ```
 
-## 🚀 Benefits
+##  Benefits
 
 ### For Developers
 
@@ -257,7 +257,7 @@ Filtered comments: 5
 
 - **Documentation**: Clear audit trail of feedback and responses
 
-## 📍 Integration Points
+## LOCATION: Integration Points
 
 ### With DevOnboarder Quality Gates
 

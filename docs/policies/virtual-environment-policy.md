@@ -41,7 +41,7 @@ visibility: internal
 
 # DevOnboarder Virtual Environment Requirements
 
-## ⚠️ CRITICAL: Virtual Environment Requirements
+##  CRITICAL: Virtual Environment Requirements
 
 ### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
 
@@ -61,7 +61,7 @@ This project REQUIRES isolated environments for ALL tooling:
 
 ```bash
 
-# ✅ CORRECT - Virtual environment usage
+#  CORRECT - Virtual environment usage
 
 source .venv/bin/activate
 pip install -e .[test]
@@ -69,7 +69,7 @@ python -m pytest
 python -m black .
 python -m openapi_spec_validator src/devonboarder/openapi.json
 
-# ❌ WRONG - System installation
+#  WRONG - System installation
 
 sudo pip install package
 pip install --user package

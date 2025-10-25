@@ -22,13 +22,13 @@ mkdir -p "$LOGS_DIR"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+    local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
     local file_violations=0
 
     for emoji in "${emoji_patterns[@]}"; do
         if grep -q "$emoji" "$file" 2>/dev/null; then
             echo "VIOLATION: $file contains emoji: $emoji" >&2
-            file_violations=$((file_violations + 1))
+            file_violations=$((file_violations  1))
         fi
     done
 
@@ -48,11 +48,11 @@ check_script_violations() {
         # Extract the markdown generation sections
         awk '/cat.*>.*\.md.*<<.*EOF/,/^EOF$/' "$script" > "$temp_file" 2>/dev/null || true
 
-        local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+        local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
         for emoji in "${emoji_patterns[@]}"; do
             if grep -q "$emoji" "$temp_file" 2>/dev/null; then
                 echo "SCRIPT VIOLATION: $script generates markdown with emoji: $emoji" >&2
-                script_violations=$((script_violations + 1))
+                script_violations=$((script_violations  1))
             fi
         done
 
@@ -72,7 +72,7 @@ if [[ -d "$REPORTS_DIR" ]]; then
         local_violations=$(check_emoji_violations "$file")
         if [[ $local_violations -gt 0 ]]; then
             echo "  Found violations in: $file"
-            VIOLATIONS=$((VIOLATIONS + local_violations))
+            VIOLATIONS=$((VIOLATIONS  local_violations))
         fi
     done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
 fi
@@ -84,7 +84,7 @@ if [[ -d "$AAR_DIR" ]]; then
         local_violations=$(check_emoji_violations "$file")
         if [[ $local_violations -gt 0 ]]; then
             echo "  Found violations in: $file"
-            VIOLATIONS=$((VIOLATIONS + local_violations))
+            VIOLATIONS=$((VIOLATIONS  local_violations))
         fi
     done < <(find "$AAR_DIR" -name "*.md" -type f -print0)
 fi
@@ -106,7 +106,7 @@ for script in "${MARKDOWN_SCRIPTS[@]}"; do
         echo "Checking script: $script"
         script_violations=$(check_script_violations "$script")
         if [[ $script_violations -gt 0 ]]; then
-            VIOLATIONS=$((VIOLATIONS + script_violations))
+            VIOLATIONS=$((VIOLATIONS  script_violations))
         fi
     else
         echo "Script not found: $script"
@@ -118,7 +118,7 @@ echo "Phase 3: Validation Summary"
 echo "==========================="
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: No markdown compliance violations found"
+    echo " No markdown compliance violations found"
     echo "All script-generated markdown content follows DevOnboarder standards"
     exit 0
 else

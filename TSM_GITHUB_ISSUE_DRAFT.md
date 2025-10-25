@@ -38,7 +38,7 @@ visibility: internal
 
 ## Description
 
-The Training Simulation Module (TSM) is a proposed feature that creates a **gamified training environment for junior developers** inside DevOnboarder. Its purpose is to intentionally generate errors, capture them in CI, and use Codex + AAR loops to teach doctrine through repeatable scenarios.
+The Training Simulation Module (TSM) is a proposed feature that creates a **gamified training environment for junior developers** inside DevOnboarder. Its purpose is to intentionally generate errors, capture them in CI, and use Codex  AAR loops to teach doctrine through repeatable scenarios.
 
 The module introduces a **leveling system**:
 
@@ -64,7 +64,7 @@ This feature will not be part of the initial MVP but should be tracked as a **po
 
 ## Priority
 
-Roadmap (Phase 3+)
+Roadmap (Phase 3)
 
 ## Notes
 

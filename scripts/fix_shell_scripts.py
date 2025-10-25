@@ -64,13 +64,13 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
     # SC2086: Fix unquoted variables in common patterns
     before_quotes = content
 
-    # Fix mtime +$VAR patterns
-    content = re.sub(r"mtime \+\$([A-Z_]+)", r'mtime +"$\1"', content)
+    # Fix mtime $VAR patterns
+    content = re.sub(r"mtime \\$([A-Z_])", r'mtime "$\1"', content)
 
     # Fix common variable expansions that need quoting
     patterns = [
-        (r"\$([A-Z_]+)", r'"$\1"'),  # Basic variable refs
-        (r"\$\{([A-Z_]+)\}", r'"${\1}"'),  # Brace expansions
+        (r"\$([A-Z_])", r'"$\1"'),  # Basic variable refs
+        (r"\$\{([A-Z_])\}", r'"${\1}"'),  # Brace expansions
     ]
 
     for pattern, replacement in patterns:
@@ -82,7 +82,7 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
 
     # SC2126: Replace grep | wc -l with grep -c
     before_grep = content
-    content = re.sub(r"grep ([^|]+) \| wc -l", r"grep -c \1", content)
+    content = re.sub(r"grep ([^|]) \| wc -l", r"grep -c \1", content)
     if content != before_grep:
         issues_fixed.append("SC2126: Replaced grep | wc -l with grep -c")
 
@@ -97,7 +97,7 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
         line = lines[i].strip()
 
         # Look for echo >> file pattern
-        match = re.match(r'(\s*)(echo\s+[^>]+)\s+>>\s+"([^"]+)"', line)
+        match = re.match(r'(\s*)(echo\s[^>])\s>>\s"([^"])"', line)
         if match:
             indent, echo_cmd, filename = match.groups()
 
@@ -108,11 +108,11 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
             while j < len(lines):
                 next_line = lines[j].strip()
                 next_match = re.match(
-                    r'(\s*)(echo\s+[^>]+)\s+>>\s+"([^"]+)"', next_line
+                    r'(\s*)(echo\s[^>])\s>>\s"([^"])"', next_line
                 )
                 if next_match and next_match.group(3) == filename:
                     redirect_group.append(next_match.group(2))
-                    j += 1
+                    j = 1
                 else:
                     break
 
@@ -120,23 +120,23 @@ def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
             if len(redirect_group) > 1:
                 fixed_lines.append(f"{indent}{{")
                 for cmd in redirect_group:
-                    fixed_lines.append(f"{indent}    {cmd}")
+                    fixed_lines.append(f"{indent} | {cmd}")
                 fixed_lines.append(f'{indent}}} >> "{filename}"')
                 i = j
                 issues_fixed.append("SC2129: Grouped redirect operations")
             else:
                 fixed_lines.append(lines[i])
-                i += 1
+                i = 1
         else:
             fixed_lines.append(lines[i])
-            i += 1
+            i = 1
 
     content = "\n".join(fixed_lines)
 
     # SC2034: Comment unused variables (conservative approach)
     # Look for declare statements that might be unused
     # This is tricky to do automatically, so we'll just flag them for review
-    unused_declares = re.findall(r"^declare -A ([A-Z_]+)=", content, flags=re.MULTILINE)
+    unused_declares = re.findall(r"^declare -A ([A-Z_])=", content, flags=re.MULTILINE)
     if unused_declares:
         # Add comments about potential unused variables
         for var in unused_declares:
@@ -314,10 +314,10 @@ def main() -> int:
     for file_path in files_to_process:
         if args.dry_run:
             logger.info("Would process: %s", file_path)
-            success_count += 1
+            success_count = 1
         else:
             if process_shell_script(file_path, not args.no_backup):
-                success_count += 1
+                success_count = 1
 
     logger.info(
         "Successfully processed %d/%d files", success_count, len(files_to_process)

@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Enhanced Root Artifact Guard - Phase 3.1 Advanced Detection Engine
@@ -28,7 +28,7 @@ CLEANUP_SUGGESTIONS=()
 
 # Function to log messages with timestamp
 log_message() {
-    echo -e "${1}[$(date '+%H:%M:%S')] ${2}${NC}"
+    echo -e "${1}[$(date '%H:%M:%S')] ${2}${NC}"
 }
 
 # Function to detect execution context
@@ -103,8 +103,8 @@ check_artifact_pattern() {
                 # Add context-aware suggestions
                 add_cleanup_suggestion "$pattern_name" "$file"
 
-                VIOLATION_FILES+=("$file")
-                found_violations=$((found_violations + 1))
+                VIOLATION_FILES=("$file")
+                found_violations=$((found_violations  1))
             fi
         done < <(find . -maxdepth 1 -name "$pattern" -print0 2>/dev/null)
     done
@@ -119,28 +119,28 @@ add_cleanup_suggestion() {
 
     case "$pattern_name" in
         "python_cache")
-            CLEANUP_SUGGESTIONS+=("rm -rf $file  # Python cache - safe to remove")
+            CLEANUP_SUGGESTIONS=("rm -rf $file  # Python cache - safe to remove")
             ;;
         "python_testing")
             if [[ "$file" == *".coverage"* ]]; then
-                CLEANUP_SUGGESTIONS+=("mv $file logs/  # Move coverage to logs/")
+                CLEANUP_SUGGESTIONS=("mv $file logs/  # Move coverage to logs/")
             else
-                CLEANUP_SUGGESTIONS+=("rm -rf $file  # Test artifact - safe to remove")
+                CLEANUP_SUGGESTIONS=("rm -rf $file  # Test artifact - safe to remove")
             fi
             ;;
         "nodejs_packages")
             if [[ "$file" == "./node_modules" ]]; then
-                CLEANUP_SUGGESTIONS+=("rm -rf $file  # Should use frontend/node_modules or bot/node_modules")
+                CLEANUP_SUGGESTIONS=("rm -rf $file  # Should use frontend/node_modules or bot/node_modules")
             fi
             ;;
         "database_files")
-            CLEANUP_SUGGESTIONS+=("rm -f $file  # Temporary database - safe to remove")
+            CLEANUP_SUGGESTIONS=("rm -f $file  # Temporary database - safe to remove")
             ;;
         "docs_artifacts")
-            CLEANUP_SUGGESTIONS+=("mv $file logs/  # Move documentation artifacts to logs/")
+            CLEANUP_SUGGESTIONS=("mv $file logs/  # Move documentation artifacts to logs/")
             ;;
         *)
-            CLEANUP_SUGGESTIONS+=("rm -rf $file  # Artifact cleanup")
+            CLEANUP_SUGGESTIONS=("rm -rf $file  # Artifact cleanup")
             ;;
     esac
 }
@@ -182,7 +182,7 @@ check_root_pollution() {
 
         if check_artifact_pattern "$pattern_name"; then
             violations=$?
-            total_violations=$((total_violations + violations))
+            total_violations=$((total_violations  violations))
             log_message "$YELLOW" "   Found $violations $pattern_name violations"
         fi
     done
@@ -209,8 +209,8 @@ check_ci_specific_artifacts() {
         for artifact in "test-results" "coverage-reports" "build-logs"; do
             if [[ -e "$artifact" ]]; then
                 log_message "$RED" "CI VIOLATION: $artifact should be in logs/ or removed"
-                VIOLATION_FILES+=("$artifact")
-                VIOLATIONS=$((VIOLATIONS + 1))
+                VIOLATION_FILES=("$artifact")
+                VIOLATIONS=$((VIOLATIONS  1))
             fi
         done
     fi
@@ -252,7 +252,7 @@ auto_cleanup() {
     log_message "$YELLOW" "Starting automated cleanup..."
 
     # Create backup timestamp
-    backup_dir="logs/artifact_backups/$(date +%Y%m%d_%H%M%S)"
+    backup_dir="logs/artifact_backups/$(date %Y%m%d_%H%M%S)"
     mkdir -p "$backup_dir"
 
     log_message "$BLUE" "Creating backup in $backup_dir"
@@ -289,7 +289,7 @@ cleanup_wizard() {
 
     for i in "${!VIOLATION_FILES[@]}"; do
         file="${VIOLATION_FILES[$i]}"
-        echo "[$((i+1))] $file"
+        echo "[$((i1))] $file"
 
         if [[ -f "$file" ]]; then
             size=$(du -h "$file" 2>/dev/null | cut -f1 || echo "unknown")

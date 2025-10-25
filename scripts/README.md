@@ -25,7 +25,7 @@ This directory contains automation scripts that support the project's "quiet rel
 
 ## Core Development Scripts
 
-### 🔧 Pre-commit and Validation
+###  Pre-commit and Validation
 
 #### `verify_and_commit.sh`
 
@@ -51,21 +51,21 @@ This directory contains automation scripts that support the project's "quiet rel
 
 **Features**:
 
-- ✅ **Aggressive pre-run cleanup**: Clears ALL test artifacts before validation for clean diagnosis
+-  **Aggressive pre-run cleanup**: Clears ALL test artifacts before validation for clean diagnosis
 
-- ✅ Validates pre-commit YAML configuration
+-  Validates pre-commit YAML configuration
 
-- ✅ Runs all pre-commit hooks with comprehensive logging
+-  Runs all pre-commit hooks with comprehensive logging
 
-- ✅ Ensures virtual environment activation (mandatory)
+-  Ensures virtual environment activation (mandatory)
 
-- ✅ Stages all changes and commits with proper message format
+-  Stages all changes and commits with proper message format
 
-- ✅ Outputs all logs to `logs/` directory for troubleshooting
+-  Outputs all logs to `logs/` directory for troubleshooting
 
-- ✅ Follows project's conventional commit standards
+-  Follows project's conventional commit standards
 
-- ✅ Automatic test artifact cleanup before validation
+-  Automatic test artifact cleanup before validation
 
 #### `validate_agents.py`
 
@@ -89,7 +89,7 @@ This directory contains automation scripts that support the project's "quiet rel
 
 **Features**: Comprehensive logging to `logs/` directory, coverage data archiving
 
-### 📊 Quality Assurance
+###  Quality Assurance
 
 #### `qc_docs.sh`
 
@@ -115,17 +115,17 @@ This directory contains automation scripts that support the project's "quiet rel
 
 **Features**:
 
-- ✅ **Automatic markdown formatting**: Fixes MD009, MD022, MD032, MD031 violations
+-  **Automatic markdown formatting**: Fixes MD009, MD022, MD032, MD031 violations
 
-- ✅ **Integrated validation**: Combines markdownlint and Vale checks
+-  **Integrated validation**: Combines markdownlint and Vale checks
 
-- ✅ **DevOnboarder standards**: Enforces project markdown conventions
+-  **DevOnboarder standards**: Enforces project markdown conventions
 
-- ✅ **Backup creation**: Preserves original files during fixes
+-  **Backup creation**: Preserves original files during fixes
 
-- ✅ **Batch processing**: Handles all markdown files or specific targets
+-  **Batch processing**: Handles all markdown files or specific targets
 
-- ✅ **Quality reporting**: Comprehensive summary with actionable feedback
+-  **Quality reporting**: Comprehensive summary with actionable feedback
 
 #### `fix_markdown_formatting.py`
 
@@ -135,13 +135,13 @@ This directory contains automation scripts that support the project's "quiet rel
 
 **Features**:
 
-- ✅ **Precise fixes**: Targets specific markdownlint violations
+-  **Precise fixes**: Targets specific markdownlint violations
 
-- ✅ **Safety first**: Creates backups before modifications
+-  **Safety first**: Creates backups before modifications
 
-- ✅ **Detailed reporting**: Shows exactly what issues were fixed
+-  **Detailed reporting**: Shows exactly what issues were fixed
 
-- ✅ **DevOnboarder compliant**: Follows project quality standards
+-  **DevOnboarder compliant**: Follows project quality standards
 
 #### `check_docs.sh`
 
@@ -161,7 +161,7 @@ This directory contains automation scripts that support the project's "quiet rel
 
 **Features**: Aggregates all validation checks, excludes tests (run via separate hook)
 
-### 🗂️ Log Management
+### FOLDER: Log Management
 
 #### `manage_logs.sh`
 
@@ -199,17 +199,17 @@ bash scripts/manage_logs.sh purge
 
 **Features**:
 
-- ✅ **Pytest artifact cleanup**: Automatically removes `logs/pytest-of-*` temporary directories
+-  **Pytest artifact cleanup**: Automatically removes `logs/pytest-of-*` temporary directories
 
-- ✅ **Test artifact management**: Cleans old test runs, coverage data, validation logs
+-  **Test artifact management**: Cleans old test runs, coverage data, validation logs
 
-- ✅ **Retention policies**: Configurable days-to-keep (default: 7 days)
+-  **Retention policies**: Configurable days-to-keep (default: 7 days)
 
-- ✅ **Dry-run support**: Preview changes before execution
+-  **Dry-run support**: Preview changes before execution
 
-- ✅ **Archive functionality**: Create timestamped log archives
+-  **Archive functionality**: Create timestamped log archives
 
-- ✅ **Safe purge**: Confirmation required for complete log removal
+-  **Safe purge**: Confirmation required for complete log removal
 
 #### `clean_pytest_artifacts.sh`
 
@@ -227,13 +227,13 @@ bash scripts/clean_pytest_artifacts.sh
 
 **Features**:
 
-- ✅ **Removes pytest-of-\* directories**: Eliminates false positive "import foo" results
+-  **Removes pytest-of-\* directories**: Eliminates false positive "import foo" results
 
-- ✅ **Cleans old test artifacts**: Removes stale test runs, coverage data, validation logs
+-  **Cleans old test artifacts**: Removes stale test runs, coverage data, validation logs
 
-- ✅ **Integrated into workflow**: Runs automatically in pre-commit hooks and verify script
+-  **Integrated into workflow**: Runs automatically in pre-commit hooks and verify script
 
-- ✅ **CI compatibility**: Prevents log pollution during continuous integration
+-  **CI compatibility**: Prevents log pollution during continuous integration
 
 #### `analyze_logs.sh`
 
@@ -251,13 +251,13 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Automatic cleanup**: Cleans artifacts before analysis for accuracy
+-  **Automatic cleanup**: Cleans artifacts before analysis for accuracy
 
-- ✅ **Categorized reporting**: Groups logs by type (test runs, validation, ESLint)
+-  **Categorized reporting**: Groups logs by type (test runs, validation, ESLint)
 
-- ✅ **Size analysis**: Shows total files and disk usage
+-  **Size analysis**: Shows total files and disk usage
 
-- ✅ **Recent activity**: Displays last 5 modified files with timestamps
+-  **Recent activity**: Displays last 5 modified files with timestamps
 
 #### `monitor_ci_health.sh`
 
@@ -265,7 +265,7 @@ bash scripts/analyze_logs.sh
 
 **Features**: Pattern analysis, failure detection, automated reporting
 
-### 🔄 Git Utilities
+### SYNC: Git Utilities
 
 #### `check_pr_inline_comments.sh`
 
@@ -281,7 +281,7 @@ bash scripts/analyze_logs.sh
 
 - Resolution verification for CI integration
 
-- Enhanced display showing suggestions + resolutions side-by-side
+- Enhanced display showing suggestions  resolutions side-by-side
 
 **Usage**:
 
@@ -310,17 +310,17 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Copilot Integration**: Efficiently extract GitHub Copilot code suggestions
+-  **Copilot Integration**: Efficiently extract GitHub Copilot code suggestions
 
-- ✅ **Comment Filtering**: Filter by user type, suggestions, or file
+-  **Comment Filtering**: Filter by user type, suggestions, or file
 
-- ✅ **Browser Integration**: One-command opening of all comment URLs
+-  **Browser Integration**: One-command opening of all comment URLs
 
-- ✅ **Automation Ready**: JSON output for CI/CD pipeline integration
+-  **Automation Ready**: JSON output for CI/CD pipeline integration
 
-- ✅ **Summary Analytics**: Comment statistics by file and user
+-  **Summary Analytics**: Comment statistics by file and user
 
-- ✅ **Quick Actions**: Streamlined review workflow for PR feedback
+-  **Quick Actions**: Streamlined review workflow for PR feedback
 
 #### `commit_changes.sh`
 
@@ -338,15 +338,15 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Smart staging**: Prompts to stage unstaged changes
+-  **Smart staging**: Prompts to stage unstaged changes
 
-- ✅ **Intelligent suggestions**: Auto-generates multiple commit message options based on file analysis
+-  **Intelligent suggestions**: Auto-generates multiple commit message options based on file analysis
 
-- ✅ **Interactive selection**: Choose from suggested messages or enter custom
+-  **Interactive selection**: Choose from suggested messages or enter custom
 
-- ✅ **File analysis**: Shows what files are being committed and suggests appropriate types
+-  **File analysis**: Shows what files are being committed and suggests appropriate types
 
-- ✅ **Status reporting**: Displays final git status and recent commits
+-  **Status reporting**: Displays final git status and recent commits
 
 #### `commit_message_guide.sh`
 
@@ -364,15 +364,15 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Examples library**: Comprehensive examples for each commit type (FEAT, FIX, DOCS, etc.)
+-  **Examples library**: Comprehensive examples for each commit type (FEAT, FIX, DOCS, etc.)
 
-- ✅ **Interactive builder**: Step-by-step commit message construction
+-  **Interactive builder**: Step-by-step commit message construction
 
-- ✅ **Current change analysis**: Analyzes your staged files and suggests appropriate commit types
+-  **Current change analysis**: Analyzes your staged files and suggests appropriate commit types
 
-- ✅ **Scope guidance**: Learn when and how to use different scopes (auth, bot, scripts, etc.)
+-  **Scope guidance**: Learn when and how to use different scopes (auth, bot, scripts, etc.)
 
-- ✅ **Format validation**: Learn the proper structure and rules
+-  **Format validation**: Learn the proper structure and rules
 
 #### `sync_with_remote.sh`
 
@@ -390,13 +390,13 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Conflict detection**: Handles pull/push rejections safely
+-  **Conflict detection**: Handles pull/push rejections safely
 
-- ✅ **Branch awareness**: Works with any current branch
+-  **Branch awareness**: Works with any current branch
 
-- ✅ **Safety checks**: Validates uncommitted changes before operations
+-  **Safety checks**: Validates uncommitted changes before operations
 
-- ✅ **Recovery guidance**: Provides clear error messages and next steps
+-  **Recovery guidance**: Provides clear error messages and next steps
 
 #### `simple_sync.sh`
 
@@ -414,11 +414,11 @@ bash scripts/analyze_logs.sh
 
 **Features**:
 
-- ✅ **Speed optimized**: Minimal checks for fast operations
+-  **Speed optimized**: Minimal checks for fast operations
 
-- ✅ **Main branch focused**: Specifically targets origin/main
+-  **Main branch focused**: Specifically targets origin/main
 
-- ✅ **Basic logging**: Simple operation status reporting
+-  **Basic logging**: Simple operation status reporting
 
 ## Development Workflow Integration
 

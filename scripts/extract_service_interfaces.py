@@ -128,7 +128,7 @@ def analyze_database_models(src_path: str = "src") -> Dict[str, List[str]]:
                     content = f.read()
 
                 # Extract class definitions that might be models
-                class_pattern = r"class\s+(\w+).*?:"
+                class_pattern = r"class\s(\w).*?:"
                 classes = re.findall(class_pattern, content)
 
                 # Look for SQLAlchemy patterns
@@ -163,12 +163,12 @@ def analyze_service_ports(src_path: str = "src") -> Dict[str, List[str]]:
 
     # Common port patterns
     port_patterns = [
-        r'port["\s]*[:=]["\s]*(\d+)',
-        r'PORT["\s]*[:=]["\s]*(\d+)',
-        r"localhost:(\d+)",
-        r"127\.0\.0\.1:(\d+)",
-        r"uvicorn.*--port\s+(\d+)",
-        r"app\.run.*port=(\d+)",
+        r'port["\s]*[:=]["\s]*(\d)',
+        r'PORT["\s]*[:=]["\s]*(\d)',
+        r"localhost:(\d)",
+        r"127\.0\.0\.1:(\d)",
+        r"uvicorn.*--port\s(\d)",
+        r"app\.run.*port=(\d)",
     ]
 
     for py_file in src_path.rglob("*.py"):
@@ -223,39 +223,39 @@ strategic repository separation post-MVP.
         service_routes[service_name].extend(file_routes)
 
     for service_name, service_route_list in service_routes.items():
-        contract += f"\n### {service_name.title()} Service\n\n"
-        contract += (
+        contract = f"\n### {service_name.title()} Service\n\n"
+        contract = (
             f"**Endpoints**: {len(service_route_list)} API routes identified\n\n"
         )
 
         for route in service_route_list:
-            contract += (
+            contract = (
                 f"- **{route['method']} {route['path']}** - `{route['function']}()`\n"
             )
-            contract += f"  - {route['description']}\n"
+            contract = f"  - {route['description']}\n"
 
-        contract += "\n"
+        contract = "\n"
 
     # Database Models Section
-    contract += "## Database Models\n\n"
+    contract = "## Database Models\n\n"
 
     for file_path, model_classes in models.items():
         service_name = extract_service_name(file_path)
-        contract += f"### {service_name.title()} Models\n\n"
-        contract += f"**File**: `{file_path}`  \n"
-        contract += f"**Models**: {', '.join(model_classes)}\n\n"
+        contract = f"### {service_name.title()} Models\n\n"
+        contract = f"**File**: `{file_path}`  \n"
+        contract = f"**Models**: {', '.join(model_classes)}\n\n"
 
     # Service Ports Section
-    contract += "## Service Port Configuration\n\n"
+    contract = "## Service Port Configuration\n\n"
 
     for file_path, port_list in ports.items():
         service_name = extract_service_name(file_path)
-        contract += f"### {service_name.title()} Service\n\n"
-        contract += f"**File**: `{file_path}`  \n"
-        contract += f"**Ports**: {', '.join(port_list)}\n\n"
+        contract = f"### {service_name.title()} Service\n\n"
+        contract = f"**File**: `{file_path}`  \n"
+        contract = f"**Ports**: {', '.join(port_list)}\n\n"
 
     # Split Readiness Assessment
-    contract += """## Split Readiness Assessment
+    contract = """## Split Readiness Assessment
 
 ### Service Boundary Maturity
 
@@ -285,21 +285,17 @@ strategic repository separation post-MVP.
         else:
             risk = "LOW"
 
-        contract += (
+        contract = (
             f"| {service.title()} | {endpoint_count} | {model_count} "
             f"| {port_count} | **{risk}** |\n"
         )
 
-    contract += """
-### Recommendations
-
-1. **Low Risk Services**: Can be split immediately post-MVP
+    contract = """
+### Recommendations + 1. **Low Risk Services**: Can be split immediately post-MVP
 2. **Medium Risk Services**: Require API contract stabilization (1-2 iterations)
 3. **High Risk Services**: Defer split until service boundaries mature (3-4 iterations)
 
-### Next Steps
-
-1. Run service dependency analysis: `bash scripts/analyze_service_dependencies.sh`
+### Next Steps + 1. Run service dependency analysis: `bash scripts/analyze_service_dependencies.sh`
 2. Catalog shared resources: `bash scripts/catalog_shared_resources.sh`
 3. Generate repository templates: `bash scripts/generate_repo_templates.sh`
 
@@ -407,7 +403,7 @@ def main():
     except Exception as e:
         print(f"Error during service interface extraction: {e}")
         with open(log_file, "a") as f:
-            f.write(f"ERROR: {e}\n")
+            f.write(f" {e}\n")
         return 1
 
     return 0

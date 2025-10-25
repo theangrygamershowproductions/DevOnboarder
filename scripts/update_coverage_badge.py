@@ -13,7 +13,7 @@ import requests
 def read_coverage(path: Path) -> float:
     """Return the average coverage percentage from the summary file."""
     text = path.read_text(encoding="utf-8")
-    numbers = [float(m.group(1)) for m in re.finditer(r"([0-9]+(?:\.[0-9]+)?)%", text)]
+    numbers = [float(m.group(1)) for m in re.finditer(r"([0-9](?:\.[0-9])?)%", text)]
     if not numbers:
         raise ValueError("No coverage values found")
     return sum(numbers) / len(numbers)

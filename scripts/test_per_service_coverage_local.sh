@@ -9,12 +9,12 @@ echo
 
 # Ensure we're in virtual environment
 if [[ "${VIRTUAL_ENV:-}" == "" ]]; then
-    echo "⚠️  Virtual environment not detected. Activating..."
+    echo "  Virtual environment not detected. Activating..."
     source .venv/bin/activate
 fi
 
-echo "🔧 Environment: $(which python)"
-echo "📁 Working Directory: $(pwd)"
+echo " Environment: $(which python)"
+echo " Working Directory: $(pwd)"
 echo
 
 # Create logs directory if it doesn't exist
@@ -52,7 +52,7 @@ test_service() {
         return 0
     else
         printf "FAIL: %s (below %s%% threshold)\n" "${service_name}" "${threshold}"
-        FAILED_SERVICES+=("${service_name}")
+        FAILED_SERVICES=("${service_name}")
         OVERALL_SUCCESS=false
         return 1
     fi
@@ -80,7 +80,7 @@ COVERAGE_FILE=logs/.coverage pytest \
     -v 2>&1 | tee logs/pytest.log
 
 echo
-echo "🔧 Testing our coverage report generator..."
+echo " Testing our coverage report generator..."
 python scripts/generate_service_coverage_report.py
 
 echo
@@ -89,27 +89,27 @@ echo "Local Per-Service Coverage Results"
 echo "=========================================="
 
 if [ "$OVERALL_SUCCESS" = "true" ]; then
-    echo "🎯 SUCCESS: All services passed their coverage thresholds!"
-    echo "✅ Implementation is ready for CI deployment"
+    echo "🎯  All services passed their coverage thresholds!"
+    echo " Implementation is ready for CI deployment"
     echo
-    echo "📊 Generated artifacts:"
+    echo " Generated artifacts:"
     echo "   • Individual coverage reports: logs/coverage_*.xml"
     echo "   • Per-service test logs: logs/pytest_*.log"
     echo "   • Strategic dashboard: coverage-summary.md"
     echo "   • Combined coverage: logs/coverage.xml"
 else
-    echo "⚠️  Some services failed coverage thresholds:"
+    echo "  Some services failed coverage thresholds:"
     for service in "${FAILED_SERVICES[@]}"; do
         echo "   • $service"
     done
     echo
-    echo "📋 This is expected behavior - the system correctly identifies"
+    echo " This is expected behavior - the system correctly identifies"
     echo "    services needing attention for strategic improvement!"
     echo
-    echo "✅ Per-service failure detection is working correctly"
+    echo " Per-service failure detection is working correctly"
 fi
 
 echo
-echo "🚀 LOCAL VALIDATION COMPLETE"
+echo " LOCAL VALIDATION COMPLETE"
 echo "   Per-service coverage implementation is working properly"
 echo "   Ready to commit and test in CI pipeline"

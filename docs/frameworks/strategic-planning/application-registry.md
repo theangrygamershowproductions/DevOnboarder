@@ -56,7 +56,7 @@ consolidation_priority: P3
 
 - **Three-Document Structure**
 
-    - Customization: Analysis → Roadmap → Executive Summary pattern
+    - Customization: Analysis  Roadmap  Executive Summary pattern
 
     - Effectiveness: Pending assessment
 
@@ -155,7 +155,7 @@ consolidation_priority: P3
 
 ### Feedback Collection Process
 
-**Framework Effectiveness Assessment** (1-5 scale + narrative):
+**Framework Effectiveness Assessment** (1-5 scale  narrative):
 
 - Issue Analysis component effectiveness
 

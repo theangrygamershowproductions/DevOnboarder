@@ -31,9 +31,9 @@ visibility: internal
 
 ### Symptoms
 
-- ✅ **Local Development**: `python -m mypy src/` passes without errors
+-  **Local Development**: `python -m mypy src/` passes without errors
 
-- ❌ **CI Environment**: MyPy fails with "Library stubs not installed" errors:
+-  **CI Environment**: MyPy fails with "Library stubs not installed" errors:
 
 ```text
 src/devonboarder/diagnostics.py:11: error: Library stubs not installed for "requests" [import-untyped]
@@ -246,5 +246,5 @@ This issue integrates with DevOnboarder's automated diagnostic system:
 **Created**: September 2, 2025
 
 **Last Updated**: September 2, 2025
-**Applies To**: DevOnboarder v0.1.0+
+**Applies To**: DevOnboarder v0.1.0
 **Issue Type**: CI Environment Mismatch

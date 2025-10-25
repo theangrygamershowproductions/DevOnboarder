@@ -19,10 +19,10 @@ This document outlines the evolution from our current 2-bot system to a comprehe
 
 ### Current Workflows Using GPG
 
-- `priority-matrix-synthesis.yml` → Priority Matrix Bot
-- `aar-automation.yml` → AAR Bot
-- `aar-portal.yml` → AAR Bot
-- `test-gpg-framework.yml` → AAR Bot
+- `priority-matrix-synthesis.yml`  Priority Matrix Bot
+- `aar-automation.yml`  AAR Bot
+- `aar-portal.yml`  AAR Bot
+- `test-gpg-framework.yml`  AAR Bot
 
 ## Proposed Framework-Based Architecture
 
@@ -231,7 +231,7 @@ jobs:
 
 ### **Immediate Actions (This Week)**
 
-1. **Document current bot→framework mapping** for existing workflows
+1. **Document current botframework mapping** for existing workflows
 2. **Generate CI Health Framework Bot** credentials (highest priority unmapped category)
 3. **Create framework bot setup scripts** based on existing AAR/Priority Matrix patterns
 4. **Update GPG framework documentation** with framework-specific guidance
@@ -245,7 +245,7 @@ jobs:
 
 ### **Medium Term (Next Month)**
 
-1. **Complete migration** of all 22+ workflows to framework-specific bots
+1. **Complete migration** of all 22 workflows to framework-specific bots
 2. **Implement framework governance procedures** and documentation
 3. **Establish credential rotation schedule** and emergency procedures
 4. **Create framework monitoring dashboard** for bot health and usage

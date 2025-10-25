@@ -11,19 +11,19 @@ export async function execute(client: Client) {
 
     console.log(`🤖 Logged in as ${client.user?.tag}`);
     console.log(`🌍 Environment: ${environment}`);
-    console.log(`🏠 Target Guild ID: ${guildId}`);
+    console.log(`HOME: Target Guild ID: ${guildId}`);
     console.log(`🧪 Dry-run Mode: ${dryRunMode}`);
     console.log("");
 
     // Display all connected guilds
-    console.log("🏠 Connected Guilds:");
+    console.log("HOME: Connected Guilds:");
     if (client.guilds.cache.size === 0) {
         console.log(
-            "   ❌ No guilds found! Bot may not be invited to any servers.",
+            "    No guilds found! Bot may not be invited to any servers.",
         );
         console.log("   ");
-        console.log("   🔗 Generate invite link: npm run invite");
-        console.log("   📋 Required servers:");
+        console.log("   LINK: Generate invite link: npm run invite");
+        console.log("    Required servers:");
         console.log("      • TAGS: DevOnboarder (1386935663139749998)");
         console.log("      • TAGS: C2C (1065367728992571444)");
     } else {
@@ -48,14 +48,14 @@ export async function execute(client: Client) {
         const guild = client.guilds.cache.get(targetGuildId);
         if (guild) {
             console.log(
-                `   ✅ ${env.toUpperCase()}: ${guild.name} (${
+                `    ${env.toUpperCase()}: ${guild.name} (${
                     guild.memberCount
                 } members)`,
             );
             connectedToTarget = true;
         } else {
             console.log(
-                `   ❌ ${env.toUpperCase()}: Guild ${targetGuildId} not accessible`,
+                `    ${env.toUpperCase()}: Guild ${targetGuildId} not accessible`,
             );
             console.log(
                 `      Invite bot: https://discord.com/api/oauth2/authorize?client_id=${
@@ -68,7 +68,7 @@ export async function execute(client: Client) {
     // Set bot status
     const statusText = dryRunMode
         ? `🧪 Dry-run | ${environment.toUpperCase()}`
-        : `🚀 Live | ${environment.toUpperCase()}`;
+        : ` Live | ${environment.toUpperCase()}`;
 
     client.user?.setActivity(statusText, { type: 3 }); // Type 3 = Watching
 
@@ -76,7 +76,7 @@ export async function execute(client: Client) {
     const targetGuild = client.guilds.cache.get(guildId);
 
     if (targetGuild) {
-        console.log(`✅ Connected to target guild: ${targetGuild.name}`);
+        console.log(` Connected to target guild: ${targetGuild.name}`);
 
         // Send startup notification to general channel (if in live mode and enabled)
         if (!dryRunMode && config.liveTriggersEnabled && config.webhookUrl) {
@@ -103,13 +103,13 @@ export async function execute(client: Client) {
                                 inline: true,
                             },
                             {
-                                name: "⚙️ Mode",
-                                value: dryRunMode ? "🧪 Dry-run" : "🚀 Live",
+                                name: " Mode",
+                                value: dryRunMode ? "🧪 Dry-run" : " Live",
                                 inline: true,
                             },
                             {
-                                name: "📊 Status",
-                                value: "✅ All systems operational",
+                                name: " Status",
+                                value: " All systems operational",
                                 inline: true,
                             },
                         ])
@@ -126,7 +126,7 @@ export async function execute(client: Client) {
                     );
                 }
             } catch (error) {
-                console.error("⚠️ Could not send startup notification:", error);
+                console.error(" Could not send startup notification:", error);
             }
         } else {
             console.log(
@@ -134,18 +134,18 @@ export async function execute(client: Client) {
             );
         }
     } else {
-        console.log(`❌ Could not find target guild with ID: ${guildId}`);
+        console.log(` Could not find target guild with ID: ${guildId}`);
         if (!connectedToTarget) {
             console.log("");
-            console.log("⚠️  Bot is not connected to any target servers!");
-            console.log("   🔗 Generate invite link: npm run invite");
-            console.log("   📋 Add bot to servers using the invite link");
+            console.log("  Bot is not connected to any target servers!");
+            console.log("   LINK: Generate invite link: npm run invite");
+            console.log("    Add bot to servers using the invite link");
         }
     }
 
     // Log startup completion
     console.log("");
-    console.log("✅ DevOnboarder Discord Bot is ready!");
+    console.log(" DevOnboarder Discord Bot is ready!");
     console.log("=====================================");
     console.log(`   Bot: ${client.user?.tag}`);
     console.log(`   Guilds: ${client.guilds.cache.size} connected`);
@@ -156,7 +156,7 @@ export async function execute(client: Client) {
 
     // Show available commands
     if (connectedToTarget) {
-        console.log("🎮 Available Commands:");
+        console.log(" Available Commands:");
         console.log("   /status - Check bot and integration status");
         console.log("   /deploy - Deploy services (admin only)");
         console.log("   /ping - Test bot responsiveness");

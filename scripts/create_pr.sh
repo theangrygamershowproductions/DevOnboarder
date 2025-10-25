@@ -99,8 +99,8 @@ fi
 # Generate default title from branch name if not overridden
 if [[ -z "$TITLE_OVERRIDE" ]]; then
     # Convert branch name to title format
-    # feat/documentation-qc-system -> FEAT(docs): documentation QC system
-    if [[ $BRANCH_NAME =~ ^([^/]+)/(.+)$ ]]; then
+    # feat/documentation-qc-system  FEAT(docs): documentation QC system
+    if [[ $BRANCH_NAME =~ ^([^/])/(.)$ ]]; then
         PREFIX=$(echo "${BASH_REMATCH[1]}" | tr '[:lower:]' '[:upper:]')
         SUFFIX=${BASH_REMATCH[2]//-/ }
 
@@ -330,11 +330,11 @@ echo ""
 echo "Executing: $GH_CMD"
 if eval "$GH_CMD"; then
     echo ""
-    echo "SUCCESS: Pull request created successfully"
+    echo " Pull request created successfully"
     echo "You can edit the PR description on GitHub if needed"
 else
     echo ""
-    echo "ERROR: Failed to create pull request"
+    echo " Failed to create pull request"
     echo "Check the error messages above for details"
     exit 1
 fi

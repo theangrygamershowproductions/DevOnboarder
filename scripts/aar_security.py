@@ -62,15 +62,15 @@ class AARTokenManager:
                             # Count tokens in each category
                             for item in data.values():
                                 if isinstance(item, dict) and "token" in item:
-                                    token_count += 1
+                                    token_count = 1
                     print(f"Token registry loaded: {token_count} tokens")
                     return registry
             else:
-                print("WARNING: Token scope registry not found")
+                print(" Token scope registry not found")
                 print("  Expected: .codex/tokens/token_scope_map.yaml")
                 return {}
         except Exception as e:
-            print(f"WARNING: Failed to load token registry: {e}")
+            print(f" Failed to load token registry: {e}")
             return {}
 
     def get_actions_token(self) -> Optional[str]:
@@ -80,7 +80,7 @@ class AARTokenManager:
             if token:
                 print(f"Using actions-capable token: {token_name}")
                 return token
-        print("WARNING: No actions-capable token found in hierarchy")
+        print(" No actions-capable token found in hierarchy")
         return None
 
     def get_issue_token(self) -> Optional[str]:
@@ -90,7 +90,7 @@ class AARTokenManager:
             if token:
                 print(f"Using issue-capable token: {token_name}")
                 return token
-        print("WARNING: No issue-capable token found in hierarchy")
+        print(" No issue-capable token found in hierarchy")
         return None
 
     def get_github_token(self) -> Optional[str]:
@@ -108,7 +108,7 @@ class AARTokenManager:
                     print(f"Using finely-scoped token: {token_name}")
                     return token
                 else:
-                    print(f"WARNING: Token {token_name} not properly scoped for AAR")
+                    print(f" Token {token_name} not properly scoped for AAR")
 
         print("POLICY VIOLATION: No finely-scoped tokens available")
         print("Falling back to GITHUB_TOKEN violates No Default Token Policy")
@@ -118,7 +118,7 @@ class AARTokenManager:
         """Validate token scope against registry following governance policy."""
         if not self.token_registry:
             # If no registry, assume token is valid but log warning
-            print(f"WARNING: Cannot validate {token_name} - registry unavailable")
+            print(f" Cannot validate {token_name} - registry unavailable")
             return True
 
         # Search for token across all categories in the registry
@@ -133,7 +133,7 @@ class AARTokenManager:
                     break
 
         if not token_info:
-            print(f"WARNING: Token {token_name} not found in registry")
+            print(f" Token {token_name} not found in registry")
             return True  # Allow for development scenarios
 
         # Check if token has required permissions for AAR operations
@@ -146,7 +146,7 @@ class AARTokenManager:
         )
 
         if not has_permissions:
-            print(f"WARNING: Token {token_name} missing required permissions for AAR")
+            print(f" Token {token_name} missing required permissions for AAR")
 
         return has_permissions
 
@@ -163,7 +163,7 @@ class AARTokenManager:
                 print("GitHub CLI not properly configured")
                 return False
         except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("WARNING: GitHub CLI not available")
+            print(" GitHub CLI not available")
             print("AAR will operate in offline mode")
             return False
         except Exception as e:
@@ -248,9 +248,9 @@ class AARTokenManager:
                     "length": len(token_value) if token_value else 0,
                 }
 
-                total_tokens += 1
+                total_tokens = 1
                 if is_available:
-                    available_tokens += 1
+                    available_tokens = 1
 
                 # Security warnings for misplaced tokens
                 if token_name == "GH_TOKEN" and token_type == "openai_api_key":
@@ -264,7 +264,7 @@ class AARTokenManager:
                     )
 
         # Check token availability across both hierarchies
-        all_tokens = set(self.actions_token_hierarchy + self.issue_token_hierarchy)
+        all_tokens = set(self.actions_token_hierarchy | self.issue_token_hierarchy)
         for token_name in all_tokens:
             is_available = bool(os.environ.get(token_name))
             audit_data["token_availability"][token_name] = is_available
@@ -280,8 +280,7 @@ class AARTokenManager:
                             "type": "UNNECESSARY_DEFAULT_TOKEN",
                             "severity": "MEDIUM",
                             "description": (
-                                "GITHUB_TOKEN used when finely-scoped "
-                                "alternatives exist"
+                                "GITHUB_TOKEN used when finely-scoped " + "alternatives exist"
                             ),
                         }
                     )
@@ -387,7 +386,7 @@ class AARTokenManager:
                                 "recommendation": "Move to proper environment variable",
                             }
                         )
-                        security_issues += 1
+                        security_issues = 1
                     elif len(token_value) > 20 and "_" in token_value:
                         token_analysis["type"] = "likely_github_token"
                     else:
@@ -396,9 +395,9 @@ class AARTokenManager:
                 category_status["tokens"][token_name] = token_analysis
 
                 if is_available:
-                    category_available += 1
-                    available_tokens += 1
-                total_tokens += 1
+                    category_available = 1
+                    available_tokens = 1
+                total_tokens = 1
 
             category_status["availability"] = f"{category_available}/{category_total}"
             status_report["token_categories"][category_name] = category_status
@@ -445,7 +444,7 @@ def validate_aar_environment() -> bool:
     """Validate DevOnboarder AAR environment requirements."""
     # CRITICAL: Check virtual environment (DevOnboarder requirement)
     if not os.environ.get("VIRTUAL_ENV"):
-        print("ERROR: AAR system requires virtual environment activation")
+        print(" AAR system requires virtual environment activation")
         print("Run: source .venv/bin/activate")
         return False
 

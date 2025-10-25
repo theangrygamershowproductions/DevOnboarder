@@ -32,7 +32,7 @@ Create and initialize two standalone repositories from the main DevOnboarder mon
 
 * [ ] Apply branch protection and enable required CI checks (e.g., `main`, `dev` branches)
 
-### 🔐 Secrets and CI/CD
+###  Secrets and CI/CD
 
 * [ ] Configure GitHub Secrets: `CODENAME_BOT_TOKEN`, `DISCORD_BOT_TOKEN`, `FRONTEND_DEPLOY_KEY`, etc.
 
@@ -40,7 +40,7 @@ Create and initialize two standalone repositories from the main DevOnboarder mon
 
 * [ ] Validate `.venv` or Node.js dependencies as appropriate
 
-### 🔧 Repo Metadata
+###  Repo Metadata
 
 * [ ] Populate `docs/README.md` with repo-specific instructions
 

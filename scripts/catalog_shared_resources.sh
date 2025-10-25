@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-LOG_FILE="logs/shared_resources_catalog_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/shared_resources_catalog_$(date %Y%m%d_%H%M%S).log"
 mkdir -p logs
 exec > >(tee -a "$LOG_FILE") 2>&1
 
@@ -64,12 +64,12 @@ echo ""
 echo "Docker services defined:"
 if [ -f "docker-compose.ci.yaml" ]; then
     echo "CI Docker Compose Services:"
-    grep -E "^\s+[a-zA-Z_-]+:" docker-compose.ci.yaml 2>/dev/null | sed 's/^/  /' | head -10
+    grep -E "^\s[a-zA-Z_-]:" docker-compose.ci.yaml 2>/dev/null | sed 's/^/  /' | head -10
 fi
 
 if [ -f "docker-compose.tags.dev.yaml" ]; then
     echo "Development Docker Compose Services:"
-    grep -E "^\s+[a-zA-Z_-]+:" docker-compose.tags.dev.yaml 2>/dev/null | sed 's/^/  /' | head -5
+    grep -E "^\s[a-zA-Z_-]:" docker-compose.tags.dev.yaml 2>/dev/null | sed 's/^/  /' | head -5
 fi
 
 echo ""

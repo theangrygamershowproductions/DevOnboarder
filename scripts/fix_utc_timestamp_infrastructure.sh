@@ -11,11 +11,11 @@ set -euo pipefail
 
 # Create logs directory
 mkdir -p logs
-LOG_FILE="logs/utc_timestamp_infrastructure_fix_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/utc_timestamp_infrastructure_fix_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "=== DevOnboarder UTC Timestamp Infrastructure Fix ==="
-echo "Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo "Date: $(date -u '%Y-%m-%d %H:%M:%S UTC')"
 echo "Purpose: Fix critical diagnostic accuracy issue"
 echo "Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md"
 echo ""
@@ -53,12 +53,12 @@ fix_python_script() {
         # Look for existing datetime import
         if grep -q "from datetime import datetime" "$script_path"; then
             # Add after datetime import
-            sed -i '/from datetime import datetime/a\\n# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities\n# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization\n# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md\n# Date: 2025-09-21\ntry:\n    from src.utils.timestamps import get_utc_display_timestamp\nexcept ImportError:\n    # Fallback for standalone script execution\n    from datetime import timezone\n\n    def get_utc_display_timestamp() -> str:\n        """Fallback UTC timestamp function."""\n        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")' "$script_path"
+            sed -i '/from datetime import datetime/a\\n# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities\n# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization\n# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md\n# Date: 2025-09-21\ntry:\n    from src.utils.timestamps import get_utc_display_timestamp\nexcept ImportError:\n    # Fallback for standalone script execution\n    from datetime import timezone\n\n    def get_utc_display_timestamp()  str:\n        """Fallback UTC timestamp function."""\n        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")' "$script_path"
         elif grep -q "import.*datetime" "$script_path"; then
             # Add after any datetime import
-            sed -i '/import.*datetime/a\\n# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities\n# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization\n# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md\n# Date: 2025-09-21\ntry:\n    from src.utils.timestamps import get_utc_display_timestamp\nexcept ImportError:\n    # Fallback for standalone script execution\n    from datetime import timezone\n\n    def get_utc_display_timestamp() -> str:\n        """Fallback UTC timestamp function."""\n        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")' "$script_path"
+            sed -i '/import.*datetime/a\\n# INFRASTRUCTURE CHANGE: Import standardized UTC timestamp utilities\n# Purpose: Fix critical diagnostic issue with GitHub API timestamp synchronization\n# Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md\n# Date: 2025-09-21\ntry:\n    from src.utils.timestamps import get_utc_display_timestamp\nexcept ImportError:\n    # Fallback for standalone script execution\n    from datetime import timezone\n\n    def get_utc_display_timestamp()  str:\n        """Fallback UTC timestamp function."""\n        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")' "$script_path"
         else
-            echo "  WARNING: Could not find datetime import to place new import after"
+            echo "   Could not find datetime import to place new import after"
         fi
     fi
 
@@ -88,7 +88,7 @@ match_count = 0
 
 # Process matches in reverse order to avoid offset issues
 for match in reversed(list(matches)):
-    match_count += 1
+    match_count = 1
     start, end = match.span()
 
     # Add infrastructure change comment and replacement
@@ -99,11 +99,11 @@ for match in reversed(list(matches)):
         get_utc_display_timestamp()'''
 
     # Replace the match
-    content = content[:start] + replacement + content[end:]
+    content = content[:start]  replacement  content[end:]
 
 print(f"Replaced {match_count} patterns")
 
-with open(script_path + '.tmp', 'w') as f:
+with open(script_path  '.tmp', 'w') as f:
     f.write(content)
 EOF
 
@@ -112,9 +112,9 @@ EOF
     # Move temp file back
     if [ -f "$temp_file" ]; then
         mv "$temp_file" "$script_path"
-        echo "  SUCCESS: Applied UTC timestamp fixes"
+        echo "   Applied UTC timestamp fixes"
     else
-        echo "  ERROR: Failed to create replacement file"
+        echo "   Failed to create replacement file"
         return 1
     fi
 
@@ -145,13 +145,13 @@ ERROR_COUNT=0
 for script in "${SCRIPTS_TO_FIX[@]}"; do
     if fix_python_script "$script"; then
         if [ -f "${script}.utc_fix_backup" ]; then
-            FIXED_COUNT=$((FIXED_COUNT + 1))
+            FIXED_COUNT=$((FIXED_COUNT  1))
         else
-            SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+            SKIPPED_COUNT=$((SKIPPED_COUNT  1))
         fi
     else
-        ERROR_COUNT=$((ERROR_COUNT + 1))
-        echo "ERROR: Failed to process $script"
+        ERROR_COUNT=$((ERROR_COUNT  1))
+        echo " Failed to process $script"
     fi
 done
 
@@ -174,4 +174,4 @@ if [ $FIXED_COUNT -gt 0 ]; then
     echo ""
 fi
 
-echo "Infrastructure fix complete: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+echo "Infrastructure fix complete: $(date -u '%Y-%m-%d %H:%M:%S UTC')"

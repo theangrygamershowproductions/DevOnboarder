@@ -36,18 +36,18 @@ modules.
 | Feature           | Description                                              | Status     |
 | ----------------- | -------------------------------------------------------- | ---------- |
 
-| Discord OAuth2    | Let users authenticate and receive session tokens        | ✅ Done    |
-| XP API            | Serve XP, level, and onboarding progress                 | ✅ Done    |
-| XP Submission     | Allow users to earn XP via bot or web actions            | ✅ Done    |
-| Discord Bot       | Handle `/verify`, `/profile`, and `/contribute` commands | ✅ Done    |
-| Contributor Roles | Flag admin/verified users via Discord roles              | ✅ Done    |
-| Frontend Scaffold | Display onboarding/XP state via session token            | 🔧 Pending |
+| Discord OAuth2    | Let users authenticate and receive session tokens        |  Done    |
+| XP API            | Serve XP, level, and onboarding progress                 |  Done    |
+| XP Submission     | Allow users to earn XP via bot or web actions            |  Done    |
+| Discord Bot       | Handle `/verify`, `/profile`, and `/contribute` commands |  Done    |
+| Contributor Roles | Flag admin/verified users via Discord roles              |  Done    |
+| Frontend Scaffold | Display onboarding/XP state via session token            |  Pending |
 
 ---
 
 ## 🧩 Task Breakdown
 
-### ✅ Phase 1: Authentication
+###  Phase 1: Authentication
 
 - [auth-001] Add Discord OAuth endpoints (`/login`, `/callback`)
 
@@ -57,7 +57,7 @@ modules.
 
 ---
 
-### ✅ Phase 2: XP Interaction
+###  Phase 2: XP Interaction
 
 - [xp-001] Create XP grant route (`/api/user/contribute`)
 
@@ -67,7 +67,7 @@ modules.
 
 ---
 
-### ✅ Phase 3: Discord Bot Integration
+###  Phase 3: Discord Bot Integration
 
 - [bot-001] Fix `/api/user/level` fetch with missing `username`
 
@@ -75,7 +75,7 @@ modules.
 
 ---
 
-### ✅ Phase 4: Frontend Bridge
+###  Phase 4: Frontend Bridge
 
 - [frontend-001] Add React component to:
 
@@ -87,7 +87,7 @@ modules.
 
 ---
 
-### 🚧 Phase 5: Llama2 Agile Helper Integration
+### WORK: Phase 5: Llama2 Agile Helper Integration
 
 - [agile-001] Connect Llama2 Agile Helper agent for sprint summaries and backlog
 
@@ -130,7 +130,7 @@ modules.
 
 ---
 
-## 📌 Notes
+## PIN: Notes
 
 - All `.env` values required for these modules are documented in `docs/env.md`
 
@@ -140,4 +140,4 @@ modules.
 
 ---
 
-**Let's ship it.** 🚀
+**Let's ship it.** 

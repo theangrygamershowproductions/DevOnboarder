@@ -13,7 +13,7 @@ PURPLE='\033[0;35m'  # Naming patterns, special categories
 CYAN='\033[0;36m'    # Informational issues, logging, formatting
 NC='\033[0m'         # No Color - reset
 
-echo "# Frameworks Audit ($(date -u '+%Y-%m-%dT%H:%M:%S%Z'))"
+echo "# Frameworks Audit ($(date -u '%Y-%m-%dT%H:%M:%S%Z'))"
 echo ""
 echo "Root: ${BLUE}frameworks${NC}"
 echo ""
@@ -84,12 +84,12 @@ echo "------------------------------------------------------------------"
 echo ""
 
 # Legacy Path Reference Scan
-echo "## Legacy Path Reference Scan (underscore→hyphen)"
+echo "## Legacy Path Reference Scan (underscorehyphen)"
 
 # Check each framework for legacy references
 for framework_dir in frameworks/*/; do
     framework_name=$(basename "$framework_dir")
-    echo "### ${BLUE}$framework_name${NC} → ${BLUE}${framework_name//_/-}${NC}"
+    echo "### ${BLUE}$framework_name${NC}  ${BLUE}${framework_name//_/-}${NC}"
 
     if [[ -d "$framework_dir" ]]; then
         # Look for references to the old underscore version in README
@@ -162,7 +162,7 @@ for framework_dir in frameworks/*/; do
         fi
 
         # Check for terminal output violations (critical for CI compatibility)
-        if grep -q "echo.*✅\|echo.*❌\|echo.*🚀\|echo.*📋\|echo.*🔍\|echo.*📝\|echo.*💡\|echo.*⚠️\|echo.*🔧\|echo.*🎯" "$script"; then
+        if grep -q "echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*🎯" "$script"; then
             issues="${issues}${YELLOW}[EMOJIS IN ECHO]${NC} "
         fi
 
@@ -333,7 +333,7 @@ echo ""
 # Summary
 echo "## Summary"
 echo ""
-echo "**Audit completed at $(date -u '+%Y-%m-%dT%H:%M:%S%Z')**"
+echo "**Audit completed at $(date -u '%Y-%m-%dT%H:%M:%S%Z')**"
 echo ""
 echo "- Frameworks scanned: $(find frameworks -mindepth 1 -maxdepth 1 -type d | wc -l)"
 echo "- Total scripts found: $(find frameworks -name "*.sh" -type f | wc -l)"

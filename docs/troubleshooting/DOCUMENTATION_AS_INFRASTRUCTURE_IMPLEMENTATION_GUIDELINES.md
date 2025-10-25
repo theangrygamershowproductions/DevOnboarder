@@ -58,11 +58,11 @@ ls -la .github/workflows/
 
 # NEVER USE - These cause immediate terminal hanging
 
-echo "✅ Task completed"              # Emojis cause hanging
+echo " Task completed"              # Emojis cause hanging
 
-echo "🚀 Deployment successful"       # Unicode causes hanging
+echo " Deployment successful"       # Unicode causes hanging
 
-echo "📋 Checklist: $(get_items)"    # Command substitution in echo
+echo " Checklist: $(get_items)"    # Command substitution in echo
 
 echo -e "Line1\nLine2\nLine3"        # Multi-line escape sequences
 
@@ -100,13 +100,13 @@ printf "Result: %s\n" "$RESULT"
 
 **Character Restrictions**:
 
-- ❌ **NO EMOJIS**: ✅, ❌, 🎯, 🚀, 📋, 🔍, 📝, 💡, ⚠️, etc.
+-  **NO EMOJIS**: , , 🎯, , , , , , , etc.
 
-- ❌ **NO UNICODE**: Special symbols, arrows, bullets, etc.
+-  **NO UNICODE**: Special symbols, arrows, bullets, etc.
 
-- ❌ **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
+-  **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
 
-- ✅ **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
+-  **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
 
 ### 3. Token Architecture v2.1 Compliance
 
@@ -116,7 +116,7 @@ printf "Result: %s\n" "$RESULT"
 
 ```bash
 
-# Proper token hierarchy (CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN)
+# Proper token hierarchy (CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN)
 
 CI_ISSUE_AUTOMATION_TOKEN || CI_BOT_TOKEN || GITHUB_TOKEN
 
@@ -232,13 +232,13 @@ bash scripts/validate_token_architecture.sh
 
 # Phase approach - implement incrementally
 
-# Phase 1: Foundation (policies + token architecture)
+# Phase 1: Foundation (policies  token architecture)
 
-# Phase 2: Core enforcement (PR compliance + drift detection)
+# Phase 2: Core enforcement (PR compliance  drift detection)
 
-# Phase 3: Metrics and validation (success rates + solutions)
+# Phase 3: Metrics and validation (success rates  solutions)
 
-# Phase 4: Governance (waiver protocol + reporting)
+# Phase 4: Governance (waiver protocol  reporting)
 
 ```
 
@@ -270,7 +270,7 @@ Before creating any DaI workflows:
 
 # Immediate action - remove all emojis/Unicode
 
-grep -r "[✅⚠️🔑❌🚨🎯🏆📋🔴🔧📊🚀🎉]" .github/workflows/
+grep -r "[🔑🚨🎯🏆🔴🎉]" .github/workflows/
 
 # Replace ALL matches with plain ASCII text
 
@@ -316,16 +316,16 @@ bash scripts/validate_token_architecture.sh
 
 ## Common Failures to Avoid
 
-❌ **Manual workflow creation without studying existing patterns**
-❌ **Using emojis or Unicode in terminal output (causes hanging)**
+ **Manual workflow creation without studying existing patterns**
+ **Using emojis or Unicode in terminal output (causes hanging)**
 
-❌ **Bypassing Token Architecture v2.1 system**
+ **Bypassing Token Architecture v2.1 system**
 
-❌ **Creating all workflows at once without testing**
+ **Creating all workflows at once without testing**
 
-❌ **Ignoring YAML quality standards**
+ **Ignoring YAML quality standards**
 
-❌ **Missing virtual environment requirements**
+ **Missing virtual environment requirements**
 
 ## Documentation Standards
 

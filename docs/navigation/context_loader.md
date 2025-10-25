@@ -26,7 +26,7 @@ Traditional AI conversations for complex projects suffer from:
 
 ## Phase 1 Solution
 
-**Constrained scope**: Issue Management + CI Troubleshooting only
+**Constrained scope**: Issue Management  CI Troubleshooting only
 
 **Three-file implementation**:
 
@@ -51,18 +51,18 @@ Traditional AI conversations for complex projects suffer from:
 ### Navigation Menu
 
 ```text
-🏠 DevOnboarder Navigator (MVN)
+HOME: DevOnboarder Navigator (MVN)
 ==================================
 
 Select your focus area:
 
-  [1] 📋 Issue Management
+  [1]  Issue Management
       Sprint operations, triage, GitHub issues
 
-  [2] 🔧 CI/CD Troubleshooting
+  [2]  CI/CD Troubleshooting
       Pipeline failures, quality gates, service issues
 
-  [9] 📊 Navigation Metrics
+  [9]  Navigation Metrics
       View MVN experiment results
 
   [0] Exit
@@ -133,7 +133,7 @@ The MVN tracks usage to validate Phase 1 success:
 
 **Phase 1 validation metrics**:
 
-- **5+ successful navigation sessions** using the system
+- **5 successful navigation sessions** using the system
 
 - **Measurable efficiency gains** in conversation focus
 
@@ -188,7 +188,7 @@ echo "▶️ Ready for focused conversation"
 
 # Track navigation usage
 
-SESSION_LOG="logs/navigation_session_$(date +%Y%m%d_%H%M%S).log"
+SESSION_LOG="logs/navigation_session_$(date %Y%m%d_%H%M%S).log"
 log_action "User selected: [domain]"
 log_action "Context session completed"
 

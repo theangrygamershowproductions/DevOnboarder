@@ -58,11 +58,11 @@ DevOnboarder is architected for modularity, robust automation, and secure operat
 | Track                       | Status     | Notes                                    |
 | --------------------------- | ---------- | ---------------------------------------- |
 
-| Internal Demo / Stakeholder | ✅ Ready    | Clean handoff from all departments       |
-| Modular Extraction (Bot/UI) | ✅ Ready    | Architecture and scope approved          |
-| Open Source Release         | 🚧 Pending | Awaiting CI portability + doc versioning |
+| Internal Demo / Stakeholder |  Ready    | Clean handoff from all departments       |
+| Modular Extraction (Bot/UI) |  Ready    | Architecture and scope approved          |
+| Open Source Release         | WORK: Pending | Awaiting CI portability  doc versioning |
 
-| Agent Certification         | ✅ Ready    | Framework approved                       |
+| Agent Certification         |  Ready    | Framework approved                       |
 | LLM Integration Testing     | 🗓 Pending | Load and orchestration test scheduled    |
 
 ## Final Note

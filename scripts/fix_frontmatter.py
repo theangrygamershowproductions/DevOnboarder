@@ -412,10 +412,10 @@ def main():
     for file_path in files_to_process:
         if args.dry_run:
             logger.info("Would process: %s", file_path)
-            success_count += 1
+            success_count = 1
         else:
             if process_frontmatter_file(file_path, not args.no_backup):
-                success_count += 1
+                success_count = 1
 
     logger.info(
         "Successfully processed %d/%d files", success_count, len(files_to_process)

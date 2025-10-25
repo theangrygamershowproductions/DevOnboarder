@@ -5,15 +5,15 @@
 set -euo pipefail
 
 # Performance monitoring setup
-SCRIPT_START_TIME=$(date +%s)
+SCRIPT_START_TIME=$(date %s)
 SCRIPT_START_TIMESTAMP=$(date)
 
 # Configuration
 DOCS_ROOT="${DOCS_ROOT:-docs}"
-LOG_DIR="${LOG_DIR:-logs}"
+LOG_DIR="${LOG_-logs}"
 SIMILARITY_THRESHOLD="${SIMILARITY_THRESHOLD:-70}"
-BACKUP_DIR="${BACKUP_DIR:-backups/consolidation}"
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="${BACKUP_-backups/consolidation}"
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/auto_consolidation_$TIMESTAMP.log"
 
 # Ensure logging directory exists
@@ -23,7 +23,7 @@ mkdir -p "$BACKUP_DIR"
 # Initialize logging
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🔄 Automated Content Consolidation Workflow"
+echo "SYNC: Automated Content Consolidation Workflow"
 echo "============================================="
 echo "Start Time: $SCRIPT_START_TIMESTAMP"
 echo "Phase: 2 - Automation Opportunities"
@@ -35,35 +35,35 @@ track_operation_time() {
     local operation_name="$1"
     local start_time="$2"
     local end_time
-    end_time=$(date +%s)
+    end_time=$(date %s)
     local duration=$((end_time - start_time))
 
     echo "⏱️  $operation_name completed in ${duration}s"
 
     # Log to performance metrics file
     local metrics_file
-    metrics_file="logs/performance_metrics_$(date +%Y%m%d).log"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | Auto-Consolidation: $operation_name | ${duration}s" >> "$metrics_file"
+    metrics_file="logs/performance_metrics_$(date %Y%m%d).log"
+    echo "$(date '%Y-%m-%d %H:%M:%S') | Auto-Consolidation: $operation_name | ${duration}s" >> "$metrics_file"
 }
 
 print_performance_summary() {
     local script_end_time
-    script_end_time=$(date +%s)
+    script_end_time=$(date %s)
     local total_duration=$((script_end_time - SCRIPT_START_TIME))
     local end_timestamp
     end_timestamp=$(date)
 
     echo ""
-    echo "📊 Auto-Consolidation Performance Summary"
+    echo " Auto-Consolidation Performance Summary"
     echo "========================================="
     echo "Start Time: $SCRIPT_START_TIMESTAMP"
     echo "End Time: $end_timestamp"
-    echo "Total Duration: ${total_duration}s ($(date -ud "@$total_duration" +'%H:%M:%S'))"
+    echo "Total Duration: ${total_duration}s ($(date -ud "@$total_duration" '%H:%M:%S'))"
     echo ""
 
     # Check if this was a slow operation
     if [ "$total_duration" -gt 600 ]; then  # 10 minutes
-        echo "⚠️  Auto-consolidation took longer than 10 minutes - consider optimization"
+        echo "  Auto-consolidation took longer than 10 minutes - consider optimization"
     elif [ "$total_duration" -gt 180 ]; then  # 3 minutes
         echo "ℹ️  Auto-consolidation took longer than 3 minutes - monitoring performance"
     fi
@@ -75,25 +75,25 @@ create_consolidation_backup() {
 
     if command -v ./scripts/backup_docs.sh &> /dev/null; then
         ./scripts/backup_docs.sh backup || {
-            echo "⚠️  Backup creation failed - proceeding with caution"
+            echo "  Backup creation failed - proceeding with caution"
             return 1
         }
-        echo "✅ Backup created successfully"
+        echo " Backup created successfully"
     else
-        echo "⚠️  Backup script not found - manual backup recommended"
+        echo "  Backup script not found - manual backup recommended"
         return 1
     fi
 }
 
 # Function: Generate current duplication analysis
 analyze_current_duplications() {
-    echo "🔍 Analyzing current content duplications..."
+    echo " Analyzing current content duplications..."
 
     if command -v ./scripts/detect_content_duplication.sh &> /dev/null; then
         echo "   Running comprehensive duplication analysis..."
         # Run comprehensive analysis (let it output normally)
         if ! ./scripts/detect_content_duplication.sh scan; then
-            echo "⚠️  Comprehensive analysis failed, trying patterns mode..."
+            echo "  Comprehensive analysis failed, trying patterns mode..."
             ./scripts/detect_content_duplication.sh patterns || return 1
         fi
 
@@ -105,14 +105,14 @@ analyze_current_duplications() {
         suggestions_file=$(find "$LOG_DIR" -name "consolidation_suggestions_*.md" -type f | head -1)
 
         if [[ -n "$suggestions_file" && -f "$suggestions_file" ]]; then
-            echo "✅ Analysis complete: $suggestions_file"
+            echo " Analysis complete: $suggestions_file"
             return 0
         else
-            echo "❌ Failed to generate consolidation suggestions"
+            echo " Failed to generate consolidation suggestions"
             return 1
         fi
     else
-        echo "❌ Content duplication detection script not found"
+        echo " Content duplication detection script not found"
         return 1
     fi
 }
@@ -124,20 +124,20 @@ consolidate_virtual_environment_content() {
     local temp_references="$LOG_DIR/venv_references_$TIMESTAMP.txt"
 
     # Find all files with virtual environment content
-    echo "   📋 Identifying files with virtual environment content..."
+    echo "    Identifying files with virtual environment content..."
     grep -r -l "virtual environment\|\.venv\|source.*activate" "$DOCS_ROOT" > "$temp_references" || true
 
     if [[ ! -s "$temp_references" ]]; then
-        echo "   ✅ No virtual environment references found to consolidate"
+        echo "    No virtual environment references found to consolidate"
         return 0
     fi
 
     local file_count
     file_count=$(wc -l < "$temp_references")
-    echo "   📊 Found virtual environment content in $file_count files"
+    echo "    Found virtual environment content in $file_count files"
 
     # Generate consolidation plan
-    echo "   📝 Generating consolidation plan..."
+    echo "    Generating consolidation plan..."
     local consolidation_plan="$LOG_DIR/venv_consolidation_plan_$TIMESTAMP.md"
 
     cat > "$consolidation_plan" << 'EOF'
@@ -161,31 +161,31 @@ EOF
         echo "- \`$file\`" >> "$consolidation_plan"
     done < "$temp_references"
 
-    echo "   ✅ Consolidation plan created: $consolidation_plan"
+    echo "    Consolidation plan created: $consolidation_plan"
     rm -f "$temp_references"
 }
 
 # Function: Process terminal output consolidation (CRITICAL)
 consolidate_terminal_output_content() {
-    echo "🖥️ Processing terminal output content consolidation..."
+    echo " Processing terminal output content consolidation..."
 
     local temp_references="$LOG_DIR/terminal_references_$TIMESTAMP.txt"
 
     # Find all files with terminal output content
-    echo "   📋 Identifying files with terminal output content..."
+    echo "    Identifying files with terminal output content..."
     grep -r -l "terminal output\|echo.*emoji\|hanging.*terminal" "$DOCS_ROOT" > "$temp_references" || true
 
     if [[ ! -s "$temp_references" ]]; then
-        echo "   ✅ No terminal output references found to consolidate"
+        echo "    No terminal output references found to consolidate"
         return 0
     fi
 
     local file_count
     file_count=$(wc -l < "$temp_references")
-    echo "   📊 Found terminal output content in $file_count files"
+    echo "    Found terminal output content in $file_count files"
 
     # Generate consolidation plan
-    echo "   📝 Generating consolidation plan..."
+    echo "    Generating consolidation plan..."
     local consolidation_plan="$LOG_DIR/terminal_consolidation_plan_$TIMESTAMP.md"
 
     cat > "$consolidation_plan" << 'EOF'
@@ -215,31 +215,31 @@ EOF
         echo "- \`$file\`" >> "$consolidation_plan"
     done < "$temp_references"
 
-    echo "   ✅ Consolidation plan created: $consolidation_plan"
+    echo "    Consolidation plan created: $consolidation_plan"
     rm -f "$temp_references"
 }
 
 # Function: Process quality control consolidation (IMPORTANT)
 consolidate_quality_control_content() {
-    echo "📊 Processing quality control content consolidation..."
+    echo " Processing quality control content consolidation..."
 
     local temp_references="$LOG_DIR/qc_references_$TIMESTAMP.txt"
 
     # Find all files with quality control content
-    echo "   📋 Identifying files with quality control content..."
+    echo "    Identifying files with quality control content..."
     grep -r -l "quality control\|95.*percent\|qc.*validation\|8.*metrics" "$DOCS_ROOT" > "$temp_references" || true
 
     if [[ ! -s "$temp_references" ]]; then
-        echo "   ✅ No quality control references found to consolidate"
+        echo "    No quality control references found to consolidate"
         return 0
     fi
 
     local file_count
     file_count=$(wc -l < "$temp_references")
-    echo "   📊 Found quality control content in $file_count files"
+    echo "    Found quality control content in $file_count files"
 
     # Generate consolidation plan
-    echo "   📝 Generating consolidation plan..."
+    echo "    Generating consolidation plan..."
     local consolidation_plan="$LOG_DIR/qc_consolidation_plan_$TIMESTAMP.md"
 
     cat > "$consolidation_plan" << 'EOF'
@@ -269,13 +269,13 @@ EOF
         echo "- \`$file\`" >> "$consolidation_plan"
     done < "$temp_references"
 
-    echo "   ✅ Consolidation plan created: $consolidation_plan"
+    echo "    Consolidation plan created: $consolidation_plan"
     rm -f "$temp_references"
 }
 
 # Function: Generate comprehensive consolidation report
 generate_consolidation_report() {
-    echo "📊 Generating comprehensive consolidation report..."
+    echo " Generating comprehensive consolidation report..."
 
     local report_file="$LOG_DIR/consolidation_workflow_report_$TIMESTAMP.md"
 
@@ -332,15 +332,15 @@ This report documents the automated content consolidation workflow results based
 
 ## Phase 1 Tool Integration Success
 
-✅ Content duplication detection leveraged for targeted analysis
-✅ Backup system integrated for safe consolidation operations
-✅ Impact analysis provides cross-reference understanding
-✅ Search function enables efficient content location
-✅ Quick reference guides provide consolidation destinations
+ Content duplication detection leveraged for targeted analysis
+ Backup system integrated for safe consolidation operations
+ Impact analysis provides cross-reference understanding
+ Search function enables efficient content location
+ Quick reference guides provide consolidation destinations
 
 ## Metrics
 
-- **Documentation Files Analyzed**: 47+ files
+- **Documentation Files Analyzed**: 47 files
 - **Critical Duplication Patterns**: 3 (virtual env, terminal output, QC)
 - **Consolidation Plans Generated**: 3
 - **Automation Scripts Created**: 1 comprehensive workflow
@@ -354,30 +354,30 @@ This report documents the automated content consolidation workflow results based
 
 EOF
 
-    echo "✅ Consolidation report generated: $report_file"
+    echo " Consolidation report generated: $report_file"
 }
 
 # Function: Validate Phase 1 tool availability
 validate_phase1_tools() {
-    echo "🔧 Validating Phase 1 tool availability..."
+    echo " Validating Phase 1 tool availability..."
 
     local missing_tools=()
 
     # Check for Phase 1 tools
-    [[ ! -x "./scripts/detect_content_duplication.sh" ]] && missing_tools+=("content duplication detection")
-    [[ ! -x "./scripts/backup_docs.sh" ]] && missing_tools+=("backup system")
-    [[ ! -x "./scripts/analyze_change_impact.sh" ]] && missing_tools+=("change impact analysis")
-    [[ ! -x "./scripts/doc_search.sh" ]] && missing_tools+=("documentation search")
+    [[ ! -x "./scripts/detect_content_duplication.sh" ]] && missing_tools=("content duplication detection")
+    [[ ! -x "./scripts/backup_docs.sh" ]] && missing_tools=("backup system")
+    [[ ! -x "./scripts/analyze_change_impact.sh" ]] && missing_tools=("change impact analysis")
+    [[ ! -x "./scripts/doc_search.sh" ]] && missing_tools=("documentation search")
 
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
-        echo "❌ Missing Phase 1 tools:"
+        echo " Missing Phase 1 tools:"
         for tool in "${missing_tools[@]}"; do
             echo "   - $tool"
         done
         return 1
     fi
 
-    echo "✅ All Phase 1 tools available for automation integration"
+    echo " All Phase 1 tools available for automation integration"
     return 0
 }
 
@@ -460,9 +460,9 @@ main() {
         esac
     done
 
-    echo "🚀 Starting Phase 2: Automated Content Consolidation"
+    echo " Starting Phase 2: Automated Content Consolidation"
     local main_start_time
-    main_start_time=$(date +%s)
+    main_start_time=$(date %s)
 
     echo "Configuration:"
     echo "   - Documentation root: $DOCS_ROOT"
@@ -473,17 +473,17 @@ main() {
 
     # Validate Phase 1 tools are available
     if ! validate_phase1_tools; then
-        echo "❌ Phase 1 tools not available - cannot proceed with automation"
+        echo " Phase 1 tools not available - cannot proceed with automation"
         exit 1
     fi
 
     # Create backup unless skipped
     if [[ "$skip_backup" != "true" ]]; then
         local backup_start_time
-        backup_start_time=$(date +%s)
+        backup_start_time=$(date %s)
 
         if ! create_consolidation_backup; then
-            echo "⚠️  Backup failed - do you want to continue? (y/N)"
+            echo "  Backup failed - do you want to continue? (y/N)"
             read -r response
             if [[ ! "$response" =~ ^[Yy]$ ]]; then
                 echo "Consolidation workflow cancelled"
@@ -496,10 +496,10 @@ main() {
 
     # Run comprehensive duplication analysis
     local analysis_start_time
-    analysis_start_time=$(date +%s)
+    analysis_start_time=$(date %s)
 
     if ! analyze_current_duplications; then
-        echo "❌ Failed to analyze current duplications"
+        echo " Failed to analyze current duplications"
         exit 1
     fi
 
@@ -507,23 +507,23 @@ main() {
 
     # Generate consolidation plans unless analyze-only mode
     if [[ "$analyze_only" != "true" ]]; then
-        echo "📋 Generating consolidation plans for critical patterns..."
+        echo " Generating consolidation plans for critical patterns..."
         local consolidation_start_time
-        consolidation_start_time=$(date +%s)
+        consolidation_start_time=$(date %s)
 
         consolidate_virtual_environment_content
         consolidate_terminal_output_content
         consolidate_quality_control_content
 
         track_operation_time "Consolidation Plan Generation" "$consolidation_start_time"
-        echo "✅ All consolidation plans generated"
+        echo " All consolidation plans generated"
     else
-        echo "📊 Analysis complete - skipping consolidation plan generation"
+        echo " Analysis complete - skipping consolidation plan generation"
     fi
 
     # Generate comprehensive report
     local report_start_time
-    report_start_time=$(date +%s)
+    report_start_time=$(date %s)
     generate_consolidation_report
     track_operation_time "Report Generation" "$report_start_time"
 
@@ -531,13 +531,13 @@ main() {
     track_operation_time "Complete Auto-Consolidation Workflow" "$main_start_time"
 
     echo
-    echo "✅ Phase 2 automation workflow complete!"
-    echo "   📄 Log: $LOG_FILE"
-    echo "   📊 Report: $LOG_DIR/consolidation_workflow_report_$TIMESTAMP.md"
-    echo "   📋 Plans: $LOG_DIR/*_consolidation_plan_$TIMESTAMP.md"
-    echo "   ⏱️  Metrics: logs/performance_metrics_$(date +%Y%m%d).log"
+    echo " Phase 2 automation workflow complete!"
+    echo "   FILE: Log: $LOG_FILE"
+    echo "    Report: $LOG_DIR/consolidation_workflow_report_$TIMESTAMP.md"
+    echo "    Plans: $LOG_DIR/*_consolidation_plan_$TIMESTAMP.md"
+    echo "   ⏱️  Metrics: logs/performance_metrics_$(date %Y%m%d).log"
     echo
-    echo "🔄 Ready for Phase 3: Strategic improvements based on automation results"
+    echo "SYNC: Ready for Phase 3: Strategic improvements based on automation results"
 }
 
 # Execute main workflow if script is run directly

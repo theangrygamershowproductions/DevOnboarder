@@ -8,7 +8,7 @@ consolidation_priority: P3
 
 # AI Agent Shell Safety Guidelines - Post-Incident Enhancement
 
-## 📋 Overview
+##  Overview
 
 Enhanced guidelines created in response to Shell Interpretation Incident (September 19, 2025) to prevent terminal command safety violations.
 
@@ -18,18 +18,18 @@ Enhanced guidelines created in response to Shell Interpretation Incident (Septem
 
 ```bash
 
-# ❌ DANGEROUS - Will cause shell interpretation errors
+#  DANGEROUS - Will cause shell interpretation errors
 
 gh pr create --body "Content with *wildcards* and `special chars`"
 
 gh issue create --body "Multi-line content with $variables"
-echo "Text with emojis ✅ and *patterns*"
+echo "Text with emojis  and *patterns*"
 
 ```
 
 ```bash
 
-# ✅ SAFE - Use file-based approaches
+#  SAFE - Use file-based approaches
 
 gh pr create --body-file template.md
 gh issue create --body-file issue_body.md
@@ -43,7 +43,7 @@ printf "Text: %s\n" "$variable"
 
 ```bash
 
-# ✅ SAFE - DevOnboarder tools with built-in safety
+#  SAFE - DevOnboarder tools with built-in safety
 
 ./scripts/create_pr.sh --template chore --title "Safe title"
 ./scripts/safe_commit.sh "Simple commit message"
@@ -67,7 +67,7 @@ printf "Text: %s\n" "$variable"
 
 - `>` `<` (redirection) - file operations
 
-## 📋 Pre-Command Checklist
+##  Pre-Command Checklist
 
 Before executing any shell command, verify:
 
@@ -85,7 +85,7 @@ Before executing any shell command, verify:
 
 - [ ] DevOnboarder safe tools used when available
 
-## 🛠️ Safe Patterns Library
+##  Safe Patterns Library
 
 ### GitHub CLI Operations
 
@@ -142,7 +142,7 @@ EOF
 
 ```
 
-## 🔍 Pattern Recognition Training
+##  Pattern Recognition Training
 
 ### Anti-Patterns to Detect
 
@@ -200,7 +200,7 @@ When shell interpretation errors occur:
 
 ### Validation Tools
 
-- `scripts/validate_shell_safety.sh` - Shell command safety validator (✅ Tested & Operational)
+- `scripts/validate_shell_safety.sh` - Shell command safety validator ( Tested & Operational)
 
 - `scripts/qc_pre_push.sh` - Comprehensive quality validation
 
@@ -230,7 +230,7 @@ When shell errors occur:
 
 4. **Enhance prevention guidelines**
 
-## 📊 Success Metrics
+##  Success Metrics
 
 Track prevention effectiveness:
 

@@ -314,7 +314,7 @@ class ExtendedMetadataYAMLManager:
         valid_files = 0
         for file_path, is_valid in validation_results.items():
             if is_valid:
-                valid_files += 1
+                valid_files = 1
                 try:
                     yaml_content = Path(file_path).read_text(encoding="utf-8")
                     metadata = self.deserialize_metadata(yaml_content)
@@ -322,20 +322,20 @@ class ExtendedMetadataYAMLManager:
                     # Count governance levels
                     gov_level = metadata.governance.level.value
                     governance_levels[gov_level] = (
-                        governance_levels.get(gov_level, 0) + 1
+                        governance_levels.get(gov_level, 0)  1
                     )
 
                     # Count compliance tags
                     for tag in metadata.governance.compliance_tags:
                         tag_value = tag.value
                         compliance_tags[tag_value] = (
-                            compliance_tags.get(tag_value, 0) + 1
+                            compliance_tags.get(tag_value, 0)  1
                         )
 
                     # Count similarity groups
                     sim_group = metadata.similarity_group
                     similarity_groups[sim_group] = (
-                        similarity_groups.get(sim_group, 0) + 1
+                        similarity_groups.get(sim_group, 0)  1
                     )
 
                 except Exception as e:

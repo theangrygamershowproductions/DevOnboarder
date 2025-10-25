@@ -35,7 +35,7 @@ Author: DevOnboarder Project
 Created: 2025-07-25
 Updated: 2025-07-25
 Purpose: Track versioning metadata for configuration files
--->
+-
 
 ## Dependencies
 
@@ -83,7 +83,7 @@ This document tracks versioning and metadata for configuration files across the 
 
 - **Key Dependencies**: fastapi, SQLAlchemy, pytest, ruff
 
-- **Coverage Requirement**: 96%+
+- **Coverage Requirement**: 96%
 
 - **Linting**: ruff with line-length=88, target-version="py312"
 
@@ -121,7 +121,7 @@ This document tracks versioning and metadata for configuration files across the 
 
 - **Key Dependencies**: react, vite, typescript, vitest
 
-- **Coverage Requirement**: 100% statements, 98.43%+ branches
+- **Coverage Requirement**: 100% statements, 98.43% branches
 
 - **Standards**: DevOnboarder frontend service standards
 

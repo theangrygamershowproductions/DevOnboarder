@@ -75,7 +75,7 @@ show_status() {
         echo "Newest report: $(basename "$NEWEST")"
 
         # Check for reports needing attention
-        CUTOFF_DATE=$(date -d "-${RETENTION_DAYS} days" '+%Y%m%d')
+        CUTOFF_DATE=$(date -d "-${RETENTION_DAYS} days" '%Y%m%d')
         OLD_REPORTS=0
 
         for report in "$REPORTS_DIR"/token-audit-*.md; do
@@ -83,16 +83,16 @@ show_status() {
                 # Extract date from filename (format: token-audit-YYYYMMDD_HHMMSS.md)
                 REPORT_DATE=$(basename "$report" | sed 's/token-audit-\([0-9]\{8\}\)_.*/\1/')
                 if [ "$REPORT_DATE" -lt "$CUTOFF_DATE" ]; then
-                    OLD_REPORTS=$((OLD_REPORTS + 1))
+                    OLD_REPORTS=$((OLD_REPORTS  1))
                 fi
             fi
         done
 
         if [ "$OLD_REPORTS" -gt 0 ]; then
-            echo "WARNING: Reports beyond retention: $OLD_REPORTS"
+            echo " Reports beyond retention: $OLD_REPORTS"
             echo "   Run 'clean' command to remove old reports"
         else
-            echo "SUCCESS: All reports within retention period"
+            echo " All reports within retention period"
         fi
     fi
 
@@ -112,7 +112,7 @@ clean_reports() {
         return 0
     fi
 
-    CUTOFF_DATE=$(date -d "-${RETENTION_DAYS} days" '+%Y%m%d')
+    CUTOFF_DATE=$(date -d "-${RETENTION_DAYS} days" '%Y%m%d')
     REMOVED_COUNT=0
 
     echo "Removing reports older than $RETENTION_DAYS days (before $CUTOFF_DATE)..."
@@ -125,16 +125,16 @@ clean_reports() {
             if [ "$REPORT_DATE" -lt "$CUTOFF_DATE" ]; then
                 echo "  Removing: $(basename "$report")"
                 rm "$report"
-                REMOVED_COUNT=$((REMOVED_COUNT + 1))
+                REMOVED_COUNT=$((REMOVED_COUNT  1))
             fi
         fi
     done
 
     if [ "$REMOVED_COUNT" -eq 0 ]; then
-        echo "SUCCESS: No reports needed removal"
+        echo " No reports needed removal"
     else
         echo ""
-        echo "SUCCESS: Removed $REMOVED_COUNT old audit reports"
+        echo " Removed $REMOVED_COUNT old audit reports"
     fi
 }
 
@@ -144,7 +144,7 @@ generate_report() {
     echo "================================="
 
     if [ ! -f "scripts/generate_token_audit_report.sh" ]; then
-        echo "ERROR: Audit report generator not found"
+        echo " Audit report generator not found"
         echo "   Expected: scripts/generate_token_audit_report.sh"
         exit 1
     fi
@@ -174,7 +174,7 @@ case "${1:-help}" in
         usage
         ;;
     *)
-        echo "ERROR: Unknown command: $1"
+        echo " Unknown command: $1"
         echo ""
         usage
         exit 1

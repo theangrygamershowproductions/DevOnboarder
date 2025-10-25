@@ -45,7 +45,7 @@ class CIFailureAnalyzer:
                     r"npm ERR!.*missing.*dependency",
                     r"pip install failed",
                     r"Could not find a version that satisfies",
-                    r"ERROR: No matching distribution found",
+                    r" No matching distribution found",
                 ],
                 "severity": "high",
                 "auto_fixable": True,
@@ -76,7 +76,7 @@ class CIFailureAnalyzer:
                     r"could not find expected ':'",
                     r"expected <block end>, but found",
                     r"too many spaces inside brackets",
-                    r"wrong indentation: expected \d+ but found \d+",
+                    r"wrong indentation: expected \d but found \d",
                     r"ParserError.*while parsing",
                     r"did not find expected key",
                 ],
@@ -126,7 +126,7 @@ class CIFailureAnalyzer:
                 "patterns": [
                     r"hook id:.*\n.*exit code: [1-9]",
                     r"shellcheck.*Failed",
-                    r"SC\d+.*error.*:",
+                    r"SC\d.*error.*:",
                     r"files were modified by this hook",
                     r"pre-commit.*failed",
                     r"markdownlint.*Failed",
@@ -148,8 +148,7 @@ class CIFailureAnalyzer:
             },
             "install_dependencies": {
                 "command": (
-                    "pip install -e .[test] && "
-                    "npm ci --prefix frontend && "
+                    "pip install -e .[test] && " + "npm ci --prefix frontend && "
                     "npm ci --prefix bot"
                 ),
                 "description": "Reinstall all project dependencies",
@@ -182,10 +181,8 @@ class CIFailureAnalyzer:
             },
             "fix_yaml_formatting": {
                 "command": (
-                    "yamllint -c .github/.yamllint-config "
-                    ".github/workflows/**/*.yml && "
-                    "yq --yaml-output '.' .github/workflows/*.yml "
-                    "> /tmp/formatted.yml && "
+                    "yamllint -c .github/.yamllint-config " + ".github/workflows/**/*.yml && "
+                    "yq --yaml-output '.' .github/workflows/*.yml " + "> /tmp/formatted.yml && "
                     "mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml"
                 ),
                 "description": "Fix YAML formatting and indentation issues",
@@ -200,8 +197,7 @@ class CIFailureAnalyzer:
             },
             "fix_pre_commit_issues": {
                 "command": (
-                    "pre-commit run --all-files && "
-                    "git add . && "
+                    "pre-commit run --all-files && " + "git add . && "
                     "git commit --amend --no-edit"
                 ),
                 "description": "Fix pre-commit hooks and update commit",
@@ -212,17 +208,17 @@ class CIFailureAnalyzer:
     def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
-            print("ERROR: Virtual environment not detected")
-            print("TIP: DevOnboarder requires virtual environment isolation")
-            print("🔧 Run: python -m venv .venv && source .venv/bin/activate")
+            print(" Virtual environment not detected")
+            print(" DevOnboarder requires virtual environment isolation")
+            print(" Run: python -m venv .venv && source .venv/bin/activate")
             sys.exit(1)
 
         venv_python = Path(self.venv_path) / "bin" / "python"
         if not venv_python.exists():
-            print(f"ERROR: Virtual environment invalid: {self.venv_path}")
+            print(f" Virtual environment invalid: {self.venv_path}")
             sys.exit(1)
 
-        print(f"SUCCESS: Virtual environment validated: {self.venv_path}")
+        print(f" Virtual environment validated: {self.venv_path}")
 
     def analyze_failure_log(self, log_content: str) -> Dict[str, Any]:
         """Analyze CI failure log and classify failure types."""
@@ -282,7 +278,7 @@ class CIFailureAnalyzer:
             ]
             analysis["auto_fixable"] = primary["auto_fixable"]
             analysis["confidence_score"] = min(
-                0.95, 0.3 + (primary["match_count"] * 0.1)
+                0.95, 0.3  (primary["match_count"] * 0.1)
             )
 
         return analysis
@@ -293,7 +289,7 @@ class CIFailureAnalyzer:
         """Extract surrounding lines for better failure context."""
         lines = content[:position].split("\n")
         start_line = max(0, len(lines) - context_lines - 1)
-        end_line = min(len(content.split("\n")), len(lines) + context_lines)
+        end_line = min(len(content.split("\n")), len(lines)  context_lines)
 
         all_lines = content.split("\n")
         return all_lines[start_line:end_line]
@@ -355,7 +351,7 @@ class CIFailureAnalyzer:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"STATS: Analysis report saved: {output_path}")
+        print(f" Analysis report saved: {output_path}")
 
     def generate_aar_integration(
         self,
@@ -385,7 +381,7 @@ class CIFailureAnalyzer:
             # Check if AAR generator is available
             aar_script = Path("scripts/generate_aar.py")
             if not aar_script.exists():
-                print("   WARNING: AAR generator script not found")
+                print("    AAR generator script not found")
                 return False
 
             # Prepare AAR data
@@ -396,7 +392,7 @@ class CIFailureAnalyzer:
             # Use Python AAR generator with proper arguments
             aar_script = Path("scripts/generate_aar.py")
             if not aar_script.exists():
-                print("   WARNING: AAR generator script not found")
+                print("    AAR generator script not found")
                 return False
 
             # Create AAR command
@@ -428,20 +424,20 @@ class CIFailureAnalyzer:
             )
 
             if result.returncode == 0:
-                print(f"   INFO: AAR generated: {aar_title}")
+                print(f"    AAR generated: {aar_title}")
                 # Use resolution_plan context for logging
                 strategy = resolution_plan.get("resolution_strategy", "unknown")
-                print(f"   🔧 Resolution strategy: {strategy}")
+                print(f"    Resolution strategy: {strategy}")
                 return True
             else:
-                print(f"   ERROR: AAR generation failed: {result.stderr}")
+                print(f"    AAR generation failed: {result.stderr}")
                 return False
 
         except (subprocess.TimeoutExpired, subprocess.SubprocessError) as e:
-            print(f"   ERROR: AAR subprocess error: {e}")
+            print(f"    AAR subprocess error: {e}")
             return False
         except OSError as e:
-            print(f"   ERROR: AAR file system error: {e}")
+            print(f"    AAR file system error: {e}")
             return False
 
 
@@ -450,7 +446,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Enhanced CI Failure Analyzer - Phase 4: CI Triage Guard"
     )
-    parser.add_argument("log_files", nargs="+", help="CI log files to analyze")
+    parser.add_argument("log_files", nargs="", help="CI log files to analyze")
     parser.add_argument(
         "--output",
         default="ci_failure_analysis.json",
@@ -481,24 +477,24 @@ def main():
     for log_file in args.log_files:
         if Path(log_file).exists():
             with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
-                combined_log += f"\n--- {log_file} ---\n"
-                combined_log += f.read()
+                combined_log = f"\n--- {log_file} ---\n"
+                combined_log = f.read()
         else:
-            print(f"WARNING:  Log file not found: {log_file}")
+            print(f"  Log file not found: {log_file}")
 
     if not combined_log.strip():
-        print("ERROR: No valid log content found")
+        print(" No valid log content found")
         sys.exit(1)
 
     # Analyze failures
-    print("INFO: Analyzing CI failures with enhanced pattern recognition...")
+    print(" Analyzing CI failures with enhanced pattern recognition...")
     analysis = analyzer.analyze_failure_log(combined_log)
 
     # Generate resolution plan
     resolution_plan = analyzer.generate_resolution_plan(analysis)
 
     # Output results
-    print("\nSTATS: Analysis Results:")
+    print("\n Analysis Results:")
     print(f"   Detected failures: {len(analysis['detected_failures'])}")
     if analysis["primary_failure"]:
         primary = analysis["primary_failure"]
@@ -512,7 +508,7 @@ def main():
             print(f"   Auto-fixable: {primary.get('auto_fixable', False)}")
             print(f"   Confidence: {analysis['confidence_score']:.1%}")
 
-    print("\n🔧 Resolution Plan:")
+    print("\n Resolution Plan:")
     strategy = resolution_plan.get("resolution_strategy", "manual_investigation")
     print(f"   Strategy: {strategy}")
     success_rate = resolution_plan.get("estimated_success_rate", 0)
@@ -542,16 +538,16 @@ def main():
         or len(analysis["detected_failures"]) > 2
     )
     if aar_conditions:
-        print("\nINFO: Generating After Action Report...")
+        print("\n Generating After Action Report...")
         aar_success = analyzer.generate_aar_integration(
             analysis, resolution_plan, args.workflow_run_id
         )
         if aar_success:
-            print("   SUCCESS: AAR generated successfully")
+            print("    AAR generated successfully")
         else:
-            print("   WARNING: AAR generation encountered issues")
+            print("    AAR generation encountered issues")
 
-    print("\nSUCCESS: Enhanced CI failure analysis complete")
+    print("\n Enhanced CI failure analysis complete")
 
 
 if __name__ == "__main__":

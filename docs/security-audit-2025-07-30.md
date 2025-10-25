@@ -25,7 +25,7 @@ We ran dependency audits for Python and Node packages and scanned the code with 
 
 ## Python (`pip-audit`)
 
-### ⚠️ Ignored Vulnerabilities (Require Periodic Review)
+###  Ignored Vulnerabilities (Require Periodic Review)
 
 The following vulnerabilities are currently ignored:
 

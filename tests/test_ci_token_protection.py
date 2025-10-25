@@ -24,8 +24,7 @@ class TestCITokenProtection:
             mode="w", suffix=".tokens.ci", delete=False
         ) as f:
             f.write(
-                "CI_ISSUE_AUTOMATION_TOKEN="
-                "ci_test_ci_issue_automation_token_placeholder\n"
+                "CI_ISSUE_AUTOMATION_TOKEN=" + "ci_test_ci_issue_automation_token_placeholder\n"
             )
             f.write("CI_BOT_TOKEN=ci_test_ci_bot_token_placeholder\n")
             temp_tokens_file = f.name

@@ -117,43 +117,43 @@ analyze_dependencies() {
     if [ -f "$script" ]; then
         # Check for common dependencies
         if grep -q "source.*scripts/" "$script" 2>/dev/null; then
-            dependencies+=("scripts")
+            dependencies=("scripts")
         fi
         if grep -q "python.*-m" "$script" 2>/dev/null; then
-            dependencies+=("python")
+            dependencies=("python")
         fi
         if grep -q "npm\|node" "$script" 2>/dev/null; then
-            dependencies+=("node")
+            dependencies=("node")
         fi
         if grep -q "docker\|compose" "$script" 2>/dev/null; then
-            dependencies+=("docker")
+            dependencies=("docker")
         fi
         if grep -q "git\|gh" "$script" 2>/dev/null; then
-            dependencies+=("git")
+            dependencies=("git")
         fi
         if grep -q "make\|Makefile" "$script" 2>/dev/null; then
-            dependencies+=("make")
+            dependencies=("make")
         fi
         if grep -q "\.venv\|venv" "$script" 2>/dev/null; then
-            dependencies+=("venv")
+            dependencies=("venv")
         fi
         if grep -q "pytest\|coverage" "$script" 2>/dev/null; then
-            dependencies+=("testing")
+            dependencies=("testing")
         fi
 
         # Check for critical paths
         local critical_paths=()
         if grep -q "logs/" "$script" 2>/dev/null; then
-            critical_paths+=("logs/")
+            critical_paths=("logs/")
         fi
         if grep -q "\.env" "$script" 2>/dev/null; then
-            critical_paths+=(".env")
+            critical_paths=(".env")
         fi
         if grep -q "\.github/" "$script" 2>/dev/null; then
-            critical_paths+=(".github/")
+            critical_paths=(".github/")
         fi
         if grep -q "src/" "$script" 2>/dev/null; then
-            critical_paths+=("src/")
+            critical_paths=("src/")
         fi
 
         if [ ${#dependencies[@]} -gt 0 ] || [ ${#critical_paths[@]} -gt 0 ]; then
@@ -211,19 +211,19 @@ ALL_SCRIPTS=("${VALIDATION_SCRIPTS[@]}" "${TESTING_SCRIPTS[@]}" "${COMPLIANCE_SC
 for script in "${ALL_SCRIPTS[@]}"; do
     if [ -f "$script" ]; then
         if grep -q "logs/" "$script" 2>/dev/null; then
-            ((SCRIPTS_WITH_LOGS++))
+            ((SCRIPTS_WITH_LOGS))
         fi
         if grep -q "\.env" "$script" 2>/dev/null; then
-            ((SCRIPTS_WITH_ENV++))
+            ((SCRIPTS_WITH_ENV))
         fi
         if grep -q "\.github/" "$script" 2>/dev/null; then
-            ((SCRIPTS_WITH_GITHUB++))
+            ((SCRIPTS_WITH_GITHUB))
         fi
         if grep -q "src/" "$script" 2>/dev/null; then
-            ((SCRIPTS_WITH_SRC++))
+            ((SCRIPTS_WITH_SRC))
         fi
         if grep -q "\.venv\|venv" "$script" 2>/dev/null; then
-            ((SCRIPTS_WITH_VENV++))
+            ((SCRIPTS_WITH_VENV))
         fi
     fi
 done

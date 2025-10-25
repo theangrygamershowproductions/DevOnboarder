@@ -153,7 +153,7 @@ For authorized edits to archived documents:
 
 - **Branch Cleanup**: Remote branch automatically deleted
 
-- **Files Changed**: 4 files, +76 lines
+- **Files Changed**: 4 files, 76 lines
 
 - **Merge Commit**: [630ea848](https://github.com/theangrygamershowproductions/DevOnboarder/commit/630ea848)
 
@@ -179,7 +179,7 @@ For authorized edits to archived documents:
 
 ---
 
-**Status**: ✅ COMPLETE - AAR Protection System successfully implemented and merged
+**Status**:  COMPLETE - AAR Protection System successfully implemented and merged
 
 **Date**: 2025-09-11
 **PR Number**: #1367

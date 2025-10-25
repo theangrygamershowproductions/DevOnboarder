@@ -7,7 +7,7 @@ target_activation: "post-MVP (September 2025)"
 priority: "strategic"
 dependencies: [
   "MVP delivery completion",
-  "Strategic split readiness 80%+",
+  "Strategic split readiness 80%",
   "Service boundary maturation"
 ]
 related_files: [
@@ -23,7 +23,7 @@ related_files: [
 
 **Mission**: Execute systematic repository separation post-MVP to enable independent service development while maintaining operational excellence and quality standards.
 
-**Activation Trigger**: MVP completion + 80%+ split readiness score + service boundary maturation
+**Activation Trigger**: MVP completion  80% split readiness score  service boundary maturation
 
 **Timeline**: 6-week execution plan starting October 2025
 
@@ -43,7 +43,7 @@ related_files: [
 
 - **Team Readiness**: 50% prepared - requires post-MVP knowledge transfer
 
-**Target for Activation**: 80%+ overall readiness
+**Target for Activation**: 80% overall readiness
 
 ### MVP Integration Benefits
 
@@ -151,21 +151,21 @@ Each extracted repository will include:
 
 ```text
 devonboarder-{service}/
-├── .github/workflows/    # DevOnboarder CI/CD patterns
+── .github/workflows/    # DevOnboarder CI/CD patterns
 
-├── src/{service}/        # Service-specific code
+── src/{service}/        # Service-specific code
 
-├── tests/               # 95%+ coverage requirement
+── tests/               # 95% coverage requirement
 
-├── docs/                # Service documentation
+── docs/                # Service documentation
 
-├── scripts/             # Service automation
+── scripts/             # Service automation
 
-├── config/             # Service configuration
+── config/             # Service configuration
 
-├── docker/             # Container configuration
+── docker/             # Container configuration
 
-└── .codex/             # Agent integration
+── .codex/             # Agent integration
 
 ```
 
@@ -173,7 +173,7 @@ devonboarder-{service}/
 
 **Maintained Standards Across All Repositories**:
 
-- **Test Coverage**: 95%+ maintained per repository
+- **Test Coverage**: 95% maintained per repository
 
 - **Security Scanning**: Zero critical vulnerabilities
 
@@ -265,7 +265,7 @@ devonboarder-{service}/
 
 - [ ] API contract compliance (100% backward compatibility)
 
-- [ ] Quality standards maintained (95%+ test coverage)
+- [ ] Quality standards maintained (95% test coverage)
 
 - [ ] Documentation completeness (Vale compliance)
 
@@ -287,7 +287,7 @@ devonboarder-{service}/
 
 - **Development Velocity**: Maintained or improved development speed
 
-- **Quality Standards**: Consistent 95%+ quality across all repositories
+- **Quality Standards**: Consistent 95% quality across all repositories
 
 - **Operational Excellence**: Reduced deployment complexity and improved reliability
 
@@ -361,6 +361,6 @@ The Strategic Repository Splitting Plan provides a comprehensive, risk-managed a
 
 - **Scalability**: Proven patterns for future service extraction and growth
 
-**Activation Readiness**: Framework complete and staged for post-MVP execution when split readiness reaches 80%+ threshold and service boundaries achieve full maturation.
+**Activation Readiness**: Framework complete and staged for post-MVP execution when split readiness reaches 80% threshold and service boundaries achieve full maturation.
 
 The plan ensures DevOnboarder's continued commitment to "quiet reliability" while providing the strategic flexibility needed for long-term platform evolution and growth.

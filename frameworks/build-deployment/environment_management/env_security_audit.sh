@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.." || exit
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Environment Security Audit"
@@ -53,7 +53,7 @@ audit_env_file() {
     echo "Committed to git: $is_committed"
 
     if [ ! -f "$file" ]; then
-        echo "  WARNING: File not found"
+        echo "   File not found"
         return 1
     fi
 
@@ -65,22 +65,22 @@ audit_env_file() {
     # Extract all variables
     while IFS='=' read -r var_name var_value; do
         if [ -n "$var_name" ] && [ -n "$var_value" ]; then
-            total_vars=$((total_vars + 1))
+            total_vars=$((total_vars  1))
 
             # Check if variable is sensitive
             if is_sensitive_var "$var_name"; then
-                sensitive_vars=$((sensitive_vars + 1))
+                sensitive_vars=$((sensitive_vars  1))
 
                 # Check if value looks like test/placeholder data
                 if echo "$var_value" | grep -qi "test\|placeholder\|ci_test\|mock\|fake\|localhost"; then
-                    test_values=$((test_values + 1))
+                    test_values=$((test_values  1))
                     echo "  SAFE: $var_name (test value)"
                 else
-                    production_values=$((production_values + 1))
+                    production_values=$((production_values  1))
                     if [ "$is_committed" = "true" ]; then
                         echo "  RISK: $var_name (production value in committed file)"
                     else
-                        echo "  OK: $var_name (production value in gitignored file)"
+                        echo "   $var_name (production value in gitignored file)"
                     fi
                 fi
             fi
@@ -134,14 +134,14 @@ main() {
                 echo "  CRITICAL: Real Cloudflare tunnel token found in CI file!"
                 audit_passed=false
             else
-                echo "  OK: CI uses test tunnel token"
+                echo "   CI uses test tunnel token"
             fi
 
             # Check for production URLs in CI
             if grep -q "https://.*\.theangrygamershow\.com" "$env_file" 2>/dev/null; then
-                echo "  INFO: Production URLs found in CI (acceptable for frontend variables)"
+                echo "   Production URLs found in CI (acceptable for frontend variables)"
             else
-                echo "  OK: CI uses localhost URLs for testing"
+                echo "   CI uses localhost URLs for testing"
             fi
 
             echo ""

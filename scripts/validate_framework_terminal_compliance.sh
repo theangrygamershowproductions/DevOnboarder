@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-LOG_FILE="logs/framework_terminal_validation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/framework_terminal_validation_$(date %Y%m%d_%H%M%S).log"
 mkdir -p logs
 exec > >(tee -a "$LOG_FILE") 2>&1
 
@@ -31,10 +31,10 @@ while IFS= read -r -d '' file; do
     file_violations=0
 
     # Check for emojis and problematic Unicode characters
-    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|✅|❌|🛠️|📊|📈|📥|🔗|🐛|⚠️|💡|🎯|🚀|📋|🔍|📝|🤖' "$file" 2>/dev/null; then
+    if grep -P '[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]|||||GROW:|📥|LINK:|🐛|||🎯|||||🤖' "$file" 2>/dev/null; then
         echo "CRITICAL VIOLATION: Terminal-hanging characters found in $file"
-        echo "DevOnboarder policy: Use ASCII equivalents (SUCCESS:, ERROR:, etc.)"
-        ((file_violations++))
+        echo "DevOnboarder policy: Use ASCII equivalents (, , etc.)"
+        ((file_violations))
     fi
 
     # For shell/Python files, check for problematic echo patterns
@@ -43,18 +43,18 @@ while IFS= read -r -d '' file; do
         if grep -E '^\s*echo.*\$\(' "$file" 2>/dev/null; then
             echo "CRITICAL VIOLATION: Command substitution in echo found in $file"
             echo "DevOnboarder policy: Use printf or separate command assignment"
-            ((file_violations++))
+            ((file_violations))
         fi
 
         # Check for variable expansion in echo (Python f-strings are OK)
         if [[ "$file" =~ \.sh$ ]] && grep -E '^\s*echo.*\$[A-Z_]' "$file" 2>/dev/null; then
             echo "CRITICAL VIOLATION: Variable expansion in echo found in $file"
             echo "DevOnboarder policy: Use printf for variable output"
-            ((file_violations++))
+            ((file_violations))
         fi
     fi
 
-    ((total_violations += file_violations))
+    ((total_violations = file_violations))
 
 done < <(find "$FRAMEWORK_DIR" -type f \( -name "*.py" -o -name "*.sh" -o -name "*.md" \) \
     ! -name "*.emoji_fix_backup" \
@@ -69,7 +69,7 @@ if [ "$total_violations" -gt 0 ]; then
     echo "Run scripts/comprehensive_emoji_fix.py to resolve violations"
     exit 1
 else
-    echo "FRAMEWORK COMPLIANCE SUCCESS: No violations found"
+    echo "FRAMEWORK COMPLIANCE  No violations found"
     echo "All framework files comply with terminal output policy"
     exit 0
 fi

@@ -30,7 +30,7 @@ class TestUTCTimestamps:
         assert "T" in result
 
         # Should be parseable as ISO format
-        parsed = datetime.fromisoformat(result.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(result.replace("Z", "00:00"))
         assert parsed.tzinfo is not None
 
     def test_get_utc_display_timestamp_format(self):
@@ -67,8 +67,8 @@ class TestUTCTimestamps:
         assert result.second == 26
 
     def test_parse_github_timestamp_offset_format(self):
-        """Test parsing GitHub timestamp with +00:00 offset."""
-        timestamp = "2025-09-21T19:06:26+00:00"
+        """Test parsing GitHub timestamp with 00:00 offset."""
+        timestamp = "2025-09-21T19:06:2600:00"
         result = parse_github_timestamp(timestamp)
 
         assert isinstance(result, datetime)
@@ -120,9 +120,9 @@ class TestUTCTimestamps:
         """Test validation of valid GitHub timestamp formats."""
         valid_timestamps = [
             "2025-09-21T19:06:26Z",
-            "2025-09-21T19:06:26+00:00",
+            "2025-09-21T19:06:2600:00",
             "2025-01-01T00:00:00Z",
-            "2025-12-31T23:59:59+00:00",
+            "2025-12-31T23:59:5900:00",
         ]
 
         for ts in valid_timestamps:
@@ -135,13 +135,13 @@ class TestUTCTimestamps:
             "",
             "2025-09-21T19:06:26",  # Missing Z
             "2025/09/21T19:06:26Z",  # Wrong date format
-            "2025-09-21T19:06:26+05:00",  # Wrong timezone
+            "2025-09-21T19:06:2605:00",  # Wrong timezone
             "2025-9-21T19:06:26Z",  # Date missing leading zero
             "2025-09-21T9:06:26Z",  # Time missing leading zero
             "2025-09-21T19:6:26Z",  # Time missing leading zero in minutes
             "2025-09-21T19:06:6Z",  # Time missing leading zero in seconds
             "2025-09-21T19:06:26Zextra",  # Extra characters
-            "2025-09-21T19:06:26+00:00extra",  # Extra characters after timezone
+            "2025-09-21T19:06:2600:00extra",  # Extra characters after timezone
             "2025-09-21T19:06:26T27:08:30Z",  # Multiple T separators
             "20250921T190626Z",  # No separators
             "2025-02-30T19:06:26Z",  # Invalid date (Feb 30 doesn't exist)
@@ -177,7 +177,7 @@ class TestUTCTimestamps:
             assert ms_ts == "2025-09-21T19:06:26.123Z"
 
     def test_parse_github_timestamp_handles_z_conversion(self):
-        """Test that Z suffix is properly converted to +00:00."""
+        """Test that Z suffix is properly converted to 00:00."""
         timestamp = "2025-09-21T19:06:26Z"
 
         with patch("src.utils.timestamps.datetime") as mock_datetime:
@@ -187,7 +187,7 @@ class TestUTCTimestamps:
 
             # Verify the result is a datetime object
             assert isinstance(result, datetime)
-            # Verify fromisoformat was called with +00:00 instead of Z
+            # Verify fromisoformat was called with 00:00 instead of Z
             # Note: We can't easily test the exact call due to how
             # datetime.fromisoformat works
 
@@ -223,7 +223,7 @@ class TestTimestampFallback:
         assert "T" in result
 
         # Should be parseable as ISO format
-        parsed = datetime.fromisoformat(result.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(result.replace("Z", "00:00"))
         assert parsed.tzinfo is not None
 
     def test_fallback_get_utc_display_timestamp_format(self):

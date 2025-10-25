@@ -68,11 +68,11 @@ class MilestoneCrossReferenceValidator:
         # Look for milestone_id patterns in text (more specific patterns)
         patterns = [
             # YAML format with date pattern
-            r'milestone_id[:\s]*["\']([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+)["\']',
+            r'milestone_id[:\s]*["\']([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-])["\']',
             # Unquoted format with date pattern
-            r"milestone_id[:\s]*([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+)(?:\s|$)",
+            r"milestone_id[:\s]*([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-])(?:\s|$)",
             # Markdown reference format
-            r"\[milestone:\s*([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+)\]",
+            r"\[milestone:\s*([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-])\]",
         ]
 
         references = []
@@ -84,7 +84,7 @@ class MilestoneCrossReferenceValidator:
 
     def validate_cross_references(self, search_paths: List[str]) -> bool:
         """Validate milestone cross-references across all files."""
-        print("🔍 Milestone Cross-Reference Validation")
+        print(" Milestone Cross-Reference Validation")
         print("=" * 50)
 
         # Find all milestone files
@@ -153,9 +153,9 @@ class MilestoneCrossReferenceValidator:
     def fix_duplicates(self, dry_run: bool = True) -> bool:
         """Fix duplicate milestone_ids by making them unique."""
         if not dry_run:
-            print("🔧 Fixing duplicate milestone_ids...")
+            print(" Fixing duplicate milestone_ids...")
         else:
-            print("🔍 Dry run - would fix duplicate milestone_ids:")
+            print(" Dry run - would fix duplicate milestone_ids:")
 
         fixes_applied = 0
 
@@ -183,9 +183,9 @@ class MilestoneCrossReferenceValidator:
                             if content != updated_content:
                                 file_path.write_text(updated_content, encoding="utf-8")
                                 print(
-                                    f"  Updated {file_path}: {milestone_id} -> {new_id}"
+                                    f"  Updated {file_path}: {milestone_id} | {new_id}"
                                 )  # noqa: E501
-                                fixes_applied += 1
+                                fixes_applied = 1
 
                         except Exception as e:
                             self.errors.append(f"Failed to fix {file_path}: {e}")
@@ -195,12 +195,12 @@ class MilestoneCrossReferenceValidator:
     def print_results(self):
         """Print validation results."""
         if self.errors:
-            print(f"\n❌ ERRORS ({len(self.errors)}):")
+            print(f"\n ERRORS ({len(self.errors)}):")
             for error in self.errors:
                 print(f"  • {error}")
 
         if self.warnings:
-            print(f"\n⚠️  WARNINGS ({len(self.warnings)}):")
+            print(f"\n + WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"  • {warning}")
 

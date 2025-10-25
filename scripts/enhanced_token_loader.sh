@@ -7,31 +7,31 @@ provide_token_guidance() {
     local missing_token="$1"
     local script_name="${0##*/}"
 
-    echo "❌ Missing Token: $missing_token"
+    echo " Missing Token: $missing_token"
     echo
-    echo "🔧 Quick Fix Guide:"
+    echo " Quick Fix Guide:"
     echo
 
     # Determine which file based on token type
     case "$missing_token" in
         "AAR_TOKEN"|"CI_BOT_TOKEN"|"CI_ISSUE_AUTOMATION_TOKEN"|"DEV_ORCHESTRATION_BOT_KEY"|"PROD_ORCHESTRATION_BOT_KEY"|"STAGING_ORCHESTRATION_BOT_KEY")
-            echo "📁 CI/CD Token - Add to: .tokens file"
+            echo " CI/CD Token - Add to: .tokens file"
             echo "   Example: echo '${missing_token}=your_token_here' >> .tokens"
             echo "   Location: /home/potato/DevOnboarder/.tokens"
             echo
-            echo "🔐 Get token from: https://github.com/settings/personal-access-tokens/fine-grained"
+            echo " Get token from: https://github.com/settings/personal-access-tokens/fine-grained"
             ;;
         "DISCORD_BOT_TOKEN"|"DISCORD_CLIENT_SECRET"|"BOT_JWT"|"CF_DNS_API_TOKEN"|"TUNNEL_TOKEN")
-            echo "📁 Runtime Token - Add to: .env file"
+            echo " Runtime Token - Add to: .env file"
             echo "   Example: echo '${missing_token}=your_token_here' >> .env"
             echo "   Location: /home/potato/DevOnboarder/.env"
             echo
-            echo "🔐 Get token from: Discord Developer Portal or service provider"
+            echo " Get token from: Discord Developer Portal or service provider"
             ;;
         *)
-            echo "📁 Token file location depends on token type"
-            echo "   CI/CD tokens → .tokens file"
-            echo "   Runtime tokens → .env file"
+            echo " Token file location depends on token type"
+            echo "   CI/CD tokens  .tokens file"
+            echo "   Runtime tokens  .env file"
             ;;
     esac
 
@@ -43,7 +43,7 @@ provide_token_guidance() {
     echo "🧪 Validate after adding:"
     echo "   python3 scripts/token_loader.py validate $missing_token"
     echo
-    echo "🚀 Then re-run: $script_name"
+    echo " Then re-run: $script_name"
 }
 
 # Function to check for specific required tokens
@@ -54,14 +54,14 @@ require_tokens() {
     # Check each required token
     for token in "$@"; do
         if [ -z "${!token:-}" ]; then
-            missing_tokens+=("$token")
+            missing_tokens=("$token")
         fi
     done
 
     # If any tokens are missing, provide guidance
     if [ ${#missing_tokens[@]} -gt 0 ]; then
-        echo "🔍 Script: $script_name"
-        echo "❌ Missing ${#missing_tokens[@]} required token(s)"
+        echo " Script: $script_name"
+        echo " Missing ${#missing_tokens[@]} required token(s)"
         echo
 
         for token in "${missing_tokens[@]}"; do

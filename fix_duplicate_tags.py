@@ -78,10 +78,10 @@ def main():
         for file in files:
             if file.endswith(".md"):
                 file_path = os.path.join(root, file)
-                processed_count += 1
+                processed_count = 1
 
                 if fix_duplicate_tags_in_file(file_path):
-                    fixed_count += 1
+                    fixed_count = 1
 
     print(f"\nProcessed {processed_count} markdown files")
     print(f"Fixed duplicate tags in {fixed_count} files")

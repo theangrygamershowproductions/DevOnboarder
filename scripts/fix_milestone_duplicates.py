@@ -82,13 +82,13 @@ def fix_duplicate_milestone_ids():
     duplicates = analyze_duplicates()
 
     if not duplicates:
-        print("✅ No duplicate milestone_id values found.")
+        print(" No duplicate milestone_id values found.")
         return
 
-    print(f"🔍 Found {len(duplicates)} sets of duplicate milestone_id values:")
+    print(f" Found {len(duplicates)} sets of duplicate milestone_id values:")
 
     for milestone_id, files in duplicates.items():
-        print(f"\n📌 Duplicate milestone_id: {milestone_id}")
+        print(f"\nPIN: Duplicate milestone_id: {milestone_id}")
         print(f"   Files affected: {len(files)}")
 
         # Sort files by modification time to preserve chronological order
@@ -104,11 +104,11 @@ def fix_duplicate_milestone_ids():
 
                 if i == 0:
                     # Keep the first file (oldest) unchanged
-                    print(f"   ✅ Keeping original: {file_path}")
+                    print(f"    Keeping original: {file_path}")
                     continue
 
                 # Add sequence suffix to subsequent files
-                new_milestone_id = f"{milestone_id}-{i+1}"
+                new_milestone_id = f"{milestone_id}-{i1}"
                 yaml_data["milestone_id"] = new_milestone_id
 
                 # Update file content
@@ -117,11 +117,11 @@ def fix_duplicate_milestone_ids():
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(new_content)
 
-                print(f"   🔧 Updated: {file_path}")
+                print(f"    Updated: {file_path}")
                 print(f"      New milestone_id: {new_milestone_id}")
 
             except Exception as e:
-                print(f"   ❌ Error updating {file_path}: {e}")
+                print(f"    Error updating {file_path}: {e}")
 
 
 def fix_filename_patterns():
@@ -133,7 +133,7 @@ def fix_filename_patterns():
 
         # Check if filename contains invalid type 'ci-fix'
         if "ci-fix" in filename:
-            print(f"🔧 Fixing filename pattern: {filename}")
+            print(f" Fixing filename pattern: {filename}")
 
             # Replace 'ci-fix' with 'infrastructure'
             new_filename = filename.replace("ci-fix", "infrastructure")
@@ -157,16 +157,16 @@ def fix_filename_patterns():
                 # Remove old file
                 file_path.unlink()
 
-                print(f"   ✅ Renamed: {filename} → {new_filename}")
-                print("   ✅ Updated type: ci-fix → infrastructure")
+                print(f"    Renamed: {filename} | {new_filename}")
+                print("    Updated type: ci-fix + infrastructure")
 
             except IOError as e:
-                print(f"   ❌ Error fixing {file_path}: {e}")
+                print(f"    Error fixing {file_path}: {e}")
 
 
 def main():
     """Main function to fix milestone validation issues."""
-    print("🔧 DevOnboarder Milestone Validation Issue Fixer")
+    print(" DevOnboarder Milestone Validation Issue Fixer")
     print("=" * 50)
 
     print("\n1. Analyzing duplicate milestone_id values...")
@@ -175,7 +175,7 @@ def main():
     print("\n2. Fixing filename patterns...")
     fix_filename_patterns()
 
-    print("\n✅ Milestone validation fixes complete!")
+    print("\n Milestone validation fixes complete!")
     print("\nNext steps:")
     print("- Run: python scripts/validate_milestone_format.py --summary")
     print("- Commit fixed files")

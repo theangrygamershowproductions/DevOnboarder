@@ -7,7 +7,7 @@ set -euo pipefail
 # Extended types: PERF, CI, OPS, WIP, INIT, TAG, POLICY, HOTFIX, CLEANUP
 # Exception: Build (title case) allowed for Dependabot compatibility
 # The <scope> section is optional, matching the commit-msg hook
-regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]+\))?: .+'
+regex='^(FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT|Build|PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP)(\([^)]\))?: .'
 
 messages=$(git log --format=%s origin/main..HEAD 2>/dev/null || git log --format=%s -10)
 if [ -z "$messages" ]; then
@@ -40,7 +40,7 @@ while IFS= read -r msg || [ -n "$msg" ]; do
     echo "::error ::Commit message '$msg' does not follow <TYPE>(<scope>): <subject> format"
     echo "::error ::Expected format: Standard types: FEAT|FIX|DOCS|STYLE|REFACTOR|TEST|CHORE|SECURITY|BUILD|REVERT"
     echo "::error ::Extended types: PERF|CI|OPS|WIP|INIT|TAG|POLICY|HOTFIX|CLEANUP or Build(deps): for Dependabot"
-    errors=$((errors+1))
+    errors=$((errors1))
   fi
 done < "$temp_file"
 
@@ -52,4 +52,4 @@ if [ $errors -ne 0 ]; then
   exit 1
 fi
 
-echo "SUCCESS: All commit messages pass validation!"
+echo " All commit messages pass validation!"

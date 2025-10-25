@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "QUALITY STANDARDS ENFORCEMENT FOR PR #966"
@@ -36,16 +36,16 @@ echo ""
 echo "RATIONALE:"
 echo "   - 64% health score violates our 95% quality standard"
 echo "   - 36% CI failure rate indicates systemic issues"
-echo "   - Large scope (46 files, 3590+ lines) compounds problems"
+echo "   - Large scope (46 files, 3590 lines) compounds problems"
 echo "   - Time to fix may exceed time for focused new PR"
 echo ""
 
 echo "CORRECTED ACTION PLAN:"
 echo "   1. CLOSE current PR #966 with lessons learned summary"
 echo "   2. CREATE new focused PR addressing core issue only"
-echo "   3. TARGET 95%+ health score from start"
+echo "   3. TARGET 95% health score from start"
 echo "   4. Apply documentation quality lessons to new PR"
-echo "   5. ONLY MERGE when 95%+ standard is achieved"
+echo "   5. ONLY MERGE when 95% standard is achieved"
 echo ""
 
 echo "BUSINESS JUSTIFICATION:"

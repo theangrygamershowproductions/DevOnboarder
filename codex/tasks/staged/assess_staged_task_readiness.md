@@ -53,9 +53,9 @@ related_files: [
 
 - Terminal output policy compliance (zero tolerance enforcement)
 
-- MVP readiness baseline validation (90%+ success rate required)
+- MVP readiness baseline validation (90% success rate required)
 
-- CI pipeline health assessment (80%+ success rate required)
+- CI pipeline health assessment (80% success rate required)
 
 - Virtual environment and tooling availability
 
@@ -129,7 +129,7 @@ related_files: [
 
 ### Scoring Thresholds
 
-**READY (90%+ score)**: High readiness - safe to implement staged tasks
+**READY (90% score)**: High readiness - safe to implement staged tasks
 
 - All critical prerequisites satisfied
 

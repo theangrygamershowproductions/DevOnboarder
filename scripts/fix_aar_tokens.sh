@@ -40,7 +40,7 @@ REPO="repos/theangrygamershowproductions/DevOnboarder"
 # Test 1: Repository access (foundational requirement)
 printf "List: Test 1: Repository Access\n"
 if GH_TOKEN="$AAR_TOKEN" gh api "$REPO" >/dev/null 2>&1; then
-    printf "   Success: SUCCESS: Basic repository access working\n"
+    printf "   Success:  Basic repository access working\n"
     export REPO_ACCESS=true
 else
     printf "   Error: FAILED: Cannot access repository\n"
@@ -53,7 +53,7 @@ printf "\n"
 printf "List: Test 2: Actions Workflows API\n"
 printf "Value: %s\n" "$REPO"
 if GH_TOKEN="$AAR_TOKEN" gh api "$REPO/actions/workflows" >/dev/null 2>&1; then
-    printf "   Success: SUCCESS: Can list repository workflows\n"
+    printf "   Success:  Can list repository workflows\n"
     export WORKFLOWS_OK=true
 else
     printf "   Error: FAILED: Cannot access workflows\n"
@@ -66,7 +66,7 @@ printf "\n"
 printf "List: Test 3: Actions Workflow Runs API\n"
 printf "Value: %s\n" "$REPO"
 if GH_TOKEN="$AAR_TOKEN" gh api "$REPO/actions/runs?per_page=1" >/dev/null 2>&1; then
-    printf "   Success: SUCCESS: Can access workflow runs\n"
+    printf "   Success:  Can access workflow runs\n"
     export RUNS_OK=true
 else
     printf "   Error: FAILED: Cannot access workflow runs\n"
@@ -79,7 +79,7 @@ printf "\n"
 printf "List: Test 4: Issues API\n"
 printf "Value: %s\n" "$REPO"
 if GH_TOKEN="$AAR_TOKEN" gh api "$REPO/issues?per_page=1" >/dev/null 2>&1; then
-    printf "   Success: SUCCESS: Can access issues\n"
+    printf "   Success:  Can access issues\n"
     export ISSUES_OK=true
 else
     printf "   Error: FAILED: Cannot access issues\n"
@@ -95,7 +95,7 @@ if latest_run=$(GH_TOKEN="$AAR_TOKEN" gh api "$REPO/actions/runs?per_page=1" 2>/
     if [ -n "$latest_run" ]; then
         printf "Value: %s\n" "$latest_run"
         if GH_TOKEN="$AAR_TOKEN" gh api "$REPO/actions/runs/$latest_run" >/dev/null 2>&1; then
-            printf "   Success: SUCCESS: Can access specific workflow run details\n"
+            printf "   Success:  Can access specific workflow run details\n"
             export RUN_DETAILS_OK=true
         else
             printf "   Error: FAILED: Cannot access workflow run details\n"
@@ -119,16 +119,16 @@ TOTAL_TESTS=4
 PASSED_TESTS=0
 
 if [ "$WORKFLOWS_OK" = true ]; then
-    PASSED_TESTS=$((PASSED_TESTS + 1))
+    PASSED_TESTS=$((PASSED_TESTS  1))
 fi
 if [ "$RUNS_OK" = true ]; then
-    PASSED_TESTS=$((PASSED_TESTS + 1))
+    PASSED_TESTS=$((PASSED_TESTS  1))
 fi
 if [ "$ISSUES_OK" = true ]; then
-    PASSED_TESTS=$((PASSED_TESTS + 1))
+    PASSED_TESTS=$((PASSED_TESTS  1))
 fi
 if [ "$RUN_DETAILS_OK" = true ]; then
-    PASSED_TESTS=$((PASSED_TESTS + 1))
+    PASSED_TESTS=$((PASSED_TESTS  1))
 fi
 
 printf "Value: %s\n" "$TOTAL_TESTS"
@@ -147,7 +147,7 @@ if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
     printf "   • All diagnostic checks passed\n"
 
 elif [ $PASSED_TESTS -ge 2 ]; then
-    printf "PARTIAL SUCCESS: Fine-Grained Token Propagation in Progress\n"
+    printf "PARTIAL  Fine-Grained Token Propagation in Progress\n"
     printf "\n"
     printf "Success: Repository access working (permissions correctly configured)\n"
     printf "Some Actions API endpoints still propagating\n"

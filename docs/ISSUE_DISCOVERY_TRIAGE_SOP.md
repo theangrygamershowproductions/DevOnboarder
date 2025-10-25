@@ -107,7 +107,7 @@ For Tier 2 issues, assess scope impact:
 
 - Document thoroughly for future sprint
 
-**High Impact** (affects 20+ files):
+**High Impact** (affects 20 files):
 
 - Always create separate issue
 
@@ -244,11 +244,11 @@ For Tier 2 issues, assess scope impact:
 
 ### Case Study 1: Systemic Markdown Compliance Issue
 
-**Discovery**: Found 20+ automation scripts generating non-compliant markdown
+**Discovery**: Found 20 automation scripts generating non-compliant markdown
 
 **Classification**: Tier 2 (Infrastructure & Automation), High Impact
 **Decision**: Separate issue (Issue #1315)
-**Rationale**: High impact (20+ files), systemic nature requires dedicated focus
+**Rationale**: High impact (20 files), systemic nature requires dedicated focus
 
 **Outcome**: Current work completed without scope creep, systemic issue properly documented
 

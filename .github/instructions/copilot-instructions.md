@@ -6,7 +6,7 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
 
-## ⚠️ CRITICAL: Virtual Environment Requirements
+##  CRITICAL: Virtual Environment Requirements
 
 ### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
 
@@ -52,7 +52,7 @@ DevOnboarder implements a unique **Enhanced Potato Policy** - an automated secur
 
 ```bash
 
-# ✅ CORRECT - Virtual environment usage
+#  CORRECT - Virtual environment usage
 
 source .venv/bin/activate
 pip install -e .[test]
@@ -60,7 +60,7 @@ python -m pytest
 python -m black .
 python -m openapi_spec_validator src/devonboarder/openapi.json
 
-# ❌ WRONG - System installation
+#  WRONG - System installation
 
 sudo pip install package
 pip install --user package
@@ -101,13 +101,13 @@ pip install -e .[test]
 
 ### Core Services
 
-- **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
+- **Backend**: Python 3.12  FastAPI  SQLAlchemy (Port 8001)
 
-- **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
+- **Discord Bot**: TypeScript  Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
 
-- **Frontend**: React + Vite + TypeScript (Port 8081)
+- **Frontend**: React  Vite  TypeScript (Port 8081)
 
-- **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
+- **Auth Service**: FastAPI  JWT  Discord OAuth (Port 8002)
 
 - **XP System**: Gamification API with user levels and contributions tracking
 
@@ -121,7 +121,7 @@ All FastAPI services follow a consistent pattern for health checks and CORS:
 
 # Standard service creation pattern (src/llama2_agile_helper/api.py, src/xp/api/__init__.py)
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()  # From utils.cors
 
@@ -135,7 +135,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```
@@ -162,7 +162,7 @@ All services follow the same FastAPI pattern:
 
 # Standard service creation pattern
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()
 
@@ -170,7 +170,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```
@@ -215,7 +215,7 @@ npm ci --prefix frontend
 
 ### 3. Code Quality Requirements
 
-### ⚠️ CRITICAL: Linting Rule Policy
+###  CRITICAL: Linting Rule Policy
 
 **NEVER modify linting configuration files without explicit human approval**:
 
@@ -241,7 +241,7 @@ npm ci --prefix frontend
 
 **Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
 
-### ⚠️ CRITICAL: CI Hygiene & Artifact Management
+###  CRITICAL: CI Hygiene & Artifact Management
 
 **Root Artifact Guard System**: DevOnboarder enforces strict artifact hygiene to prevent repository pollution:
 
@@ -269,21 +269,21 @@ bash scripts/enforce_output_location.sh
 
 # Automatically blocks commits with violations
 
-# ❌ ./pytest-of-* directories in root
+#  ./pytest-of-* directories in root
 
-# ❌ ./.coverage* files in root (should be logs/)
+#  ./.coverage* files in root (should be logs/)
 
-# ❌ ./vale-results.json in root (should be logs/)
+#  ./vale-results.json in root (should be logs/)
 
-# ❌ ./node_modules in root (should be frontend/bot/)
+#  ./node_modules in root (should be frontend/bot/)
 
-# ❌ ./test.db or cache files in root
+#  ./test.db or cache files in root
 
 ```
 
 **CI Triage Guard Framework**: Comprehensive automation monitors and maintains CI health:
 
-- **22+ GitHub Actions workflows** provide complete automation coverage
+- **22 GitHub Actions workflows** provide complete automation coverage
 
 - **Auto-fixing**: Automatic formatting via `auto-fix.yml` workflow
 
@@ -299,12 +299,12 @@ bash scripts/enforce_output_location.sh
 
 ```bash
 
-# ✅ CORRECT - Install in service directories
+#  CORRECT - Install in service directories
 
 cd frontend && npm ci
 cd bot && npm ci
 
-# ❌ WRONG - Never install in repository root
+#  WRONG - Never install in repository root
 
 npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 
@@ -327,7 +327,7 @@ npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 - **Docstrings**: Required for all public functions (use NumPy style)
 
 ```python
-def greet(name: str) -> str:
+def greet(name: str)  str:
     """Return a friendly greeting.
 
     Parameters
@@ -354,7 +354,7 @@ def greet(name: str) -> str:
 
 - **Testing**: Jest for bot, Vitest for frontend
 
-- **ESLint + Prettier**: Enforced formatting
+- **ESLint  Prettier**: Enforced formatting
 
 - **100% coverage** for bot service
 
@@ -362,11 +362,11 @@ def greet(name: str) -> str:
 
 #### Coverage Thresholds
 
-- **Python backend**: 96%+ (enforced in CI)
+- **Python backend**: 96% (enforced in CI)
 
 - **TypeScript bot**: 100% (enforced in CI)
 
-- **React frontend**: 100% statements, 98.43%+ branches
+- **React frontend**: 100% statements, 98.43% branches
 
 #### Test Commands (Virtual Environment Required)
 
@@ -461,27 +461,27 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ### Directory Layout
 
 ```text
-├── .venv/                     # Python virtual environment (NEVER commit)
+── .venv/                     # Python virtual environment (NEVER commit)
 
-├── src/devonboarder/          # Python backend application
+── src/devonboarder/          # Python backend application
 
-├── bot/                       # Discord bot (TypeScript)
+── bot/                       # Discord bot (TypeScript)
 
-├── frontend/                  # React application
+── frontend/                  # React application
 
-├── auth/                      # Authentication service
+── auth/                      # Authentication service
 
-├── tests/                     # Test suites
+── tests/                     # Test suites
 
-├── docs/                      # Documentation
+── docs/                      # Documentation
 
-├── scripts/                   # Automation scripts
+── scripts/                   # Automation scripts
 
-├── .github/workflows/         # GitHub Actions (22+ workflows)
+── .github/workflows/         # GitHub Actions (22 workflows)
 
-├── config/                    # Configuration files
+── config/                    # Configuration files
 
-└── plugins/                   # Optional Python extensions
+── plugins/                   # Optional Python extensions
 
 ```
 
@@ -531,7 +531,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **Startup logging**: Bot provides detailed environment info on startup
 
-- **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
+- **ESLint v9 flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 
@@ -595,7 +595,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 ### Automation Ecosystem
 
-DevOnboarder includes 100+ automation scripts in `scripts/` covering:
+DevOnboarder includes 100 automation scripts in `scripts/` covering:
 
 - **CI Health Monitoring**: `monitor_ci_health.sh`, `analyze_ci_patterns.sh`
 
@@ -663,7 +663,7 @@ All CI commands use proper virtual environment context:
 
 - **Token security**: Secure Discord bot token storage
 
-- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 - **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
 
@@ -745,7 +745,7 @@ useEffect(() => {
 # FastAPI endpoint with proper documentation
 
 @app.get("/api/user/status", response_model=UserStatus)
-async def get_user_status(user_id: int) -> UserStatus:
+async def get_user_status(user_id: int)  UserStatus:
     """Get user onboarding status.
 
     Returns user's current onboarding progress and level.
@@ -788,7 +788,7 @@ async def get_user_status(user_id: int) -> UserStatus:
 def user_level(username: str, db: Session = Depends(auth_service.get_db)):
     user = db.query(auth_service.User).filter_by(username=username).first()
     xp_total = sum(evt.xp for evt in user.events)
-    level = xp_total // 100 + 1
+    level = xp_total // 100  1
 
     return {"level": level}
 
@@ -879,7 +879,7 @@ python -m pytest plugins/example_plugin/
 
 ## Troubleshooting
 
-### ⚠️ MANDATORY: Standard Operating Procedure for ALL Issues
+###  MANDATORY: Standard Operating Procedure for ALL Issues
 
 **BEFORE attempting any custom solutions, ALWAYS follow this SOP:**
 
@@ -962,23 +962,23 @@ gh issue list --label "ci-failure" --state open # Check for CI-related issues
 
 ```
 
-### ⚠️ CRITICAL: Always Use Existing Tools Before Custom Solutions
+###  CRITICAL: Always Use Existing Tools Before Custom Solutions
 
-**DO NOT create custom debugging solutions when DevOnboarder has 100+ automation scripts specifically designed for troubleshooting. This is a core principle of the "quiet reliability" philosophy.**
+**DO NOT create custom debugging solutions when DevOnboarder has 100 automation scripts specifically designed for troubleshooting. This is a core principle of the "quiet reliability" philosophy.**
 
 ### Common Issues
 
 1. **ModuleNotFoundError**:
 
-    - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+    -  **Solution**: `source .venv/bin/activate && pip install -e .[test]`
 
-    - ❌ **NOT**: Install to system Python
+    -  **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
 
-    - ✅ **Solution**: Use `python -m command` syntax in virtual environment
+    -  **Solution**: Use `python -m command` syntax in virtual environment
 
-    - ❌ **NOT**: Install globally with `pip install --user`
+    -  **NOT**: Install globally with `pip install --user`
 
 3. **Coverage failures**: Check test quality, not just quantity
 
@@ -1142,7 +1142,7 @@ git status --short  # Should show only intended changes
 
 - `gh-dashboard` - Comprehensive status dashboard
 
-- `gh-watch` - Auto-refreshing dashboard (Ctrl+C to stop)
+- `gh-watch` - Auto-refreshing dashboard (CtrlC to stop)
 
 - `gh-branch-status` - Branch and PR overview
 
@@ -1191,7 +1191,7 @@ gh-trigger-workflow "security-audit.yml" "main"
 
 ```
 
-### 🔧 Agent CLI Integration Guidelines
+###  Agent CLI Integration Guidelines
 
 **When suggesting DevOnboarder workflows, agents should:**
 
@@ -1265,7 +1265,7 @@ gh-trigger-workflow "security-audit.yml" "main"
 
 - Execute infrastructure-affecting commands without explicit prompt context
 
-### ✅ Agents MUST
+###  Agents MUST
 
 - Route all GitHub interactions through the GitHub CLI (`gh`)
 
@@ -1281,7 +1281,7 @@ gh-trigger-workflow "security-audit.yml" "main"
 
 > Claude and other Codex agents are prohibited from assuming orchestration roles (e.g., MCP Server behavior) unless registered in `.codex/agents/index.json` and activated via CI.
 
-### 📌 GitHub CLI Enforcement
+### PIN: GitHub CLI Enforcement
 
 All repository interactions (issue creation, PRs, commenting, closing, etc.) **must** use the GitHub CLI (`gh`) or approved GitHub API scripts.
 
@@ -1295,7 +1295,7 @@ All repository interactions (issue creation, PRs, commenting, closing, etc.) **m
 
 Violations will trigger Root Artifact Guard and CI failure.
 
-✅ Approved command examples:
+ Approved command examples:
 
 - `gh pr create --title ...`
 
@@ -1413,11 +1413,11 @@ You must operate within GitHub CLI boundaries or registered agent triggers. All 
 
 16. **FOLLOW**: Node modules hygiene standards and placement requirements
 
-17. **USE**: The 100+ automation scripts built specifically for troubleshooting
+17. **USE**: The 100 automation scripts built specifically for troubleshooting
 
 18. **ESCALATE**: To human if orchestration or infrastructure changes are requested
 
-### ⚠️ CRITICAL: Tool Usage Priority
+###  CRITICAL: Tool Usage Priority
 
 **ALWAYS use these tools in this order for ANY troubleshooting:**
 
@@ -1485,12 +1485,12 @@ bash scripts/check_env_docs.py
 
 **Last Updated**: 2025-08-01 (Enhanced with Agent Role Enforcement & GitHub CLI Framework)
 
-**Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
-**Active Environments**: Development + Production Discord integration
+**Coverage Status**: Backend 96%, Bot 100%, Frontend 100%
+**Active Environments**: Development  Production Discord integration
 
-**CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
+**CI Framework**: 22 GitHub Actions workflows with comprehensive automation
 
-**Security**: Enhanced Potato Policy + Root Artifact Guard + Agent Role Enforcement active
+**Security**: Enhanced Potato Policy  Root Artifact Guard  Agent Role Enforcement active
 
 **Review Required**: Follow PR template and maintain quality standards
 **Virtual Environment**: MANDATORY for all development and tooling

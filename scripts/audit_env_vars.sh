@@ -29,13 +29,13 @@ to_json_array() {
   while IFS= read -r var; do
     [ -n "$var" ] || continue
     if [ "$first" = true ]; then
-      json+="\"$var\""
+      json="\"$var\""
       first=false
     else
-      json+=" ,\"$var\""
+      json=" ,\"$var\""
     fi
   done <<< "$input"
-  json+="]"
+  json="]"
   echo "$json"
 }
 

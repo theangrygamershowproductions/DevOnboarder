@@ -5,15 +5,15 @@
 set -euo pipefail
 
 # Performance monitoring setup
-SCRIPT_START_TIME=$(date +%s)
+SCRIPT_START_TIME=$(date %s)
 SCRIPT_START_TIMESTAMP=$(date)
 
 # Logging setup
 mkdir -p logs
-LOG_FILE="logs/duplication_detection_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/duplication_detection_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🔍 DevOnboarder Content Duplication Detection"
+echo " DevOnboarder Content Duplication Detection"
 echo "=============================================="
 echo "Start Time: $SCRIPT_START_TIMESTAMP"
 echo "Log: $LOG_FILE"
@@ -72,35 +72,35 @@ track_operation_time() {
     local operation_name="$1"
     local start_time="$2"
     local end_time
-    end_time=$(date +%s)
+    end_time=$(date %s)
     local duration=$((end_time - start_time))
 
     echo "⏱️  $operation_name completed in ${duration}s"
 
     # Log to performance metrics file
     local metrics_file
-    metrics_file="logs/performance_metrics_$(date +%Y%m%d).log"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | $operation_name | ${duration}s" >> "$metrics_file"
+    metrics_file="logs/performance_metrics_$(date %Y%m%d).log"
+    echo "$(date '%Y-%m-%d %H:%M:%S') | $operation_name | ${duration}s" >> "$metrics_file"
 }
 
 print_performance_summary() {
     local script_end_time
-    script_end_time=$(date +%s)
+    script_end_time=$(date %s)
     local total_duration=$((script_end_time - SCRIPT_START_TIME))
     local end_timestamp
     end_timestamp=$(date)
 
     echo ""
-    echo "📊 Performance Summary"
+    echo " Performance Summary"
     echo "======================"
     echo "Start Time: $SCRIPT_START_TIMESTAMP"
     echo "End Time: $end_timestamp"
-    echo "Total Duration: ${total_duration}s ($(date -ud "@$total_duration" +'%H:%M:%S'))"
+    echo "Total Duration: ${total_duration}s ($(date -ud "@$total_duration" '%H:%M:%S'))"
     echo ""
 
     # Check if this was a slow operation
     if [ "$total_duration" -gt 300 ]; then  # 5 minutes
-        echo "⚠️  Operation took longer than 5 minutes - consider optimization"
+        echo "  Operation took longer than 5 minutes - consider optimization"
     elif [ "$total_duration" -gt 60 ]; then  # 1 minute
         echo "ℹ️  Operation took longer than 1 minute - monitoring for optimization opportunities"
     fi
@@ -113,7 +113,7 @@ find_all_docs() {
     for path in "${SCAN_PATHS[@]}"; do
         if [ -d "$path" ]; then
             while IFS= read -r -d '' file; do
-                all_files+=("$file")
+                all_files=("$file")
             done < <(find "$path" -type f -name "*.md" -print0)
         fi
     done
@@ -215,7 +215,7 @@ extract_sentences() {
     grep -v "document_type:" | \
     grep -v "visibility:" | \
     grep -v "codex_" | \
-    sed 's/[[:space:]]\+/ /g' | \
+    sed 's/[[:space:]]\/ /g' | \
     tr '.' '\n' | \
     sed 's/^[[:space:]]*//' | \
     sed 's/[[:space:]]*$//' | \
@@ -249,7 +249,7 @@ calculate_similarity() {
     local matching_words=0
     for word in $words1; do
         if echo "$words2" | grep -q "\b$word\b"; then
-            matching_words=$((matching_words + 1))
+            matching_words=$((matching_words  1))
         fi
     done
 
@@ -357,18 +357,18 @@ calculate_enhanced_similarity() {
 
     # Weighted scoring with PRIORITY MATRIX for 100% accuracy
     weighted_score=$((
-        fm_prio_matches * 15 +
-        fm_merge_matches * 14 +
-        fm_group_matches * 12 +
-        fm_uniq_matches * 11 +
-        fm_tag_matches * 10 +
-        fm_title_matches * 9 +
-        fm_doc_matches * 8 +
-        fm_proj_matches * 7 +
-        fm_desc_matches * 6 +
-        header_matches * 3 +
-        semantic_matches * 3 +
-        first_matches * 2 +
+        fm_prio_matches * 15 
+        fm_merge_matches * 14 
+        fm_group_matches * 12 
+        fm_uniq_matches * 11 
+        fm_tag_matches * 10 
+        fm_title_matches * 9 
+        fm_doc_matches * 8 
+        fm_proj_matches * 7 
+        fm_desc_matches * 6 
+        header_matches * 3 
+        semantic_matches * 3 
+        first_matches * 2 
         normal_matches * 1
     ))
 
@@ -411,7 +411,7 @@ calculate_fingerprint_similarity() {
     local fingerprint1="$1"
     local fingerprint2="$2"
 
-    # Use sorted merge approach for O(n+m) instead of O(n×m)
+    # Use sorted merge approach for O(nm) instead of O(n×m)
     local common_terms=0
     local total_unique_terms=0
 
@@ -443,22 +443,22 @@ detect_pattern_repetitions_optimized() {
     local pattern_files=()
     local pattern_count=0
 
-    echo "🔍 Pattern Analysis: '$pattern'"
+    echo " Pattern Analysis: '$pattern'"
 
     # Use grep -l for fast file filtering (O(n) instead of O(n×m))
     while IFS= read -r -d '' file; do
         if grep -iq "$pattern" "$file"; then
-            pattern_files+=("$file")
-            pattern_count=$((pattern_count + 1))
+            pattern_files=("$file")
+            pattern_count=$((pattern_count  1))
         fi
     done < <(find_all_docs | tr '\n' '\0')
 
     if [ "$pattern_count" -gt 1 ]; then
-        echo "   📊 Found in $pattern_count files:"
-        printf '   📄 %s\n' "${pattern_files[@]}"
-        echo "   💡 Consolidation opportunity: Create shared reference for '$pattern'"
+        echo "    Found in $pattern_count files:"
+        printf '   FILE: %s\n' "${pattern_files[@]}"
+        echo "    Consolidation opportunity: Create shared reference for '$pattern'"
     else
-        echo "   ✅ Pattern appears in $pattern_count file(s) - no duplication"
+        echo "    Pattern appears in $pattern_count file(s) - no duplication"
     fi
     echo
 }
@@ -547,7 +547,7 @@ find_duplicated_content() {
     local file2="$2"
     local duplications=()
 
-    echo "  🔍 Comparing $(basename "$file1") ↔ $(basename "$file2")"
+    echo "   Comparing $(basename "$file1") ↔ $(basename "$file2")"
 
     # Extract sentences from both files
     local sentences1
@@ -564,7 +564,7 @@ find_duplicated_content() {
                     similarity=$(calculate_similarity "$sent1" "$sent2")
 
                     if [ "$similarity" -ge "$SIMILARITY_THRESHOLD" ]; then
-                        duplications+=("$similarity%: '$sent1' ≈ '$sent2'")
+                        duplications=("$similarity%: '$sent1' ≈ '$sent2'")
                     fi
                 fi
             done <<< "$sentences2"
@@ -581,20 +581,20 @@ detect_pattern_repetitions() {
     local pattern="$1"
     local occurrences=()
 
-    echo "  🔍 Scanning for pattern: '$pattern'"
+    echo "   Scanning for pattern: '$pattern'"
 
     while IFS= read -r file; do
         local count
         count=$(grep -ci "$pattern" "$file" 2>/dev/null | head -1 || echo "0")
 
         # Ensure count is numeric
-        if [[ "$count" =~ ^[0-9]+$ ]] && [ "$count" -gt 0 ]; then
-            occurrences+=("$file ($count occurrences)")
+        if [[ "$count" =~ ^[0-9]$ ]] && [ "$count" -gt 0 ]; then
+            occurrences=("$file ($count occurrences)")
         fi
     done < <(find_all_docs)
 
     if [ ${#occurrences[@]} -gt 1 ]; then
-        echo "    📊 Found in ${#occurrences[@]} files:"
+        echo "     Found in ${#occurrences[@]} files:"
         for occurrence in "${occurrences[@]}"; do
             echo "      - $occurrence"
         done
@@ -605,21 +605,21 @@ detect_pattern_repetitions() {
 analyze_section_overlap() {
     local section_map=()
 
-    echo "📋 Analyzing section structure overlap..."
+    echo " Analyzing section structure overlap..."
 
     while IFS= read -r file; do
-        echo "  📄 Extracting sections from: $(basename "$file")"
+        echo "  FILE: Extracting sections from: $(basename "$file")"
 
         # Extract markdown headers
         local headers
-        headers=$(grep "^#" "$file" 2>/dev/null | sed 's/^#+\s*//' || true)
+        headers=$(grep "^#" "$file" 2>/dev/null | sed 's/^#\s*//' || true)
 
         while IFS= read -r header; do
             if [ -n "$header" ]; then
                 # Clean header for comparison
                 local clean_header
                 clean_header=$(echo "$header" | tr '[:upper:]' '[:lower:]' | sed 's/[[:punct:]]//g' | tr -s ' ')
-                section_map+=("$clean_header:$file")
+                section_map=("$clean_header:$file")
             fi
         done <<< "$headers"
 
@@ -645,25 +645,25 @@ analyze_section_overlap() {
             local check_file="${check_entry##*:}"
 
             if [ "$check_section" = "$section" ]; then
-                files_with_section+=("$check_file")
+                files_with_section=("$check_file")
             fi
         done
 
         if [ ${#files_with_section[@]} -gt 1 ]; then
-            duplicated_sections+=("Section '$section' appears in ${#files_with_section[@]} files: ${files_with_section[*]}")
+            duplicated_sections=("Section '$section' appears in ${#files_with_section[@]} files: ${files_with_section[*]}")
         fi
 
-        processed_sections+=("$section")
+        processed_sections=("$section")
     done
 
     if [ ${#duplicated_sections[@]} -gt 0 ]; then
         echo ""
-        echo "⚠️ Duplicated Section Names Found:"
+        echo " Duplicated Section Names Found:"
         for dup_section in "${duplicated_sections[@]}"; do
             echo "   - $dup_section"
         done
     else
-        echo "   ✅ No duplicated section names found"
+        echo "    No duplicated section names found"
     fi
 }
 
@@ -671,7 +671,7 @@ analyze_section_overlap() {
 generate_consolidation_suggestions() {
     local output_file="$1"
 
-    echo "💡 Generating consolidation suggestions..."
+    echo " Generating consolidation suggestions..."
 
     cat > "$output_file" << EOF
 # Content Consolidation Suggestions
@@ -757,8 +757,8 @@ EOF
             local count
             count=$(grep -ci "$pattern" "$file" 2>/dev/null | head -1 || echo "0")
             # Ensure count is numeric
-            if [[ "$count" =~ ^[0-9]+$ ]] && [ "$count" -gt 0 ]; then
-                pattern_files+=("$file ($count times)")
+            if [[ "$count" =~ ^[0-9]$ ]] && [ "$count" -gt 0 ]; then
+                pattern_files=("$file ($count times)")
             fi
         done < <(find_all_docs)
 
@@ -838,27 +838,27 @@ EOF
 
 EOF
 
-    echo "   ✅ Consolidation suggestions generated: $output_file"
+    echo "    Consolidation suggestions generated: $output_file"
 }
 
 # Run comprehensive duplication analysis
 run_comprehensive_analysis() {
-    echo "🔄 Running optimized duplication analysis..."
+    echo "SYNC: Running optimized duplication analysis..."
     local analysis_start_time
-    analysis_start_time=$(date +%s)
+    analysis_start_time=$(date %s)
 
     local total_files
     total_files=$(find_all_docs | wc -l)
     local comparisons_made=0
     local duplications_found=0
 
-    echo "📊 Analyzing $total_files documentation files with optimized algorithm..."
+    echo " Analyzing $total_files documentation files with optimized algorithm..."
     echo ""
 
     # Optimized approach: Create temporary directory for fingerprints
-    echo "📋 Pre-computing Content Fingerprints:"
+    echo " Pre-computing Content Fingerprints:"
     local fingerprint_start_time
-    fingerprint_start_time=$(date +%s)
+    fingerprint_start_time=$(date %s)
 
     local fp_dir="/tmp/devonboarder_fingerprints_$$"
     mkdir -p "$fp_dir"
@@ -868,7 +868,7 @@ run_comprehensive_analysis() {
 
     local processed_files=0
     while IFS= read -r file; do
-        processed_files=$((processed_files + 1))
+        processed_files=$((processed_files  1))
         echo "   Processing ($processed_files/$total_files): $(basename "$file")"
 
         # Create fingerprint file with safe filename
@@ -881,14 +881,14 @@ run_comprehensive_analysis() {
 
     # Optimized pairwise comparison using pre-computed fingerprints
     echo ""
-    echo "📋 Optimized Pairwise Comparison:"
+    echo " Optimized Pairwise Comparison:"
     local comparison_start_time
-    comparison_start_time=$(date +%s)
+    comparison_start_time=$(date %s)
 
     while IFS= read -r file1; do
         while IFS= read -r file2; do
             if [ "$file1" != "$file2" ] && [[ "$file1" < "$file2" ]]; then
-                comparisons_made=$((comparisons_made + 1))
+                comparisons_made=$((comparisons_made  1))
 
                 # Show progress for long operations
                 if [ $((comparisons_made % 25)) -eq 0 ]; then
@@ -908,12 +908,12 @@ run_comprehensive_analysis() {
 
                     # Only report if similarity exceeds threshold
                     if [ "$similarity" -ge "$SIMILARITY_THRESHOLD" ]; then
-                        duplications_found=$((duplications_found + 1))
+                        duplications_found=$((duplications_found  1))
                         echo ""
-                        echo "⚠️ High similarity detected ($similarity%):"
-                        echo "   📄 $file1"
-                        echo "   📄 $file2"
-                        echo "   💡 Consolidation recommended"
+                        echo " High similarity detected ($similarity%):"
+                        echo "   FILE: $file1"
+                        echo "   FILE: $file2"
+                        echo "    Consolidation recommended"
                     fi
                 fi
             fi
@@ -926,9 +926,9 @@ run_comprehensive_analysis() {
     track_operation_time "Optimized Pairwise Comparison" "$comparison_start_time"
 
     echo ""
-    echo "📋 Optimized Pattern Analysis:"
+    echo " Optimized Pattern Analysis:"
     local pattern_start_time
-    pattern_start_time=$(date +%s)
+    pattern_start_time=$(date %s)
 
     for pattern in "${COMMON_PATTERNS[@]}"; do
         detect_pattern_repetitions_optimized "$pattern"
@@ -938,12 +938,12 @@ run_comprehensive_analysis() {
 
     echo ""
     local section_start_time
-    section_start_time=$(date +%s)
+    section_start_time=$(date %s)
     analyze_section_overlap
     track_operation_time "Section Overlap Analysis" "$section_start_time"
 
     echo ""
-    echo "📊 Optimized Analysis Summary:"
+    echo " Optimized Analysis Summary:"
     echo "   Total Files: $total_files"
     echo "   Comparisons Made: $comparisons_made"
     echo "   High Similarity Pairs: $duplications_found"
@@ -951,9 +951,9 @@ run_comprehensive_analysis() {
     echo "   Performance Improvement: ~$(( (total_files * total_files - total_files) / 2 ))x faster than naive O(n²×m²)"
 
     if [ "$duplications_found" -gt 0 ]; then
-        echo "   Status: ⚠️ Consolidation opportunities detected"
+        echo "   Status:  Consolidation opportunities detected"
     else
-        echo "   Status: ✅ No significant duplication found"
+        echo "   Status:  No significant duplication found"
     fi
 
     track_operation_time "Full Optimized Analysis" "$analysis_start_time"
@@ -963,21 +963,21 @@ run_comprehensive_analysis() {
 run_enhanced_analysis() {
     echo "🎯 Running enhanced analysis with advanced similarity detection..."
     local analysis_start_time
-    analysis_start_time=$(date +%s)
+    analysis_start_time=$(date %s)
 
     local total_files
     total_files=$(find_all_docs | wc -l)
     local comparisons_made=0
     local duplications_found=0
 
-    echo "📊 Analyzing $total_files files with enhanced multi-metric algorithm..."
+    echo " Analyzing $total_files files with enhanced multi-metric algorithm..."
     echo "🔬 Features: TF-IDF weighting, n-grams, semantic mapping, structural analysis"
     echo ""
 
     # Enhanced approach: Create temporary directory for enhanced fingerprints
-    echo "📋 Pre-computing Enhanced Fingerprints:"
+    echo " Pre-computing Enhanced Fingerprints:"
     local fingerprint_start_time
-    fingerprint_start_time=$(date +%s)
+    fingerprint_start_time=$(date %s)
 
     local fp_dir="/tmp/devonboarder_enhanced_fp_$$"
     mkdir -p "$fp_dir"
@@ -987,7 +987,7 @@ run_enhanced_analysis() {
 
     local processed_files=0
     while IFS= read -r file; do
-        processed_files=$((processed_files + 1))
+        processed_files=$((processed_files  1))
         echo "   Enhanced processing ($processed_files/$total_files): $(basename "$file")"
 
         # Create enhanced fingerprint file with safe filename
@@ -1000,14 +1000,14 @@ run_enhanced_analysis() {
 
     # Enhanced pairwise comparison using multi-metric analysis
     echo ""
-    echo "📋 Enhanced Multi-Metric Comparison:"
+    echo " Enhanced Multi-Metric Comparison:"
     local comparison_start_time
-    comparison_start_time=$(date +%s)
+    comparison_start_time=$(date %s)
 
     while IFS= read -r file1; do
         while IFS= read -r file2; do
             if [ "$file1" != "$file2" ] && [[ "$file1" < "$file2" ]]; then
-                comparisons_made=$((comparisons_made + 1))
+                comparisons_made=$((comparisons_made  1))
 
                 # Show progress for long operations
                 if [ $((comparisons_made % 15)) -eq 0 ]; then
@@ -1027,13 +1027,13 @@ run_enhanced_analysis() {
 
                     # Only report if similarity exceeds threshold
                     if [ "$similarity" -ge "$SIMILARITY_THRESHOLD" ]; then
-                        duplications_found=$((duplications_found + 1))
+                        duplications_found=$((duplications_found  1))
                         echo ""
                         echo "🎯 Enhanced similarity detected ($similarity%):"
-                        echo "   📄 $file1"
-                        echo "   📄 $file2"
-                        echo "   🔬 Multi-metric analysis: semantic + structural + n-gram"
-                        echo "   💡 High-confidence consolidation recommended"
+                        echo "   FILE: $file1"
+                        echo "   FILE: $file2"
+                        echo "   🔬 Multi-metric analysis: semantic  structural  n-gram"
+                        echo "    High-confidence consolidation recommended"
                     fi
                 fi
             fi
@@ -1046,9 +1046,9 @@ run_enhanced_analysis() {
     track_operation_time "Enhanced Multi-Metric Comparison" "$comparison_start_time"
 
     echo ""
-    echo "📋 Enhanced Pattern Analysis:"
+    echo " Enhanced Pattern Analysis:"
     local pattern_start_time
-    pattern_start_time=$(date +%s)
+    pattern_start_time=$(date %s)
 
     for pattern in "${COMMON_PATTERNS[@]}"; do
         detect_pattern_repetitions_optimized "$pattern"
@@ -1058,12 +1058,12 @@ run_enhanced_analysis() {
 
     echo ""
     local section_start_time
-    section_start_time=$(date +%s)
+    section_start_time=$(date %s)
     analyze_section_overlap
     track_operation_time "Section Overlap Analysis" "$section_start_time"
 
     echo ""
-    echo "📊 Enhanced Analysis Summary:"
+    echo " Enhanced Analysis Summary:"
     echo "   Total Files: $total_files"
     echo "   Comparisons Made: $comparisons_made"
     echo "   High-Confidence Duplications: $duplications_found"
@@ -1074,7 +1074,7 @@ run_enhanced_analysis() {
     if [ "$duplications_found" -gt 0 ]; then
         echo "   Status: 🎯 High-confidence consolidation opportunities detected"
     else
-        echo "   Status: ✅ No significant duplication found (enhanced analysis)"
+        echo "   Status:  No significant duplication found (enhanced analysis)"
     fi
 
     track_operation_time "Full Enhanced Analysis" "$analysis_start_time"
@@ -1082,22 +1082,22 @@ run_enhanced_analysis() {
 
 # Legacy high-quality analysis (preserved for maximum accuracy)
 run_legacy_comprehensive_analysis() {
-    echo "🔍 Running legacy high-quality analysis..."
+    echo " Running legacy high-quality analysis..."
     local analysis_start_time
-    analysis_start_time=$(date +%s)
+    analysis_start_time=$(date %s)
 
     local total_files
     total_files=$(find_all_docs | wc -l)
     local comparisons_made=0
     local duplications_found=0
 
-    echo "📊 Analyzing $total_files files with detailed sentence comparison..."
+    echo " Analyzing $total_files files with detailed sentence comparison..."
     echo ""
 
     # File-to-file comparison using original algorithm
-    echo "📋 High-Quality Pairwise Content Comparison:"
+    echo " High-Quality Pairwise Content Comparison:"
     local comparison_start_time
-    comparison_start_time=$(date +%s)
+    comparison_start_time=$(date %s)
 
     local files
     files=$(find_all_docs)
@@ -1105,7 +1105,7 @@ run_legacy_comprehensive_analysis() {
     while IFS= read -r file1; do
         while IFS= read -r file2; do
             if [ "$file1" != "$file2" ] && [[ "$file1" < "$file2" ]]; then
-                comparisons_made=$((comparisons_made + 1))
+                comparisons_made=$((comparisons_made  1))
 
                 # Show progress for long operations
                 if [ $((comparisons_made % 10)) -eq 0 ]; then
@@ -1116,11 +1116,11 @@ run_legacy_comprehensive_analysis() {
                 duplicated_content=$(find_duplicated_content "$file1" "$file2")
 
                 if [ -n "$duplicated_content" ]; then
-                    duplications_found=$((duplications_found + 1))
+                    duplications_found=$((duplications_found  1))
                     echo ""
-                    echo "⚠️ Detailed duplication detected between:"
-                    echo "   📄 $file1"
-                    echo "   📄 $file2"
+                    echo " Detailed duplication detected between:"
+                    echo "   FILE: $file1"
+                    echo "   FILE: $file2"
                     echo "   Detailed Similarities:"
                     echo "$duplicated_content" | while read -r dup; do
                         echo "     - $dup"
@@ -1133,9 +1133,9 @@ run_legacy_comprehensive_analysis() {
     track_operation_time "High-Quality Pairwise Comparison" "$comparison_start_time"
 
     echo ""
-    echo "📋 Original Pattern Analysis:"
+    echo " Original Pattern Analysis:"
     local pattern_start_time
-    pattern_start_time=$(date +%s)
+    pattern_start_time=$(date %s)
 
     for pattern in "${COMMON_PATTERNS[@]}"; do
         detect_pattern_repetitions "$pattern"
@@ -1144,16 +1144,16 @@ run_legacy_comprehensive_analysis() {
     track_operation_time "Original Pattern Analysis" "$pattern_start_time"
 
     echo ""
-    echo "📊 High-Quality Analysis Summary:"
+    echo " High-Quality Analysis Summary:"
     echo "   Total Files: $total_files"
     echo "   Comparisons Made: $comparisons_made"
     echo "   Detailed Duplications Found: $duplications_found"
     echo "   Algorithm: Original O(n²×m²) sentence-level analysis"
 
     if [ "$duplications_found" -gt 0 ]; then
-        echo "   Status: ⚠️ Detailed consolidation opportunities detected"
+        echo "   Status:  Detailed consolidation opportunities detected"
     else
-        echo "   Status: ✅ No significant sentence-level duplication found"
+        echo "   Status:  No significant sentence-level duplication found"
     fi
 
     track_operation_time "Full High-Quality Analysis" "$analysis_start_time"
@@ -1166,33 +1166,33 @@ case "${1:-help}" in
 
         # Quality mode selection
         if [ "${2:-}" = "--high-quality" ]; then
-            echo "🔍 Running in HIGH QUALITY mode (slower, more detailed)"
-            echo "⚠️  Note: This uses O(n²×m²) algorithm - may take significant time"
+            echo " Running in HIGH QUALITY mode (slower, more detailed)"
+            echo "  Note: This uses O(n²×m²) algorithm - may take significant time"
             run_legacy_comprehensive_analysis
         elif [ "${2:-}" = "--enhanced" ] || [ "${2:-}" = "--near-perfect" ]; then
             echo "🎯 Running in ENHANCED mode (multi-metric near-100% quality)"
             echo "🔬 Features: TF-IDF weighting, n-grams, semantic mapping, structural analysis"
             run_enhanced_analysis
         elif [ "${2:-}" = "--quick" ] || [ "${ANALYSIS_MODE}" = "quick" ]; then
-            echo "🚀 Running in QUICK mode with maximum optimizations"
+            echo " Running in QUICK mode with maximum optimizations"
             run_comprehensive_analysis
         elif [ "${2:-}" = "--pattern" ]; then
             # Pattern-specific quick scan
             pattern="${3:-virtual environment}"
-            echo "🔍 Quick pattern scan for: '$pattern'"
+            echo " Quick pattern scan for: '$pattern'"
             detect_pattern_repetitions_optimized "$pattern"
         else
-            echo "🔄 Running in BALANCED mode (optimized with quality checks)"
+            echo "SYNC: Running in BALANCED mode (optimized with quality checks)"
             run_comprehensive_analysis
         fi
         print_performance_summary
 
         echo ""
-        echo "✅ Duplication detection completed!"
-        echo "   📄 Log: $LOG_FILE"
-        echo "   📊 Metrics: logs/performance_metrics_$(date +%Y%m%d).log"
+        echo " Duplication detection completed!"
+        echo "   FILE: Log: $LOG_FILE"
+        echo "    Metrics: logs/performance_metrics_$(date %Y%m%d).log"
         echo ""
-        echo "💡 Mode Options:"
+        echo " Mode Options:"
         echo "   --quick         : Maximum speed, fingerprint-based (recommended)"
         echo "   --enhanced      : Multi-metric near-100% quality analysis (slower)"
         echo "   --high-quality  : Maximum accuracy, sentence-level analysis (slowest)"
@@ -1200,20 +1200,20 @@ case "${1:-help}" in
         ;;
 
     "suggest")
-        output_file="${2:-logs/consolidation_suggestions_$(date +%Y%m%d_%H%M%S).md}"
+        output_file="${2:-logs/consolidation_suggestions_$(date %Y%m%d_%H%M%S).md}"
 
         display_config
         generate_consolidation_suggestions "$output_file"
 
         echo ""
-        echo "✅ Consolidation suggestions generated!"
-        echo "   📄 Report: $output_file"
-        echo "   📄 Log: $LOG_FILE"
+        echo " Consolidation suggestions generated!"
+        echo "   FILE: Report: $output_file"
+        echo "   FILE: Log: $LOG_FILE"
         ;;
 
     "patterns")
         display_config
-        echo "📋 Common Pattern Analysis:"
+        echo " Common Pattern Analysis:"
         for pattern in "${COMMON_PATTERNS[@]}"; do
             detect_pattern_repetitions "$pattern"
         done
@@ -1234,21 +1234,21 @@ case "${1:-help}" in
         file2="$3"
 
         if [ ! -f "$file1" ] || [ ! -f "$file2" ]; then
-            echo "❌ One or both files not found"
+            echo " One or both files not found"
             exit 1
         fi
 
-        echo "🔍 Comparing content between:"
-        echo "   📄 $file1"
-        echo "   📄 $file2"
+        echo " Comparing content between:"
+        echo "   FILE: $file1"
+        echo "   FILE: $file2"
         echo ""
 
         duplicated_content=$(find_duplicated_content "$file1" "$file2")
         if [ -n "$duplicated_content" ]; then
-            echo "⚠️ Duplicated content found:"
+            echo " Duplicated content found:"
             echo "$duplicated_content"
         else
-            echo "✅ No significant duplication detected"
+            echo " No significant duplication detected"
         fi
         ;;
 

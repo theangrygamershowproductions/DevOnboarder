@@ -43,16 +43,16 @@ class GovernanceCLI:
         script = Path(script_path)
 
         if not script.exists():
-            print(f"❌ Error: Script not found: {script_path}")
+            print(f" Error: Script not found: {script_path}")
             return 1
 
-        print(f"🔍 Checking compliance for: {script.name}")
+        print(f" Checking compliance for: {script.name}")
         print("=" * 60)
 
         violations = self.policy_engine.check_script_compliance(script)
 
         if not violations:
-            print("✅ Script is fully compliant!")
+            print(" Script is fully compliant!")
             return 0
 
         # Group violations by severity
@@ -81,24 +81,24 @@ class GovernanceCLI:
                 for violation in violation_list:
                     print(f"  • {violation.message}")
                     if violation.remediation_hint:
-                        print(f"    💡 Fix: {violation.remediation_hint}")
+                        print(f"     Fix: {violation.remediation_hint}")
                     if violation.blocking:
                         print("    🚫 This violation blocks execution")
                     print()
 
         # Summary
         blocking_violations = [v for v in violations if v.blocking]
-        print(f"📊 Summary: {len(violations)} total violations")
+        print(f" Summary: {len(violations)} total violations")
         print(f"   - {len(blocking_violations)} blocking violations")
         print(
             f"   - {len(violations) - len(blocking_violations)} non-blocking violations"
         )
 
         if blocking_violations:
-            print("\n❌ Script execution BLOCKED due to policy violations")
+            print("\n Script execution BLOCKED due to policy violations")
             return 1
         else:
-            print("\n⚠️  Script can execute but has policy violations to address")
+            print("\n + Script can execute but has policy violations to address")
             return 0
 
     def generate_report(self, directory: str = ".") -> int:
@@ -106,16 +106,16 @@ class GovernanceCLI:
         dir_path = Path(directory)
 
         if not dir_path.exists():
-            print(f"❌ Error: Directory not found: {directory}")
+            print(f" Error: Directory not found: {directory}")
             return 1
 
-        print(f"📊 Generating compliance report for: {dir_path.absolute()}")
+        print(f" Generating compliance report for: {dir_path.absolute()}")
         print("=" * 60)
 
         report = self.policy_engine.get_compliance_report(dir_path)
 
         # Display summary
-        print("📈 COMPLIANCE SUMMARY")
+        print("GROW: COMPLIANCE SUMMARY")
         print(f"   Total Scripts: {report['total_scripts']}")
         print(f"   Compliant: {report['compliant_scripts']}")
         print(f"   Non-Compliant: {report['non_compliant_scripts']}")
@@ -123,20 +123,20 @@ class GovernanceCLI:
 
         # Violations by type
         if report["violation_counts"]:
-            print("\n🔍 VIOLATIONS BY TYPE:")
+            print("\n VIOLATIONS BY TYPE:")
             for vtype, count in report["violation_counts"].items():
                 print(f"   • {vtype.replace('_', ' ').title()}: {count}")
 
         # Violations by severity
         if report["severity_counts"]:
-            print("\n⚠️  VIOLATIONS BY SEVERITY:")
+            print("\n + VIOLATIONS BY SEVERITY:")
             for severity, count in report["severity_counts"].items():
                 emoji = {
                     "critical": "🚨",
                     "high": "🔴",
                     "medium": "🟡",
                     "low": "🟢",
-                }.get(severity, "📋")
+                }.get(severity, "")
                 print(f"   {emoji} {severity.upper()}: {count}")
 
         # Save detailed report to file
@@ -156,10 +156,10 @@ class GovernanceCLI:
         dir_path = Path(directory)
 
         if not dir_path.exists():
-            print(f"❌ Error: Directory not found: {directory}")
+            print(f" Error: Directory not found: {directory}")
             return 1
 
-        print(f"✅ Validating metadata files in: {dir_path.absolute()}")
+        print(f" Validating metadata files in: {dir_path.absolute()}")
         print("=" * 60)
 
         validation_results = self.yaml_manager.validate_all_metadata(dir_path)
@@ -167,7 +167,7 @@ class GovernanceCLI:
         valid_count = sum(1 for result in validation_results.values() if result)
         total_count = len(validation_results)
 
-        print("📊 VALIDATION SUMMARY")
+        print(" VALIDATION SUMMARY")
         print(f"   Total Metadata Files: {total_count}")
         print(f"   Valid Files: {valid_count}")
         print(f"   Invalid Files: {total_count - valid_count}")
@@ -179,7 +179,7 @@ class GovernanceCLI:
             path for path, valid in validation_results.items() if not valid
         ]
         if invalid_files:
-            print("\n❌ INVALID METADATA FILES:")
+            print("\n INVALID METADATA FILES:")
             for file_path in invalid_files:
                 print(f"   • {file_path}")
 
@@ -192,28 +192,28 @@ class GovernanceCLI:
         script = Path(script_path)
 
         if not script.exists():
-            print(f"❌ Error: Script not found: {script_path}")
+            print(f" Error: Script not found: {script_path}")
             return 1
 
         # Check if metadata already exists
         existing_metadata = self.yaml_manager.load_metadata(script)
         if existing_metadata:
-            print(f"⚠️  Metadata already exists for {script.name}")
+            print(f"  Metadata already exists for {script.name}")
             response = input("Overwrite existing metadata? (y/N): ").lower()
             if response != "y":
-                print("❌ Operation cancelled")
+                print(" Operation cancelled")
                 return 1
 
-        print(f"📝 Creating metadata for: {script.name}")
+        print(f" Creating metadata for: {script.name}")
 
         try:
             metadata_file = self.yaml_manager.create_default_metadata_file(
                 script, similarity_group
             )
-            print(f"✅ Metadata created: {metadata_file}")
+            print(f" Metadata created: {metadata_file}")
 
             # Show the created metadata
-            print("\n📋 Created metadata preview:")
+            print("\n Created metadata preview:")
             with open(metadata_file) as f:
                 content = f.read()
                 # Show first 20 lines
@@ -225,7 +225,7 @@ class GovernanceCLI:
             return 0
 
         except Exception as e:
-            print(f"❌ Error creating metadata: {e}")
+            print(f" Error creating metadata: {e}")
             return 1
 
     def approve_script(self, script_path: str, approved_by: str = "cli_user") -> int:
@@ -233,7 +233,7 @@ class GovernanceCLI:
         script = Path(script_path)
 
         if not script.exists():
-            print(f"❌ Error: Script not found: {script_path}")
+            print(f" Error: Script not found: {script_path}")
             return 1
 
         print(f"✍️  Approving script: {script.name}")
@@ -244,18 +244,17 @@ class GovernanceCLI:
             )
 
             if success:
-                print(f"✅ Script approved by {approved_by}")
+                print(f" Script approved by {approved_by}")
                 return 0
             else:
-                print(f"❌ No approval request found for {script.name}")
+                print(f" No approval request found for {script.name}")
                 print(
-                    "💡 Hint: Scripts may need approval requests "
-                    "before they can be approved"
+                    " Hint: Scripts may need approval requests " + "before they can be approved"
                 )
                 return 1
 
         except Exception as e:
-            print(f"❌ Error approving script: {e}")
+            print(f" Error approving script: {e}")
             return 1
 
 
@@ -333,10 +332,10 @@ Examples:
             return 1
 
     except KeyboardInterrupt:
-        print("\n❌ Operation cancelled by user")
+        print("\n Operation cancelled by user")
         return 1
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f" Unexpected error: {e}")
         return 1
 
 

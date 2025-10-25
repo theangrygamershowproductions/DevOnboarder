@@ -42,7 +42,7 @@ TARGET_ENV_FILES=(".env.dev" ".env.prod" ".env.ci")
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/smart_env_sync_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/smart_env_sync_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Command line options
@@ -175,7 +175,7 @@ update_var_in_file() {
     local var_value=$3
 
     if [ ! -f "$target_file" ]; then
-        echo "  WARNING: Target file $target_file not found"
+        echo "   Target file $target_file not found"
         return 1
     fi
 
@@ -205,7 +205,7 @@ validate_single_domain_format() {
 
     # Check if URL contains the old multi-subdomain format
     if echo "$var_value" | grep -q "\.dev\.theangrygamershow\.com"; then
-        echo "  ERROR: $var_name uses old multi-subdomain format: $var_value"
+        echo "   $var_name uses old multi-subdomain format: $var_value"
         local suggested_value="${var_value//.dev.theangrygamershow.com/.theangrygamershow.com}"
         echo "    SHOULD BE: $suggested_value"
         return 1
@@ -229,14 +229,14 @@ sync_variables() {
         source_value=$(get_var_value "$SOURCE_ENV" "$var_name")
 
         if [ -z "$source_value" ]; then
-            echo "  WARNING: Variable $var_name not found in source file"
+            echo "   Variable $var_name not found in source file"
             continue
         fi
 
         # Validate single domain format for URL variables
         if [[ $var_name =~ URL$ ]] || [[ $var_name =~ URI$ ]]; then
             if ! validate_single_domain_format "$var_name" "$source_value"; then
-                sync_errors=$((sync_errors + 1))
+                sync_errors=$((sync_errors  1))
                 continue
             fi
         fi
@@ -262,7 +262,7 @@ sync_variables() {
                     fi
 
                     if update_var_in_file "$target_file" "$var_name" "$source_value"; then
-                        changes_made=$((changes_made + 1))
+                        changes_made=$((changes_made  1))
                     fi
                 fi
             fi
@@ -294,14 +294,14 @@ validate_environments() {
         source_value=$(get_var_value "$SOURCE_ENV" "$var_name")
 
         if [ -z "$source_value" ]; then
-            echo "  ERROR: Critical variable $var_name missing from source"
-            validation_errors=$((validation_errors + 1))
+            echo "   Critical variable $var_name missing from source"
+            validation_errors=$((validation_errors  1))
             continue
         fi
 
         # Validate single domain format
         if ! validate_single_domain_format "$var_name" "$source_value"; then
-            validation_errors=$((validation_errors + 1))
+            validation_errors=$((validation_errors  1))
             continue
         fi
 
@@ -317,7 +317,7 @@ validate_environments() {
                     echo "    MISMATCH in $target_file:"
                     echo "      Source: $source_value"
                     echo "      Target: $target_value"
-                    validation_errors=$((validation_errors + 1))
+                    validation_errors=$((validation_errors  1))
                 fi
             fi
         done
@@ -340,15 +340,15 @@ validate_environments() {
 
         for domain in "${required_domains[@]}"; do
             if ! echo "$cors_origins" | grep -q "$domain"; then
-                echo "    ERROR: CORS origins missing required domain: $domain"
-                validation_errors=$((validation_errors + 1))
+                echo "     CORS origins missing required domain: $domain"
+                validation_errors=$((validation_errors  1))
             fi
         done
     fi
 
     echo ""
     if [ $validation_errors -eq 0 ]; then
-        echo "SUCCESS: All environments are synchronized and valid"
+        echo " All environments are synchronized and valid"
     else
         echo "FAILED: $validation_errors validation errors found"
     fi
@@ -390,7 +390,7 @@ main() {
 
     # Check if source file exists
     if [ ! -f "$SOURCE_ENV" ]; then
-        echo "ERROR: Source file $SOURCE_ENV not found"
+        echo " Source file $SOURCE_ENV not found"
         exit 1
     fi
 

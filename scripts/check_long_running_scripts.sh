@@ -29,7 +29,7 @@ while [ "$#" -gt 0 ]; do
     --threshold-seconds)
       shift; THRESHOLD="$1"; shift;;
     --ignore-pid)
-      shift; IGNORE_PIDS+=("$1"); shift;;
+      shift; IGNORE_PIDS=("$1"); shift;;
     --json)
       OUTPUT_JSON=1; shift;;
     -h|--help)
@@ -55,7 +55,7 @@ if [ -n "$SCRIPT_PIDS" ]; then
   # Get process details for the found PIDs using ps
   PS_OUTPUT=$(echo "$SCRIPT_PIDS" | xargs ps -o pid=,etimes=,cmd= 2>/dev/null || true)
   while IFS= read -r line; do
-    [ -n "$line" ] && LINES+=("$line")
+    [ -n "$line" ] && LINES=("$line")
   done <<< "$PS_OUTPUT"
 fi
 
@@ -76,7 +76,7 @@ for ln in "${LINES[@]}"; do
   if [ "$skip" -eq 1 ]; then continue; fi
 
   # ensure etimes looks numeric
-  if ! printf '%s' "$etimes" | grep -qE '^[0-9]+$'; then
+  if ! printf '%s' "$etimes" | grep -qE '^[0-9]$'; then
     continue
   fi
 
@@ -90,7 +90,7 @@ if [ "$FOUND_COUNT" -eq 0 ]; then
   if [ "$OUTPUT_JSON" -eq 1 ]; then
     echo '{"long_running": []}'
   else
-    echo "OK: no long-running script processes (threshold=${THRESHOLD}s)"
+    echo " no long-running script processes (threshold=${THRESHOLD}s)"
   fi
   exit 0
 fi

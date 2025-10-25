@@ -22,7 +22,7 @@ consolidation_priority: P3
 
 #### **2. Copilot Inline Comment Review**
 
-> ⚠️ **CRITICAL STEP - Do NOT skip this**
+>  **CRITICAL STEP - Do NOT skip this**
 
 - [ ] **Check for Comments**: Run `bash scripts/check_pr_inline_comments.sh <PR_NUMBER>`
 

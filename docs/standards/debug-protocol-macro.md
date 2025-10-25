@@ -66,7 +66,7 @@ constraints:
 
   - "Prefer smallest safe change."
 
-  - "All fixes must include a validation step + rollback."
+  - "All fixes must include a validation step  rollback."
 
 inputs:
   problem_summary: "<1–3 lines>"
@@ -93,7 +93,7 @@ inputs:
 
 - Steps 1..N to reproduce; include expected vs. actual for each step.
 
-4) Evidence to Collect (Ordered, Cheap → Expensive)
+4) Evidence to Collect (Ordered, Cheap  Expensive)
 
 - Logs/commands/paths with exact invocations.
 
@@ -103,7 +103,7 @@ inputs:
 
 - Change set (files/lines/commands).
 
-- Risk level + blast radius.
+- Risk level  blast radius.
 
 - Rollback plan (exact steps).
 
@@ -191,7 +191,7 @@ For data and pipeline debugging sessions, enhance with:
 
 For security-related debugging sessions, enhance with:
 
-* Add CWE mapping + mitigation level
+* Add CWE mapping  mitigation level
 
 * Require "exploit pre/post" steps in **Validation**
 
@@ -205,7 +205,7 @@ For security-related debugging sessions, enhance with:
 
 ```markdown
 problem_summary: "Workflow `close-codex-issues.yml` fails on runner with `gh: unknown flag --jq`."
-env_facts: Windows + Ubuntu runners; gh 2.0–2.54 variance; jq not installed on Windows.
+env_facts: Windows  Ubuntu runners; gh 2.0–2.54 variance; jq not installed on Windows.
 
 evidence: Action log shows `gh issue close --jq` errors.
 
@@ -215,7 +215,7 @@ evidence: Action log shows `gh issue close --jq` errors.
 
 #### 1) Situation Snapshot
 
-`gh` on some runners doesn't support `--jq`; workflow assumes it. Symptom: job fails at issue-close step. Likely cause: using unsupported flags + missing `jq` dependency.
+`gh` on some runners doesn't support `--jq`; workflow assumes it. Symptom: job fails at issue-close step. Likely cause: using unsupported flags  missing `jq` dependency.
 
 #### 2) Hypotheses (Ranked)
 
@@ -227,11 +227,11 @@ evidence: Action log shows `gh issue close --jq` errors.
 
 #### 3) Minimal Repro Plan
 
-1. `gh --version` on failing runner → expect older/newer mismatch.
+1. `gh --version` on failing runner  expect older/newer mismatch.
 
-2. `jq --version` → expect not found on Windows.
+2. `jq --version`  expect not found on Windows.
 
-3. Re-run step with `--jq` removed → expect pass.
+3. Re-run step with `--jq` removed  expect pass.
 
 #### 4) Evidence to Collect
 
@@ -245,7 +245,7 @@ evidence: Action log shows `gh issue close --jq` errors.
 
 * Remove `--jq` usage; parse issue number from returned URL/string.
 
-* Add version guard + fallback path (POSIX parsing).
+* Add version guard  fallback path (POSIX parsing).
 
 * Risk: Low; affects only issue-close step.
 
@@ -253,7 +253,7 @@ evidence: Action log shows `gh issue close --jq` errors.
 
 #### 6) Validation (Pass/Fail Gates)
 
-* CI green on Ubuntu + Windows.
+* CI green on Ubuntu  Windows.
 
 * Dry-run with a dummy issue in sandbox repo.
 
@@ -272,15 +272,15 @@ evidence: Action log shows `gh issue close --jq` errors.
     set -euo pipefail
     issue_url="$(gh issue close "$ISSUE_ID" -R "$REPO" -c "Auto-closed by CI" -o json 2>/dev/null || true)"
     if [[ -z "${issue_url}" ]]; then
-      # Fallback: no -o json support; use URL echo + grep
+      # Fallback: no -o json support; use URL echo  grep
 
       close_out="$(gh issue close "$ISSUE_ID" -R "$REPO" -c "Auto-closed by CI" 2>&1 || true)"
       # Extract issue number from the printed URL or text
 
-      num="$(printf "%s" "$close_out" | grep -Eo '#[0-9]+' | head -n1 | tr -d '#')"
+      num="$(printf "%s" "$close_out" | grep -Eo '#[0-9]' | head -n1 | tr -d '#')"
       echo "Closed issue #${num:-$ISSUE_ID}"
     else
-      num="$(printf "%s" "$issue_url" | grep -Eo '"number":[ ]*[0-9]+' | grep -Eo '[0-9]+')"
+      num="$(printf "%s" "$issue_url" | grep -Eo '"number":[ ]*[0-9]' | grep -Eo '[0-9]')"
       echo "Closed issue #${num:-$ISSUE_ID}"
     fi
 
@@ -292,7 +292,7 @@ evidence: Action log shows `gh issue close --jq` errors.
 
 gh --version
 gh issue create -R "$REPO" -t "CI Sandbox" -b "ok" | tee /tmp/issue_url
-ISSUE_ID=$(sed -E 's@.*/issues/([0-9]+).*@\1@' /tmp/issue_url)
+ISSUE_ID=$(sed -E 's@.*/issues/([0-9]).*@\1@' /tmp/issue_url)
 
 # run the workflow or call the action locally if supported
 
@@ -300,7 +300,7 @@ ISSUE_ID=$(sed -E 's@.*/issues/([0-9]+).*@\1@' /tmp/issue_url)
 
 #### 8. Postmortem Notes
 
-* Guardrail: add `gh version check` step + fallback parsing pattern.
+* Guardrail: add `gh version check` step  fallback parsing pattern.
 
 * Monitor: alert on any `unknown flag` in Action logs.
 
@@ -408,7 +408,7 @@ To create a VS Code snippet for this macro:
 
       "  - \"Prefer smallest safe change.\"",
 
-      "  - \"All fixes must include a validation step + rollback.\"",
+      "  - \"All fixes must include a validation step  rollback.\"",
 
       "inputs:",
       "  problem_summary: \"${2:<1–3 lines>}\"",
@@ -435,7 +435,7 @@ To create a VS Code snippet for this macro:
       "- Steps 1..N to reproduce; include expected vs. actual for each step.",
 
       "",
-      "4) Evidence to Collect (Ordered, Cheap → Expensive)",
+      "4) Evidence to Collect (Ordered, Cheap  Expensive)",
       "- Logs/commands/paths with exact invocations.",
 
       "- Note what each item will confirm or deny.",
@@ -444,7 +444,7 @@ To create a VS Code snippet for this macro:
       "5) Fix Plan (Smallest Safe Change)",
       "- Change set (files/lines/commands).",
 
-      "- Risk level + blast radius.",
+      "- Risk level  blast radius.",
 
       "- Rollback plan (exact steps).",
 

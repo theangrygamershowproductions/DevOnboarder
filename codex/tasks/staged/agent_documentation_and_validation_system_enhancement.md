@@ -108,7 +108,7 @@ def validate_agent_frontmatter(agent_file):
   "type": "object",
   "properties": {
     "codex-agent": {"type": "boolean"},
-    "name": {"type": "string", "pattern": "^Agent\\.[A-Za-z0-9]+$"},
+    "name": {"type": "string", "pattern": "^Agent\\.[A-Za-z0-9]$"},
     "role": {"type": "string"},
     "scope": {"type": "string"},
     "triggers": {"type": "string"},

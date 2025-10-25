@@ -21,13 +21,13 @@ visibility: internal
 
 # DevOnboarder Token Security Guidelines
 
-## ⚠️ CRITICAL: Token Output Security
+##  CRITICAL: Token Output Security
 
 ## NEVER output full token values to console, logs, or any visible medium
 
 ## Security Vulnerabilities
 
-### ❌ **Dangerous Practices**
+###  **Dangerous Practices**
 
 ```bash
 
@@ -39,7 +39,7 @@ printf "Token: %s\n" "$DISCORD_BOT_TOKEN"
 
 ```bash
 
-## ✅ **Secure Practices**
+##  **Secure Practices**
 
 ```bash
 
@@ -70,7 +70,7 @@ log "  ${token_name}=${masked_value}"
 ## Python Pattern
 
 ```python
-def mask_token(token_value: str) -> str:
+def mask_token(token_value: str)  str:
     """Mask token value for safe console output."""
     if not token_value:
         return "EMPTY"
@@ -114,7 +114,7 @@ print(f"Token: {mask_token(os.getenv('SECRET_TOKEN'))}")
 
 ## DevOnboarder Implementation Status
 
-### ✅ **Secured Components**
+###  **Secured Components**
 
 - `scripts/migrate_cicd_tokens.sh` - Masks token values in dry-run output
 
@@ -122,7 +122,7 @@ print(f"Token: {mask_token(os.getenv('SECRET_TOKEN'))}")
 
 - `scripts/token_loader.py` - Only outputs token names and file paths
 
-### 🔍 **Security Validation**
+###  **Security Validation**
 
 ```bash
 
@@ -154,7 +154,7 @@ python3 scripts/token_loader.py info
 
 5. **Document incident** and improve security practices
 
-### 📝 **Prevention Checklist**
+###  **Prevention Checklist**
 
 - [ ] All scripts mask token values in output
 

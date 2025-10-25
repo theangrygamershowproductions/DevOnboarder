@@ -50,7 +50,7 @@ In scripts/verify_and_commit.sh line 13:
 
 ### Resolution Applied
 
-✅ **Fixed Unicode Character**: Replaced the corrupted `�` character with the proper `🧹` emoji in the cleaning message on line 60.
+ **Fixed Unicode Character**: Replaced the corrupted `�` character with the proper `🧹` emoji in the cleaning message on line 60.
 
 **Before:**
 
@@ -70,53 +70,53 @@ log_and_display "🧹 Cleaning all test artifacts before validation..."
 
 ### Verification
 
-1. ✅ **Shellcheck Direct Test**: `shellcheck scripts/verify_and_commit.sh` - **PASSED**
+1.  **Shellcheck Direct Test**: `shellcheck scripts/verify_and_commit.sh` - **PASSED**
 
-2. ✅ **Pre-commit Hook Test**: `pre-commit run shellcheck --files scripts/verify_and_commit.sh` - **PASSED**
+2.  **Pre-commit Hook Test**: `pre-commit run shellcheck --files scripts/verify_and_commit.sh` - **PASSED**
 
-3. ✅ **Full Pre-commit Suite**: `pre-commit run --all-files` - **ALL PASSED**
+3.  **Full Pre-commit Suite**: `pre-commit run --all-files` - **ALL PASSED**
 
 ### Other Findings from Logs
 
 **Good News - Other Components Working:**
 
-- ✅ **All 115 tests passed**
+-  **All 115 tests passed**
 
-- ✅ **Coverage: 96.14%** (exceeds 95% requirement)
+-  **Coverage: 96.14%** (exceeds 95% requirement)
 
-- ✅ **All other pre-commit hooks passed**:
+-  **All other pre-commit hooks passed**:
 
-    - black formatting ✅
+    - black formatting 
 
-    - ruff linting ✅
+    - ruff linting 
 
-    - prettier ✅
+    - prettier 
 
-    - trim trailing whitespace ✅
+    - trim trailing whitespace 
 
-    - fix end of files ✅
+    - fix end of files 
 
-    - codespell ✅
+    - codespell 
 
-    - markdownlint-cli2 ✅
+    - markdownlint-cli2 
 
-    - Clean pytest sandbox artifacts ✅
+    - Clean pytest sandbox artifacts 
 
-    - Docs quality checks ✅
+    - Docs quality checks 
 
-    - Potato ignore policy ✅
+    - Potato ignore policy 
 
-    - Environment docs check ✅
+    - Environment docs check 
 
-    - Validate Codex Agents ✅
+    - Validate Codex Agents 
 
-    - Frontend ESLint ✅
+    - Frontend ESLint 
 
-    - Bot ESLint ✅
+    - Bot ESLint 
 
-    - Python tests ✅
+    - Python tests 
 
-    - Full validation suite ✅
+    - Full validation suite 
 
 ### Impact
 

@@ -25,7 +25,7 @@ log_message() {
     local level="${1}"
     local message="${2}"
     local timestamp
-    timestamp="$(date '+%Y-%m-%d %H:%M:%S')"
+    timestamp="$(date '%Y-%m-%d %H:%M:%S')"
     echo "[${timestamp}] [${level}] ${message}" | tee -a "${EXECUTION_LOG}"
 }
 
@@ -87,7 +87,7 @@ execute_script() {
 
     if [[ ! -x "${script_path}" ]]; then
         log_message "WARN" "Making script executable: ${script_path}"
-        chmod +x "${script_path}"
+        chmod x "${script_path}"
     fi
 
     log_message "INFO" "Executing: ${script_category}/${script_name}"

@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Load tokens using Token Architecture v2.1 with developer guidance
@@ -103,7 +103,7 @@ total_components=${#components[@]}
 for component in "${components[@]}"; do
     if command -v "$component" >/dev/null 2>&1; then
         echo "  $component: Available"
-        ((healthy_components++))
+        ((healthy_components))
     else
         echo "  $component: Missing"
     fi

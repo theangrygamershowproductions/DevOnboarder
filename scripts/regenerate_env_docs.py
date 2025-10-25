@@ -30,7 +30,7 @@ def read_env_vars(paths: list[Path]) -> set[str]:
 
 
 def read_doc_table(path: Path) -> dict[str, str]:
-    pattern = re.compile(r"^\|\s*([A-Za-z0-9_]+)\s*\|\s*(.*?)\s*\|$")
+    pattern = re.compile(r"^\|\s*([A-Za-z0-9_])\s*\|\s*(.*?)\s*\|$")
     table: dict[str, str] = {}
     lines = path.read_text().splitlines()
     i = 0
@@ -40,17 +40,17 @@ def read_doc_table(path: Path) -> dict[str, str]:
             j = i
             parts = [line.rstrip()]
             while j + 1 < len(lines) and not lines[j + 1].rstrip().endswith("|"):
-                j += 1
+                j = 1
                 parts.append(lines[j].rstrip())
             if j + 1 < len(lines):
-                j += 1
+                j = 1
                 parts.append(lines[j].rstrip())
             line = " ".join(parts)
             i = j
         m = pattern.match(line)
         if m and m.group(1) != "Variable":
             table[m.group(1)] = m.group(2)
-        i += 1
+        i = 1
     return table
 
 
@@ -79,15 +79,15 @@ def replace_table(doc_lines: list[str], table_lines: list[str]) -> list[str]:
     i = start + 1
     while i < len(doc_lines) and not doc_lines[i].startswith("|"):
         result.append(doc_lines[i])
-        i += 1
+        i = 1
 
     # find end of current table
     end = i
     while end < len(doc_lines) and doc_lines[end].startswith("|"):
-        end += 1
+        end = 1
     # skip to next section header
     while end < len(doc_lines) and not doc_lines[end].startswith("## "):
-        end += 1
+        end = 1
 
     result.extend(table_lines)
     result.extend(doc_lines[end:])

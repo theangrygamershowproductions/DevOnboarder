@@ -4,9 +4,7 @@
 This script uses only the Python standard library and supports a tiny
 subset of YAML (top-level key: value pairs). Exit codes:
 
-  0 - all versions match
-  1 - version mismatches found
-  2 - spec file missing or unreadable
+  0 - all versions match + 1 - version mismatches found + 2 - spec file missing or unreadable
 
 The implementation deliberately keeps lines under 88 cols to satisfy
 the project's linters.
@@ -115,19 +113,19 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
         #  - major: "x" (accept any minor/patch)
         #  - simple range: ">=x.y.z,<X.Y.Z"
         def parse_semver(v: str) -> tuple[int, int, int] | None:
-            m = re.match(r"^(\d+)\.(\d+)\.(\d+)", v)
+            m = re.match(r"^(\d)\.(\d)\.(\d)", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
 
         def parse_major_minor(v: str) -> tuple[int, int] | None:
-            m = re.match(r"^(\d+)\.(\d+)$", v)
+            m = re.match(r"^(\d)\.(\d)$", v)
             if not m:
                 return None
             return (int(m.group(1)), int(m.group(2)))
 
         def parse_major(v: str) -> int | None:
-            m = re.match(r"^(\d+)$", v)
+            m = re.match(r"^(\d)$", v)
             if not m:
                 return None
             return int(m.group(1))
@@ -139,14 +137,14 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
             parts = [p.strip() for p in spec_str.split(",") if p.strip()]
             for p in parts:
                 if p.startswith(">="):
-                    m = re.match(r">=(\d+)\.(\d+)\.(\d+)$", p)
+                    m = re.match(r">=(\d)\.(\d)\.(\d)$", p)
                     if not m:
                         return False
                     lower = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
                     if obs < lower:
                         return False
                 elif p.startswith("<"):
-                    m = re.match(r"<(\d+)\.(\d+)\.(\d+)$", p)
+                    m = re.match(r"<(\d)\.(\d)\.(\d)$", p)
                     if not m:
                         return False
                     upper = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
@@ -172,11 +170,11 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
             ):
                 semver_ok = True
         elif exp_mm and obs_sem:
-            # expected major.minor -> accept observed with same major/minor
+            # expected major.minor  accept observed with same major/minor
             if exp_mm[0] == obs_sem[0] and exp_mm[1] == obs_sem[1]:
                 semver_ok = True
         elif exp_m and obs_sem:
-            # expected major only -> accept same major
+            # expected major only  accept same major
             if exp_m == obs_sem[0]:
                 semver_ok = True
         elif "," in expected:
@@ -194,13 +192,13 @@ def run_checks(spec: Dict[str, str]) -> Tuple[bool, list[str]]:
 def main() -> int:
     spec_path = Path("versions.yaml")
     if not spec_path.exists():
-        print("ERROR: versions.yaml not found at repo root", file=sys.stderr)
+        print(" versions.yaml not found at repo root", file=sys.stderr)
         return 2
 
     try:
         spec = parse_versions(spec_path)
     except Exception as exc:  # pragma: no cover - defensive
-        print(f"ERROR: unable to parse versions.yaml: {exc}", file=sys.stderr)
+        print(f" unable to parse versions.yaml: {exc}", file=sys.stderr)
         return 2
 
     ok, failures = run_checks(spec)

@@ -46,15 +46,15 @@ This directory contains **reusable strategic planning frameworks** designed for 
 
 ```text
 docs/frameworks/
-├── README.md                           # This navigation guide
-├── friction-prevention.md              # Framework Phase 2 implementation docs
-├── friction-prevention-integration.md  # Integration guide for Framework Phase 2
-├── friction-prevention-quickstart.md   # Quick start guide for developers
-└── strategic-planning/                 # Strategic planning methodology
-    ├── application-registry.md         # Framework application tracking
-    ├── conversation_continuity_guide.md # Multi-session planning protocols
-    ├── framework-governance.md         # Version control and evolution
-    └── scope-assessment-checklist.md   # 12-point validation tool
+── README.md                           # This navigation guide
+── friction-prevention.md              # Framework Phase 2 implementation docs
+── friction-prevention-integration.md  # Integration guide for Framework Phase 2
+── friction-prevention-quickstart.md   # Quick start guide for developers
+── strategic-planning/                 # Strategic planning methodology
+    ── application-registry.md         # Framework application tracking
+    ── conversation_continuity_guide.md # Multi-session planning protocols
+    ── framework-governance.md         # Version control and evolution
+    ── scope-assessment-checklist.md   # 12-point validation tool
 ```
 
 ## Framework Components
@@ -69,7 +69,7 @@ docs/frameworks/
 
 1. **Main Documentation** (`friction-prevention.md`)
    - Complete framework overview and architecture
-   - Script categories and purposes (20 automation + 11 workflow + 3 productivity + 2 developer experience)
+   - Script categories and purposes (20 automation  11 workflow  3 productivity  2 developer experience)
    - Integration patterns and migration guidelines
    - Quality gates and development standards
 

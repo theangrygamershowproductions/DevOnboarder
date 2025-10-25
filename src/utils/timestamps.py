@@ -6,13 +6,13 @@ INFRASTRUCTURE CHANGE LOG:
 - Created: 2025-09-21
 - Purpose: Fix critical diagnostic issue with GitHub API vs local timestamp sync
 - Evidence: docs/troubleshooting/TIMESTAMP_SYNCHRONIZATION_DIAGNOSTIC_ISSUE.md
-- Impact: Ensures diagnostic accuracy across 50+ automation scripts
+- Impact: Ensures diagnostic accuracy across 50 automation scripts
 
 This module provides UTC-consistent timestamp functions to replace the inconsistent
 datetime.now() usage that was causing diagnostic "whack" behavior when comparing
 local timestamps with GitHub API timestamps.
 
-BEFORE (problematic pattern found in 20+ scripts):
+BEFORE (problematic pattern found in 20 scripts):
     # Claims UTC but uses local time
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
 
@@ -33,15 +33,15 @@ STANDALONE SCRIPT PATTERN:
 
 DIRECT DATETIME IMPORT GUIDELINES:
     Scripts should AVOID direct datetime imports for timestamp generation:
-    ❌ from datetime import datetime, timezone  # Avoid for new timestamp creation
-    ❌ datetime.now().strftime(format)  # Use get_utc_display_timestamp()
-    ❌ datetime.now(timezone.utc).isoformat()  # Use get_utc_timestamp()
+     from datetime import datetime, timezone  # Avoid for new timestamp creation
+     datetime.now().strftime(format)  # Use get_utc_display_timestamp()
+     datetime.now(timezone.utc).isoformat()  # Use get_utc_timestamp()
 
     Direct datetime imports are ONLY appropriate for:
-    ✅ Converting existing timestamps: datetime.fromtimestamp(file_stat.st_mtime)
-    ✅ Parsing timestamp strings: datetime.fromisoformat(timestamp_str)
-    ✅ Type annotations: def func() -> datetime
-    ✅ Datetime arithmetic: timedelta calculations
+     Converting existing timestamps: datetime.fromtimestamp(file_stat.st_mtime)
+     Parsing timestamp strings: datetime.fromisoformat(timestamp_str)
+     Type annotations: def func()  datetime
+     Datetime arithmetic: timedelta calculations
 
     This approach eliminates the import pattern duplication that was causing
     inconsistent timestamp generation across automation scripts.
@@ -66,8 +66,7 @@ def get_utc_timestamp() -> str:
     Example:
         >>> timestamp = get_utc_timestamp()
         >>> print(timestamp)
-        "2025-09-21T19:06:26Z"
-    """
+        "2025-09-21T19:06:26Z" + """
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
@@ -84,8 +83,7 @@ def get_utc_display_timestamp() -> str:
     Example:
         >>> timestamp = get_utc_display_timestamp()
         >>> print(f"Generated: {timestamp}")
-        "Generated: 2025-09-21 19:06:26 UTC"
-    """
+        "Generated: 2025-09-21 19:06:26 UTC" + """
     return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 
@@ -104,9 +102,8 @@ def get_utc_timestamp_with_milliseconds() -> str:
     Example:
         >>> timestamp = get_utc_timestamp_with_milliseconds()
         >>> print(timestamp)
-        "2025-09-21T19:06:26.456Z"
-    """
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")[:-4] + "Z"
+        "2025-09-21T19:06:26.456Z" + """
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")[:-4]  "Z"
 
 
 def parse_github_timestamp(github_ts: str) -> datetime:
@@ -130,9 +127,9 @@ def parse_github_timestamp(github_ts: str) -> datetime:
         >>> duration = local_time - github_time
         >>> print(f"Duration: {duration.total_seconds():.1f}s")
     """
-    # Handle both "Z" and "+00:00" format endings
+    # Handle both "Z" and "00:00" format endings
     if github_ts.endswith("Z"):
-        github_ts = github_ts.replace("Z", "+00:00")
+        github_ts = github_ts.replace("Z", "00:00")
 
     return datetime.fromisoformat(github_ts)
 
@@ -160,8 +157,7 @@ def calculate_duration_from_github(
         ...     "2025-09-21T19:03:26Z", "2025-09-21T19:06:26Z"
         ... )
         >>> print(f"Duration: {duration:.1f}s")
-        "Duration: 180.0s"
-    """
+        "Duration: 180.0s" + """
     start_time = parse_github_timestamp(github_start)
 
     if github_end:
@@ -193,8 +189,7 @@ def get_local_timestamp_for_filename() -> str:
         >>> timestamp = get_local_timestamp_for_filename()
         >>> filename = f"snapshot_{timestamp}.json"
         >>> print(filename)
-        "snapshot_20250921_190626.json"
-    """
+        "snapshot_20250921_190626.json" + """
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
@@ -222,10 +217,10 @@ def validate_timestamp_format(timestamp: str) -> bool:
         if not isinstance(timestamp, str):
             return False
 
-        # Must be in GitHub API format: YYYY-MM-DDTHH:MM:SSZ or +00:00
+        # Must be in GitHub API format: YYYY-MM-DDTHH:MM:SSZ or 00:00
         if timestamp.endswith("Z"):
             timezone_len = 1
-        elif timestamp.endswith("+00:00"):
+        elif timestamp.endswith("00:00"):
             timezone_len = 6
         else:
             return False
@@ -255,7 +250,7 @@ def validate_timestamp_format(timestamp: str) -> bool:
 #
 # INFRASTRUCTURE CHANGE EVIDENCE:
 # - Issue: Critical diagnostic accuracy problems across DevOnboarder automation
-# - Root Cause: 20+ scripts claiming "UTC" but using local time via datetime.now()
+# - Root Cause: 20 scripts claiming "UTC" but using local time via datetime.now()
 # - Detection: Manual analysis showing 3-minute discrepancies between local and
 #              GitHub timestamps
 # - Impact: "Whack" diagnostic behavior affecting CI correlation, PR automation
@@ -273,10 +268,10 @@ def validate_timestamp_format(timestamp: str) -> bool:
 # - scripts/generate_aar_portal.py (lines 845, 847, 859, 861, 874)
 # - scripts/validate_frontmatter_content.py (lines 292, 297)
 # - scripts/ci_health_aar_integration.py (line 31)
-# - And 8+ additional scripts identified in audit
+# - And 8 additional scripts identified in audit
 #
 # VALIDATION STRATEGY:
-# - Extend scripts/qc_pre_push.sh to detect datetime.now() + "UTC" pattern
+# - Extend scripts/qc_pre_push.sh to detect datetime.now()  "UTC" pattern
 # - Add timestamp format validation to prevent future regressions
 # - Update copilot-instructions.md to mandate UTC timestamp usage
 #

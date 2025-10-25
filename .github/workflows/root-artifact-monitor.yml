@@ -24,6 +24,7 @@ permissions:
     contents: read
     issues: write
     pull-requests: write
+    statuses: write
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -175,3 +176,32 @@ jobs:
                   name: "artifact-report-${{ github.run_number }}"
                   path: logs/ci/
                   retention-days: 7
+
+            - name: Debug status creation
+              run: |
+                  echo "About to create status for SHA: ${{ github.sha }}"
+                  echo "Status from check: ${{ steps.check.outputs.status }}"
+                  echo "Repository: ${{ github.repository }}"
+
+            - name: Create commit status
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const status = '${{ steps.check.outputs.status }}' === 'clean' ? 'success' : 'failure';
+                      const description = '${{ steps.check.outputs.status }}' === 'clean'
+                          ? 'No root artifact violations detected'
+                          : 'Root artifact violations found';
+
+                      console.log('About to create status:', { status, description, sha: context.sha, githubSha: process.env.GITHUB_SHA });
+
+                      const result = await github.rest.repos.createCommitStatus({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          sha: process.env.GITHUB_SHA,  // Use GITHUB_SHA instead of context.sha
+                          state: status,
+                          context: 'Root Artifact Guard',
+                          description: description,
+                          target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+                      });
+
+                      console.log('Status creation result:', result.status);

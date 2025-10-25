@@ -2,7 +2,7 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
@@ -35,13 +35,13 @@ to_json_array() {
   while IFS= read -r var; do
     [ -n "$var" ] || continue
     if [ "$first" = true ]; then
-      json+="\"$var\""
+      json="\"$var\""
       first=false
     else
-      json+=" ,\"$var\""
+      json=" ,\"$var\""
     fi
   done <<< "$input"
-  json+="]"
+  json="]"
   echo "$json"
 }
 

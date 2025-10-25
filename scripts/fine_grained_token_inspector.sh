@@ -39,7 +39,7 @@ inspect_fine_grained_token() {
     fi
 
     echo ""
-    echo "🔐 Authentication & Identity:"
+    echo " Authentication & Identity:"
     if user_response=$(GH_TOKEN="$token_value" gh api user 2>&1); then
         if echo "$user_response" | grep -q '"login"'; then
             username=$(echo "$user_response" | jq -r '.login' 2>/dev/null || echo "unknown")
@@ -87,7 +87,7 @@ inspect_fine_grained_token() {
 
     # Test basic repository access
     echo ""
-    echo "   🏠 Basic Repository Access:"
+    echo "   HOME: Basic Repository Access:"
     if repo_response=$(GH_TOKEN="$token_value" gh api repos/theangrygamershowproductions/DevOnboarder 2>&1); then
         if echo "$repo_response" | grep -q '"full_name"'; then
             echo "      Repository metadata: Accessible"
@@ -107,7 +107,7 @@ inspect_fine_grained_token() {
 
     # Test Actions API
     echo ""
-    echo "   ⚡ Actions API Testing:"
+    echo "   FAST: Actions API Testing:"
     if actions_response=$(GH_TOKEN="$token_value" gh api repos/theangrygamershowproductions/DevOnboarder/actions 2>&1); then
         if echo "$actions_response" | grep -q '"total_count"'; then
             echo "      Actions API: Working"
@@ -161,6 +161,6 @@ echo "3. Consider Propagation Time:"
 echo "   • Fine-Grained tokens can take 2-10 minutes for permissions to propagate"
 echo "   • Organization repositories sometimes take longer"
 echo ""
-echo "4. 🔄 Try Regenerating:"
+echo "4. SYNC: Try Regenerating:"
 echo "   • If permissions look correct but still failing"
 echo "   • Generate a new token with same permissions"

@@ -18,7 +18,7 @@ similarity_group: docs-
 
 # Issue #1261 Phase 2 Complete
 
-**Status**: ✅ COMPLETE
+**Status**:  COMPLETE
 
 ## Deliverables
 

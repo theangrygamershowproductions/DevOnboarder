@@ -28,23 +28,23 @@ visibility: internal
 
 ## Executive Summary
 
-<!-- Brief description of what was accomplished -->
+<!-- Brief description of what was accomplished -
 
 ## Context
 
 - **Issue Number**: #Discord Bot Authentication Enhancement
 
-- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -->
+- **Issue Type**: <!-- Bug/Feature/Enhancement/Infrastructure -
 
-- **Priority**: <!-- Critical/High/Medium/Low -->
+- **Priority**: <!-- Critical/High/Medium/Low -
 
-- **Duration**: <!-- Start Date to End Date -->
+- **Duration**: <!-- Start Date to End Date -
 
-- **Participants**: <!-- @username1, @username2 -->
+- **Participants**: <!-- @username1, @username2 -
 
 ## Timeline
 
-<!-- Key milestones and activities -->
+<!-- Key milestones and activities -
 
 - **Discovery**: Issue identified and initial triage
 
@@ -56,7 +56,7 @@ visibility: internal
 
 ## What Worked Well
 
-<!-- Successful patterns and effective processes -->
+<!-- Successful patterns and effective processes -
 
 - Effective use of DevOnboarder automation tools
 
@@ -66,7 +66,7 @@ visibility: internal
 
 ## Areas for Improvement
 
-<!-- Process bottlenecks and improvement opportunities -->
+<!-- Process bottlenecks and improvement opportunities -
 
 - Earlier detection and prevention strategies
 
@@ -76,7 +76,7 @@ visibility: internal
 
 ## Action Items
 
-<!-- Specific improvements to implement -->
+<!-- Specific improvements to implement -
 
 - [ ] Update documentation in [specific location] (@owner, due: 2025-08-06)
 
@@ -86,7 +86,7 @@ visibility: internal
 
 ## Lessons Learned
 
-<!-- Key insights and knowledge gained -->
+<!-- Key insights and knowledge gained -
 
 - Technical insights discovered during resolution
 
@@ -96,25 +96,25 @@ visibility: internal
 
 ## DevOnboarder Integration Impact
 
-<!-- How this relates to project standards -->
+<!-- How this relates to project standards -
 
-- **Virtual Environment**: <!-- Any dependency or setup impacts -->
+- **Virtual Environment**: <!-- Any dependency or setup impacts -
 
-- **CI/CD Pipeline**: <!-- Automation or workflow effects -->
+- **CI/CD Pipeline**: <!-- Automation or workflow effects -
 
-- **Code Quality**: <!-- Impact on coverage or standards -->
+- **Code Quality**: <!-- Impact on coverage or standards -
 
-- **Security**: <!-- Enhanced Potato Policy or security considerations -->
+- **Security**: <!-- Enhanced Potato Policy or security considerations -
 
 ## Related Issues/PRs
 
-<!-- Cross-references to related work -->
+<!-- Cross-references to related work -
 
 - Resolves #Discord Bot Authentication Enhancement
 
-- Related to: <!-- #other-issues -->
+- Related to: <!-- #other-issues -
 
-- Follow-up needed: <!-- #future-issues -->
+- Follow-up needed: <!-- #future-issues -
 
 ---
 **AAR Created**: 2025-07-30

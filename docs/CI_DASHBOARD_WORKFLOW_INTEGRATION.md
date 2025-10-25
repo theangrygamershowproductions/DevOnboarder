@@ -155,7 +155,7 @@ Implement automatic cancellation for predicted failures:
           # Auto-cancel for very high confidence detached HEAD issues
 
           if [[ "$FAILURE_TYPE" == "detached_head" ]] && (( $(echo "$CONFIDENCE >= 0.9" | bc -l) )); then
-            echo "::error::AUTO-CANCELLING: Detached HEAD with 90%+ confidence"
+            echo "::error::AUTO-CANCELLING: Detached HEAD with 90% confidence"
 
             echo "::error::This saves approximately $COST_SAVINGS minutes of compute time"
 
@@ -220,7 +220,7 @@ Connect monitoring results with the existing AAR system:
 
 ### Phase 3: Comprehensive Monitoring (Week 3)
 
-- Add monitoring to all 45+ workflows via reusable action
+- Add monitoring to all 45 workflows via reusable action
 
 - Implement automatic AAR generation for predicted failures
 
@@ -236,13 +236,13 @@ Connect monitoring results with the existing AAR system:
 
 ## Success Metrics
 
-- **Cost Savings**: Target 20+ minutes/week through early cancellation
+- **Cost Savings**: Target 20 minutes/week through early cancellation
 
-- **Prediction Accuracy**: Target 90%+ accuracy for detached HEAD detection
+- **Prediction Accuracy**: Target 90% accuracy for detached HEAD detection
 
 - **False Positive Rate**: Target <5% false positive rate for high-confidence predictions
 
-- **Integration Coverage**: Target monitoring on 20+ critical workflows
+- **Integration Coverage**: Target monitoring on 20 critical workflows
 
 ## Security Considerations
 

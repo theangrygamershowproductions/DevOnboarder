@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOC="$SCRIPT_DIR/../docs/network-exception-list.md"
 
-readarray -t DOMAINS < <(awk '/^- /{gsub(/`/, ""); for(i=1;i<=NF;i++) if($i ~ /^[A-Za-z0-9.-]+\.(com|org|io|sh)$/) print $i}' "$DOC")
+readarray -t DOMAINS < <(awk '/^- /{gsub(/`/, ""); for(i=1;i<=NF;i) if($i ~ /^[A-Za-z0-9.-]\.(com|org|io|sh)$/) print $i}' "$DOC")
 
 failed=0
 for host in "${DOMAINS[@]}"; do
@@ -23,4 +23,4 @@ if [ "$failed" -ne 0 ]; then
   exit 1
 fi
 
-echo "All required domains are reachable ✅"
+echo "All required domains are reachable "

@@ -158,7 +158,7 @@ git remote rename origin source
 
 ---
 
-## ✅ Helpful Commands
+##  Helpful Commands
 
 - Show remotes:
 

@@ -4,15 +4,15 @@ set -euo pipefail
 # Local CI Analysis Demo
 # Demonstrates failure filtering concepts without requiring GitHub CLI authentication
 
-echo "🔍 CI Failure Analysis - Local Demo"
+echo " CI Failure Analysis - Local Demo"
 echo "===================================="
 echo ""
 
-echo "💡 This demo shows how the 'conclusion: FAILURE' filter works"
+echo " This demo shows how the 'conclusion: FAILURE' filter works"
 echo "   In a real environment with GitHub CLI authentication, you would use:"
 echo ""
 
-echo "🔧 Basic GitHub CLI Commands with Failure Filter:"
+echo " Basic GitHub CLI Commands with Failure Filter:"
 echo ""
 echo "   # List only failed runs"
 echo "   gh run list --status failure --limit 10"
@@ -24,7 +24,7 @@ echo "   # Failed runs for specific workflow"
 echo "   gh run list -w 'Enhanced Potato Policy Enforcement' --status failure"
 echo ""
 
-echo "📊 Example Failed Run Analysis:"
+echo " Example Failed Run Analysis:"
 echo ""
 
 # Simulate failed run data (what would come from GitHub CLI)
@@ -69,12 +69,12 @@ SAMPLE_DATA='[
   {"conclusion":"SUCCESS","workflowName":"Documentation","createdAt":"2025-01-28T08:30:00Z"}
 ]'
 
-echo "📈 Total runs: $(echo "$SAMPLE_DATA" | jq length)"
-echo "❌ Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
-echo "✅ Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
+echo "GROW: Total runs: $(echo "$SAMPLE_DATA" | jq length)"
+echo " Failed runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "FAILURE")] | length')"
+echo " Successful runs: $(echo "$SAMPLE_DATA" | jq '[.[] | select(.conclusion == "SUCCESS")] | length')"
 
 echo ""
-echo "🔧 Failures grouped by workflow:"
+echo " Failures grouped by workflow:"
 echo "$SAMPLE_DATA" | jq -r '
   [.[] | select(.conclusion == "FAILURE")] |
   group_by(.workflowName) |
@@ -95,19 +95,19 @@ echo "$SAMPLE_DATA" | jq -r '
 
 echo ""
 echo "🎯 Key Benefits of Failure Filtering:"
-echo "   ✅ Focus only on relevant failures"
-echo "   ✅ Reduce analysis time and noise"
-echo "   ✅ Better pattern recognition"
-echo "   ✅ More efficient troubleshooting"
+echo "    Focus only on relevant failures"
+echo "    Reduce analysis time and noise"
+echo "    Better pattern recognition"
+echo "    More efficient troubleshooting"
 echo ""
 
-echo "🔗 Available Tools in DevOnboarder:"
-echo "   📱 python scripts/ci-monitor.py <PR>"
-echo "   🔍 bash scripts/analyze_failed_ci_runs.sh"
-echo "   📊 bash scripts/monitor_ci_health.sh"
+echo "LINK: Available Tools in DevOnboarder:"
+echo "    python scripts/ci-monitor.py <PR>"
+echo "    bash scripts/analyze_failed_ci_runs.sh"
+echo "    bash scripts/monitor_ci_health.sh"
 echo ""
 
-echo "💡 For authentication setup:"
+echo " For authentication setup:"
 echo "   gh auth login"
 echo "   gh auth status"
 echo ""

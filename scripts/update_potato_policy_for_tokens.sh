@@ -52,7 +52,7 @@ for ignore_file in "${IGNORE_FILES[@]}"; do
             printf "VERIFIED: %s already has token patterns\n" "$ignore_file"
         fi
     else
-        printf "WARNING: %s not found\n" "$ignore_file"
+        printf " %s not found\n" "$ignore_file"
     fi
 done
 

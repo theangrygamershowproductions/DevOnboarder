@@ -479,7 +479,7 @@ class FileVersionTracker:
                 for file_info in comparison_data["modified_files"]:
                     size_change = file_info["size_change"]
                     change_indicator = (
-                        f"+{size_change}" if size_change >= 0 else str(size_change)
+                        f"{size_change}" if size_change >= 0 else str(size_change)
                     )
                     report_lines.append(
                         f"- `{file_info['path']}` ({change_indicator} bytes)"
@@ -519,7 +519,7 @@ class FileVersionTracker:
                         # Renamed files
                         for file_info in files:
                             report_lines.append(
-                                f"- `{file_info['old_path']}` → "
+                                f"- `{file_info['old_path']}`  "
                                 f"`{file_info['new_path']}`"
                             )
                     else:
@@ -594,7 +594,7 @@ def main():
 
     # Validate virtual environment
     if not sys.prefix.endswith(".venv"):
-        print("ERROR: Must run in virtual environment (.venv)")
+        print(" Must run in virtual environment (.venv)")
         print("Run: source .venv/bin/activate")
         sys.exit(1)
 
@@ -641,7 +641,7 @@ def main():
             print(f"Created current snapshot: {snapshot_id}")
 
     except Exception as error:
-        print(f"ERROR: File tracking failed: {error}")
+        print(f" File tracking failed: {error}")
         sys.exit(1)
 
 

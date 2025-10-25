@@ -24,7 +24,7 @@ test_script() {
     local test_description="$3"
     local expected_pattern="${4:-Loaded.*tokens from Token Architecture}"
 
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    TOTAL_TESTS=$((TOTAL_TESTS  1))
 
     echo "Testing: $test_description"
     printf "   Script: %s %s\n" "$script_path" "$test_args"
@@ -32,14 +32,14 @@ test_script() {
     if output=$(bash "$script_path" "$test_args" 2>&1 | head -8); then
         if echo "$output" | grep -q "$expected_pattern" || echo "$output" | grep -q "Token environment loaded successfully"; then
             echo "   Result: PASS - Enhanced token loading integrated"
-            PASSED_TESTS=$((PASSED_TESTS + 1))
+            PASSED_TESTS=$((PASSED_TESTS  1))
         else
             echo "   Result: PASS - No token loading required (working correctly)"
-            PASSED_TESTS=$((PASSED_TESTS + 1))
+            PASSED_TESTS=$((PASSED_TESTS  1))
         fi
     else
         echo "   Result: FAIL - Script execution failed"
-        FAILED_TESTS+=("$script_path: $test_description (execution failed)")
+        FAILED_TESTS=("$script_path: $test_description (execution failed)")
     fi
     echo ""
 }
@@ -74,7 +74,7 @@ printf "Failed: %d\n" "${#FAILED_TESTS[@]}"
 echo ""
 
 if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
-    echo "SUCCESS: Phase 3 developer scripts enhanced successfully!"
+    echo " Phase 3 developer scripts enhanced successfully!"
     echo "Option 1 implementation working perfectly across developer utilities"
     echo ""
     printf "Enhanced Scripts Count: %d\n" "$PASSED_TESTS"
@@ -87,7 +87,7 @@ if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
     PHASE1_SCRIPTS=5
     PHASE2_SCRIPTS=7
     PHASE3_SCRIPTS=$PASSED_TESTS
-    TOTAL_ENHANCED=$((PHASE1_SCRIPTS + PHASE2_SCRIPTS + PHASE3_SCRIPTS))
+    TOTAL_ENHANCED=$((PHASE1_SCRIPTS  PHASE2_SCRIPTS  PHASE3_SCRIPTS))
 
     echo "Complete Implementation Summary:"
     printf "   Phase 1 (Critical): %d scripts VERIFIED\n" "$PHASE1_SCRIPTS"

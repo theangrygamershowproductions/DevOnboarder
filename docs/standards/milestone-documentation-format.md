@@ -211,15 +211,15 @@ All GitHub references must be direct, clickable links:
 
 ```text
 milestones/
-├── YYYY-MM/                           # Year-month grouping
+── YYYY-MM/                           # Year-month grouping
 
-│   ├── YYYY-MM-DD-type-brief-name.md  # Individual milestone docs
+│   ── YYYY-MM-DD-type-brief-name.md  # Individual milestone docs
 
-│   └── ...
-├── templates/
-│   └── milestone.md                   # Template for new milestones
+│   ── ...
+── templates/
+│   ── milestone.md                   # Template for new milestones
 
-└── MILESTONE_LOG.md                   # Historical consolidated log
+── MILESTONE_LOG.md                   # Historical consolidated log
 
 ```
 
@@ -288,11 +288,11 @@ When updating existing milestone documentation:
 
 This standardization framework enables:
 
-✅ **Cross-Reference Capability**: Unique IDs allow precise milestone referencing
-✅ **Automated Tracking**: Consistent format enables dashboard and reporting automation
-✅ **Quality Assurance**: Validation ensures complete and properly formatted documentation
-✅ **Team Efficiency**: Templates and standards reduce documentation time
-✅ **Historical Traceability**: Direct GitHub links provide immediate access to implementation details
+ **Cross-Reference Capability**: Unique IDs allow precise milestone referencing
+ **Automated Tracking**: Consistent format enables dashboard and reporting automation
+ **Quality Assurance**: Validation ensures complete and properly formatted documentation
+ **Team Efficiency**: Templates and standards reduce documentation time
+ **Historical Traceability**: Direct GitHub links provide immediate access to implementation details
 
 ## Examples
 

@@ -38,35 +38,35 @@ assess_category() {
             # Check terminal output compliance
             if bash scripts/terminal_zero_tolerance_validator.sh >/dev/null 2>&1; then
                 echo "  Terminal Output Policy: COMPLIANT (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             else
                 echo "  Terminal Output Policy: NON-COMPLIANT (0 points)"
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
 
             # Check MVP readiness
             if bash scripts/mvp_readiness_check.sh >/dev/null 2>&1; then
                 echo "  MVP Readiness: READY (3 points)"
-                score=$((score + 3))
+                score=$((score  3))
             else
                 echo "  MVP Readiness: NOT READY (0 points)"
             fi
-            max_score=$((max_score + 3))
+            max_score=$((max_score  3))
 
             # Check CI pipeline health
             if command -v gh >/dev/null 2>&1; then
                 ci_success=$(gh run list --limit=10 --json conclusion | jq '[.[] | select(.conclusion=="success")] | length')
                 if [[ $ci_success -ge 8 ]]; then
                     echo "  CI Pipeline Health: HEALTHY (2 points)"
-                    score=$((score + 2))
+                    score=$((score  2))
                 else
                     echo "  CI Pipeline Health: DEGRADED (0 points)"
                 fi
             else
                 echo "  CI Pipeline Health: UNKNOWN - GitHub CLI not available (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
             ;;
 
         "RESOURCES")
@@ -74,32 +74,32 @@ assess_category() {
             memory_usage=$(free | awk 'NR==2{printf "%.1f", $3*100/$2}')
             if (( $(echo "$memory_usage < 80.0" | bc -l) )); then
                 echo "  System Memory: AVAILABLE ($memory_usage% used) (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             else
                 echo "  System Memory: CONSTRAINED ($memory_usage% used) (0 points)"
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
 
             # Check disk space
             disk_usage=$(df . | awk 'NR==2{print $5}' | sed 's/%//')
             if [[ $disk_usage -lt 80 ]]; then
                 echo "  Disk Space: AVAILABLE ($disk_usage% used) (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             else
                 echo "  Disk Space: LIMITED ($disk_usage% used) (0 points)"
             fi
-            max_score=$((max_score + 1))
+            max_score=$((max_score  1))
 
             # Check active processes
             active_tasks=$(pgrep -c "(npm|python|docker)" || echo "0")
             if [[ $active_tasks -lt 10 ]]; then
                 echo "  Process Load: LIGHT ($active_tasks processes) (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             else
                 echo "  Process Load: HEAVY ($active_tasks processes) (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
             ;;
 
         "RISK_FACTORS")
@@ -108,113 +108,113 @@ assess_category() {
                 echo "  Working Directory: UNCOMMITTED CHANGES (0 points)"
             else
                 echo "  Working Directory: CLEAN (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
 
             # Check for failing tests
             if bash scripts/run_tests.sh >/dev/null 2>&1; then
                 echo "  Test Suite: PASSING (3 points)"
-                score=$((score + 3))
+                score=$((score  3))
             else
                 echo "  Test Suite: FAILING (0 points)"
             fi
-            max_score=$((max_score + 3))
+            max_score=$((max_score  3))
 
             # Check for open dependency PRs
             if command -v gh >/dev/null 2>&1; then
                 open_deps=$(gh pr list --state=open --label=dependencies --json number | jq length)
                 if [[ $open_deps -eq 0 ]]; then
                     echo "  Dependency PRs: NONE (2 points)"
-                    score=$((score + 2))
+                    score=$((score  2))
                 elif [[ $open_deps -le 3 ]]; then
                     echo "  Dependency PRs: MANAGEABLE ($open_deps open) (1 point)"
-                    score=$((score + 1))
+                    score=$((score  1))
                 else
                     echo "  Dependency PRs: HIGH VOLUME ($open_deps open) (0 points)"
                 fi
             else
                 echo "  Dependency PRs: UNKNOWN (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
             ;;
 
         "INTEGRATION")
             # Check virtual environment
             if [[ -f ".venv/bin/python" ]] && [[ -f ".venv/bin/pip" ]]; then
                 echo "  Virtual Environment: READY (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             else
                 echo "  Virtual Environment: NOT READY (0 points)"
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
 
             # Check service health
             services_healthy=0
             total_services=3
 
             if curl -sf http://localhost:8001/health >/dev/null 2>&1; then
-                services_healthy=$((services_healthy + 1))
+                services_healthy=$((services_healthy  1))
             fi
             if curl -sf http://localhost:8002/health >/dev/null 2>&1; then
-                services_healthy=$((services_healthy + 1))
+                services_healthy=$((services_healthy  1))
             fi
             if curl -sf http://localhost:8081 >/dev/null 2>&1; then
-                services_healthy=$((services_healthy + 1))
+                services_healthy=$((services_healthy  1))
             fi
 
             if [[ $services_healthy -eq $total_services ]]; then
                 echo "  Service Health: ALL HEALTHY ($services_healthy/$total_services) (3 points)"
-                score=$((score + 3))
+                score=$((score  3))
             elif [[ $services_healthy -ge 2 ]]; then
                 echo "  Service Health: MOSTLY HEALTHY ($services_healthy/$total_services) (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             else
                 echo "  Service Health: DEGRADED ($services_healthy/$total_services) (0 points)"
             fi
-            max_score=$((max_score + 3))
+            max_score=$((max_score  3))
             ;;
 
         "TIMING")
             # Check current phase
-            current_week=$(date +%U)
+            current_week=$(date %U)
             mvp_start_week=31  # Approximate MVP start (week 31 of 2025)
             weeks_into_mvp=$((current_week - mvp_start_week))
 
             if [[ $weeks_into_mvp -le 2 ]]; then
                 echo "  MVP Phase: FOUNDATION (Week $weeks_into_mvp) (3 points)"
-                score=$((score + 3))
+                score=$((score  3))
             elif [[ $weeks_into_mvp -le 4 ]]; then
                 echo "  MVP Phase: FEATURE COMPLETION (Week $weeks_into_mvp) (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             elif [[ $weeks_into_mvp -le 6 ]]; then
                 echo "  MVP Phase: FINALIZATION (Week $weeks_into_mvp) (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             else
                 echo "  MVP Phase: POST-MVP (Week $weeks_into_mvp) (3 points)"
-                score=$((score + 3))
+                score=$((score  3))
             fi
-            max_score=$((max_score + 3))
+            max_score=$((max_score  3))
 
             # Check time of day (avoid peak hours)
-            current_hour=$(date +%H)
+            current_hour=$(date %H)
             if [[ $current_hour -ge 9 ]] && [[ $current_hour -le 17 ]]; then
                 echo "  Time of Day: BUSINESS HOURS ($current_hour:00) (1 point)"
-                score=$((score + 1))
+                score=$((score  1))
             else
                 echo "  Time of Day: OFF HOURS ($current_hour:00) (2 points)"
-                score=$((score + 2))
+                score=$((score  2))
             fi
-            max_score=$((max_score + 2))
+            max_score=$((max_score  2))
             ;;
     esac
 
     echo "Category Score: $score/$max_score"
     echo
 
-    TOTAL_SCORE=$((TOTAL_SCORE + score))
-    MAX_SCORE=$((MAX_SCORE + max_score))
+    TOTAL_SCORE=$((TOTAL_SCORE  score))
+    MAX_SCORE=$((MAX_SCORE  max_score))
 }
 
 # Run assessments

@@ -10,7 +10,7 @@ export ENVIRONMENT=dev
 
 # Check if .env.dev exists
 if [[ ! -f ".env.dev" ]]; then
-    echo "❌ Development environment file not found: .env.dev"
+    echo " Development environment file not found: .env.dev"
     echo "   Run: bash ../scripts/setup_discord_env.sh dev"
     exit 1
 fi
@@ -30,5 +30,5 @@ if [[ ! -d "dist" ]] || [[ "src/" -nt "dist/" ]]; then
     npm run build
 fi
 
-echo "🚀 Starting bot in development mode..."
+echo " Starting bot in development mode..."
 npm start

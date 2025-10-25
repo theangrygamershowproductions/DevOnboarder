@@ -173,7 +173,7 @@ from scripts.token_loader import require_tokens
 
 success = require_tokens(['AAR_TOKEN', 'DISCORD_BOT_TOKEN'], 'My Service')
 
-# Output: ❌ My Service: CANNOT START - Missing required tokens
+# Output:  My Service: CANNOT START - Missing required tokens
 
 ```
 
@@ -192,10 +192,10 @@ success = require_tokens(['AAR_TOKEN', 'DISCORD_BOT_TOKEN'], 'My Service')
 ### Sample Output
 
 ```plaintext
-⚠️  Token file not found: /path/to/.tokens
-💡 Creating template: .tokens
-✅ Created template token file: /path/to/.tokens
-📝 Please fill in your actual token values!
+  Token file not found: /path/to/.tokens
+ Creating template: .tokens
+ Created template token file: /path/to/.tokens
+ Please fill in your actual token values!
 
 ```
 
@@ -356,7 +356,7 @@ APP_ENV=development python scripts/token_loader.py load
 
 python scripts/token_loader.py validate AAR_TOKEN
 
-# Should show ❌ for placeholder values
+# Should show  for placeholder values
 
 ```
 

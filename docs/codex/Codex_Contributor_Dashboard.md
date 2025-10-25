@@ -40,21 +40,21 @@ It also tracks onboarding readiness for Codex contributors.
 | Module           | Path                    | Description                                                     | Status         |
 | ---------------- | ----------------------- | --------------------------------------------------------------- | -------------- |
 
-| **auth_service** | `services/auth_service` | Implement Discord OAuth2 login and session issuance.            | ✅ Complete    |
+| **auth_service** | `services/auth_service` | Implement Discord OAuth2 login and session issuance.            |  Complete    |
 
-| **xp_api**       | `services/xp_api`       | Fix XP endpoint logic and add contribution POST route.          | ✅ Complete    |
+| **xp_api**       | `services/xp_api`       | Fix XP endpoint logic and add contribution POST route.          |  Complete    |
 
-| **discord_bot**  | `bot`                   | Modularize commands and integrate token-based API calls.        | ✅ Complete    |
+| **discord_bot**  | `bot`                   | Modularize commands and integrate token-based API calls.        |  Complete    |
 
-| **frontend**     | `frontend`              | Scaffold OAuth callback, onboarding UI, and XP dashboard.       | 🚧 In Progress |
+| **frontend**     | `frontend`              | Scaffold OAuth callback, onboarding UI, and XP dashboard.       | WORK: In Progress |
 
-| **infra_docs**   | `infra`                 | Environment templates, Docker Compose, CI/CD scripts.           | ✅ Complete    |
+| **infra_docs**   | `infra`                 | Environment templates, Docker Compose, CI/CD scripts.           |  Complete    |
 
-| **codex_docs**   | `codex`                 | Codex plan, tasks, and automation metadata files.               | ✅ Complete    |
+| **codex_docs**   | `codex`                 | Codex plan, tasks, and automation metadata files.               |  Complete    |
 
-| **project_docs** | `docs`                  | General docs, merge guides, changelog, and onboarding markdown. | ✅ Complete    |
+| **project_docs** | `docs`                  | General docs, merge guides, changelog, and onboarding markdown. |  Complete    |
 
-## ✅ Summary
+##  Summary
 
 - Use this table to assign, track, and verify Codex contributor progress across all modules.
 

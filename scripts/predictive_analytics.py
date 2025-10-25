@@ -76,10 +76,9 @@ class PredictiveAnalytics:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                "❌ Virtual environment not detected. "
-                "DevOnboarder Phase 5 requires virtual environment isolation."
+                " Virtual environment not detected. " + "DevOnboarder Phase 5 requires virtual environment isolation."
             )
-        print(f"✅ Predictive Analytics virtual environment: {self.venv_path}")
+        print(f" Predictive Analytics virtual environment: {self.venv_path}")
 
     def setup_logging(self) -> None:
         """Configure logging for analytics events."""
@@ -152,9 +151,9 @@ class PredictiveAnalytics:
             # Higher failure rates during peak hours and after deployments
             failure_prob = 0.1
             if 9 <= hour <= 17:  # Business hours
-                failure_prob += 0.05
+                failure_prob = 0.05
             if day_of_week in [0, 6]:  # Monday/Sunday deployments
-                failure_prob += 0.03
+                failure_prob = 0.03
 
             cpu_usage = np.random.normal(45, 15)
             memory_usage = np.random.normal(60, 20)
@@ -162,7 +161,7 @@ class PredictiveAnalytics:
 
             # Correlate metrics with failure probability
             if cpu_usage > 70 or memory_usage > 80 or response_time > 2:
-                failure_prob += 0.2
+                failure_prob = 0.2
 
             record = {
                 "timestamp": base_time.isoformat(),
@@ -193,7 +192,7 @@ class PredictiveAnalytics:
                 df[col] = 0
 
         # Feature engineering
-        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"] + 1)
+        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"]  1)
         df["response_error_ratio"] = df["response_time"] * df["error_rate"]
         df["load_factor"] = df["request_count"] / 1000
 
@@ -300,7 +299,7 @@ class PredictiveAnalytics:
 
         # Add engineered features
         features["cpu_memory_ratio"] = features["cpu_usage"] / (
-            features["memory_usage"] + 1
+            features["memory_usage"]  1
         )
         features["response_error_ratio"] = (
             features["response_time"] * features["error_rate"]
@@ -310,7 +309,7 @@ class PredictiveAnalytics:
         feature_vector = [
             features[col]
             for col in self.feature_columns
-            + ["cpu_memory_ratio", "response_error_ratio", "load_factor"]
+             ["cpu_memory_ratio", "response_error_ratio", "load_factor"]
         ]
         feature_vector = np.array(feature_vector).reshape(1, -1)
         feature_vector = self.scaler.transform(feature_vector)
@@ -319,7 +318,7 @@ class PredictiveAnalytics:
         prediction_prob = self.failure_predictor.predict_proba(feature_vector)[0][
             1
         ]  # Feature importance
-        feature_names = self.feature_columns + [
+        feature_names = self.feature_columns  [
             "cpu_memory_ratio",
             "response_error_ratio",
             "load_factor",
@@ -375,22 +374,22 @@ class PredictiveAnalytics:
     def generate_failure_recommendation(self, risk_score: float, metrics: Dict) -> str:
         """Generate actionable recommendation based on failure risk."""
         if risk_score < 0.2:
-            return "✅ System healthy - continue monitoring"
+            return " System healthy - continue monitoring"
         elif risk_score < 0.5:
-            return "⚠️ Elevated risk - consider scaling resources"
+            return " Elevated risk - consider scaling resources"
         elif risk_score < 0.8:
             return "🚨 High risk - immediate attention required"
         else:
-            return "❌ Critical risk - activate incident response"
+            return " Critical risk - activate incident response"
 
     def generate_performance_recommendation(self, score: float) -> str:
         """Generate performance optimization recommendation."""
         if score >= 90:
-            return "✅ Excellent performance - maintain current configuration"
+            return " Excellent performance - maintain current configuration"
         elif score >= 80:
             return "👍 Good performance - minor optimizations available"
         elif score >= 70:
-            return "⚠️ Fair performance - consider resource optimization"
+            return " Fair performance - consider resource optimization"
         else:
             return "🚨 Poor performance - immediate optimization required"
 
@@ -420,7 +419,7 @@ class PredictiveAnalytics:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        self.logger.info(f"📊 Prediction report saved: {output_path}")
+        self.logger.info(f" Prediction report saved: {output_path}")
 
 
 # CLI Interface

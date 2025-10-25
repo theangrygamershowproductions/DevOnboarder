@@ -12,7 +12,7 @@ capture_qc_milestone_metrics() {
 
     local duration=$((end_time - start_time))
     local milestone_log
-    milestone_log="logs/milestone_metrics_$(date +%Y%m%d).log"
+    milestone_log="logs/milestone_metrics_$(date %Y%m%d).log"
 
     # Create milestone metrics entry
     {
@@ -20,7 +20,7 @@ capture_qc_milestone_metrics() {
         echo "Duration: ${duration}s"
         echo "Quality Score: $quality_score"
         echo "Success Rate: $success_rate"
-        echo "Automation Level: 95%+ (8/8 metrics automated)"
+        echo "Automation Level: 95% (8/8 metrics automated)"
         echo "Tools Used: qc_pre_push.sh comprehensive validation"
         echo "Competitive Edge: 10-20x faster than manual quality checks"
         echo ""
@@ -71,7 +71,7 @@ suggest_milestone_generation() {
 
     if [[ $commit_count -gt 2 ]] || [[ $branch_name =~ (feat|fix|enhance|ci) ]]; then
         echo ""
-        echo "💡 Milestone Suggestion:"
+        echo " Milestone Suggestion:"
         echo "This branch has $commit_count commits and appears to be significant work."
         echo "Consider generating a milestone to capture performance improvements:"
         echo ""

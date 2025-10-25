@@ -11,7 +11,7 @@ source scripts/project_root_wrapper.sh
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/cors_validation_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/cors_validation_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting CORS Configuration Validation"
@@ -22,17 +22,17 @@ VALIDATION_WARNINGS=0
 
 # Helper functions
 log_error() {
-    echo "ERROR: $1"
-    VALIDATION_ERRORS=$((VALIDATION_ERRORS + 1))
+    echo " $1"
+    VALIDATION_ERRORS=$((VALIDATION_ERRORS  1))
 }
 
 log_warning() {
-    echo "WARNING: $1"
-    VALIDATION_WARNINGS=$((VALIDATION_WARNINGS + 1))
+    echo " $1"
+    VALIDATION_WARNINGS=$((VALIDATION_WARNINGS  1))
 }
 
 log_success() {
-    echo "SUCCESS: $1"
+    echo " $1"
 }
 
 # Validate environment CORS settings
@@ -72,7 +72,7 @@ validate_env_cors() {
             log_success "Domain $domain found in CORS origins"
         else
             log_error "Domain $domain missing from CORS origins"
-            missing_domains+=("$domain")
+            missing_domains=("$domain")
         fi
     done
 
@@ -266,7 +266,7 @@ generate_validation_report() {
 
     if [ $VALIDATION_ERRORS -eq 0 ]; then
         if [ $VALIDATION_WARNINGS -eq 0 ]; then
-            echo "SUCCESS: CORS configuration is valid"
+            echo " CORS configuration is valid"
             echo "Ready for cross-origin testing"
             return 0
         else

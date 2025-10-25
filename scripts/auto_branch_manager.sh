@@ -7,7 +7,7 @@ set -euo pipefail
 # DevOnboarder centralized logging pattern
 LOG_DIR="$(dirname "$0")/../logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/branch_management_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/branch_management_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Virtual environment activation pattern
@@ -19,7 +19,7 @@ echo "Project Root: $PROJECT_ROOT"
 
 # Check for virtual environment
 if [[ ! -d "$PROJECT_ROOT/.venv" ]]; then
-    echo "ERROR: Virtual environment not found at $PROJECT_ROOT/.venv"
+    echo " Virtual environment not found at $PROJECT_ROOT/.venv"
     echo "Run: python -m venv .venv && source .venv/bin/activate && pip install -e .[test]"
     exit 1
 fi
@@ -104,9 +104,9 @@ detect_work_type() {
 
             # Increase confidence for exact matches
             if [[ "$description_lower" == "$pattern" ]]; then
-                confidence=$((confidence + 10))
+                confidence=$((confidence  10))
             else
-                confidence=$((confidence + 5))
+                confidence=$((confidence  5))
             fi
 
             if [[ -z "$detected_type" ]] || [[ "$confidence" -gt 5 ]]; then

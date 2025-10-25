@@ -58,7 +58,7 @@ pre-commit install
 
 **CRITICAL**: ALL logging must use the centralized `logs/` directory. This is enforced by CI/CD:
 
-- Scripts: `mkdir -p logs && exec > >(tee -a "logs/script_$(date +%Y%m%d_%H%M%S).log") 2>&1`
+- Scripts: `mkdir -p logs && exec > >(tee -a "logs/script_$(date %Y%m%d_%H%M%S).log") 2>&1`
 
 - Workflows: `command 2>&1 | tee logs/step-name.log`
 

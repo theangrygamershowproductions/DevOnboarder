@@ -1,0 +1,124 @@
+#!/bin/bash
+# DevOnboarder CI Health Dashboard - Shell Integration Wrapper
+#
+# This script provides a convenient CLI entry point for the CI Health Dashboard
+# and integrates with the existing DevOnboarder CLI shortcuts system.
+#
+# Usage:
+#   devonboarder-ci-health [options]
+#   gh-ci-health (alias)
+#
+# Architecture: docs/CI_DASHBOARD_INTEGRATION_ARCHITECTURE.md
+
+set -euo pipefail
+
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Check if we're in a DevOnboarder repository
+if [[ ! -f "$PROJECT_ROOT/Makefile" || ! -d "$PROJECT_ROOT/scripts" ]]; then
+    echo "Error: This script must be run from a DevOnboarder repository"
+    exit 1
+fi
+
+# Load DevOnboarder Token Architecture v2.1
+echo "🔑 Loading DevOnboarder Token Architecture v2.1..."
+# shellcheck source=scripts/enhanced_token_loader.sh
+if [[ -f "$PROJECT_ROOT/scripts/enhanced_token_loader.sh" ]]; then
+    source "$PROJECT_ROOT/scripts/enhanced_token_loader.sh"
+elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
+    # Fallback to legacy token loader
+    source "$PROJECT_ROOT/scripts/load_token_environment.sh"
+else
+    echo "⚠️  Warning: Token Architecture scripts not found. Dashboard may have limited functionality."
+fi
+
+# Function to show usage help
+show_help() {
+    cat << EOF
+DevOnboarder CI Health Dashboard
+
+USAGE:
+    devonboarder-ci-health [OPTIONS]
+
+OPTIONS:
+    -h, --help          Show this help message
+    -b, --branch BRANCH Filter workflows by branch
+    -l, --live          Live monitoring mode (updates every 30 seconds)
+    -p, --predict       Run failure prediction only
+    -j, --json          Output results in JSON format
+    -v, --verbose       Verbose logging output
+    --diagnose-pr PR    Integrated PR diagnosis: analyze comments + CI failures
+
+EXAMPLES:
+    devonboarder-ci-health                    # Full dashboard view
+    devonboarder-ci-health --branch main      # Branch-specific analysis
+    devonboarder-ci-health --live             # Live monitoring mode
+    devonboarder-ci-health --predict          # Failure prediction only
+    devonboarder-ci-health --json             # JSON output for automation
+    devonboarder-ci-health --diagnose-pr 1397 # Analyze PR comments + CI status
+
+INTEGRATION:
+    This command integrates with DevOnboarder's Token Architecture v2.1
+    and existing automation systems. For CLI shortcuts, see:
+    docs/cli-shortcuts.md
+
+REQUIREMENTS:
+    - GitHub CLI (gh) authenticated
+    - DevOnboarder Token Architecture v2.1 configured
+    - Python 3.12+ with project dependencies
+
+EOF
+}
+
+# Check for help flags first
+if [[ $# -gt 0 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    show_help
+    exit 0
+fi
+
+# Verify GitHub CLI is available
+if ! command -v gh &> /dev/null; then
+    echo "Error: GitHub CLI (gh) is required but not installed"
+    echo "Please install GitHub CLI and authenticate before using this command"
+    exit 1
+fi
+
+# Check if GitHub CLI is authenticated
+if ! gh auth status &> /dev/null; then
+    echo "Error: GitHub CLI is not authenticated"
+    echo "Please run 'gh auth login' to authenticate"
+    exit 1
+fi
+
+# Activate virtual environment if available and not already active
+if [[ -d "$PROJECT_ROOT/.venv" && -z "${VIRTUAL_ENV:-}" ]]; then
+    echo "Activating DevOnboarder virtual environment..."
+    source "$PROJECT_ROOT/.venv/bin/activate"
+fi
+
+# Check if the main CI health script exists
+CI_HEALTH_SCRIPT="$PROJECT_ROOT/scripts/devonboarder_ci_health.py"
+if [[ ! -f "$CI_HEALTH_SCRIPT" ]]; then
+    echo "Error: CI Health Dashboard script not found at $CI_HEALTH_SCRIPT"
+    exit 1
+fi
+
+# Check if script is executable
+if [[ ! -x "$CI_HEALTH_SCRIPT" ]]; then
+    echo "Making CI Health Dashboard script executable..."
+    chmod +x "$CI_HEALTH_SCRIPT"
+fi
+
+# Change to project root for proper relative paths
+cd "$PROJECT_ROOT"
+
+# Execute the main CI health dashboard with all arguments
+echo "Starting DevOnboarder CI Health Dashboard..."
+echo "Project: $PROJECT_ROOT"
+echo "Command: $CI_HEALTH_SCRIPT $*"
+echo
+
+# Execute with all arguments passed through
+exec python3 "$CI_HEALTH_SCRIPT" "$@"

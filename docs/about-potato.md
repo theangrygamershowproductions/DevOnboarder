@@ -50,7 +50,7 @@ every phase of the workflow: immortalized in `.gitignore`, `.dockerignore`,
   never accidentally removed and continues to travel with every branch, PR, and
   release.
 
-## 🔐 The Potato Policy: Technical Implementation
+##  The Potato Policy: Technical Implementation
 
 Beyond the legend lies a serious security mechanism. The **Potato Policy** is DevOnboarder's automated protection system that prevents sensitive configuration from being accidentally exposed.
 
@@ -70,7 +70,7 @@ Beyond the legend lies a serious security mechanism. The **Potato Policy** is De
 
 The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a **repository canary**:
 
-1. **📁 File Protection**: Automatically ensures `Potato.md` is listed in:
+1. ** File Protection**: Automatically ensures `Potato.md` is listed in:
 
     - `.gitignore` (prevents Git commits)
 
@@ -78,7 +78,7 @@ The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a **reposito
 
     - `.codespell-ignore` (prevents documentation scanning)
 
-2. **🔍 CI Monitoring**: Triggers on any changes to:
+2. ** CI Monitoring**: Triggers on any changes to:
 
     - `Potato.md` itself
 
@@ -86,7 +86,7 @@ The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a **reposito
 
     - Pushes to main/master branches
 
-3. **⚡ Auto-Correction**: The `potato_policy_enforce.sh` script:
+3. **FAST: Auto-Correction**: The `potato_policy_enforce.sh` script:
 
     - Scans all ignore files for required entries
 
@@ -96,19 +96,19 @@ The Potato Policy enforcement (`potato-policy-focused.yml`) acts as a **reposito
 
 4. **🚨 Enforcement**:
 
-- ✅ **Pass**: If all files are compliant
+-  **Pass**: If all files are compliant
 
-- ❌ **Fail**: If violations detected, forcing manual review
+-  **Fail**: If violations detected, forcing manual review
 
-- 📊 **Status**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
+-  **Status**: [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 
 ### Why This Matters
 
 - **🛡️ Security**: Prevents accidental exposure of sensitive development instructions
 
-- **🔄 Automation**: No manual effort required from developers
+- **SYNC: Automation**: No manual effort required from developers
 
-- **📋 Compliance**: Consistent protection across all deployment environments
+- ** Compliance**: Consistent protection across all deployment environments
 
 - **🚨 Early Detection**: Catches violations before they reach production
 

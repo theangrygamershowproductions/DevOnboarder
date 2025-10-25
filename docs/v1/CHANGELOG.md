@@ -25,7 +25,7 @@ All notable changes to this project will be recorded in this file.
 
 ## [Unreleased]
 
-<!-- markdownlint-disable MD030 -->
+<!-- markdownlint-disable MD030 -
 
 - docs(node): update setup and troubleshooting guides for Node.js 22
 
@@ -643,7 +643,7 @@ compose.codex.yml`.
 
 - Updated `docker-compose.codex.yml` with the Codex runner image and documented manual invocation under "Codex Runs".
 
-- Clarified README instructions to stop the server with Ctrl+C.
+- Clarified README instructions to stop the server with CtrlC.
 
 - Updated README quickstart to run `npm run coverage --prefix frontend`.
 
@@ -808,7 +808,7 @@ dev`.
 
   moved endpoints to an `APIRouter`.
 
-- Clarified where Codex posts QA results, added a "What happens next?" section, and noted that "⚠️ Docs: Lint skipped"
+- Clarified where Codex posts QA results, added a "What happens next?" section, and noted that " Docs: Lint skipped"
 
   doesn't block merges.
 
@@ -1325,7 +1325,7 @@ dev`.
 - Documented the new Vale ignore patterns and Codespell hook in
 
   `docs/doc-quality-onboarding.md`, including how to disable Vale with
-  `<!-- vale off -->` / `<!-- vale on -->` and a reference to `.pre-commit-config.yaml`.
+  `<!-- vale off -` / `<!-- vale on -` and a reference to `.pre-commit-config.yaml`.
 
 - Documented how to add words to `.codespell-ignore`.
 
@@ -1524,7 +1524,7 @@ dev`.
 
 - Added tests for `scripts/show_network_exceptions.sh` validating the domain list matches the documentation.
 
-- Required Node.js 20+ via the `engines` field in all package.json files.
+- Required Node.js 20 via the `engines` field in all package.json files.
 
 - Documented the Node.js 20 requirement in the bot and frontend READMEs and referenced `.nvmrc`.
 

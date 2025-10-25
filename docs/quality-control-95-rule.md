@@ -29,21 +29,21 @@ All code changes MUST achieve a minimum 95% quality score before pushing to any 
 
 ### Mandatory Checks (Must Pass)
 
-1. **✅ YAML Linting** - All YAML files pass yamllint
+1. ** YAML Linting** - All YAML files pass yamllint
 
-2. **✅ Python Linting** - Code passes `python -m ruff check .`
+2. ** Python Linting** - Code passes `python -m ruff check .`
 
-3. **✅ Python Formatting** - Code passes `python -m black --check .`
+3. ** Python Formatting** - Code passes `python -m black --check .`
 
-4. **✅ Type Checking** - Code passes `python -m mypy src/devonboarder`
+4. ** Type Checking** - Code passes `python -m mypy src/devonboarder`
 
-5. **✅ Test Coverage** - Minimum 95% coverage: `python -m pytest --cov=src --cov-fail-under=95`
+5. ** Test Coverage** - Minimum 95% coverage: `python -m pytest --cov=src --cov-fail-under=95`
 
-6. **✅ Documentation** - Passes Vale documentation checks
+6. ** Documentation** - Passes Vale documentation checks
 
-7. **✅ Commit Messages** - Follow conventional commit format
+7. ** Commit Messages** - Follow conventional commit format
 
-8. **✅ Security Scan** - No high-severity issues: `python -m bandit -r src -ll`
+8. ** Security Scan** - No high-severity issues: `python -m bandit -r src -ll`
 
 ### Virtual Environment Requirements
 

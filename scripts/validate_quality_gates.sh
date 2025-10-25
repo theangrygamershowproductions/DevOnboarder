@@ -10,7 +10,7 @@ set -euo pipefail
 
 # Centralized logging compliance
 mkdir -p logs
-HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
+HEALTH_LOG="logs/quality_gate_health_$(date %Y%m%d_%H%M%S).log"
 
 {
     echo "DevOnboarder Quality Gate Health Check"
@@ -31,7 +31,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
         echo "Incident requires immediate investigation and documentation"
         exit 1
     else
-        echo "SUCCESS: core.hooksPath not set (hooks enabled)"
+        echo " core.hooksPath not set (hooks enabled)"
     fi
 
     # 2. Verify pre-commit is installed
@@ -42,7 +42,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
         # In CI environments, pre-commit hooks may not be installed
         # but quality gates are still enforced through workflow steps
         if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
-            echo "INFO: Pre-commit hooks not installed in CI environment"
+            echo " Pre-commit hooks not installed in CI environment"
             echo "Quality gates enforced through GitHub Actions workflows"
         else
             echo "CRITICAL FAILURE: No pre-commit hook found at .git/hooks/pre-commit"
@@ -51,7 +51,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
             exit 1
         fi
     else
-        echo "SUCCESS: Pre-commit hook file exists"
+        echo " Pre-commit hook file exists"
         echo "Hook details: $(ls -la .git/hooks/pre-commit)"
     fi
 
@@ -61,7 +61,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "---------------------------------"
     if ! command -v pre-commit >/dev/null 2>&1; then
         if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
-            echo "INFO: pre-commit command not found in CI (expected)"
+            echo " pre-commit command not found in CI (expected)"
             echo "Quality gates enforced through individual workflow steps"
         else
             echo "CRITICAL FAILURE: pre-commit command not found"
@@ -69,7 +69,7 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
             exit 1
         fi
     else
-        echo "SUCCESS: pre-commit executable found at: $(which pre-commit)"
+        echo " pre-commit executable found at: $(which pre-commit)"
         echo "Version: $(pre-commit --version)"
     fi
 
@@ -77,12 +77,12 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo ""
     echo "4. Pre-commit Functionality Test"
     echo "---------------------------------"
-    TEST_FILE="test_quality_gate_$(date +%s).md"
+    TEST_FILE="test_quality_gate_$(date %s).md"
 
     # Create test file with known violation (trailing space)
     echo "# Test file with trailing space " > "$TEST_FILE"
     git add "$TEST_FILE" 2>/dev/null || {
-        echo "WARNING: Could not stage test file for validation"
+        echo " Could not stage test file for validation"
         rm -f "$TEST_FILE"
     }
 
@@ -95,12 +95,12 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
             rm -f "$TEST_FILE"
             exit 1
         else
-            echo "SUCCESS: Pre-commit correctly caught test violation"
+            echo " Pre-commit correctly caught test violation"
             git reset HEAD "$TEST_FILE" 2>/dev/null || true
             rm -f "$TEST_FILE"
         fi
     else
-        echo "INFO: Skipping functional test (could not stage test file)"
+        echo " Skipping functional test (could not stage test file)"
     fi
 
     # 5. Verify virtual environment integration
@@ -108,11 +108,11 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "5. Virtual Environment Integration"
     echo "----------------------------------"
     if [[ -z "${VIRTUAL_ENV:-}" ]]; then
-        echo "WARNING: Virtual environment not activated"
+        echo " Virtual environment not activated"
         echo "Quality gates may not have access to required tools"
         echo "Recommended action: source .venv/bin/activate"
     else
-        echo "SUCCESS: Virtual environment active: $VIRTUAL_ENV"
+        echo " Virtual environment active: $VIRTUAL_ENV"
         echo "Python executable: $(which python)"
     fi
 
@@ -122,14 +122,14 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "------------------------------"
     BYPASS_COMMITS=$(git log --oneline --since="7 days ago" --grep="--no-verify" --grep="skip.*hook" --grep="bypass.*hook" 2>/dev/null || echo "")
     if [[ -n "$BYPASS_COMMITS" ]]; then
-        echo "WARNING: Recent commits may have bypassed quality gates:"
+        echo " Recent commits may have bypassed quality gates:"
         # POTATO: Documentation - This grep pattern detects '--no-verify' bypass attempts; not an actual bypass approval.
         while IFS= read -r line; do
             echo "   $line"
         done <<< "$BYPASS_COMMITS"
         echo "These commits require review for compliance"
     else
-        echo "SUCCESS: No recent quality gate bypass detected"
+        echo " No recent quality gate bypass detected"
     fi
 
     # 7. Check for common quality gate files
@@ -139,9 +139,9 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     REQUIRED_FILES=(".pre-commit-config.yaml" "pyproject.toml" ".markdownlint.json")
     for file in "${REQUIRED_FILES[@]}"; do
         if [[ -f "$file" ]]; then
-            echo "SUCCESS: $file exists"
+            echo " $file exists"
         else
-            echo "WARNING: $file missing (quality configuration may be incomplete)"
+            echo " $file missing (quality configuration may be incomplete)"
         fi
     done
 
@@ -150,16 +150,16 @@ HEALTH_LOG="logs/quality_gate_health_$(date +%Y%m%d_%H%M%S).log"
     echo "8. Safe Commit Script Validation"
     echo "---------------------------------"
     if [[ -f "scripts/safe_commit.sh" && -x "scripts/safe_commit.sh" ]]; then
-        echo "SUCCESS: safe_commit.sh exists and is executable"
+        echo " safe_commit.sh exists and is executable"
     else
-        echo "WARNING: scripts/safe_commit.sh missing or not executable"
+        echo " scripts/safe_commit.sh missing or not executable"
         echo "Developers may bypass quality gates with direct git commit"
     fi
 
     echo ""
     echo "HEALTH CHECK SUMMARY"
     echo "==================="
-    echo "SUCCESS: Quality gates are FUNCTIONAL and ENFORCED"
+    echo " Quality gates are FUNCTIONAL and ENFORCED"
     echo "Validation completed without critical failures"
     echo "Health log: $HEALTH_LOG"
     echo "Completed: $(date -Iseconds)"

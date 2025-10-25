@@ -166,10 +166,10 @@ markdownlint docs/
 
 ### Common Issues
 
-- GPG signing failures → See GPG troubleshooting guide
-- Permission errors → Verify token hierarchy in workflow
-- Signature verification → Check public key upload to GitHub
-- Workflow not triggering → Review trigger conditions and paths
+- GPG signing failures  See GPG troubleshooting guide
+- Permission errors  Verify token hierarchy in workflow
+- Signature verification  Check public key upload to GitHub
+- Workflow not triggering  Review trigger conditions and paths
 
 ### Getting Help
 

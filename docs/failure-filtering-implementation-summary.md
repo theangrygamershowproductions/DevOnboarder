@@ -40,7 +40,7 @@ We successfully added `"conclusion": "FAILURE"` filtering to multiple CI analysi
 # New code added
 
 if failed_runs_detailed=$(gh run list --limit 10 --json conclusion,status,workflowName,createdAt,url --conclusion FAILURE 2>/dev/null); then
-    echo "✅ Retrieved detailed failed run data"
+    echo " Retrieved detailed failed run data"
 fi
 
 ```
@@ -74,7 +74,7 @@ run_id=$(gh run list -w CI --json databaseId,headSha,conclusion -L 10 --conclusi
 
 # New method added
 
-def get_failed_workflow_runs(self) -> Dict[str, Any]:
+def get_failed_workflow_runs(self)  Dict[str, Any]:
     cmd = [
         "gh", "run", "list", "--limit", "10",
         "--json", "conclusion,status,workflowName,createdAt,url,displayTitle",
@@ -168,9 +168,9 @@ gh run list --conclusion FAILURE --limit <N> --json <fields>
 if failed_runs=$(gh run list --conclusion FAILURE 2>/dev/null); then
     # Process failed runs data
 
-    echo "✅ Retrieved failed run data"
+    echo " Retrieved failed run data"
 else
-    echo "⚠️  GitHub CLI authentication needed"
+    echo "  GitHub CLI authentication needed"
 fi
 
 # Analysis with jq to group and categorize failures

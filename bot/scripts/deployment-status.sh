@@ -2,7 +2,7 @@
 # Discord Bot Deployment Status Check
 set -euo pipefail
 
-echo "🚀 Discord Bot Deployment Status Check"
+echo " Discord Bot Deployment Status Check"
 echo "======================================"
 echo ""
 
@@ -15,47 +15,47 @@ NC='\033[0m' # No Color
 
 # Check if we're in the bot directory
 if [[ ! -f "package.json" ]]; then
-    echo -e "${RED}❌ Not in bot directory. Please run from /home/potato/DevOnboarder/bot${NC}"
+    echo -e "${RED} Not in bot directory. Please run from /home/potato/DevOnboarder/bot${NC}"
     exit 1
 fi
 
-echo -e "${BLUE}📋 Pre-Flight Checks${NC}"
+echo -e "${BLUE} Pre-Flight Checks${NC}"
 echo "===================="
 
 # Check Node.js
 if command -v node &> /dev/null; then
     NODE_VERSION=$(node --version)
-    echo -e "✅ Node.js: $NODE_VERSION"
+    echo -e " Node.js: $NODE_VERSION"
 else
-    echo -e "${RED}❌ Node.js not found${NC}"
+    echo -e "${RED} Node.js not found${NC}"
 fi
 
 # Check npm
 if command -v npm &> /dev/null; then
     NPM_VERSION=$(npm --version)
-    echo -e "✅ npm: $NPM_VERSION"
+    echo -e " npm: $NPM_VERSION"
 else
-    echo -e "${RED}❌ npm not found${NC}"
+    echo -e "${RED} npm not found${NC}"
 fi
 
 # Check environment file
 if [[ -f ".env" ]]; then
-    echo -e "✅ Environment file: .env exists"
+    echo -e " Environment file: .env exists"
 
     # Check critical environment variables
     if grep -q "DISCORD_BOT_TOKEN=" .env; then
-        echo -e "✅ Bot token: Configured"
+        echo -e " Bot token: Configured"
     else
-        echo -e "${RED}❌ Bot token: Missing${NC}"
+        echo -e "${RED} Bot token: Missing${NC}"
     fi
 
     if grep -q "DISCORD_CLIENT_ID=" .env; then
-        echo -e "✅ Client ID: Configured"
+        echo -e " Client ID: Configured"
     else
-        echo -e "${RED}❌ Client ID: Missing${NC}"
+        echo -e "${RED} Client ID: Missing${NC}"
     fi
 else
-    echo -e "${RED}❌ Environment file: .env not found${NC}"
+    echo -e "${RED} Environment file: .env not found${NC}"
 fi
 
 # Check TypeScript compilation
@@ -64,21 +64,21 @@ echo -e "${BLUE}🔨 Build Status${NC}"
 echo "==============="
 
 if [[ -d "dist" ]]; then
-    echo -e "✅ Build directory exists"
+    echo -e " Build directory exists"
     if [[ -f "dist/main.js" ]]; then
-        echo -e "✅ Main build file exists"
+        echo -e " Main build file exists"
     else
-        echo -e "${YELLOW}⚠️  Main build file missing - running build...${NC}"
+        echo -e "${YELLOW}  Main build file missing - running build...${NC}"
         npm run build
     fi
 else
-    echo -e "${YELLOW}⚠️  Build directory missing - running build...${NC}"
+    echo -e "${YELLOW}  Build directory missing - running build...${NC}"
     npm run build
 fi
 
 # Test guild connections
 echo ""
-echo -e "${BLUE}🔗 Discord Connection Test${NC}"
+echo -e "${BLUE}LINK: Discord Connection Test${NC}"
 echo "=========================="
 
 echo "Testing bot connection to Discord servers..."
@@ -87,11 +87,11 @@ echo ""
 # Run the guild connection test
 if timeout 30 node scripts/test-guild-connections.js; then
     echo ""
-    echo -e "${GREEN}✅ Discord connection test completed${NC}"
+    echo -e "${GREEN} Discord connection test completed${NC}"
 else
     echo ""
-    echo -e "${RED}❌ Discord connection test failed or timed out${NC}"
-    echo -e "${YELLOW}💡 Troubleshooting tips:${NC}"
+    echo -e "${RED} Discord connection test failed or timed out${NC}"
+    echo -e "${YELLOW} Troubleshooting tips:${NC}"
     echo "   1. Verify bot token is correct"
     echo "   2. Check bot was invited to both servers"
     echo "   3. Ensure bot has proper permissions"
@@ -99,7 +99,7 @@ else
 fi
 
 echo ""
-echo -e "${BLUE}📊 Target Servers${NC}"
+echo -e "${BLUE} Target Servers${NC}"
 echo "=================="
 echo "Development: TAGS: DevOnboarder (1386935663139749998)"
 echo "Production:  TAGS: Command & Control (1065367728992571444)"
@@ -115,4 +115,4 @@ echo "npm run build        - Build TypeScript code"
 echo "npm run test         - Run test suite"
 
 echo ""
-echo -e "${GREEN}✅ Deployment status check complete!${NC}"
+echo -e "${GREEN} Deployment status check complete!${NC}"

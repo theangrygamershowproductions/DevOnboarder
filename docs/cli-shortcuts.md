@@ -184,7 +184,7 @@ gh-ci-health --json             # JSON output for automation
 
 **Features:**
 
-- Real-time workflow monitoring across all 45+ workflows
+- Real-time workflow monitoring across all 45 workflows
 
 - Failure pattern detection and prediction (95% confidence)
 
@@ -198,7 +198,7 @@ gh-ci-health --json             # JSON output for automation
 
 ```text
 
-🏥 DevOnboarder CI Health Dashboard
+HOSPITAL: DevOnboarder CI Health Dashboard
 ========================================
 Timestamp: 2025-09-13 14:54:26
 Token Source: enhanced_token_loader.sh
@@ -207,7 +207,7 @@ Predicted Failures: 0
 High Confidence (>80%): 0
 Potential Cost Savings: 0 minutes
 
-📊 Active Workflow Status:
+ Active Workflow Status:
 ----------------------------------------
 🟡 ci.yml
 
@@ -215,12 +215,12 @@ Potential Cost Savings: 0 minutes
 
 🔮 Failure Predictions:
 ----------------------------------------
-⚡ ci.yml: detached_head
+FAST: ci.yml: detached_head
 
    Confidence: [████████  ] 85%
    Actions: Cancel workflow immediately to save compute time
 
-💡 Recommendations:
+ Recommendations:
 ----------------------------------------
 • Consider cancelling 1 workflows with >80% failure confidence
 
@@ -280,7 +280,7 @@ Auto-refreshing dashboard that updates every 30 seconds.
 
 gh-watch
 
-# Press Ctrl+C to stop
+# Press CtrlC to stop
 
 ```
 
@@ -324,7 +324,7 @@ ci-health-aar-integration --analyze-patterns           # Analyze all CI health p
 
 ci-health-aar-integration --workflow-id 12345          # Generate enhanced AAR
 
-ci-health-aar-integration --workflow-id 12345 --create-issue  # Generate AAR + GitHub issue
+ci-health-aar-integration --workflow-id 12345 --create-issue  # Generate AAR  GitHub issue
 
 ```
 
@@ -358,7 +358,7 @@ make ci-health-aar-help                                 # Show all AAR commands
 
 ```text
 
-📊 CI Health Pattern Analysis
+ CI Health Pattern Analysis
 ========================================
 Total Logs Analyzed: 15
 Failure Predictions: 8
@@ -773,7 +773,7 @@ For troubleshooting function execution:
 
 set -x
 gh-ci-health
-set +x
+set x
 
 # Check GitHub CLI calls
 

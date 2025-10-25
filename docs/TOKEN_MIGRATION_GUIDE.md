@@ -57,7 +57,7 @@ The new system includes automatic `.tokens` file creation - missing files are cr
 
 - **DevOnboarder compliance**: Aligns with "quiet reliability" philosophy
 
-## 📋 Migration Steps
+##  Migration Steps
 
 ### Phase 1: Setup Token Architecture (30 minutes)
 
@@ -330,7 +330,7 @@ python scripts/token_manager.py
 
 # Test services can load tokens
 
-cd src/devonboarder && python -c "from scripts.token_loader import load_tokens; load_tokens(); import os; print('✅' if os.environ.get('AAR_TOKEN') else '❌')"
+cd src/devonboarder && python -c "from scripts.token_loader import load_tokens; load_tokens(); import os; print('' if os.environ.get('AAR_TOKEN') else '')"
 
 # Test Docker Compose
 
@@ -364,7 +364,7 @@ grep -E "(placeholder|test)" .tokens.ci
 
 - Update `.github/copilot-instructions.md` with new patterns
 
-## 🔧 Implementation Checklist
+##  Implementation Checklist
 
 ### Core Infrastructure
 

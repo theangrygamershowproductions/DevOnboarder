@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Setup logging
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "=== DevOnboarder Internal Link Validation ==="
@@ -47,7 +47,7 @@ validate_file_links() {
     echo "Checking: $file"
 
     # Extract markdown links: [text](path) - timeout protection
-    if links=$(timeout 5s grep -oE '\[([^]]+)\]\(([^)]+)\)' "$file" 2>/dev/null); then
+    if links=$(timeout 5s grep -oE '\[([^]])\]\(([^)])\)' "$file" 2>/dev/null); then
         echo "$links" | while IFS= read -r link; do
             # Extract the path part
             path="${link##*](}"
@@ -64,34 +64,34 @@ validate_file_links() {
             fi
 
             # Handle fragment-only links (e.g., #section)
-            if [[ "$path" =~ ^#(.+) ]]; then
+            if [[ "$path" =~ ^#(.) ]]; then
                 fragment="${BASH_REMATCH[1]}"
 
                 # Use GitHub-style anchor checking with duplicate handling
                 if command -v python3 >/dev/null 2>&1 && [[ -f "scripts/anchors_github.py" ]]; then
                     mkdir -p logs
                     if ! anchors_json="$(python3 scripts/anchors_github.py < "$file" 2>logs/anchors_github_error.log)"; then
-                        echo "WARNING: anchors_github.py failed for $file. See logs/anchors_github_error.log for details." >&2
+                        echo " anchors_github.py failed for $file. See logs/anchors_github_error.log for details." >&2
                         anchors_json='{"anchors":[]}'
                     fi
                     if ! printf '%s' "$anchors_json" | grep -q "\"$fragment\""; then
-                        echo "ERROR: Broken fragment link in $file"
+                        echo " Broken fragment link in $file"
                         echo "  Link: $link"
                         echo "  Target: $file#$fragment"
                         echo "  Status: Section does not exist"
                         echo "FAILED" >> "$temp_dir/errors.log"
-                        local_broken=$((local_broken + 1))
+                        local_broken=$((local_broken  1))
                         continue
                     fi
                 else
                     # Fallback: direct text search in headers
                     if ! grep -Eq "^#{1,6} .*${fragment}.*" "$file"; then
-                        echo "ERROR: Broken fragment link in $file"
+                        echo " Broken fragment link in $file"
                         echo "  Link: $link"
                         echo "  Target: $file#$fragment"
                         echo "  Status: Section does not exist"
                         echo "FAILED" >> "$temp_dir/errors.log"
-                        local_broken=$((local_broken + 1))
+                        local_broken=$((local_broken  1))
                         continue
                     fi
                 fi
@@ -117,12 +117,12 @@ validate_file_links() {
 
             # Check if target exists
             if [[ ! -e "$full_path" ]]; then
-                echo "ERROR: Broken link in $file"
+                echo " Broken link in $file"
                 echo "  Link: $link"
                 echo "  Target: $full_path"
                 echo "  Status: File does not exist"
                 echo "FAILED" >> "$temp_dir/errors.log"
-                local_broken=$((local_broken + 1))
+                local_broken=$((local_broken  1))
             fi
         done
     fi
@@ -131,7 +131,7 @@ validate_file_links() {
     (
         flock -x 200
         read -r current_scanned current_broken < "$temp_dir/counters"
-        echo "$((current_scanned + local_scanned)) $((current_broken + local_broken))" > "$temp_dir/counters"
+        echo "$((current_scanned  local_scanned)) $((current_broken  local_broken))" > "$temp_dir/counters"
     ) 200>"$temp_dir/counters.lock"
 }
 
@@ -161,15 +161,15 @@ files_scanned=${#files[@]}
 report="logs/link_validation_report.json"
 mkdir -p logs
 printf '{ "ts":"%s","files_scanned":%d,"broken":%d }\n' \
-  "$(date -u +%FT%TZ)" "$files_scanned" "$broken_count" > "$report"
+  "$(date -u %FT%TZ)" "$files_scanned" "$broken_count" > "$report"
 echo "Report: $report"
 
 # Check if any validation failures occurred
 if [[ $broken_count -gt 0 ]]; then
     echo ""
-    echo "❌ VALIDATION FAILED: $broken_count broken internal links found in $files_scanned files"
+    echo " VALIDATION FAILED: $broken_count broken internal links found in $files_scanned files"
     echo "Please fix the broken links before committing."
     exit 1
 else
-    echo "✅ All internal links validated successfully ($files_scanned files checked)"
+    echo " All internal links validated successfully ($files_scanned files checked)"
 fi

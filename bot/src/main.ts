@@ -28,7 +28,7 @@ if (
     !process.env.DISCORD_BOT_TOKEN ||
     process.env.DISCORD_BOT_TOKEN === "changeme"
 ) {
-    console.error("❌ DISCORD_BOT_TOKEN not configured");
+    console.error(" DISCORD_BOT_TOKEN not configured");
     console.error(
         "   Please set your Discord bot token in the environment variables",
     );
@@ -36,7 +36,7 @@ if (
 }
 
 if (!process.env.DISCORD_GUILD_ID) {
-    console.error("❌ DISCORD_GUILD_ID not configured");
+    console.error(" DISCORD_GUILD_ID not configured");
     console.error("   Please run: bash ../scripts/setup_discord_env.sh");
     process.exit(1);
 }
@@ -67,12 +67,12 @@ async function start() {
         const commands = await loadCommands(path.join(__dirname, "commands"));
         await loadEvents(client, path.join(__dirname, "events"), commands);
 
-        console.log("🔐 Logging in to Discord...");
+        console.log(" Logging in to Discord...");
         await client.login(process.env.DISCORD_BOT_TOKEN);
 
-        console.log("✅ Bot startup complete!");
+        console.log(" Bot startup complete!");
     } catch (error) {
-        console.error("❌ Failed to start bot:", error);
+        console.error(" Failed to start bot:", error);
         process.exit(1);
     }
 }

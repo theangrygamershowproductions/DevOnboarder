@@ -41,23 +41,20 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]
 
     # CRITICAL: Complete gh stub handling both 'pr view' AND 'pr comment'
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ]; then\n'
-        f"  echo '{body}'\n"
-        "  exit 0\n"
+        f"  echo '{body}'\n" + "  exit 0\n"
         'elif [ "$1" = "pr" ] && [ "$2" = "comment" ]; then\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)
 
     # CRITICAL: Controlled environment (includes system paths but our bin first)
     env = {
-        "PATH": str(bin_dir) + ":/usr/bin:/bin",  # Our bin first, then system paths
+        "PATH": str(bin_dir)  ":/usr/bin:/bin",  # Our bin first, then system paths
         "HOME": str(tmp_path),
         "TMPDIR": str(tmp_path),
         "SHELL": "/bin/bash",
@@ -102,8 +99,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
     # Mock a process-related PR title that should require checklist
     gh_stub = tmp_path / "bin" / "gh"
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ] && [ "$3" = "1" ] && '
@@ -115,8 +111,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
         '  echo "{\\"body\\": \\"\\"}"\n'
         "  exit 0\n"
         'elif [ "$1" = "pr" ] && [ "$2" = "comment" ]; then\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)
@@ -150,15 +145,13 @@ def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path) -> None:
     # Mock a feature PR title that should skip checklist validation
     gh_stub = tmp_path / "bin" / "gh"
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ] && [ "$3" = "1" ] && '
         '[ "$4" = "--json" ] && [ "$5" = "title" ]; then\n'
         '  echo "{\\"title\\": \\"FEAT(ci): Add new feature\\"}"\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)

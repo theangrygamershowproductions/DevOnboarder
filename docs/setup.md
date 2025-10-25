@@ -14,8 +14,8 @@ For immediate setup, see [QUICKSTART.md](../QUICKSTART.md).
 
 ### Prerequisites
 
-- Python 3.11+
-- Node.js 18+
+- Python 3.11
+- Node.js 18
 - Docker and Docker Compose
 - Git
 
@@ -62,7 +62,7 @@ See [Environment Variables](env.md) for detailed configuration.
 
 - **Backend**: FastAPI services in `src/` (Auth: 8002, XP: 8001)
 - **Bot**: TypeScript Discord.js bot in `bot/` (Port: 8081)
-- **Frontend**: React + Vite in `frontend/` (Port: 8081 dev server)
+- **Frontend**: React  Vite in `frontend/` (Port: 8081 dev server)
 - **Database**: PostgreSQL with SQLAlchemy models
 
 ## Development Workflow

@@ -48,7 +48,7 @@ Specs live under `/openapi/*.yaml`. Governance mirrors via `x-codex`.
 
 ## Generate Clients (optional)
 
-- `make openapi-client-python` → outputs to `/clients/python`
+- `make openapi-client-python`  outputs to `/clients/python`
 
 - Pin generator version in CI to avoid drift.
 

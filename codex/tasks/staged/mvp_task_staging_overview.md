@@ -39,7 +39,7 @@ tags:
 
 This document contains a structured list of staged DevOnboarder system tasks, captured during planning sessions for MVP deployment. Each task is staged and ready for implementation once its dependencies are satisfied.
 
-## ✅ Primary MVP Infrastructure Tasks
+##  Primary MVP Infrastructure Tasks
 
 ### 1. Codex Catch System: Coverage Decay Mitigation
 
@@ -69,7 +69,7 @@ This document contains a structured list of staged DevOnboarder system tasks, ca
 
 ### 4. CI Workflow Token Security Enhancement
 
-* **Status**: ✅ **COMPLETED** (PR #1071 merged 2025-08-04)
+* **Status**:  **COMPLETED** (PR #1071 merged 2025-08-04)
 
 * **Priority**: High
 
@@ -95,7 +95,7 @@ This document contains a structured list of staged DevOnboarder system tasks, ca
 
 ### 6. Root Artifact Guard and CI Hygiene System Enhancement
 
-* **Status**: ⚡ **ADVANCED** (Terminal output compliance achieved)
+* **Status**: FAST: **ADVANCED** (Terminal output compliance achieved)
 
 * **Priority**: Medium
 
@@ -107,7 +107,7 @@ This document contains a structured list of staged DevOnboarder system tasks, ca
 
 ---
 
-## 🔄 Task Integration Strategy
+## SYNC: Task Integration Strategy
 
 Each task includes:
 
@@ -129,7 +129,7 @@ Tasks are staged until dependencies clear or Phase 2 milestone gating checks are
 
 * Scaffold modular runtime manifest and registration tools
 
-* **✅ COMPLETED**: Terminal Output enforcement milestone (PR #1071)
+* ** COMPLETED**: Terminal Output enforcement milestone (PR #1071)
 
 * Schedule CI token hierarchy audit and cleanup
 

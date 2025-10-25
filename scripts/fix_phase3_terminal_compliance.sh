@@ -6,7 +6,7 @@ set -e
 
 # Centralized logging
 mkdir -p logs
-LOG_FILE="logs/phase3_terminal_compliance_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/phase3_terminal_compliance_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Phase 3 Framework: Terminal Output Compliance Fix"
@@ -20,17 +20,17 @@ TOTAL_FIXES=0
 
 # Define emoji replacements
 declare -A EMOJI_MAP
-EMOJI_MAP["🔍"]="INFO:"
-EMOJI_MAP["✅"]="SUCCESS:"
-EMOJI_MAP["❌"]="ERROR:"
-EMOJI_MAP["📋"]="INFO:"
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
 EMOJI_MAP["🎯"]="TARGET:"
-EMOJI_MAP["🚀"]="ACTION:"
-EMOJI_MAP["⚡"]="QUICK:"
-EMOJI_MAP["📊"]="STATS:"
-EMOJI_MAP["📝"]="NOTE:"
-EMOJI_MAP["💡"]="TIP:"
-EMOJI_MAP["⚠️"]="WARNING:"
+EMOJI_MAP[""]="ACTION:"
+EMOJI_MAP["FAST:"]="QUICK:"
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
+EMOJI_MAP[""]=""
 
 # Function to fix terminal output in a script
 fix_script() {
@@ -50,26 +50,26 @@ fix_script() {
         if grep -q "echo.*$emoji" "$script_path"; then
             sed -i "s/echo \"\([^\"]*\)$emoji \([^\"]*\)\"/echo \"\1$replacement \2\"/g" "$script_path"
             sed -i "s/echo '\([^']*\)$emoji \([^']*\)'/echo '\1$replacement \2'/g" "$script_path"
-            ((fixes_made++))
-            echo "  Fixed emoji: $emoji -> $replacement"
+            ((fixes_made))
+            echo "  Fixed emoji: $emoji  $replacement"
         fi
     done
 
     # Fix echo -e with color codes and emojis
-    if grep -q "echo -e.*\\\${.*}.*[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]" "$script_path"; then
+    if grep -q "echo -e.*\\\${.*}.*[🎯FAST:]" "$script_path"; then
         # Remove echo -e color formatting with emojis
-        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]\([^"]*\)\${[^}]*}"/echo "\1INFO:\2"/g' "$script_path"
-        ((fixes_made++))
+        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[🎯FAST:]\([^"]*\)\${[^}]*}"/echo "\1\2"/g' "$script_path"
+        ((fixes_made))
         echo "  Fixed echo -e with colors and emojis"
     fi
 
     # Fix any remaining standalone emojis in echo
-    for emoji in 🔍 ✅ ❌ 📋 🎯 🚀 ⚡ 📊 📝 💡 ⚠️; do
+    for emoji in     🎯  FAST:    ; do
         if grep -q "$emoji" "$script_path"; then
-            replacement="${EMOJI_MAP[$emoji]:-"INFO:"}"
+            replacement="${EMOJI_MAP[$emoji]:-""}"
             sed -i "s/$emoji/$replacement/g" "$script_path"
-            ((fixes_made++))
-            echo "  Fixed standalone emoji: $emoji -> $replacement"
+            ((fixes_made))
+            echo "  Fixed standalone emoji: $emoji  $replacement"
         fi
     done
 
@@ -79,7 +79,7 @@ fix_script() {
         echo "  No fixes needed"
     else
         echo "  Total fixes: $fixes_made"
-        TOTAL_FIXES=$((TOTAL_FIXES + fixes_made))
+        TOTAL_FIXES=$((TOTAL_FIXES  fixes_made))
     fi
 
     echo ""
@@ -122,13 +122,13 @@ echo ""
 
 # Verify compliance
 echo "Verifying compliance..."
-VIOLATIONS=$(grep -r '[🔍✅❌📋🎯🚀⚡📊📝💡⚠️]' "$FRAMEWORK_DIR" || true)
+VIOLATIONS=$(grep -r '[🎯FAST:]' "$FRAMEWORK_DIR" || true)
 
 if [ -z "$VIOLATIONS" ]; then
-    echo "SUCCESS: No emoji violations found in Phase 3 framework"
+    echo " No emoji violations found in Phase 3 framework"
     echo "Phase 3 framework is now compliant with terminal output policy"
 else
-    echo "WARNING: Some violations may remain:"
+    echo " Some violations may remain:"
     echo "$VIOLATIONS"
 fi
 

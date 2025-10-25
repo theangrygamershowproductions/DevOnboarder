@@ -281,29 +281,29 @@ framework-compatibility:
 
 #### **Use Strategic Planning Framework When**
 
-- ✅ **Issue Count**: >20 items requiring analysis
+-  **Issue Count**: >20 items requiring analysis
 
-- ✅ **Timeline**: >30 days for completion
+-  **Timeline**: >30 days for completion
 
-- ✅ **Complexity**: Multiple stakeholders or dependencies
+-  **Complexity**: Multiple stakeholders or dependencies
 
-- ✅ **Impact**: Strategic importance to DevOnboarder roadmap
+-  **Impact**: Strategic importance to DevOnboarder roadmap
 
-- ✅ **Resources**: Multiple team members involved
+-  **Resources**: Multiple team members involved
 
-- ✅ **Documentation**: Requires formal tracking and handoff protocols
+-  **Documentation**: Requires formal tracking and handoff protocols
 
 #### **DO NOT Use Framework When**
 
-- ❌ **Simple Tasks**: <5 issues or <1 week effort
+-  **Simple Tasks**: <5 issues or <1 week effort
 
-- ❌ **Individual Work**: Single developer, no handoff needed
+-  **Individual Work**: Single developer, no handoff needed
 
-- ❌ **Urgent Fixes**: Critical bugs requiring immediate attention
+-  **Urgent Fixes**: Critical bugs requiring immediate attention
 
-- ❌ **Routine Maintenance**: Standard dependency updates, minor fixes
+-  **Routine Maintenance**: Standard dependency updates, minor fixes
 
-- ❌ **Ad-hoc Exploration**: Research or prototyping work
+-  **Ad-hoc Exploration**: Research or prototyping work
 
 #### **Alternative Approaches for Simple Work**
 

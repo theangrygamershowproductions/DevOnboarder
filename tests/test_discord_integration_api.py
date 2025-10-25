@@ -8,6 +8,7 @@ This module provides Discord OAuth integration and role lookup endpoints.
 from fastapi.testclient import TestClient
 from fastapi import APIRouter
 import httpx
+import os
 
 from src.discord_integration.api import create_app, router
 from devonboarder import auth_service
@@ -114,7 +115,7 @@ def test_get_roles_success(monkeypatch):
         user = auth_service.User(
             username="roleuser_success",
             password_hash="",
-            discord_token="discord_token_456",
+            discord_token=os.getenv("TEST_DISCORD_TOKEN", "test_discord_token_456"),
         )
         db.add(user)
         db.commit()

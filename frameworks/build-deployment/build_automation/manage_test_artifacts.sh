@@ -12,7 +12,7 @@ fi
 
 # Use existing centralized logging pattern (mandatory DevOnboarder requirement)
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Colors for output
@@ -34,7 +34,7 @@ ARCHIVE_DIR="$LOGS_DIR/archive"
 COVERAGE_DIR="$LOGS_DIR/coverage"
 PYTEST_DIR="$LOGS_DIR/pytest"
 TOKEN_AUDIT_DIR="$LOGS_DIR/token-audit"
-CURRENT_SESSION="test_session_$(date +%Y%m%d_%H%M%S)"
+CURRENT_SESSION="test_session_$(date %Y%m%d_%H%M%S)"
 
 # Function to validate token environment with governance integration
 validate_token_environment() {
@@ -247,9 +247,9 @@ activate_virtual_env() {
 
     # Check for required packages (DevOnboarder dependencies)
     local missing_packages=()
-    python -c "import pytest" 2>/dev/null || missing_packages+=("pytest")
-    python -c "import coverage" 2>/dev/null || missing_packages+=("coverage")
-    python -c "import yaml" 2>/dev/null || missing_packages+=("pyyaml")
+    python -c "import pytest" 2>/dev/null || missing_packages=("pytest")
+    python -c "import coverage" 2>/dev/null || missing_packages=("coverage")
+    python -c "import yaml" 2>/dev/null || missing_packages=("pyyaml")
 
     if [ ${#missing_packages[@]} -gt 0 ]; then
         echo -e "${YELLOW}Missing packages: ${missing_packages[*]}${NC}"
@@ -272,9 +272,9 @@ cleanup_test_session_with_tokens() {
             # Use jq if available, otherwise create basic end record
             if command -v jq >/dev/null 2>&1; then
                 local start_time_seconds
-                start_time_seconds=$(date -d "$(jq -r '.start_time' "$session_dir/session_info.json")" +%s 2>/dev/null || echo "0")
-                local duration_seconds=$(($(date +%s) - start_time_seconds))
-                jq '. + {"end_time": "'"$(date -Iseconds)"'", "duration_seconds": '"$duration_seconds"'}' \
+                start_time_seconds=$(date -d "$(jq -r '.start_time' "$session_dir/session_info.json")" %s 2>/dev/null || echo "0")
+                local duration_seconds=$(($(date %s) - start_time_seconds))
+                jq '.  {"end_time": "'"$(date -Iseconds)"'", "duration_seconds": '"$duration_seconds"'}' \
                     "$session_dir/session_info.json" > "$temp_file"
             else
                 echo '{"cleanup_time": "'"$(date -Iseconds)"'", "note": "jq not available for duration calculation"}' > "$temp_file"
@@ -291,13 +291,13 @@ cleanup_test_session_with_tokens() {
 
         # Preserve coverage data (DevOnboarder pattern)
         if [ -f "$session_dir/coverage/.coverage" ]; then
-            cp "$session_dir/coverage/.coverage" "$COVERAGE_DIR/.coverage.$(date +%Y%m%d_%H%M%S)"
+            cp "$session_dir/coverage/.coverage" "$COVERAGE_DIR/.coverage.$(date %Y%m%d_%H%M%S)"
             echo "Coverage data archived to $COVERAGE_DIR/"
         fi
 
         # Copy HTML coverage reports if they exist
         if [ -d "$session_dir/coverage/htmlcov" ]; then
-            cp -r "$session_dir/coverage/htmlcov" "$COVERAGE_DIR/htmlcov_$(date +%Y%m%d_%H%M%S)"
+            cp -r "$session_dir/coverage/htmlcov" "$COVERAGE_DIR/htmlcov_$(date %Y%m%d_%H%M%S)"
             echo "HTML coverage report archived"
         fi
 
@@ -306,12 +306,12 @@ cleanup_test_session_with_tokens() {
 
         # Archive pytest artifacts
         if [ -d "$session_dir/pytest" ]; then
-            cp -r "$session_dir/pytest" "$PYTEST_DIR/pytest_$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+            cp -r "$session_dir/pytest" "$PYTEST_DIR/pytest_$(date %Y%m%d_%H%M%S)" 2>/dev/null || true
         fi
 
         # Create comprehensive session archive
         local archive_name
-        archive_name="test_artifacts_$(date +%Y%m%d_%H%M%S).tar.gz"
+        archive_name="test_artifacts_$(date %Y%m%d_%H%M%S).tar.gz"
         echo "Creating session archive with token governance data..."
         tar -czf "$ARCHIVE_DIR/$archive_name" -C "$TEMP_DIR" "$(basename "$session_dir")" 2>/dev/null || {
             echo "Archive creation failed, but continuing cleanup"
@@ -340,7 +340,7 @@ run_tests_with_artifacts() {
     activate_virtual_env || return 1
 
     local start_time
-    start_time=$(date +%s)
+    start_time=$(date %s)
 
     # Initialize result tracking
     local pytest_exit_code=0
@@ -423,7 +423,7 @@ run_tests_with_artifacts() {
     fi
 
     local end_time
-    end_time=$(date +%s)
+    end_time=$(date %s)
     local duration=$((end_time - start_time))
 
     # Generate comprehensive test report with token governance
@@ -432,7 +432,7 @@ run_tests_with_artifacts() {
 
 **Session**: $CURRENT_SESSION
 **Date**: $(date)
-**Duration**: ${duration}s ($(date -d@$duration -u +%H:%M:%S))
+**Duration**: ${duration}s ($(date -d@$duration -u %H:%M:%S))
 **Policy**: No Default Token Policy v1.0
 
 ## Token Governance Results
@@ -661,38 +661,38 @@ clean_old_artifacts() {
 
     # Clean temp sessions older than specified days
     if [ -d "$TEMP_DIR" ]; then
-        find "$TEMP_DIR" -type d -name "test_session_*" -mtime +"$days" -print0 | while IFS= read -r -d '' session; do
+        find "$TEMP_DIR" -type d -name "test_session_*" -mtime "$days" -print0 | while IFS= read -r -d '' session; do
             echo "Removing old session: $(basename "$session")"
             rm -rf "$session"
-            ((cleaned_count++))
+            ((cleaned_count))
         done
     fi
 
     # Clean archived artifacts older than specified days
     if [ -d "$ARCHIVE_DIR" ]; then
-        find "$ARCHIVE_DIR" -name "test_artifacts_*.tar.gz" -mtime +"$days" -print0 | while IFS= read -r -d '' archive; do
+        find "$ARCHIVE_DIR" -name "test_artifacts_*.tar.gz" -mtime "$days" -print0 | while IFS= read -r -d '' archive; do
             echo "Removing old archive: $(basename "$archive")"
             rm -f "$archive"
-            ((cleaned_count++))
+            ((cleaned_count))
         done
     fi
 
     # Clean old coverage data (keep recent ones)
     if [ -d "$COVERAGE_DIR" ]; then
-        find "$COVERAGE_DIR" -name ".coverage.*" -mtime +"$days" -delete 2>/dev/null || true
-        find "$COVERAGE_DIR" -type d -name "htmlcov_*" -mtime +"$days" -exec rm -rf {} + 2>/dev/null || true
+        find "$COVERAGE_DIR" -name ".coverage.*" -mtime "$days" -delete 2>/dev/null || true
+        find "$COVERAGE_DIR" -type d -name "htmlcov_*" -mtime "$days" -exec rm -rf {}  2>/dev/null || true
     fi
 
     # Clean old pytest artifacts
     if [ -d "$PYTEST_DIR" ]; then
-        find "$PYTEST_DIR" -type d -name "pytest_*" -mtime +"$days" -exec rm -rf {} + 2>/dev/null || true
+        find "$PYTEST_DIR" -type d -name "pytest_*" -mtime "$days" -exec rm -rf {}  2>/dev/null || true
     fi
 
     # Clean old token audit data (but keep more recent than other artifacts)
     local token_audit_retention=$((days * 2))  # Keep token audit data twice as long
     if [ -d "$TOKEN_AUDIT_DIR" ]; then
-        find "$TOKEN_AUDIT_DIR" -name "*.json" -mtime +"$token_audit_retention" -delete 2>/dev/null || true
-        find "$TOKEN_AUDIT_DIR" -name "*.log" -mtime +"$token_audit_retention" -delete 2>/dev/null || true
+        find "$TOKEN_AUDIT_DIR" -name "*.json" -mtime "$token_audit_retention" -delete 2>/dev/null || true
+        find "$TOKEN_AUDIT_DIR" -name "*.log" -mtime "$token_audit_retention" -delete 2>/dev/null || true
     fi
 
     echo "Cleanup complete (token audit data retained for ${token_audit_retention} days)"
@@ -707,7 +707,7 @@ case "${1:-help}" in
         echo -e "${GREEN}Session ready for manual testing with token governance:${NC}"
         echo "  Session directory: $session_dir"
         echo "  Activate environment: source .venv/bin/activate"
-        echo "  PYTEST_CACHE_DIR: $PYTEST_CACHE_DIR"
+        echo "  PYTEST_CACHE_ $PYTEST_CACHE_DIR"
         echo "  COVERAGE_FILE: $COVERAGE_FILE"
         echo "  Token audit: $session_dir/token-audit/"
         ;;

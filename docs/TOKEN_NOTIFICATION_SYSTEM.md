@@ -108,9 +108,9 @@ python scripts/token_manager.py
 
 ```bash
 
-## 📋 **Notification Features**
+##  **Notification Features**
 
-### ✅ **What Gets Notified**
+###  **What Gets Notified**
 
 1. **Missing Token Detection** - Clear visual indicators for each missing token
 
@@ -129,12 +129,12 @@ python scripts/token_manager.py
 #### Development Environment
 
 ```bash
-⚠️  MISSING TOKENS DETECTED
+  MISSING TOKENS DETECTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❌ AAR_TOKEN
-❌ CI_ISSUE_AUTOMATION_TOKEN
+ AAR_TOKEN
+ CI_ISSUE_AUTOMATION_TOKEN
 
-💡 TO FIX MISSING TOKENS:
+ TO FIX MISSING TOKENS:
    1. Add missing tokens to: /home/user/DevOnboarder/.tokens
 
    2. Run: bash scripts/sync_tokens.sh --sync-all
@@ -145,7 +145,7 @@ python scripts/token_manager.py
    See: docs/token-setup-guide.md
    Architecture: docs/TOKEN_ARCHITECTURE.md
 
-🔍 ENVIRONMENT CHECK:
+ ENVIRONMENT CHECK:
    Current tokens file: .tokens
    Project root: /home/user/DevOnboarder
    APP_ENV: not set
@@ -156,15 +156,15 @@ python scripts/token_manager.py
 #### CI Environment
 
 ```bash
-⚠️  MISSING TOKENS DETECTED
+  MISSING TOKENS DETECTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❌ NONEXISTENT_TOKEN
+ NONEXISTENT_TOKEN
 
-💡 TO FIX MISSING TOKENS:
+ TO FIX MISSING TOKENS:
    CI Environment: Check .tokens.ci file has test values
    File: /home/user/DevOnboarder/.tokens.ci
 
-🔍 ENVIRONMENT CHECK:
+ ENVIRONMENT CHECK:
    Current tokens file: .tokens.ci
    Project root: /home/user/DevOnboarder
    APP_ENV: not set
@@ -172,7 +172,7 @@ python scripts/token_manager.py
 
 ```bash
 
-## 🛠️ **Integration Patterns**
+##  **Integration Patterns**
 
 ### 1. **FastAPI Service Integration**
 
@@ -281,7 +281,7 @@ status = validate_required_tokens(tokens, notify_missing=True)
 
 - **File Selection**: Automatically uses appropriate `.tokens.*` file
 
-## 📊 **Monitoring & Debugging**
+##  **Monitoring & Debugging**
 
 ### Token Status Monitoring
 
@@ -319,7 +319,7 @@ python examples/service_with_token_validation.py
 
 ### When to Use Notifications
 
-✅ **DO Use For**:
+ **DO Use For**:
 
 - Service startup validation
 
@@ -329,7 +329,7 @@ python examples/service_with_token_validation.py
 
 - CI/CD pipeline validation
 
-❌ **DON'T Use For**:
+ **DON'T Use For**:
 
 - High-frequency token checks
 

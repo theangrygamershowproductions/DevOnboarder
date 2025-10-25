@@ -44,7 +44,7 @@ generate_secret_if_empty() {
     if [ -z "$current_value" ]; then
         echo "Generating secret for $key in $env_file..."
         if [ "$key" = "DISCORD_CLIENT_SECRET" ]; then
-            write_env "$env_file" "$key" "$(openssl rand -base64 24 | tr '/+' '_-')"
+            write_env "$env_file" "$key" "$(openssl rand -base64 24 | tr '/' '_-')"
         else
             write_env "$env_file" "$key" "$(openssl rand -hex 32)"
         fi

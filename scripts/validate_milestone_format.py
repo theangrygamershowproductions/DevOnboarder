@@ -35,11 +35,11 @@ class MilestoneFormatValidator:
     VALID_PRIORITIES = {"critical", "high", "medium", "low"}
     VALID_COMPLEXITIES = {"simple", "moderate", "complex", "very-complex"}
 
-    MILESTONE_ID_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9-]+$")
+    MILESTONE_ID_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9-]$")
     DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
     GITHUB_LINK_PATTERN = re.compile(
         r"https://github\.com/theangrygamershowproductions/DevOnboarder/"
-        r"(pull|issues|commit|actions/runs)/\d+"
+        r"(pull|issues|commit|actions/runs)/\d"
     )
 
     def __init__(self):
@@ -87,13 +87,12 @@ class MilestoneFormatValidator:
         filename = file_path.name
         expected_pattern = re.compile(
             r"^\d{4}-\d{2}-\d{2}-(enhancement|feature|bugfix|infrastructure|process)"
-            r"-[a-z0-9-]+\.md$"
+            r"-[a-z0-9-]\.md$"
         )
 
         if not expected_pattern.match(filename):
             self.errors.append(
-                f"Filename '{filename}' doesn't match pattern: "
-                "YYYY-MM-DD-type-brief-descriptive-name.md"
+                f"Filename '{filename}' doesn't match pattern: " + "YYYY-MM-DD-type-brief-descriptive-name.md"
             )
 
     def _extract_yaml_frontmatter(self, content: str) -> Dict[str, Any]:
@@ -135,8 +134,7 @@ class MilestoneFormatValidator:
             milestone_id = yaml_data["milestone_id"]
             if not self.MILESTONE_ID_PATTERN.match(milestone_id):
                 self.errors.append(
-                    f"milestone_id '{milestone_id}' doesn't match format: "
-                    "YYYY-MM-DD-brief-descriptive-name"
+                    f"milestone_id '{milestone_id}' doesn't match format: " + "YYYY-MM-DD-brief-descriptive-name"
                 )
 
             # Check for uniqueness
@@ -176,7 +174,7 @@ class MilestoneFormatValidator:
     def _validate_content_structure(self, content: str):
         """Validate required content sections."""
         required_sections = [
-            r"# .+ - .+",  # Title with description
+            r"# . - .",  # Title with description
             r"## .*Overview",  # Some kind of overview section
             r"## Evidence Anchors",  # Evidence Anchors section
         ]
@@ -225,17 +223,17 @@ class MilestoneFormatValidator:
         print(f"{'='*60}")
 
         if self.errors:
-            print(f"\n❌ ERRORS ({len(self.errors)}):")
+            print(f"\n ERRORS ({len(self.errors)}):")
             for error in self.errors:
                 print(f"  • {error}")
 
         if self.warnings:
-            print(f"\n⚠️  WARNINGS ({len(self.warnings)}):")
+            print(f"\n + WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"  • {warning}")
 
         if not self.errors and not self.warnings:
-            print("\n✅ File passes all validation checks!")
+            print("\n File passes all validation checks!")
 
         return len(self.errors) == 0
 
@@ -262,7 +260,7 @@ def main():
     path = Path(args.path)
 
     if not path.exists():
-        print(f"❌ Path does not exist: {path}")
+        print(f" Path does not exist: {path}")
         sys.exit(1)
 
     if path.is_file():
@@ -270,7 +268,7 @@ def main():
         if not args.summary:
             validator.print_results(path)
         print(
-            f"\n{'✅' if success else '❌'} Validation "
+            f"\n{'' if success else ''} Validation "
             f"{'PASSED' if success else 'FAILED'}"
         )
         sys.exit(0 if success else 1)
@@ -297,8 +295,8 @@ def main():
     print("VALIDATION SUMMARY")
     print(f"{'='*60}")
     print(f"Total files:  {total_files}")
-    print(f"✅ Passed:    {passed_files}")
-    print(f"❌ Failed:    {failed_files}")
+    print(f" Passed:    {passed_files}")
+    print(f" Failed:    {failed_files}")
 
     if failed_files == 0:
         print("\n🎉 All milestone files pass validation!")

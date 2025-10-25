@@ -75,8 +75,7 @@ def main() -> None:
 
     lines.append(
         "[Download artifacts](https://github.com/"
-        f"{repo}/actions/runs/{run_id}) "
-        "for full logs."
+        f"{repo}/actions/runs/{run_id}) " + "for full logs."
     )
 
     Path("summary.md").write_text("\n".join(lines))

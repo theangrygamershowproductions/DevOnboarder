@@ -5,7 +5,7 @@ COMPOSE_FILE=${1:-docker-compose.ci.yaml}
 TRIVY_VERSION=${TRIVY_VERSION:-0.47.0}
 TRIVY_CMD=${TRIVY_CMD:-trivy}
 
-cleanup() { [ -n "${TMP_DIR:-}" ] && rm -rf "$TMP_DIR"; }
+cleanup() { [ -n "${TMP_-}" ] && rm -rf "$TMP_DIR"; }
 trap cleanup EXIT
 
 if ! command -v "$TRIVY_CMD" >/dev/null 2>&1; then

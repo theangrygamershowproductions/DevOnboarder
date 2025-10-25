@@ -127,7 +127,7 @@ if git diff --cached --name-only | grep -q '\.md$'; then
     ./frameworks/friction_prevention/workflow/validate_internal_links.sh
 fi
 
-echo "Framework validations passed ✅"
+echo "Framework validations passed "
 ```
 
 ### Developer Workflow Integration
@@ -237,7 +237,7 @@ framework-generate-aar:
 # Complete framework workflow
 .PHONY: framework-full-workflow
 framework-full-workflow: framework-env-check framework-qc framework-ci-health
-    @echo "Complete Framework Phase 2 workflow executed ✅"
+    @echo "Complete Framework Phase 2 workflow executed "
 
 # Usage examples:
 # make framework-qc
@@ -381,12 +381,12 @@ framework-full-workflow: framework-env-check framework-qc framework-ci-health
 **Example PR Description Template:**
 
 ```markdown
-## Framework Phase 2 Validation ✅
+## Framework Phase 2 Validation 
 
-- [ ] QC Validation: `./frameworks/friction_prevention/workflow/qc_pre_push.sh` ✅
-- [ ] Safe Commit: Used framework safe commit wrapper ✅
-- [ ] Environment Check: Validated with `smart_env_sync.sh --validate-only` ✅
-- [ ] PR Health: Assessed with `assess_pr_health.sh` ✅
+- [ ] QC Validation: `./frameworks/friction_prevention/workflow/qc_pre_push.sh` 
+- [ ] Safe Commit: Used framework safe commit wrapper 
+- [ ] Environment Check: Validated with `smart_env_sync.sh --validate-only` 
+- [ ] PR Health: Assessed with `assess_pr_health.sh` 
 
 ## Changes Summary
 [Your change description here]
@@ -403,22 +403,22 @@ framework-full-workflow: framework-env-check framework-qc framework-ci-health
 ```bash
 # Framework performance monitoring script
 function framework_metrics() {
-    local start_time=$(date +%s)
+    local start_time=$(date %s)
     local script_name="$1"
-    local log_file="logs/framework_metrics_$(date +%Y%m%d).log"
+    local log_file="logs/framework_metrics_$(date %Y%m%d).log"
 
     # Execute framework script with timing
-    echo "$(date '+%Y-%m-%d %H:%M:%S UTC') - Starting $script_name" >> "$log_file"
+    echo "$(date '%Y-%m-%d %H:%M:%S UTC') - Starting $script_name" >> "$log_file"
 
     if "$script_name" "${@:2}"; then
-        local end_time=$(date +%s)
+        local end_time=$(date %s)
         local duration=$((end_time - start_time))
-        echo "$(date '+%Y-%m-%d %H:%M:%S UTC') - Completed $script_name (${duration}s) ✅" >> "$log_file"
+        echo "$(date '%Y-%m-%d %H:%M:%S UTC') - Completed $script_name (${duration}s) " >> "$log_file"
         return 0
     else
-        local end_time=$(date +%s)
+        local end_time=$(date %s)
         local duration=$((end_time - start_time))
-        echo "$(date '+%Y-%m-%d %H:%M:%S UTC') - Failed $script_name (${duration}s) ❌" >> "$log_file"
+        echo "$(date '%Y-%m-%d %H:%M:%S UTC') - Failed $script_name (${duration}s) " >> "$log_file"
         return 1
     fi
 }
@@ -442,7 +442,7 @@ Framework Phase 2 scripts can be integrated with monitoring dashboards:
 # Combined health metrics
 {
     "framework_phase": 2,
-    "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "timestamp": "$(date -u %Y-%m-%dT%H:%M:%SZ)",
     "framework_health": $(cat framework_health_report.json),
     "ci_health": $(cat ci_health_metrics.json)
 } > combined_health_metrics.json
@@ -475,7 +475,7 @@ Framework Phase 2 scripts can be integrated with monitoring dashboards:
    ```bash
    # Problem: Permission denied on script execution
    # Solution: Ensure execute permissions on framework scripts
-   chmod +x frameworks/friction_prevention/**/*.sh
+   chmod x frameworks/friction_prevention/**/*.sh
    ```
 
 4. **Quality Gate Failures**

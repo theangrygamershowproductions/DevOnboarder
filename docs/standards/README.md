@@ -35,23 +35,23 @@ This directory contains the standard practices and policies that govern DevOnboa
 
 | Standard | Document | Status | Last Updated |
 |----------|----------|---------|--------------|
-| **VS Code/CI Integration Framework** | [`vscode-ci-integration-standard.md`](vscode-ci-integration-standard.md) | ✅ ACTIVE | 2025-08-07 |
+| **VS Code/CI Integration Framework** | [`vscode-ci-integration-standard.md`](vscode-ci-integration-standard.md) |  ACTIVE | 2025-08-07 |
 
-| **After Actions Report Process** | [`after-actions-report-process.md`](after-actions-report-process.md) | ✅ ACTIVE | 2025-07-30 |
+| **After Actions Report Process** | [`after-actions-report-process.md`](after-actions-report-process.md) |  ACTIVE | 2025-07-30 |
 
-| **Debug Protocol Macro v1.2** | [`debug-protocol-macro.md`](debug-protocol-macro.md) | ✅ ACTIVE | 2025-09-13 |
+| **Debug Protocol Macro v1.2** | [`debug-protocol-macro.md`](debug-protocol-macro.md) |  ACTIVE | 2025-09-13 |
 
-| **Centralized Logging Policy** | [`centralized-logging-policy.md`](centralized-logging-policy.md) | ✅ ACTIVE | TBD |
+| **Centralized Logging Policy** | [`centralized-logging-policy.md`](centralized-logging-policy.md) |  ACTIVE | TBD |
 
 ## Standard Types
 
-### 🛠️ Development Standards
+###  Development Standards
 
 **Purpose**: Establish consistent development practices across the team
 **Scope**: Tools, workflows, quality gates, and team collaboration
 **Examples**: VS Code integration, CI/CD practices, code review processes
 
-### 📋 Process Standards
+###  Process Standards
 
 **Purpose**: Define operational procedures and governance
 **Scope**: Issue management, documentation, reporting, and communication
@@ -67,7 +67,7 @@ This directory contains the standard practices and policies that govern DevOnboa
 
 ### Mandatory Compliance
 
-All standards marked as **✅ ACTIVE** are mandatory for:
+All standards marked as ** ACTIVE** are mandatory for:
 
 - **All team members**: Must follow established practices
 

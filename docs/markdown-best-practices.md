@@ -19,7 +19,7 @@ updated_at: '2025-09-12'
 visibility: internal
 ---
 
-# 📝 DevOnboarder Markdown Formatting Rules
+#  DevOnboarder Markdown Formatting Rules
 
 Golden rules and best practices for writing lint-free markdown documentation in DevOnboarder.
 
@@ -51,7 +51,7 @@ Additional formatting standards:
 
 - **Reference Links:** Use descriptive text instead of "click here"
 
-## 🛠️ Quick Fix Commands
+##  Quick Fix Commands
 
 Common markdown linting errors and their solutions.
 
@@ -127,7 +127,7 @@ markdownlint --fix docs/my-file.md
 
 ```
 
-## 📊 Approach Comparison
+##  Approach Comparison
 
 Reactive vs proactive markdown creation analysis.
 
@@ -136,9 +136,9 @@ Reactive vs proactive markdown creation analysis.
 | Approach      | Time Investment       | Error Rate | Frustration Level |
 | ------------- | --------------------- | ---------- | ----------------- |
 
-| **Reactive**  | Write + 15min fixes   | High       | 😤 High           |
+| **Reactive**  | Write  15min fixes   | High       | 😤 High           |
 
-| **Proactive** | Template + validation | Low        | 😌 Low            |
+| **Proactive** | Template  validation | Low        | 😌 Low            |
 
 ### Best Practice Workflow
 

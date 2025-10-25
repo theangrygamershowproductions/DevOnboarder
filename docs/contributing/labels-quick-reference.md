@@ -33,23 +33,23 @@ visibility: internal
 
 ### Effort (Choose One)
 
-- `effort-small` ⚡ - 1-2 day implementations
+- `effort-small` FAST: - 1-2 day implementations
 
-- `effort-medium` 🔧 - 3-5 day implementations
+- `effort-medium`  - 3-5 day implementations
 
-- `effort-large` 🏗️ - 1+ week implementations
+- `effort-large` BUILD: - 1 week implementations
 
 ### Component (Choose One or More)
 
 - `testing-infrastructure` 🧪 - Test runners, coverage, artifacts
 
-- `developer-experience` 👨‍💻 - Tooling, documentation, automation
+- `developer-experience` 👨‍ - Tooling, documentation, automation
 
 - `security-enhancement` 🔒 - Authentication, vulnerabilities
 
-- `cross-platform` 🌐 - Windows/macOS compatibility
+- `cross-platform`  - Windows/macOS compatibility
 
-- `performance` ⚡ - Speed and efficiency improvements
+- `performance` FAST: - Speed and efficiency improvements
 
 ### Technology (Choose Relevant)
 

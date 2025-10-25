@@ -65,7 +65,7 @@ on:
 
 **What happens:**
 
-1. System extracts all PR comments (Copilot + reviewer feedback)
+1. System extracts all PR comments (Copilot  reviewer feedback)
 
 2. Retrieves current CI check status from GitHub API
 
@@ -126,18 +126,18 @@ python scripts/devonboarder_ci_health.py --diagnose-pr 1397 --format json
 ### Analysis Summary Format
 
 ```text
-🔍 Integrated PR Analysis: #1397
+ Integrated PR Analysis: #1397
 ============================================================
-📝 PR Comments: 6 total
+ PR Comments: 6 total
 🤖 Copilot Comments: 6
-💡 Code Suggestions: 3
+ Code Suggestions: 3
 
-🏗️ CI Status: 29 total checks
-✅ Passed: 25
-❌ Failed: 2
+BUILD: CI Status: 29 total checks
+ Passed: 25
+ Failed: 2
 ⏳ Pending: 2
 
-🔗 Comment-CI Correlations: 3 found
+LINK: Comment-CI Correlations: 3 found
 🎯 High Confidence: 2
 🚨 Priority Score: 0.85/1.0
 

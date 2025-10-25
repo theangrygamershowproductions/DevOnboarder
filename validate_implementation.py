@@ -24,7 +24,7 @@ def main() -> int:
         if not Path(file_path).exists():
             missing_files.append(file_path)
         else:
-            print(f"OK: {file_path}")
+            print(f" {file_path}")
 
     if missing_files:
         print("\nMissing files:")

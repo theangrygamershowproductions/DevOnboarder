@@ -21,7 +21,7 @@ echo "📤 Deploying commands to production guild..."
 DISCORD_GUILD_ID=1065367728992571444 npm run deploy-commands
 
 echo ""
-echo "✅ Bot deployment complete!"
+echo " Bot deployment complete!"
 echo ""
-echo "🚀 Starting bot..."
+echo " Starting bot..."
 npm start

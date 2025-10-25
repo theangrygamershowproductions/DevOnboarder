@@ -3,7 +3,7 @@
 DevOnboarder CI Health Dashboard Engine
 
 Real-time monitoring, failure prediction, and automated remediation for DevOnboarder's
-45+ GitHub Actions workflows. Built upon Token Architecture v2.1 and integrated with
+45 GitHub Actions workflows. Built upon Token Architecture v2.1 and integrated with
 the AAR system for proactive CI health management.
 
 Architecture: docs/CI_DASHBOARD_INTEGRATION_ARCHITECTURE.md
@@ -50,7 +50,7 @@ class TokenLoader:
 
     def load_token(self) -> Optional[str]:
         """Load GitHub token using Token Architecture v2.1 hierarchy"""
-        # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+        # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
         token_hierarchy = ["CI_ISSUE_AUTOMATION_TOKEN", "CI_BOT_TOKEN", "GITHUB_TOKEN"]
 
         # First try environment variables
@@ -273,7 +273,7 @@ class PRCommentAnalyzer:
         file_in_check = file_path in check_name
         path_parts_match = any(part in check_name for part in file_path.split("/"))
         if file_in_check or path_parts_match:
-            strength += 0.3
+            strength = 0.3
 
         # Pattern-based correlation
         correlation_patterns = {
@@ -287,7 +287,7 @@ class PRCommentAnalyzer:
         for pattern, keywords in correlation_patterns.items():
             if pattern in check_name:
                 if any(keyword in suggestion_comment for keyword in keywords):
-                    strength += 0.4
+                    strength = 0.4
 
         return min(strength, 1.0)  # Cap at 100%
 
@@ -319,13 +319,13 @@ class DetachedHeadPredictor:
         self.patterns = {
             "detached_head": [
                 r"fatal: You are in 'detached HEAD' state",
-                r"HEAD is now at [a-f0-9]+ .*",
+                r"HEAD is now at [a-f0-9] .*",
                 r"You are in detached HEAD state",
                 r"git checkout -b <new-branch-name>",
             ],
             "signature_verification": [
                 r"signature verification failed",
-                r"commit [a-f0-9]+ has a bad GPG signature",
+                r"commit [a-f0-9] has a bad GPG signature",
                 r"error: could not verify the tag",
                 r"gpg: signature verification failed",
             ],
@@ -587,7 +587,7 @@ class CIHealthDashboard:
                             "actions": prediction["recommended_actions"],
                         }
                     )
-                    analysis["total_cost_savings_potential"] += prediction[
+                    analysis["total_cost_savings_potential"] = prediction[
                         "cost_savings_minutes"
                     ]
 
@@ -654,8 +654,7 @@ class CIHealthDashboard:
         try:
             # Fields for pr checks command
             json_fields = (
-                "bucket,completedAt,description,event,link,"
-                "name,startedAt,state,workflow"
+                "bucket,completedAt,description,event,link," + "name,startedAt,state,workflow"
             )
             result = subprocess.run(
                 ["gh", "pr", "checks", str(pr_number), "--json", json_fields],
@@ -716,7 +715,7 @@ class CIHealthDashboard:
         pending_checks = len(ci_status.get("pending_checks", []))
         if copilot_suggestions > 0 and pending_checks > 0:
             recommendations.append(
-                f"🔄 PROACTIVE: Apply {copilot_suggestions} Copilot suggestions "
+                f"SYNC: PROACTIVE: Apply {copilot_suggestions} Copilot suggestions "
                 f"before {pending_checks} checks complete"
             )
 
@@ -724,8 +723,7 @@ class CIHealthDashboard:
         failure_patterns = pr_comments.get("failure_patterns", [])
         if "linting" in failure_patterns:
             recommendations.append(
-                "🔧 QUICK FIX: Copilot identified linting issues - "
-                "apply suggestions to prevent CI failures"
+                " QUICK + Copilot identified linting issues - " + "apply suggestions to prevent CI failures"
             )
 
         if "security" in failure_patterns:
@@ -737,14 +735,13 @@ class CIHealthDashboard:
         failed_checks = len(ci_status.get("failed_checks", []))
         if failed_checks > 0:
             recommendations.append(
-                f"ERROR: FAILURES: {failed_checks} CI checks failed - "
+                f" FAILURES: {failed_checks} CI checks failed - "
                 f"review correlations with comments"
             )
 
         if not recommendations:
             recommendations.append(
-                "SUCCESS: STATUS: No immediate issues detected - "
-                "PR appears ready for review"
+                " STATUS: No immediate issues detected - " + "PR appears ready for review"
             )
 
         return recommendations
@@ -757,29 +754,29 @@ class CIHealthDashboard:
 
         # High-confidence correlations significantly increase priority
         high_conf = correlations.get("high_confidence_correlations", 0)
-        score += min(high_conf * 0.3, 0.6)  # Max 0.6 from correlations
+        score = min(high_conf * 0.3, 0.6)  # Max 0.6 from correlations
 
         # Failed CI checks increase priority
         failed_checks = len(ci_status.get("failed_checks", []))
-        score += min(failed_checks * 0.1, 0.3)  # Max 0.3 from failures
+        score = min(failed_checks * 0.1, 0.3)  # Max 0.3 from failures
 
         # Security-related patterns increase priority
         patterns = pr_comments.get("failure_patterns", [])
         if "security" in patterns:
-            score += 0.2
+            score = 0.2
         if "syntax_error" in patterns:
-            score += 0.15
+            score = 0.15
 
         # Multiple Copilot suggestions increase urgency
         suggestions_count = len(pr_comments.get("copilot_suggestions", []))
-        score += min(suggestions_count * 0.05, 0.2)  # Max 0.2
+        score = min(suggestions_count * 0.05, 0.2)  # Max 0.2
 
         return min(score, 1.0)  # Cap at 1.0
 
     def display_dashboard(self, branch: Optional[str] = None, live_mode: bool = False):
         """Display real-time CI health dashboard"""
         if live_mode:
-            logger.info("Starting live monitoring mode (Ctrl+C to exit)")
+            logger.info("Starting live monitoring mode (CtrlC to exit)")
 
         try:
             while True:
@@ -788,7 +785,7 @@ class CIHealthDashboard:
                     subprocess.run(["clear"], check=False)
 
                 print("=" * 80)
-                print("🏥 DevOnboarder CI Health Dashboard")
+                print("HOSPITAL: DevOnboarder CI Health Dashboard")
                 print("=" * 80)
                 print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                 print(f"Token Source: {self.token_loader.token_source or 'None'}")
@@ -809,13 +806,13 @@ class CIHealthDashboard:
 
                 # Display active workflows
                 if analysis["active_workflows"]:
-                    print("STATS: Active Workflow Status:")
+                    print(" Active Workflow Status:")
                     print("-" * 40)
                     for workflow in analysis["active_workflows"]:
                         status_icon = (
-                            "WARNING:"
+                            ""
                             if workflow["status"] == "in_progress"
-                            else "ERROR:"
+                            else ""
                         )
                         print(f"{status_icon} {workflow['name']}")
 
@@ -825,7 +822,7 @@ class CIHealthDashboard:
                         ):
                             pred = workflow["prediction"]
                             confidence_icon = (
-                                "ALERT:" if pred["confidence"] > 0.8 else "WARNING:"
+                                "ALERT:" if pred["confidence"] > 0.8 else ""
                             )
                             print(
                                 f"   {confidence_icon} {pred['failure_type']} "
@@ -849,7 +846,7 @@ class CIHealthDashboard:
 
                 # Display recommendations
                 if analysis["recommendations"]:
-                    print("TIP: Recommendations:")
+                    print(" Recommendations:")
                     print("-" * 40)
                     for rec in analysis["recommendations"]:
                         print(f"• {rec}")
@@ -858,7 +855,7 @@ class CIHealthDashboard:
                 if not live_mode:
                     break
 
-                print("Live monitoring... (Ctrl+C to exit)")
+                print("Live monitoring... (CtrlC to exit)")
                 time.sleep(30)  # Update every 30 seconds
 
         except KeyboardInterrupt:
@@ -888,8 +885,7 @@ def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
         description=(
-            "DevOnboarder CI Health Dashboard - Real-time workflow "
-            "monitoring and failure prediction"
+            "DevOnboarder CI Health Dashboard - Real-time workflow " + "monitoring and failure prediction"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
@@ -936,8 +932,7 @@ Examples:
 
     if not dashboard.github_token:
         print(
-            "WARNING:  Warning: No GitHub token available. Dashboard will "
-            "have limited functionality."
+            "  Warning: No GitHub token available. Dashboard will " + "have limited functionality."
         )
         print("   Please ensure TOKEN_ARCHITECTURE_V2.1 is properly configured.")
         print()
@@ -950,19 +945,19 @@ Examples:
             if args.json:
                 print(json.dumps(results, indent=2))
             else:
-                print(f"INFO: Integrated PR Analysis: #{results['pr_number']}")
+                print(f" Integrated PR Analysis: #{results['pr_number']}")
                 print("=" * 60)
 
                 # PR Comments Summary
                 pr_comments = results["pr_comments"]
                 print(
-                    f"NOTE: PR Comments: {pr_comments.get('total_comments', 0)} total"
+                    f" PR Comments: {pr_comments.get('total_comments', 0)} total"
                 )
                 print(
                     f"BOT: Copilot Comments: {pr_comments.get('copilot_comments', 0)}"
                 )
                 suggestions_count = len(pr_comments.get("copilot_suggestions", []))
-                print(f"TIP: Code Suggestions: {suggestions_count}")
+                print(f" Code Suggestions: {suggestions_count}")
                 print()
 
                 # CI Status Summary
@@ -970,8 +965,8 @@ Examples:
                 print(
                     f"BUILD: CI Status: {ci_status.get('total_checks', 0)} total checks"
                 )
-                print(f"SUCCESS: Passed: {len(ci_status.get('passed_checks', []))}")
-                print(f"ERROR: Failed: {len(ci_status.get('failed_checks', []))}")
+                print(f" Passed: {len(ci_status.get('passed_checks', []))}")
+                print(f" Failed: {len(ci_status.get('failed_checks', []))}")
                 print(f"⏳ Pending: {len(ci_status.get('pending_checks', []))}")
                 print()
 
@@ -985,20 +980,20 @@ Examples:
                 print()
 
                 # Recommendations
-                print("TIP: Integrated Recommendations:")
+                print(" Integrated Recommendations:")
                 print("-" * 40)
                 for i, rec in enumerate(results["recommendations"], 1):
                     print(f"{i}. {rec}")
 
                 # Show high-confidence correlations
                 if high_conf_corr > 0:
-                    print("\nINFO: High-Confidence Correlations:")
+                    print("\n High-Confidence Correlations:")
                     print("-" * 40)
                     for corr in correlations.get("correlations", []):
                         if corr["correlation_strength"] > 0.7:
                             suggestion = corr["suggestion"]
-                            print(f"📁 {suggestion.get('file', 'Unknown')}")
-                            print(f"📍 Line {suggestion.get('line', 'Unknown')}")
+                            print(f" {suggestion.get('file', 'Unknown')}")
+                            print(f"LOCATION: Line {suggestion.get('line', 'Unknown')}")
                             print(
                                 f"LINK: {corr['correlation_strength']:.1%} correlation"
                             )

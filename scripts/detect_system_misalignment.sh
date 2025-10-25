@@ -9,13 +9,13 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 LOG_DIR="${PROJECT_ROOT}/logs"
 mkdir -p "$LOG_DIR"
 
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="${LOG_DIR}/system_misalignment_${TIMESTAMP}.log"
 REPORT_FILE="${LOG_DIR}/misalignment_report_${TIMESTAMP}.json"
 
 # Logging function
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+    echo "[$(date '%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
 }
 
 # JSON report structure
@@ -211,15 +211,15 @@ check_venv_alignment() {
 
     # Check for key DevOnboarder dependencies
     if ! python -c "import fastapi" 2>/dev/null; then
-        missing_packages+=("fastapi")
+        missing_packages=("fastapi")
     fi
 
     if ! python -c "import pytest" 2>/dev/null; then
-        missing_packages+=("pytest")
+        missing_packages=("pytest")
     fi
 
     if ! python -c "import ruff" 2>/dev/null; then
-        missing_packages+=("ruff")
+        missing_packages=("ruff")
     fi
 
     if [[ ${#missing_packages[@]} -gt 0 ]]; then
@@ -240,7 +240,7 @@ run_qc_checks() {
 
     # Time the QC execution
     local start_time end_time duration
-    start_time=$(date +%s.%N)
+    start_time=$(date %s.%N)
 
     local qc_exit_code=0
     local qc_output
@@ -263,7 +263,7 @@ run_qc_checks() {
         fi
     fi
 
-    end_time=$(date +%s.%N)
+    end_time=$(date %s.%N)
     duration=$(echo "$end_time - $start_time" | bc -l 2>/dev/null || echo "unknown")
 
     update_report "quality_checks.duration_seconds" "$duration"
@@ -409,34 +409,34 @@ with open("'"$REPORT_FILE"'", "r") as f:
     data = json.load(f)
 
 env = data.get("environment", {})
-print("Environment: " + env.get("detected", "unknown"))
-print("Timestamp: " + data.get("timestamp", "unknown"))
+print("Environment: "  env.get("detected", "unknown"))
+print("Timestamp: "  data.get("timestamp", "unknown"))
 
 misalignments = data.get("misalignments", [])
 severity = data.get("severity", "unknown")
 
-print("Severity: " + severity.upper())
-print("Misalignments Found: " + str(len(misalignments)))
+print("Severity: "  severity.upper())
+print("Misalignments Found: "  str(len(misalignments)))
 
 if misalignments:
     print("\nMISALIGNMENTS:")
     for i, m in enumerate(misalignments, 1):
         severity_icon = "🔴" if m.get("severity") == "high" else "🟡" if m.get("severity") == "medium" else "🟢"
-        print("  " + str(i) + ". " + severity_icon + " [" + m.get("category", "unknown") + "] " + m.get("description", "No description"))
-        print("     Local: " + str(m.get("local_value", "unknown")))
-        print("     Expected: " + str(m.get("expected_value", "unknown")))
+        print("  "  str(i)  ". "  severity_icon  " ["  m.get("category", "unknown")  "] "  m.get("description", "No description"))
+        print("     Local: "  str(m.get("local_value", "unknown")))
+        print("     Expected: "  str(m.get("expected_value", "unknown")))
 
 recommendations = data.get("recommendations", [])
 if recommendations:
     print("\nRECOMMENDATIONS:")
     for i, rec in enumerate(recommendations, 1):
-        print("  " + str(i) + ". " + rec)
+        print("  "  str(i)  ". "  rec)
 
 qc = data.get("quality_checks", {})
 if "status" in qc:
-    print("\nQUALITY CHECKS: " + qc["status"].upper())
+    print("\nQUALITY CHECKS: "  qc["status"].upper())
     if "duration_seconds" in qc:
-        print("Duration: " + str(qc["duration_seconds"]) + "s")
+        print("Duration: "  str(qc["duration_seconds"])  "s")
 '
 
     echo

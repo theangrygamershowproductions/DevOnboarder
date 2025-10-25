@@ -11,7 +11,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}📝 DevOnboarder Commit Message Guide${NC}"
+echo -e "${GREEN} DevOnboarder Commit Message Guide${NC}"
 echo "===================================="
 echo ""
 echo -e "${YELLOW}This guide helps you write proper commit messages following DevOnboarder conventions.${NC}"
@@ -29,7 +29,7 @@ show_examples() {
     echo "  FEAT(scripts): add comprehensive branch cleanup utilities"
     echo ""
 
-    echo -e "${CYAN}FIX: Bug fixes${NC}"
+    echo -e "${CYAN} Bug fixes${NC}"
     echo "  FIX(auth): resolve token expiration handling"
     echo "  FIX(bot): correct Discord permission validation logic"
     echo "  FIX(ci): resolve shellcheck Unicode character corruption"
@@ -100,23 +100,23 @@ show_message_structure() {
     echo -e "${CYAN}Format:${NC} TYPE(scope): subject"
     echo ""
     echo -e "${CYAN}Rules:${NC}"
-    echo "  ✅ TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
-    echo "  ✅ scope is optional but recommended (lowercase)"
-    echo "  ✅ subject should be imperative mood (\"add\" not \"added\")"
-    echo "  ✅ subject should be descriptive and concise"
-    echo "  ✅ no period at the end of subject"
-    echo "  ✅ keep under 72 characters for better git log display"
+    echo "   TYPE must be UPPERCASE (FEAT, FIX, DOCS, etc.)"
+    echo "   scope is optional but recommended (lowercase)"
+    echo "   subject should be imperative mood (\"add\" not \"added\")"
+    echo "   subject should be descriptive and concise"
+    echo "   no period at the end of subject"
+    echo "   keep under 72 characters for better git log display"
     echo ""
     echo -e "${CYAN}Examples:${NC}"
-    echo "  ✅ FEAT(auth): add JWT token validation middleware"
-    echo "  ✅ FIX(bot): resolve Discord connection timeout handling"
-    echo "  ✅ DOCS: update git workflow utilities documentation"
+    echo "   FEAT(auth): add JWT token validation middleware"
+    echo "   FIX(bot): resolve Discord connection timeout handling"
+    echo "   DOCS: update git workflow utilities documentation"
     echo ""
     echo -e "${CYAN}Avoid:${NC}"
-    echo "  ❌ fix bug (too vague)"
-    echo "  ❌ Updated documentation (wrong tense)"
-    echo "  ❌ feat: add feature (wrong case)"
-    echo "  ❌ FEAT(auth): Added JWT validation. (wrong tense, has period)"
+    echo "   fix bug (too vague)"
+    echo "   Updated documentation (wrong tense)"
+    echo "   feat: add feature (wrong case)"
+    echo "   FEAT(auth): Added JWT validation. (wrong tense, has period)"
     echo ""
 }
 
@@ -198,18 +198,18 @@ show_interactive_helper() {
     echo -e "${GREEN}🎉 Generated commit message:${NC}"
     echo "  $commit_msg"
     echo ""
-    echo -e "${YELLOW}💡 Copy this message and use it with git commit -m \"$commit_msg\"${NC}"
+    echo -e "${YELLOW} Copy this message and use it with git commit -m \"$commit_msg\"${NC}"
     echo "   Or use ./scripts/commit_changes.sh and select the custom message option."
     echo ""
 }
 
 show_current_changes() {
-    echo -e "${BLUE}🔍 Current Changes Analysis${NC}"
+    echo -e "${BLUE} Current Changes Analysis${NC}"
     echo "=========================="
     echo ""
 
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository"
+        echo " Not in a git repository"
         return
     fi
 
@@ -223,7 +223,7 @@ show_current_changes() {
             echo -e "${YELLOW}Unstaged changes found:${NC}"
             git diff --name-only | head -10
             echo ""
-            echo "💡 Run 'git add .' to stage changes, then use this guide again."
+            echo " Run 'git add .' to stage changes, then use this guide again."
         else
             echo "Working directory is clean."
         fi
@@ -245,11 +245,11 @@ show_current_changes() {
     echo -e "${CYAN}Suggested commit types based on your changes:${NC}"
 
     if echo "$changed_files" | grep -q "\.md$"; then
-        echo "  📝 DOCS - You have documentation files"
+        echo "   DOCS - You have documentation files"
     fi
 
     if echo "$changed_files" | grep -q "scripts/"; then
-        echo "  🔧 CHORE(scripts) or FEAT(scripts) - You have script changes"
+        echo "   CHORE(scripts) or FEAT(scripts) - You have script changes"
     fi
 
     if echo "$changed_files" | grep -q "\.py$"; then
@@ -257,11 +257,11 @@ show_current_changes() {
     fi
 
     if echo "$changed_files" | grep -q "\.(js|ts)$"; then
-        echo "  ⚡ FEAT, FIX, or REFACTOR - You have JavaScript/TypeScript changes"
+        echo "  FAST: FEAT, FIX, or REFACTOR - You have JavaScript/TypeScript changes"
     fi
 
     if echo "$changed_files" | grep -q "\.(yml|yaml)$"; then
-        echo "  ⚙️ CI or CONFIG - You have YAML configuration changes"
+        echo "   CI or CONFIG - You have YAML configuration changes"
     fi
 
     echo ""

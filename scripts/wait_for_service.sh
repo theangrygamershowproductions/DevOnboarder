@@ -7,7 +7,7 @@ RETRIES=${2:-30}
 SLEEP=${3:-2}
 SERVICE=${4:-auth}
 
-for ((i=1; i<=RETRIES; i++)); do
+for ((i=1; i<=RETRIES; i)); do
   if curl -fs "$URL" >/dev/null; then
     echo "Service is up!"
     exit 0

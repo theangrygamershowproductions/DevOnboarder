@@ -314,22 +314,21 @@ class DashboardService:
             if request.args:
                 for arg in request.args:
                     # Basic sanitization - allow alphanumeric, hyphens, dots
-                    if not re.match(r"^[a-zA-Z0-9._-]+$", str(arg)):
+                    if not re.match(r"^[a-zA-Z0-9._-]$", str(arg)):
                         raise HTTPException(
                             status_code=400,
-                            detail=f"Invalid argument format: {arg}. "
-                            "Only alphanumeric characters, dots, hyphens, "
+                            detail=f"Invalid argument format: {arg}. " + "Only alphanumeric characters, dots, hyphens, "
                             "and underscores allowed.",
                         )
                     safe_args.append(str(arg))
 
             # Prepare command with validated script path and sanitized arguments
             if script_path.suffix == ".py":
-                cmd = ["python", str(script_path)] + safe_args
+                cmd = ["python", str(script_path)]  safe_args
             elif script_path.suffix in {".sh", ".bash"}:
-                cmd = ["bash", str(script_path)] + safe_args
+                cmd = ["bash", str(script_path)]  safe_args
             else:
-                cmd = [str(script_path)] + safe_args
+                cmd = [str(script_path)]  safe_args
 
             # Create log file
             log_file = self.logs_dir / f"dashboard_execution_{execution_id}.log"
@@ -591,7 +590,7 @@ def create_dashboard_app() -> FastAPI:
             # Check if validation script exists and is executable
             validation_script = Path("scripts/validate_no_verify_usage.sh")
             if validation_script.exists() and os.access(validation_script, os.X_OK):
-                components["validation_script"] = "✅ Available"
+                components["validation_script"] = " Available"
 
                 # Run the validation with trusted script path - security validated
                 result = subprocess.run(  # noqa: B603
@@ -612,14 +611,14 @@ def create_dashboard_app() -> FastAPI:
                     if "Emergency approved usages:" in output:
                         import re
 
-                        match = re.search(r"Emergency approved usages: (\d+)", output)
+                        match = re.search(r"Emergency approved usages: (\d)", output)
                         if match:
                             status["emergency_approvals"] = match.group(1)
 
                     if "Unauthorized violations:" in output:
                         import re
 
-                        match = re.search(r"Unauthorized violations: (\d+)", output)
+                        match = re.search(r"Unauthorized violations: (\d)", output)
                         if match:
                             violations = match.group(1)
                             status["violations"] = violations
@@ -631,14 +630,14 @@ def create_dashboard_app() -> FastAPI:
                     status["compliance_score"] = "0.0"
                     status["error"] = result.stderr
             else:
-                components["validation_script"] = "❌ Missing"
+                components["validation_script"] = " Missing"
 
             # Check safety wrapper
             safety_wrapper = Path("scripts/git_safety_wrapper.sh")
             if safety_wrapper.exists() and os.access(safety_wrapper, os.X_OK):
-                components["safety_wrapper"] = "✅ Available"
+                components["safety_wrapper"] = " Available"
             else:
-                components["safety_wrapper"] = "❌ Missing"
+                components["safety_wrapper"] = " Missing"
 
             # Check pre-commit hook
             precommit_config = Path(".pre-commit-config.yaml")
@@ -646,18 +645,18 @@ def create_dashboard_app() -> FastAPI:
                 with open(precommit_config, "r", encoding="utf-8") as f:
                     config_content = f.read()
                     if "validate-no-verify" in config_content:
-                        components["precommit_hook"] = "✅ Configured"
+                        components["precommit_hook"] = " Configured"
                     else:
-                        components["precommit_hook"] = "❌ Not configured"
+                        components["precommit_hook"] = " Not configured"
             else:
-                components["precommit_hook"] = "❌ Missing"
+                components["precommit_hook"] = " Missing"
 
             # Check CI workflow
             ci_workflow = Path(".github/workflows/no-verify-policy.yml")
             if ci_workflow.exists():
-                components["ci_workflow"] = "✅ Active"
+                components["ci_workflow"] = " Active"
             else:
-                components["ci_workflow"] = "❌ Missing"
+                components["ci_workflow"] = " Missing"
 
             # Check policy documentation
             policy_doc = Path("docs/NO_VERIFY_POLICY.md")
@@ -670,9 +669,9 @@ def create_dashboard_app() -> FastAPI:
                 docs_status.append("Quick Reference")
 
             if docs_status:
-                components["documentation"] = f"✅ {', '.join(docs_status)}"
+                components["documentation"] = f" {', '.join(docs_status)}"
             else:
-                components["documentation"] = "❌ Missing"
+                components["documentation"] = " Missing"
 
         except subprocess.TimeoutExpired:
             status["status"] = "ERROR"

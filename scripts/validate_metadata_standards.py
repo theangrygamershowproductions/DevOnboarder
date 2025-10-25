@@ -24,10 +24,10 @@ def extract_frontmatter(file_path: Path) -> Dict[str, Any] | None:
     try:
         content = file_path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
-        print(f"   ❌ Cannot read file (encoding issue): {file_path}")
+        print(f"    Cannot read file (encoding issue): {file_path}")
         return None
     except FileNotFoundError:
-        print(f"   ❌ File not found: {file_path}")
+        print(f"    File not found: {file_path}")
         return None
 
     lines = content.split("\n")
@@ -51,7 +51,7 @@ def extract_frontmatter(file_path: Path) -> Dict[str, Any] | None:
     try:
         return yaml.safe_load(yaml_content) or {}
     except yaml.YAMLError as e:
-        print(f"   ❌ YAML parsing error in {file_path}: {e}")
+        print(f"    YAML parsing error in {file_path}: {e}")
         return None
 
 
@@ -228,7 +228,7 @@ def validate_devonboarder_requirements(
 
 def main():
     """Main validation function."""
-    print("🔍 Starting Core Metadata Standards Validation...")
+    print(" Starting Core Metadata Standards Validation...")
 
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
@@ -257,29 +257,29 @@ def main():
         if not file_path.is_file():
             continue
 
-        total_files += 1
+        total_files = 1
         file_name = file_path.name
 
         # Extract frontmatter
         frontmatter = extract_frontmatter(file_path)
 
         if frontmatter is None:
-            print(f"❌ {file_name}: Failed to parse YAML frontmatter")
-            validation_errors += 1
+            print(f" {file_name}: Failed to parse YAML frontmatter")
+            validation_errors = 1
             continue
 
         if not frontmatter:
-            print(f"⚠️  {file_name}: No frontmatter found")
+            print(f"  {file_name}: No frontmatter found")
             print(f"   File: {file_path}")
             continue
 
         # Track file types
         if "project" in frontmatter and frontmatter["project"] == "DevOnboarder":
-            devonboarder_files += 1
+            devonboarder_files = 1
         if "agents" in file_path.parts or (
             "document_type" in frontmatter and frontmatter["document_type"] == "agent"
         ):
-            agent_files += 1
+            agent_files = 1
 
         # Core metadata validation
         core_errors = validate_core_metadata(frontmatter, file_path)
@@ -288,16 +288,16 @@ def main():
         all_errors = core_errors + devonboarder_errors
 
         if all_errors:
-            print(f"❌ {file_name}: Metadata validation failed")
+            print(f" {file_name}: Metadata validation failed")
             print(f"   File: {file_path}")
             for error in all_errors:
                 print(f"   • {error}")
-            validation_errors += 1
+            validation_errors = 1
         else:
-            print(f"✅ {file_name}: Valid metadata")
+            print(f" {file_name}: Valid metadata")
 
     print()
-    print("📊 Metadata Validation Summary:")
+    print(" Metadata Validation Summary:")
     print(f"   Total files validated: {total_files}")
     print(f"   DevOnboarder project files: {devonboarder_files}")
     print(f"   Agent files: {agent_files}")
@@ -310,9 +310,9 @@ def main():
 
     if validation_errors == 0:
         print("🎉 All files meet metadata standards!")
-        print("   ✅ Core metadata fields present")
-        print("   ✅ DevOnboarder requirements met")
-        print("   ✅ Agent standards compliant")
+        print("    Core metadata fields present")
+        print("    DevOnboarder requirements met")
+        print("    Agent standards compliant")
         sys.exit(0)
     else:
         print(f"💥 {validation_errors} file(s) failed metadata validation")

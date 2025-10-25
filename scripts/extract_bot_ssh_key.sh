@@ -9,7 +9,7 @@ echo "================================================"
 
 # Check if we have the secret available
 if [[ -z "${PMBOT_SSH_PRIVATE:-}" ]]; then
-    echo "ERROR: PMBOT_SSH_PRIVATE environment variable not set"
+    echo " PMBOT_SSH_PRIVATE environment variable not set"
     echo ""
     echo "To get the key:"
     echo "1. Go to: https://github.com/theangrygamershowproductions/DevOnboarder/settings/secrets/actions"
@@ -28,7 +28,7 @@ chmod 600 "$TEMP_DIR/bot_key"
 
 # Generate public key
 if ssh-keygen -y -f "$TEMP_DIR/bot_key" > "$TEMP_DIR/bot_key.pub"; then
-    echo "SUCCESS: SSH public key extracted"
+    echo " SSH public key extracted"
     echo ""
     echo "Copy this public key to GitHub:"
     echo "==============================="
@@ -43,7 +43,7 @@ if ssh-keygen -y -f "$TEMP_DIR/bot_key" > "$TEMP_DIR/bot_key.pub"; then
     echo "5. Paste the public key above"
     echo "6. Click 'Add SSH key'"
 else
-    echo "ERROR: Failed to generate public key"
+    echo " Failed to generate public key"
     exit 1
 fi
 

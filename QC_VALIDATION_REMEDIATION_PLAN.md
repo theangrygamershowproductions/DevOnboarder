@@ -17,7 +17,7 @@ consolidation_priority: P3
 ```bash
 current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
-    echo "WARNING: You're about to push to main branch!"
+    echo " You're about to push to main branch!"
     # ... blocks ALL main branch activity
 fi
 ```
@@ -32,10 +32,10 @@ current_branch=$(git branch --show-current 2>/dev/null || echo "unknown")
 if [[ "$current_branch" == "main" ]]; then
     # Check if running in GitHub Actions (PR merge context)
     if [[ -n "${GITHUB_ACTIONS:-}" && "${GITHUB_EVENT_NAME:-}" == "push" && "${GITHUB_REF:-}" == "refs/heads/main" ]]; then
-        echo "✅ GitHub Actions PR merge to main detected - allowing QC validation"
+        echo " GitHub Actions PR merge to main detected - allowing QC validation"
     else
         echo
-        echo "WARNING: You're about to push to main branch!"
+        echo " You're about to push to main branch!"
         echo "   DevOnboarder requires feature branch workflow"
         echo "   Consider: git checkout -b feat/your-feature-name"
         echo
@@ -48,7 +48,7 @@ if [[ "$current_branch" == "main" ]]; then
 fi
 ```
 
-## 🔧 Implementation Strategy
+##  Implementation Strategy
 
 ### Phase 1: Environment Detection Enhancement
 
@@ -75,7 +75,7 @@ fi
 **Risk**: Low - simple environment detection addition
 **Testing**: Can be validated locally and in CI
 
-## 📋 Checklist
+##  Checklist
 
 - [ ] Update `scripts/qc_pre_push.sh` with GitHub Actions detection
 - [ ] Test locally with environment variable simulation
@@ -85,11 +85,11 @@ fi
 
 ## 🎯 Expected Outcome
 
-- ✅ PR squash merges to main branch pass QC validation
-- ✅ Direct pushes to main still blocked (security maintained)
-- ✅ All 7 failing workflows recover successfully
-- ✅ CI pipeline returns to normal operation
-- ✅ Feature branch workflow enforcement preserved
+-  PR squash merges to main branch pass QC validation
+-  Direct pushes to main still blocked (security maintained)
+-  All 7 failing workflows recover successfully
+-  CI pipeline returns to normal operation
+-  Feature branch workflow enforcement preserved
 
 ---
 

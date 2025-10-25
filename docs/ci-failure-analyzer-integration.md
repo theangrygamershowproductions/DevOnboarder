@@ -93,25 +93,25 @@ The integration detects and analyzes 7 categories of CI failures:
 
 | Category | Examples | Auto-fixable |
 |----------|----------|--------------|
-| **Environment** | Virtual environment missing, PATH issues | ✅ Yes |
+| **Environment** | Virtual environment missing, PATH issues |  Yes |
 
-| **Dependency** | ModuleNotFoundError, npm failures | ✅ Yes |
+| **Dependency** | ModuleNotFoundError, npm failures |  Yes |
 
-| **Timeout** | Process timeouts, job cancellations | ⚠️ Partial |
+| **Timeout** | Process timeouts, job cancellations |  Partial |
 
-| **Syntax** | Code syntax errors, linting failures | ⚠️ Partial |
+| **Syntax** | Code syntax errors, linting failures |  Partial |
 
-| **Network** | Connection issues, DNS resolution | ❌ No |
+| **Network** | Connection issues, DNS resolution |  No |
 
-| **Resource** | Memory limits, disk space, rate limits | ⚠️ Partial |
+| **Resource** | Memory limits, disk space, rate limits |  Partial |
 
-| **GitHub CLI** | Authentication, API failures | ✅ Yes |
+| **GitHub CLI** | Authentication, API failures |  Yes |
 
-| **Pre-commit** | Hook failures, file modifications | ✅ Yes |
+| **Pre-commit** | Hook failures, file modifications |  Yes |
 
 ## Resolution Strategies
 
-### High-Confidence Auto-Resolution (80%+ confidence)
+### High-Confidence Auto-Resolution (80% confidence)
 
 ```bash
 
@@ -295,13 +295,13 @@ gh auth status
 
 | Metric | Expected Value | Actual Performance |
 |--------|---------------|-------------------|
-| **Analysis Speed** | < 30 seconds | ✅ Typically 15-25s |
+| **Analysis Speed** | < 30 seconds |  Typically 15-25s |
 
-| **Pattern Detection** | 80%+ accuracy | ✅ 85%+ validated |
+| **Pattern Detection** | 80% accuracy |  85% validated |
 
-| **Auto-resolution Success** | 85%+ rate | 🎯 Target metric |
+| **Auto-resolution Success** | 85% rate | 🎯 Target metric |
 
-| **Issue Creation** | < 5 seconds | ✅ Near-instantaneous |
+| **Issue Creation** | < 5 seconds |  Near-instantaneous |
 
 ## Integration Benefits
 

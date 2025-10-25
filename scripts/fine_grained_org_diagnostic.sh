@@ -13,7 +13,7 @@ echo "============================================="
 echo ""
 
 if [ -z "$AAR_TOKEN" ]; then
-    echo "ERROR: AAR_TOKEN not found"
+    echo " AAR_TOKEN not found"
     exit 1
 fi
 
@@ -86,7 +86,7 @@ fi
 echo ""
 
 # Test Actions API specifically
-echo "⚡ Actions API Testing:"
+echo "FAST: Actions API Testing:"
 echo "   Testing organization repository Actions access..."
 
 # Try different Actions endpoints
@@ -125,7 +125,7 @@ echo ""
 echo "Fine-Grained Token Organization Resolution:"
 echo "=============================================="
 echo ""
-echo "IDENTIFIED ISSUE: Organization Repository + Fine-Grained Token"
+echo "IDENTIFIED ISSUE: Organization Repository  Fine-Grained Token"
 echo ""
 echo "Fine-Grained tokens have stricter access controls for organization repositories."
 echo "Here's how to fix this:"

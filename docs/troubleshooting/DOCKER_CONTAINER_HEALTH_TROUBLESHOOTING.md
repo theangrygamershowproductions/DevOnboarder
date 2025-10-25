@@ -208,11 +208,11 @@ This file is being treated as an ES module because it has a '.js' file extension
 Use ES module syntax in health check scripts:
 
 ```javascript
-// ❌ Wrong (CommonJS)
+//  Wrong (CommonJS)
 const fs = require('fs');
 const path = require('path');
 
-// ✅ Correct (ES Modules)
+//  Correct (ES Modules)
 import fs from 'fs';
 import path from 'path';
 
@@ -364,7 +364,7 @@ volumes:
 
 # Avoid mounting entire directories that contain build artifacts
 
-# ❌ Don't do this if it contains compiled files
+#  Don't do this if it contains compiled files
 
 # - ./app:/app
 
@@ -424,5 +424,5 @@ If you encounter issues not covered in this guide:
 
 **Last Updated**: August 7, 2025
 
-**Applies To**: DevOnboarder v1.0.0+
+**Applies To**: DevOnboarder v1.0.0
 **Related Issues**: Discord Bot Health Check (#XXX)

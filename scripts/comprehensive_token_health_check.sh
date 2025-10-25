@@ -32,14 +32,14 @@ test_github_token() {
     local test_description="$2"
     local api_endpoint="$3"
 
-    TOTAL_TOKENS=$((TOTAL_TOKENS + 1))
+    TOTAL_TOKENS=$((TOTAL_TOKENS  1))
 
     printf "Value: %s\n" "$"
     printf "Value: %s\n" "$"
 
     if [ -z "$token_value" ]; then
         echo "   Status: Error: NOT FOUND in environment"
-        FAILED_TOKENS+=("$token_name: Not found in environment")
+        FAILED_TOKENS=("$token_name: Not found in environment")
         echo ""
         return 1
     fi
@@ -52,7 +52,7 @@ test_github_token() {
 
     if GH_TOKEN="$token_value" gh api "$api_endpoint" > /dev/null 2>&1; then
         echo "   Status: Success: WORKING"
-        WORKING_TOKENS=$((WORKING_TOKENS + 1))
+        WORKING_TOKENS=$((WORKING_TOKENS  1))
         echo ""
         return 0
     else
@@ -71,7 +71,7 @@ test_github_token() {
             echo "   Issue: Missing required permissions"
         fi
 
-        FAILED_TOKENS+=("$token_name: $test_description")
+        FAILED_TOKENS=("$token_name: $test_description")
         echo ""
         return 1
     fi
@@ -83,20 +83,20 @@ test_other_token() {
     local token_value="${!token_name:-}"
     local test_description="$2"
 
-    TOTAL_TOKENS=$((TOTAL_TOKENS + 1))
+    TOTAL_TOKENS=$((TOTAL_TOKENS  1))
 
     printf "Value: %s\n" "$"
     printf "Value: %s\n" "$"
 
     if [ -z "$token_value" ]; then
         echo "   Status: Error: NOT FOUND in environment"
-        FAILED_TOKENS+=("$token_name: Not found in environment")
+        FAILED_TOKENS=("$token_name: Not found in environment")
         return 1
     fi
 
     printf "Value: %s\n" "$"
     echo "   Status: Success: PRESENT (validation requires specific service test)"
-    WORKING_TOKENS=$((WORKING_TOKENS + 1))
+    WORKING_TOKENS=$((WORKING_TOKENS  1))
     echo ""
     return 0
 }
@@ -139,12 +139,12 @@ printf "Failed Tokens: %d\n" "${#FAILED_TOKENS[@]}"
 
 if [ ${#FAILED_TOKENS[@]} -eq 0 ]; then
     echo ""
-    echo "SUCCESS: All tokens are working correctly!"
+    echo " All tokens are working correctly!"
     echo "Token Architecture v2.1 is fully operational"
     echo "All DevOnboarder services should function properly"
 else
     echo ""
-    echo "WARNING: Issues found with the following tokens:"
+    echo " Issues found with the following tokens:"
     for failed_token in "${FAILED_TOKENS[@]}"; do
         printf "   FAILED: %s\n" "$failed_token"
     done

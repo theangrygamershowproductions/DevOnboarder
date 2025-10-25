@@ -73,7 +73,7 @@ consolidation_priority: P3
 
 ### Strategic Impact (90 days)
 
-- **PR Troubleshooting**: Reduced from 5.5h to <3h (50%+ improvement)
+- **PR Troubleshooting**: Reduced from 5.5h to <3h (50% improvement)
 
 - **Issue Management**: Structured closure workflow operational
 
@@ -127,7 +127,7 @@ consolidation_priority: P3
 
 ### Operational Efficiency
 
-- **Time Savings**: 50%+ reduction in PR troubleshooting time
+- **Time Savings**: 50% reduction in PR troubleshooting time
 
 - **Workflow Improvement**: Two-step issue closure eliminates terminal hanging
 
@@ -153,7 +153,7 @@ consolidation_priority: P3
 
 ### Measurement & Learning
 
-- **Cycle Time Tracking**: Monitor issue open→closed duration
+- **Cycle Time Tracking**: Monitor issue openclosed duration
 
 - **Process Improvement**: Document lessons learned from each sprint
 

@@ -37,7 +37,7 @@ DevOnboarder is a multi-service onboarding platform built to "work quietly and r
 
 **Multi-service setup** with specific ports:
 
-- Auth Service: 8002 (Discord OAuth + JWT)
+- Auth Service: 8002 (Discord OAuth  JWT)
 - XP API: 8001 (gamification)
 - Discord Integration: 8081
 - Frontend: 8081 (React)
@@ -67,11 +67,11 @@ const isProdEnvironment = guildId === "1065367728992571444"; // TAGS: C2C
 
 ### Automation Ecosystem
 
-100+ scripts handle validation, CI/CD, and automation. Key ones:
+100 scripts handle validation, CI/CD, and automation. Key ones:
 
 - `scripts/validate_terminal_output.sh` - Terminal compliance (CRITICAL)
 - `scripts/automate_pr_process.sh` - Full PR automation
 - `scripts/analyze_ci_patterns.sh` - AI-powered CI failure analysis
 
 **Branch workflow**: Feature branches from `main`, trunk-based development
-**Quality requirements**: 95%+ test coverage, conventional commits, markdown compliance
+**Quality requirements**: 95% test coverage, conventional commits, markdown compliance

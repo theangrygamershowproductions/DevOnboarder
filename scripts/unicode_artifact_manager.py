@@ -68,14 +68,14 @@ class UnicodeArtifactManager:
 
             # Track Unicode usage
             if any(ord(char) > 127 for char in normalized):
-                self.unicode_stats["files_with_unicode"] += 1
-                self.unicode_stats["unicode_chars_detected"] += sum(
+                self.unicode_stats["files_with_unicode"] = 1
+                self.unicode_stats["unicode_chars_detected"] = sum(
                     1 for char in normalized if ord(char) > 127
                 )
 
             return normalized
         except (UnicodeError, ValueError, TypeError):
-            self.unicode_stats["fallback_applied"] += 1
+            self.unicode_stats["fallback_applied"] = 1
             return filename.encode("ascii", errors="replace").decode("ascii")
 
     def safe_display_filename(
@@ -87,7 +87,7 @@ class UnicodeArtifactManager:
         if not unicode_capable:
             # Convert to ASCII-safe representation
             safe_name = normalized.encode("ascii", errors="replace").decode()
-            self.unicode_stats["fallback_applied"] += 1
+            self.unicode_stats["fallback_applied"] = 1
             return safe_name[:max_width]
 
         # Truncate with Unicode awareness
@@ -113,7 +113,7 @@ class UnicodeArtifactManager:
 
         for file_path in artifact_dir.rglob("*"):
             if file_path.is_file():
-                analysis["total_files"] += 1
+                analysis["total_files"] = 1
                 filename = file_path.name
 
                 # Check for Unicode characters
@@ -140,14 +140,12 @@ class UnicodeArtifactManager:
         # Generate recommendations
         if analysis["unicode_files"]:
             analysis["recommendations"].append(
-                "Files with Unicode characters detected. "
-                "Consider ASCII fallbacks for CI environments."
+                "Files with Unicode characters detected. " + "Consider ASCII fallbacks for CI environments."
             )
 
         if analysis["problematic_files"]:
             analysis["recommendations"].append(
-                "Files with problematic characters detected. "
-                "May cause issues on some filesystems."
+                "Files with problematic characters detected. " + "May cause issues on some filesystems."
             )
 
         return analysis

@@ -9,7 +9,7 @@ set -euo pipefail
 # Initialize logging
 LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/markdown_compliance_fix_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/markdown_compliance_fix_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "Starting Markdown Compliance Fix for Automation Scripts"
@@ -23,7 +23,7 @@ REPORTS_DIR="reports"
 # Unused variables for future expansion
 # shellcheck disable=SC2034
 TEMPLATES_DIR="templates"
-BACKUP_DIR="$LOG_DIR/markdown_compliance_backup_$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="$LOG_DIR/markdown_compliance_backup_$(date %Y%m%d_%H%M%S)"
 
 # Track progress
 SCRIPTS_PROCESSED=0
@@ -49,9 +49,9 @@ echo "==============================================================="
 # Function to identify scripts that generate markdown with violations
 find_markdown_generating_scripts() {
     local violation_patterns=(
-        "📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍"  # Common emojis
+        "" "" "🎯" "" "" "" "" "" "" ""  # Common emojis
         "cat.*>.*\.md.*<<"                                   # Here-doc to markdown
-        "echo.*[📊📋🎯✅❌⚠️🚀📝💡🔍].*>.*\.md"                 # Emoji echo to markdown
+        "echo.*[🎯].*>.*\.md"                 # Emoji echo to markdown
     )
 
     echo "Scanning scripts for markdown compliance violations..."
@@ -63,16 +63,16 @@ find_markdown_generating_scripts() {
             # Check for emoji usage in markdown generation
             for pattern in "${violation_patterns[@]}"; do
                 if grep -q "$pattern" "$script" 2>/dev/null; then
-                    violations=$((violations + 1))
+                    violations=$((violations  1))
                 fi
             done
 
             if [[ $violations -gt 0 ]]; then
                 echo "VIOLATION: $(basename "$script") - $violations patterns found"
-                VIOLATIONS_FOUND=$((VIOLATIONS_FOUND + violations))
+                VIOLATIONS_FOUND=$((VIOLATIONS_FOUND  violations))
             fi
         fi
-        SCRIPTS_PROCESSED=$((SCRIPTS_PROCESSED + 1))
+        SCRIPTS_PROCESSED=$((SCRIPTS_PROCESSED  1))
     done
 
     echo "Analysis complete: $SCRIPTS_PROCESSED scripts processed, $VIOLATIONS_FOUND violations found"
@@ -90,11 +90,11 @@ fix_automate_pr_process() {
     cp "$script" "$backup"
 
     # Replace emoji-containing markdown generation
-    sed -i 's/## 📊 Analysis Results/## Analysis Results/g' "$script"
-    sed -i "s/echo -e \"\${YELLOW}📋 STEP 6: Automation Report\${NC}\"/echo \"STEP 6: Automation Report\"/g" "$script"
+    sed -i 's/##  Analysis Results/## Analysis Results/g' "$script"
+    sed -i "s/echo -e \"\${YELLOW} STEP 6: Automation Report\${NC}\"/echo \"STEP 6: Automation Report\"/g" "$script"
 
     echo "Fixed: automate_pr_process.sh"
-    FIXES_APPLIED=$((FIXES_APPLIED + 1))
+    FIXES_APPLIED=$((FIXES_APPLIED  1))
 }
 
 fix_generate_aar() {
@@ -126,10 +126,10 @@ fix_manage_ci_failure_issues() {
 
         # Replace any emoji usage in generated markdown
         sed -i 's/### 🎯 Resolution/### Resolution/g' "$script" 2>/dev/null || true
-        sed -i 's/### ✅ Status/### Status/g' "$script" 2>/dev/null || true
+        sed -i 's/###  Status/### Status/g' "$script" 2>/dev/null || true
 
         echo "Fixed: manage_ci_failure_issues.sh"
-        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+        FIXES_APPLIED=$((FIXES_APPLIED  1))
     else
         echo "Script not found: $script"
     fi
@@ -148,10 +148,10 @@ fix_update_systems_for_tokens() {
 
         # Fix markdown generation sections
         sed -i 's/## 🎯 Token System Integration/## Token System Integration/g' "$script" 2>/dev/null || true
-        sed -i 's/### ✅ /### /g' "$script" 2>/dev/null || true
+        sed -i 's/###  /### /g' "$script" 2>/dev/null || true
 
         echo "Fixed: update_systems_for_tokens.sh"
-        FIXES_APPLIED=$((FIXES_APPLIED + 1))
+        FIXES_APPLIED=$((FIXES_APPLIED  1))
     else
         echo "Script not found: $script"
     fi
@@ -180,12 +180,12 @@ AAR_DIR=".aar"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("📊" "📋" "🎯" "✅" "❌" "⚠️" "🚀" "📝" "💡" "🔍")
+    local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
 
     for emoji in "${emoji_patterns[@]}"; do
         if grep -q "$emoji" "$file" 2>/dev/null; then
             echo "VIOLATION: $file contains emoji: $emoji"
-            VIOLATIONS=$((VIOLATIONS + 1))
+            VIOLATIONS=$((VIOLATIONS  1))
         fi
     done
 }
@@ -207,7 +207,7 @@ if [[ -d "$AAR_DIR" ]]; then
 fi
 
 if [[ $VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: No markdown compliance violations found"
+    echo " No markdown compliance violations found"
     exit 0
 else
     echo "FAILURE: $VIOLATIONS markdown compliance violations found"
@@ -216,7 +216,7 @@ else
 fi
 EOF
 
-    chmod +x "$validator_script"
+    chmod x "$validator_script"
     echo "Created: validate_markdown_compliance.sh"
 }
 
@@ -229,14 +229,14 @@ cleanup_existing_violations() {
     # Clean reports directory
     if [[ -d "$REPORTS_DIR" ]]; then
         find "$REPORTS_DIR" -name "*.md" -type f | while read -r file; do
-            if grep -q "📊\|📋\|🎯\|✅\|❌\|⚠️\|🚀\|📝\|💡\|🔍" "$file" 2>/dev/null; then
+            if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
                 echo "Cleaning: $file"
                 # Create backup
                 cp "$file" "$BACKUP_DIR/$(basename "$file")"
 
                 # Remove emojis
-                sed -i 's/📊//g; s/📋//g; s/🎯//g; s/✅//g; s/❌//g; s/⚠️//g; s/🚀//g; s/📝//g; s/💡//g; s/🔍//g' "$file"
-                cleaned=$((cleaned + 1))
+                sed -i 's///g; s///g; s/🎯//g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
+                cleaned=$((cleaned  1))
             fi
         done
     fi

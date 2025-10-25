@@ -27,7 +27,7 @@ The Priority Matrix Bot commit `86d9c503` shows "Good 'git' signature" but also 
 Created `.gitsigners` file with the correct format:
 
 ```text
-bot+priority-matrix@theangrygamershow.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAtQqvBok3NY0H4kPJ5sE3Vmpz8tGybKqYg44PouNtmo
+botpriority-matrix@theangrygamershow.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAtQqvBok3NY0H4kPJ5sE3Vmpz8tGybKqYg44PouNtmo
 
 ```
 
@@ -146,14 +146,14 @@ The Priority Matrix workflow (`priority-matrix-synthesis.yml`) includes:
 
 ## Success Criteria
 
-- ✅ SSH signature verification configured (`git config --get gpg.ssh.allowedSignersFile`)
+-  SSH signature verification configured (`git config --get gpg.ssh.allowedSignersFile`)
 
-- ✅ .gitsigners file created with correct public key format
+-  .gitsigners file created with correct public key format
 
-- ✅ Scripts created for SSH key management and verification
+-  Scripts created for SSH key management and verification
 
-- ✅ GitHub Secret updated with current SSH key (Environment and Repository secrets)
+-  GitHub Secret updated with current SSH key (Environment and Repository secrets)
 
-- ✅ New Priority Matrix commits properly verified with full SSH signature verification (commit 49cc1905)
+-  New Priority Matrix commits properly verified with full SSH signature verification (commit 49cc1905)
 
 This fix resolves the "minor issue with a commit not being signed" by ensuring proper SSH signature verification for all Priority Matrix Bot automated commits.

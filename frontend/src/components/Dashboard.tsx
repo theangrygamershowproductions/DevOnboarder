@@ -220,7 +220,7 @@ const Dashboard: React.FC = () => {
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>
-                      {cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      {cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase()  cat.slice(1)}
                     </option>
                   ))}
                 </select>

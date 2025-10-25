@@ -874,7 +874,7 @@ def test_is_safe_redirect_url_edge_cases():
 
     # Test empty URL (line 52)
     assert not is_safe_redirect_url("")
-    assert not is_safe_redirect_url("   ")  # Whitespace only
+    assert not is_safe_redirect_url(" + ")  # Whitespace only
 
     # Test protocol-relative URLs (line 59)
     assert not is_safe_redirect_url("//evil.com/malicious")
@@ -1041,7 +1041,7 @@ def test_jwt_secret_key_validation_in_production():
 
 
 def test_is_safe_redirect_url_exception_paths():
-    """Test exception paths in is_safe_redirect_url to achieve 95%+ coverage."""
+    """Test exception paths in is_safe_redirect_url to achieve 95% coverage."""
     from devonboarder.auth_service import is_safe_redirect_url
     from unittest.mock import patch
 
@@ -1094,7 +1094,7 @@ def test_environment_validation_coverage():
 
 
 def test_additional_auth_service_coverage():
-    """Test additional code paths to achieve 95%+ coverage."""
+    """Test additional code paths to achieve 95% coverage."""
     from devonboarder.auth_service import is_safe_redirect_url, create_app
     import os
 
@@ -1140,8 +1140,7 @@ def test_additional_auth_service_coverage():
 
                 # Use unsafe state parameter to trigger warning log
                 resp = client.get(
-                    "/login/discord/callback"
-                    "?code=test123&state=https://evil.com/malicious",
+                    "/login/discord/callback" + "?code=test123&state=https://evil.com/malicious",
                     follow_redirects=False,
                 )
                 assert resp.status_code == 307  # noqa: B101  # Temporary redirect
@@ -1436,7 +1435,7 @@ def test_password_truncation_for_bcrypt():
     client = TestClient(app)
 
     # Create a password longer than 72 bytes (100 characters)
-    long_password = "a" * 50 + "b" * 50  # 100 chars, >72 bytes
+    long_password = "a" * 50  "b" * 50  # 100 chars, >72 bytes
     assert len(long_password.encode("utf-8")) > 72  # Verify it's >72 bytes
 
     # Register with long password

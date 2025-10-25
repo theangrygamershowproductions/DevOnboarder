@@ -38,7 +38,7 @@ Establish clean and secure orchestration between DevOnboarder core, the newly sp
 
 * [ ] Implement `core-instructions` agent fallback for repo offline detection
 
-### 🔗 Secure Communication
+### LINK: Secure Communication
 
 * [ ] Confirm API tokens are split per repo and scoped accordingly
 
@@ -46,7 +46,7 @@ Establish clean and secure orchestration between DevOnboarder core, the newly sp
 
 * [ ] Implement `codex_callout` script to target Codex Agents in remote repos
 
-### 📊 Documentation & Logging
+###  Documentation & Logging
 
 * [ ] Update automation logs to indicate which repo triggered which agent
 

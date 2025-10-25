@@ -18,7 +18,7 @@ find templates/ -name "*.md" -exec grep -H '\[documentation links]' {} \; | whil
     file=$(echo "$line" | cut -d: -f1)
     link=$(echo "$line" | grep -o 'docs/[^)]*\.md')
     if [[ ! -f "$link" ]]; then
-        echo "ERROR: Broken template reference in $file -> $link"
+        echo " Broken template reference in $file  $link"
     fi
 done
 ```
@@ -50,7 +50,7 @@ VALIDATION_PATTERNS=(
 
 ```bash
 # Enhanced internal link validation with parallelization and metrics
-scripts/validate_internal_links.sh  # Validates 513+ files in ~60 seconds
+scripts/validate_internal_links.sh  # Validates 513 files in ~60 seconds
 
 # GitHub-style anchor generation (supports duplicate headings)
 python3 scripts/anchors_github.py < file.md  # Returns JSON with anchors array
@@ -67,25 +67,25 @@ scripts/audit_frameworks.sh  # Framework documentation integrity
 
 ### Common Anti-Patterns
 
-❌ **Hardcoded paths without validation**
+ **Hardcoded paths without validation**
 
 ```markdown
 [Terminal Policy](TERMINAL_OUTPUT_VIOLATIONS.md)  # File doesn't exist
 ```
 
-✅ **Validated references with automated checking**
+ **Validated references with automated checking**
 
 ```markdown
 [Terminal Policy](TERMINAL_OUTPUT_VIOLATIONS.md)  # Validated via pre-commit
 ```
 
-❌ **Outdated cross-references**
+ **Outdated cross-references**
 
 ```markdown
 [Documentation Framework](frameworks/README.md)  # Stale reference
 ```
 
-✅ **Maintained cross-references**
+ **Maintained cross-references**
 
 ```markdown
 [Quality Framework](../frameworks/quality-assurance/README.md)  # Current and validated
@@ -101,6 +101,6 @@ scripts/audit_frameworks.sh  # Framework documentation integrity
 
 ---
 **Enhanced**: October 2, 2025 (PR #1720)
-**Integration**: Pre-commit hooks + CI workflows + enhanced safe commit wrapper
+**Integration**: Pre-commit hooks  CI workflows  enhanced safe commit wrapper
 **Performance**: 513 markdown files validated in ~60 seconds with parallelization
 **Coverage**: Internal links, fragments, GitHub-style anchors, duplicate headings

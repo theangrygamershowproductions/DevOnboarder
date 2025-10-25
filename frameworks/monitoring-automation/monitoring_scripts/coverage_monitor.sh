@@ -3,12 +3,12 @@
 
 # Centralized logging for troubleshooting and repository health
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 set -euo pipefail
 
-echo "INFO: DevOnboarder Coverage Monitor"
+echo " DevOnboarder Coverage Monitor"
 echo "================================"
 
 # Activate virtual environment
@@ -16,19 +16,19 @@ echo "================================"
 source .venv/bin/activate
 
 # Run Python backend coverage
-echo "STATS: Python Backend Coverage:"
+echo " Python Backend Coverage:"
 pytest --cov=src --cov-report=term --cov-fail-under=95 --tb=short -q
 PYTHON_EXIT=$?
 
 # Run Bot coverage
-echo "STATS: Bot Coverage:"
+echo " Bot Coverage:"
 cd bot
 npm run coverage --silent
 BOT_EXIT=$?
 cd ..
 
 # Run Frontend coverage
-echo "STATS: Frontend Coverage:"
+echo " Frontend Coverage:"
 cd frontend
 npm run coverage --silent
 FRONTEND_EXIT=$?
@@ -37,9 +37,9 @@ cd ..
 # Summary
 echo "================================"
 if [ $PYTHON_EXIT -eq 0 ] && [ $BOT_EXIT -eq 0 ] && [ $FRONTEND_EXIT -eq 0 ]; then
-    echo "SUCCESS: All services maintain 95%+ coverage!"
+    echo " All services maintain 95% coverage!"
     exit 0
 else
-    echo "ERROR: Coverage below threshold detected!"
+    echo " Coverage below threshold detected!"
     exit 1
 fi

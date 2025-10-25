@@ -29,39 +29,39 @@ visibility: internal
 
 1. **Is this plain ASCII text only?**
 
-   - ❌ NO emojis (✅, ❌, 🛠️, 📊, 📈, 📥, 🔗, 🐛, ⚠️, 💡, 🎯, 🚀, 📋, 🔍, 📝)
+   -  NO emojis (, , , , GROW:, 📥, LINK:, 🐛, , , 🎯, , , , )
 
-   - ❌ NO Unicode characters
+   -  NO Unicode characters
 
-   - ❌ NO special formatting symbols
+   -  NO special formatting symbols
 
-   - ✅ ONLY letters, numbers, basic punctuation (. , : ; - _ )
+   -  ONLY letters, numbers, basic punctuation (. , : ; - _ )
 
 2. **Is this a single line with no variables or command substitution?**
 
-   - ❌ NO `$(command)` substitution
+   -  NO `$(command)` substitution
 
-   - ❌ NO `$VARIABLE` expansion
+   -  NO `$VARIABLE` expansion
 
-   - ❌ NO `${VARIABLE}` expansion
+   -  NO `${VARIABLE}` expansion
 
-   - ✅ ONLY plain static text
+   -  ONLY plain static text
 
 3. **Am I using individual echo commands instead of multi-line?**
 
-   - ❌ NO multi-line string variables
+   -  NO multi-line string variables
 
-   - ❌ NO here-doc in echo context
+   -  NO here-doc in echo context
 
-   - ❌ NO escape sequences (\n, \t)
+   -  NO escape sequences (\n, \t)
 
-   - ✅ ONLY individual echo statements
+   -  ONLY individual echo statements
 
 **IF ANY ANSWER IS NO, STOP AND REWRITE.**
 
 ## Approved Patterns Only
 
-### ✅ SAFE - Individual Echo Commands
+###  SAFE - Individual Echo Commands
 
 ```bash
 echo "Task completed successfully"
@@ -70,7 +70,7 @@ echo "Operation finished"
 
 ```
 
-### ✅ SAFE - File-Based Complex Output
+###  SAFE - File-Based Complex Output
 
 ```bash
 cat > output.md << 'EOF'
@@ -83,13 +83,13 @@ EOF
 
 ```
 
-### ❌ FORBIDDEN - Will Cause Terminal Hanging
+###  FORBIDDEN - Will Cause Terminal Hanging
 
 ```bash
 
 # NEVER USE THESE PATTERNS
 
-echo "✅ Success"                    # Emoji
+echo " Success"                    # Emoji
 
 echo "Files: $(ls | wc -l)"         # Command substitution
 

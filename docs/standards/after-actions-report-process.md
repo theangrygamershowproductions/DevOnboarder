@@ -81,21 +81,21 @@ After Actions Reports (AARs) are systematic reviews of project activities, issue
 
 ```text
 .aar/
-├── 2025/
-│   ├── Q1/
-│   │   ├── issues/
-│   │   │   ├── issue-1234-git-workflow-enhancement.md
-│   │   │   └── issue-5678-pre-commit-failures.md
-│   │   ├── sprints/
-│   │   │   └── 2025-Q1-git-utilities-enhancement.md
-│   │   └── incidents/
-│   │       └── 2025-01-30-ci-failure-cascade.md
-│   └── archive/
-├── templates/
-│   ├── issue-aar-template.md
-│   ├── sprint-aar-template.md
-│   └── incident-aar-template.md
-└── index.md
+── 2025/
+│   ── Q1/
+│   │   ── issues/
+│   │   │   ── issue-1234-git-workflow-enhancement.md
+│   │   │   ── issue-5678-pre-commit-failures.md
+│   │   ── sprints/
+│   │   │   ── 2025-Q1-git-utilities-enhancement.md
+│   │   ── incidents/
+│   │       ── 2025-01-30-ci-failure-cascade.md
+│   ── archive/
+── templates/
+│   ── issue-aar-template.md
+│   ── sprint-aar-template.md
+│   ── incident-aar-template.md
+── index.md
 
 ```
 
@@ -266,7 +266,7 @@ When closing qualifying issues, automation adds:
 
 ```markdown
 
-## 📋 After Actions Report
+##  After Actions Report
 
 **Issue Summary**: [Brief description]
 **Resolution**: [How it was resolved]

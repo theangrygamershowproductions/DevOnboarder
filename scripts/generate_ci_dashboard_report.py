@@ -17,7 +17,7 @@ from pathlib import Path
 def check_environment():
     """Check if we're in a proper environment."""
     if not (Path.cwd() / "pyproject.toml").exists():
-        print("❌ Not in DevOnboarder project root")
+        print(" Not in DevOnboarder project root")
         return False
     return True
 
@@ -165,19 +165,19 @@ def generate_html_report(scripts, analyses):
 
     # Create status text expressions
     patterns_text = (
-        "✅ Success"
+        " Success"
         if analyses.get("patterns", {}).get("exit_code") == 0
-        else "❌ Issues Found"
+        else " Issues Found"
     )
     health_text = (
-        "✅ Healthy"
+        " Healthy"
         if analyses.get("health", {}).get("exit_code") == 0
-        else "❌ Needs Attention"
+        else " Needs Attention"
     )
     failures_text = (
-        "✅ Clean"
+        " Clean"
         if analyses.get("failures", {}).get("exit_code") == 0
-        else "❌ Failures Detected"
+        else " Failures Detected"
     )
 
     html_content = f"""<!DOCTYPE html>
@@ -235,12 +235,12 @@ def generate_html_report(scripts, analyses):
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛠️ DevOnboarder CI Dashboard Report</h1>
+            <h1> DevOnboarder CI Dashboard Report</h1>
             <p class="timestamp">Generated: {datetime.now().isoformat()}</p>
         </div>
 
         <div class="section">
-            <h2>📊 CI Analysis Summary</h2>
+            <h2> CI Analysis Summary</h2>
             <div class="summary">
                 <div class="summary-card {patterns_status}">
                     <h3>Pattern Analysis</h3>
@@ -262,7 +262,7 @@ def generate_html_report(scripts, analyses):
         </div>
 
         <div class="section">
-            <h2>🔍 CI Pattern Analysis</h2>
+            <h2> CI Pattern Analysis</h2>
             <div class="analysis-output">{patterns_output}</div>
         </div>
 
@@ -277,11 +277,11 @@ def generate_html_report(scripts, analyses):
         </div>
 
         <div class="section">
-            <h2>🛠️ Available Automation Scripts</h2>
+            <h2> Available Automation Scripts</h2>
             <div class="scripts-grid">"""
 
     for script in scripts[:20]:  # Limit to first 20 scripts to prevent huge HTML
-        html_content += f"""
+        html_content = f"""
                 <div class="script-card">
                     <h3>{safe_html_escape(script['name'])}</h3>
                     <p><strong>Type:</strong> {safe_html_escape(script['type'])}</p>
@@ -292,18 +292,18 @@ def generate_html_report(scripts, analyses):
                 </div>"""
 
     if len(scripts) > 20:
-        html_content += f"""
+        html_content = f"""
                 <div class="script-card">
                     <h3>... and {len(scripts) - 20} more scripts</h3>
                     <p>See JSON data for complete list</p>
                 </div>"""
 
-    html_content += f"""
+    html_content = f"""
             </div>
         </div>
 
         <div class="section">
-            <h2>📋 Raw Analysis Data</h2>
+            <h2> Raw Analysis Data</h2>
             <details>
                 <summary>Click to view JSON data</summary>
                 <div class="analysis-output">{safe_html_escape(
@@ -320,7 +320,7 @@ def generate_html_report(scripts, analyses):
 
 def main():
     """Main execution function."""
-    print("🛠️ Generating DevOnboarder CI Dashboard Report...")
+    print(" Generating DevOnboarder CI Dashboard Report...")
 
     if not check_environment():
         sys.exit(1)
@@ -329,14 +329,14 @@ def main():
     output_dir = Path("logs")
     output_dir.mkdir(exist_ok=True)
 
-    print("📋 Discovering automation scripts...")
+    print(" Discovering automation scripts...")
     scripts = get_scripts_info()
     print(f"Found {len(scripts)} scripts")
 
-    print("🔍 Running CI analysis...")
+    print(" Running CI analysis...")
     analyses = run_ci_analysis()
 
-    print("📊 Generating HTML report...")
+    print(" Generating HTML report...")
     html_report = generate_html_report(scripts, analyses)
 
     # Write report
@@ -355,7 +355,7 @@ def main():
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_data, f, indent=2, ensure_ascii=False)
 
-    print("✅ Dashboard report generated:")
+    print(" Dashboard report generated:")
     print(f"   HTML: {report_path}")
     print(f"   JSON: {json_path}")
     print("   Open the HTML file in a browser to view the dashboard")

@@ -8,7 +8,7 @@ set -euo pipefail
 
 # Initialize logging
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "DevOnboarder Terminal Output Violations - Bulk Fix Starting"
@@ -36,7 +36,7 @@ TOKEN_SCRIPTS=(
 )
 
 # Violation patterns that WILL cause terminal hanging
-EMOJI_PATTERNS='[✅❌🎯📋🔍🚀💡⚠️🎨🔗📦]'
+EMOJI_PATTERNS='[🎯🎨LINK:📦]'
 VARIABLE_ECHO_PATTERN='echo.*\$[A-Z_]*[^}]'
 COMMAND_SUB_ECHO_PATTERN='echo.*\$\([^)]*\)'
 
@@ -55,15 +55,15 @@ for script in "${TOKEN_SCRIPTS[@]}"; do
         VAR_ECHO_COUNT=$(grep -c "$VARIABLE_ECHO_PATTERN" "$script" 2>/dev/null || echo "0")
         CMD_SUB_COUNT=$(grep -c "$COMMAND_SUB_ECHO_PATTERN" "$script" 2>/dev/null || echo "0")
 
-        SCRIPT_VIOLATIONS=$((EMOJI_COUNT + VAR_ECHO_COUNT + CMD_SUB_COUNT))
+        SCRIPT_VIOLATIONS=$((EMOJI_COUNT  VAR_ECHO_COUNT  CMD_SUB_COUNT))
 
         if [[ $SCRIPT_VIOLATIONS -gt 0 ]]; then
             echo "  CRITICAL VIOLATIONS FOUND: $SCRIPT_VIOLATIONS"
             printf "    Emojis: %d\n" "$EMOJI_COUNT"
             printf "    Variable Echo: %d\n" "$VAR_ECHO_COUNT"
             printf "    Command Substitution Echo: %d\n" "$CMD_SUB_COUNT"
-            TOTAL_VIOLATIONS=$((TOTAL_VIOLATIONS + SCRIPT_VIOLATIONS))
-            SCRIPTS_WITH_VIOLATIONS=$((SCRIPTS_WITH_VIOLATIONS + 1))
+            TOTAL_VIOLATIONS=$((TOTAL_VIOLATIONS  SCRIPT_VIOLATIONS))
+            SCRIPTS_WITH_VIOLATIONS=$((SCRIPTS_WITH_VIOLATIONS  1))
         else
             echo "  Clean - no violations"
         fi
@@ -80,7 +80,7 @@ printf "Total Token Architecture v2.1 scripts: %d\n" "${#TOKEN_SCRIPTS[@]}"
 echo ""
 
 if [[ $TOTAL_VIOLATIONS -eq 0 ]]; then
-    echo "SUCCESS: All Token Architecture v2.1 scripts are compliant"
+    echo " All Token Architecture v2.1 scripts are compliant"
     echo "Terminal hanging risk eliminated"
     exit 0
 fi

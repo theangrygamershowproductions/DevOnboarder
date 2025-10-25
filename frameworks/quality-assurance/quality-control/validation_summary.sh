@@ -6,14 +6,14 @@ set -euo pipefail
 
 # Centralized logging setup
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 echo "=== DevOnboarder Validation Summary ==="
-echo "Date: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Date: $(date '%Y-%m-%d %H:%M:%S')"
 echo
 
 # Initialize counters
@@ -36,7 +36,7 @@ if command -v npx >/dev/null 2>&1; then
             if [ "$MARKDOWN_ERRORS" -gt 5 ]; then
                 echo "... and $((MARKDOWN_ERRORS - 5)) more"
             fi
-            TOTAL_ERRORS=$((TOTAL_ERRORS + MARKDOWN_ERRORS))
+            TOTAL_ERRORS=$((TOTAL_ERRORS  MARKDOWN_ERRORS))
         else
             echo "No markdown violations found"
         fi
@@ -60,7 +60,7 @@ if [ -f "$REPO_ROOT/scripts/validate_terminal_output_simple.sh" ]; then
         if [ "$TERMINAL_ERRORS" -gt 5 ]; then
             echo "... and $((TERMINAL_ERRORS - 5)) more"
         fi
-        TOTAL_ERRORS=$((TOTAL_ERRORS + TERMINAL_ERRORS))
+        TOTAL_ERRORS=$((TOTAL_ERRORS  TERMINAL_ERRORS))
     else
         echo "No terminal policy violations found"
     fi
@@ -75,10 +75,10 @@ echo "----------------------"
 if [ -f "$REPO_ROOT/scripts/validate_agent_certification.sh" ]; then
     AGENT_OUTPUT=$(bash "$REPO_ROOT/scripts/validate_agent_certification.sh" 2>&1 || true)
     if echo "$AGENT_OUTPUT" | grep -q "CERTIFICATION INCOMPLETE"; then
-        AGENT_ERRORS=$(echo "$AGENT_OUTPUT" | grep -c "ERROR:" || echo "0")
+        AGENT_ERRORS=$(echo "$AGENT_OUTPUT" | grep -c "" || echo "0")
         echo "Found $AGENT_ERRORS agent certification issues:"
-        echo "$AGENT_OUTPUT" | grep "ERROR:" | head -3
-        TOTAL_ERRORS=$((TOTAL_ERRORS + AGENT_ERRORS))
+        echo "$AGENT_OUTPUT" | grep "" | head -3
+        TOTAL_ERRORS=$((TOTAL_ERRORS  AGENT_ERRORS))
     else
         echo "All agents certified"
     fi

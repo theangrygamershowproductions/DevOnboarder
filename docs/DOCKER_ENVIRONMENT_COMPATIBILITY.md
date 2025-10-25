@@ -65,7 +65,7 @@ fi
 
 1. **Enable WSL Integration** (Recommended):
 
-   - Open Docker Desktop → Settings → Resources → WSL Integration
+   - Open Docker Desktop  Settings  Resources  WSL Integration
 
    - Enable integration with your WSL distro
 
@@ -77,7 +77,7 @@ fi
    # Install docker-compose binary for legacy script compatibility
 
    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-   sudo chmod +x /usr/local/bin/docker-compose
+   sudo chmod x /usr/local/bin/docker-compose
    ```
 
 1. **Manual Testing with Modern Syntax**:

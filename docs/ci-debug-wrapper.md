@@ -38,7 +38,7 @@ python scripts/ci_debug_wrapper.py artifacts --run-id abc12345
 ## Requirements
 
 - GitHub CLI (`gh`) installed and authenticated
-- Python 3.8+ with standard library
+- Python 3.8 with standard library
 - DevOnboarder repository context
 
 ## Output

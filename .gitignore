@@ -4,8 +4,7 @@
 !*/.env.*.example
 !*/.env.example
 !.codex/
-!.codex/**/*
-!.env.ci
+!.codex/**/*/*
 # Force CI rerun
 # IDE folders
 # JS artifacts
@@ -27,8 +26,8 @@
 *.potato.*
 *.py[cod]
 *.sublime-*
-*.bak
-*.backup
+*.tmp
+*.temp
 docs-backup/
 .DS_Store
 .Trash-*
@@ -39,6 +38,7 @@ docs-backup/
 .coverage
 .env
 .env.*
+.env.ci
 .env.local
 .env.production
 .idea/
@@ -48,6 +48,7 @@ docs-backup/
 .ruff_cache/
 .terraform/
 .venv/
+.test_venv/
 .vscode-integrations/
 .vscode/
 /.coverage*

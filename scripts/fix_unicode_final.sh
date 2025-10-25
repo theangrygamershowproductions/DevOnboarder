@@ -19,7 +19,7 @@ echo "Validating PR #$PR_NUMBER for continuous improvement checklist..."
 
 # Check for checklist completion using plain text
 CHECKLIST_COMMENT="
-WARNING: Continuous Improvement Checklist is missing or incomplete
+ Continuous Improvement Checklist is missing or incomplete
 
 Please review and complete the following checklist before merging:
 
@@ -44,8 +44,8 @@ gh pr comment "$PR_NUMBER" --body "$CHECKLIST_COMMENT"
 echo "Clean validation comment posted to PR #$PR_NUMBER"
 EOF
 
-chmod +x scripts/clean_pr_validation.sh
+chmod x scripts/clean_pr_validation.sh
 
-echo "✅ Clean validation script created"
-echo "✅ No Unicode escape sequences"
-echo "✅ Plain text formatting for compatibility"
+echo " Clean validation script created"
+echo " No Unicode escape sequences"
+echo " Plain text formatting for compatibility"

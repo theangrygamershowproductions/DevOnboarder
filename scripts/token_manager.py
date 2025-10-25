@@ -89,7 +89,7 @@ class DevOnboarderTokenManager:
 
     def discover_tokens(self) -> None:
         """Discover and analyze all available tokens in environment."""
-        print("🔍 Discovering tokens in environment...")
+        print(" Discovering tokens in environment...")
 
         # Find all token-like environment variables
         token_candidates = []
@@ -345,12 +345,12 @@ class DevOnboarderTokenManager:
     def print_status(self) -> None:
         """Print human-readable token status."""
         print("\n" + "=" * 70)
-        print("🔐 DevOnboarder Token Management Status")
+        print(" DevOnboarder Token Management Status")
         print("=" * 70)
 
         # Summary
         github_tokens = [t for t in self.tokens.values() if t.user_login]
-        print("\n📊 Summary:")
+        print("\n Summary:")
         print(f"   Total tokens discovered: {len(self.tokens)}")
         print(f"   GitHub tokens: {len(github_tokens)}")
         actions_count = len([t for t in github_tokens if t.has_actions_read])
@@ -366,7 +366,7 @@ class DevOnboarderTokenManager:
                 for name in mapping["primary_tokens"] + mapping["fallback_tokens"]
                 if self._is_token_suitable_for_operation(name, operation)
             ]
-            status = "✅" if suitable_tokens else "❌"
+            status = "" if suitable_tokens else ""
             print(f"   {status} {operation}: {len(suitable_tokens)} suitable tokens")
             if suitable_tokens:
                 print(f"      Available: {', '.join(suitable_tokens)}")
@@ -382,12 +382,12 @@ class DevOnboarderTokenManager:
                     missing_tokens.add(token_name)
 
         if missing_tokens:
-            print("\n⚠️  Missing Critical Tokens:")
+            print("\n + Missing Critical Tokens:")
             for token in sorted(missing_tokens):
                 print(f"   - {token}")
 
         # Token details
-        print("\n🔍 Available GitHub Tokens:")
+        print("\n Available GitHub Tokens:")
         for name, info in self.tokens.items():
             if info.user_login:
                 perms = []
@@ -401,7 +401,7 @@ class DevOnboarderTokenManager:
                     perms.append("pull_requests:write")
 
                 perm_str = ", ".join(perms) if perms else "limited permissions"
-                print(f"   ✅ {name}")
+                print(f"    {name}")
                 print(f"      User: {info.user_login} ({info.user_type})")
                 print(f"      Permissions: {perm_str}")
 

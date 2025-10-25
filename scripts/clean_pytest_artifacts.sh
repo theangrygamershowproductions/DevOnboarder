@@ -26,8 +26,8 @@ done
 # CRITICAL: This section removes TEMPORARY coverage artifacts while protecting
 # PERMANENT project configuration files:
 #
-# ✅ PROTECTED: config/.coveragerc.* - Service-specific coverage configurations
-# ✅ PROTECTED: config/* - All permanent project configuration files
+#  PROTECTED: config/.coveragerc.* - Service-specific coverage configurations
+#  PROTECTED: config/* - All permanent project configuration files
 # 🗑️ REMOVED: .coverage*, coverage.xml, etc. - Temporary test artifacts
 #
 # The --not -path "./config/*" exclusion ensures our coverage masking solution
@@ -38,7 +38,7 @@ find . -name ".coverage*" -type f -not -path "./.venv/*" -not -path "./venv/*" -
 find . -name "coverage.xml" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
 find . -name "coverage.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
 find . -name "coverage-final.json" -type f -not -path "./.venv/*" -not -path "./venv/*" -not -path "./config/*" -delete 2>/dev/null || true
-find . -name ".nyc_output" -type d -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -name ".nyc_output" -type d -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {}  2>/dev/null || true
 rm -rf htmlcov/ .coverage coverage/ 2>/dev/null || true
 
 if [[ -d "logs/" ]]; then
@@ -71,10 +71,10 @@ if [[ -d "logs/" ]]; then
 fi
 
 echo "Removing pytest cache"
-find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -type d -name ".pytest_cache" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {}  2>/dev/null || true
 
 echo "Removing ALL Python cache"
-find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null || true
+find . -type d -name "__pycache__" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -exec rm -rf {}  2>/dev/null || true
 find . -name "*.pyc" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 find . -name "*.pyo" -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*" -delete 2>/dev/null || true
 
@@ -85,7 +85,7 @@ find . -name "*.db-journal" -not -path "./.git/*" -not -path "./.venv/*" -not -p
 # ==================================================================================
 # TEMPORARY CONFIGURATION BACKUPS CLEANUP
 #
-# ✅ PROTECTED: config/ - Permanent project configuration directory
+#  PROTECTED: config/ - Permanent project configuration directory
 # 🗑️ REMOVED: config_backups/ - Temporary backup directory created during testing
 #
 # DISTINCTION:
@@ -170,7 +170,7 @@ foo_refs=$(echo "$foo_refs" | tr -d '\n')
 printf -- "- %s 'foo' references remaining in non-test files (target: 0)\n" "$foo_refs"
 
 if [[ "$foo_refs" -gt 0 ]]; then
-    echo "WARNING: foo references still exist in non-test files"
+    echo " foo references still exist in non-test files"
     grep -r "ModuleNotFoundError.*foo\|import foo\|from foo" . \
         --exclude-dir=.git \
         --exclude-dir=.venv \

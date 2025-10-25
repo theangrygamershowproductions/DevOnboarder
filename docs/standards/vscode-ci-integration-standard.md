@@ -39,9 +39,9 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 
 ## Standard Practice Status
 
-**✅ MANDATORY**: All DevOnboarder development MUST use this integrated framework
+** MANDATORY**: All DevOnboarder development MUST use this integrated framework
 **🎯 Objective**: Eliminate CI surprises and ensure 100% consistency between local and CI environments
-**📊 Success Criteria**: 90%+ local CI simulation accuracy, 100% YAML linting consistency
+** Success Criteria**: 90% local CI simulation accuracy, 100% YAML linting consistency
 
 ## Core Framework Components
 
@@ -83,7 +83,7 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 
 - **MANDATORY**: Install recommended extensions (auto-prompted by VS Code)
 
-- **MANDATORY**: Access DevOnboarder tools via Command Palette (`Ctrl+Shift+P`)
+- **MANDATORY**: Access DevOnboarder tools via Command Palette (`CtrlShiftP`)
 
 - **MANDATORY**: Activate integrated virtual environment before development
 
@@ -107,7 +107,7 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 
 - **VERIFICATION**: VS Code shows real-time YAML validation status
 
-### 3. Local CI Simulation Framework - 90%+ COVERAGE
+### 3. Local CI Simulation Framework - 90% COVERAGE
 
 #### Comprehensive Validation Script: `validate_ci_locally.sh`
 
@@ -127,7 +127,7 @@ This document establishes the mandatory VS Code/CI Integration Framework as the 
 
 - **MANDATORY**: Run local validation before every commit
 
-- **MANDATORY**: Achieve 90%+ local validation success before pushing
+- **MANDATORY**: Achieve 90% local validation success before pushing
 
 - **NEVER**: Push changes that fail local CI simulation
 
@@ -188,7 +188,7 @@ code .  # Opens VS Code with workspace configuration
 
 # Or via VS Code Command Palette
 
-# Ctrl+Shift+P → "DevOnboarder: Full CI Validation"
+# CtrlShiftP  "DevOnboarder: Full CI Validation"
 
 ```
 
@@ -202,7 +202,7 @@ code .  # Opens VS Code with workspace configuration
 
 # NEVER bypass quality gates
 
-# git commit --no-verify  # ❌ FORBIDDEN
+# git commit --no-verify  #  FORBIDDEN
 
 ```
 
@@ -214,7 +214,7 @@ code .  # Opens VS Code with workspace configuration
 
 - **MANDATORY**: All changes must pass local CI simulation
 
-- **VERIFICATION**: 90%+ local validation success rate demonstrated
+- **VERIFICATION**: 90% local validation success rate demonstrated
 
 - **DOCUMENTATION**: Update workspace configuration if needed
 
@@ -232,7 +232,7 @@ code .  # Opens VS Code with workspace configuration
 
 ### Key Performance Indicators
 
-**Local CI Success Rate**: 90%+ validation accuracy (Target: 95%)
+**Local CI Success Rate**: 90% validation accuracy (Target: 95%)
 
 **YAML Consistency**: 100% VS Code/CI alignment (Maintained)
 **Developer Experience**: <5 minutes from code to validated commit
@@ -240,7 +240,7 @@ code .  # Opens VS Code with workspace configuration
 
 ### Quality Gates
 
-**Pre-commit Success**: 95%+ first-attempt success rate
+**Pre-commit Success**: 95% first-attempt success rate
 
 **Framework Adoption**: 100% team usage of VS Code workspace
 **Tool Integration**: 100% use of Command Palette tasks

@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Logging setup
 mkdir -p logs
-LOG_FILE="logs/branch_cleanup_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/branch_cleanup_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo "🧹 DevOnboarder Branch Cleanup Utility"
@@ -27,7 +27,7 @@ safe_git() {
     if command -v git >/dev/null 2>&1; then
         git "$@"
     else
-        echo "❌ Git not found. Please install git."
+        echo " Git not found. Please install git."
         exit 1
     fi
 }
@@ -35,7 +35,7 @@ safe_git() {
 # Function to check if we're in a git repository
 check_git_repo() {
     if ! safe_git rev-parse --git-dir >/dev/null 2>&1; then
-        echo "❌ Not in a git repository."
+        echo " Not in a git repository."
         exit 1
     fi
 }
@@ -47,7 +47,7 @@ get_current_branch() {
 
 # Function to list all branches with details
 list_branches() {
-    echo -e "${BLUE}📋 Branch Analysis${NC}"
+    echo -e "${BLUE} Branch Analysis${NC}"
     echo "==================="
 
     current_branch=$(get_current_branch)
@@ -75,7 +75,7 @@ list_branches() {
 
 # Function to find merged branches
 find_merged_branches() {
-    echo -e "${BLUE}🔍 Finding Merged Branches${NC}"
+    echo -e "${BLUE} Finding Merged Branches${NC}"
     echo "============================"
 
     base_branch="${1:-main}"
@@ -123,7 +123,7 @@ cleanup_local_branches() {
     if [ "$current_branch" != "$base_branch" ]; then
         echo "Switching to $base_branch..."
         safe_git checkout "$base_branch" 2>/dev/null || {
-            echo "❌ Failed to switch to $base_branch. Please switch manually."
+            echo " Failed to switch to $base_branch. Please switch manually."
             return 1
         }
     fi
@@ -138,7 +138,7 @@ cleanup_local_branches() {
                    sed 's/^[ *]*//' || echo "")
 
     if [ -z "$merged_locals" ]; then
-        echo "✅ No local merged branches to delete"
+        echo " No local merged branches to delete"
         return 0
     fi
 
@@ -153,11 +153,11 @@ cleanup_local_branches() {
             if [ -n "$branch" ]; then
                 echo "Deleting local branch: $branch"
                 safe_git branch -d "$branch" 2>/dev/null || {
-                    echo "⚠️  Failed to delete $branch (may have unmerged changes)"
+                    echo "  Failed to delete $branch (may have unmerged changes)"
                     read -p "Force delete $branch? [y/N] " -n 1 -r
                     echo ""
                     if [[ $REPLY =~ ^[Yy]$ ]]; then
-                        safe_git branch -D "$branch" && echo "✅ Force deleted $branch"
+                        safe_git branch -D "$branch" && echo " Force deleted $branch"
                     fi
                 }
             fi
@@ -176,7 +176,7 @@ list_stale_branches() {
     echo "Checking for branches older than $days_threshold days..."
     echo ""
 
-    cutoff_date=$(date -d "$days_threshold days ago" +%s 2>/dev/null || date -v-"${days_threshold}"d +%s 2>/dev/null || echo "0")
+    cutoff_date=$(date -d "$days_threshold days ago" %s 2>/dev/null || date -v-"${days_threshold}"d %s 2>/dev/null || echo "0")
 
     echo -e "${YELLOW}Stale Local Branches:${NC}"
     safe_git for-each-ref --format='%(refname:short) %(committerdate:unix) %(committerdate:relative)' refs/heads/ 2>/dev/null | \
@@ -208,7 +208,7 @@ run_automated_cleanup() {
         echo "Running existing cleanup script (dry-run mode)..."
         DRY_RUN=true BASE_BRANCH=main DAYS_STALE=30 bash scripts/cleanup_branches.sh
     else
-        echo "⚠️  Cleanup script not found. Manual cleanup only."
+        echo "  Cleanup script not found. Manual cleanup only."
     fi
 }
 
@@ -218,7 +218,7 @@ main_menu() {
     echo "=========================="
     echo "1. List all branches"
     echo "2. Find merged branches"
-    echo "3. List stale branches (30+ days)"
+    echo "3. List stale branches (30 days)"
     echo "4. Clean up local merged branches"
     echo "5. Run automated cleanup (dry-run)"
     echo "6. Exit"
@@ -267,7 +267,7 @@ main_menu() {
 main() {
     check_git_repo
 
-    echo "🔍 Quick branch overview:"
+    echo " Quick branch overview:"
     echo "Current branch: $(get_current_branch)"
     echo "Local branches: $(safe_git branch 2>/dev/null | wc -l || echo 'unknown')"
     echo "Remote branches: $(safe_git branch -r 2>/dev/null | wc -l || echo 'unknown')"

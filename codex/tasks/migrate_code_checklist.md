@@ -22,7 +22,7 @@ Move relevant source code from the main DevOnboarder monorepo to the newly creat
 
 ## Checklist
 
-### 🗂️ Frontend Code Migration
+### FOLDER: Frontend Code Migration
 
 * [ ] Move `src/`, `routes/`, `components/`, and UI-related files to `devonboarder-frontend`
 

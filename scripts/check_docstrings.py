@@ -53,8 +53,7 @@ def main() -> None:
                             if not has_docstring(node):
                                 rel_path = os.path.relpath(path)
                                 msg = (
-                                    f"::error file={rel_path},line={node.lineno}"
-                                    "::missing docstring"
+                                    f"::error file={rel_path},line={node.lineno}" + "::missing docstring"
                                 )
                                 print(msg)
                                 errors.append(rel_path)

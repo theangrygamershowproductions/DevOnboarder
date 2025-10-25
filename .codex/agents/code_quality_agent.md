@@ -165,21 +165,21 @@ find . -name "*.yml" -o -name "*.yaml" | xargs -I {} sh -c 'yq eval . {} > {}.tm
 
 ```mermaid
 graph TD
-    A[Trigger Event] --> B[Scan Changed Files]
-    B --> C{File Type?}
-    C -->|Markdown| D[Run Markdown Auto-Fix]
-    C -->|Shell| E[Run Shell Auto-Fix]
-    C -->|Python| F[Run Python Auto-Fix]
-    C -->|YAML| G[Run YAML Auto-Fix]
-    D --> H[Validate Fixes]
-    E --> H
-    F --> H
-    G --> H
-    H --> I{Fixes Applied?}
-    I -->|Yes| J[Create Auto-Fix Commit]
-    I -->|No| K[Report Status]
-    J --> L[Update PR]
-    K --> L
+    A[Trigger Event] - B[Scan Changed Files]
+    B - C{File Type?}
+    C -|Markdown| D[Run Markdown Auto-Fix]
+    C -|Shell| E[Run Shell Auto-Fix]
+    C -|Python| F[Run Python Auto-Fix]
+    C -|YAML| G[Run YAML Auto-Fix]
+    D - H[Validate Fixes]
+    E - H
+    F - H
+    G - H
+    H - I{Fixes Applied?}
+    I -|Yes| J[Create Auto-Fix Commit]
+    I -|No| K[Report Status]
+    J - L[Update PR]
+    K - L
 
 ```
 
@@ -194,7 +194,7 @@ graph TD
 
 set -euo pipefail
 
-echo "🔧 Starting Code Quality Auto-Fix..."
+echo " Starting Code Quality Auto-Fix..."
 
 # Get list of changed files
 
@@ -205,7 +205,7 @@ CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
 for file in $CHANGED_FILES; do
     case "$file" in
         *.md)
-            echo "📝 Fixing markdown: $file"
+            echo " Fixing markdown: $file"
             markdownlint --fix "$file" || true
             ;;
         *.sh)
@@ -218,7 +218,7 @@ for file in $CHANGED_FILES; do
             isort "$file" --quiet || true
             ;;
         *.yml|*.yaml)
-            echo "📋 Fixing YAML: $file"
+            echo " Fixing YAML: $file"
             yq eval . "$file" > "$file.tmp" && mv "$file.tmp" "$file" || true
             ;;
     esac
@@ -227,7 +227,7 @@ done
 # Check if any changes were made
 
 if ! git diff --quiet; then
-    echo "✅ Auto-fixes applied, creating commit..."
+    echo " Auto-fixes applied, creating commit..."
     git add .
     git commit -m "CHORE(auto): fix code quality issues
 
@@ -280,7 +280,7 @@ jobs:
     - name: Run auto-fix
 
         run: |
-          chmod +x .codex/scripts/auto_fix_quality.sh
+          chmod x .codex/scripts/auto_fix_quality.sh
           ./.codex/scripts/auto_fix_quality.sh
 
     - name: Push changes
@@ -350,11 +350,11 @@ jobs:
 
 ## Benefits
 
-✅ **Immediate**: Eliminates manual formatting work
-✅ **Consistent**: Enforces uniform code quality standards
-✅ **Proactive**: Catches issues before CI failures
-✅ **Learning**: Improves developer habits through consistent feedback
-✅ **Velocity**: Reduces development friction and review time
+ **Immediate**: Eliminates manual formatting work
+ **Consistent**: Enforces uniform code quality standards
+ **Proactive**: Catches issues before CI failures
+ **Learning**: Improves developer habits through consistent feedback
+ **Velocity**: Reduces development friction and review time
 
 This agent transforms code quality from a reactive process to a proactive, automated
 system that maintains high standards without developer intervention.

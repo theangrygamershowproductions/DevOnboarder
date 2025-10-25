@@ -27,7 +27,7 @@ This document defines the **corrected** DevOnboarder token architecture that pro
 
 ## Token Classification
 
-### 🔧 CI/CD Automation Tokens (`.tokens*` files)
+###  CI/CD Automation Tokens (`.tokens*` files)
 
 **Purpose**: Build, deployment, and automation processes
 **Lifecycle**: Managed by DevOps/Infrastructure team
@@ -51,7 +51,7 @@ STAGING_ORCHESTRATION_BOT_KEY=      # GitHub PAT for staging orchestration
 
 ```
 
-### 🚀 Application Runtime Tokens (`.env*` files)
+###  Application Runtime Tokens (`.env*` files)
 
 **Purpose**: Service runtime authentication and integration
 **Lifecycle**: Managed by Development team
@@ -75,13 +75,13 @@ TUNNEL_TOKEN=                      # Cloudflare tunnel
 
 ## Architecture Benefits
 
-### ✅ **Separation of Concerns**
+###  **Separation of Concerns**
 
 - **CI/CD tokens**: Used only for automation and deployment
 
 - **Runtime tokens**: Used only for application services
 
-### ✅ **Security Boundaries**
+###  **Security Boundaries**
 
 - Different rotation schedules and access patterns
 
@@ -89,7 +89,7 @@ TUNNEL_TOKEN=                      # Cloudflare tunnel
 
 - Reduced blast radius for token compromise
 
-### ✅ **Operational Clarity**
+###  **Operational Clarity**
 
 - CI/CD failures don't affect runtime services
 
@@ -101,21 +101,21 @@ TUNNEL_TOKEN=                      # Cloudflare tunnel
 
 ```text
 DevOnboarder/
-├── .tokens              # CI/CD automation tokens (GITIGNORED)
+── .tokens              # CI/CD automation tokens (GITIGNORED)
 
-├── .tokens.dev          # Development CI tokens (GITIGNORED)
+── .tokens.dev          # Development CI tokens (GITIGNORED)
 
-├── .tokens.prod         # Production CI tokens (GITIGNORED)
+── .tokens.prod         # Production CI tokens (GITIGNORED)
 
-├── .tokens.ci           # CI test tokens (COMMITTED - safe values)
+── .tokens.ci           # CI test tokens (COMMITTED - safe values)
 
-├── .env                 # App config + runtime tokens (GITIGNORED)
+── .env                 # App config  runtime tokens (GITIGNORED)
 
-├── .env.dev             # Development app config (GITIGNORED)
+── .env.dev             # Development app config (GITIGNORED)
 
-├── .env.prod            # Production app config (GITIGNORED)
+── .env.prod            # Production app config (GITIGNORED)
 
-└── .env.ci              # CI app config + test tokens (COMMITTED)
+── .env.ci              # CI app config  test tokens (COMMITTED)
 
 ```
 
@@ -229,11 +229,11 @@ This architecture aligns with DevOnboarder's philosophy:
 
 ## Implementation Status
 
-- ❌ **Current State**: All tokens mixed in `.env` files
+-  **Current State**: All tokens mixed in `.env` files
 
-- ✅ **Target State**: CI/CD tokens in `.tokens`, runtime tokens in `.env`
+-  **Target State**: CI/CD tokens in `.tokens`, runtime tokens in `.env`
 
-- 🔄 **Migration**: Create selective migration script for CI/CD tokens only
+- SYNC: **Migration**: Create selective migration script for CI/CD tokens only
 
 ---
 

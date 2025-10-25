@@ -56,7 +56,7 @@ class CIHealthAARIntegrator:
     def _setup_token_environment(self):
         """
         Setup token environment following Token Architecture v2.1 hierarchy
-        CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+        CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
         """
         # Check for CI_ISSUE_AUTOMATION_TOKEN first
         token = os.getenv("CI_ISSUE_AUTOMATION_TOKEN")
@@ -74,7 +74,7 @@ class CIHealthAARIntegrator:
         if os.getenv("GITHUB_TOKEN"):
             print("Using GITHUB_TOKEN for GitHub operations")
         else:
-            print("WARNING: No GitHub token available - AAR generation may fail")
+            print(" No GitHub token available - AAR generation may fail")
 
     def get_ci_health_logs(
         self, workflow_id: str | None = None
@@ -214,19 +214,19 @@ class CIHealthAARIntegrator:
             pred = log["prediction_results"]
 
             if pred["failure_predicted"]:
-                analysis["failure_predictions"] += 1
+                analysis["failure_predictions"] = 1
 
             if pred["confidence"] > 0.8:
-                analysis["high_confidence_predictions"] += 1
+                analysis["high_confidence_predictions"] = 1
 
-            confidence_sum += pred["confidence"]
-            analysis["total_cost_savings_potential"] += pred["cost_savings"]
+            confidence_sum = pred["confidence"]
+            analysis["total_cost_savings_potential"] = pred["cost_savings"]
 
             # Track pattern frequency
             failure_type = pred["failure_type"]
             if failure_type != "none":
                 analysis["pattern_frequency"][failure_type] = (
-                    analysis["pattern_frequency"].get(failure_type, 0) + 1
+                    analysis["pattern_frequency"].get(failure_type, 0)  1
                 )
 
             patterns_found.extend(log["patterns_detected"])
@@ -238,8 +238,7 @@ class CIHealthAARIntegrator:
         # Generate recommendations based on patterns
         if analysis["pattern_frequency"].get("detached_head", 0) > 0:
             analysis["recommendations"].append(
-                "Consider adding branch protection rules "
-                "to prevent detached HEAD issues"
+                "Consider adding branch protection rules " + "to prevent detached HEAD issues"
             )
 
         if analysis["pattern_frequency"].get("signature_verification", 0) > 0:
@@ -354,12 +353,12 @@ class CIHealthAARIntegrator:
                 # Write base AAR information
                 f.write("## Base AAR Results\n\n")
                 if enhanced_aar["base_aar"]["success"]:
-                    f.write("SUCCESS: Base AAR generated successfully\n\n")
+                    f.write(" Base AAR generated successfully\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"]["stdout"])
                     f.write("\n```\n")
                 else:
-                    f.write("ERROR: Base AAR generation failed\n\n")
+                    f.write(" Base AAR generation failed\n\n")
                     f.write("```\n")
                     f.write(enhanced_aar["base_aar"].get("stderr", "Unknown error"))
                     f.write("\n```\n")
@@ -419,7 +418,7 @@ Examples:
                 args.workflow_id, args.create_issue
             )
 
-            print("SUCCESS: Enhanced AAR generated successfully")
+            print(" Enhanced AAR generated successfully")
             print(f"Workflow ID: {result['workflow_id']}")
             print(
                 f"CI Health Predictions: "
@@ -441,7 +440,7 @@ Examples:
             ci_logs = integrator.get_ci_health_logs()
             analysis = integrator._analyze_ci_health_patterns(ci_logs)
 
-            print("STATS: CI Health Pattern Analysis")
+            print(" CI Health Pattern Analysis")
             print("=" * 40)
             print(f"Total Logs Analyzed: {analysis['total_predictions']}")
             print(f"Failure Predictions: {analysis['failure_predictions']}")

@@ -20,18 +20,18 @@ fi
 # Logging
 LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/cloudflare_tunnel_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/cloudflare_tunnel_$(date %Y%m%d_%H%M%S).log"
 
 log_info() {
-    echo "INFO: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_error() {
-    echo "ERROR: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 log_success() {
-    echo "SUCCESS: $1" | tee -a "$LOG_FILE"
+    echo " $1" | tee -a "$LOG_FILE"
 }
 
 # Show usage

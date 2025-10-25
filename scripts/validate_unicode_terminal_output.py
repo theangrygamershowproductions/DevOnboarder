@@ -24,9 +24,9 @@ class UnicodeTerminalValidator:
     def __init__(self):
         # Patterns that indicate terminal output in shell scripts
         self.shell_output_patterns = [
-            r'echo\s+["\']([^"\']*)["\']',  # echo "text" or echo 'text'
-            r"echo\s+([^#\n]*)",  # echo text (unquoted)
-            r'printf\s+["\']([^"\']*)["\']',  # printf "text"
+            r'echo\s["\']([^"\']*)["\']',  # echo "text" or echo 'text'
+            r"echo\s([^#\n]*)",  # echo text (unquoted)
+            r'printf\s["\']([^"\']*)["\']',  # printf "text"
         ]
 
         # Patterns that indicate terminal output in Python scripts
@@ -184,7 +184,7 @@ class UnicodeTerminalValidator:
         for file_path in files:
             violations = self.validate_file(file_path)
             if violations:
-                violations_count += len(violations)
+                violations_count = len(violations)
                 print(f"\nVIOLATIONS in {file_path}:")
                 for line_num, full_line, text_content, _ in violations:
                     print(f"  Line {line_num}: {full_line}")
@@ -213,7 +213,7 @@ class UnicodeTerminalValidator:
             "\U0001f527": "FIX",
             "\U0001f7e2": "GREEN",
             "\U0001f534": "RED",
-            "\u2192": "->",
+            "\u2192": "",
             "\u2190": "<-",
             "\u2191": "^",
             "\u2193": "v",
@@ -269,8 +269,7 @@ def main():
 
     if violations_count > 0:
         print(
-            f"\nCRITICAL: Found {violations_count} Unicode terminal output "
-            "violations!"
+            f"\nCRITICAL: Found {violations_count} Unicode terminal output " + "violations!"
         )
         print("These WILL cause terminal hanging in DevOnboarder environment.")
         print("Fix by replacing Unicode characters with plain ASCII " "alternatives.")

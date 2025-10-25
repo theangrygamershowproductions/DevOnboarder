@@ -28,7 +28,7 @@ npm ci --prefix frontend
 
 **Philosophy**: "Work quietly and reliably" - extensive automation and quality gates ensure stability.
 
-## ⚠️ CRITICAL: Development Prerequisites
+##  CRITICAL: Development Prerequisites
 
 **ALWAYS activate virtual environment first:**
 
@@ -50,13 +50,13 @@ source .venv/bin/activate  # Required before ANY Python work
 
 **Safe commit wrapper now enforces:**
 
-- ✅ Branch protection (prevents main branch commits)
-- ✅ Commit message format validation (uppercase TYPE required)
-- ✅ Mandatory QC validation (95% quality threshold)
-- ✅ Terminal output compliance (ZERO TOLERANCE policy)
-- ✅ Forbidden file detection (`Potato.md`, `*.env`, `*.pem`, `*.key`)
-- ✅ Emoji usage detection in committed files
-- ✅ Virtual environment activation verification
+-  Branch protection (prevents main branch commits)
+-  Commit message format validation (uppercase TYPE required)
+-  Mandatory QC validation (95% quality threshold)
+-  Terminal output compliance (ZERO TOLERANCE policy)
+-  Forbidden file detection (`Potato.md`, `*.env`, `*.pem`, `*.key`)
+-  Emoji usage detection in committed files
+-  Virtual environment activation verification
 
 ## Architecture Patterns
 
@@ -64,14 +64,14 @@ source .venv/bin/activate  # Required before ANY Python work
 
 - **Backend**: FastAPI services in `src/` with consistent patterns
 - **Bot**: TypeScript Discord.js bot in `bot/` with ES modules
-- **Frontend**: React + Vite in `frontend/`
+- **Frontend**: React  Vite in `frontend/`
 - **Database**: PostgreSQL with SQLAlchemy models
 
 ### FastAPI Service Pattern
 
 ```python
 # src/xp/api/__init__.py - Standard service creation
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()  # From src/utils/cors.py
 
@@ -79,7 +79,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)  # From starlette
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
     app.include_router(router)
@@ -97,19 +97,19 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 ## Critical Policies & Conventions
 
-### ⚠️ ZERO TOLERANCE: Terminal Output
+###  ZERO TOLERANCE: Terminal Output
 
 **NEVER use these patterns - they cause immediate hanging:**
 
 ```bash
-# ❌ FORBIDDEN - Causes hanging
-echo "✅ Success"                    # Emojis
+#  FORBIDDEN - Causes hanging
+echo " Success"                    # Emojis
 echo "Status: $VAR"                 # Variable expansion in echo
 echo -e "Line1\nLine2"               # Multi-line echo
 echo "$(command)"                  # Command substitution in echo
 cat << 'EOF'...EOF                 # Here-doc syntax
 
-# ✅ REQUIRED - Safe patterns
+#  REQUIRED - Safe patterns
 echo "Task completed successfully"
 printf "Status: %s\n" "$VAR"
 ```
@@ -117,13 +117,13 @@ printf "Status: %s\n" "$VAR"
 ### UTC Timestamp Standardization
 
 ```python
-# ✅ CORRECT - Use centralized utilities
+#  CORRECT - Use centralized utilities
 from src.utils.timestamps import get_utc_display_timestamp, get_utc_timestamp
 
 timestamp = get_utc_display_timestamp()  # "2025-09-21 19:06:26 UTC"
 api_timestamp = get_utc_timestamp()      # "2025-09-21T19:06:26Z"
 
-# ❌ FORBIDDEN - Causes diagnostic synchronization issues
+#  FORBIDDEN - Causes diagnostic synchronization issues
 datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")  # Wrong - uses local time
 ```
 
@@ -132,7 +132,7 @@ datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")  # Wrong - uses local time
 ```bash
 # MANDATORY: All scripts log to centralized location
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 ```
 
@@ -191,9 +191,9 @@ npm ci --prefix frontend
 
 ### Testing Requirements
 
-- **Backend**: 96%+ coverage with `python -m pytest --cov=src`
+- **Backend**: 96% coverage with `python -m pytest --cov=src`
 - **Bot**: 100% coverage with `npm run coverage --prefix bot`
-- **Frontend**: 100% statements, 98.43%+ branches
+- **Frontend**: 100% statements, 98.43% branches
 
 ### Commit Standards
 
@@ -251,14 +251,14 @@ def contribute(data: dict, current_user = Depends(auth_service.get_current_user)
 2. Python linting (Ruff)
 3. Python formatting (Black)
 4. Type checking (MyPy)
-5. Test coverage (95%+)
+5. Test coverage (95%)
 6. Documentation quality (Vale)
 7. Commit message format
 8. Security scanning (Bandit)
 
 ### Automation Scripts Overview
 
-**100+ scripts in `scripts/` covering:**
+**100 scripts in `scripts/` covering:**
 
 - CI health monitoring (`monitor_ci_health.sh`)
 - Quality control (`qc_pre_push.sh`)
@@ -271,7 +271,7 @@ def contribute(data: dict, current_user = Depends(auth_service.get_current_user)
 ```bash
 make aar-setup                    # Initialize AAR system
 make aar-generate WORKFLOW_ID=123 # Generate failure analysis
-make aar-generate WORKFLOW_ID=123 CREATE_ISSUE=true  # + GitHub issue
+make aar-generate WORKFLOW_ID=123 CREATE_ISSUE=true  #  GitHub issue
 ```
 
 ## Common Patterns & Gotchas
@@ -279,13 +279,13 @@ make aar-generate WORKFLOW_ID=123 CREATE_ISSUE=true  # + GitHub issue
 ### Import Patterns
 
 ```python
-# ✅ PREFERRED - Centralized utilities
+#  PREFERRED - Centralized utilities
 from src.utils.timestamps import get_utc_display_timestamp
 
-# ✅ LEGITIMATE - Direct imports for specific operations
+#  LEGITIMATE - Direct imports for specific operations
 from datetime import datetime  # For fromtimestamp(), type hints
 
-# ❌ AVOIDED - Direct datetime for timestamp generation
+#  AVOIDED - Direct datetime for timestamp generation
 from datetime import datetime, timezone
 ```
 
@@ -310,7 +310,7 @@ except ImportError:
     "preset": "ts-jest/presets/default-esm",
     "extensionsToTreatAsEsm": [".ts]",
     "transform": {
-      "^.+\\.ts$": ["ts-jest", {"useESM": true}]
+      "^.\\.ts$": ["ts-jest", {"useESM": true}]
     }
   }
 }
@@ -363,11 +363,11 @@ bash scripts/manage_logs.sh clean  # Remove logs >7 days
 
 ### Discord OAuth Flow
 
-Frontend → Auth Service → Discord API → JWT → Frontend localStorage
+Frontend  Auth Service  Discord API  JWT  Frontend localStorage
 
 ### XP/Gamification System
 
-User contributions → XP events → Level calculation → API responses
+User contributions  XP events  Level calculation  API responses
 
 ### Multi-Environment Routing
 
@@ -379,9 +379,9 @@ Bot automatically detects guild ID for dev/prod environment switching
 
 **Critical Lessons Learned (PR #1720):**
 
-✅ **GitHub Review Behavior**: Comments are marked "Outdated" immediately when fixes are applied, not based on commit staleness
-✅ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks and CI workflows
-✅ **Root Cause Fixes**: Address underlying issues, not just symptoms identified in comments
+ **GitHub Review Behavior**: Comments are marked "Outdated" immediately when fixes are applied, not based on commit staleness
+ **Documentation Links**: All internal markdown links must reference existing files - validation now enforced via pre-commit hooks and CI workflows
+ **Root Cause Fixes**: Address underlying issues, not just symptoms identified in comments
 
 ### Documentation Validation Enhancement System (PR #1720)
 
@@ -400,20 +400,20 @@ scripts/safe_commit_enhanced.sh  # Prevents silent drift, proper re-staging
 
 **System Features:**
 
-- ✅ **513 markdown files** validated in ~60 seconds with parallel processing
-- ✅ **Fragment validation** with GitHub-style anchor normalization
-- ✅ **Duplicate heading support** (title → title-1 → title-2)
-- ✅ **JSON metrics reporting** with real file counts and broken link tracking
-- ✅ **CI workflow separation** (docs-quality.yml + pr-welcome.yml)
-- ✅ **Fork security** with proper pull_request vs pull_request_target usage
+-  **513 markdown files** validated in ~60 seconds with parallel processing
+-  **Fragment validation** with GitHub-style anchor normalization
+-  **Duplicate heading support** (title  title-1  title-2)
+-  **JSON metrics reporting** with real file counts and broken link tracking
+-  **CI workflow separation** (docs-quality.yml  pr-welcome.yml)
+-  **Fork security** with proper pull_request vs pull_request_target usage
 
 **Common Documentation Errors Now Caught:**
 
-- ❌ Broken internal links with fragments (#section)
-- ❌ Non-existent file references in templates
-- ❌ Duplicate heading anchors without proper suffixes
-- ❌ Relative paths without validation → ✅ Absolute paths with existence checks
-- ❌ Stale cross-references → ✅ Automated link validation
+-  Broken internal links with fragments (#section)
+-  Non-existent file references in templates
+-  Duplicate heading anchors without proper suffixes
+-  Relative paths without validation   Absolute paths with existence checks
+-  Stale cross-references   Automated link validation
 
 ### Review Process Workflow
 
@@ -487,11 +487,11 @@ fi
 **Pattern**: Use environment detection and conditional logic rather than hardcoded references:
 
 ```python
-# ✅ APPROVED - Environment-based detection
+#  APPROVED - Environment-based detection
 import os
 from pathlib import Path
 
-def has_enhanced_capabilities() -> bool:
+def has_enhanced_capabilities()  bool:
     """Check if enhanced toolkit is available without exposing specifics."""
     import subprocess
     try:
@@ -501,7 +501,7 @@ def has_enhanced_capabilities() -> bool:
     except (subprocess.SubprocessError, FileNotFoundError):
         return False
 
-# ❌ FORBIDDEN - Hardcoded references to proprietary tools
+#  FORBIDDEN - Hardcoded references to proprietary tools
 # Don't reference specific toolkit names or commercial features
 ```
 
@@ -518,9 +518,9 @@ For implementation details, see: `docs/agents/external-toolkit-integration.md`
 ---
 
 **Last Updated**: 2025-01-02
-**Coverage**: Backend 96%+, Bot 100%, Frontend 100%
+**Coverage**: Backend 96%, Bot 100%, Frontend 100%
 **Services**: Auth (8002), XP (8001), Discord Integration (8081), Dashboard (8003)
-**Architecture**: FastAPI + Discord.js + React + PostgreSQL + Traefik
+**Architecture**: FastAPI  Discord.js  React  PostgreSQL  Traefik
 
 **Virtual Environment**: MANDATORY for all development and tooling
 **Safe Commit Wrapper**: ENFORCED - Comprehensive validation and error prevention

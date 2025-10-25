@@ -36,7 +36,7 @@ DevOnboarder is a comprehensive onboarding automation platform with multi-servic
 
 **Project Philosophy**: _"This project wasn't built to impress — it was built to work. Quietly. Reliably. And in service of those who need it."_
 
-## ⚠️ CRITICAL: Terminal Output Policy - ZERO TOLERANCE
+##  CRITICAL: Terminal Output Policy - ZERO TOLERANCE
 
 **TERMINAL HANGING PREVENTION - ABSOLUTE REQUIREMENTS:**
 
@@ -46,13 +46,13 @@ DevOnboarder has a **ZERO TOLERANCE POLICY** for terminal output violations that
 
 ```bash
 
-# ❌ FORBIDDEN - WILL CAUSE IMMEDIATE HANGING
+#  FORBIDDEN - WILL CAUSE IMMEDIATE HANGING
 
-echo "✅ Task completed"              # Emojis cause hanging
+echo " Task completed"              # Emojis cause hanging
 
-echo "🚀 Deployment successful"       # Unicode causes hanging
+echo " Deployment successful"       # Unicode causes hanging
 
-echo "📋 Checklist: $(get_items)"    # Command substitution in echo
+echo " Checklist: $(get_items)"    # Command substitution in echo
 
 echo -e "Line1\nLine2\nLine3"        # Multi-line escape sequences
 
@@ -61,7 +61,7 @@ cat << 'EOF'                         # Here-doc patterns
 Multi-line content
 EOF
 
-# ❌ FORBIDDEN - Variable expansion in echo
+#  FORBIDDEN - Variable expansion in echo
 
 echo "Status: $STATUS_VAR"           # Variable expansion causes hanging
 
@@ -75,19 +75,19 @@ echo "Result: $(command_output)"     # Command substitution causes hanging
 
 ```bash
 
-# ✅ REQUIRED - Individual echo commands with plain ASCII only
+#  REQUIRED - Individual echo commands with plain ASCII only
 
 echo "Task completed successfully"
 echo "Deployment finished"
 echo "Processing file"
 echo "Operation complete"
 
-# ✅ REQUIRED - Variable handling with printf
+#  REQUIRED - Variable handling with printf
 
 printf "Status: %s\n" "$STATUS_VAR"
 printf "Files processed: %d\n" "$FILE_COUNT"
 
-# ✅ REQUIRED - Store command output first, then echo
+#  REQUIRED - Store command output first, then echo
 
 RESULT=$(command_here)
 echo "Command completed"
@@ -167,7 +167,7 @@ printf "Result: %s\n" "$RESULT"
 
 - **Coverage Challenge Lessons**: `docs/COVERAGE_CHALLENGE_LESSONS_LEARNED.md`
 
-## ⚠️ CRITICAL: Virtual Environment Requirements
+##  CRITICAL: Virtual Environment Requirements
 
 ### NEVER INSTALL TO SYSTEM - ALWAYS USE VIRTUAL ENVIRONMENTS
 
@@ -251,7 +251,7 @@ bash scripts/potato_policy_enforce.sh
 
 ```bash
 
-# ✅ CORRECT - Virtual environment usage
+#  CORRECT - Virtual environment usage
 
 source .venv/bin/activate
 pip install -e .[test]
@@ -259,7 +259,7 @@ python -m pytest
 python -m black .
 python -m openapi_spec_validator src/devonboarder/openapi.json
 
-# ❌ WRONG - System installation
+#  WRONG - System installation
 
 sudo pip install package
 pip install --user package
@@ -315,13 +315,13 @@ All services depend on shared PostgreSQL database (port 5432) and use consistent
 
 ### Core Services
 
-- **Backend**: Python 3.12 + FastAPI + SQLAlchemy (Port 8001)
+- **Backend**: Python 3.12  FastAPI  SQLAlchemy (Port 8001)
 
-- **Discord Bot**: TypeScript + Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
+- **Discord Bot**: TypeScript  Discord.js (Port 8002) - **DevOnboader#3613** (ID: 1397063993213849672)
 
-- **Frontend**: React + Vite + TypeScript (Port 8081)
+- **Frontend**: React  Vite  TypeScript (Port 8081)
 
-- **Auth Service**: FastAPI + JWT + Discord OAuth (Port 8002)
+- **Auth Service**: FastAPI  JWT  Discord OAuth (Port 8002)
 
 - **XP System**: Gamification API with user levels and contributions tracking
 
@@ -347,7 +347,7 @@ All FastAPI services follow a consistent pattern for health checks and CORS:
 
 # Standard service creation pattern (src/llama2_agile_helper/api.py, src/xp/api/__init__.py)
 
-def create_app() -> FastAPI:
+def create_app()  FastAPI:
     app = FastAPI()
     cors_origins = get_cors_origins()  # From utils.cors
 
@@ -361,7 +361,7 @@ def create_app() -> FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health() -> dict[str, str]:
+    def health()  dict[str, str]:
         return {"status": "ok"}
 
 ```
@@ -529,7 +529,7 @@ This is a **CRITICAL INFRASTRUCTURE REQUIREMENT** enforced by CI/CD pipelines:
 # MANDATORY: All scripts create logs in centralized location
 
 mkdir -p logs
-LOG_FILE="logs/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="logs/$(basename "$0" .sh)_$(date %Y%m%d_%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # MANDATORY: All workflows use centralized logging
@@ -556,23 +556,23 @@ command 2>&1 | tee logs/step-name.log
 
 ```bash
 
-# ✅ CORRECT - Simple text only (MANDATORY)
+#  CORRECT - Simple text only (MANDATORY)
 
 echo "Task completed successfully"
 echo "Files processed: 5"
 echo "Next steps: Review and commit"
 
-# ✅ CORRECT - Plain ASCII characters only
+#  CORRECT - Plain ASCII characters only
 
 echo "Status: Implementation complete"
 echo "Result: All tests passing"
 echo "Action: Ready for deployment"
 
-# ❌ FORBIDDEN - These WILL cause terminal hanging
+#  FORBIDDEN - These WILL cause terminal hanging
 
-echo "✅ Multi-line output here"        # Emojis cause hanging
+echo " Multi-line output here"        # Emojis cause hanging
 
-echo "📋 Works with emojis"             # Unicode causes hanging
+echo " Works with emojis"             # Unicode causes hanging
 
 echo "🎯 No escaping issues"            # Special chars cause hanging
 
@@ -607,13 +607,13 @@ echo -e "Line1\nLine2\nLine3"          # Escape sequences cause hanging
 
 **CRITICAL CHARACTER RESTRICTIONS**:
 
-- ❌ **NO EMOJIS**: ✅, ❌, 🎯, 🚀, 📋, 🔍, 📝, 💡, ⚠️, etc.
+-  **NO EMOJIS**: , , 🎯, , , , , , , etc.
 
-- ❌ **NO UNICODE**: Special symbols, arrows, bullets, etc.
+-  **NO UNICODE**: Special symbols, arrows, bullets, etc.
 
-- ❌ **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
+-  **NO SPECIAL FORMATTING**: Colors, bold, underline, etc.
 
-- ✅ **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
+-  **ONLY ASCII**: Letters, numbers, basic punctuation (. , : ; - _ )
 
 **Safe Usage Patterns**:
 
@@ -668,7 +668,7 @@ echo "Deployment complete"
 
 ### 3. Code Quality Requirements
 
-### ⚠️ CRITICAL: Linting Rule Policy
+###  CRITICAL: Linting Rule Policy
 
 **NEVER modify linting configuration files without explicit human approval**:
 
@@ -694,7 +694,7 @@ echo "Deployment complete"
 
 **Rationale**: Linting rules represent established project quality standards and governance decisions. Changing rules to avoid fixing legitimate issues undermines code quality consistency.
 
-### ⚠️ MANDATORY: Markdown Standards Compliance
+###  MANDATORY: Markdown Standards Compliance
 
 **ALL markdown content MUST comply with project linting rules before creation**:
 
@@ -744,7 +744,7 @@ More content following the same pattern.
 
 **Process Violation**: Creating non-compliant markdown that requires post-creation fixes violates the "quiet reliability" philosophy and wastes development cycles. Pre-commit hooks will block commits with markdown violations.
 
-### ⚠️ CRITICAL: CI Hygiene & Artifact Management
+###  CRITICAL: CI Hygiene & Artifact Management
 
 **Root Artifact Guard System**: DevOnboarder enforces strict artifact hygiene to prevent repository pollution:
 
@@ -772,21 +772,21 @@ bash scripts/enforce_output_location.sh
 
 # Automatically blocks commits with violations
 
-# ❌ ./pytest-of-* directories in root
+#  ./pytest-of-* directories in root
 
-# ❌ ./.coverage* files in root (should be logs/)
+#  ./.coverage* files in root (should be logs/)
 
-# ❌ ./vale-results.json in root (should be logs/)
+#  ./vale-results.json in root (should be logs/)
 
-# ❌ ./node_modules in root (should be frontend/bot/)
+#  ./node_modules in root (should be frontend/bot/)
 
-# ❌ ./test.db or cache files in root
+#  ./test.db or cache files in root
 
 ```
 
 **CI Triage Guard Framework**: Comprehensive automation monitors and maintains CI health:
 
-- **22+ GitHub Actions workflows** provide complete automation coverage
+- **22 GitHub Actions workflows** provide complete automation coverage
 
 - **Auto-fixing**: Automatic formatting via `auto-fix.yml` workflow
 
@@ -802,12 +802,12 @@ bash scripts/enforce_output_location.sh
 
 ```bash
 
-# ✅ CORRECT - Install in service directories
+#  CORRECT - Install in service directories
 
 cd frontend && npm ci
 cd bot && npm ci
 
-# ❌ WRONG - Never install in repository root
+#  WRONG - Never install in repository root
 
 npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 
@@ -830,7 +830,7 @@ npm ci  # Creates ./node_modules/ - BLOCKED by Root Artifact Guard
 - **Docstrings**: Required for all public functions (use NumPy style)
 
 ```python
-def greet(name: str) -> str:
+def greet(name: str)  str:
     """Return a friendly greeting.
 
     Parameters
@@ -857,13 +857,13 @@ def greet(name: str) -> str:
 
 - **Testing**: Jest for bot, Vitest for frontend
 
-- **ESLint + Prettier**: Enforced formatting
+- **ESLint  Prettier**: Enforced formatting
 
 - **100% coverage** for bot service
 
 ### 4. Testing Requirements
 
-#### ⚠️ CRITICAL: 95% Quality Control Rule
+####  CRITICAL: 95% Quality Control Rule
 
 **ALL changes must pass comprehensive QC validation before merging**:
 
@@ -903,11 +903,11 @@ git push
 
 #### Coverage Thresholds
 
-- **Python backend**: 96%+ (enforced in CI)
+- **Python backend**: 96% (enforced in CI)
 
 - **TypeScript bot**: 100% (enforced in CI)
 
-- **React frontend**: 100% statements, 98.43%+ branches
+- **React frontend**: 100% statements, 98.43% branches
 
 #### Test Commands (Virtual Environment Required)
 
@@ -997,13 +997,13 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 
 **FORBIDDEN Practices**:
 
-- ❌ Using `git commit` directly (bypasses validation)
+-  Using `git commit` directly (bypasses validation)
 
-- ❌ Using unapproved types like `MERGE`, `UPDATE`, `MISC`
+-  Using unapproved types like `MERGE`, `UPDATE`, `MISC`
 
-- ❌ Missing scope in commit messages
+-  Missing scope in commit messages
 
-- ❌ Using `--no-verify` without explicit Potato Approval
+-  Using `--no-verify` without explicit Potato Approval
 
 ### 6. Commit Message Standards
 
@@ -1040,41 +1040,41 @@ bash scripts/manage_logs.sh purge     # Remove all logs (with confirmation)
 ### Directory Layout
 
 ```text
-├── .venv/                     # Python virtual environment (NEVER commit)
+── .venv/                     # Python virtual environment (NEVER commit)
 
-├── src/devonboarder/          # Python backend application
+── src/devonboarder/          # Python backend application
 
-├── src/xp/                    # XP/gamification service
+── src/xp/                    # XP/gamification service
 
-├── src/discord_integration/   # Discord OAuth and role management service
+── src/discord_integration/   # Discord OAuth and role management service
 
-├── src/feedback_service/      # User feedback collection service
+── src/feedback_service/      # User feedback collection service
 
-├── src/llama2_agile_helper/   # LLM integration service
+── src/llama2_agile_helper/   # LLM integration service
 
-├── src/routes/                # Additional API routes
+── src/routes/                # Additional API routes
 
-├── src/utils/                 # Shared utilities (CORS, Discord, roles)
+── src/utils/                 # Shared utilities (CORS, Discord, roles)
 
-├── bot/                       # Discord bot (TypeScript)
+── bot/                       # Discord bot (TypeScript)
 
-├── frontend/                  # React application
+── frontend/                  # React application
 
-├── auth/                      # Authentication service
+── auth/                      # Authentication service
 
-├── tests/                     # Test suites
+── tests/                     # Test suites
 
-├── docs/                      # Documentation
+── docs/                      # Documentation
 
-├── scripts/                   # Automation scripts (100+ scripts)
+── scripts/                   # Automation scripts (100 scripts)
 
-├── .github/workflows/         # GitHub Actions (22+ workflows)
+── .github/workflows/         # GitHub Actions (22 workflows)
 
-├── config/                    # Configuration files
+── config/                    # Configuration files
 
-├── codex/                     # Agent documentation and tasks
+── codex/                     # Agent documentation and tasks
 
-└── plugins/                   # Optional Python extensions
+── plugins/                   # Optional Python extensions
 
 ```
 
@@ -1211,7 +1211,7 @@ const isProdEnvironment = guildId === "1065367728992571444";
 
 - **Startup logging**: Bot provides detailed environment info on startup
 
-- **ESLint v9+ flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
+- **ESLint v9 flat config**: Use `eslint.config.js` format, not legacy `.eslintrc`
 
 ### 3. Database Patterns
 
@@ -1306,7 +1306,7 @@ make aar-validate        # Check AAR templates for markdown compliance
 
 make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
 
-make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR  GitHub issue
 
 ```
 
@@ -1326,7 +1326,7 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 
 ### Automation Ecosystem
 
-DevOnboarder includes 100+ automation scripts in `scripts/` covering:
+DevOnboarder includes 100 automation scripts in `scripts/` covering:
 
 - **CI Health Monitoring**: `monitor_ci_health.sh`, `analyze_ci_patterns.sh`
 
@@ -1396,7 +1396,7 @@ All CI commands use proper virtual environment context:
 
 - **Token security**: Secure Discord bot token storage
 
-- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN → CI_BOT_TOKEN → GITHUB_TOKEN
+- **CI token hierarchy**: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
 
 - **Fine-grained tokens**: Prefer GitHub fine-grained tokens for security
 
@@ -1556,7 +1556,7 @@ useEffect(() => {
 # FastAPI endpoint with proper documentation
 
 @app.get("/api/user/status", response_model=UserStatus)
-async def get_user_status(user_id: int) -> UserStatus:
+async def get_user_status(user_id: int)  UserStatus:
     """Get user onboarding status.
 
     Returns user's current onboarding progress and level.
@@ -1599,7 +1599,7 @@ async def get_user_status(user_id: int) -> UserStatus:
 def user_level(username: str, db: Session = Depends(auth_service.get_db)):
     user = db.query(auth_service.User).filter_by(username=username).first()
     xp_total = sum(evt.xp for evt in user.events)
-    level = xp_total // 100 + 1
+    level = xp_total // 100  1
 
     return {"level": level}
 
@@ -1712,41 +1712,41 @@ python -m pytest plugins/example_plugin/
 
 1. **ModuleNotFoundError**:
 
-    - ✅ **Solution**: `source .venv/bin/activate && pip install -e .[test]`
+    -  **Solution**: `source .venv/bin/activate && pip install -e .[test]`
 
-    - ❌ **NOT**: Install to system Python
+    -  **NOT**: Install to system Python
 
 2. **Command not found (black, pytest, etc.)**:
 
-    - ✅ **Solution**: Use `python -m command` syntax in virtual environment
+    -  **Solution**: Use `python -m command` syntax in virtual environment
 
-    - ❌ **NOT**: Install globally with `pip install --user`
+    -  **NOT**: Install globally with `pip install --user`
 
 3. **MyPy passes locally but fails in CI**:
 
-    - ✅ **Symptom**: "Library stubs not installed for 'requests' [import-untyped]"
+    -  **Symptom**: "Library stubs not installed for 'requests' [import-untyped]"
 
-    - ✅ **Solution**: Add missing `types-*` packages to `pyproject.toml` test dependencies
+    -  **Solution**: Add missing `types-*` packages to `pyproject.toml` test dependencies
 
     - 📚 **Documentation**: `docs/troubleshooting/CI_MYPY_TYPE_STUBS.md`
 
-    - ❌ **NOT**: Install type stubs only locally
+    -  **NOT**: Install type stubs only locally
 
 4. **Automerge hangs indefinitely** (CRITICAL INFRASTRUCTURE ISSUE):
 
-    - ✅ **Symptom**: All checks pass, automerge enabled, but PR shows "BLOCKED" indefinitely
+    -  **Symptom**: All checks pass, automerge enabled, but PR shows "BLOCKED" indefinitely
 
-    - ✅ **Root Cause**: Repository default branch mismatch OR status check name misalignment
+    -  **Root Cause**: Repository default branch mismatch OR status check name misalignment
 
-    - ✅ **Quick Check**: `gh api repos/OWNER/REPO --jq '.default_branch'` (should be "main")
+    -  **Quick Check**: `gh api repos/OWNER/REPO --jq '.default_branch'` (should be "main")
 
-    - ✅ **Solution**: Fix default branch + align status check names with actual check runs
+    -  **Solution**: Fix default branch  align status check names with actual check runs
 
     - 📚 **Documentation**: `docs/troubleshooting/AUTOMERGE_HANGING_INDEFINITELY.md`
 
-    - 🛠️ **Health Check**: `bash scripts/check_automerge_health.sh`
+    -  **Health Check**: `bash scripts/check_automerge_health.sh`
 
-    - ❌ **NOT**: Assume it's a temporary GitHub issue - this requires configuration fixes
+    -  **NOT**: Assume it's a temporary GitHub issue - this requires configuration fixes
 
 5. **Coverage failures**: Check test quality, not just quantity
 
@@ -1756,31 +1756,31 @@ python -m pytest plugins/example_plugin/
 
 8. **Cache pollution in repository root**:
 
-    - ✅ **Detection**: Run `bash scripts/validate_cache_centralization.sh`
+    -  **Detection**: Run `bash scripts/validate_cache_centralization.sh`
 
-    - ✅ **Solution**: Run `bash scripts/manage_logs.sh cache clean`
+    -  **Solution**: Run `bash scripts/manage_logs.sh cache clean`
 
-    - ❌ **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
+    -  **NOT**: Manually delete cache directories (bypasses DevOnboarder automation)
 
 9. **Jest Test Timeouts in CI**:
 
-    - ✅ **Symptom**: Tests hang indefinitely in CI causing workflow failures
+    -  **Symptom**: Tests hang indefinitely in CI causing workflow failures
 
-    - ✅ **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
+    -  **Quick Fix**: Ensure Jest configuration includes `testTimeout: 30000`
 
-    - ✅ **Location**: `bot/package.json` Jest configuration block
+    -  **Location**: `bot/package.json` Jest configuration block
 
-    - ✅ **Validation**: Run `bash scripts/check_jest_config.sh`
+    -  **Validation**: Run `bash scripts/check_jest_config.sh`
 
 10. **Dependency Update Failures**:
 
-    - ✅ **Pattern**: "Tests hang in CI but pass locally" → Missing Jest timeout configuration
+    -  **Pattern**: "Tests hang in CI but pass locally"  Missing Jest timeout configuration
 
-    - ✅ **Pattern**: "TypeScript compilation errors after upgrade" → Breaking changes in major versions
+    -  **Pattern**: "TypeScript compilation errors after upgrade"  Breaking changes in major versions
 
-    - ✅ **Pattern**: "Dependabot PR fails immediately" → Lock file conflicts or incompatible versions
+    -  **Pattern**: "Dependabot PR fails immediately"  Lock file conflicts or incompatible versions
 
-    - ✅ **Emergency Rollback**: `git revert <commit-hash> && git push origin main`
+    -  **Emergency Rollback**: `git revert <commit-hash> && git push origin main`
 
 ### Dependency Crisis Management
 
@@ -1810,9 +1810,9 @@ python -m pytest plugins/example_plugin/
 
 3. **Incremental Recovery**:
 
-   - Merge patch updates first (1.2.3 → 1.2.4)
+   - Merge patch updates first (1.2.3  1.2.4)
 
-   - Then minor updates (1.2.x → 1.3.0)
+   - Then minor updates (1.2.x  1.3.0)
 
    - Major updates last with manual testing
 
@@ -1830,19 +1830,19 @@ python -m pytest plugins/example_plugin/
 
 **Fast Track Criteria (Safe to Auto-Merge)**:
 
-- ✅ Patch version updates (1.2.3 → 1.2.4)
+-  Patch version updates (1.2.3  1.2.4)
 
-- ✅ Minor version updates with green CI
+-  Minor version updates with green CI
 
-- ✅ Test framework maintenance updates (@types/*, ts-jest)
+-  Test framework maintenance updates (@types/*, ts-jest)
 
 **Requires Investigation**:
 
-- ⚠️ Major version jumps (5.8.x → 5.9.x)
+-  Major version jumps (5.8.x  5.9.x)
 
-- ⚠️ Framework core updates (TypeScript, Jest major versions)
+-  Framework core updates (TypeScript, Jest major versions)
 
-- ⚠️ Any PR with failing CI checks
+-  Any PR with failing CI checks
 
 ### Environment Variable Management Issues
 
@@ -1850,55 +1850,55 @@ python -m pytest plugins/example_plugin/
 
 - **Environment File Inconsistencies**:
 
-    - ✅ **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
+    -  **Detection**: Run `bash scripts/smart_env_sync.sh --validate-only` to detect mismatches
 
-    - ✅ **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
+    -  **Solution**: Run `bash scripts/smart_env_sync.sh --sync-all` to synchronize
 
-    - ❌ **NOT**: Manually edit individual environment files
+    -  **NOT**: Manually edit individual environment files
 
 - **Security Audit Failures**:
 
-    - ✅ **Detection**: Run `bash scripts/env_security_audit.sh`
+    -  **Detection**: Run `bash scripts/env_security_audit.sh`
 
-    - ✅ **Pattern**: Production secrets in CI files (CRITICAL violation)
+    -  **Pattern**: Production secrets in CI files (CRITICAL violation)
 
-    - ✅ **Solution**: Move production secrets to gitignored files only
+    -  **Solution**: Move production secrets to gitignored files only
 
-    - ⚠️ **Emergency**: Never commit production secrets to CI environment
+    -  **Emergency**: Never commit production secrets to CI environment
 
 - **Tunnel Hostname Validation Failures**:
 
-    - ✅ **Pattern**: "ERROR: uses old multi-subdomain format"
+    -  **Pattern**: " uses old multi-subdomain format"
 
-    - ✅ **Solution**: Use single domain format (auth.theangrygamershow.com)
+    -  **Solution**: Use single domain format (auth.theangrygamershow.com)
 
-    - ❌ **NOT**: Disable validation to avoid errors
+    -  **NOT**: Disable validation to avoid errors
 
 - **Discord Bot Authentication Failures in Docker**:
 
-    - ✅ **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
+    -  **Pattern**: Bot shows "0 env vars loaded" or "DISCORD_GUILD_ID not configured"
 
-    - ✅ **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
+    -  **Root Cause**: Environment file mismatch between docker-compose.yaml and container mount
 
-    - ✅ **Solution**: Ensure compose file env_file matches volume mount (.env.dev → /app/.env:ro)
+    -  **Solution**: Ensure compose file env_file matches volume mount (.env.dev  /app/.env:ro)
 
-    - ✅ **Verification**: Check container logs with `docker compose logs bot`
+    -  **Verification**: Check container logs with `docker compose logs bot`
 
 - **Missing Bot Environment Variables**:
 
-    - ✅ **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
+    -  **Pattern**: Bot starts but missing DISCORD_GUILD_ID, ENVIRONMENT, DISCORD_BOT_READY
 
-    - ✅ **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
+    -  **Solution**: Add variables to main .env file and run `bash scripts/smart_env_sync.sh --sync-all`
 
-    - ❌ **NOT**: Manually edit .env.dev or docker-specific files directly
+    -  **NOT**: Manually edit .env.dev or docker-specific files directly
 
 - **Multi-Service Container Failures**:
 
-    - ✅ **Diagnostic Pattern**: Check `docker compose ps` → logs → environment sync → security audit
+    -  **Diagnostic Pattern**: Check `docker compose ps`  logs  environment sync  security audit
 
-    - ✅ **Service Order**: Database fails → Auth fails → Backend fails → Bot fails
+    -  **Service Order**: Database fails  Auth fails  Backend fails  Bot fails
 
-    - ✅ **Environment Consistency**: All services should reference same environment file in compose
+    -  **Environment Consistency**: All services should reference same environment file in compose
 
 ### Validation-Driven Resolution Pattern
 
@@ -1920,7 +1920,7 @@ bash scripts/manage_logs.sh cache clean
 
 bash scripts/validate_cache_centralization.sh
 
-# Output: "SUCCESS: No cache pollution found in repository root"
+# Output: " No cache pollution found in repository root"
 
 ```
 
@@ -2064,7 +2064,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 
 **Essential References**:
 
-- `PHASE_INDEX.md` - Comprehensive navigation guide for 7+ active phase systems
+- `PHASE_INDEX.md` - Comprehensive navigation guide for 7 active phase systems
 
 - `PHASE_ISSUE_INDEX.md` - Single pane of glass for phase-to-issue traceability
 
@@ -2080,7 +2080,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 **Phase 2 (Automation)**: 7 scripts including `monitor_ci_health.sh`, `ci_gh_issue_wrapper.sh`
 **Phase 3 (Developer)**: 3 scripts including `validate_token_architecture.sh`
 
-**Token Hierarchy**: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+**Token Hierarchy**: `CI_ISSUE_AUTOMATION_TOKEN`  `CI_BOT_TOKEN`  `GITHUB_TOKEN`
 
 **Key Scripts**:
 
@@ -2090,7 +2090,7 @@ DevOnboarder uses a sophisticated multi-layer phase architecture. When students 
 
 - `scripts/complete_system_validation.sh` - Validates entire token architecture
 
-### Essential Automation Scripts (100+)
+### Essential Automation Scripts (100)
 
 DevOnboarder includes an extensive automation ecosystem in `scripts/` for all aspects of development:
 
@@ -2155,7 +2155,7 @@ make aar-setup           # Complete AAR system setup
 
 make aar-generate WORKFLOW_ID=12345                    # Generate AAR for workflow
 
-make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub issue
+make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR  GitHub issue
 
 ```
 
@@ -2309,7 +2309,7 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 
 14. **TERMINAL OUTPUT**: Use only simple, individual echo commands with plain text
 
-### ⚠️ NEW: Pre-commit Hook Management for Agents
+###  NEW: Pre-commit Hook Management for Agents
 
 **CRITICAL UNDERSTANDING**: Pre-commit hooks frequently modify files during validation (trailing whitespace, formatting fixes). This creates a common cycle where:
 
@@ -2339,11 +2339,11 @@ make aar-generate WORKFLOW_ID=12345 CREATE_ISSUE=true  # Generate AAR + GitHub i
 
 ```bash
 
-# ✅ CORRECT - Use safe commit wrapper
+#  CORRECT - Use safe commit wrapper
 
 scripts/safe_commit.sh "FEAT(component): descriptive commit message"
 
-# ❌ WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
+#  WRONG - Direct git commit bypasses DevOnboarder safety mechanisms
 
 git commit -m "message"
 
@@ -2353,7 +2353,7 @@ git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypass
 
 ```
 
-### ⚠️ NEW: Environment Variable Management for Agents
+###  NEW: Environment Variable Management for Agents
 
 **CRITICAL UNDERSTANDING**: DevOnboarder uses centralized environment variable management with security boundaries.
 
@@ -2371,18 +2371,18 @@ git commit --no-verify -m "message"  # VIOLATION: Never use --no-verify - bypass
 
 ```bash
 
-# ✅ CORRECT - Centralized management
+#  CORRECT - Centralized management
 
 echo "NEW_VARIABLE=value" >> .env
 bash scripts/smart_env_sync.sh --sync-all
 
-# ❌ WRONG - Manual multi-file editing
+#  WRONG - Manual multi-file editing
 
 echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 
 ```
 
-### ⚠️ UPDATED: Shellcheck External Dependencies - Hybrid Approach
+###  UPDATED: Shellcheck External Dependencies - Hybrid Approach
 
 **CRITICAL UNDERSTANDING**: DevOnboarder uses a hybrid approach for external dependency management.
 
@@ -2406,13 +2406,13 @@ echo "NEW_VARIABLE=value" >> .env.ci  # Bypasses security boundaries
 
 ```bash
 
-# ✅ CORRECT - Covered by global .shellcheckrc
+#  CORRECT - Covered by global .shellcheckrc
 
 source .venv/bin/activate
 source scripts/load_token_environment.sh
 source scripts/enhanced_token_loader.sh
 
-# ✅ CORRECT - Only for unusual external dependencies
+#  CORRECT - Only for unusual external dependencies
 
 # shellcheck source=custom-external-config.sh disable=SC1091
 
@@ -2422,13 +2422,13 @@ source scripts/enhanced_token_loader.sh
 
 **BENEFITS**:
 
-- Eliminates 60+ repetitive disable comments across Token Architecture scripts
+- Eliminates 60 repetitive disable comments across Token Architecture scripts
 
 - Maintains shellcheck safety through targeted configuration
 
 - Clear project standards documented in `docs/SHELLCHECK_EXTERNAL_DEPENDENCIES.md`
 
-### ⚠️ NEW: Markdown Content Creation Standards
+###  NEW: Markdown Content Creation Standards
 
 **CRITICAL REQUIREMENT**: Create markdown content that passes linting validation on first attempt.
 
@@ -2494,7 +2494,7 @@ Final paragraph after code block.
 
 **AGENT RESPONSIBILITY**: Treat markdown linting rules as **requirements**, not **suggestions**. Creating non-compliant content violates DevOnboarder's "quiet reliability" philosophy.
 
-### ⚠️ NEW: Priority Matrix Bot GPG Signing
+###  NEW: Priority Matrix Bot GPG Signing
 
 **CRITICAL UNDERSTANDING**: DevOnboarder implements automated Priority Matrix synthesis with SSH GPG-signed commits.
 
@@ -2543,9 +2543,9 @@ Final paragraph after code block.
 
 - **PR integration**: Automatic comments with synthesis results and quality metrics
 
-### ⚠️ NEW: Traefik Reverse Proxy Architecture
+###  NEW: Traefik Reverse Proxy Architecture
 
-**CRITICAL UNDERSTANDING**: DevOnboarder uses Traefik reverse proxy with dual routing (subdomain + path-based).
+**CRITICAL UNDERSTANDING**: DevOnboarder uses Traefik reverse proxy with dual routing (subdomain  path-based).
 
 **Service Routing Architecture**:
 
@@ -2607,7 +2607,7 @@ Final paragraph after code block.
 
 **Enhanced Error Patterns to Recognize**:
 
-- **First attempt failure + successful re-staging** = Normal formatting fix cycle
+- **First attempt failure  successful re-staging** = Normal formatting fix cycle
 
 - **Second attempt failure** = Systemic issue requiring investigation
 
@@ -2637,7 +2637,7 @@ pre-commit run <hook-name> --all-files
 
 ```
 
-### ⚠️ NEW: Multi-Service Docker Architecture Troubleshooting
+###  NEW: Multi-Service Docker Architecture Troubleshooting
 
 **CRITICAL UNDERSTANDING**: Multi-service Docker Compose environments require systematic debugging following service dependency chains.
 
@@ -2645,7 +2645,7 @@ pre-commit run <hook-name> --all-files
 
 1. **Check service health first**: `docker compose ps` - identify which services are failing
 
-2. **Follow dependency chain**: Services fail in order of dependencies (db → auth → backend → bot)
+2. **Follow dependency chain**: Services fail in order of dependencies (db  auth  backend  bot)
 
 3. **Verify environment consistency**: All services in compose file should use same environment file
 
@@ -2657,7 +2657,7 @@ pre-commit run <hook-name> --all-files
 
 ```bash
 
-# ✅ CORRECT - Systematic debugging approach
+#  CORRECT - Systematic debugging approach
 
 docker compose -f docker-compose.dev.yaml ps                    # Check service status
 
@@ -2667,7 +2667,7 @@ bash scripts/smart_env_sync.sh --validate-only                  # Verify env syn
 
 bash scripts/env_security_audit.sh                              # Check security boundaries
 
-# ❌ WRONG - Random service restart without diagnosis
+#  WRONG - Random service restart without diagnosis
 
 docker compose restart bot  # Doesn't address root cause
 
@@ -2677,7 +2677,7 @@ docker compose restart bot  # Doesn't address root cause
 
 ```yaml
 
-# ✅ CORRECT - Consistent environment file usage across all services
+#  CORRECT - Consistent environment file usage across all services
 
 services:
   auth-service:
@@ -2690,7 +2690,7 @@ services:
     volumes:
       - ./.env.dev:/app/.env:ro   # Mount as expected filename
 
-# ❌ WRONG - Mixed environment file references
+#  WRONG - Mixed environment file references
 
 services:
   bot:
@@ -2701,20 +2701,20 @@ services:
 
 ```
 
-### ⚠️ NEW: ES Module Requirements for TypeScript Discord Bots
+###  NEW: ES Module Requirements for TypeScript Discord Bots
 
-**CRITICAL UNDERSTANDING**: Discord.js v14+ requires ES modules with explicit .js extensions in TypeScript imports.
+**CRITICAL UNDERSTANDING**: Discord.js v14 requires ES modules with explicit .js extensions in TypeScript imports.
 
 **MANDATORY IMPORT PATTERNS**:
 
 ```typescript
-// ✅ CORRECT - ES module imports in TypeScript (mandatory .js extensions)
+//  CORRECT - ES module imports in TypeScript (mandatory .js extensions)
 
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { command as verifyCommand } from './verify.js';        // .js required even for .ts files
 import { command as profileCommand } from './profile.js';      // .js required even for .ts files
 
-// ❌ WRONG - Missing .js extension causes runtime MODULE_NOT_FOUND errors
+//  WRONG - Missing .js extension causes runtime MODULE_NOT_FOUND errors
 
 import { command as verifyCommand } from './verify';           // Missing .js
 import { command as profileCommand } from './profile';         // Missing .js
@@ -2851,17 +2851,17 @@ bash scripts/validate-bot-permissions.sh
 
 **Last Updated**: 2025-09-18 (Priority Matrix Bot GPG Signing & Current Architecture Analysis)
 
-**Coverage Status**: Backend 96%+, Bot 100%, Frontend 100%
-**Active Environments**: Development + Production Discord integration (Guild IDs: 1386935663139749998, 1065367728992571444)
+**Coverage Status**: Backend 96%, Bot 100%, Frontend 100%
+**Active Environments**: Development  Production Discord integration (Guild IDs: 1386935663139749998, 1065367728992571444)
 
-**CI Framework**: 22+ GitHub Actions workflows with comprehensive automation
+**CI Framework**: 22 GitHub Actions workflows with comprehensive automation
 
-**Security**: Enhanced Potato Policy + Root Artifact Guard + SSH GPG signing active
+**Security**: Enhanced Potato Policy  Root Artifact Guard  SSH GPG signing active
 
 **Agent System**: JSON schema validation with YAML frontmatter enforcement
 **Enhanced Debugging**: safe_commit.sh with automatic log analysis and error diagnostics
 **Current Branch**: fix/priority-matrix-bot-gpg-signing (GPG signing implementation)
-**Architecture**: Traefik reverse proxy + multi-service Docker Compose with subdomain routing
+**Architecture**: Traefik reverse proxy  multi-service Docker Compose with subdomain routing
 
 **Virtual Environment**: MANDATORY for all development and tooling
 **Artifact Hygiene**: Root Artifact Guard enforces zero tolerance for pollution

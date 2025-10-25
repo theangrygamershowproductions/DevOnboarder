@@ -16,16 +16,16 @@ echo ""
 # Test GitHub CLI
 echo "Testing GitHub CLI:"
 if command -v gh >/dev/null 2>&1; then
-    echo "✅ gh command available"
+    echo " gh command available"
 
     # Test auth status
     if gh auth status 2>/dev/null; then
-        echo "✅ GitHub authentication working"
+        echo " GitHub authentication working"
     else
-        echo "❌ GitHub authentication issue"
+        echo " GitHub authentication issue"
     fi
 else
-    echo "❌ gh command not available"
+    echo " gh command not available"
 fi
 
 echo ""

@@ -155,18 +155,18 @@ gh run download "$LATEST_FAILED"
 # Get failed runs with error handling
 
 if failed_runs=$(gh run list --limit 15 --json conclusion,status,workflowName,createdAt,url --conclusion FAILURE 2>/dev/null); then
-    echo "✅ Retrieved failed run data"
+    echo " Retrieved failed run data"
 
     # Process failed runs
 
     total_failed=$(echo "$failed_runs" | jq length)
-    echo "📈 Total failed runs: $total_failed"
+    echo "GROW: Total failed runs: $total_failed"
 
     # Group by workflow
 
     echo "$failed_runs" | jq -r 'group_by(.workflowName) | map({workflow: .[0].workflowName, count: length}) | .[] | "  \(.count)x \(.workflow)"'
 else
-    echo "❌ Failed to fetch failed workflow runs"
+    echo " Failed to fetch failed workflow runs"
 fi
 
 ```
@@ -193,18 +193,18 @@ fi
 
 ```bash
 
-# ✅ Good: Handle GitHub CLI failures
+#  Good: Handle GitHub CLI failures
 
 if failed_runs=$(gh run list --conclusion FAILURE 2>/dev/null); then
     # Process data
 
 else
-    echo "⚠️  GitHub CLI not available or not authenticated"
+    echo "  GitHub CLI not available or not authenticated"
     # Fallback behavior
 
 fi
 
-# ❌ Bad: No error handling
+#  Bad: No error handling
 
 failed_runs=$(gh run list --conclusion FAILURE)
 
@@ -214,11 +214,11 @@ failed_runs=$(gh run list --conclusion FAILURE)
 
 ```bash
 
-# ✅ Good: Limit results
+#  Good: Limit results
 
 gh run list --conclusion FAILURE --limit 10
 
-# ❌ Bad: Fetch all failures (could be thousands)
+#  Bad: Fetch all failures (could be thousands)
 
 gh run list --conclusion FAILURE
 
@@ -310,7 +310,7 @@ gh run list --conclusion FAILURE --limit 10 --json conclusion,workflowName
 #!/bin/bash
 set -euo pipefail
 
-echo "🔍 Comprehensive Failure Analysis"
+echo " Comprehensive Failure Analysis"
 echo "================================="
 
 # 1. Get recent failures
@@ -320,12 +320,12 @@ if failed_runs=$(gh run list --conclusion FAILURE --limit 15 --json conclusion,w
     # 2. Count and categorize
 
     total=$(echo "$failed_runs" | jq length)
-    echo "📊 Total failed runs: $total"
+    echo " Total failed runs: $total"
 
     # 3. Group by workflow
 
     echo ""
-    echo "🔧 Failures by workflow:"
+    echo " Failures by workflow:"
     echo "$failed_runs" | jq -r 'group_by(.workflowName) | map({workflow: .[0].workflowName, count: length}) | sort_by(-.count) | .[] | "  \(.count)x \(.workflow)"'
 
     # 4. Recent timeline
@@ -345,7 +345,7 @@ if failed_runs=$(gh run list --conclusion FAILURE --limit 15 --json conclusion,w
     echo "3. Check for patterns in failure messages"
 
 else
-    echo "❌ Cannot fetch failure data - check GitHub CLI authentication"
+    echo " Cannot fetch failure data - check GitHub CLI authentication"
 
 fi
 

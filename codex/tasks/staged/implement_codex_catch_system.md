@@ -27,7 +27,7 @@ Implement comprehensive coverage decay mitigation system following DevOnboarder 
 
 ## Implementation Readiness
 
-### ✅ **Ready Components**
+###  **Ready Components**
 
 - Core script designs validated
 
@@ -91,7 +91,7 @@ Implement comprehensive coverage decay mitigation system following DevOnboarder 
 
 - Create GitHub issues for backlog items needing tests
 
-- **Token hierarchy compliance**: `CI_ISSUE_AUTOMATION_TOKEN` → `CI_BOT_TOKEN` → `GITHUB_TOKEN`
+- **Token hierarchy compliance**: `CI_ISSUE_AUTOMATION_TOKEN`  `CI_BOT_TOKEN`  `GITHUB_TOKEN`
 
 - Avoid duplicate issue creation via existing issue detection
 
@@ -167,16 +167,16 @@ Implement comprehensive coverage decay mitigation system following DevOnboarder 
 
 ```bash
 
-# ✅ REQUIRED - DevOnboarder compliant
+#  REQUIRED - DevOnboarder compliant
 
 echo "Coverage check completed successfully"
 echo "Current coverage: 95.2%"
 echo "Baseline coverage: 94.8%"
-echo "Delta: +0.4%"
+echo "Delta: 0.4%"
 
-# ❌ FORBIDDEN - Causes immediate hanging
+#  FORBIDDEN - Causes immediate hanging
 
-echo "✅ Coverage maintained"  # Emojis cause hanging
+echo " Coverage maintained"  # Emojis cause hanging
 
 echo "🎯 Ready for deployment"  # Unicode causes hanging
 
@@ -188,7 +188,7 @@ echo "Status: $STATUS_VAR"     # Variable expansion causes hanging
 
 ```bash
 
-# ✅ CORRECT - Use printf for variables
+#  CORRECT - Use printf for variables
 
 printf "Current coverage: %.2f%%\n" "$COVERAGE"
 printf "Baseline: %.2f%%\n" "$BASELINE"
@@ -231,7 +231,7 @@ fi
 def ensure_venv():
     """Ensure we're running in virtual environment (MANDATORY)."""
     if not hasattr(sys, 'real_prefix') and not sys.base_prefix != sys.prefix:
-        print("ERROR: Must run in virtual environment")
+        print(" Must run in virtual environment")
         sys.exit(1)
 
 ```

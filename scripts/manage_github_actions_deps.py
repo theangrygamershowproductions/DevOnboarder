@@ -27,7 +27,7 @@ try:
     def get_current_utc() -> datetime:
         """Get current UTC timestamp using centralized utility."""
         # Convert ISO string back to datetime for calculation compatibility
-        return datetime.fromisoformat(get_utc_timestamp().replace("Z", "+00:00"))
+        return datetime.fromisoformat(get_utc_timestamp().replace("Z", "00:00"))
 
 except ImportError:
 
@@ -53,7 +53,7 @@ class GitHubActionsDependencyManager:
         self.session = requests.Session()
         self.session.headers.update(
             {
-                "Accept": "application/vnd.github.v3+json",
+                "Accept": "application/vnd.github.v3json",
                 "User-Agent": "DevOnboarder-Dependency-Manager/1.0",
             }
         )
@@ -91,8 +91,8 @@ class GitHubActionsDependencyManager:
         for workflow_file in workflow_files:
             try:
                 workflow_results = self._validate_workflow_file(workflow_file)
-                results["workflows_processed"] += 1
-                results["dependencies_checked"] += workflow_results[
+                results["workflows_processed"] = 1
+                results["dependencies_checked"] = workflow_results[
                     "dependencies_checked"
                 ]
                 results["violations"].extend(workflow_results["violations"])
@@ -141,7 +141,7 @@ class GitHubActionsDependencyManager:
             actions = self._extract_actions_from_workflow(workflow, content)
 
             for action_info in actions:
-                results["dependencies_checked"] += 1
+                results["dependencies_checked"] = 1
                 violation = self._validate_action_dependency(
                     action_info, str(workflow_file.relative_to(self.repo_root))
                 )
@@ -176,7 +176,7 @@ class GitHubActionsDependencyManager:
         actions = []
 
         # Look for 'uses' statements in the YAML content
-        uses_pattern = r"uses:\s+([^@\s]+)@([^\s]+)"
+        uses_pattern = r"uses:\s([^@\s])@([^\s])"
         matches = re.findall(uses_pattern, content)
 
         for action_name, version in matches:
@@ -196,11 +196,11 @@ class GitHubActionsDependencyManager:
 
     def _determine_version_type(self, version: str) -> str:
         """Determine the type of version specification."""
-        if re.match(r"^v?\d+$", version):
+        if re.match(r"^v?\d$", version):
             return "major"
-        elif re.match(r"^v?\d+\.\d+$", version):
+        elif re.match(r"^v?\d\.\d$", version):
             return "minor"
-        elif re.match(r"^v?\d+\.\d+\.\d+$", version):
+        elif re.match(r"^v?\d\.\d\.\d$", version):
             return "patch"
         elif re.match(r"^[a-f0-9]{40}$", version):
             return "commit_sha"
@@ -225,8 +225,7 @@ class GitHubActionsDependencyManager:
                     "action": action_name,
                     "version": version,
                     "issue": (
-                        f"Using branch reference '{version}' instead of "
-                        "tagged version"
+                        f"Using branch reference '{version}' instead of " + "tagged version"
                     ),
                     "severity": "warning",
                     "recommendation": "Use specific version tags for better stability",
@@ -241,8 +240,7 @@ class GitHubActionsDependencyManager:
                 "action": action_name,
                 "version": version,
                 "issue": (
-                    "Could not validate version - action may not exist or be "
-                    "accessible"
+                    "Could not validate version - action may not exist or be " + "accessible"
                 ),
                 "severity": "warning",
                 "recommendation": "Verify action name and version are correct",
@@ -255,7 +253,7 @@ class GitHubActionsDependencyManager:
 
         try:
             release_datetime = datetime.fromisoformat(
-                release_date.replace("Z", "+00:00")
+                release_date.replace("Z", "00:00")
             )
             days_old = (get_current_utc() - release_datetime).days
 
@@ -411,7 +409,7 @@ class GitHubActionsDependencyManager:
                 report_lines.extend(
                     [
                         (
-                            f"  {rec['action']}: {rec['current_version']} -> "
+                            f"  {rec['action']}: {rec['current_version']}  "
                             f"{rec['recommended_version']}"
                         ),
                         f"    Reason: {rec['reason']}",
@@ -426,12 +424,10 @@ def main():
     """Main entry point for the dependency manager."""
     if len(sys.argv) < 2:
         print(
-            "Usage: manage_github_actions_deps.py <repo_root> "
-            "[--window-days min,max]"
+            "Usage: manage_github_actions_deps.py <repo_root> " + "[--window-days min,max]"
         )
         print(
-            "Example: manage_github_actions_deps.py /path/to/repo "
-            "--window-days 30,90"
+            "Example: manage_github_actions_deps.py /path/to/repo " + "--window-days 30,90"
         )
         sys.exit(1)
 
@@ -447,8 +443,7 @@ def main():
                 window_days = (min_days, max_days)
             except ValueError:
                 print(
-                    "Error: --window-days must be in format 'min,max' "
-                    "(e.g., '30,90')"
+                    "Error: --window-days must be in format 'min,max' " + "(e.g., '30,90')"
                 )
                 sys.exit(1)
 

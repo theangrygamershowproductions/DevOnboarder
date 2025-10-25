@@ -1027,8 +1027,7 @@ def test_main_execution_block():
     cmd = [
         sys.executable,
         "-c",
-        "from src.devonboarder.dashboard_service import create_dashboard_app; "
-        "print('App created')",
+        "from src.devonboarder.dashboard_service import create_dashboard_app; " + "print('App created')",
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
@@ -1478,7 +1477,7 @@ repos:
 
             data = response.json()
             # Should detect that precommit hook is not configured
-            assert data["precommit_hook"] == "❌ Not configured"
+            assert data["precommit_hook"] == " Not configured"
 
         finally:
             os.chdir(original_cwd)
@@ -1502,7 +1501,7 @@ def test_precommit_config_missing():
 
             data = response.json()
             # Should detect that precommit config is missing
-            assert data["precommit_hook"] == "❌ Missing"
+            assert data["precommit_hook"] == " Missing"
 
         finally:
             os.chdir(original_cwd)

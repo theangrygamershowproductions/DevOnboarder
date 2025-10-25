@@ -33,8 +33,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     // Create status indicators
-    const getStatusIcon = (status: boolean) => (status ? "✅" : "❌");
-    const getModeIcon = (mode: boolean) => (mode ? "🧪" : "🚀");
+    const getStatusIcon = (status: boolean) => (status ? "" : "");
+    const getModeIcon = (mode: boolean) => (mode ? "🧪" : "");
 
     const embed = new EmbedBuilder()
         .setTitle("🤖 DevOnboarder Bot Status")
@@ -46,7 +46,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: "⚙️ Configuration",
+                name: " Configuration",
                 value: [
                     `${getStatusIcon(botReady)} Bot Ready: ${botReady}`,
                     `${getStatusIcon(
@@ -57,14 +57,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: "🔗 Integration Status",
+                name: "LINK: Integration Status",
                 value: [
-                    "✅ CI Pipeline: Resolved",
-                    "✅ Coverage: 96%+ across services",
-                    "🔄 Discord Integration: Active",
+                    " CI Pipeline: Resolved",
+                    " Coverage: 96% across services",
+                    "SYNC: Discord Integration: Active",
                     dryRunMode
                         ? "🧪 API Testing: Dry-run mode"
-                        : "🚀 API Testing: Live mode",
+                        : " API Testing: Live mode",
                 ].join("\n"),
                 inline: false,
             },
@@ -79,7 +79,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (dryRunMode) {
         embed.addFields([
             {
-                name: "⚠️ Safety Notice",
+                name: " Safety Notice",
                 value: "Bot is running in **dry-run mode**. All commands are simulated and logged only.",
                 inline: false,
             },
@@ -95,7 +95,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         embed.addFields([
             {
-                name: "🚀 Next Steps for Live Mode",
+                name: " Next Steps for Live Mode",
                 value: nextSteps.join("\n"),
                 inline: false,
             },

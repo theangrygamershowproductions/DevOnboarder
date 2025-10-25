@@ -6,7 +6,7 @@ consolidation_priority: P3
 ---
 # Framework Phase 2 Quick Start Guide
 
-## 🚀 5-Minute Setup
+##  5-Minute Setup
 
 **Essential commands to get started with Framework Phase 2:**
 
@@ -24,9 +24,9 @@ source .venv/bin/activate
 ./frameworks/friction_prevention/workflow/monitor_ci_health.sh
 ```
 
-## 📋 Essential Scripts by Category
+##  Essential Scripts by Category
 
-### 🔧 Daily Development
+###  Daily Development
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
@@ -42,7 +42,7 @@ source .venv/bin/activate
 | `assess_pr_health.sh` | PR health assessment | `./frameworks/friction_prevention/automation/assess_pr_health.sh 1740` |
 | `comprehensive_branch_cleanup.sh` | Branch cleanup | `./frameworks/friction_prevention/automation/comprehensive_branch_cleanup.sh` |
 
-### 📊 Monitoring & Analysis
+###  Monitoring & Analysis
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
@@ -50,7 +50,7 @@ source .venv/bin/activate
 | `analyze_logs.sh` | Log analysis | `./frameworks/friction_prevention/productivity/analyze_logs.sh` |
 | `generate_aar.py` | After Action Reports | `./frameworks/friction_prevention/productivity/generate_aar.py WORKFLOW_ID` |
 
-## ⚡ Common Workflow Patterns
+## FAST: Common Workflow Patterns
 
 ### Pattern 1: Feature Development
 
@@ -100,7 +100,7 @@ git push origin feat/your-feature-name
 ./frameworks/friction_prevention/productivity/generate_aar.py FAILED_WORKFLOW_ID
 ```
 
-## 🛠️ VS Code Integration
+##  VS Code Integration
 
 ### Quick Setup
 
@@ -135,32 +135,32 @@ git push origin feat/your-feature-name
 }
 ```
 
-1. Use `Ctrl+Shift+P` → "Tasks: Run Task" → Select framework task
+1. Use `CtrlShiftP`  "Tasks: Run Task"  Select framework task
 
 ## 🚨 Common Issues & Quick Fixes
 
-### ❌ "Virtual environment not activated"
+###  "Virtual environment not activated"
 
 ```bash
 # Fix: Always activate first
 source .venv/bin/activate
 ```
 
-### ❌ "Permission denied"
+###  "Permission denied"
 
 ```bash
 # Fix: Set execute permissions
-chmod +x frameworks/friction_prevention/**/*.sh
+chmod x frameworks/friction_prevention/**/*.sh
 ```
 
-### ❌ "QC validation failed"
+###  "QC validation failed"
 
 ```bash
 # Fix: Run with verbose output to see specific issues
 ./frameworks/friction_prevention/workflow/qc_pre_push.sh --verbose
 ```
 
-### ❌ "Script not found"
+###  "Script not found"
 
 ```bash
 # Fix: Use absolute path from project root
