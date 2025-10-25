@@ -12,7 +12,7 @@ class StubResponse:
     def json(self):
         return self._json
 
-    def raise_for_status(self)  None:
+    def raise_for_status(self) -> None:
         if self.status_code >= 400:
             # Create a proper HTTPStatusError with response attribute
             error = httpx.HTTPStatusError("error", request=None, response=None)
@@ -176,7 +176,7 @@ def test_get_user_roles_rate_limited(monkeypatch):
 
     # Should get empty roles for rate limited guild, normal roles for other
     assert roles == {"1": [], "2": ["role2"]}
-    assert len(calls) == 3  # guilds call  2 member calls
+    assert len(calls) == 3  # guilds call + 2 member calls
 
 
 def test_get_user_roles_not_member(monkeypatch):
@@ -204,7 +204,7 @@ def test_get_user_roles_not_member(monkeypatch):
 
     # Should skip first guild (not a member), get roles for second
     assert roles == {"2": ["role2"]}
-    assert len(calls) == 3  # guilds call  2 member calls
+    assert len(calls) == 3  # guilds call + 2 member calls
 
 
 def test_get_user_roles_timeout(monkeypatch):
@@ -232,7 +232,7 @@ def test_get_user_roles_timeout(monkeypatch):
 
     # Should get empty roles for timeout guild, normal roles for other
     assert roles == {"1": [], "2": ["role2"]}
-    assert len(calls) == 3  # guilds call  2 member calls
+    assert len(calls) == 3  # guilds call + 2 member calls
 
 
 def test_get_user_roles_other_http_error(monkeypatch):

@@ -89,7 +89,7 @@ class ExtendedMetadataYAMLManager:
         yaml.add_representer(LogLevel, represent_log_level)
         yaml.add_representer(datetime, represent_datetime)
 
-    def serialize_metadata(self, metadata: ExtendedMetadata)  str:
+    def serialize_metadata(self, metadata: ExtendedMetadata) -> str:
         """
         Serialize ExtendedMetadata to YAML string.
 
@@ -113,7 +113,7 @@ class ExtendedMetadataYAMLManager:
             logger.error(f"Failed to serialize metadata: {e}")
             raise
 
-    def deserialize_metadata(self, yaml_content: str)  ExtendedMetadata:
+    def deserialize_metadata(self, yaml_content: str) -> ExtendedMetadata:
         """
         Deserialize YAML string to ExtendedMetadata.
 
@@ -139,7 +139,7 @@ class ExtendedMetadataYAMLManager:
             logger.error(f"Failed to deserialize metadata: {e}")
             raise
 
-    def get_metadata_file_path(self, script_path: Path)  Path:
+    def get_metadata_file_path(self, script_path: Path) -> Path:
         """
         Get the metadata file path for a given script.
 
@@ -154,7 +154,7 @@ class ExtendedMetadataYAMLManager:
         metadata_file = metadata_dir / f"{script_path.name}.yaml"
         return metadata_file
 
-    def save_metadata(self, script_path: Path, metadata: ExtendedMetadata)  Path:
+    def save_metadata(self, script_path: Path, metadata: ExtendedMetadata) -> Path:
         """
         Save metadata to YAML file.
 
@@ -182,7 +182,7 @@ class ExtendedMetadataYAMLManager:
             logger.error(f"Failed to save metadata for {script_path}: {e}")
             raise
 
-    def load_metadata(self, script_path: Path)  Optional[ExtendedMetadata]:
+    def load_metadata(self, script_path: Path) -> Optional[ExtendedMetadata]:
         """
         Load metadata from YAML file.
 
@@ -213,7 +213,7 @@ class ExtendedMetadataYAMLManager:
 
     def create_default_metadata_file(
         self, script_path: Path, similarity_group: str = "script_automation"
-    )  Path:
+    ) -> Path:
         """
         Create a default metadata file for a script.
 
@@ -227,7 +227,7 @@ class ExtendedMetadataYAMLManager:
         metadata = create_default_metadata(script_path.name, similarity_group)
         return self.save_metadata(script_path, metadata)
 
-    def validate_metadata_file(self, metadata_file: Path)  bool:
+    def validate_metadata_file(self, metadata_file: Path) -> bool:
         """
         Validate a metadata file.
 
@@ -251,7 +251,7 @@ class ExtendedMetadataYAMLManager:
 
     def find_all_metadata_files(
         self, search_directory: Optional[Path] = None
-    )  List[Path]:
+    ) -> List[Path]:
         """
         Find all metadata files in a directory tree.
 
@@ -273,7 +273,7 @@ class ExtendedMetadataYAMLManager:
 
     def validate_all_metadata(
         self, search_directory: Optional[Path] = None
-    )  Dict[str, bool]:
+    ) -> Dict[str, bool]:
         """
         Validate all metadata files in a directory tree.
 
@@ -293,7 +293,7 @@ class ExtendedMetadataYAMLManager:
 
     def generate_metadata_report(
         self, search_directory: Optional[Path] = None
-    )  Dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Generate a comprehensive metadata report.
 
@@ -353,7 +353,7 @@ class ExtendedMetadataYAMLManager:
 
 
 # Convenience functions for common operations
-def save_script_metadata(script_path: Path, metadata: ExtendedMetadata)  Path:
+def save_script_metadata(script_path: Path, metadata: ExtendedMetadata) -> Path:
     """
     Convenience function to save metadata for a script.
 
@@ -368,7 +368,7 @@ def save_script_metadata(script_path: Path, metadata: ExtendedMetadata)  Path:
     return manager.save_metadata(script_path, metadata)
 
 
-def load_script_metadata(script_path: Path)  Optional[ExtendedMetadata]:
+def load_script_metadata(script_path: Path) -> Optional[ExtendedMetadata]:
     """
     Convenience function to load metadata for a script.
 
@@ -384,7 +384,7 @@ def load_script_metadata(script_path: Path)  Optional[ExtendedMetadata]:
 
 def create_default_script_metadata(
     script_path: Path, similarity_group: str = "script_automation"
-)  Path:
+) -> Path:
     """
     Convenience function to create default metadata for a script.
 

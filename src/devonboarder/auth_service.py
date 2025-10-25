@@ -66,7 +66,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def is_safe_redirect_url(url: str)  bool:
+def is_safe_redirect_url(url: str) -> bool:
     """Validate that a redirect URL is safe to prevent phishing attacks.
 
     Parameters
@@ -159,8 +159,7 @@ if (not _secret_key_raw or _secret_key_raw == "secret") and APP_ENV != "developm
 # Ensure SECRET_KEY is never None for type checking - secure fallback
 if not _secret_key_raw:
     raise RuntimeError(
-        "JWT_SECRET_KEY environment variable is required. "
-        "Set JWT_SECRET_KEY to a secure random string for production use."
+        "JWT_SECRET_KEY environment variable is required. " + "Set JWT_SECRET_KEY to a secure random string for production use."
     )
 SECRET_KEY: str = _secret_key_raw
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
@@ -187,7 +186,7 @@ pwd_context = CryptContext(
 )
 
 
-def _validate_password_for_bcrypt(password: Optional[str])  str:
+def _validate_password_for_bcrypt(password: Optional[str]) -> str:
     """Validate and truncate passwords for bcrypt compatibility.
 
     bcrypt operates on the first 72 bytes of the password. This function
@@ -258,12 +257,12 @@ class XPEvent(Base):
     user = relationship("User", back_populates="events")
 
 
-def init_db()  None:
+def init_db() -> None:
     """Create database tables if they do not exist."""
     Base.metadata.create_all(bind=engine)
 
 
-def get_db()  Session:
+def get_db() -> Session:
     db = SessionLocal()
     try:
         yield db
@@ -271,10 +270,10 @@ def get_db()  Session:
         db.close()
 
 
-def create_token(user: User)  str:
+def create_token(user: User) -> str:
     """Return a signed JWT for the given user."""
     iat = int(time.time())
-    payload = {"sub": str(user.id), "iat": iat, "exp": iat  TOKEN_EXPIRE_SECONDS}
+    payload = {"sub": str(user.id), "iat": iat, "exp": iat + TOKEN_EXPIRE_SECONDS}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
@@ -284,7 +283,7 @@ security = HTTPBearer()
 def get_current_user(
     creds: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
-)  User:
+) -> User:
     jwt_token = creds.credentials
     try:
         payload = jwt.decode(
@@ -340,13 +339,13 @@ router = APIRouter()
 
 
 @router.get("/health")
-def health()  dict[str, str]:
+def health() -> dict[str, str]:
     """Return service health status."""
     return {"status": "ok"}
 
 
 @router.post("/api/register")
-def register(data: dict, db: Session = Depends(get_db))  dict[str, str]:
+def register(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     """Create a new user and return an authentication token."""
     username = data["username"]
     password = data["password"]
@@ -367,7 +366,7 @@ def register(data: dict, db: Session = Depends(get_db))  dict[str, str]:
 
 
 @router.post("/api/login")
-def login(data: dict, db: Session = Depends(get_db))  dict[str, str]:
+def login(data: dict, db: Session = Depends(get_db)) -> dict[str, str]:
     """Authenticate a user and return a JWT."""
     username = data["username"]
     password = data["password"]
@@ -391,7 +390,7 @@ def login(data: dict, db: Session = Depends(get_db))  dict[str, str]:
 
 
 @router.get("/login/discord")
-def discord_login(redirect_to: Optional[str] = None)  RedirectResponse:
+def discord_login(redirect_to: Optional[str] = None) -> RedirectResponse:
     """Redirect the user to Discord's OAuth consent screen."""
     # Store redirect_to in state parameter for callback
     state = redirect_to if redirect_to else ""
@@ -412,7 +411,7 @@ def discord_login(redirect_to: Optional[str] = None)  RedirectResponse:
 @router.get("/login/discord/callback", response_model=None)
 def discord_callback(
     code: str, state: Optional[str] = None, db: Session = Depends(get_db)
-)  RedirectResponse | dict[str, str]:
+) -> RedirectResponse | dict[str, str]:
     """Exchange the OAuth code for a token and return a JWT."""
     # Debug logging to see what we receive
     logger.info(f"Discord callback - code: {code[:10]}..., state: {state}")
@@ -552,24 +551,24 @@ def discord_callback(
 
 
 @router.get("/api/user/onboarding-status")
-def onboarding_status(current_user: User = Depends(get_current_user))  dict[str, str]:
+def onboarding_status(current_user: User = Depends(get_current_user)) -> dict[str, str]:
     """Return the user's onboarding progress."""
     status_str = "complete" if current_user.contributions else "pending"
     return {"status": status_str}
 
 
 @router.get("/api/user/level")
-def user_level(current_user: User = Depends(get_current_user))  dict[str, int]:
+def user_level(current_user: User = Depends(get_current_user)) -> dict[str, int]:
     """Calculate the user's level from accumulated XP."""
     xp_total = sum(evt.xp for evt in current_user.events)
-    level = xp_total // 100  1
+    level = xp_total // 100 + 1
     return {"level": level}
 
 
 @router.get("/api/user/contributions")
 def user_contributions(
     current_user: User = Depends(get_current_user),
-)  dict[str, list[str]]:
+) -> dict[str, list[str]]:
     """List the user's recorded contributions."""
     return {"contributions": [c.description for c in current_user.contributions]}
 
@@ -579,7 +578,7 @@ def add_contribution(
     data: dict,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-)  dict[str, str]:
+) -> dict[str, str]:
     """Record a new contribution and award XP."""
     username = data.get("username", current_user.username)
     description = data["description"]
@@ -602,7 +601,7 @@ def promote(
     data: dict,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-)  dict[str, str]:
+) -> dict[str, str]:
     """Grant admin privileges to another user."""
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Admin required")
@@ -615,7 +614,7 @@ def promote(
     return {"promoted": target_username}
 
 
-def create_app()  FastAPI:
+def create_app() -> FastAPI:
     """Instantiate and configure the FastAPI application."""
 
     if os.getenv("INIT_DB_ON_STARTUP"):
@@ -650,7 +649,7 @@ def create_app()  FastAPI:
     return app
 
 
-def main()  None:
+def main() -> None:
     import uvicorn
 
     uvicorn.run(create_app(), host="0.0.0.0", port=8002)  # nosec B104

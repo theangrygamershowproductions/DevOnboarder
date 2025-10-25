@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Any, List
 
 
-def extract_frontmatter(file_path: Path)  Dict[str, Any] | None:
+def extract_frontmatter(file_path: Path) -> Dict[str, Any] | None:
     """Extract YAML frontmatter from a documentation file.
 
     Parameters
@@ -55,7 +55,7 @@ def extract_frontmatter(file_path: Path)  Dict[str, Any] | None:
         return None
 
 
-def validate_core_metadata(frontmatter: Dict[str, Any], file_path: Path)  List[str]:
+def validate_core_metadata(frontmatter: Dict[str, Any], file_path: Path) -> List[str]:
     """Validate core metadata requirements.
 
     Parameters
@@ -180,7 +180,7 @@ def validate_core_metadata(frontmatter: Dict[str, Any], file_path: Path)  List[s
 
 def validate_devonboarder_requirements(
     frontmatter: Dict[str, Any], file_path: Path
-)  List[str]:
+) -> List[str]:
     """Validate DevOnboarder-specific requirements.
 
     Parameters
@@ -285,7 +285,7 @@ def main():
         core_errors = validate_core_metadata(frontmatter, file_path)
         devonboarder_errors = validate_devonboarder_requirements(frontmatter, file_path)
 
-        all_errors = core_errors  devonboarder_errors
+        all_errors = core_errors + devonboarder_errors
 
         if all_errors:
             print(f" {file_name}: Metadata validation failed")

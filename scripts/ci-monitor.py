@@ -37,7 +37,7 @@ class CIMonitor:
         """Initialize CI monitor for specific PR."""
         self.pr_number = pr_number
 
-    def get_failed_workflow_runs(self)  Dict[str, Any]:
+    def get_failed_workflow_runs(self) -> Dict[str, Any]:
         """Fetch recent failed workflow runs for additional context."""
         cmd = [
             "gh",
@@ -60,7 +60,7 @@ class CIMonitor:
             print(f" Error parsing failed workflow runs: {e}")
             return {"failed_runs": []}
 
-    def get_pr_data(self)  Dict[str, Any]:
+    def get_pr_data(self) -> Dict[str, Any]:
         """Fetch PR data and CI status from GitHub API."""
         cmd = [
             "gh",
@@ -82,7 +82,7 @@ class CIMonitor:
             print(f" Error parsing PR data: {e}")
             return self._create_minimal_pr_data()
 
-    def _try_fallback_pr_data(self)  Dict[str, Any]:
+    def _try_fallback_pr_data(self) -> Dict[str, Any]:
         """Try simpler GitHub CLI commands as fallback."""
         try:
             # Try basic PR view without checks
@@ -144,7 +144,7 @@ class CIMonitor:
         except subprocess.CalledProcessError:
             return self._create_minimal_pr_data()
 
-    def _create_minimal_pr_data(self)  Dict[str, Any]:
+    def _create_minimal_pr_data(self) -> Dict[str, Any]:
         """Create minimal PR data when GitHub CLI fails."""
         base_url = "https://github.com/theangrygamershowproductions"
         pr_url = f"{base_url}/DevOnboarder/pull/{self.pr_number}"
@@ -155,7 +155,7 @@ class CIMonitor:
             "statusCheckRollup": [],
         }
 
-    def categorize_check(self, check_name: str)  str:
+    def categorize_check(self, check_name: str) -> str:
         """Categorize CI checks by type."""
         name = check_name.lower()
 
@@ -185,7 +185,7 @@ class CIMonitor:
 
         return " Other"
 
-    def analyze_ci_status(self, checks: list)  Dict[str, Any]:
+    def analyze_ci_status(self, checks: list) -> Dict[str, Any]:
         """Analyze CI status and provide insights."""
         if not checks:
             return {"status": "no_checks", "message": "No CI checks found"}
@@ -229,7 +229,7 @@ class CIMonitor:
             categories[category].append(check)
         return categories
 
-    def generate_status_report(self, pr_data: Dict[str, Any])  str:
+    def generate_status_report(self, pr_data: Dict[str, Any]) -> str:
         """Generate comprehensive status report."""
         title = pr_data.get("title", "Unknown PR")
         state = pr_data.get("state", "UNKNOWN")
@@ -383,7 +383,7 @@ class CIMonitor:
 
         return report
 
-    def _format_duration(self, check: Dict[str, Any])  str:
+    def _format_duration(self, check: Dict[str, Any]) -> str:
         """Format check duration for display."""
         started = check.get("startedAt")
         completed = check.get("completedAt")
@@ -399,7 +399,7 @@ class CIMonitor:
 
         return ""
 
-    def post_status_comment(self, report: str)  None:
+    def post_status_comment(self, report: str) -> None:
         """Post status report as PR comment."""
         try:
             cmd = ["gh", "pr", "comment", str(self.pr_number), "--body", report]
@@ -409,7 +409,7 @@ class CIMonitor:
             print(f" Failed to post comment: {e}")
 
 
-def get_current_pr_number()  Optional[int]:
+def get_current_pr_number() -> Optional[int]:
     """Try to detect current PR number from git context."""
     try:
         cmd = ["gh", "pr", "view", "--json", "number"]
@@ -422,7 +422,7 @@ def get_current_pr_number()  Optional[int]:
         return None
 
 
-def prompt_for_pr_number()  int:
+def prompt_for_pr_number() -> int:
     """Prompt user for PR number with helpful suggestions."""
     print(" CI Monitor Agent - Enhanced DevOnboarder CI Analysis")
     print("=" * 60)

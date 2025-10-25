@@ -250,8 +250,7 @@ def generate_triage_report(categories, priority_stats, unlabeled_priority, issue
         and any("priority-high" in label.lower() for label in issue["labels"])
     ]
     print(
-        f"- Assign owners to {len(high_priority_unassigned)} "
-        "high-priority unassigned issues"
+        f"- Assign owners to {len(high_priority_unassigned)} " + "high-priority unassigned issues"
     )
     print("- Consider team capacity for bridge platform and service discovery work")
     print("- Distribute infrastructure work across team members")

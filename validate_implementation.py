@@ -4,7 +4,7 @@
 from pathlib import Path
 
 
-def main()  int:
+def main() -> int:
     """Validate that all Issue #1008 implementation files are present."""
     print("Validating Issue #1008 Implementation")
     print("=" * 40)

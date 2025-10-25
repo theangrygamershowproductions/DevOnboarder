@@ -51,7 +51,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 
-def get_utc_timestamp()  str:
+def get_utc_timestamp() -> str:
     """
     Get current UTC timestamp in GitHub API compatible format.
 
@@ -66,12 +66,11 @@ def get_utc_timestamp()  str:
     Example:
         >>> timestamp = get_utc_timestamp()
         >>> print(timestamp)
-        "2025-09-21T19:06:26Z"
-    """
+        "2025-09-21T19:06:26Z" + """
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def get_utc_display_timestamp()  str:
+def get_utc_display_timestamp() -> str:
     """
     Get current UTC timestamp for display and logging.
 
@@ -84,12 +83,11 @@ def get_utc_display_timestamp()  str:
     Example:
         >>> timestamp = get_utc_display_timestamp()
         >>> print(f"Generated: {timestamp}")
-        "Generated: 2025-09-21 19:06:26 UTC"
-    """
+        "Generated: 2025-09-21 19:06:26 UTC" + """
     return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
 
-def get_utc_timestamp_with_milliseconds()  str:
+def get_utc_timestamp_with_milliseconds() -> str:
     """
     Get current UTC timestamp with millisecond precision.
 
@@ -104,12 +102,11 @@ def get_utc_timestamp_with_milliseconds()  str:
     Example:
         >>> timestamp = get_utc_timestamp_with_milliseconds()
         >>> print(timestamp)
-        "2025-09-21T19:06:26.456Z"
-    """
+        "2025-09-21T19:06:26.456Z" + """
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")[:-4]  "Z"
 
 
-def parse_github_timestamp(github_ts: str)  datetime:
+def parse_github_timestamp(github_ts: str) -> datetime:
     """
     Parse GitHub API timestamp to timezone-aware datetime object.
 
@@ -139,7 +136,7 @@ def parse_github_timestamp(github_ts: str)  datetime:
 
 def calculate_duration_from_github(
     github_start: str, github_end: Optional[str] = None
-)  float:
+) -> float:
     """
     Calculate duration between GitHub API timestamps.
 
@@ -160,8 +157,7 @@ def calculate_duration_from_github(
         ...     "2025-09-21T19:03:26Z", "2025-09-21T19:06:26Z"
         ... )
         >>> print(f"Duration: {duration:.1f}s")
-        "Duration: 180.0s"
-    """
+        "Duration: 180.0s" + """
     start_time = parse_github_timestamp(github_start)
 
     if github_end:
@@ -173,7 +169,7 @@ def calculate_duration_from_github(
     return duration.total_seconds()
 
 
-def get_local_timestamp_for_filename()  str:
+def get_local_timestamp_for_filename() -> str:
     """
     Get local timestamp suitable for filename generation.
 
@@ -193,12 +189,11 @@ def get_local_timestamp_for_filename()  str:
         >>> timestamp = get_local_timestamp_for_filename()
         >>> filename = f"snapshot_{timestamp}.json"
         >>> print(filename)
-        "snapshot_20250921_190626.json"
-    """
+        "snapshot_20250921_190626.json" + """
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
-def validate_timestamp_format(timestamp: str)  bool:
+def validate_timestamp_format(timestamp: str) -> bool:
     """
     Validate if timestamp follows GitHub API compatible format.
 

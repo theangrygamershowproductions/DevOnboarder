@@ -30,7 +30,7 @@ class UnicodeArtifactManager:
             "fallback_applied": 0,
         }
 
-    def detect_unicode_environment(self)  Dict[str, bool]:
+    def detect_unicode_environment(self) -> Dict[str, bool]:
         """Detect Unicode capabilities of current environment."""
         capabilities = {
             "utf8_stdout": True,
@@ -60,7 +60,7 @@ class UnicodeArtifactManager:
 
         return capabilities
 
-    def normalize_unicode_filename(self, filename: str)  str:
+    def normalize_unicode_filename(self, filename: str) -> str:
         """Normalize Unicode filename for cross-platform compatibility."""
         try:
             # Normalize to NFC form (canonical composition)
@@ -80,7 +80,7 @@ class UnicodeArtifactManager:
 
     def safe_display_filename(
         self, filename: str, max_width: int = 80, unicode_capable: bool = True
-    )  str:
+    ) -> str:
         """Safely display filename with Unicode awareness."""
         normalized = self.normalize_unicode_filename(filename)
 
@@ -96,9 +96,9 @@ class UnicodeArtifactManager:
 
         # Smart truncation that doesn't break Unicode characters
         truncated = normalized[: max_width - 3]
-        return truncated  "..."
+        return truncated + "..."
 
-    def analyze_artifact_filenames(self, artifact_dir: Path)  dict:
+    def analyze_artifact_filenames(self, artifact_dir: Path) -> dict:
         """Analyze Unicode usage in artifact filenames."""
         analysis: dict = {
             "total_files": 0,
@@ -140,21 +140,19 @@ class UnicodeArtifactManager:
         # Generate recommendations
         if analysis["unicode_files"]:
             analysis["recommendations"].append(
-                "Files with Unicode characters detected. "
-                "Consider ASCII fallbacks for CI environments."
+                "Files with Unicode characters detected. " + "Consider ASCII fallbacks for CI environments."
             )
 
         if analysis["problematic_files"]:
             analysis["recommendations"].append(
-                "Files with problematic characters detected. "
-                "May cause issues on some filesystems."
+                "Files with problematic characters detected. " + "May cause issues on some filesystems."
             )
 
         return analysis
 
     def generate_unicode_aware_listing(
         self, artifact_dir: Path, output_format: str = "text"
-    )  str:
+    ) -> str:
         """Generate Unicode-aware artifact listing."""
         capabilities = self.detect_unicode_environment()
         analysis = self.analyze_artifact_filenames(artifact_dir)
@@ -215,7 +213,7 @@ class UnicodeArtifactManager:
 
         return "\n".join(lines)
 
-    def create_unicode_config(self, output_path: Path)  None:
+    def create_unicode_config(self, output_path: Path) -> None:
         """Create Unicode handling configuration for test artifacts."""
         capabilities = self.detect_unicode_environment()
 

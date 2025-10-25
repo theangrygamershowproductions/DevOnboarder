@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_cors_origins()  List[str]:
+def get_cors_origins() -> List[str]:
     """Get CORS origins for the dashboard service."""
     return [
         "http://localhost:8081",
@@ -111,7 +111,7 @@ class DashboardService:
         # Ensure logs directory exists
         self.logs_dir.mkdir(parents=True, exist_ok=True)
 
-    def discover_scripts(self)  List[ScriptInfo]:
+    def discover_scripts(self) -> List[ScriptInfo]:
         """Discover all executable scripts in the scripts directory.
 
         Returns
@@ -161,7 +161,7 @@ class DashboardService:
 
         return sorted(scripts, key=lambda s: (s.category, s.name))
 
-    def _extract_description(self, script_path: Path)  str:
+    def _extract_description(self, script_path: Path) -> str:
         """Extract description from script header comments.
 
         Parameters
@@ -214,7 +214,7 @@ class DashboardService:
             logger.warning("Failed to extract description from %s: %s", script_path, e)
             return "Description unavailable"
 
-    def _categorize_script(self, script_path: Path)  str:
+    def _categorize_script(self, script_path: Path) -> str:
         """Categorize script based on path and name.
 
         Parameters
@@ -247,7 +247,7 @@ class DashboardService:
         else:
             return "general"
 
-    async def execute_script(self, request: ExecutionRequest)  ExecutionResult:
+    async def execute_script(self, request: ExecutionRequest) -> ExecutionResult:
         """Execute a script with the given parameters.
 
         Parameters
@@ -317,8 +317,7 @@ class DashboardService:
                     if not re.match(r"^[a-zA-Z0-9._-]$", str(arg)):
                         raise HTTPException(
                             status_code=400,
-                            detail=f"Invalid argument format: {arg}. "
-                            "Only alphanumeric characters, dots, hyphens, "
+                            detail=f"Invalid argument format: {arg}. " + "Only alphanumeric characters, dots, hyphens, "
                             "and underscores allowed.",
                         )
                     safe_args.append(str(arg))
@@ -466,7 +465,7 @@ class DashboardService:
         for ws in disconnected:
             self.websocket_connections.remove(ws)
 
-    def get_execution_status(self, execution_id: str)  Optional[ExecutionResult]:
+    def get_execution_status(self, execution_id: str) -> Optional[ExecutionResult]:
         """Get the status of a specific execution.
 
         Parameters
@@ -481,7 +480,7 @@ class DashboardService:
         """
         return self.active_executions.get(execution_id)
 
-    def list_active_executions(self)  List[ExecutionResult]:
+    def list_active_executions(self) -> List[ExecutionResult]:
         """List all active executions.
 
         Returns
@@ -492,7 +491,7 @@ class DashboardService:
         return list(self.active_executions.values())
 
 
-def create_dashboard_app()  FastAPI:
+def create_dashboard_app() -> FastAPI:
     """Create the FastAPI dashboard application.
 
     Returns
@@ -520,7 +519,7 @@ def create_dashboard_app()  FastAPI:
     dashboard_service = DashboardService()
 
     @app.get("/health")
-    def health()  Dict[str, str]:
+    def health() -> Dict[str, str]:
         """Health check endpoint."""
         return {"status": "ok"}
 
@@ -543,7 +542,7 @@ def create_dashboard_app()  FastAPI:
         }
 
     @app.get("/login/discord")
-    def discord_login()  RedirectResponse:
+    def discord_login() -> RedirectResponse:
         """Redirect to Discord OAuth with dashboard return URL."""
         dashboard_url = os.getenv(
             "VITE_DASHBOARD_URL", "https://dashboard.theangrygamershow.com"
@@ -557,7 +556,7 @@ def create_dashboard_app()  FastAPI:
         return RedirectResponse(f"{auth_url}/login/discord?{urlencode(params)}")
 
     @app.get("/auth/callback")
-    def auth_callback(token: Optional[str] = None)  dict[str, str]:
+    def auth_callback(token: Optional[str] = None) -> dict[str, str]:
         """Handle authentication callback from Discord OAuth."""
         if token:
             return {
@@ -570,7 +569,7 @@ def create_dashboard_app()  FastAPI:
             return {"status": "error", "message": "No authentication token received"}
 
     @app.get("/policy/no-verify")
-    def no_verify_policy_status()  Dict[str, str]:
+    def no_verify_policy_status() -> Dict[str, str]:
         """Get --no-verify policy enforcement status."""
         # Import only what we need for security
         import subprocess  # noqa: B404
@@ -686,17 +685,17 @@ def create_dashboard_app()  FastAPI:
         return status
 
     @app.get("/scripts", response_model=List[ScriptInfo])
-    def list_scripts()  List[ScriptInfo]:
+    def list_scripts() -> List[ScriptInfo]:
         """List all discovered scripts."""
         return dashboard_service.discover_scripts()
 
     @app.post("/execute", response_model=ExecutionResult)
-    async def execute_script(request: ExecutionRequest)  ExecutionResult:
+    async def execute_script(request: ExecutionRequest) -> ExecutionResult:
         """Execute a script."""
         return await dashboard_service.execute_script(request)
 
     @app.get("/execution/{execution_id}", response_model=ExecutionResult)
-    def get_execution_status(execution_id: str)  ExecutionResult:
+    def get_execution_status(execution_id: str) -> ExecutionResult:
         """Get execution status."""
         result = dashboard_service.get_execution_status(execution_id)
         if not result:
@@ -704,7 +703,7 @@ def create_dashboard_app()  FastAPI:
         return result
 
     @app.get("/executions", response_model=List[ExecutionResult])
-    def list_executions()  List[ExecutionResult]:
+    def list_executions() -> List[ExecutionResult]:
         """List all active executions."""
         return dashboard_service.list_active_executions()
 

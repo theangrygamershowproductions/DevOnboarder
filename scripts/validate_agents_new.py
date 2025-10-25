@@ -9,13 +9,13 @@ from typing import Dict, Any
 from jsonschema import validate, ValidationError
 
 
-def load_schema(schema_path: Path)  Dict[str, Any]:
+def load_schema(schema_path: Path) -> Dict[str, Any]:
     """Load the JSON schema."""
     with open(schema_path) as f:
         return json.load(f)
 
 
-def extract_frontmatter(agent_file: Path)  Dict[str, Any] | None:
+def extract_frontmatter(agent_file: Path) -> Dict[str, Any] | None:
     """Extract YAML frontmatter from an agent file."""
     content = agent_file.read_text()
     lines = content.split("\n")

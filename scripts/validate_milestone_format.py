@@ -47,7 +47,7 @@ class MilestoneFormatValidator:
         self.warnings: List[str] = []
         self.milestone_ids: set = set()
 
-    def validate_file(self, file_path: Path)  bool:
+    def validate_file(self, file_path: Path) -> bool:
         """Validate a single milestone file."""
         self.errors.clear()
         self.warnings.clear()
@@ -92,11 +92,10 @@ class MilestoneFormatValidator:
 
         if not expected_pattern.match(filename):
             self.errors.append(
-                f"Filename '{filename}' doesn't match pattern: "
-                "YYYY-MM-DD-type-brief-descriptive-name.md"
+                f"Filename '{filename}' doesn't match pattern: " + "YYYY-MM-DD-type-brief-descriptive-name.md"
             )
 
-    def _extract_yaml_frontmatter(self, content: str)  Dict[str, Any]:
+    def _extract_yaml_frontmatter(self, content: str) -> Dict[str, Any]:
         """Extract and parse YAML front matter."""
         if not content.startswith("---\n"):
             return None
@@ -135,8 +134,7 @@ class MilestoneFormatValidator:
             milestone_id = yaml_data["milestone_id"]
             if not self.MILESTONE_ID_PATTERN.match(milestone_id):
                 self.errors.append(
-                    f"milestone_id '{milestone_id}' doesn't match format: "
-                    "YYYY-MM-DD-brief-descriptive-name"
+                    f"milestone_id '{milestone_id}' doesn't match format: " + "YYYY-MM-DD-brief-descriptive-name"
                 )
 
             # Check for uniqueness
@@ -204,7 +202,7 @@ class MilestoneFormatValidator:
                 "Evidence Anchors section must contain at least one direct GitHub link"
             )
 
-    def validate_directory(self, directory: Path)  Dict[Path, bool]:
+    def validate_directory(self, directory: Path) -> Dict[Path, bool]:
         """Validate all milestone files in a directory."""
         results = {}
 
@@ -230,7 +228,7 @@ class MilestoneFormatValidator:
                 print(f"  • {error}")
 
         if self.warnings:
-            print(f"\n  WARNINGS ({len(self.warnings)}):")
+            print(f"\n + WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"  • {warning}")
 

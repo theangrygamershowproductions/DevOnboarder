@@ -69,7 +69,7 @@ def fix_file_emojis(file_path):
                 if count > 0:
                     content = content.replace(emoji, replacement)
                     fixes_made = count
-                    print(f"  Fixed {count}x: {emoji}  {replacement}")
+                    print(f"  Fixed {count}x: {emoji} | {replacement}")
 
         # Only write if changes were made
         if fixes_made > 0:
@@ -137,8 +137,7 @@ def main():
     if violation_count == 0:
         print(" No emoji violations found in Phase 3 framework")
         print(
-            "Phase 3 framework is now compliant with "
-            "DevOnboarder terminal output policy"
+            "Phase 3 framework is now compliant with " + "DevOnboarder terminal output policy"
         )
     else:
         print(f" {violation_count} violations may remain")

@@ -1027,8 +1027,7 @@ def test_main_execution_block():
     cmd = [
         sys.executable,
         "-c",
-        "from src.devonboarder.dashboard_service import create_dashboard_app; "
-        "print('App created')",
+        "from src.devonboarder.dashboard_service import create_dashboard_app; " + "print('App created')",
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)

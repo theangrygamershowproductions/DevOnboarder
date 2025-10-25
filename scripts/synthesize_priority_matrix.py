@@ -219,7 +219,7 @@ def synthesize_priority_matrix(path):
         uniqueness = uniqueness_from_similarity(max_sim)
         # Boost for high-value documents
         if frontmatter.get("project") == "core-instructions":
-            uniqueness = min(5, uniqueness  1)
+            uniqueness = min(5, uniqueness + 1)
         frontmatter["content_uniqueness_score"] = int(uniqueness)
         changed = True
 

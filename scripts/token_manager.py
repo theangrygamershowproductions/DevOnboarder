@@ -43,7 +43,7 @@ class DevOnboarderTokenManager:
         self.tokens: Dict[str, TokenInfo] = {}
         self.operation_mappings = self._load_operation_mappings()
 
-    def _load_operation_mappings(self)  Dict[str, Dict[str, Any]]:
+    def _load_operation_mappings(self) -> Dict[str, Dict[str, Any]]:
         """Load operation to token mappings from configuration."""
         return {
             "actions_api": {
@@ -87,7 +87,7 @@ class DevOnboarderTokenManager:
             },
         }
 
-    def discover_tokens(self)  None:
+    def discover_tokens(self) -> None:
         """Discover and analyze all available tokens in environment."""
         print(" Discovering tokens in environment...")
 
@@ -105,7 +105,7 @@ class DevOnboarderTokenManager:
             token_info = self._analyze_token(token_name)
             self.tokens[token_name] = token_info
 
-    def _is_token_like(self, key: str, value: str)  bool:
+    def _is_token_like(self, key: str, value: str) -> bool:
         """Determine if an environment variable looks like a token."""
         if not value or len(value) < 20:
             return False
@@ -114,7 +114,7 @@ class DevOnboarderTokenManager:
 
         return any(indicator in key.upper() for indicator in token_indicators)
 
-    def _analyze_token(self, token_name: str)  TokenInfo:
+    def _analyze_token(self, token_name: str) -> TokenInfo:
         """Analyze a token's capabilities and permissions."""
         token_value = os.environ.get(token_name)
         if not token_value:
@@ -160,7 +160,7 @@ class DevOnboarderTokenManager:
 
         return info
 
-    def _test_actions_permission(self, env: Dict[str, str])  bool:
+    def _test_actions_permission(self, env: Dict[str, str]) -> bool:
         """Test if token has actions:read permission."""
         try:
             result = subprocess.run(
@@ -178,7 +178,7 @@ class DevOnboarderTokenManager:
         except subprocess.SubprocessError:
             return False
 
-    def _test_issues_permission(self, env: Dict[str, str])  bool:
+    def _test_issues_permission(self, env: Dict[str, str]) -> bool:
         """Test if token has issues:write permission."""
         # Read-only test - actual write test would require creating an issue
         try:
@@ -199,7 +199,7 @@ class DevOnboarderTokenManager:
         except subprocess.SubprocessError:
             return False
 
-    def _test_contents_permission(self, env: Dict[str, str])  bool:
+    def _test_contents_permission(self, env: Dict[str, str]) -> bool:
         """Test if token has contents:read permission."""
         try:
             result = subprocess.run(
@@ -217,7 +217,7 @@ class DevOnboarderTokenManager:
         except subprocess.SubprocessError:
             return False
 
-    def _test_pr_permission(self, env: Dict[str, str])  bool:
+    def _test_pr_permission(self, env: Dict[str, str]) -> bool:
         """Test if token has pull_requests:read permission."""
         try:
             result = subprocess.run(
@@ -237,7 +237,7 @@ class DevOnboarderTokenManager:
         except subprocess.SubprocessError:
             return False
 
-    def get_token_for_operation(self, operation: str)  Optional[Tuple[str, str]]:
+    def get_token_for_operation(self, operation: str) -> Optional[Tuple[str, str]]:
         """Get the best available token for a specific operation."""
         if operation not in self.operation_mappings:
             raise ValueError(f"Unknown operation: {operation}")
@@ -260,7 +260,7 @@ class DevOnboarderTokenManager:
 
         return None
 
-    def _is_token_suitable_for_operation(self, token_name: str, operation: str)  bool:
+    def _is_token_suitable_for_operation(self, token_name: str, operation: str) -> bool:
         """Check if a token is suitable for a specific operation."""
         if token_name not in self.tokens:
             return False
@@ -287,7 +287,7 @@ class DevOnboarderTokenManager:
 
         return True
 
-    def generate_report(self)  Dict[str, Any]:
+    def generate_report(self) -> Dict[str, Any]:
         """Generate comprehensive token status report."""
         report = {
             "timestamp": "2025-09-04",
@@ -308,7 +308,7 @@ class DevOnboarderTokenManager:
         for operation, mapping in self.operation_mappings.items():
             suitable_tokens = [
                 name
-                for name in mapping["primary_tokens"]  mapping["fallback_tokens"]
+                for name in mapping["primary_tokens"] + mapping["fallback_tokens"]
                 if self._is_token_suitable_for_operation(name, operation)
             ]
             report["operation_coverage"][operation] = {
@@ -342,9 +342,9 @@ class DevOnboarderTokenManager:
 
         return report
 
-    def print_status(self)  None:
+    def print_status(self) -> None:
         """Print human-readable token status."""
-        print("\n"  "=" * 70)
+        print("\n" + "=" * 70)
         print(" DevOnboarder Token Management Status")
         print("=" * 70)
 
@@ -363,7 +363,7 @@ class DevOnboarderTokenManager:
         for operation, mapping in self.operation_mappings.items():
             suitable_tokens = [
                 name
-                for name in mapping["primary_tokens"]  mapping["fallback_tokens"]
+                for name in mapping["primary_tokens"] + mapping["fallback_tokens"]
                 if self._is_token_suitable_for_operation(name, operation)
             ]
             status = "" if suitable_tokens else ""
@@ -382,7 +382,7 @@ class DevOnboarderTokenManager:
                     missing_tokens.add(token_name)
 
         if missing_tokens:
-            print("\n  Missing Critical Tokens:")
+            print("\n + Missing Critical Tokens:")
             for token in sorted(missing_tokens):
                 print(f"   - {token}")
 

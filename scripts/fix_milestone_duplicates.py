@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 
-def extract_yaml_frontmatter(content: str)  Tuple[Dict, str]:
+def extract_yaml_frontmatter(content: str) -> Tuple[Dict, str]:
     """Extract YAML frontmatter and content from markdown file."""
     if not content.startswith("---\n"):
         return {}, content
@@ -28,7 +28,7 @@ def extract_yaml_frontmatter(content: str)  Tuple[Dict, str]:
         return {}, content
 
     yaml_content = "\n".join(lines[1:yaml_end])
-    markdown_content = "\n".join(lines[yaml_end  1 :])
+    markdown_content = "\n".join(lines[yaml_end + 1 :])
 
     try:
         yaml_data = yaml.safe_load(yaml_content)
@@ -37,13 +37,13 @@ def extract_yaml_frontmatter(content: str)  Tuple[Dict, str]:
         return {}, content
 
 
-def update_yaml_frontmatter(yaml_data: Dict, content: str)  str:
+def update_yaml_frontmatter(yaml_data: Dict, content: str) -> str:
     """Update file content with new YAML frontmatter."""
     yaml_str = yaml.dump(yaml_data, default_flow_style=False, sort_keys=False)
     return f"---\n{yaml_str}---\n{content}"
 
 
-def find_milestone_files()  List[Path]:
+def find_milestone_files() -> List[Path]:
     """Find all milestone documentation files."""
     milestone_dir = Path("milestones")
     if not milestone_dir.exists():
@@ -52,7 +52,7 @@ def find_milestone_files()  List[Path]:
     return list(milestone_dir.rglob("*.md"))
 
 
-def analyze_duplicates()  Dict[str, List[Path]]:
+def analyze_duplicates() -> Dict[str, List[Path]]:
     """Analyze milestone files and identify duplicate milestone_id values."""
     milestone_files = find_milestone_files()
     milestone_ids = {}
@@ -157,8 +157,8 @@ def fix_filename_patterns():
                 # Remove old file
                 file_path.unlink()
 
-                print(f"    Renamed: {filename}  {new_filename}")
-                print("    Updated type: ci-fix  infrastructure")
+                print(f"    Renamed: {filename} | {new_filename}")
+                print("    Updated type: ci-fix + infrastructure")
 
             except IOError as e:
                 print(f"    Error fixing {file_path}: {e}")

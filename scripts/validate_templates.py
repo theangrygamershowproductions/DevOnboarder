@@ -32,7 +32,7 @@ def validate_md007_compliance(file_path):
                 in_list = True
             else:
                 if indent_spaces > expected_base_indent:
-                    expected_nested = expected_base_indent  4
+                    expected_nested = expected_base_indent + 4
                     if indent_spaces != expected_nested:
                         msg = (
                             f"Line {line_num}: MD007 violation - nested list "
@@ -106,7 +106,7 @@ def main():
             print(f" Template not found: {template}")
             all_valid = False
 
-    print("\n"  "=" * 30)
+    print("\n" + "=" * 30)
     if all_valid:
         print(" All AAR templates are valid")
         exit(0)

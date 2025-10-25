@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import List
 
 
-def setup_logging()  None:
+def setup_logging() -> None:
     """Set up centralized logging per DevOnboarder standards."""
     import logging
 
@@ -45,7 +45,7 @@ def setup_logging()  None:
     )
 
 
-def fix_shell_script_content(content: str)  tuple[str, List[str]]:
+def fix_shell_script_content(content: str) -> tuple[str, List[str]]:
     """
     Fix common shell script issues.
 
@@ -103,7 +103,7 @@ def fix_shell_script_content(content: str)  tuple[str, List[str]]:
 
             # Look ahead for more redirects to same file
             redirect_group = [echo_cmd]
-            j = i  1
+            j = i + 1
 
             while j < len(lines):
                 next_line = lines[j].strip()
@@ -120,7 +120,7 @@ def fix_shell_script_content(content: str)  tuple[str, List[str]]:
             if len(redirect_group) > 1:
                 fixed_lines.append(f"{indent}{{")
                 for cmd in redirect_group:
-                    fixed_lines.append(f"{indent}    {cmd}")
+                    fixed_lines.append(f"{indent} | {cmd}")
                 fixed_lines.append(f'{indent}}} >> "{filename}"')
                 i = j
                 issues_fixed.append("SC2129: Grouped redirect operations")
@@ -154,7 +154,7 @@ def fix_shell_script_content(content: str)  tuple[str, List[str]]:
     return content, issues_fixed
 
 
-def process_shell_script(file_path: Path, create_backup: bool = True)  bool:
+def process_shell_script(file_path: Path, create_backup: bool = True) -> bool:
     """
     Process a single shell script file.
 
@@ -217,7 +217,7 @@ def process_shell_script(file_path: Path, create_backup: bool = True)  bool:
         return False
 
 
-def find_shell_scripts(path: Path)  List[Path]:
+def find_shell_scripts(path: Path) -> List[Path]:
     """
     Find all shell script files in a path.
 
@@ -249,7 +249,7 @@ def find_shell_scripts(path: Path)  List[Path]:
     return sorted(shell_scripts)
 
 
-def main()  int:
+def main() -> int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="DevOnboarder Shell Script Auto-Fixer",

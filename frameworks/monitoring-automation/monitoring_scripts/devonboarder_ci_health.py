@@ -48,7 +48,7 @@ class TokenLoader:
         self.token = None
         self.token_source = None
 
-    def load_token(self)  Optional[str]:
+    def load_token(self) -> Optional[str]:
         """Load GitHub token using Token Architecture v2.1 hierarchy"""
         # Token hierarchy: CI_ISSUE_AUTOMATION_TOKEN  CI_BOT_TOKEN  GITHUB_TOKEN
         token_hierarchy = ["CI_ISSUE_AUTOMATION_TOKEN", "CI_BOT_TOKEN", "GITHUB_TOKEN"]
@@ -106,7 +106,7 @@ class PRCommentAnalyzer:
         self.project_root = project_root
         self.comments_script = project_root / "scripts" / "check_pr_inline_comments.sh"
 
-    def get_pr_comments(self, pr_number: int)  Dict[str, Any]:
+    def get_pr_comments(self, pr_number: int) -> Dict[str, Any]:
         """Get PR inline comments using existing DevOnboarder infrastructure"""
         try:
             # Use existing script to get JSON output
@@ -132,7 +132,7 @@ class PRCommentAnalyzer:
             logger.error(f"Error analyzing PR comments: {e}")
             return {"total_comments": 0, "copilot_suggestions": [], "error": str(e)}
 
-    def _process_comments_data(self, comments_data: List[Dict])  Dict[str, Any]:
+    def _process_comments_data(self, comments_data: List[Dict]) -> Dict[str, Any]:
         """Process raw comments data into structured analysis"""
         copilot_suggestions = []
         suggestion_patterns = []
@@ -171,7 +171,7 @@ class PRCommentAnalyzer:
             "analysis_timestamp": datetime.now().isoformat(),
         }
 
-    def _extract_suggestion(self, comment_body: str)  Optional[str]:
+    def _extract_suggestion(self, comment_body: str) -> Optional[str]:
         """Extract code suggestion from comment body"""
         lines = comment_body.split("\n")
         in_suggestion = False
@@ -188,7 +188,7 @@ class PRCommentAnalyzer:
 
         return "\n".join(suggestion_lines) if suggestion_lines else None
 
-    def _identify_failure_patterns(self, comment: str, suggestion: str)  List[str]:
+    def _identify_failure_patterns(self, comment: str, suggestion: str) -> List[str]:
         """Identify patterns in comments that might correlate with CI failures"""
         patterns = []
 
@@ -218,7 +218,7 @@ class PRCommentAnalyzer:
 
     def correlate_with_ci_failures(
         self, pr_comments: Dict[str, Any], ci_status: Dict[str, Any]
-    )  Dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Correlate PR comment suggestions with actual CI failures"""
         correlations = []
 
@@ -262,7 +262,7 @@ class PRCommentAnalyzer:
 
     def _calculate_correlation_strength(
         self, suggestion: Dict, failed_check: Dict, file_path: str
-    )  float:
+    ) -> float:
         """Calculate correlation strength between suggestion and CI failure"""
         strength = 0.0
 
@@ -291,7 +291,7 @@ class PRCommentAnalyzer:
 
         return min(strength, 1.0)  # Cap at 100%
 
-    def _generate_recommendation(self, suggestion: Dict, failed_check: Dict)  str:
+    def _generate_recommendation(self, suggestion: Dict, failed_check: Dict) -> str:
         """Generate actionable recommendation based on suggestion and failure"""
         file_path = suggestion.get("file", "")
         line_number = suggestion.get("line", 0)
@@ -343,7 +343,7 @@ class DetachedHeadPredictor:
             ],
         }
 
-    def _load_critical_workflows(self, config_file: Optional[Path] = None)  List[str]:
+    def _load_critical_workflows(self, config_file: Optional[Path] = None) -> List[str]:
         """Load critical workflows from configuration file or environment variable"""
         # Try environment variable first
         env_workflows = os.getenv("DEVONBOARDER_CRITICAL_WORKFLOWS")
@@ -362,7 +362,7 @@ class DetachedHeadPredictor:
         # Default fallback
         return ["ci.yml", "auto-fix.yml"]
 
-    def predict_failure(self, workflow_logs: str, workflow_name: str)  Dict[str, Any]:
+    def predict_failure(self, workflow_logs: str, workflow_name: str) -> Dict[str, Any]:
         """
         Predict workflow failure with confidence scoring and actionable solutions
 
@@ -438,7 +438,7 @@ class DetachedHeadPredictor:
 
         return prediction
 
-    def _get_recommended_actions(self, failure_type: str)  List[str]:
+    def _get_recommended_actions(self, failure_type: str) -> List[str]:
         """Get actionable recommendations based on failure type"""
         actions = {
             "detached_head": [
@@ -470,7 +470,7 @@ class DetachedHeadPredictor:
             failure_type, ["Review workflow logs for specific error patterns"]
         )
 
-    def _estimate_cost_savings(self, failure_type: str, workflow_name: str)  int:
+    def _estimate_cost_savings(self, failure_type: str, workflow_name: str) -> int:
         """Estimate cost savings in minutes if workflow is cancelled early"""
         # Based on typical DevOnboarder workflow durations
         workflow_durations = {
@@ -509,7 +509,7 @@ class CIHealthDashboard:
 
     def get_workflow_runs(
         self, branch: Optional[str] = None, limit: int = 10
-    )  List[Dict]:
+    ) -> List[Dict]:
         """Get recent workflow runs using GitHub CLI"""
         cmd = [
             "gh",
@@ -533,7 +533,7 @@ class CIHealthDashboard:
 
         return []
 
-    def get_workflow_logs(self, run_id: str)  str:
+    def get_workflow_logs(self, run_id: str) -> str:
         """Get workflow logs for analysis"""
         try:
             result = subprocess.run(
@@ -546,7 +546,7 @@ class CIHealthDashboard:
 
         return ""
 
-    def analyze_active_workflows(self)  Dict[str, Any]:
+    def analyze_active_workflows(self) -> Dict[str, Any]:
         """Analyze currently active workflows for failure prediction"""
         analysis = {
             "timestamp": datetime.now().isoformat(),
@@ -605,7 +605,7 @@ class CIHealthDashboard:
 
         return analysis
 
-    def analyze_pr_with_ci_integration(self, pr_number: int)  Dict[str, Any]:
+    def analyze_pr_with_ci_integration(self, pr_number: int) -> Dict[str, Any]:
         """
         Integrated PR analysis combining comment review with CI health diagnosis
         This is the main integration point between PR comments and CI failures
@@ -649,13 +649,12 @@ class CIHealthDashboard:
 
         return analysis
 
-    def _get_pr_ci_status(self, pr_number: int)  Dict[str, Any]:
+    def _get_pr_ci_status(self, pr_number: int) -> Dict[str, Any]:
         """Get CI status for a specific PR"""
         try:
             # Fields for pr checks command
             json_fields = (
-                "bucket,completedAt,description,event,link,"
-                "name,startedAt,state,workflow"
+                "bucket,completedAt,description,event,link," + "name,startedAt,state,workflow"
             )
             result = subprocess.run(
                 ["gh", "pr", "checks", str(pr_number), "--json", json_fields],
@@ -699,8 +698,8 @@ class CIHealthDashboard:
 
     def _generate_integrated_recommendations(
         self, pr_comments: Dict, ci_status: Dict, correlations: Dict
-    )  List[str]:
-        """Generate integrated recommendations based on PR comments  CI status"""
+    ) -> List[str]:
+        """Generate integrated recommendations based on PR comments + CI status"""
         recommendations = []
 
         # High-confidence correlations get priority
@@ -724,8 +723,7 @@ class CIHealthDashboard:
         failure_patterns = pr_comments.get("failure_patterns", [])
         if "linting" in failure_patterns:
             recommendations.append(
-                " QUICK  Copilot identified linting issues - "
-                "apply suggestions to prevent CI failures"
+                " QUICK + Copilot identified linting issues - " + "apply suggestions to prevent CI failures"
             )
 
         if "security" in failure_patterns:
@@ -743,15 +741,14 @@ class CIHealthDashboard:
 
         if not recommendations:
             recommendations.append(
-                " STATUS: No immediate issues detected - "
-                "PR appears ready for review"
+                " STATUS: No immediate issues detected - " + "PR appears ready for review"
             )
 
         return recommendations
 
     def _calculate_priority_score(
         self, pr_comments: Dict, ci_status: Dict, correlations: Dict
-    )  float:
+    ) -> float:
         """Calculate priority score (0-1) for the PR based on integrated analysis"""
         score = 0.0
 
@@ -866,7 +863,7 @@ class CIHealthDashboard:
                 print("\nLive monitoring stopped.")
             return
 
-    def predict_only(self, branch: Optional[str] = None)  Dict[str, Any]:
+    def predict_only(self, branch: Optional[str] = None) -> Dict[str, Any]:
         """Run failure prediction only and return results"""
         analysis = self.analyze_active_workflows()
 
@@ -888,8 +885,7 @@ def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
         description=(
-            "DevOnboarder CI Health Dashboard - Real-time workflow "
-            "monitoring and failure prediction"
+            "DevOnboarder CI Health Dashboard - Real-time workflow " + "monitoring and failure prediction"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
@@ -922,7 +918,7 @@ Examples:
         "--diagnose-pr",
         type=int,
         metavar="PR_NUMBER",
-        help="Integrated PR diagnosis: analyze comments  CI failures for specific PR",
+        help="Integrated PR diagnosis: analyze comments + CI failures for specific PR",
     )
 
     args = parser.parse_args()
@@ -936,8 +932,7 @@ Examples:
 
     if not dashboard.github_token:
         print(
-            "  Warning: No GitHub token available. Dashboard will "
-            "have limited functionality."
+            "  Warning: No GitHub token available. Dashboard will " + "have limited functionality."
         )
         print("   Please ensure TOKEN_ARCHITECTURE_V2.1 is properly configured.")
         print()

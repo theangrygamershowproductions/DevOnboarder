@@ -4,8 +4,7 @@
 !*/.env.*.example
 !*/.env.example
 !.codex/
-!.codex/**/*
-!.env.ci
+!.codex/**/*/*
 # Force CI rerun
 # IDE folders
 # JS artifacts
@@ -39,6 +38,7 @@ docs-backup/
 .coverage
 .env
 .env.*
+.env.ci
 .env.local
 .env.production
 .idea/

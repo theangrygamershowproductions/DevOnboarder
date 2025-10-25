@@ -115,7 +115,7 @@ class TestCIHealthDashboard:
     def test_analyze_workflow_health_success_rate(self):
         """Test workflow health analysis with various success rates."""
         # Test high success rate
-        runs = [{"conclusion": "success"} for _ in range(90)]  [
+        runs = [{"conclusion": "success"} for _ in range(90)] + [
             {"conclusion": "failure"} for _ in range(10)
         ]
 
@@ -123,7 +123,7 @@ class TestCIHealthDashboard:
         assert 80 <= health_score <= 100  # Should be high due to 90% success rate
 
         # Test low success rate
-        runs = [{"conclusion": "failure"} for _ in range(90)]  [
+        runs = [{"conclusion": "failure"} for _ in range(90)] + [
             {"conclusion": "success"} for _ in range(10)
         ]
 
@@ -180,7 +180,7 @@ class TestWorkflowMetrics:
 
     def test_calculate_success_rate(self):
         """Test success rate calculation."""
-        runs = [{"conclusion": "success"} for _ in range(7)]  [
+        runs = [{"conclusion": "success"} for _ in range(7)] + [
             {"conclusion": "failure"} for _ in range(3)
         ]
 
@@ -206,7 +206,7 @@ class TestWorkflowMetrics:
         ]
 
         avg_duration = self.dashboard.calculate_average_duration(runs)
-        assert avg_duration == 6.5  # (5  8) / 2 minutes
+        assert avg_duration == 6.5  # (5 + 8) / 2 minutes
 
 
 class TestHealthReporting:

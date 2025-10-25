@@ -38,7 +38,7 @@ def _get_token(
     password: str,
     *,
     discord_token: str = "dtoken",
-)  str:
+) -> str:
     resp = client.post(
         "/api/login",
         json={
@@ -388,7 +388,7 @@ class StubResponse:
     def json(self):
         return self._json
 
-    def raise_for_status(self)  None:
+    def raise_for_status(self) -> None:
         if self.status_code >= 400:
             raise httpx.HTTPStatusError("error", request=None, response=None)
 
@@ -874,7 +874,7 @@ def test_is_safe_redirect_url_edge_cases():
 
     # Test empty URL (line 52)
     assert not is_safe_redirect_url("")
-    assert not is_safe_redirect_url("   ")  # Whitespace only
+    assert not is_safe_redirect_url(" + ")  # Whitespace only
 
     # Test protocol-relative URLs (line 59)
     assert not is_safe_redirect_url("//evil.com/malicious")
@@ -1140,8 +1140,7 @@ def test_additional_auth_service_coverage():
 
                 # Use unsafe state parameter to trigger warning log
                 resp = client.get(
-                    "/login/discord/callback"
-                    "?code=test123&state=https://evil.com/malicious",
+                    "/login/discord/callback" + "?code=test123&state=https://evil.com/malicious",
                     follow_redirects=False,
                 )
                 assert resp.status_code == 307  # noqa: B101  # Temporary redirect

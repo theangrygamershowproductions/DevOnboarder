@@ -57,9 +57,9 @@ class CIDebugWrapper:
 
     def run_gh_command(
         self, args: List[str], capture_output: bool = True
-    )  subprocess.CompletedProcess:
+    ) -> subprocess.CompletedProcess:
         """Run a GitHub CLI command."""
-        cmd = ["gh"]  args
+        cmd = ["gh"] + args
         try:
             result = subprocess.run(  # nosec B603 - args come from trusted code
                 cmd, capture_output=capture_output, text=True, check=True
@@ -74,15 +74,14 @@ class CIDebugWrapper:
                 print(f"stderr: {e.stderr}")
             raise
 
-    def get_workflow_runs(self, limit: int = 10)  List[Dict[str, Any]]:
+    def get_workflow_runs(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get recent workflow runs."""
         result = self.run_gh_command(
             [
                 "run",
                 "list",
                 "--json",
-                "status,conclusion,headSha,createdAt,updatedAt,"
-                "headBranch,databaseId",
+                "status,conclusion,headSha,createdAt,updatedAt," + "headBranch,databaseId",
                 "--limit",
                 str(limit),
             ]
@@ -91,7 +90,7 @@ class CIDebugWrapper:
         runs = json.loads(result.stdout)
         return runs
 
-    def get_run_details(self, run_id: str)  Optional[Dict[str, Any]]:
+    def get_run_details(self, run_id: str) -> Optional[Dict[str, Any]]:
         """Get run details by ID or commit SHA."""
         # First try to use run_id directly as a run database ID
         try:
@@ -128,7 +127,7 @@ class CIDebugWrapper:
                         continue
             return None
 
-    def get_workflow_jobs(self, run_id: str)  List[Dict[str, Any]]:
+    def get_workflow_jobs(self, run_id: str) -> List[Dict[str, Any]]:
         """Get jobs for a specific workflow run."""
         run_data = self.get_run_details(run_id)
         if not run_data:
@@ -137,7 +136,7 @@ class CIDebugWrapper:
 
     def download_job_logs(
         self, job_id: int, output_file: Path, run_database_id: str
-    )  None:
+    ) -> None:
         """Download logs for a specific job."""
         print(f"Downloading logs for job {job_id} to {output_file}")
 
@@ -146,7 +145,7 @@ class CIDebugWrapper:
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(result.stdout)
 
-    def download_artifacts(self, run_id: str, output_dir: Path)  None:
+    def download_artifacts(self, run_id: str, output_dir: Path) -> None:
         """Download artifacts for a workflow run."""
         run_data = self.get_run_details(run_id)
         if not run_data:
@@ -185,7 +184,7 @@ class CIDebugWrapper:
                 ]
             )
 
-    def get_latest_failed_run(self)  Optional[Dict[str, Any]]:
+    def get_latest_failed_run(self) -> Optional[Dict[str, Any]]:
         """Get the latest failed workflow run."""
         runs = self.get_workflow_runs(limit=20)
 
@@ -195,7 +194,7 @@ class CIDebugWrapper:
 
         return None
 
-    def generate_status_report(self)  str:
+    def generate_status_report(self) -> str:
         """Generate a status report of recent CI runs."""
         runs = self.get_workflow_runs(limit=10)
 
@@ -235,7 +234,7 @@ class CIDebugWrapper:
 
         return "\n".join(report)
 
-    def generate_failure_analysis(self, run_id: str)  str:
+    def generate_failure_analysis(self, run_id: str) -> str:
         """Generate detailed failure analysis for a run."""
         jobs = self.get_workflow_jobs(run_id)
 

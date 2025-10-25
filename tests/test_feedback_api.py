@@ -43,7 +43,7 @@ def test_submit_and_analytics():
     data = resp.json()["feedback"]
 
     # There should be exactly one more item than before
-    assert len(data) == initial_count  1
+    assert len(data) == initial_count + 1
 
     # Find our newly created item by ID
     created_item = next((item for item in data if item["id"] == item_id), None)

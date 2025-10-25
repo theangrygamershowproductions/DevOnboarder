@@ -6,7 +6,7 @@ import os
 from typing import Iterable, Optional
 
 
-def resolve_verification_type(role_ids: Iterable[str])  Optional[str]:
+def resolve_verification_type(role_ids: Iterable[str]) -> Optional[str]:
     """Return the verification type for the given role IDs."""
     env = os.environ
     verified_member_role = env.get("VERIFIED_MEMBER_ROLE_ID")
@@ -28,7 +28,7 @@ def resolve_verification_type(role_ids: Iterable[str])  Optional[str]:
     return None
 
 
-def resolve_user_flags(role_ids: Iterable[str])  dict[str, object]:
+def resolve_user_flags(role_ids: Iterable[str]) -> dict[str, object]:
     """Resolve admin and verification flags from role IDs."""
     env = os.environ
     owner_role = env.get("OWNER_ROLE_ID")

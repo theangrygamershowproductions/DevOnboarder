@@ -28,7 +28,7 @@ class ExampleService:
         """Initialize service with token validation."""
         self.service_name = "Example DevOnboarder Service"
 
-    def start(self)  bool:
+    def start(self) -> bool:
         """Start the service with token validation."""
         print(f"Starting {self.service_name}...")
 
@@ -47,7 +47,7 @@ def main():
     service = ExampleService()
 
     if not service.start():
-        print("\nTO  Set up your tokens as described above")
+        print("\nTO + Set up your tokens as described above")
         sys.exit(1)
 
     print(f"\n{service.service_name} is running...")

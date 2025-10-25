@@ -72,8 +72,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
     # Allow some placeholders if not all sections apply, but warn if too many
     if placeholder_count > 5:
         errors.append(
-            f"Too many template placeholders remain ({placeholder_count}). "
-            "Please fill in the relevant sections."
+            f"Too many template placeholders remain ({placeholder_count}). " + "Please fill in the relevant sections."
         )
 
     # Check for empty sections (header followed immediately by another section)
@@ -81,8 +80,7 @@ def validate_pr_summary(file_path: Path) -> Tuple[bool, List[str]]:
     empty_sections = re.findall(section_pattern, content)
     if empty_sections:
         errors.append(
-            "Some sections appear to be empty. "
-            "Please provide content for all applicable sections."
+            "Some sections appear to be empty. " + "Please provide content for all applicable sections."
         )
 
     # Check minimum content length (excluding template)

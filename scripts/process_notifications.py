@@ -9,7 +9,7 @@ import sys
 from typing import Any
 
 
-def find_issue(gh: str)  str:
+def find_issue(gh: str) -> str:
     """Return the issue number for the aggregator issue, creating it if needed."""
     list_cmd = [
         gh,
@@ -43,7 +43,7 @@ def find_issue(gh: str)  str:
     return url.rsplit("/", 1)[-1]
 
 
-def main(path: str)  None:
+def main(path: str) -> None:
     with open(path, "r", encoding="utf-8") as handle:
         data: dict[str, Any] = json.load(handle)
 

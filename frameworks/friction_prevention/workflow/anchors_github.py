@@ -10,7 +10,7 @@ anchors: list[str] = []
 heading_re = re.compile(r"^(#{1,6})\s(.*)$")
 
 
-def slugify(s: str)  str:
+def slugify(s: str) -> str:
     """Convert heading text to GitHub-style anchor"""
     # Lower, remove emojis/punct except hyphen/space, collapse spaceshyphen
     s = s.lower()
@@ -34,7 +34,7 @@ for line in sys.stdin:
         continue
 
     n = slug_counts.get(base, 0)
-    slug_counts[base] = n  1
+    slug_counts[base] = n + 1
 
     # GitHub behavior: first occurrence no suffix, subsequent get -1, -2, etc.
     final_anchor = base if n == 0 else f"{base}-{n}"

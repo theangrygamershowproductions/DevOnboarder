@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import List
 
 
-def setup_logging()  None:
+def setup_logging() -> None:
     """Set up centralized logging per DevOnboarder standards."""
     import logging
 
@@ -48,7 +48,7 @@ def setup_logging()  None:
     )
 
 
-def fix_markdown_content(content: str)  tuple[str, List[str]]:
+def fix_markdown_content(content: str) -> tuple[str, List[str]]:
     """
     Fix common markdown formatting issues in content.
 
@@ -112,12 +112,12 @@ def fix_markdown_content(content: str)  tuple[str, List[str]]:
         issues_fixed.append("Cleaned up excessive blank lines")
 
     # Ensure file ends with single newline
-    content = content.rstrip()  "\n"
+    content = content.rstrip() + "\n"
 
     return content, issues_fixed
 
 
-def process_markdown_file(file_path: Path, create_backup: bool = True)  bool:
+def process_markdown_file(file_path: Path, create_backup: bool = True) -> bool:
     """
     Process a single markdown file.
 
@@ -180,7 +180,7 @@ def process_markdown_file(file_path: Path, create_backup: bool = True)  bool:
         return False
 
 
-def find_markdown_files(path: Path)  List[Path]:
+def find_markdown_files(path: Path) -> List[Path]:
     """
     Find all markdown files in a path.
 
@@ -212,7 +212,7 @@ def find_markdown_files(path: Path)  List[Path]:
     return sorted(markdown_files)
 
 
-def main()  int:
+def main() -> int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="DevOnboarder Markdown Auto-Formatter",

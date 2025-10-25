@@ -53,7 +53,7 @@ class AARPortalGenerator:
             autoescape=select_autoescape(["html", "xml"]),
         )
 
-    def discover_aar_structure(self)  Dict[str, Any]:
+    def discover_aar_structure(self) -> Dict[str, Any]:
         """Scan .aar directory and build comprehensive data structure.
 
         Returns
@@ -138,7 +138,7 @@ class AARPortalGenerator:
 
     def parse_aar_file(
         self, file_path: Path, aar_type: str
-    )  Optional[Dict[str, Any]]:
+    ) -> Optional[Dict[str, Any]]:
         """Parse individual AAR file for metadata and content.
 
         Parameters
@@ -204,7 +204,7 @@ class AARPortalGenerator:
             print(f"Warning: Failed to parse {file_path}: {e}")
             return None
 
-    def extract_metrics_from_content(self, content: str)  Dict[str, Any]:
+    def extract_metrics_from_content(self, content: str) -> Dict[str, Any]:
         """Extract metrics from AAR content.
 
         Parameters
@@ -251,7 +251,7 @@ class AARPortalGenerator:
 
         return metrics
 
-    def extract_labels_from_content(self, content: str)  List[str]:
+    def extract_labels_from_content(self, content: str) -> List[str]:
         """Extract labels/tags from AAR content.
 
         Parameters
@@ -287,7 +287,7 @@ class AARPortalGenerator:
 
         return labels
 
-    def calculate_trends(self, aar_data: Dict[str, Any])  Dict[str, Any]:
+    def calculate_trends(self, aar_data: Dict[str, Any]) -> Dict[str, Any]:
         """Calculate trend data for dashboard visualization.
 
         Parameters
@@ -364,95 +364,61 @@ class AARPortalGenerator:
             '    <meta charset="UTF-8">\n'
             '    <meta name="viewport" content="width=device-width, '
             'initial-scale=1.0">\n'
-            "    <title>{% block title %}DevOnboarder AAR Portal"
-            "{% endblock %}</title>\n"
+            "    <title>{% block title %}DevOnboarder AAR Portal" + "{% endblock %}</title>\n"
             '    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/'
             'bootstrap.min.css" rel="stylesheet">\n'
             '    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/'
             'font/bootstrap-icons.css" rel="stylesheet">\n'
-            "    <style>\n"
-            "        .aar-card {\n"
-            "            transition: transform 0.2s;\n"
-            "            height: 100%;\n"
-            "        }\n"
-            "        .aar-card:hover {\n"
-            "            transform: translateY(-2px);\n"
-            "            box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n"
-            "        }\n"
-            "        .metric-badge {\n"
-            "            font-size: 0.8em;\n"
-            "        }\n"
-            "        .search-box {\n"
-            "            position: sticky;\n"
-            "            top: 20px;\n"
-            "            z-index: 100;\n"
-            "        }\n"
-            "        .filter-sidebar {\n"
-            "            background-color: #f8f9fa;\n"
-            "            min-height: 100vh;\n"
-            "        }\n"
-            "        .trend-chart {\n"
-            "            height: 300px;\n"
-            "        }\n"
-            "        .navbar-brand {\n"
-            "            font-weight: bold;\n"
-            "        }\n"
-            "        .footer {\n"
-            "            background-color: #343a40;\n"
-            "            color: white;\n"
-            "            padding: 20px 0;\n"
-            "            margin-top: 50px;\n"
-            "        }\n"
-            "        .type-pull_requests { border-left: 4px solid #0d6efd; }\n"
-            "        .type-issues { border-left: 4px solid #198754; }\n"
-            "        .type-sprints { border-left: 4px solid #ffc107; }\n"
-            "        .type-incidents { border-left: 4px solid #dc3545; }\n"
-            "        .type-automation { border-left: 4px solid #6f42c1; }\n"
-            "    </style>\n"
-            "    {% block extra_head %}{% endblock %}\n"
-            "</head>\n"
-            "<body>\n"
+            "    <style>\n" + "        .aar-card {\n"
+            "            transition: transform 0.2s;\n" + "            height: 100%;\n"
+            "        }\n" + "        .aar-card:hover {\n"
+            "            transform: translateY(-2px);\n" + "            box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n"
+            "        }\n" + "        .metric-badge {\n"
+            "            font-size: 0.8em;\n" + "        }\n"
+            "        .search-box {\n" + "            position: sticky;\n"
+            "            top: 20px;\n" + "            z-index: 100;\n"
+            "        }\n" + "        .filter-sidebar {\n"
+            "            background-color: #f8f9fa;\n" + "            min-height: 100vh;\n"
+            "        }\n" + "        .trend-chart {\n"
+            "            height: 300px;\n" + "        }\n"
+            "        .navbar-brand {\n" + "            font-weight: bold;\n"
+            "        }\n" + "        .footer {\n"
+            "            background-color: #343a40;\n" + "            color: white;\n"
+            "            padding: 20px 0;\n" + "            margin-top: 50px;\n"
+            "        }\n" + "        .type-pull_requests { border-left: 4px solid #0d6efd; }\n"
+            "        .type-issues { border-left: 4px solid #198754; }\n" + "        .type-sprints { border-left: 4px solid #ffc107; }\n"
+            "        .type-incidents { border-left: 4px solid #dc3545; }\n" + "        .type-automation { border-left: 4px solid #6f42c1; }\n"
+            "    </style>\n" + "    {% block extra_head %}{% endblock %}\n"
+            "</head>\n" + "<body>\n"
             '    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">\n'
             '        <div class="container">\n'
             '            <a class="navbar-brand" href="index.html">\n'
             '                <i class="bi bi-journal-text"></i> '
-            "DevOnboarder AAR Portal\n"
-            "            </a>\n"
+            "DevOnboarder AAR Portal\n" + "            </a>\n"
             '            <div class="navbar-nav ms-auto">\n'
             '                <a class="nav-link" href="index.html">Browse</a>\n'
             '                <a class="nav-link" href="trends.html">Trends</a>\n'
             '                <a class="nav-link" href="search.html">Search</a>\n'
-            "            </div>\n"
-            "        </div>\n"
-            "    </nav>\n"
-            "\n"
+            "            </div>\n" + "        </div>\n"
+            "    </nav>\n" + "\n"
             '    <main class="container-fluid mt-4">\n'
-            "        {% block content %}{% endblock %}\n"
-            "    </main>\n"
+            "        {% block content %}{% endblock %}\n" + "    </main>\n"
             "\n"
             '    <footer class="footer">\n'
             '        <div class="container text-center">\n'
-            "            <p>&copy; 2025 DevOnboarder AAR Portal - Generated on "
-            "{{ generation_date }}</p>\n"
-            "            <p><small>Total AARs: {{ total_aars }} | Last Updated: "
-            "{{ last_updated }}</small></p>\n"
-            "        </div>\n"
-            "    </footer>\n"
+            "            <p>&copy; 2025 DevOnboarder AAR Portal - Generated on " + "{{ generation_date }}</p>\n"
+            "            <p><small>Total AARs: {{ total_aars }} | Last Updated: " + "{{ last_updated }}</small></p>\n"
+            "        </div>\n" + "    </footer>\n"
             "\n"
             '    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/'
             'bootstrap.bundle.min.js"></script>\n'
             '    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\n'
-            "    {% block extra_scripts %}{% endblock %}\n"
-            "</body>\n"
+            "    {% block extra_scripts %}{% endblock %}\n" + "</body>\n"
             "</html>"
         )
 
         # Index template
-        index_template = """{% extends "base.html" %}
-
-{% block title %}AAR Browser - DevOnboarder{% endblock %}
-
-{% block content %}
+        index_template = """{% extends "base.html" %} | {% block title %}AAR Browser - DevOnboarder{% endblock %} | {% block content %}
 <div class="row">
     <!-- Filters Sidebar -
     <div class="col-md-3 filter-sidebar p-4">
@@ -463,13 +429,11 @@ class AARPortalGenerator:
                 <label for="quarterFilter" class="form-label">Quarter</label>
                 <select class="form-select" id="quarterFilter">
                     <option value="">All Quarters</option>
-                    {% for year, quarters in aar_data.quarters.items() %}
-                        {% for quarter in quarters.keys() %}
+                    {% for year, quarters in aar_data.quarters.items() %} | {% for quarter in quarters.keys() %}
                             <option value="{{ quarter }}-{{ year }}">
                                 {{ quarter }} {{ year }}
                             </option>
-                        {% endfor %}
-                    {% endfor %}
+                        {% endfor %} | {% endfor %}
                 </select>
             </div>
 
@@ -515,10 +479,7 @@ class AARPortalGenerator:
         </div>
 
         <div class="row" id="aarGrid">
-            {% for year, quarters in aar_data.quarters.items() %}
-                {% for quarter, types in quarters.items() %}
-                    {% for type_name, aars in types.items() %}
-                        {% for aar in aars %}
+            {% for year, quarters in aar_data.quarters.items() %} | {% for quarter, types in quarters.items() %} | {% for type_name, aars in types.items() %} | {% for aar in aars %}
                             <div class="col-lg-4 col-md-6 mb-4 aar-item"
                                  data-quarter="{{ quarter }}-{{ year }}"
                                  data-type="{{ type_name }}"
@@ -564,10 +525,7 @@ class AARPortalGenerator:
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
+                        {% endfor %} | {% endfor %} | {% endfor %} | {% endfor %}
         </div>
 
         <div id="noResults" class="text-center mt-5" style="display: none;">
@@ -577,9 +535,7 @@ class AARPortalGenerator:
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} | {% block extra_scripts %}
 <script>
     function filterAARs() {
         const quarterFilter = document.getElementById('quarterFilter').value;
@@ -624,11 +580,7 @@ class AARPortalGenerator:
 {% endblock %}"""
 
         # Trends template
-        trends_template = """{% extends "base.html" %}
-
-{% block title %}Trends Dashboard - DevOnboarder AAR Portal{% endblock %}
-
-{% block content %}
+        trends_template = """{% extends "base.html" %} | {% block title %}Trends Dashboard - DevOnboarder AAR Portal{% endblock %} | {% block content %}
 <div class="container">
     <div class="row mb-4">
         <div class="col-12">
@@ -710,9 +662,7 @@ class AARPortalGenerator:
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} | {% block extra_scripts %}
 <script>
     // Type Distribution Chart
     const typeCtx = document.getElementById('typeChart').getContext('2d');

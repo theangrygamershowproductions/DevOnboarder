@@ -28,9 +28,9 @@ class AARTokenManager:
 
         # For Actions API operations (requires actions:read permission)
         self.actions_token_hierarchy = [
-            "DIAGNOSTICS_BOT_KEY",  # PRIMARY: Actions read  issue write
-            "CI_HEALTH_KEY",  # SECONDARY: Actions read  monitoring
-            "CI_HELPER_AGENT_KEY",  # TERTIARY: Actions read  CI assistance
+            "DIAGNOSTICS_BOT_KEY",  # PRIMARY: Actions read + issue write
+            "CI_HEALTH_KEY",  # SECONDARY: Actions read + monitoring
+            "CI_HELPER_AGENT_KEY",  # TERTIARY: Actions read + CI assistance
             "CI_BOT_TOKEN",  # LEGACY: Has actions:read
             "GITHUB_TOKEN",  # FALLBACK ONLY: Broad permissions
         ]
@@ -47,7 +47,7 @@ class AARTokenManager:
         # Load token registry for validation
         self.token_registry = self._load_token_registry()
 
-    def _load_token_registry(self)  Dict[str, Any]:
+    def _load_token_registry(self) -> Dict[str, Any]:
         """Load token scope registry following governance requirements."""
         registry_path = Path(".codex/tokens/token_scope_map.yaml")
 
@@ -73,7 +73,7 @@ class AARTokenManager:
             print(f" Failed to load token registry: {e}")
             return {}
 
-    def get_actions_token(self)  Optional[str]:
+    def get_actions_token(self) -> Optional[str]:
         """Get GitHub token for Actions API operations (requires actions:read)."""
         for token_name in self.actions_token_hierarchy:
             token = os.environ.get(token_name)
@@ -83,7 +83,7 @@ class AARTokenManager:
         print(" No actions-capable token found in hierarchy")
         return None
 
-    def get_issue_token(self)  Optional[str]:
+    def get_issue_token(self) -> Optional[str]:
         """Get GitHub token for Issue operations (requires issues:write)."""
         for token_name in self.issue_token_hierarchy:
             token = os.environ.get(token_name)
@@ -93,7 +93,7 @@ class AARTokenManager:
         print(" No issue-capable token found in hierarchy")
         return None
 
-    def get_github_token(self)  Optional[str]:
+    def get_github_token(self) -> Optional[str]:
         """Get GitHub token following No Default Token Policy hierarchy.
 
         DEPRECATED: Use get_actions_token() or get_issue_token() for
@@ -114,7 +114,7 @@ class AARTokenManager:
         print("Falling back to GITHUB_TOKEN violates No Default Token Policy")
         return None
 
-    def _validate_token_scope(self, token_name: str)  bool:
+    def _validate_token_scope(self, token_name: str) -> bool:
         """Validate token scope against registry following governance policy."""
         if not self.token_registry:
             # If no registry, assume token is valid but log warning
@@ -150,7 +150,7 @@ class AARTokenManager:
 
         return has_permissions
 
-    def check_github_cli_availability(self)  bool:
+    def check_github_cli_availability(self) -> bool:
         """Check GitHub CLI availability with DevOnboarder error handling."""
         try:
             result = subprocess.run(
@@ -170,7 +170,7 @@ class AARTokenManager:
             print(f"GitHub CLI check failed: {e}")
             return False
 
-    def validate_token_permissions(self, token: str)  bool:
+    def validate_token_permissions(self, token: str) -> bool:
         """Validate token has required permissions for AAR operations."""
         try:
             # Test token with minimal GitHub API call
@@ -190,7 +190,7 @@ class AARTokenManager:
             print("Token validation failed")
             return False
 
-    def audit_token_usage(self)  Dict[str, Any]:
+    def audit_token_usage(self) -> Dict[str, Any]:
         """Generate comprehensive token usage audit for full ecosystem."""
         audit_data = {
             "audit_timestamp": datetime.now().isoformat(),
@@ -264,7 +264,7 @@ class AARTokenManager:
                     )
 
         # Check token availability across both hierarchies
-        all_tokens = set(self.actions_token_hierarchy  self.issue_token_hierarchy)
+        all_tokens = set(self.actions_token_hierarchy | self.issue_token_hierarchy)
         for token_name in all_tokens:
             is_available = bool(os.environ.get(token_name))
             audit_data["token_availability"][token_name] = is_available
@@ -280,8 +280,7 @@ class AARTokenManager:
                             "type": "UNNECESSARY_DEFAULT_TOKEN",
                             "severity": "MEDIUM",
                             "description": (
-                                "GITHUB_TOKEN used when finely-scoped "
-                                "alternatives exist"
+                                "GITHUB_TOKEN used when finely-scoped " + "alternatives exist"
                             ),
                         }
                     )
@@ -314,7 +313,7 @@ class AARTokenManager:
 
         return audit_data
 
-    def comprehensive_token_status(self)  Dict[str, Any]:
+    def comprehensive_token_status(self) -> Dict[str, Any]:
         """Get comprehensive status of all tokens in the ecosystem."""
         status_report = {
             "scan_timestamp": datetime.now().isoformat(),
@@ -441,7 +440,7 @@ class AARTokenManager:
         return status_report
 
 
-def validate_aar_environment()  bool:
+def validate_aar_environment() -> bool:
     """Validate DevOnboarder AAR environment requirements."""
     # CRITICAL: Check virtual environment (DevOnboarder requirement)
     if not os.environ.get("VIRTUAL_ENV"):

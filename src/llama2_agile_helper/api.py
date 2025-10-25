@@ -20,11 +20,11 @@ PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 router = APIRouter()
 
 
-def _load_prompt(name: str)  str:
+def _load_prompt(name: str) -> str:
     return (PROMPT_DIR / name).read_text()
 
 
-def _call_llama2(prompt: str)  str:
+def _call_llama2(prompt: str) -> str:
     if not API_KEY:
         raise HTTPException(status_code=503, detail="LLAMA2_API_KEY not set")
     try:
@@ -42,7 +42,7 @@ def _call_llama2(prompt: str)  str:
 
 
 @router.post("/sprint-summary")
-def sprint_summary(data: dict[str, str])  dict[str, str]:
+def sprint_summary(data: dict[str, str]) -> dict[str, str]:
     """Return a sprint summary generated from raw notes."""
     notes = data["notes"]
     prompt = _load_prompt("retro_analysis.prompt")  "\n"  notes
@@ -51,7 +51,7 @@ def sprint_summary(data: dict[str, str])  dict[str, str]:
 
 
 @router.post("/groom-backlog")
-def groom_backlog(data: dict[str, list[str]])  dict[str, str]:
+def groom_backlog(data: dict[str, list[str]]) -> dict[str, str]:
     """Return backlog grooming suggestions for the given tickets."""
     tickets = "\n".join(f"- {t}" for t in data["tickets"])
     prompt = _load_prompt("ticket_classifier.prompt")  "\n"  tickets
@@ -59,7 +59,7 @@ def groom_backlog(data: dict[str, list[str]])  dict[str, str]:
     return {"suggestions": suggestions}
 
 
-def create_app()  FastAPI:
+def create_app() -> FastAPI:
     """Instantiate and configure the FastAPI application."""
 
     app = FastAPI()
@@ -83,14 +83,14 @@ def create_app()  FastAPI:
     app.add_middleware(_SecurityHeadersMiddleware)
 
     @app.get("/health")
-    def health()  dict[str, str]:
+    def health() -> dict[str, str]:
         return {"status": "ok"}
 
     app.include_router(router)
     return app
 
 
-def main()  None:  # pragma: no cover - convenience runner
+def main() -> None:  # pragma: no cover - convenience runner
     import uvicorn
 
     uvicorn.run(create_app(), host="0.0.0.0", port=8100)  # nosec B104

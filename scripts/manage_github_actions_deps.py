@@ -24,14 +24,14 @@ try:
     sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
     from utils.timestamps import get_utc_timestamp
 
-    def get_current_utc()  datetime:
+    def get_current_utc() -> datetime:
         """Get current UTC timestamp using centralized utility."""
         # Convert ISO string back to datetime for calculation compatibility
         return datetime.fromisoformat(get_utc_timestamp().replace("Z", "00:00"))
 
 except ImportError:
 
-    def get_current_utc()  datetime:
+    def get_current_utc() -> datetime:
         """Fallback UTC timestamp function."""
         return datetime.now(timezone.utc)
 
@@ -61,7 +61,7 @@ class GitHubActionsDependencyManager:
         # Cache for API responses to avoid rate limiting
         self._cache: Dict[str, Optional[Dict[str, Any]]] = {}
 
-    def validate_all_workflows(self)  Dict[str, Any]:
+    def validate_all_workflows(self) -> Dict[str, Any]:
         """
         Validate all GitHub Actions dependencies in workflow files.
 
@@ -84,7 +84,7 @@ class GitHubActionsDependencyManager:
             "security_warnings": [],
         }
 
-        workflow_files = list(self.workflows_dir.glob("*.yml"))  list(
+        workflow_files = list(self.workflows_dir.glob("*.yml")) + list(
             self.workflows_dir.glob("*.yaml")
         )
 
@@ -111,7 +111,7 @@ class GitHubActionsDependencyManager:
 
         return results
 
-    def _validate_workflow_file(self, workflow_file: Path)  Dict[str, Any]:
+    def _validate_workflow_file(self, workflow_file: Path) -> Dict[str, Any]:
         """Validate dependencies in a single workflow file."""
         results = {
             "dependencies_checked": 0,
@@ -171,7 +171,7 @@ class GitHubActionsDependencyManager:
 
     def _extract_actions_from_workflow(
         self, workflow: Dict, content: str
-    )  List[Dict]:
+    ) -> List[Dict]:
         """Extract GitHub Actions dependencies from workflow."""
         actions = []
 
@@ -194,7 +194,7 @@ class GitHubActionsDependencyManager:
 
         return actions
 
-    def _determine_version_type(self, version: str)  str:
+    def _determine_version_type(self, version: str) -> str:
         """Determine the type of version specification."""
         if re.match(r"^v?\d$", version):
             return "major"
@@ -211,7 +211,7 @@ class GitHubActionsDependencyManager:
 
     def _validate_action_dependency(
         self, action_info: Dict, workflow_file: str
-    )  Optional[Dict]:
+    ) -> Optional[Dict]:
         """Validate a single action dependency against version windows."""
         action_name = action_info["name"]
         version = action_info["version"]
@@ -225,8 +225,7 @@ class GitHubActionsDependencyManager:
                     "action": action_name,
                     "version": version,
                     "issue": (
-                        f"Using branch reference '{version}' instead of "
-                        "tagged version"
+                        f"Using branch reference '{version}' instead of " + "tagged version"
                     ),
                     "severity": "warning",
                     "recommendation": "Use specific version tags for better stability",
@@ -241,8 +240,7 @@ class GitHubActionsDependencyManager:
                 "action": action_name,
                 "version": version,
                 "issue": (
-                    "Could not validate version - action may not exist or be "
-                    "accessible"
+                    "Could not validate version - action may not exist or be " + "accessible"
                 ),
                 "severity": "warning",
                 "recommendation": "Verify action name and version are correct",
@@ -289,7 +287,7 @@ class GitHubActionsDependencyManager:
 
     def _get_action_release_info(
         self, action_name: str, version: str
-    )  Optional[Dict]:
+    ) -> Optional[Dict]:
         """Get release information for a GitHub Action."""
         # Use cache to avoid repeated API calls
         cache_key = f"{action_name}@{version}"
@@ -335,7 +333,7 @@ class GitHubActionsDependencyManager:
 
         return None
 
-    def _check_security_advisories(self, action_info: Dict)  Optional[Dict]:
+    def _check_security_advisories(self, action_info: Dict) -> Optional[Dict]:
         """Check for known security advisories for the action."""
         # This is a placeholder for security advisory checking
         # In a real implementation, this would check against GitHub
@@ -343,7 +341,7 @@ class GitHubActionsDependencyManager:
         # or other vulnerability databases
         return None
 
-    def _generate_update_recommendation(self, action_info: Dict)  Optional[Dict]:
+    def _generate_update_recommendation(self, action_info: Dict) -> Optional[Dict]:
         """Generate update recommendations for the action."""
         action_name = action_info["name"]
         current_version = action_info["version"]
@@ -371,7 +369,7 @@ class GitHubActionsDependencyManager:
 
         return None
 
-    def generate_report(self, results: Dict)  str:
+    def generate_report(self, results: Dict) -> str:
         """Generate a human-readable report from validation results."""
         report_lines = [
             "GitHub Actions Dependency Validation Report",
@@ -426,12 +424,10 @@ def main():
     """Main entry point for the dependency manager."""
     if len(sys.argv) < 2:
         print(
-            "Usage: manage_github_actions_deps.py <repo_root> "
-            "[--window-days min,max]"
+            "Usage: manage_github_actions_deps.py <repo_root> " + "[--window-days min,max]"
         )
         print(
-            "Example: manage_github_actions_deps.py /path/to/repo "
-            "--window-days 30,90"
+            "Example: manage_github_actions_deps.py /path/to/repo " + "--window-days 30,90"
         )
         sys.exit(1)
 
@@ -441,14 +437,13 @@ def main():
     window_days = (30, 90)  # Default
     if "--window-days" in sys.argv:
         idx = sys.argv.index("--window-days")
-        if idx  1 < len(sys.argv):
+        if idx + 1 < len(sys.argv):
             try:
-                min_days, max_days = map(int, sys.argv[idx  1].split(","))
+                min_days, max_days = map(int, sys.argv[idx + 1].split(","))
                 window_days = (min_days, max_days)
             except ValueError:
                 print(
-                    "Error: --window-days must be in format 'min,max' "
-                    "(e.g., '30,90')"
+                    "Error: --window-days must be in format 'min,max' " + "(e.g., '30,90')"
                 )
                 sys.exit(1)
 
@@ -460,7 +455,7 @@ def main():
 
     # Generate and display report
     report = manager.generate_report(results)
-    print("\n"  report)
+    print("\n" + report)
 
     # Exit with appropriate code
     if results["violations"]:

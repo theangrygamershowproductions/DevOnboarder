@@ -7,7 +7,7 @@ from typing import Dict
 from .app import greet
 
 
-def _discover_plugins()  Dict[str, object]:
+def _discover_plugins() -> Dict[str, object]:
     """Return a mapping of plugin names to imported modules."""
     registry: Dict[str, object] = {}
     plugins_dir = Path(__file__).resolve().parents[2] / "plugins"

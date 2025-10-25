@@ -11,14 +11,14 @@ from typing import Optional
 import yaml
 
 
-def to_snake(name: str)  str:
+def to_snake(name: str) -> str:
     """Convert CamelCase to snake_case."""
     s = re.sub(r"(.)([A-Z][a-z])", r"\1_\2", name)
     s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s)
     return s.lower()
 
 
-def parse_header(path: Path)  Optional[str]:
+def parse_header(path: Path) -> Optional[str]:
     """Return the codex-agent name from ``path`` if present."""
     try:
         with path.open() as fh:
@@ -48,7 +48,7 @@ def parse_header(path: Path)  Optional[str]:
     return None
 
 
-def scan_workflows()  dict[str, str]:
+def scan_workflows() -> dict[str, str]:
     bots: dict[str, str] = {}
     for path in Path(".github/workflows").glob("*.yml"):
         name = parse_header(path)
@@ -57,7 +57,7 @@ def scan_workflows()  dict[str, str]:
     return bots
 
 
-def scan_index()  dict[str, str]:
+def scan_index() -> dict[str, str]:
     bots: dict[str, str] = {}
     index_path = Path(".codex/agents/index.json")
     if not index_path.exists():
@@ -73,7 +73,7 @@ def scan_index()  dict[str, str]:
     return bots
 
 
-def load_permissions()  set[str]:
+def load_permissions() -> set[str]:
     file = Path(".codex/bot-permissions.yaml")
     if not file.exists():
         return set()
@@ -81,7 +81,7 @@ def load_permissions()  set[str]:
     return set(data.keys())
 
 
-def main()  None:
+def main() -> None:
     bots = scan_workflows()
     bots.update(scan_index())
     permissions = load_permissions()

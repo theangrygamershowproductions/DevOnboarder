@@ -88,7 +88,7 @@ except:
                 token_status="audit_ready"
                 echo "Token audit system functional"
             else
-                token_status="audit_available_not_functional"
+    local audit_status="audit_available_not_functional"
                 echo "Token audit script available but not functional"
             fi
         else
@@ -105,7 +105,7 @@ except:
   "timestamp": "$(date -Iseconds)",
   "registry_available": $registry_available,
   "audit_capable": $audit_capable,
-  "token_status": "$token_status",
+  "audit_status": "$audit_status",
   "virtual_env_available": $([ -d ".venv" ] && echo "true" || echo "false"),
   "policy_version": "No Default Token Policy v1.0"
 }

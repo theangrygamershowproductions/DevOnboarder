@@ -276,7 +276,7 @@ PROTECTED_PATTERNS = {
 }
 
 
-def ensure_virtual_environment()  None:
+def ensure_virtual_environment() -> None:
     """Ensure script is running in virtual environment (DevOnboarder req)."""
     if not os.environ.get("VIRTUAL_ENV"):
         print("  Virtual environment not detected")
@@ -298,12 +298,12 @@ def ensure_virtual_environment()  None:
         sys.exit(1)
 
 
-def setup_logging()  None:
+def setup_logging() -> None:
     """Setup logging directory and file (DevOnboarder logging standards)."""
     LOGS_DIR.mkdir(exist_ok=True)
 
 
-def log_message(message: str, level: str = "INFO")  None:
+def log_message(message: str, level: str = "INFO") -> None:
     """Log message to file and optionally print to console."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_entry = f"[{timestamp}] [{level}] {message}\n"
@@ -315,7 +315,7 @@ def log_message(message: str, level: str = "INFO")  None:
         print(f" {level}: {message}")
 
 
-def load_current_dictionary()  Set[str]:
+def load_current_dictionary() -> Set[str]:
     """Load current .codespell-ignore entries."""
     if not CODESPELL_IGNORE_FILE.exists():
         log_message("No .codespell-ignore file found, creating new one", "WARNING")
@@ -335,7 +335,7 @@ def load_current_dictionary()  Set[str]:
     return entries
 
 
-def save_dictionary(entries: Set[str])  None:
+def save_dictionary(entries: Set[str]) -> None:
     """Save entries back to .codespell-ignore with DevOnboarder formatting."""
     # Separate file patterns from words
     file_patterns = set()
@@ -369,7 +369,7 @@ def save_dictionary(entries: Set[str])  None:
     log_message(f"Saved {len(entries)} entries to .codespell-ignore")
 
 
-def audit_dictionary()  Dict[str, Any]:
+def audit_dictionary() -> Dict[str, Any]:
     """Audit current dictionary and return analysis."""
     current_entries = load_current_dictionary()
 
@@ -395,7 +395,7 @@ def audit_dictionary()  Dict[str, Any]:
     return analysis
 
 
-def print_audit_report(analysis: Dict[str, Any])  None:
+def print_audit_report(analysis: Dict[str, Any]) -> None:
     """Print comprehensive audit report."""
     print("\n DevOnboarder Dictionary Audit Report")
     print("=" * 50)
@@ -406,7 +406,7 @@ def print_audit_report(analysis: Dict[str, Any])  None:
 
     if analysis["missing_core_terms"]:
         missing_count = len(analysis["missing_core_terms"])
-        print(f"\n  Missing {missing_count} core DevOnboarder terms:")
+        print(f"\n + Missing {missing_count} core DevOnboarder terms:")
         # Show first 10
         for term in sorted(analysis["missing_core_terms"])[:10]:
             print(f"   • {term}")
@@ -421,7 +421,7 @@ def print_audit_report(analysis: Dict[str, Any])  None:
     print(f"\n Log file: {LOG_FILE}")
 
 
-def add_core_terms()  int:
+def add_core_terms() -> int:
     """Add all missing DevOnboarder core terms."""
     current_entries = load_current_dictionary()
     missing_terms = DEVONBOARDER_CORE_TERMS - current_entries
@@ -437,7 +437,7 @@ def add_core_terms()  int:
     return len(missing_terms)
 
 
-def add_term(term: str)  bool:
+def add_term(term: str) -> bool:
     """Add a single term to dictionary."""
     current_entries = load_current_dictionary()
 
@@ -452,7 +452,7 @@ def add_term(term: str)  bool:
     return True
 
 
-def remove_term(term: str)  bool:
+def remove_term(term: str) -> bool:
     """Remove a term from dictionary (with protection for core terms)."""
     current_entries = load_current_dictionary()
 
@@ -471,7 +471,7 @@ def remove_term(term: str)  bool:
     return True
 
 
-def interactive_mode()  None:
+def interactive_mode() -> None:
     """Interactive mode for bulk dictionary management."""
     print("\n DevOnboarder Dictionary Interactive Mode")
     print("Commands: add <term>, remove <term>, audit, core, quit")
@@ -518,7 +518,7 @@ def interactive_mode()  None:
             print(f" Error: {e}")
 
 
-def main()  None:
+def main() -> None:
     """Main entry point following DevOnboarder script patterns."""
     parser = argparse.ArgumentParser(
         description=("Update DevOnboarder project dictionary for spell checking"),

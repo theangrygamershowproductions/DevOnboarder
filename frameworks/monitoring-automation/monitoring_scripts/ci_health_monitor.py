@@ -45,12 +45,11 @@ class CIHealthMonitor:
             "flaky_test_rate": "Rate of intermittent test failures",
         }
 
-    def validate_virtual_environment(self)  None:
+    def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             error_msg = (
-                "Virtual environment not detected. "
-                "DevOnboarder requires virtual environment isolation. "
+                "Virtual environment not detected. " + "DevOnboarder requires virtual environment isolation. "
                 "Run: python -m venv .venv && source .venv/bin/activate"
             )
             raise EnvironmentError(error_msg)
@@ -61,7 +60,7 @@ class CIHealthMonitor:
 
         print(f" Virtual environment validated: {self.venv_path}")
 
-    def collect_ci_metrics(self, days_back: int = 7)  Dict[str, Any]:
+    def collect_ci_metrics(self, days_back: int = 7) -> Dict[str, Any]:
         """Collect CI metrics from GitHub Actions."""
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days_back)
@@ -86,8 +85,7 @@ class CIHealthMonitor:
                 "--limit",
                 "100",
                 "--json",
-                "status,conclusion,createdAt,updatedAt,"
-                "workflowName,displayTitle,url,id",
+                "status,conclusion,createdAt,updatedAt," + "workflowName,displayTitle,url,id",
             ]
 
             result = subprocess.run(  # nosec B603 - Trusted GitHub CLI
@@ -122,7 +120,7 @@ class CIHealthMonitor:
 
         return metrics
 
-    def _calculate_summary_stats(self, runs: List[Dict[str, Any]])  Dict[str, Any]:
+    def _calculate_summary_stats(self, runs: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Calculate summary statistics from workflow runs."""
         if not runs:
             return {"total_runs": 0, "message": "No runs in period"}
@@ -168,7 +166,7 @@ class CIHealthMonitor:
             "max_duration_seconds": max(durations) if durations else 0,
         }
 
-    def _calculate_health_score(self, stats: Dict[str, Any])  float:
+    def _calculate_health_score(self, stats: Dict[str, Any]) -> float:
         """Calculate overall CI health score (0-100)."""
         if not stats or stats.get("total_runs", 0) == 0:
             return 0.0
@@ -195,7 +193,7 @@ class CIHealthMonitor:
         total_score = success_score  duration_score  reliability_score
         return round(total_score, 1)
 
-    def _generate_health_alerts(self, stats: Dict[str, Any])  List[Dict[str, Any]]:
+    def _generate_health_alerts(self, stats: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Generate health alerts based on thresholds."""
         alerts: List[Dict[str, Any]] = []
 
@@ -255,7 +253,7 @@ class CIHealthMonitor:
 
         return alerts
 
-    def generate_health_report(self, metrics: Dict[str, Any], output_path: str)  None:
+    def generate_health_report(self, metrics: Dict[str, Any], output_path: str) -> None:
         """Generate comprehensive CI health report."""
         report = {
             "ci_health_report": {
@@ -275,7 +273,7 @@ class CIHealthMonitor:
 
     def _generate_recommendations(
         self, metrics: Dict[str, Any]
-    )  List[Dict[str, str]]:
+    ) -> List[Dict[str, str]]:
         """Generate actionable recommendations based on metrics."""
         recommendations: List[Dict[str, str]] = []
         stats = metrics.get("summary_stats", {})
@@ -293,8 +291,7 @@ class CIHealthMonitor:
                         "category": "reliability",
                         "action": "Investigate and fix failing tests",
                         "description": (
-                            "Low success rate indicates systematic issues. "
-                            "Review recent failures and implement fixes."
+                            "Low success rate indicates systematic issues. " + "Review recent failures and implement fixes."
                         ),
                     }
                 )
@@ -305,8 +302,7 @@ class CIHealthMonitor:
                         "category": "performance",
                         "action": "Optimize CI pipeline performance",
                         "description": (
-                            "Long CI durations slow development. "
-                            "Consider parallelization and caching improvements."
+                            "Long CI durations slow development. " + "Consider parallelization and caching improvements."
                         ),
                     }
                 )
@@ -320,8 +316,7 @@ class CIHealthMonitor:
                     "category": "overall",
                     "action": "Implement CI health monitoring alerts",
                     "description": (
-                        "CI health score is below optimal. "
-                        "Set up proactive monitoring and alerting."
+                        "CI health score is below optimal. " + "Set up proactive monitoring and alerting."
                     ),
                 }
             )
@@ -330,7 +325,7 @@ class CIHealthMonitor:
 
     def monitor_continuously(
         self, interval_hours: int = 6, max_iterations: int = 0
-    )  None:
+    ) -> None:
         """Run continuous CI health monitoring."""
         print(
             f"SYNC: Starting continuous CI health monitoring "
@@ -341,7 +336,7 @@ class CIHealthMonitor:
         while max_iterations == 0 or iteration < max_iterations:
             try:
                 print(
-                    f"\n⏰ Health check #{iteration  1} "
+                    f"\n⏰ Health check #{iteration + 1} "
                     f"at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 )
 

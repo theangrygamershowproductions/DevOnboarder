@@ -44,7 +44,7 @@ class TokenLoader:
         self.project_root = self._find_project_root()
         self.tokens_file = self._determine_tokens_file()
 
-    def _find_project_root(self)  Path:
+    def _find_project_root(self) -> Path:
         """Find the project root directory."""
         current = Path.cwd()
 
@@ -59,7 +59,7 @@ class TokenLoader:
         # Fallback to current directory
         return Path.cwd()
 
-    def _determine_tokens_file(self)  str:
+    def _determine_tokens_file(self) -> str:
         """Determine which tokens file to load based on environment."""
         # CI environment takes precedence
         if os.getenv("CI"):
@@ -75,7 +75,7 @@ class TokenLoader:
         # Default to source of truth
         return ".tokens"
 
-    def _determine_env_file(self)  str:
+    def _determine_env_file(self) -> str:
         """Determine which .env file to load based on environment."""
         # CI environment takes precedence
         if os.getenv("CI"):
@@ -91,7 +91,7 @@ class TokenLoader:
         # Default to source of truth
         return ".env"
 
-    def _should_protect_ci_secret(self, key: str, value: str)  bool:
+    def _should_protect_ci_secret(self, key: str, value: str) -> bool:
         """Check if a CI secret should be protected from override.
 
         Parameters
@@ -110,7 +110,7 @@ class TokenLoader:
             bool(os.getenv("CI")) and value.startswith("ci_test_") and key in os.environ
         )
 
-    def _apply_ci_protection(self, key: str, value: str, loaded_tokens: dict)  bool:
+    def _apply_ci_protection(self, key: str, value: str, loaded_tokens: dict) -> bool:
         """Apply CI protection logic and update loaded_tokens.
 
         Parameters
@@ -130,14 +130,13 @@ class TokenLoader:
         if self._should_protect_ci_secret(key, value):
             # Skip setting test placeholder if real token already exists
             print(
-                f"🔒 Protecting CI secret: {key} "
-                "(not overriding with test placeholder)"
+                f"🔒 Protecting CI secret: {key} " + "(not overriding with test placeholder)"
             )
             loaded_tokens[key] = os.environ[key]  # Use existing value
             return True
         return False
 
-    def _load_env_tokens(self)  dict[str, str]:
+    def _load_env_tokens(self) -> dict[str, str]:
         """Load runtime tokens from appropriate .env file.
 
         Returns
@@ -190,7 +189,7 @@ class TokenLoader:
         except (OSError, IOError):
             return {}
 
-    def load_tokens(self, tokens_file_override: Optional[str] = None)  dict[str, str]:
+    def load_tokens(self, tokens_file_override: Optional[str] = None) -> dict[str, str]:
         """Load tokens from appropriate file.
 
         Parameters
@@ -256,7 +255,7 @@ class TokenLoader:
 
     def validate_required_tokens(
         self, required_tokens: list[str], notify_missing: bool = True
-    )  dict[str, bool]:
+    ) -> dict[str, bool]:
         """Validate that required tokens are available.
 
         Parameters
@@ -297,7 +296,7 @@ class TokenLoader:
 
         return token_status
 
-    def load_tokens_by_type(self, token_type: str = TOKEN_TYPE_ALL)  dict[str, str]:
+    def load_tokens_by_type(self, token_type: str = TOKEN_TYPE_ALL) -> dict[str, str]:
         """Load tokens filtered by type (cicd, runtime, or all).
 
         Loads CI/CD tokens from .tokens files and runtime tokens from .env files
@@ -334,7 +333,7 @@ class TokenLoader:
 
         return all_tokens
 
-    def get_token_classification(self, token_name: str)  str:
+    def get_token_classification(self, token_name: str) -> str:
         """Get the classification of a specific token.
 
         Parameters
@@ -345,8 +344,7 @@ class TokenLoader:
         Returns
         -------
         str
-            Token classification: TOKEN_TYPE_CICD, TOKEN_TYPE_RUNTIME, or "unknown"
-        """
+            Token classification: TOKEN_TYPE_CICD, TOKEN_TYPE_RUNTIME, or "unknown" + """
         if token_name in self.CICD_TOKENS:
             return self.TOKEN_TYPE_CICD
         elif token_name in self.RUNTIME_TOKENS:
@@ -354,7 +352,7 @@ class TokenLoader:
         else:
             return "unknown"
 
-    def list_tokens_by_type(self)  dict[str, list[str]]:
+    def list_tokens_by_type(self) -> dict[str, list[str]]:
         """List all known tokens organized by type.
 
         Returns
@@ -367,7 +365,7 @@ class TokenLoader:
             "runtime": sorted(list(self.RUNTIME_TOKENS)),
         }
 
-    def _create_tokens_template(self, tokens_path: Path)  None:
+    def _create_tokens_template(self, tokens_path: Path) -> None:
         """Create a template tokens file with standard DevOnboarder tokens.
 
         Parameters
@@ -441,9 +439,9 @@ STAGING_ORCHESTRATION_BOT_KEY={placeholder_prefix}staging_orchestration_bot_key_
             print(f" Error creating tokens template: {e}")
             raise
 
-    def _notify_missing_tokens(self, missing_tokens: list[str])  None:
+    def _notify_missing_tokens(self, missing_tokens: list[str]) -> None:
         """Provide user notification about missing tokens."""
-        print("\n  MISSING TOKENS DETECTED")
+        print("\n + MISSING TOKENS DETECTED")
         print("━" * 50)
 
         for token_name in missing_tokens:
@@ -479,7 +477,7 @@ STAGING_ORCHESTRATION_BOT_KEY={placeholder_prefix}staging_orchestration_bot_key_
 
     def require_tokens(
         self, required_tokens: list[str], service_name: str = "Service"
-    )  bool:
+    ) -> bool:
         """Require specific tokens and exit if missing.
 
         Parameters
@@ -511,7 +509,7 @@ STAGING_ORCHESTRATION_BOT_KEY={placeholder_prefix}staging_orchestration_bot_key_
             print(f" {service_name}: All required tokens available")
             return True
 
-    def get_token_info(self)  dict[str, str | bool]:
+    def get_token_info(self) -> dict[str, str | bool]:
         """Get information about current token loading configuration."""
         return {
             "project_root": str(self.project_root),
@@ -527,7 +525,7 @@ STAGING_ORCHESTRATION_BOT_KEY={placeholder_prefix}staging_orchestration_bot_key_
 _token_loader = TokenLoader()
 
 
-def load_tokens(tokens_file_override: Optional[str] = None)  dict[str, str]:
+def load_tokens(tokens_file_override: Optional[str] = None) -> dict[str, str]:
     """Convenience function to load tokens.
 
     Parameters
@@ -545,7 +543,7 @@ def load_tokens(tokens_file_override: Optional[str] = None)  dict[str, str]:
 
 def validate_required_tokens(
     required_tokens: list[str], notify_missing: bool = True
-)  dict[str, bool]:
+) -> dict[str, bool]:
     """Convenience function to validate required tokens.
 
     Parameters
@@ -563,7 +561,7 @@ def validate_required_tokens(
     return _token_loader.validate_required_tokens(required_tokens, notify_missing)
 
 
-def require_tokens(required_tokens: list[str], service_name: str = "Service")  bool:
+def require_tokens(required_tokens: list[str], service_name: str = "Service") -> bool:
     """Convenience function to require specific tokens and exit if missing.
 
     Parameters
@@ -581,7 +579,7 @@ def require_tokens(required_tokens: list[str], service_name: str = "Service")  b
     return _token_loader.require_tokens(required_tokens, service_name)
 
 
-def get_token_info()  dict[str, str | bool]:
+def get_token_info() -> dict[str, str | bool]:
     """Convenience function to get token loading info."""
     return _token_loader.get_token_info()
 
@@ -628,14 +626,14 @@ if __name__ == "__main__":
             print("Usage: python token_loader.py [command] [options]")
             print()
             print("Commands:")
-            print("  info                    Show token configuration details")
+            print("  info + Show token configuration details")
             print("  load [file]             Load tokens (auto-creates if missing)")
-            print("  validate TOKEN1 TOKEN2  Validate specific tokens")
+            print("  validate TOKEN1 TOKEN2 + Validate specific tokens")
             print()
             print("Features:")
-            print("  🤖 Auto-Creation      Missing .tokens files created automatically")
-            print("  🌍 Environment-Aware   Different templates per environment")
-            print("  🔔 Smart Validation    Detects placeholder values")
+            print("  🤖 Auto-Creation + Missing .tokens files created automatically")
+            print("  🌍 Environment-Aware + Different templates per environment")
+            print("  🔔 Smart Validation + Detects placeholder values")
             print("  🔒 Security Boundaries Separates tokens from configuration")
             print()
             print("Examples:")

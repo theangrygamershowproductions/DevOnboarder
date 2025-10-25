@@ -10,7 +10,7 @@ from pathlib import Path
 import requests
 
 
-def read_coverage(path: Path)  float:
+def read_coverage(path: Path) -> float:
     """Return the average coverage percentage from the summary file."""
     text = path.read_text(encoding="utf-8")
     numbers = [float(m.group(1)) for m in re.finditer(r"([0-9](?:\.[0-9])?)%", text)]
@@ -19,7 +19,7 @@ def read_coverage(path: Path)  float:
     return sum(numbers) / len(numbers)
 
 
-def badge_color(pct: float)  str:
+def badge_color(pct: float) -> str:
     if pct >= 95:
         return "brightgreen"
     if pct >= 90:
@@ -29,7 +29,7 @@ def badge_color(pct: float)  str:
     return "red"
 
 
-def fetch_badge(pct: float)  bytes:
+def fetch_badge(pct: float) -> bytes:
     """Return an SVG badge for the given coverage percentage."""
     if os.getenv("OFFLINE_BADGE") == "1":
         template = Path("scripts/offline_badge_template.svg")
@@ -60,7 +60,7 @@ def fetch_badge(pct: float)  bytes:
     return resp.content
 
 
-def main()  None:
+def main() -> None:
     summary = Path(sys.argv[1] if len(sys.argv) > 1 else "coverage-summary.md")
     output = Path(sys.argv[2] if len(sys.argv) > 2 else "coverage.svg")
     pct = read_coverage(summary)

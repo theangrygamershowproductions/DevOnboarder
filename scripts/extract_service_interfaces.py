@@ -23,7 +23,7 @@ def setup_logging():
     return log_file
 
 
-def analyze_fastapi_routes(service_path: str)  Dict[str, List[Dict[str, str]]]:
+def analyze_fastapi_routes(service_path: str) -> Dict[str, List[Dict[str, str]]]:
     """Extract FastAPI routes and their details."""
     routes = {}
     service_path = Path(service_path)
@@ -58,7 +58,7 @@ def analyze_fastapi_routes(service_path: str)  Dict[str, List[Dict[str, str]]]:
 
 def extract_route_info(
     decorator, function_node, file_content: str
-)  Optional[Dict[str, str]]:  # noqa: E501
+) -> Optional[Dict[str, str]]:  # noqa: E501
     """Extract route information from FastAPI decorator."""
     route_info = None
 
@@ -114,7 +114,7 @@ def extract_route_info(
     return route_info
 
 
-def analyze_database_models(src_path: str = "src")  Dict[str, List[str]]:
+def analyze_database_models(src_path: str = "src") -> Dict[str, List[str]]:
     """Extract database model definitions and relationships."""
     models = {}
     src_path = Path(src_path)
@@ -154,7 +154,7 @@ def analyze_database_models(src_path: str = "src")  Dict[str, List[str]]:
     return models
 
 
-def analyze_service_ports(src_path: str = "src")  Dict[str, List[str]]:
+def analyze_service_ports(src_path: str = "src") -> Dict[str, List[str]]:
     """Extract service port configurations."""
     ports = {}
     src_path = Path(src_path)
@@ -193,7 +193,7 @@ def analyze_service_ports(src_path: str = "src")  Dict[str, List[str]]:
     return ports
 
 
-def generate_service_contract_docs(routes: Dict, models: Dict, ports: Dict)  str:
+def generate_service_contract_docs(routes: Dict, models: Dict, ports: Dict) -> str:
     """Generate comprehensive service API contract documentation."""
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -291,15 +291,11 @@ strategic repository separation post-MVP.
         )
 
     contract = """
-### Recommendations
-
-1. **Low Risk Services**: Can be split immediately post-MVP
+### Recommendations + 1. **Low Risk Services**: Can be split immediately post-MVP
 2. **Medium Risk Services**: Require API contract stabilization (1-2 iterations)
 3. **High Risk Services**: Defer split until service boundaries mature (3-4 iterations)
 
-### Next Steps
-
-1. Run service dependency analysis: `bash scripts/analyze_service_dependencies.sh`
+### Next Steps + 1. Run service dependency analysis: `bash scripts/analyze_service_dependencies.sh`
 2. Catalog shared resources: `bash scripts/catalog_shared_resources.sh`
 3. Generate repository templates: `bash scripts/generate_repo_templates.sh`
 
@@ -312,7 +308,7 @@ for post-MVP service boundary extraction.*
     return contract
 
 
-def extract_service_name(file_path: str)  str:
+def extract_service_name(file_path: str) -> str:
     """Extract service name from file path."""
     path_parts = Path(file_path).parts
 

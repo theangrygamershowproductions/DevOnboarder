@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 
-def fix_md029_ordered_lists(content: str)  str:
+def fix_md029_ordered_lists(content: str) -> str:
     """Fix MD029: Ordered list item prefix - restart numbering at 1."""
     lines = content.split("\n")
     result = []
@@ -31,7 +31,7 @@ def fix_md029_ordered_lists(content: str)  str:
             # Replace the number with the correct counter
             indentation = len(line) - len(line.lstrip())
             rest_of_line = re.sub(r"^\s*\d\.\s*", "", line)
-            result.append(" " * indentation  f"{list_counter}. {rest_of_line}")
+            result.append(" " * indentation + f"{list_counter}. {rest_of_line}")
             list_counter = 1
         else:
             # Not an ordered list item
@@ -51,7 +51,7 @@ def fix_md029_ordered_lists(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md022_blanks_around_headings(content: str)  str:
+def fix_md022_blanks_around_headings(content: str) -> str:
     """Fix MD022: Blanks around headings."""
     lines = content.split("\n")
     result = []
@@ -70,7 +70,7 @@ def fix_md022_blanks_around_headings(content: str)  str:
             result.append(line)
 
             # Add blank line after heading (if not already present and not last line)
-            if i < len(lines) - 1 and lines[i  1].strip() != "":
+            if i < len(lines) - 1 and lines[i + 1].strip() != "":
                 result.append("")
         else:
             result.append(line)
@@ -78,7 +78,7 @@ def fix_md022_blanks_around_headings(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md032_blanks_around_lists(content: str)  str:
+def fix_md032_blanks_around_lists(content: str) -> str:
     """Fix MD032: Blanks around lists."""
     lines = content.split("\n")
     result = []
@@ -108,7 +108,7 @@ def fix_md032_blanks_around_lists(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md058_blanks_around_tables(content: str)  str:
+def fix_md058_blanks_around_tables(content: str) -> str:
     """Fix MD058: Blanks around tables."""
     lines = content.split("\n")
     result = []
@@ -139,7 +139,7 @@ def fix_md058_blanks_around_tables(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md036_emphasis_instead_of_heading(content: str)  str:
+def fix_md036_emphasis_instead_of_heading(content: str) -> str:
     """Fix MD036: Emphasis used instead of heading."""
     lines = content.split("\n")
     result = []
@@ -157,7 +157,7 @@ def fix_md036_emphasis_instead_of_heading(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md031_blanks_around_fences(content: str)  str:
+def fix_md031_blanks_around_fences(content: str) -> str:
     """Fix MD031: Blanks around fences (enhanced)."""
     lines = content.split("\n")
     result: list[str] = []
@@ -177,7 +177,7 @@ def fix_md031_blanks_around_fences(content: str)  str:
             # Ending a fence
             result.append(line)
             # Add blank line after if needed
-            if i < len(lines) - 1 and lines[i  1].strip() != "":
+            if i < len(lines) - 1 and lines[i + 1].strip() != "":
                 result.append("")
             in_fence = False
         else:
@@ -186,7 +186,7 @@ def fix_md031_blanks_around_fences(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md026_trailing_punctuation_in_headings(content: str)  str:
+def fix_md026_trailing_punctuation_in_headings(content: str) -> str:
     """Fix MD026: Remove trailing punctuation from headings."""
     lines = content.split("\n")
     result = []
@@ -201,7 +201,7 @@ def fix_md026_trailing_punctuation_in_headings(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md001_heading_increment(content: str)  str:
+def fix_md001_heading_increment(content: str) -> str:
     """Fix MD001: Heading levels should only increment by one level at a time."""
     lines = content.split("\n")
     result = []
@@ -214,9 +214,9 @@ def fix_md001_heading_increment(content: str)  str:
             current_level = len(heading_match.group(1))
 
             # If jumping more than 1 level, adjust to be 1 level deeper
-            if current_level > last_heading_level  1:
-                new_level = last_heading_level  1
-                line = "#" * new_level  line[current_level:]
+            if current_level > last_heading_level + 1:
+                new_level = last_heading_level + 1
+                line = "#" * new_level + line[current_level:]
                 last_heading_level = new_level
             else:
                 last_heading_level = current_level
@@ -225,7 +225,7 @@ def fix_md001_heading_increment(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md040_fenced_code_language(content: str)  str:
+def fix_md040_fenced_code_language(content: str) -> str:
     """Fix MD040: Add language to fenced code blocks."""
     lines = content.split("\n")
     result = []
@@ -241,7 +241,7 @@ def fix_md040_fenced_code_language(content: str)  str:
     return "\n".join(result)
 
 
-def fix_md024_duplicate_headings(content: str)  str:
+def fix_md024_duplicate_headings(content: str) -> str:
     """Fix MD024: Handle duplicate headings by adding context numbers."""
     lines = content.split("\n")
     result: list[str] = []
@@ -267,7 +267,7 @@ def fix_md024_duplicate_headings(content: str)  str:
     return "\n".join(result)
 
 
-def fix_markdown_file(file_path: Path)  bool:
+def fix_markdown_file(file_path: Path) -> bool:
     """Fix all markdown issues in a file."""
     try:
         content = file_path.read_text(encoding="utf-8")

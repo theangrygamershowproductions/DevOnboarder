@@ -148,9 +148,7 @@ class CIFailureAnalyzer:
             },
             "install_dependencies": {
                 "command": (
-                    "pip install -e .[test] && "
-                    "npm ci --prefix frontend && "
-                    "npm ci --prefix bot"
+                    "pip install -e .[test] && " + "npm ci --prefix frontend && " + "npm ci --prefix bot"
                 ),
                 "description": "Reinstall all project dependencies",
                 "success_rate": 0.85,
@@ -182,11 +180,7 @@ class CIFailureAnalyzer:
             },
             "fix_yaml_formatting": {
                 "command": (
-                    "yamllint -c .github/.yamllint-config "
-                    ".github/workflows/**/*.yml && "
-                    "yq --yaml-output '.' .github/workflows/*.yml "
-                    "> /tmp/formatted.yml && "
-                    "mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml"
+                    "yamllint -c .github/.yamllint-config " + ".github/workflows/**/*.yml && " + "yq --yaml-output '.' .github/workflows/*.yml " + "> /tmp/formatted.yml && " + "mv /tmp/formatted.yml .github/workflows/ci-failure-analyzer.yml"
                 ),
                 "description": "Fix YAML formatting and indentation issues",
                 "success_rate": 0.90,
@@ -200,16 +194,14 @@ class CIFailureAnalyzer:
             },
             "fix_pre_commit_issues": {
                 "command": (
-                    "pre-commit run --all-files && "
-                    "git add . && "
-                    "git commit --amend --no-edit"
+                    "pre-commit run --all-files && " + "git add . && " + "git commit --amend --no-edit"
                 ),
                 "description": "Fix pre-commit hooks and update commit",
                 "success_rate": 0.85,
             },
         }
 
-    def validate_virtual_environment(self)  None:
+    def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             print(" Virtual environment not detected")
@@ -224,7 +216,7 @@ class CIFailureAnalyzer:
 
         print(f" Virtual environment validated: {self.venv_path}")
 
-    def analyze_failure_log(self, log_content: str)  Dict[str, Any]:
+    def analyze_failure_log(self, log_content: str) -> Dict[str, Any]:
         """Analyze CI failure log and classify failure types."""
         analysis: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
@@ -282,23 +274,23 @@ class CIFailureAnalyzer:
             ]
             analysis["auto_fixable"] = primary["auto_fixable"]
             analysis["confidence_score"] = min(
-                0.95, 0.3  (primary["match_count"] * 0.1)
+                0.95, 0.3 + (primary["match_count"] * 0.1)
             )
 
         return analysis
 
     def _extract_line_context(
         self, content: str, position: int, context_lines: int = 2
-    )  List[str]:
+    ) -> List[str]:
         """Extract surrounding lines for better failure context."""
         lines = content[:position].split("\n")
         start_line = max(0, len(lines) - context_lines - 1)
-        end_line = min(len(content.split("\n")), len(lines)  context_lines)
+        end_line = min(len(content.split("\n")), len(lines) + context_lines)
 
         all_lines = content.split("\n")
         return all_lines[start_line:end_line]
 
-    def generate_resolution_plan(self, analysis: Dict[str, Any])  Dict[str, Any]:
+    def generate_resolution_plan(self, analysis: Dict[str, Any]) -> Dict[str, Any]:
         """Generate automated resolution plan based on failure analysis."""
         if not analysis["primary_failure"]:
             return {
@@ -340,7 +332,7 @@ class CIFailureAnalyzer:
 
         return plan
 
-    def save_analysis_report(self, analysis: Dict[str, Any], output_path: str)  None:
+    def save_analysis_report(self, analysis: Dict[str, Any], output_path: str) -> None:
         """Save analysis report with DevOnboarder-compliant formatting."""
         report = {
             "enhanced_ci_analysis": {
@@ -362,7 +354,7 @@ class CIFailureAnalyzer:
         analysis: Dict[str, Any],
         resolution_plan: Dict[str, Any],
         workflow_run_id: Optional[str] = None,
-    )  bool:
+    ) -> bool:
         """Generate AAR report for significant CI failures.
 
         Parameters

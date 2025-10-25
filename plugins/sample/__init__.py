@@ -3,6 +3,6 @@
 MESSAGE = "Sample plugin loaded"
 
 
-def register()  str:
+def register() -> str:
     """Return a sample registration message."""
     return MESSAGE

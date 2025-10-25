@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Tuple, Any
 
 
-def extract_coverage_from_log(log_path: Path)  Tuple[float, str]:
+def extract_coverage_from_log(log_path: Path) -> Tuple[float, str]:
     """Extract coverage percentage from pytest log file.
 
     Parameters
@@ -53,7 +53,7 @@ def extract_coverage_from_log(log_path: Path)  Tuple[float, str]:
     return 0.0, ""
 
 
-def get_service_info()  Dict[str, Dict[str, Any]]:
+def get_service_info() -> Dict[str, Dict[str, Any]]:
     """Get service configuration and expected thresholds.
 
     Returns
@@ -96,7 +96,7 @@ def get_service_info()  Dict[str, Dict[str, Any]]:
     }
 
 
-def generate_markdown_report()  str:
+def generate_markdown_report() -> str:
     """Generate markdown coverage report.
 
     Returns
@@ -184,14 +184,12 @@ def generate_markdown_report()  str:
             )
 
         report = (
-            "\n **Recommendation**: Start with services having the "
-            "largest coverage gaps for maximum improvement impact.\n"
+            "\n **Recommendation**: Start with services having the " + "largest coverage gaps for maximum improvement impact.\n"
         )
     else:
         report = "\n## 🎉 Excellent Quality Achievement!\n\n"
         all_services_msg = (
-            "All services are meeting or exceeding their "
-            "coverage thresholds. DevOnboarder maintains "
+            "All services are meeting or exceeding their " + "coverage thresholds. DevOnboarder maintains "
             "high quality across all components.\n"
         )
         report = all_services_msg
@@ -219,7 +217,7 @@ def generate_markdown_report()  str:
     return report
 
 
-def main()  None:
+def main() -> None:
     """Generate and save coverage report."""
     report = generate_markdown_report()
 
@@ -231,7 +229,7 @@ def main()  None:
     print(f"Per-service coverage report generated: {output_file}")
 
     # Also print to stdout for CI visibility
-    print("\n"  report)
+    print("\n" + report)
 
 
 if __name__ == "__main__":

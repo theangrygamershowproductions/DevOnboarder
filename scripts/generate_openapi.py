@@ -17,7 +17,7 @@ os.environ.setdefault("APP_ENV", "development")
 from devonboarder.auth_service import create_app  # noqa: E402
 
 
-def main()  None:
+def main() -> None:
     """Write the application's OpenAPI spec to ``src/devonboarder/openapi.json``."""
     import subprocess  # nosec B404
 

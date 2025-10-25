@@ -15,7 +15,7 @@ ENV_FILES = [
 ]
 
 
-def read_env_vars(paths: list[Path])  set[str]:
+def read_env_vars(paths: list[Path]) -> set[str]:
     pattern = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)=")
     vars: set[str] = set()
     for p in paths:
@@ -29,7 +29,7 @@ def read_env_vars(paths: list[Path])  set[str]:
     return vars
 
 
-def read_doc_table(path: Path)  dict[str, str]:
+def read_doc_table(path: Path) -> dict[str, str]:
     pattern = re.compile(r"^\|\s*([A-Za-z0-9_])\s*\|\s*(.*?)\s*\|$")
     table: dict[str, str] = {}
     lines = path.read_text().splitlines()
@@ -39,10 +39,10 @@ def read_doc_table(path: Path)  dict[str, str]:
         if line.startswith("|") and not line.rstrip().endswith("|"):
             j = i
             parts = [line.rstrip()]
-            while j  1 < len(lines) and not lines[j  1].rstrip().endswith("|"):
+            while j + 1 < len(lines) and not lines[j + 1].rstrip().endswith("|"):
                 j = 1
                 parts.append(lines[j].rstrip())
-            if j  1 < len(lines):
+            if j + 1 < len(lines):
                 j = 1
                 parts.append(lines[j].rstrip())
             line = " ".join(parts)
@@ -54,7 +54,7 @@ def read_doc_table(path: Path)  dict[str, str]:
     return table
 
 
-def build_table(vars: set[str], existing: dict[str, str])  list[str]:
+def build_table(vars: set[str], existing: dict[str, str]) -> list[str]:
     width = max(len("Variable"), *(len(v) for v in vars))
     header = f"| {'Variable'.ljust(width)} | Description |"
     separator = f"| {'-' * width} | ----------- |"
@@ -65,7 +65,7 @@ def build_table(vars: set[str], existing: dict[str, str])  list[str]:
     return lines
 
 
-def replace_table(doc_lines: list[str], table_lines: list[str])  list[str]:
+def replace_table(doc_lines: list[str], table_lines: list[str]) -> list[str]:
     start = None
     for i, line in enumerate(doc_lines):
         if line.strip() == "## Required Environment Variables":
@@ -75,8 +75,8 @@ def replace_table(doc_lines: list[str], table_lines: list[str])  list[str]:
         raise RuntimeError("Section header not found")
 
     # copy lines up to end of header and any explanatory text
-    result = doc_lines[: start  1]
-    i = start  1
+    result = doc_lines[: start + 1]
+    i = start + 1
     while i < len(doc_lines) and not doc_lines[i].startswith("|"):
         result.append(doc_lines[i])
         i = 1
@@ -94,13 +94,13 @@ def replace_table(doc_lines: list[str], table_lines: list[str])  list[str]:
     return result
 
 
-def main()  None:
+def main() -> None:
     env_vars = read_env_vars(ENV_FILES)
     doc_lines = DOC_PATH.read_text().splitlines()
     existing = read_doc_table(DOC_PATH)
     table_lines = build_table(env_vars, existing)
     new_content = replace_table(doc_lines, table_lines)
-    DOC_PATH.write_text("\n".join(new_content)  "\n")
+    DOC_PATH.write_text("\n".join(new_content) + "\n")
     print(f"Updated {DOC_PATH} with {len(env_vars)} variables")
 
 

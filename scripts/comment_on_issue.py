@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-def run_command(cmd: list[str])  tuple[str, int]:
+def run_command(cmd: list[str]) -> tuple[str, int]:
     """Run shell command and return output and exit code."""
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=False)
@@ -23,7 +23,7 @@ def run_command(cmd: list[str])  tuple[str, int]:
         return f"Error: {e}", 1
 
 
-def get_aar_summary(aar_path: str)  dict[str, str]:
+def get_aar_summary(aar_path: str) -> dict[str, str]:
     """Extract key insights from AAR file for comment summary."""
     if not os.path.exists(aar_path):
         return {"status": "AAR file not found"}
@@ -46,26 +46,26 @@ def get_aar_summary(aar_path: str)  dict[str, str]:
         for i, line in enumerate(lines):
             if "Files Changed:" in line or "Changed Files:" in line:
                 # Look for number in next few lines
-                for j in range(i, min(i  5, len(lines))):
+                for j in range(i, min(i + 5, len(lines))):
                     if lines[j].strip().isdigit():
                         summary["files_changed"] = lines[j].strip()
                         break
             elif "Agents Updated:" in line or "Codex Agents:" in line:
                 # Extract agent count
-                for j in range(i, min(i  3, len(lines))):
+                for j in range(i, min(i + 3, len(lines))):
                     if lines[j].strip().isdigit():
                         summary["agents_updated"] = lines[j].strip()
                         break
             elif "Action Items:" in line:
                 # Count action items
                 action_count = 0
-                for j in range(i  1, min(i  20, len(lines))):
+                for j in range(i + 1, min(i + 20, len(lines))):
                     if lines[j].strip().startswith("- [ ]"):
                         action_count = 1
                 summary["action_items"] = str(action_count)
             elif "Codex Alignment:" in line:
                 # Check alignment status
-                if "Verified" in content[i : i  100]:
+                if "Verified" in content[i : i + 100]:
                     summary["codex_alignment"] = "Verified"
 
         return summary
@@ -76,10 +76,10 @@ def get_aar_summary(aar_path: str)  dict[str, str]:
 
 def create_structured_comment(
     ref_type: str, ref_number: str, aar_summary: dict[str, str]
-)  str:
+) -> str:
     """Create structured comment for GitHub issue/PR."""
 
-    quarter = f"Q{((datetime.now().month - 1) // 3)  1}"
+    quarter = f"Q{((datetime.now().month - 1) // 3) + 1}"
     year = datetime.now().year
 
     if ref_type == "pull_request":
@@ -133,7 +133,7 @@ This AAR is immediately accessible in VSCode via:
     return comment
 
 
-def post_github_comment(ref_type: str, ref_number: str, comment_body: str)  bool:
+def post_github_comment(ref_type: str, ref_number: str, comment_body: str) -> bool:
     """Post comment to GitHub issue or PR using GitHub CLI."""
 
     if ref_type == "pull_request":
@@ -177,7 +177,7 @@ def main():
 
     # Find AAR file if not provided
     if not args.aar_path:
-        quarter = f"Q{((datetime.now().month - 1) // 3)  1}"
+        quarter = f"Q{((datetime.now().month - 1) // 3) + 1}"
         year = datetime.now().year
 
         if ref_type == "pull_request":

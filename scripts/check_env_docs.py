@@ -15,7 +15,7 @@ ENV_FILES = [
 ]
 
 
-def read_doc_vars(path: Path)  set[str]:
+def read_doc_vars(path: Path) -> set[str]:
     """Return variable names listed in the docs table."""
     pattern = re.compile(r"^\|\s*([A-Z0-9_])\b")
     vars: set[str] = set()
@@ -27,7 +27,7 @@ def read_doc_vars(path: Path)  set[str]:
     return vars
 
 
-def read_env_vars(paths: list[Path])  set[str]:
+def read_env_vars(paths: list[Path]) -> set[str]:
     """Return variable names from example .env files."""
     pattern = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)=")
     vars: set[str] = set()
@@ -40,7 +40,7 @@ def read_env_vars(paths: list[Path])  set[str]:
     return vars
 
 
-def main()  int:
+def main() -> int:
     doc_vars = read_doc_vars(DOC_PATH)
     env_vars = read_env_vars(ENV_FILES)
 

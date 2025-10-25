@@ -90,7 +90,7 @@ class PolicyRule(ABC):
     @abstractmethod
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         """
         Check if the script/metadata violates this policy rule.
 
@@ -104,7 +104,7 @@ class PolicyRule(ABC):
         pass
 
     @abstractmethod
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         """Get the name of this policy rule"""
         pass
 
@@ -114,7 +114,7 @@ class MetadataRequiredRule(PolicyRule):
 
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         if metadata is None:
             return [
                 PolicyViolation(
@@ -127,7 +127,7 @@ class MetadataRequiredRule(PolicyRule):
             ]
         return []
 
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         return "metadata_required"
 
 
@@ -145,7 +145,7 @@ class GovernanceLevelRule(PolicyRule):
 
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         if metadata is None:
             return []  # Handled by MetadataRequiredRule
 
@@ -175,7 +175,7 @@ class GovernanceLevelRule(PolicyRule):
 
         return violations
 
-    def _level_priority(self, level: GovernanceLevel)  int:
+    def _level_priority(self, level: GovernanceLevel) -> int:
         """Get numeric priority for governance level (higher = more restrictive)"""
         priorities = {
             GovernanceLevel.LOW: 1,
@@ -187,7 +187,7 @@ class GovernanceLevelRule(PolicyRule):
 
     def _get_severity_for_level(
         self, level: GovernanceLevel
-    )  PolicyViolationSeverity:
+    ) -> PolicyViolationSeverity:
         """Get violation severity based on required governance level"""
         severity_map = {
             GovernanceLevel.LOW: PolicyViolationSeverity.LOW,
@@ -197,7 +197,7 @@ class GovernanceLevelRule(PolicyRule):
         }
         return severity_map[level]
 
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         return "governance_level"
 
 
@@ -215,7 +215,7 @@ class ComplianceTagRule(PolicyRule):
 
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         if metadata is None:
             return []  # Handled by MetadataRequiredRule
 
@@ -242,7 +242,7 @@ class ComplianceTagRule(PolicyRule):
 
         return violations
 
-    def _get_severity_for_tag(self, tag: ComplianceTag)  PolicyViolationSeverity:
+    def _get_severity_for_tag(self, tag: ComplianceTag) -> PolicyViolationSeverity:
         """Get violation severity based on compliance tag"""
         severity_map = {
             ComplianceTag.SECURITY: PolicyViolationSeverity.HIGH,
@@ -253,7 +253,7 @@ class ComplianceTagRule(PolicyRule):
         }
         return severity_map.get(tag, PolicyViolationSeverity.MEDIUM)
 
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         return "compliance_tags"
 
 
@@ -265,7 +265,7 @@ class ApprovalRequiredRule(PolicyRule):
 
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         if metadata is None:
             return []  # Handled by MetadataRequiredRule
 
@@ -290,7 +290,7 @@ class ApprovalRequiredRule(PolicyRule):
 
     def _get_severity_for_level(
         self, level: GovernanceLevel
-    )  PolicyViolationSeverity:
+    ) -> PolicyViolationSeverity:
         """Get violation severity based on governance level"""
         severity_map = {
             GovernanceLevel.LOW: PolicyViolationSeverity.LOW,
@@ -300,7 +300,7 @@ class ApprovalRequiredRule(PolicyRule):
         }
         return severity_map[level]
 
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         return "approval_required"
 
 
@@ -309,7 +309,7 @@ class AuditOverdueRule(PolicyRule):
 
     def check(
         self, script_path: Path, metadata: Optional[ExtendedMetadata]
-    )  List[PolicyViolation]:
+    ) -> List[PolicyViolation]:
         if metadata is None:
             return []  # Handled by MetadataRequiredRule
 
@@ -336,7 +336,7 @@ class AuditOverdueRule(PolicyRule):
 
         return []
 
-    def _get_severity_for_overdue_days(self, days: int)  PolicyViolationSeverity:
+    def _get_severity_for_overdue_days(self, days: int) -> PolicyViolationSeverity:
         """Get violation severity based on overdue days"""
         if days > 90:
             return PolicyViolationSeverity.CRITICAL
@@ -347,7 +347,7 @@ class AuditOverdueRule(PolicyRule):
         else:
             return PolicyViolationSeverity.LOW
 
-    def get_rule_name(self)  str:
+    def get_rule_name(self) -> str:
         return "audit_overdue"
 
 
@@ -417,7 +417,7 @@ class ApprovalManager:
         metadata: ExtendedMetadata,
         requested_by: str,
         reason: str,
-    )  ApprovalRequest:
+    ) -> ApprovalRequest:
         """Request approval for a script"""
         request = ApprovalRequest(
             script_path=script_path,
@@ -437,7 +437,7 @@ class ApprovalManager:
 
     def approve(
         self, script_path: Path, approved_by: str, notes: Optional[str] = None
-    )  bool:
+    ) -> bool:
         """Approve a script"""
         key = str(script_path)
         if key not in self.approvals:
@@ -455,7 +455,7 @@ class ApprovalManager:
         logger.info(f"Script {script_path.name} approved by {approved_by}")
         return True
 
-    def is_approved(self, script_path: Path)  bool:
+    def is_approved(self, script_path: Path) -> bool:
         """Check if a script is approved"""
         key = str(script_path)
         if key not in self.approvals:
@@ -464,7 +464,7 @@ class ApprovalManager:
         request = self.approvals[key]
         return request.approved is True
 
-    def add_approval(self, request: ApprovalRequest)  None:
+    def add_approval(self, request: ApprovalRequest) -> None:
         """Add an approval request directly to the manager"""
         key = str(request.script_path)
         self.approvals[key] = request
@@ -561,7 +561,7 @@ class GovernancePolicyEngine:
         self.policy_rules.append(rule)
         logger.debug(f"Added policy rule: {rule.get_rule_name()}")
 
-    def check_script_compliance(self, script_path: Path)  List[PolicyViolation]:
+    def check_script_compliance(self, script_path: Path) -> List[PolicyViolation]:
         """
         Check a script for policy compliance.
 
@@ -596,7 +596,7 @@ class GovernancePolicyEngine:
 
     def check_directory_compliance(
         self, directory: Path, script_patterns: List[str] = ["*.sh", "*.py"]
-    )  Dict[Path, List[PolicyViolation]]:
+    ) -> Dict[Path, List[PolicyViolation]]:
         """
         Check all scripts in a directory for compliance.
 
@@ -618,13 +618,13 @@ class GovernancePolicyEngine:
 
         return results
 
-    def is_script_compliant(self, script_path: Path)  bool:
+    def is_script_compliant(self, script_path: Path) -> bool:
         """Check if a script is compliant (no blocking violations)"""
         violations = self.check_script_compliance(script_path)
         blocking_violations = [v for v in violations if v.blocking]
         return len(blocking_violations) == 0
 
-    def get_compliance_report(self, directory: Path)  Dict[str, Any]:
+    def get_compliance_report(self, directory: Path) -> Dict[str, Any]:
         """Generate a comprehensive compliance report"""
         compliance_results = self.check_directory_compliance(directory)
 

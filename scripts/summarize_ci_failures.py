@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import List
 
 
-def parse_pytest(path: Path)  List[str]:
+def parse_pytest(path: Path) -> List[str]:
     """Return failing pytest testcase names."""
     if not path.exists():
         return []
@@ -26,7 +26,7 @@ def parse_pytest(path: Path)  List[str]:
     return fails
 
 
-def parse_log(path: Path)  List[str]:
+def parse_log(path: Path) -> List[str]:
     """Return lines containing 'FAIL' from a test log."""
     if not path.exists():
         return []
@@ -38,7 +38,7 @@ def parse_log(path: Path)  List[str]:
     return lines
 
 
-def main()  None:
+def main() -> None:
     repo = os.getenv("GITHUB_REPOSITORY", "")
     run_id = os.getenv("GITHUB_RUN_ID", "")
     sha = os.getenv("GITHUB_SHA", "")[:7]
@@ -75,8 +75,7 @@ def main()  None:
 
     lines.append(
         "[Download artifacts](https://github.com/"
-        f"{repo}/actions/runs/{run_id}) "
-        "for full logs."
+        f"{repo}/actions/runs/{run_id}) " + "for full logs."
     )
 
     Path("summary.md").write_text("\n".join(lines))

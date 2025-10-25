@@ -37,7 +37,7 @@ def fix_markdown_file(filename):
     content = re.sub(r"\n{3,}", "\n\n", content)
 
     # Ensure file ends with single newline
-    content = content.rstrip()  "\n"
+    content = content.rstrip() + "\n"
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)

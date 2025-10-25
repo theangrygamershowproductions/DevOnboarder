@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 
-def setup_files(tmp_path: Path)  Path:
+def setup_files(tmp_path: Path) -> Path:
     repo_root = Path(__file__).resolve().parents[1]
     script = repo_root / "scripts" / "create-retro-file.sh"
     shutil.copy(script, tmp_path / "create-retro-file.sh")
@@ -18,7 +18,7 @@ def setup_files(tmp_path: Path)  Path:
     return tmp_path
 
 
-def test_create_retro_file(tmp_path: Path)  None:
+def test_create_retro_file(tmp_path: Path) -> None:
     setup_files(tmp_path)
     subprocess.run(
         ["bash", str(tmp_path / "create-retro-file.sh")],
@@ -37,7 +37,7 @@ def test_create_retro_file(tmp_path: Path)  None:
     assert content == template.replace("[YYYY-MM-DD or Sprint #]", today)
 
 
-def test_create_retro_file_exists(tmp_path: Path)  None:
+def test_create_retro_file_exists(tmp_path: Path) -> None:
     setup_files(tmp_path)
 
     today = date.today().strftime("%Y-%m-%d")

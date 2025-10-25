@@ -465,7 +465,7 @@ class TestGovernancePolicyEngine:
         new_rule = MetadataRequiredRule()
         self.engine.add_rule(new_rule)
 
-        assert len(self.engine.policy_rules) == initial_count  1
+        assert len(self.engine.policy_rules) == initial_count + 1
         assert new_rule in self.engine.policy_rules
 
     def test_check_script_compliance_with_metadata(self):

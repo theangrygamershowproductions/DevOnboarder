@@ -6,7 +6,7 @@ import os
 import requests
 
 
-def _fetch_headers(url: str)  requests.Response:
+def _fetch_headers(url: str) -> requests.Response:
     """Return the response from the given service URL."""
     try:
         return requests.get(url, timeout=5)
@@ -18,7 +18,7 @@ def _fetch_headers(url: str)  requests.Response:
 SERVICE_URL = os.getenv("CHECK_HEADERS_URL", "http://localhost:8002/api/user")
 
 
-def main()  None:
+def main() -> None:
     """Verify basic CORS and security headers."""
     resp = _fetch_headers(SERVICE_URL)
     assert "Access-Control-Allow-Origin" in resp.headers, "CORS header missing"

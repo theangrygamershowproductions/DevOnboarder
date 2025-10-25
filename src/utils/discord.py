@@ -10,7 +10,7 @@ BASE_URL = "https://discord.com/api/v10"
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 
 
-def get_user_roles(token: str)  dict[str, list[str]]:
+def get_user_roles(token: str) -> dict[str, list[str]]:
     """Return guild role IDs for the authenticated user.
 
     Parameters
@@ -74,7 +74,7 @@ def get_user_roles(token: str)  dict[str, list[str]]:
     return roles
 
 
-def get_user_profile(token: str)  dict[str, str | None]:
+def get_user_profile(token: str) -> dict[str, str | None]:
     """Return the Discord user profile for the given OAuth token."""
     headers = {"Authorization": f"Bearer {token}"}
     resp = httpx.get(

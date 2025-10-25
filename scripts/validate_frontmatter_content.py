@@ -27,7 +27,7 @@ class FrontmatterContentValidator:
             "warnings": 0,
         }
 
-    def parse_frontmatter(self, file_path: Path)  Tuple[Dict[str, Any], str]:
+    def parse_frontmatter(self, file_path: Path) -> Tuple[Dict[str, Any], str]:
         """Extract frontmatter and content from markdown file"""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -42,8 +42,8 @@ class FrontmatterContentValidator:
             if not end_match:
                 return {}, content
 
-            frontmatter_content = content[4 : end_match.start()  4]
-            document_content = content[end_match.end()  4 :]
+            frontmatter_content = content[4 : end_match.start() - 4]
+            document_content = content[end_match.end() + 4 :]
 
             try:
                 frontmatter = yaml.safe_load(frontmatter_content)
@@ -266,7 +266,7 @@ class FrontmatterContentValidator:
             if field not in frontmatter or not str(frontmatter[field]).strip():
                 self.add_issue(file_path, "WARNING", f"Missing required field: {field}")
 
-    def validate_file(self, file_path: Path)  bool:
+    def validate_file(self, file_path: Path) -> bool:
         """Validate a single markdown file"""
         self.stats["files_processed"] = 1
 
@@ -287,7 +287,7 @@ class FrontmatterContentValidator:
 
         return True
 
-    def generate_report(self)  str:
+    def generate_report(self) -> str:
         """Generate validation report"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = self.log_dir / f"frontmatter_validation_report_{timestamp}.md"
@@ -339,20 +339,16 @@ class FrontmatterContentValidator:
 
             f.write("## Recommendations\n\n")
             f.write(
-                "1. **Address Critical Issues**: Fix YAML syntax errors "
-                "and missing required fields\n"
+                "1. **Address Critical Issues**: Fix YAML syntax errors " + "and missing required fields\n"
             )
             f.write(
-                "2. **Review Warnings**: Ensure metadata accurately "
-                "reflects document content\n"
+                "2. **Review Warnings**: Ensure metadata accurately " + "reflects document content\n"
             )
             f.write(
-                "3. **Standardize Fields**: Use consistent date formats "
-                "and document types\n"
+                "3. **Standardize Fields**: Use consistent date formats " + "and document types\n"
             )
             f.write(
-                "4. **Content Alignment**: Verify titles, descriptions, "
-                "and tags match content\n\n"
+                "4. **Content Alignment**: Verify titles, descriptions, " + "and tags match content\n\n"
             )
 
             f.write("---\n")

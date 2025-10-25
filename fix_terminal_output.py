@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 
-def fix_terminal_output(content: str)  str:
+def fix_terminal_output(content: str) -> str:
     """Fix terminal output violations in shell scripts."""
     # Define emoji and Unicode patterns to remove/replace
     emoji_patterns = [

@@ -72,16 +72,15 @@ class PredictiveAnalytics:
         self.load_historical_data()
         self.train_models()
 
-    def validate_virtual_environment(self)  None:
+    def validate_virtual_environment(self) -> None:
         """Validate virtual environment compliance per DevOnboarder."""
         if not self.venv_path:
             raise EnvironmentError(
-                " Virtual environment not detected. "
-                "DevOnboarder Phase 5 requires virtual environment isolation."
+                " Virtual environment not detected. " + "DevOnboarder Phase 5 requires virtual environment isolation."
             )
         print(f" Predictive Analytics virtual environment: {self.venv_path}")
 
-    def setup_logging(self)  None:
+    def setup_logging(self) -> None:
         """Configure logging for analytics events."""
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
@@ -96,7 +95,7 @@ class PredictiveAnalytics:
         )
         self.logger = logging.getLogger("PredictiveAnalytics")
 
-    def load_historical_data(self)  None:
+    def load_historical_data(self) -> None:
         """Load historical data for model training."""
         # Load from Phase 4 CI analysis reports
         data_sources = [
@@ -120,7 +119,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Loaded {len(self.historical_data)} historical records")
 
-    def process_ci_data(self, data: Dict)  None:
+    def process_ci_data(self, data: Dict) -> None:
         """Process CI failure analysis data for training."""
         if "enhanced_ci_analysis" in data:
             analysis = data["enhanced_ci_analysis"]["analysis"]
@@ -137,7 +136,7 @@ class PredictiveAnalytics:
 
             self.historical_data.append(record)
 
-    def generate_synthetic_training_data(self)  None:
+    def generate_synthetic_training_data(self) -> None:
         """Generate synthetic data for model training demonstration."""
         np.random.seed(42)  # For reproducible results
 
@@ -183,7 +182,7 @@ class PredictiveAnalytics:
 
             self.historical_data.append(record)
 
-    def prepare_features(self, data: List[Dict])  pd.DataFrame:
+    def prepare_features(self, data: List[Dict]) -> pd.DataFrame:
         """Prepare feature matrix for ML models."""
         df = pd.DataFrame(data)
 
@@ -207,7 +206,7 @@ class PredictiveAnalytics:
 
         return df
 
-    def train_models(self)  None:
+    def train_models(self) -> None:
         """Train ML models on historical data."""
         if len(self.historical_data) < 10:
             self.logger.warning("Insufficient data for model training")
@@ -225,7 +224,7 @@ class PredictiveAnalytics:
 
         self.logger.info("ML models trained successfully")
 
-    def train_failure_predictor(self, df: pd.DataFrame)  None:
+    def train_failure_predictor(self, df: pd.DataFrame) -> None:
         """Train failure prediction model."""
         feature_cols = [col for col in self.feature_columns if col in df.columns]
         feature_cols.extend(["cpu_memory_ratio", "response_error_ratio", "load_factor"])
@@ -256,7 +255,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Failure predictor accuracy: {accuracy:.3f}")
 
-    def train_performance_forecaster(self, df: pd.DataFrame)  None:
+    def train_performance_forecaster(self, df: pd.DataFrame) -> None:
         """Train performance forecasting model."""
         feature_cols = [col for col in self.feature_columns if col in df.columns]
 
@@ -282,7 +281,7 @@ class PredictiveAnalytics:
 
         self.logger.info(f"Performance forecaster MSE: {mse:.3f}")
 
-    def predict_failure_risk(self, current_metrics: Dict)  PredictionResult:
+    def predict_failure_risk(self, current_metrics: Dict) -> PredictionResult:
         """Predict failure risk based on current system metrics."""
         if not self.failure_predictor:
             return PredictionResult(
@@ -341,7 +340,7 @@ class PredictiveAnalytics:
 
     def forecast_performance(
         self, current_metrics: Dict, hours_ahead: int = 24
-    )  PredictionResult:
+    ) -> PredictionResult:
         """Forecast system performance trends."""
         if not self.performance_forecaster:
             return PredictionResult(
@@ -372,7 +371,7 @@ class PredictiveAnalytics:
             timestamp=datetime.now(),
         )
 
-    def generate_failure_recommendation(self, risk_score: float, metrics: Dict)  str:
+    def generate_failure_recommendation(self, risk_score: float, metrics: Dict) -> str:
         """Generate actionable recommendation based on failure risk."""
         if risk_score < 0.2:
             return " System healthy - continue monitoring"
@@ -383,7 +382,7 @@ class PredictiveAnalytics:
         else:
             return " Critical risk - activate incident response"
 
-    def generate_performance_recommendation(self, score: float)  str:
+    def generate_performance_recommendation(self, score: float) -> str:
         """Generate performance optimization recommendation."""
         if score >= 90:
             return " Excellent performance - maintain current configuration"
@@ -396,7 +395,7 @@ class PredictiveAnalytics:
 
     def save_prediction_report(
         self, predictions: List[PredictionResult], output_path: str
-    )  None:
+    ) -> None:
         """Save prediction analysis report."""
         report = {
             "predictive_analysis": {

@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-def setup_script(tmp_path: Path, body: str)  tuple[Path, dict[str, str], Path]:
+def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]:
     """Setup test environment with CI-compatible path resolution."""
     # CRITICAL: CI-compatible path resolution (handles /workspace/DevOnboarder/)
     current_dir = Path.cwd()
@@ -41,16 +41,13 @@ def setup_script(tmp_path: Path, body: str)  tuple[Path, dict[str, str], Path]:
 
     # CRITICAL: Complete gh stub handling both 'pr view' AND 'pr comment'
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ]; then\n'
-        f"  echo '{body}'\n"
-        "  exit 0\n"
+        f"  echo '{body}'\n" + "  exit 0\n"
         'elif [ "$1" = "pr" ] && [ "$2" = "comment" ]; then\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)
@@ -70,7 +67,7 @@ def setup_script(tmp_path: Path, body: str)  tuple[Path, dict[str, str], Path]:
     return script_dst, env, gh_calls
 
 
-def test_validate_pr_checklist_success(tmp_path: Path)  None:
+def test_validate_pr_checklist_success(tmp_path: Path) -> None:
     """Test successful PR checklist validation."""
     body = "## Continuous Improvement Checklist\n- [ ] item"
     script, env, gh_calls = setup_script(tmp_path, body)
@@ -93,7 +90,7 @@ def test_validate_pr_checklist_success(tmp_path: Path)  None:
     assert not any("pr comment" in call for call in calls)
 
 
-def test_validate_pr_checklist_failure(tmp_path: Path)  None:
+def test_validate_pr_checklist_failure(tmp_path: Path) -> None:
     """Test PR checklist validation failure with comment posting for process PRs."""
     # Use a process-related title to trigger checklist validation
     process_pr_body = ""
@@ -102,8 +99,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path)  None:
     # Mock a process-related PR title that should require checklist
     gh_stub = tmp_path / "bin" / "gh"
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ] && [ "$3" = "1" ] && '
@@ -115,8 +111,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path)  None:
         '  echo "{\\"body\\": \\"\\"}"\n'
         "  exit 0\n"
         'elif [ "$1" = "pr" ] && [ "$2" = "comment" ]; then\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)
@@ -141,7 +136,7 @@ def test_validate_pr_checklist_failure(tmp_path: Path)  None:
     ), f"Missing 'pr comment' in: {calls}"
 
 
-def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path)  None:
+def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path) -> None:
     """Test that feature PRs pass without requiring checklist."""
     # Use a feature PR title that should NOT require checklist
     feature_pr_body = "missing"
@@ -150,15 +145,13 @@ def test_validate_pr_checklist_feature_pr_passes(tmp_path: Path)  None:
     # Mock a feature PR title that should skip checklist validation
     gh_stub = tmp_path / "bin" / "gh"
     gh_stub.write_text(
-        "#!/bin/bash\n"
-        "set -euo pipefail\n"
+        "#!/bin/bash\n" + "set -euo pipefail\n"
         f"echo \"$@\" >> '{gh_calls}'\n"
         f"sync\n"  # Force file system sync
         'if [ "$1" = "pr" ] && [ "$2" = "view" ] && [ "$3" = "1" ] && '
         '[ "$4" = "--json" ] && [ "$5" = "title" ]; then\n'
         '  echo "{\\"title\\": \\"FEAT(ci): Add new feature\\"}"\n'
-        "  exit 0\n"
-        "fi\n"
+        "  exit 0\n" + "fi\n"
         "exit 0\n"
     )
     gh_stub.chmod(0o755)

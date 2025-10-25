@@ -9,7 +9,7 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade()  None:
+def upgrade() -> None:
     op.create_table(
         "users",
         sa.Column("id", sa.Integer, primary_key=True),
@@ -36,7 +36,7 @@ def upgrade()  None:
     )
 
 
-def downgrade()  None:
+def downgrade() -> None:
     op.drop_table("xp_events")
     op.drop_table("contributions")
     op.drop_table("users")

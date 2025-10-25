@@ -38,7 +38,7 @@ class GovernanceCLI:
         self.yaml_manager = ExtendedMetadataYAMLManager()
         self.policy_engine = GovernancePolicyEngine()
 
-    def check_script(self, script_path: str)  int:
+    def check_script(self, script_path: str) -> int:
         """Check a single script for compliance"""
         script = Path(script_path)
 
@@ -98,10 +98,10 @@ class GovernanceCLI:
             print("\n Script execution BLOCKED due to policy violations")
             return 1
         else:
-            print("\n  Script can execute but has policy violations to address")
+            print("\n + Script can execute but has policy violations to address")
             return 0
 
-    def generate_report(self, directory: str = ".")  int:
+    def generate_report(self, directory: str = ".") -> int:
         """Generate comprehensive compliance report"""
         dir_path = Path(directory)
 
@@ -129,7 +129,7 @@ class GovernanceCLI:
 
         # Violations by severity
         if report["severity_counts"]:
-            print("\n  VIOLATIONS BY SEVERITY:")
+            print("\n + VIOLATIONS BY SEVERITY:")
             for severity, count in report["severity_counts"].items():
                 emoji = {
                     "critical": "🚨",
@@ -151,7 +151,7 @@ class GovernanceCLI:
 
         return 0 if report["compliance_percentage"] == 100 else 1
 
-    def validate_metadata(self, directory: str = ".")  int:
+    def validate_metadata(self, directory: str = ".") -> int:
         """Validate all metadata files in directory"""
         dir_path = Path(directory)
 
@@ -187,7 +187,7 @@ class GovernanceCLI:
 
     def create_metadata(
         self, script_path: str, similarity_group: str = "script_automation"
-    )  int:
+    ) -> int:
         """Create default metadata for a script"""
         script = Path(script_path)
 
@@ -228,7 +228,7 @@ class GovernanceCLI:
             print(f" Error creating metadata: {e}")
             return 1
 
-    def approve_script(self, script_path: str, approved_by: str = "cli_user")  int:
+    def approve_script(self, script_path: str, approved_by: str = "cli_user") -> int:
         """Approve a script for execution"""
         script = Path(script_path)
 
@@ -249,8 +249,7 @@ class GovernanceCLI:
             else:
                 print(f" No approval request found for {script.name}")
                 print(
-                    " Hint: Scripts may need approval requests "
-                    "before they can be approved"
+                    " Hint: Scripts may need approval requests " + "before they can be approved"
                 )
                 return 1
 

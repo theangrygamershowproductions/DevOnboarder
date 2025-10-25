@@ -11,7 +11,7 @@ from jsonschema import validate, ValidationError
 
 def validate_devonboarder_metadata(
     frontmatter: Dict[str, Any], agent_name: str
-)  List[str]:
+) -> List[str]:
     """Validate DevOnboarder-specific metadata requirements.
 
     Parameters
@@ -91,13 +91,13 @@ def validate_devonboarder_metadata(
     return errors
 
 
-def load_schema(schema_path: Path)  Dict[str, Any]:
+def load_schema(schema_path: Path) -> Dict[str, Any]:
     """Load the JSON schema."""
     with open(schema_path, encoding="utf-8") as f:
         return json.load(f)
 
 
-def extract_frontmatter(agent_file: Path)  Dict[str, Any] | None:
+def extract_frontmatter(agent_file: Path) -> Dict[str, Any] | None:
     """Extract YAML frontmatter from an agent file."""
     content = agent_file.read_text(encoding="utf-8")
     lines = content.split("\n")

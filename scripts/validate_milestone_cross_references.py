@@ -26,7 +26,7 @@ class MilestoneCrossReferenceValidator:
         self.errors: List[str] = []
         self.warnings: List[str] = []
 
-    def find_milestone_files(self, search_paths: List[str])  List[Path]:
+    def find_milestone_files(self, search_paths: List[str]) -> List[Path]:
         """Find all milestone files in the specified paths."""
         milestone_files = []
 
@@ -39,7 +39,7 @@ class MilestoneCrossReferenceValidator:
 
         return milestone_files
 
-    def extract_milestone_id(self, file_path: Path)  str:
+    def extract_milestone_id(self, file_path: Path) -> str:
         """Extract milestone_id from a file's YAML frontmatter."""
         try:
             content = file_path.read_text(encoding="utf-8")
@@ -63,7 +63,7 @@ class MilestoneCrossReferenceValidator:
         except yaml.YAMLError:
             return None
 
-    def find_milestone_references(self, content: str)  List[str]:
+    def find_milestone_references(self, content: str) -> List[str]:
         """Find milestone_id references in content."""
         # Look for milestone_id patterns in text (more specific patterns)
         patterns = [
@@ -82,7 +82,7 @@ class MilestoneCrossReferenceValidator:
 
         return list(set(references))  # Remove duplicates
 
-    def validate_cross_references(self, search_paths: List[str])  bool:
+    def validate_cross_references(self, search_paths: List[str]) -> bool:
         """Validate milestone cross-references across all files."""
         print(" Milestone Cross-Reference Validation")
         print("=" * 50)
@@ -150,7 +150,7 @@ class MilestoneCrossReferenceValidator:
 
         return len(self.errors) == 0
 
-    def fix_duplicates(self, dry_run: bool = True)  bool:
+    def fix_duplicates(self, dry_run: bool = True) -> bool:
         """Fix duplicate milestone_ids by making them unique."""
         if not dry_run:
             print(" Fixing duplicate milestone_ids...")
@@ -183,7 +183,7 @@ class MilestoneCrossReferenceValidator:
                             if content != updated_content:
                                 file_path.write_text(updated_content, encoding="utf-8")
                                 print(
-                                    f"  Updated {file_path}: {milestone_id}  {new_id}"
+                                    f"  Updated {file_path}: {milestone_id} | {new_id}"
                                 )  # noqa: E501
                                 fixes_applied = 1
 
@@ -200,7 +200,7 @@ class MilestoneCrossReferenceValidator:
                 print(f"  • {error}")
 
         if self.warnings:
-            print(f"\n  WARNINGS ({len(self.warnings)}):")
+            print(f"\n + WARNINGS ({len(self.warnings)}):")
             for warning in self.warnings:
                 print(f"  • {warning}")
 

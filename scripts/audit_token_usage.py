@@ -18,7 +18,7 @@ except ImportError:
     sys.exit(1)
 
 # Define constants to avoid hardcoded strings
-GITHUB_TOKEN_NAME = "GITHUB"  "_TOKEN"  # Split to avoid B105
+GITHUB_TOKEN_NAME = "GITHUB" + "_TOKEN"  # Split to avoid B105
 PROHIBITED_CATEGORIES = [
     "prohibited",
     "hierarchy",
@@ -54,7 +54,7 @@ class TokenAuditor:
             print(f" Failed to load bot registry: {e}")
             sys.exit(1)
 
-    def _get_all_tokens(self)  Dict[str, Dict]:
+    def _get_all_tokens(self) -> Dict[str, Dict]:
         """Extract all token definitions from registry"""
         tokens = {}
 
@@ -77,7 +77,7 @@ class TokenAuditor:
 
         return tokens
 
-    def _get_prohibited_tokens(self)  List[str]:
+    def _get_prohibited_tokens(self) -> List[str]:
         """Get list of prohibited token patterns"""
         prohibited = []
 
@@ -96,7 +96,7 @@ class TokenAuditor:
 
         return prohibited
 
-    def audit_workflow_file(self, workflow_path: Path)  List[Dict]:
+    def audit_workflow_file(self, workflow_path: Path) -> List[Dict]:
         """Audit a single workflow file for token usage"""
         violations = []
 
@@ -139,8 +139,7 @@ class TokenAuditor:
                                     "token": token_name,
                                     "line": token_usage.get("line", "unknown"),
                                     "message": (
-                                        "Using GITHUB_TOKEN for readonly "
-                                        "operations (acceptable)"
+                                        "Using GITHUB_TOKEN for readonly " + "operations (acceptable)"
                                     ),
                                     "severity": "WARNING",
                                     "context": context,
@@ -223,7 +222,7 @@ class TokenAuditor:
 
         return violations
 
-    def _extract_token_patterns(self, content: str)  List[Dict]:
+    def _extract_token_patterns(self, content: str) -> List[Dict]:
         """Extract token usage patterns from workflow content"""
         patterns = []
 
@@ -240,7 +239,7 @@ class TokenAuditor:
         # Find secrets.* usage
         for match in secret_pattern.finditer(content):
             token_name = match.group(1)
-            line_num = content[: match.start()].count("\n")  1
+            line_num = content[: match.start()].count("\n") + 1
             context_line = lines[line_num - 1] if line_num <= len(lines) else ""
 
             patterns.append(
@@ -256,7 +255,7 @@ class TokenAuditor:
         for match in env_pattern.finditer(content):
             token_name = match.group(1)
             token_value = match.group(2)
-            line_num = content[: match.start()].count("\n")  1
+            line_num = content[: match.start()].count("\n") + 1
 
             # Extract actual token name if it's a secrets reference
             if "secrets." in token_value:
@@ -277,7 +276,7 @@ class TokenAuditor:
 
         return patterns
 
-    def _is_readonly_github_token_usage(self, context: str)  bool:
+    def _is_readonly_github_token_usage(self, context: str) -> bool:
         """Check if GITHUB_TOKEN usage is for readonly operations"""
         readonly_patterns = [
             "actions/checkout",
@@ -289,7 +288,7 @@ class TokenAuditor:
 
         return any(pattern in context.lower() for pattern in readonly_patterns)
 
-    def _get_token_alternative(self, prohibited_token: str)  str:
+    def _get_token_alternative(self, prohibited_token: str) -> str:
         """Get alternative token suggestion for prohibited tokens"""
         alternatives = {
             GITHUB_TOKEN_NAME: "CI_ISSUE_AUTOMATION_TOKEN or CI_BOT_TOKEN",
@@ -301,7 +300,7 @@ class TokenAuditor:
             prohibited_token, "Use properly scoped token from bot registry"
         )
 
-    def audit_all_workflows(self)  None:
+    def audit_all_workflows(self) -> None:
         """Audit all GitHub workflow files"""
         workflows_dir = self.project_root / ".github" / "workflows"
 
@@ -319,7 +318,7 @@ class TokenAuditor:
             violations = self.audit_workflow_file(workflow_file)
             self.violations.extend(violations)
 
-    def generate_report(self)  Dict[str, Any]:
+    def generate_report(self) -> Dict[str, Any]:
         """Generate comprehensive audit report"""
         critical_violations = [
             v for v in self.violations if v.get("severity") == "CRITICAL"
@@ -346,11 +345,11 @@ class TokenAuditor:
 
         return report
 
-    def print_report(self, report: Dict[str, Any])  None:
+    def print_report(self, report: Dict[str, Any]) -> None:
         """Print human-readable audit report"""
         summary = report["summary"]
 
-        print("\n"  "=" * 80)
+        print("\n" + "=" * 80)
         print("🔒 DevOnboarder Token Usage Audit Report")
         print("=" * 80)
 
@@ -387,7 +386,7 @@ class TokenAuditor:
 
         # Warnings
         if report["warnings"]:
-            print("\n  WARNINGS:")
+            print("\n + WARNINGS:")
             for warning in report["warnings"]:
                 print(f"   • {warning['file']}: {warning['message']}")
 
@@ -405,7 +404,7 @@ class TokenAuditor:
         print(f"   • Registered tokens: {len(report['registered_tokens'])}")
         print(f"   • Prohibited tokens: {len(report['prohibited_tokens'])}")
 
-        print("\n"  "=" * 80)
+        print("\n" + "=" * 80)
 
 
 def main():
