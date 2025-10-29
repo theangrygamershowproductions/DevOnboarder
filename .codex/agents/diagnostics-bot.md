@@ -1,33 +1,23 @@
 ---
 agent: diagnostics-bot
-
 consolidation_priority: P3
 content_uniqueness_score: 4
-description: Collects environment diagnostics and system health info with health checks and environment variable verification
+description: "Collects environment diagnostics and system health info with health checks and environment variable verification"
+
 document_type: specification
 environment: any
 merge_candidate: false
 output: .codex/logs/diagnostics-bot.log
-permissions:
-
-- repo:read
-
-- actions:read
-
-purpose: Collects environment diagnostics and system health info
+permissions: 
+- repo: read
+- actions: read
+purpose: "Collects environment diagnostics and system health info"
 similarity_group: agents-agents
-tags:
+tags: 
+title: "Diagnostics Bot"
 
-- diagnostics
-
-- health
-
-- system
-
-- environment
-
-title: Diagnostics Bot
-trigger: manual or `python -m diagnostics`
+trigger: "manual or `python -m diagnostics`"
+updated_at: 2025-10-27
 ---
 
 # Diagnostics Bot

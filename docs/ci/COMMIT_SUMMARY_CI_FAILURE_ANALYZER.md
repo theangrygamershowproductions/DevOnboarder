@@ -1,29 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: CI failure analyzer for commit summaries and automated failure detection
+created_at: 2025-09-12
+description: "CI failure analyzer for commit summaries and automated failure detection"
+
 document_type: tool-documentation
 merge_candidate: false
 project: DevOnboarder
 similarity_group: ci-ci
 status: active
-tags:
+tags: 
+title: "Commit Summary CI Failure Analyzer"
 
-- ci
-
-- failure-analysis
-
-- automation
-
-- commit-summary
-
-- analyzer
-
-title: Commit Summary CI Failure Analyzer
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

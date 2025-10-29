@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Compatibility requirements and supported platforms for DevOnboarder
+created_at: 2025-09-12
+description: "Compatibility requirements and supported platforms for DevOnboarder"
+
 document_type: documentation
 merge_candidate: false
 project: DevOnboarder
 similarity_group: compatibility.md-docs
 status: active
-tags:
-
-- compatibility
-
-- requirements
-
-- platforms
-
-- documentation
-
+tags: 
 title: Compatibility
-updated_at: '2025-09-12'
+
+updated_at: 2025-10-27
 visibility: internal
 ---
 

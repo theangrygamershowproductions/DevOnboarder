@@ -22,7 +22,7 @@ mkdir -p "$LOGS_DIR"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
+    local emoji_patterns=("" "" "TARGET:" "" "" "" "" "" "" "")
     local file_violations=0
 
     for emoji in "${emoji_patterns[@]}"; do
@@ -48,7 +48,7 @@ check_script_violations() {
         # Extract the markdown generation sections
         awk '/cat.*>.*\.md.*<<.*EOF/,/^EOF$/' "$script" > "$temp_file" 2>/dev/null || true
 
-        local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
+        local emoji_patterns=("" "" "TARGET:" "" "" "" "" "" "" "")
         for emoji in "${emoji_patterns[@]}"; do
             if grep -q "$emoji" "$temp_file" 2>/dev/null; then
                 echo "SCRIPT VIOLATION: $script generates markdown with emoji: $emoji" >&2

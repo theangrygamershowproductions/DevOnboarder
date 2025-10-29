@@ -1,43 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Complete development workflow guidelines including environment setup,
-  branch management, and quality control
+created_at: 2025-09-11
+description: "Complete development workflow guidelines including environment setup,"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- architecture-overview.md
-
-- code-quality-requirements.md
-
-- file-structure-conventions.md
-
+related_modules: 
 similarity_group: environment-config
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Development Workflow"
 
-- devonboarder
-
-- development
-
-- workflow
-
-- environment
-
-- quality-control
-
-title: DevOnboarder Development Workflow
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

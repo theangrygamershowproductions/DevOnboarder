@@ -24,9 +24,9 @@ s/🔀/MERGE:/g
 s/SYNC:/RELOAD:/g
 s//REPORT:/g
 s//LIST:/g
-s/🎯/GOAL:/g
+s/TARGET:/GOAL:/g
 s/✨/NEW:/g
-s/🔒//g
+s/SECURE://g
 s/🔓/OPEN:/g
 s/💾/SAVE:/g
 s/📤/UPLOAD:/g

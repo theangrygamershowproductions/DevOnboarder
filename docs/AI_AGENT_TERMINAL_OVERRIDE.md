@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
+created_at: 2025-09-12
 description: "Critical policy for AI agents regarding terminal output compliance and Unicode restrictions to prevent system hanging"
-document_type: "policy"
+
+document_type: policy
 merge_candidate: false
-project: "DevOnboarder"
+project: DevOnboarder
 similarity_group: AI_AGENT_TERMINAL_OVERRIDE.md-docs
 status: active
-tags:
+tags: 
+title: "Ai Agent Terminal Override"
 
-- policy
-
-- ai-agents
-
-- terminal-output
-
-- compliance
-
-title: Ai Agent Terminal Override
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

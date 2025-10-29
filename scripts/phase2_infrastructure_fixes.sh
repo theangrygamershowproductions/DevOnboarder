@@ -165,19 +165,19 @@ echo " PR Health Score: ${HEALTH_SCORE}%"
 # Health recommendations based on recalibrated standards
 if [ "$HEALTH_SCORE" -ge 95 ]; then
     echo "🎉 EXCELLENT: Meets 95% quality standard"
-    echo "🎯 Recommendation: Ready for merge"
+    echo "TARGET: Recommendation: Ready for merge"
 elif [ "$HEALTH_SCORE" -ge 85 ]; then
     echo " GOOD: Strong health score"
-    echo "🎯 Recommendation: Manual review recommended"
+    echo "TARGET: Recommendation: Manual review recommended"
 elif [ "$HEALTH_SCORE" -ge 70 ]; then
     echo "  ACCEPTABLE: Functional but needs improvement"
-    echo "🎯 Recommendation: Targeted fixes required"
+    echo "TARGET: Recommendation: Targeted fixes required"
 elif [ "$HEALTH_SCORE" -ge 50 ]; then
     echo " POOR: Significant issues present"
-    echo "🎯 Recommendation: Major fixes required"
+    echo "TARGET: Recommendation: Major fixes required"
 else
     echo "🚨 FAILING: Critical failures present"
-    echo "🎯 Recommendation: Fresh start recommended"
+    echo "TARGET: Recommendation: Fresh start recommended"
 fi
 
 # Show failing checks if any
@@ -272,7 +272,7 @@ fi
 # Security failures
 if echo "$FAILING_CHECKS" | grep -qi "security\|audit\|vulnerability\|snyk\|safety"; then
     PATTERNS=("SECURITY")
-    echo "  🔒 SECURITY ISSUES: Security scan failures detected"
+    echo "  SECURE: SECURITY ISSUES: Security scan failures detected"
 fi
 
 # Build failures
@@ -284,7 +284,7 @@ fi
 # Documentation failures
 if echo "$FAILING_CHECKS" | grep -qi "docs\|documentation\|markdown\|readme"; then
     PATTERNS=("DOCUMENTATION")
-    echo "  📚 DOCUMENTATION: Documentation quality issues detected"
+    echo "  DOCS: DOCUMENTATION: Documentation quality issues detected"
 fi
 
 # Infrastructure failures
@@ -306,7 +306,7 @@ if [ ${#PATTERNS[@]} -eq 0 ]; then
 fi
 
 echo ""
-echo "🎯 Automated Fix Recommendations:"
+echo "TARGET: Automated Fix Recommendations:"
 
 for pattern in "${PATTERNS[@]}"; do
     case $pattern in
@@ -317,13 +317,13 @@ for pattern in "${PATTERNS[@]}"; do
             echo "   CODE_QUALITY: Run formatters (black, prettier), fix linting errors"
             ;;
         "SECURITY")
-            echo "  🔒 SECURITY: Update dependencies, patch vulnerabilities, review security policies"
+            echo "  SECURE: SECURITY: Update dependencies, patch vulnerabilities, review security policies"
             ;;
         "BUILD")
             echo "  BUILD: BUILD: Check dependencies, fix compilation errors, verify configurations"
             ;;
         "DOCUMENTATION")
-            echo "  📚 DOCUMENTATION: Fix markdown errors, update docs, validate links"
+            echo "  DOCS: DOCUMENTATION: Fix markdown errors, update docs, validate links"
             ;;
         "INFRASTRUCTURE")
             echo "  BUILD: INFRASTRUCTURE: Verify deployment configs, check environment variables"
@@ -338,7 +338,7 @@ for pattern in "${PATTERNS[@]}"; do
 done
 
 echo ""
-echo "🤖 Auto-fix Potential Assessment:"
+echo "BOT: Auto-fix Potential Assessment:"
 if [[ " ${PATTERNS[*]} " =~ " CODE_QUALITY " ]] || [[ " ${PATTERNS[*]} " =~ " DOCUMENTATION " ]]; then
     echo "  🟢 HIGH: Code quality and documentation issues are auto-fixable"
 elif [[ " ${PATTERNS[*]} " =~ " TESTING " ]] && [[ " ${PATTERNS[*]} " =~ " BUILD " ]]; then
@@ -523,7 +523,7 @@ echo "  4.  Recalibrated quality standards (95%85%70%50%)"
 echo "  5.  CI health monitoring framework deployed"
 
 echo ""
-echo "🎯 Infrastructure Repair Status:"
+echo "TARGET: Infrastructure Repair Status:"
 echo "   Terminal communication issues: ADDRESSED"
 echo "   Health score calculation: ROBUST VERSION CREATED"
 echo "   GitHub CLI reliability: RETRY LOGIC IMPLEMENTED"

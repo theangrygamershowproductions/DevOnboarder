@@ -32,7 +32,7 @@ clean_file_emojis() {
     cp "$file" "$backup_file"
 
     # Remove common emojis used in DevOnboarder markdown generation
-    sed -i 's///g; s///g; s/🎯//g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
+    sed -i 's///g; s///g; s/TARGET://g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
 
     CLEANED=$((CLEANED  1))
 }
@@ -44,7 +44,7 @@ if [[ -d "$REPORTS_DIR" ]]; then
     echo "Processing $REPORTS_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
+        if grep -q "\|\|TARGET:\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$REPORTS_DIR" -name "*.md" -type f -print0)
@@ -58,7 +58,7 @@ if [[ -d "$AAR_DIR" ]]; then
     echo "Processing $AAR_DIR..."
     while IFS= read -r -d '' file; do
         # Check if file contains emojis before cleaning
-        if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
+        if grep -q "\|\|TARGET:\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
             clean_file_emojis "$file"
         fi
     done < <(find "$AAR_DIR" -name "*.md" -type f -print0)

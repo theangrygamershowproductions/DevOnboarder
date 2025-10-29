@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Template for generating security audit reports with standardized formatting
+created_at: 2025-09-12
+description: "Template for generating security audit reports with standardized formatting"
+
 document_type: template
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Security Report Template"
 
-- template
-
-- security
-
-- audit
-
-- reports
-
-title: Security Report Template
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

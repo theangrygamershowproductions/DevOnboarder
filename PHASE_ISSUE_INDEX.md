@@ -1,20 +1,19 @@
 ---
-author: DevOnboarder Team
+author: "DevOnboarder Team"
 similarity_group: docs-
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3
-created_at: '2025-09-12'
-description: Single pane of glass for phase-to-issue traceability across 7 active phase systems with comprehensive mapping of implementation phases to GitHub issues
+created_at: 2025-09-12
+description: "Single pane of glass for phase-to-issue traceability across 7 active phase systems with comprehensive mapping of implementation phases to GitHub issues"
+
 document_type: guide
 project: DevOnboarder
 status: active
-tags:
-  - phases
-  - issues
-  - tracking
-title: DevOnboarder Phase-to-Issue Index
-updated_at: '2025-09-12'
+tags: 
+title: "DevOnboarder Phase-to-Issue Index"
+
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Checklist - Setup Cross-Repo Codex Orchestration
+title: "Checklist - Setup Cross-Repo Codex Orchestration"
 
 project: DevOnboarder
 codex_scope: orchestration
@@ -7,13 +7,12 @@ codex_role: integration_engineer
 codex_type: task_checklist
 status: draft
 created_at: 2025-08-03
-tags:
-  - codex-task
-
-  - orchestration
-
-  - cross-repo
-
+tags: 
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## Objective

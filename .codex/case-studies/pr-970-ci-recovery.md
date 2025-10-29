@@ -2,22 +2,14 @@
 title: "Case Study: PR #970 CI Pipeline Recovery"
 
 description: "Comprehensive analysis of CI pipeline failures and systematic infrastructure hygiene restoration achieving 100% reliability"
-document_type: "case-study"
+
+document_type: case-study
 consolidation_priority: P3
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: codex-codex
-tags:
-  - case-study
-
-  - ci-pipeline
-
-  - infrastructure
-
-  - recovery
-
-  - automation
-
+tags: 
+updated_at: 2025-10-27
 ---
 
 # Case Study: PR #970 CI Pipeline Recovery

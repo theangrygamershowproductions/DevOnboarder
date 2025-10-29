@@ -1,24 +1,17 @@
 ---
 project: "DevOnboarder MVP Task Coordination"
-
-priority: "critical"
-status: "active"
-created: "2025-08-04"
-target_completion: "2025-09-15"
-project_lead: "architecture-team"
+priority: critical
+status: active
+created: 2025-08-04
+target_completion: 2025-09-15
+project_lead: architecture-team
 dependencies: [
-  "codex/mvp/MVP_PROJECT_PLAN.md",
-  "codex/mvp/mvp_delivery_checklist.md",
-  "codex/mvp/mvp_quality_gates.md"
-]
 related_files: [
-  "scripts/mvp_readiness_check.sh",
-  "scripts/mvp_health_monitor.sh",
-  "scripts/terminal_zero_tolerance_validator.sh",
-  "scripts/assess_staged_task_readiness.sh",
-  "codex/tasks/staged/terminal_zero_tolerance_validator.md",
-  "codex/tasks/staged/assess_staged_task_readiness.md"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder MVP Task Coordination

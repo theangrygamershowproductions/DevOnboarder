@@ -1,26 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Contributor Covenant Code of Conduct establishing community standards, expected behavior, and enforcement procedures for DevOnboarder project
+created_at: 2025-09-12
+description: "Contributor Covenant Code of Conduct establishing community standards, expected behavior, and enforcement procedures for DevOnboarder project"
+
 document_type: policy
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "Contributor Covenant Code of Conduct"
 
-tags:
-
-- community
-
-- conduct
-
-- policy
-
-title: Contributor Covenant Code of Conduct
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

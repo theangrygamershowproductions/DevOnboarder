@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Task prompt for DevOnboarder TAGS integration with condensed setup instructions
+created_at: 2025-09-12
+description: "Task prompt for DevOnboarder TAGS integration with condensed setup instructions"
+
 document_type: prompt
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "DevOnboarder TAGS Integration Task"
 
-- prompt
-
-- integration
-
-- tags
-
-- setup
-
-title: DevOnboarder TAGS Integration Task
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

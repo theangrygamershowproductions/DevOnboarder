@@ -153,7 +153,7 @@ if [[ -f "pytest.ini" ]] || [[ -f "pyproject.toml" ]]; then
 fi
 
 # 6. Documentation Quality
-echo "📚 Checking documentation..."
+echo "DOCS: Checking documentation..."
 if [[ -x "scripts/check_docs.sh" ]]; then
     if bash scripts/check_docs.sh >/dev/null 2>&1; then
         CHECKS=(" Documentation")
@@ -175,7 +175,7 @@ else
 fi
 
 # 8. Security Scan
-echo "🔒 Running security scan..."
+echo "SECURE: Running security scan..."
 if python -m bandit -r src -ll --quiet 2>/dev/null; then
     CHECKS=(" Security scan")
 else

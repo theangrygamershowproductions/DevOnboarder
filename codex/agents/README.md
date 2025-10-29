@@ -2,25 +2,30 @@
 title: "Codex Agents Documentation"
 
 description: "Documentation for the Codex agents directory structure and metadata format including index.json structure"
-document_type: "guide"
-tags: ["agents", "codex", "automation", "documentation", "metadata"]
-project: "core-agents"
-created: "2025-09-13"
-last_modified: "2025-09-13"
-version: "1.0"
-agent: "codex_agents_documentation"
+
+document_type: guide
+tags: "["agents", "codex", "automation", "documentation", "metadata"]"
+project: core-agents
+created: 2025-09-13
+last_modified: 2025-09-13
+version: 1.0
+agent: codex_agents_documentation
 purpose: "Documentation for the Codex agents directory structure and metadata format"
 trigger: "agent system updates and documentation maintenance"
-environment: "any"
-output: "codex/agents/index.json"
-permissions:
-    - "repo:read"
-
+environment: any
+output: codex/agents/index.json
+permissions: 
+- "repo: read"
 codex_runtime: false
 codex_dry_run: false
-discord_role_required: ""
+discord_role_required: 
 authentication_required: false
 integration_log: "Codex agents system documentation"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Codex Agents

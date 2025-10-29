@@ -1,39 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Plugin development guidelines with virtual environment requirements and
-  discovery patterns
+created_at: 2025-09-11
+description: "Plugin development guidelines with virtual environment requirements and"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- virtual-environment-policy.md
-
-- file-structure-conventions.md
-
+related_modules: 
 similarity_group: development-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Plugin Development"
 
-- devonboarder
-
-- plugin-development
-
-- virtual-environment
-
-- guidelines
-
-title: DevOnboarder Plugin Development
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

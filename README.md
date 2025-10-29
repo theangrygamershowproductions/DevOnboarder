@@ -1,15 +1,17 @@
 ---
-title: "DevOnboarder"
+title: DevOnboarder
 
 description: "Multi-service on-boarding automation platform with Discord bot, web interface, and comprehensive CI/CD pipeline designed to work quietly and reliably."
-document_type: "documentation"
-tags: ["devonboarder", "platform", "automation", "onboarding", "discord", "ci-cd"]
-project: "DevOnboarder"
+
+document_type: documentation
+tags: "["devonboarder", "platform", "automation", "onboarding", "discord", "ci-cd"]"
+project: DevOnboarder
 author: "DevOnboarder Team"
-consolidation_priority: "P3"
-similarity_group: "ci-automation"
+consolidation_priority: P3
+similarity_group: ci-automation
 content_uniqueness_score: 4
 merge_candidate: false
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder

@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: API conventions, Discord bot patterns, database integration, and multi-service
-  communication standards
+created_at: 2025-09-11
+description: "API conventions, Discord bot patterns, database integration, and multi-service"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- architecture-overview.md
-
-- common-integration-points.md
-
+related_modules: 
 similarity_group: integration-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Service Integration Patterns"
 
-- devonboarder
-
-- service-integration
-
-- api-patterns
-
-- discord-bot
-
-- database
-
-title: DevOnboarder Service Integration Patterns
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

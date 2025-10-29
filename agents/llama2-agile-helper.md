@@ -1,27 +1,25 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.Llama2AgileHelper
-  output: Backlog grooming tips
-  role: Provides agile planning advice via Llama2
-  scope: sprint workflows
-  triggers: Developer questions or metrics updates
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.Llama2AgileHelper
+output: "Backlog grooming tips"
+role: "Provides agile planning advice via Llama2"
+scope: "sprint workflows"
+triggers: "Developer questions or metrics updates"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Llama2 Agile Helper"
 
-- documentation
-
-title: Llama2 Agile Helper
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

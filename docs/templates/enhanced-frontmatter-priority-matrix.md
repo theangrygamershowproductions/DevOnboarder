@@ -1,42 +1,29 @@
 ---
 audience: developers
-
-author: TAGS Engineering
+author: "TAGS Engineering"
 consolidation_priority: P2
 consolidation_strategy: merge_sections
 consolidation_target: environment-policies-unified.md
 content_accuracy: verified
 content_uniqueness_score: 3
-created_at: '2025-09-12'
-description: Brief description of document purpose and content
+created_at: 2025-09-12
+description: "Brief description of document purpose and content"
+
 document_type: standards|policies|guides|troubleshooting|reference
-last_review_date: '2025-09-12'
+last_review_date: 2025-09-12
 maintenance_burden: low
 merge_candidate: true
 parent_document: core-policies.md
 project: core-instructions|automation|security|documentation
-related_documents:
-
-- terminal-output-policy.md
-
-- potato-policy.md
-
+related_documents: 
 review_frequency: quarterly
 similarity_group: environment-policies
 status: active|draft|deprecated|archived
-tags:
-
-- devonboarder
-
-- topic1
-
-- topic2
-
-- document-type
-
+tags: 
 technical_depth: comprehensive
-title: Document Title
-updated_at: '2025-09-12'
+title: "Document Title"
+
+updated_at: 2025-10-27
 visibility: internal
 ---
 

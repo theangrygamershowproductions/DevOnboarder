@@ -48,7 +48,7 @@ notify_missing_tokens() {
     fi
 
     echo ""
-    echo "📚 For token setup guidance:"
+    echo "DOCS: For token setup guidance:"
     echo "   See: docs/token-setup-guide.md"
     echo "   Architecture: docs/TOKEN_ARCHITECTURE.md"
 

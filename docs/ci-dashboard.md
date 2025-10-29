@@ -1,47 +1,28 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 codex_agent: true
 codex_role: ci_observer
 codex_scope: DevOnboarder
 codex_type: ci_dashboard
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: AI-ready track and triage dashboard for all CI test results with priority,
-  stability, and fix status
+created_at: 2025-09-12
+description: "AI-ready track and triage dashboard for all CI test results with priority,"
+
 document_type: documentation
-integration_points:
-
-- scripts/ci_failure_diagnoser.py
-
-- scripts/enhanced_ci_failure_analyzer.py
-
-- .github/workflows/ci.yml
-
-- logs/validation_*.log
-
+integration_points: 
 log_location: logs/ci_dashboard_*.log
 merge_candidate: false
 name: CI-Dashboard-Monitor
-permissions:
-
-- read
-
-- write
-
-- issues
-
+permissions: 
 project: DevOnboarder
 similarity_group: ci-dashboard.md-docs
 status: active
-tags:
+tags: 
+title: "DevOnboarder CI Failure Dashboard"
 
-- documentation
-
-title: DevOnboarder CI Failure Dashboard
 type: monitoring
-updated_at: '2025-07-29'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

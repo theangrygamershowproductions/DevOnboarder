@@ -1,21 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Common markdown linting issues and solutions for DevOnboarder files
+created_at: 2025-09-12
+description: "Common markdown linting issues and solutions for DevOnboarder files"
+
 document_type: troubleshooting
 merge_candidate: false
 project: DevOnboarder
 similarity_group: MARKDOWN_LINTING_TROUBLESHOOTING.md-docs
 status: active
-tags:
+tags: 
+title: "Markdown Linting Troubleshooting"
 
-- documentation
-
-title: Markdown Linting Troubleshooting
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

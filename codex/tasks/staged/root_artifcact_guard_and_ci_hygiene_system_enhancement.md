@@ -1,19 +1,18 @@
 ---
 task: "Root Artifact Guard and CI Hygiene System Enhancement"
-
-priority: "medium"
-status: "staged"
-created: "2025-08-04"
-assigned: "infrastructure-team"
+priority: medium
+status: staged
+created: 2025-08-04
+assigned: infrastructure-team
 dependencies: ["agent-system-enhancement.md"]
 related_files: [
-    "scripts/enforce_output_location.sh",
-    "scripts/clean_pytest_artifacts.sh",
-    "scripts/manage_logs.sh",
-    ".github/workflows/validate-artifacts.yml"
-]
 validation_required: true
 staging_reason: "discussed comprehensive artifact management during conversation"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Root Artifact Guard Enhancement Task

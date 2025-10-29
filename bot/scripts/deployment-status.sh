@@ -105,7 +105,7 @@ echo "Development: TAGS: DevOnboarder (1386935663139749998)"
 echo "Production:  TAGS: Command & Control (1065367728992571444)"
 
 echo ""
-echo -e "${BLUE}🎯 Available Commands${NC}"
+echo -e "${BLUE}TARGET: Available Commands${NC}"
 echo "===================="
 echo "npm run dev          - Start bot in development mode"
 echo "npm run start        - Start bot in production mode"

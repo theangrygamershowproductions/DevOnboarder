@@ -1,28 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: GitHub issue draft for Training Simulation Module (TSM) enhancement feature
+created_at: 2025-09-12
+description: "GitHub issue draft for Training Simulation Module (TSM) enhancement feature"
+
 document_type: draft
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "TSM GitHub Issue Draft"
 
-tags:
-
-- draft
-
-- github-issue
-
-- tsm
-
-- enhancement
-
-title: TSM GitHub Issue Draft
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

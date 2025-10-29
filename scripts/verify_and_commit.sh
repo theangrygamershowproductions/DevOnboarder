@@ -32,7 +32,7 @@ main() {
         exit 1
     fi
 
-    log_and_display "🐍 Activating virtual environment..."
+    log_and_display "PYTHON: Activating virtual environment..."
     # shellcheck source=/dev/null
     source .venv/bin/activate
 

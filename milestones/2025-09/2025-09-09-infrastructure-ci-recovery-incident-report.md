@@ -1,37 +1,28 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 complexity: moderate
 consolidation_priority: P1
 content_uniqueness_score: 5
-created_at: '2025-09-13'
-date: '2025-09-09'
-description: CI recovery incident report and analysis
+created_at: 2025-09-13
+date: 2025-09-09
+description: "CI recovery incident report and analysis"
+
 document_type: documentation
 generated_by: manual
-issue_number: ''
+issue_number: 
 merge_candidate: false
 milestone_id: 2025-09-09-infrastructure-ci-recovery-incident-report
-pr_number: ''
+pr_number: 
 priority: critical
 project: DevOnboarder
 similarity_group: infrastructure-recovery
 status: complete
-tags:
+tags: 
+title: "DevOnboarder CI Recovery Report"
 
-- infrastructure
-
-- ci
-
-- recovery
-
-- incident-report
-
-title: DevOnboarder CI Recovery Report
 type: infrastructure
-
-# Updated 2025-09-13: Validation fix applied
-
+# Updated 2025-09-13: "Validation fix applied"
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder CI Recovery Report - Systematic Infrastructure Recovery Analysis

@@ -1,3 +1,10 @@
+---
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-general
+updated_at: 2025-10-27
+---
 # CI Infrastructure Modernization: PR #1212 Progress Report
 
 **Status:** Active • **Owner:** @reesey275 • **Updated:** 2025-09-02

@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: GitHub Actions workflows, automation scripts, CI/CD patterns, and comprehensive
-  automation ecosystem
+created_at: 2025-09-11
+description: "GitHub Actions workflows, automation scripts, CI/CD patterns, and comprehensive"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- quality-control-policy.md
-
-- common-integration-points.md
-
+related_modules: 
 similarity_group: ci-automation
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder CI/CD Automation"
 
-- devonboarder
-
-- ci-cd
-
-- github-actions
-
-- automation
-
-- workflows
-
-title: DevOnboarder CI/CD Automation
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

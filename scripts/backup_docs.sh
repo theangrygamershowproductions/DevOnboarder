@@ -307,7 +307,7 @@ main() {
     echo ""
     echo " Backup completed successfully!"
     echo "    Backup location: $backup_path"
-    echo "   🔒 Integrity verified: $([ "$VERIFY_CHECKSUMS" = "true" ] && echo "Yes" || echo "Skipped")"
+    echo "   SECURE: Integrity verified: $([ "$VERIFY_CHECKSUMS" = "true" ] && echo "Yes" || echo "Skipped")"
     echo "   📦 Archive created: $([ "$CREATE_ARCHIVE" = "true" ] && echo "Yes" || echo "Skipped")"
     echo "   FILE: Log: $LOG_FILE"
 

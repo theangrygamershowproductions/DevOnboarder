@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🎯 FINAL PUSH TO 95% HEALTH SCORE"
+echo "TARGET: FINAL PUSH TO 95% HEALTH SCORE"
 echo "================================="
 
 PR_NUMBER="968"
@@ -88,7 +88,7 @@ echo ""
 echo "🎉 FINAL RESULTS:"
 echo "================"
 echo " Final Health Score: ${NEW_HEALTH}%"
-echo "🎯 Target: 95%"
+echo "TARGET: Target: 95%"
 
 if [ "${NEW_HEALTH:-0}" -ge 95 ]; then
     echo "🎉 SUCCESS! 95% health threshold achieved!"
@@ -96,7 +96,7 @@ if [ "${NEW_HEALTH:-0}" -ge 95 ]; then
     echo " Quality standards met - finishing strong!"
 else
     echo "GROW: Progress Made: Improved toward 95% target"
-    echo "🎯 Continue monitoring CI results"
+    echo "TARGET: Continue monitoring CI results"
     echo "💪 Strong finish - quality focused approach"
 fi
 

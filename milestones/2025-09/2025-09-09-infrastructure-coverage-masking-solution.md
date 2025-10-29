@@ -1,29 +1,27 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 complexity: moderate
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-date: '2025-09-09'
-description: Documentation description needed
+created_at: 2025-09-12
+date: 2025-09-09
+description: "Documentation description needed"
+
 document_type: documentation
 generated_by: scripts/generate_milestone.sh
-issue_number: '#1286'
+issue_number: #1286
 merge_candidate: false
 milestone_id: 2025-09-09-coverage-masking-solution
-pr_number: ''
+pr_number: 
 priority: critical
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "2025 09 09 Infrastructure Coverage Masking Solution"
 
-- documentation
-
-title: 2025 09 09 Infrastructure Coverage Masking Solution
 type: infrastructure
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

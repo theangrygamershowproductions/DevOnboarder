@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Comprehensive security requirements including environment variable management
-  and access control policies
+created_at: 2025-09-11
+description: "Comprehensive security requirements including environment variable management"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- potato-policy.md
-
-- virtual-environment-policy.md
-
+related_modules: 
 similarity_group: security-framework
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Security Best Practices"
 
-- devonboarder
-
-- security
-
-- environment-variables
-
-- best-practices
-
-- access-control
-
-title: DevOnboarder Security Best Practices
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

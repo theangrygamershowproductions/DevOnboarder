@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🤖 Setting up PR Automation Framework"
+echo "BOT: Setting up PR Automation Framework"
 echo "====================================="
 
 # Create required directories

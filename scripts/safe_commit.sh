@@ -87,7 +87,7 @@ for pattern in "${FORBIDDEN_FILES[@]}"; do
 done
 
 # Check for emoji usage in committed files (common violation)
-if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "\|\|🚨\|\|\|\|FILE:\|🏆\|\|🥔\|\|💥\|\|🎯\|\|SYNC:\|🚦\|\|" >/dev/null 2>&1; then
+if git ls-files | grep -E '\.(md|txt|sh|py)$' | xargs grep -l "\|\|🚨\|\|\|\|FILE:\|🏆\|\|🥔\|\|💥\|\|TARGET:\|\|SYNC:\|🚦\|\|" >/dev/null 2>&1; then
     printf " Emoji usage detected in committed files\n"
     printf "ZERO TOLERANCE: Remove all emojis from documentation and scripts\n"
     exit 1

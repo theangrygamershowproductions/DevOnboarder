@@ -1,28 +1,22 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-date_created: '2025-07-29'
-description: Standards documentation
+created_at: 2025-09-12
+date_created: 2025-07-29
+description: "Standards documentation"
+
 document_type: standards
 enforcement: CI/CD
 merge_candidate: false
 project: DevOnboarder
 similarity_group: standards-standards
 status: MANDATORY
-tags:
+tags: 
+title: "DevOnboarder Centralized Logging Policy"
 
-- standards
-
-- policy
-
-- documentation
-
-title: DevOnboarder Centralized Logging Policy
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 version: 1.0.0
 violation_severity: CRITICAL
 virtual_env_required: true

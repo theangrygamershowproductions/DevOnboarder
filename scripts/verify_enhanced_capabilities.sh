@@ -66,14 +66,14 @@ fi
 # 6. Security validation - check for proprietary references
 echo ""
 echo "6. Security validation..."
-echo "   🔒 Checking for secret tokens..."
+echo "   SECURE: Checking for secret tokens..."
 if ! git grep -qE 'sk-[A-Za-z0-9]{20,}' -- . 2>/dev/null; then
     echo "       No secret tokens found"
 else
     echo "       Secret-like tokens detected"
 fi
 
-echo "   🔒 Checking for proprietary identifiers..."
+echo "   SECURE: Checking for proprietary identifiers..."
 if ! git grep -qE '(devonboarder[-_ ]?premium|internal[-_ ]?toolkit)' -- . 2>/dev/null; then
     echo "       No proprietary identifiers found"
 else
@@ -90,7 +90,7 @@ else
 fi
 
 echo ""
-echo "🎯 Verification Summary"
+echo "TARGET: Verification Summary"
 echo "======================="
 echo "Mode: $MODE"
 echo "Enhanced Test: $ENHANCED_MODE"

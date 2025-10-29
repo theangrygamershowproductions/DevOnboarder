@@ -89,4 +89,4 @@ else
 fi
 
 echo ""
-echo "🎯 DevOnboarder: Working quietly and reliably in service of those who need it."
+echo "TARGET: DevOnboarder: Working quietly and reliably in service of those who need it."

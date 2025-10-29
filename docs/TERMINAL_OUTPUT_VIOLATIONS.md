@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Zero tolerance policy for terminal output violations and enforcement guidelines
+created_at: 2025-09-12
+description: "Zero tolerance policy for terminal output violations and enforcement guidelines"
+
 document_type: reference
 merge_candidate: false
 project: DevOnboarder
 similarity_group: TERMINAL_OUTPUT_VIOLATIONS.md-docs
 status: active
-tags:
+tags: 
+title: "Terminal Output Violations Reference"
 
-- reference
-
-- policy
-
-- terminal-output
-
-- enforcement
-
-title: Terminal Output Violations Reference
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

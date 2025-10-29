@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Dependency update process and maintenance procedures using Dependabot
+created_at: 2025-09-12
+description: "Dependency update process and maintenance procedures using Dependabot"
+
 document_type: reference
 merge_candidate: false
 project: DevOnboarder
 similarity_group: dependencies.md-docs
 status: active
-tags:
+tags: 
+title: "Dependency Update Process"
 
-- reference
-
-- dependencies
-
-- maintenance
-
-- dependabot
-
-title: Dependency Update Process
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

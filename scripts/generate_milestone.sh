@@ -450,7 +450,7 @@ function main() {
     create_milestone_file "$milestone_id" "$type" "$title" "$issue_number" "$pr_number" "$priority" "$template_only"
 
     echo ""
-    echo -e "${GREEN}🎯 Milestone generation complete!${NC}"
+    echo -e "${GREEN}TARGET: Milestone generation complete!${NC}"
     echo ""
     echo "Next steps:"
     echo "1. Edit the milestone file to add specific metrics"

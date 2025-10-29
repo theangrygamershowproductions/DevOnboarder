@@ -482,7 +482,7 @@ case "${1:-help}" in
         fi
 
         display_config
-        echo "🎯 Analyzing impact for: $source_file"
+        echo "TARGET: Analyzing impact for: $source_file"
         echo ""
 
         generate_impact_report "$source_file" "$output_file"
@@ -550,7 +550,7 @@ case "${1:-help}" in
             exit 1
         fi
 
-        echo "🎯 Risk assessment for: $source_file"
+        echo "TARGET: Risk assessment for: $source_file"
         echo "   Risk Level: $(assess_risk_level "$source_file")"
         ;;
 

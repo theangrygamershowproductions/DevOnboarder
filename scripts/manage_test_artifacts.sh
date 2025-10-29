@@ -125,13 +125,13 @@ EOF
     # Overall compliance assessment
     case "$token_compliance" in
         "compliant")
-            echo "   🔒 Overall Token Compliance:  COMPLIANT"
+            echo "   SECURE: Overall Token Compliance:  COMPLIANT"
             ;;
         "violation")
-            echo "   🔒 Overall Token Compliance:   POLICY VIOLATIONS DETECTED"
+            echo "   SECURE: Overall Token Compliance:   POLICY VIOLATIONS DETECTED"
             ;;
         "missing")
-            echo "   🔒 Overall Token Compliance:  CRITICAL TOKENS MISSING"
+            echo "   SECURE: Overall Token Compliance:  CRITICAL TOKENS MISSING"
             ;;
     esac
 }
@@ -240,7 +240,7 @@ activate_virtual_env() {
     source .venv/bin/activate
 
     # Validate environment (DevOnboarder pattern)
-    echo -e "${BLUE}🐍 Virtual environment activated${NC}"
+    echo -e "${BLUE}PYTHON: Virtual environment activated${NC}"
     echo "   Python: $(which python)"
     echo "   Pip: $(which pip)"
     echo "   Python version: $(python --version)"
@@ -378,7 +378,7 @@ run_tests_with_artifacts() {
 
     # Run bot tests if bot directory exists (Node.js hygiene)
     if [ -d "bot" ]; then
-        echo -e "${BLUE}🤖 Running bot tests...${NC}"
+        echo -e "${BLUE}BOT: Running bot tests...${NC}"
         (
             cd bot
             # Ensure bot dependencies are installed (DevOnboarder pattern)

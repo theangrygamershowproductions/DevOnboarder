@@ -33,7 +33,7 @@ else
 fi
 
 echo ""
-echo "🎯 Monitoring Setup:"
+echo "TARGET: Monitoring Setup:"
 echo "===================================="
 echo "Option 1: Active monitoring - check workflow runs for 'Welcome external contributors' job"
 echo "Option 2: Create test PR from fork account to validate"

@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: General troubleshooting guide for DevOnboarder platform issues
+created_at: 2025-09-12
+description: "General troubleshooting guide for DevOnboarder platform issues"
+
 document_type: troubleshooting
 merge_candidate: false
 project: DevOnboarder
 similarity_group: TROUBLESHOOTING.md-docs
 status: active
-tags:
-
-- troubleshooting
-
-- devonboarder
-
-- support
-
-- documentation
-
+tags: 
 title: Troubleshooting
-updated_at: '2025-09-12'
+
+updated_at: 2025-10-27
 visibility: internal
 ---
 

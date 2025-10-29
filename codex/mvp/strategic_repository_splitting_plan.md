@@ -1,20 +1,16 @@
 ---
 project: "DevOnboarder Strategic Repository Splitting Plan"
-
-status: "strategic-planning"
-created_at: "2025-08-05"
+status: strategic-planning
+created_at: 2025-08-05
 target_activation: "post-MVP (September 2025)"
-priority: "strategic"
+priority: strategic
 dependencies: [
-  "MVP delivery completion",
-  "Strategic split readiness 80%",
-  "Service boundary maturation"
-]
 related_files: [
-  "codex/mvp/post_mvp_strategic_plan.md",
-  "codex/tasks/strategic_split_readiness_diagnostic_COMPLETE.md",
-  "scripts/execute_strategic_split.sh"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder Strategic Repository Splitting Plan

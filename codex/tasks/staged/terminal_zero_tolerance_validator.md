@@ -1,34 +1,25 @@
 ---
 task: "Terminal Zero Tolerance Validator"
-
 description: "Comprehensive terminal output violation detection and enforcement system"
-project: "DevOnboarder"
-status: "staged"
-created_at: "2025-08-05"
+
+project: DevOnboarder
+status: staged
+created_at: 2025-08-05
 author: "TAGS CTO"
-tags:
-  - terminal-output
-
-  - validation
-
-  - ci
-
-  - enforcement
-
-  - quality-gates
-
-visibility: "internal"
-document_type: "staged_task"
-codex_scope: "tags/devonboarder"
-codex_type: "validation"
+tags: 
+visibility: internal
+document_type: staged_task
+codex_scope: tags/devonboarder
+codex_type: validation
 codex_runtime: true
-priority: "critical"
+priority: critical
 dependencies: ["phase2_terminal_output_compliance.md"]
 related_files: [
-  "scripts/validate_terminal_output.sh",
-  "scripts/validation_summary.sh",
-  "docs/TERMINAL_OUTPUT_VIOLATIONS.md"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Terminal Zero Tolerance Validator

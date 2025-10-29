@@ -304,7 +304,7 @@ echo "$FILTERED_COMMENTS" | jq -c '.[]' | while IFS= read -r comment; do
     echo "─────────────────────────────────────────────────────────────"
 
     # Format comment body with proper indentation
-    echo "│ 🤖 Comment:"
+    echo "│ BOT: Comment:"
     while IFS= read -r line; do
         echo "│ $line"
     done <<< "$BODY"
@@ -348,7 +348,7 @@ fi
 
 # Resolution tracking functions
 annotate_resolutions() {
-    echo "🎯 RESOLUTION ANNOTATION MODE"
+    echo "TARGET: RESOLUTION ANNOTATION MODE"
     echo "Adding resolution notes for PR #$PR_NUMBER comments"
     echo ""
 
@@ -402,7 +402,7 @@ annotate_resolutions() {
         echo ""
     done
 
-    echo "🎯 Resolution annotation complete!"
+    echo "TARGET: Resolution annotation complete!"
     echo "View resolutions: ./scripts/check_pr_inline_comments.sh --resolution-summary $PR_NUMBER"
 }
 
@@ -433,7 +433,7 @@ show_resolution_summary() {
 
         # Show comment (truncated)
         COMMENT_PREVIEW=$(echo "$BODY" | head -2 | tr '\n' ' ' | cut -c1-60)
-        echo "│ 🤖 Comment: $COMMENT_PREVIEW..."
+        echo "│ BOT: Comment: $COMMENT_PREVIEW..."
         echo "│"
 
         if [[ -n "$RESOLUTION" ]]; then
@@ -463,7 +463,7 @@ show_resolution_summary() {
 }
 
 export_learning_patterns() {
-    echo "📚 LEARNING EXPORT for PR #$PR_NUMBER"
+    echo "DOCS: LEARNING EXPORT for PR #$PR_NUMBER"
     echo "Generating documentation from resolution patterns..."
     echo ""
 
@@ -544,7 +544,7 @@ EOF
 
     echo " Learning export created: $export_file"
     echo " Metrics added to export"
-    echo "🎯 Ready for documentation integration"
+    echo "TARGET: Ready for documentation integration"
 }
 
 verify_resolutions() {

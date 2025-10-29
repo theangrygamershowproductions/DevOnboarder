@@ -1,26 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Security policy for DevOnboarder including supported versions, vulnerability reporting process, and response procedures
+created_at: 2025-09-12
+description: "Security policy for DevOnboarder including supported versions, vulnerability reporting process, and response procedures"
+
 document_type: policy
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "Security Policy"
 
-tags:
-
-- security
-
-- policy
-
-- vulnerability
-
-title: Security Policy
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

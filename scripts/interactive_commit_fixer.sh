@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-echo "🎯 DevOnboarder Interactive Commit Message Fixer"
+echo "TARGET: DevOnboarder Interactive Commit Message Fixer"
 echo "================================================="
 echo
 

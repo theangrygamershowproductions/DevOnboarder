@@ -24,7 +24,7 @@ EMOJI_MAP[""]=""
 EMOJI_MAP[""]=""
 EMOJI_MAP[""]=""
 EMOJI_MAP[""]=""
-EMOJI_MAP["🎯"]="TARGET:"
+EMOJI_MAP["TARGET:"]="TARGET:"
 EMOJI_MAP[""]="ACTION:"
 EMOJI_MAP["FAST:"]="QUICK:"
 EMOJI_MAP[""]=""
@@ -56,15 +56,15 @@ fix_script() {
     done
 
     # Fix echo -e with color codes and emojis
-    if grep -q "echo -e.*\\\${.*}.*[🎯FAST:]" "$script_path"; then
+    if grep -q "echo -e.*\\\${.*}.*[TARGET:FAST:]" "$script_path"; then
         # Remove echo -e color formatting with emojis
-        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[🎯FAST:]\([^"]*\)\${[^}]*}"/echo "\1\2"/g' "$script_path"
+        sed -i 's/echo -e "\${[^}]*}\([^"]*\)[TARGET:FAST:]\([^"]*\)\${[^}]*}"/echo "\1\2"/g' "$script_path"
         ((fixes_made))
         echo "  Fixed echo -e with colors and emojis"
     fi
 
     # Fix any remaining standalone emojis in echo
-    for emoji in     🎯  FAST:    ; do
+    for emoji in     TARGET:  FAST:    ; do
         if grep -q "$emoji" "$script_path"; then
             replacement="${EMOJI_MAP[$emoji]:-""}"
             sed -i "s/$emoji/$replacement/g" "$script_path"
@@ -122,7 +122,7 @@ echo ""
 
 # Verify compliance
 echo "Verifying compliance..."
-VIOLATIONS=$(grep -r '[🎯FAST:]' "$FRAMEWORK_DIR" || true)
+VIOLATIONS=$(grep -r '[TARGET:FAST:]' "$FRAMEWORK_DIR" || true)
 
 if [ -z "$VIOLATIONS" ]; then
     echo " No emoji violations found in Phase 3 framework"

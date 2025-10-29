@@ -21,7 +21,7 @@ echo "   • Quality Standards: 95% requirement enforced"
 echo "   • Potato Policy: Successfully protected sensitive data"
 echo ""
 
-echo "🎯 NEXT PHASE:"
+echo "TARGET: NEXT PHASE:"
 echo "    CI Infrastructure Repair Initiative"
 echo "    Dedicated focus on infrastructure reliability"
 echo "    Health scoring accuracy improvements"

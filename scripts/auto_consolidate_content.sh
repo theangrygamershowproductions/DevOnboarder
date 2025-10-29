@@ -119,7 +119,7 @@ analyze_current_duplications() {
 
 # Function: Process virtual environment consolidation (HIGH PRIORITY)
 consolidate_virtual_environment_content() {
-    echo "🐍 Processing virtual environment content consolidation..."
+    echo "PYTHON: Processing virtual environment content consolidation..."
 
     local temp_references="$LOG_DIR/venv_references_$TIMESTAMP.txt"
 

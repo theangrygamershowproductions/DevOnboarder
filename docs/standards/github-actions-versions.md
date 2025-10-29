@@ -1,26 +1,20 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 ci_integration: true
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Standards documentation
+created_at: 2025-09-12
+description: "Standards documentation"
+
 document_type: standards
 merge_candidate: false
 project: DevOnboarder
 similarity_group: standards-standards
 status: active
-tags:
+tags: 
+title: "Github Actions Versions"
 
-- standards
-
-- policy
-
-- documentation
-
-title: Github Actions Versions
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 virtual_env_required: true
 visibility: internal
 ---

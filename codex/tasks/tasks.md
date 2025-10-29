@@ -1,19 +1,10 @@
-# 🧠 Codex Task Tracker – DevOnboarder Orchestration Rollout
-
-This master task index tracks all rollout phases for DevOnboarder’s modularization, orchestration expansion, and public readiness. All items here are Codex-ready and scoped to `.codex/tasks/` for structured agent ingestion.
-
 ---
-
-## 📦 Phase 1B – Repo Extraction (Status: WORK: In Progress)
-
-> Split core components into standalone repositories to enable modular orchestration.
-
-- [ ] [Create New Repos for Frontend and Discord Bot](create_new_repos_checklist.md)
-
-- [ ] [Migrate Code to Extracted Repos](migrate_code_checklist.md)
-
-- [ ] [Set Up Cross-Repo Codex Orchestration](cross_repo_orchestration.md)
-
+## 📦 Phase 1B – Repo Extraction (Status: "WORK: In Progress)"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## 🧭 Phase 2.1B – Public Readiness & CI Hardening (Status: ⏳ Planned)

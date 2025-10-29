@@ -207,7 +207,7 @@ analyze_qc_failure() {
 
         if grep -q "permission denied\|not permitted" "$latest_qc_log" 2>/dev/null; then
             qc_content="
-🔒 **Permission Issue**: Access denied to required resources"
+SECURE: **Permission Issue**: Access denied to required resources"
         fi
 
         if grep -q "No module named\|ModuleNotFoundError" "$latest_qc_log" 2>/dev/null; then

@@ -2,23 +2,15 @@
 title: "Phase 2 Baseline Lock"
 
 description: "Canonical definition and lock status for Phase 2: Terminal Output Compliance & Deployment Visibility with scope and implementation status"
-document_type: "status"
-project: "DevOnboarder"
+
+document_type: status
+project: DevOnboarder
 consolidation_priority: P3
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: codex-codex
-tags:
-  - phase2
-
-  - baseline
-
-  - locked
-
-  - terminal-output
-
-  - status
-
+tags: 
+updated_at: 2025-10-27
 ---
 
 # 🔒 PHASE 2 BASELINE LOCK

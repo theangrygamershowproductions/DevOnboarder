@@ -79,12 +79,12 @@ show_triage_sop() {
     echo "     - Tier 1: Always separate issue (strategic importance)"
     echo "     - Tier 2: Based on scope impact and current work"
     echo ""
-    echo "🎯 TARGET: <15 minute triage decisions"
+    echo "TARGET: TARGET: <15 minute triage decisions"
     echo "LOCATION: REFERENCE: docs/ISSUE_DISCOVERY_TRIAGE_SOP.md"
 }
 
 show_priority_framework() {
-    echo "🎯 PRIORITY STACK FRAMEWORK"
+    echo "TARGET: PRIORITY STACK FRAMEWORK"
     echo "==========================="
     echo ""
     echo "🔴 TIER 1: STRATEGIC FOUNDATION"

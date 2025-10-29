@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🎯 DevOnboarder MVP Readiness Check"
+echo "TARGET: DevOnboarder MVP Readiness Check"
 echo "=================================="
 echo "Timestamp: $(date)"
 echo
@@ -59,7 +59,7 @@ check_command "Discord Bot Process" "pgrep -f 'node.*bot' || docker ps --filter 
 echo
 
 # 2. Quality Gates Validation
-echo "🎯 Quality Gates Validation"
+echo "TARGET: Quality Gates Validation"
 echo "============================"
 
 # Set up Python environment
@@ -117,7 +117,7 @@ check_command "System Memory Usage" "free -m | awk 'NR==2{printf \"%.1f\", \$3*1
 echo
 
 # 5. Documentation Quality
-echo "📚 Documentation Quality"
+echo "DOCS: Documentation Quality"
 echo "========================"
 
 # Check if documentation tools are available
@@ -148,7 +148,7 @@ fi
 echo
 
 # 7. Security Validation
-echo "🔒 Security Validation"
+echo "SECURE: Security Validation"
 echo "======================"
 
 check_command "Python Dependencies Security" "pip-audit --desc --format=json | jq '.vulnerabilities | length'" "^0$"

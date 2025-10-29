@@ -114,7 +114,7 @@ This issue tracks the development and review progress of **Pull Request #$PR_NUM
 - [ ] **Documentation Updated**: Any required docs updated
 - [ ] **Ready for Merge**: PR approved and ready for integration
 
-### 🎯 Acceptance Criteria
+### TARGET: Acceptance Criteria
 
 **Definition of Done**:
 - All CI checks passing (coverage, linting, security)

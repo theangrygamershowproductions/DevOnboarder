@@ -1,28 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Local CI coverage validation and comprehensive development environment setup
+created_at: 2025-09-12
+description: "Local CI coverage validation and comprehensive development environment setup"
+
 document_type: guide
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "Local CI Coverage Validation"
 
-tags:
-
-- guide
-
-- ci
-
-- coverage
-
-- validation
-
-title: Local CI Coverage Validation
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -57,7 +57,7 @@ echo "================================================"
 if ! gh auth status >/dev/null 2>&1; then
     echo "  GitHub CLI not authenticated, using basic analysis"
     echo " Proceeding with simplified pattern analysis"
-    echo "🤖 Pattern Analysis Complete (simplified mode)"
+    echo "BOT: Pattern Analysis Complete (simplified mode)"
     exit 0
 fi
 
@@ -95,7 +95,7 @@ echo "$FAILING_CHECKS" | jq -r '.[] | "\(.name): \(.conclusion)"' | while read -
             echo "    Action: Fix markdown formatting, likely auto-fixable"
             ;;
         *"security"*|*"audit"*)
-            echo "   🔒 Category: SECURITY SCAN"
+            echo "   SECURE: Category: SECURITY SCAN"
             echo "    Impact: Security vulnerabilities"
             echo "    Action: Update dependencies, review security issues"
             ;;
@@ -120,7 +120,7 @@ done
 
 # Generate overall recommendation
 FAILURE_COUNT=$(echo "$FAILING_CHECKS" | jq length)
-echo "🎯 Overall Assessment:"
+echo "TARGET: Overall Assessment:"
 echo "  Total Failures: $FAILURE_COUNT"
 
 # Check for auto-fixable issues
@@ -148,4 +148,4 @@ else
 fi
 
 echo
-echo "🤖 Pattern Analysis Complete"
+echo "BOT: Pattern Analysis Complete"

@@ -44,7 +44,7 @@ else
 fi
 
 # Apply Python formatting
-echo "🐍 Applying Python code formatting..."
+echo "PYTHON: Applying Python code formatting..."
 if command -v black >/dev/null 2>&1; then
     black --quiet . 2>/dev/null || echo "    No Python formatting needed"
     echo "    Python formatting applied"

@@ -1,34 +1,23 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Comprehensive mitigation strategies for potential disadvantages of modular
-  documentation structure
+created_at: 2025-09-11
+description: "Comprehensive mitigation strategies for potential disadvantages of modular"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
 similarity_group: documentation-guides
 status: active
-tags:
+tags: 
+title: "DevOnboarder Modular Documentation Risk Mitigation Strategy"
 
-- devonboarder
-
-- documentation
-
-- risk-mitigation
-
-- modular
-
-- strategy
-
-title: DevOnboarder Modular Documentation Risk Mitigation Strategy
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Mandatory virtual environment requirements for all development and tooling
-  in DevOnboarder
+created_at: 2025-09-11
+description: "Mandatory virtual environment requirements for all development and tooling"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- terminal-output-policy.md
-
-- plugin-development.md
-
+related_modules: 
 similarity_group: policies-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Virtual Environment Policy"
 
-- devonboarder
-
-- virtual-environment
-
-- policy
-
-- development
-
-- isolation
-
-title: DevOnboarder Virtual Environment Policy
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

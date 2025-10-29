@@ -1,29 +1,24 @@
 ---
 title: "DevOnboarder Agent Instructions - Comprehensive Reference"
-description: "Complete comprehensive AI agent instructions for DevOnboarder, including
-  all policies, workflows, and detailed guidance"
+
+description: ""Complete comprehensive AI agent instructions for DevOnboarder, including"
+
 author: "TAGS DevSecOps Manager"
-project: "DevOnboarder"
-version: "v1.0.0"
-status: "active"
-visibility: "internal"
-created_at: "2025-09-21"
-updated_at: "2025-09-21"
+project: DevOnboarder
+version: v1.0.0
+status: active
+visibility: internal
+created_at: 2025-09-21
+updated_at: 2025-10-27
 canonical_url: "https://codex.theangrygamershow.com/docs/devonboarder/copilot-instructions-comprehensive"
-related_components:
-- github_copilot
-- development_workflow
-- quality_gates
-- automation
-- security
-- testing
-codex_scope: "DevOnboarder"
-codex_role: "ai_agent"
-codex_type: "instruction"
-codex_runtime: "github_copilot"
-tags: ["ai-agent", "comprehensive", "complete", "reference", "development", "automation"]
-document_type: "instruction"
-similarity_group: "ci-automation"
+related_components: 
+codex_scope: DevOnboarder
+codex_role: ai_agent
+codex_type: instruction
+codex_runtime: github_copilot
+tags: "["ai-agent", "comprehensive", "complete", "reference", "development", "automation"]"
+document_type: instruction
+similarity_group: ci-automation
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3

@@ -1,22 +1,20 @@
 ---
-author: DevOnboarder Project
-
+author: "DevOnboarder Project"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
+created_at: 2025-09-12
 date_created: 2025-07-05
-description: Documentation description needed
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: DevOnboarder
 similarity_group: builder_ethics_dossier.md-docs
 status: active
-tags:
+tags: 
+title: "Builder Ethics Dossier"
 
-- documentation
-
-title: Builder Ethics Dossier
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 version: v1.0.0
 visibility: internal
 ---

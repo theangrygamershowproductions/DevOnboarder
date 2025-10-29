@@ -142,7 +142,7 @@ add_cleanup_suggestion() {
 
 # Function to check virtual environment compliance
 check_venv_compliance() {
-    log_message "$BLUE" "🐍 Checking virtual environment compliance..."
+    log_message "$BLUE" "PYTHON: Checking virtual environment compliance..."
 
     # Check if virtual environment exists
     if [[ ! -d ".venv" ]]; then
@@ -244,7 +244,7 @@ suggest_enhanced_cleanup() {
 
 # Function for automated cleanup (Phase 3.2 preview)
 auto_cleanup() {
-    log_message "$YELLOW" "🤖 Starting automated cleanup..."
+    log_message "$YELLOW" "BOT: Starting automated cleanup..."
 
     # Create backup timestamp
     backup_dir="logs/artifact_backups/$(date %Y%m%d_%H%M%S)"

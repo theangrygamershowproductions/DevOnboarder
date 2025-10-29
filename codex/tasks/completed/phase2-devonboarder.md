@@ -1,13 +1,18 @@
 ---
-title: Phase 2 Rollout – DevOnboarder Readiness Tasks
+title: "Phase 2 Rollout – DevOnboarder Readiness Tasks"
 
-labels: ["codex", "ci-fix", "documentation", "modular-extraction", "security"]
-assignees: ["@codex-bot", "@claude-dev"]
+labels: "["codex", "ci-fix", "documentation", "modular-extraction", "security"]"
+assignees: "["@codex-bot", "@claude-dev"]"
 priority: high
 codex_runtime: true
 codex_type: task-bundle
 codex_scope: tags/devonboarder
 codex_target_branch: main
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## 🎯 Objective

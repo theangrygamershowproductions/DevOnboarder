@@ -1,23 +1,24 @@
 ---
-title: External Toolkit Integration (Public-Safe Patterns)
-description: How agents detect optional enhanced capabilities without exposing
-  proprietary tool names or secrets.
-author: TAGS DevSecOps
+title: "External Toolkit Integration (Public-Safe Patterns)"
+
+description: "How agents detect optional enhanced capabilities without exposing"
+
+author: "TAGS DevSecOps"
 created_at: 2025-10-06
-updated_at: 2025-10-06
+updated_at: 2025-10-27
 project: DevOnboarder
-related_components: [agents, ci, security, vscode, mcp]
+related_components: "[agents, ci, security, vscode, mcp]"
 document_type: guide
 status: active
 visibility: public
-canonical_url:
-  https://github.com/theangrygamershowproductions/DevOnboarder/blob/main/docs/agents/external-toolkit-integration.md
+canonical_url: 
+https: //github.com/theangrygamershowproductions/DevOnboarder/blob/main/docs/agents/external-toolkit-integration.md
 codex_scope: tags/devonboarder
 codex_role: devsecops
 codex_type: policy
 codex_runtime: cilocal
-tags: [security, detection, agents, mcp]
-similarity_group: "security-framework"
+tags: "[security, detection, agents, mcp]"
+similarity_group: security-framework
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3

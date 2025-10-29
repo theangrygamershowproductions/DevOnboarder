@@ -76,7 +76,7 @@ echo "2. Use environment files instead of direct secrets"
 echo "3. Use GitHub CLI to set secrets programmatically"
 echo ""
 
-echo "🎯 RECOMMENDED STEPS"
+echo "TARGET: RECOMMENDED STEPS"
 echo "=================="
 echo "1. Try Solution 1 first (direct copy-paste)"
 echo "2. If that fails, try Solution 2 (base64)"

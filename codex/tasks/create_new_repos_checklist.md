@@ -1,5 +1,5 @@
 ---
-title: Checklist - Create New Repositories
+title: "Checklist - Create New Repositories"
 
 project: DevOnboarder
 codex_scope: repo-split-phase1
@@ -7,13 +7,12 @@ codex_role: project_maintainer
 codex_type: task_checklist
 status: draft
 created_at: 2025-08-03
-tags:
-  - codex-task
-
-  - repository-creation
-
-  - phase1
-
+tags: 
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## Objective

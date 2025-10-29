@@ -18,7 +18,7 @@ echo -e "${YELLOW}This guide helps you write proper commit messages following De
 echo ""
 
 show_examples() {
-    echo -e "${BLUE}🎯 Commit Type Examples${NC}"
+    echo -e "${BLUE}TARGET: Commit Type Examples${NC}"
     echo "======================"
     echo ""
 
@@ -76,7 +76,7 @@ show_examples() {
 }
 
 show_scope_guide() {
-    echo -e "${BLUE}🎯 Scope Guidelines${NC}"
+    echo -e "${BLUE}TARGET: Scope Guidelines${NC}"
     echo "=================="
     echo ""
     echo -e "${CYAN}Common scopes in DevOnboarder:${NC}"
@@ -121,7 +121,7 @@ show_message_structure() {
 }
 
 show_interactive_helper() {
-    echo -e "${BLUE}🤖 Interactive Commit Helper${NC}"
+    echo -e "${BLUE}BOT: Interactive Commit Helper${NC}"
     echo "============================="
     echo ""
     echo "Let's build a commit message step by step!"
@@ -253,7 +253,7 @@ show_current_changes() {
     fi
 
     if echo "$changed_files" | grep -q "\.py$"; then
-        echo "  🐍 FEAT, FIX, or REFACTOR - You have Python changes"
+        echo "  PYTHON: FEAT, FIX, or REFACTOR - You have Python changes"
     fi
 
     if echo "$changed_files" | grep -q "\.(js|ts)$"; then
@@ -269,7 +269,7 @@ show_current_changes() {
 
 # Main menu
 main_menu() {
-    echo -e "${GREEN}📚 What would you like to learn about?${NC}"
+    echo -e "${GREEN}DOCS: What would you like to learn about?${NC}"
     echo "====================================="
     echo "1. Show commit message examples"
     echo "2. Show scope guidelines"

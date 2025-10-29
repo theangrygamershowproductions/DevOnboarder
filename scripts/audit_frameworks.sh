@@ -162,7 +162,7 @@ for framework_dir in frameworks/*/; do
         fi
 
         # Check for terminal output violations (critical for CI compatibility)
-        if grep -q "echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*🎯" "$script"; then
+        if grep -q "echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*\|echo.*TARGET:" "$script"; then
             issues="${issues}${YELLOW}[EMOJIS IN ECHO]${NC} "
         fi
 

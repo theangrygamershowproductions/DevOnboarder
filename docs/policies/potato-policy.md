@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Automated security mechanism protecting sensitive files from accidental
-  exposure with comprehensive enforcement
+created_at: 2025-09-11
+description: "Automated security mechanism protecting sensitive files from accidental"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- security-best-practices.md
-
-- quality-control-policy.md
-
+related_modules: 
 similarity_group: ci-automation
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Enhanced Potato Policy"
 
-- devonboarder
-
-- potato-policy
-
-- security
-
-- file-protection
-
-- automation
-
-title: DevOnboarder Enhanced Potato Policy
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

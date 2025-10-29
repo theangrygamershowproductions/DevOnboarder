@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🤖 DevOnboarder Bot Full Deployment"
+echo "BOT: DevOnboarder Bot Full Deployment"
 echo "==================================="
 echo ""
 

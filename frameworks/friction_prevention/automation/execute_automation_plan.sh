@@ -84,7 +84,7 @@ elif [[ "$MODE" == "execute" ]]; then
 
     # Apply Python code fixes if needed
     if grep -q "TEST FAILURE" reports/pattern_analysis_$PR_NUMBER.txt; then
-        echo "🐍 Checking Python code formatting..."
+        echo "PYTHON: Checking Python code formatting..."
         if command -v black >/dev/null 2>&1; then
             black --check --diff . || {
                 echo "    Applying black formatting..."
@@ -96,7 +96,7 @@ elif [[ "$MODE" == "execute" ]]; then
     echo "    Automated fixes applied"
 
 elif [[ "$MODE" == "full-auto" ]]; then
-    echo "🤖 FULL-AUTO MODE: Complete automation"
+    echo "BOT: FULL-AUTO MODE: Complete automation"
     echo "  This would apply fixes AND potentially auto-merge"
     echo "🛡️  Safety check: Potato.md protection active"
 

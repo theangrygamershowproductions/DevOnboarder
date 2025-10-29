@@ -961,7 +961,7 @@ run_comprehensive_analysis() {
 
 # Enhanced analysis with near-100% quality using advanced fingerprinting
 run_enhanced_analysis() {
-    echo "🎯 Running enhanced analysis with advanced similarity detection..."
+    echo "TARGET: Running enhanced analysis with advanced similarity detection..."
     local analysis_start_time
     analysis_start_time=$(date %s)
 
@@ -1029,7 +1029,7 @@ run_enhanced_analysis() {
                     if [ "$similarity" -ge "$SIMILARITY_THRESHOLD" ]; then
                         duplications_found=$((duplications_found  1))
                         echo ""
-                        echo "🎯 Enhanced similarity detected ($similarity%):"
+                        echo "TARGET: Enhanced similarity detected ($similarity%):"
                         echo "   FILE: $file1"
                         echo "   FILE: $file2"
                         echo "   🔬 Multi-metric analysis: semantic  structural  n-gram"
@@ -1072,7 +1072,7 @@ run_enhanced_analysis() {
     echo "   Quality Features: Semantic mapping, TF-IDF weighting, n-grams, structure analysis"
 
     if [ "$duplications_found" -gt 0 ]; then
-        echo "   Status: 🎯 High-confidence consolidation opportunities detected"
+        echo "   Status: TARGET: High-confidence consolidation opportunities detected"
     else
         echo "   Status:  No significant duplication found (enhanced analysis)"
     fi
@@ -1170,7 +1170,7 @@ case "${1:-help}" in
             echo "  Note: This uses O(n²×m²) algorithm - may take significant time"
             run_legacy_comprehensive_analysis
         elif [ "${2:-}" = "--enhanced" ] || [ "${2:-}" = "--near-perfect" ]; then
-            echo "🎯 Running in ENHANCED mode (multi-metric near-100% quality)"
+            echo "TARGET: Running in ENHANCED mode (multi-metric near-100% quality)"
             echo "🔬 Features: TF-IDF weighting, n-grams, semantic mapping, structural analysis"
             run_enhanced_analysis
         elif [ "${2:-}" = "--quick" ] || [ "${ANALYSIS_MODE}" = "quick" ]; then

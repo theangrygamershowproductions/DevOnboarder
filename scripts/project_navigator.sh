@@ -117,7 +117,7 @@ show_main_menu() {
 load_issue_management_context() {
     log_action "Loading Issue Management context"
     echo
-    echo "🎯 ISSUE MANAGEMENT CONTEXT LOADED"
+    echo "TARGET: ISSUE MANAGEMENT CONTEXT LOADED"
     echo "=================================="
     echo
     echo " Current State:"
@@ -126,7 +126,7 @@ load_issue_management_context() {
     echo "• Strategic milestones: 5 milestones with 37 issue assignments"
     echo "• Sprint 1: COMPLETE (Issues #1437, #1315 resolved)"
     echo
-    echo "🎯 Active Framework:"
+    echo "TARGET: Active Framework:"
     echo "• Strategic Planning Framework v1.0.0"
     echo "• Issue Management Initiative - Administrative Triage COMPLETE"
     echo
@@ -199,7 +199,7 @@ show_navigation_metrics() {
     echo "• Faster task focus and resolution"
     echo "• Consistent use of pre-loaded context"
     echo
-    echo "🎯 Next Phase Readiness:"
+    echo "TARGET: Next Phase Readiness:"
     echo "• If 5 successful sessions  Expand to more domains"
     echo "• If clear efficiency gains  Extract as universal template"
     echo "• If minimal usage  Refine or discontinue"

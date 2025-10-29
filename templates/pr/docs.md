@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Template for documentation quality control system enhancement pull requests
+created_at: 2025-09-12
+description: "Template for documentation quality control system enhancement pull requests"
+
 document_type: template
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Documentation PR Template"
 
-- template
-
-- pr-template
-
-- documentation
-
-- quality-control
-
-title: Documentation PR Template
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

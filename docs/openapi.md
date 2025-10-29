@@ -1,28 +1,22 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: cto
 codex_scope: tags
 codex_type: documentation
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-04'
-description: How we author, validate, mock, and consume OpenAPI contracts.
+created_at: 2025-09-04
+description: "How we author, validate, mock, and consume OpenAPI contracts."
+
 document_type: guide
 merge_candidate: false
 project: DevOnboarder
 similarity_group: openapi.md-guide
 status: draft
-tags:
+tags: 
+title: "OpenAPI in DevOnboarder"
 
-- docs
-
-- openapi
-
-- contracts
-
-title: OpenAPI in DevOnboarder
-updated_at: '2025-09-04'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

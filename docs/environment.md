@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Environment variable management and documentation maintenance procedures
+created_at: 2025-09-12
+description: "Environment variable management and documentation maintenance procedures"
+
 document_type: reference
 merge_candidate: false
 project: DevOnboarder
 similarity_group: environment.md-docs
 status: active
-tags:
+tags: 
+title: "Environment Variable Management"
 
-- reference
-
-- environment-variables
-
-- maintenance
-
-- automation
-
-title: Environment Variable Management
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

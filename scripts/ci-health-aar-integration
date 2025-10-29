@@ -26,7 +26,7 @@ elif [[ -f "$PROJECT_ROOT/scripts/load_token_environment.sh" ]]; then
     # Fallback to legacy token loader
     source "$PROJECT_ROOT/scripts/load_token_environment.sh"
 else
-    echo "⚠️  Warning: Token Architecture scripts not found. AAR integration may have limited functionality."
+    echo "WARNING:  Warning: Token Architecture scripts not found. AAR integration may have limited functionality."
 fi
 
 # Check for virtual environment

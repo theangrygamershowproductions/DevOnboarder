@@ -2,16 +2,18 @@
 title: "CI Enforcement Tasks"
 
 description: "Comprehensive guide to automation checks and CI workflow enforcement for maintaining consistent build quality and standards"
-document_type: "guide"
-tags: ["ci", "automation", "enforcement", "workflow", "quality-control"]
-project: "DevOnboarder"
-created: "2025-09-13"
-last_modified: "2025-09-13"
-version: "1.0"
+
+document_type: guide
+tags: "["ci", "automation", "enforcement", "workflow", "quality-control"]"
+project: DevOnboarder
+created: 2025-09-13
+last_modified: 2025-09-13
+version: 1.0
 consolidation_priority: P3
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: codex-codex
+updated_at: 2025-10-27
 ---
 
 # CI Enforcement Tasks

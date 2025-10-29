@@ -1,21 +1,17 @@
 ---
 project: "DevOnboarder Post-MVP Strategic Plan"
-
-priority: "strategic"
-status: "staged"
-created: "2025-08-04"
-activation_date: "2025-09-16"
-project_lead: "architecture-team"
+priority: strategic
+status: staged
+created: 2025-08-04
+activation_date: 2025-09-16
+project_lead: architecture-team
 dependencies: [
-  "codex/mvp/MVP_PROJECT_PLAN.md",
-  "codex/tasks/strategic_split_readiness_diagnostic_COMPLETE.md",
-  "docs/strategic-split-assessment.md"
-]
 related_files: [
-  "scripts/validate_split_readiness.sh",
-  "scripts/execute_strategic_split.sh",
-  "codex/tasks/staged/modular_extraction_deferred.md"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder Post-MVP Strategic Plan

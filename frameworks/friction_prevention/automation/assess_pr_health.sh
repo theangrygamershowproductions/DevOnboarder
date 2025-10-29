@@ -70,7 +70,7 @@ echo "HOSPITAL: PR Health Score: $HEALTH_PERCENTAGE%"
 
 # Provide recommendations
 echo
-echo "🎯 Recommendations:"
+echo "TARGET: Recommendations:"
 
 if [ "$HEALTH_PERCENTAGE" -ge 80 ]; then
     echo "   HIGH HEALTH: PR is in good shape, consider proceeding with merge"
@@ -105,4 +105,4 @@ if [ "$ADDITIONS" -gt 1000 ]; then
 fi
 
 echo
-echo "🤖 Automated Assessment Complete"
+echo "BOT: Automated Assessment Complete"

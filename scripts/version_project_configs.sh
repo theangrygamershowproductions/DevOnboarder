@@ -34,7 +34,7 @@ echo
 # Version pyproject.toml with DevOnboarder standards
 version_pyproject_toml() {
     if [[ -f "pyproject.toml" ]]; then
-        echo "🐍 Versioning pyproject.toml..."
+        echo "PYTHON: Versioning pyproject.toml..."
         cp "pyproject.toml" "$BACKUP_DIR/pyproject.toml.backup"
         echo "   Backup created"
         echo "   Adding DevOnboarder metadata header"
@@ -158,9 +158,9 @@ main() {
     echo " Summary:"
     echo "   Project configuration files processed"
     echo "  💾 Backups saved to: $BACKUP_DIR"
-    echo "  🔒 User shell configs (.zshrc) preserved as requested"
+    echo "  SECURE: User shell configs (.zshrc) preserved as requested"
     echo
-    echo "🎯 Next steps:"
+    echo "TARGET: Next steps:"
     echo "  1. Review generated .env.dev and update with actual dev values"
     echo "  2. Ensure .env.dev is NOT committed (should be in .gitignore)"
     echo "  3. Run CI to test with new environment structure"

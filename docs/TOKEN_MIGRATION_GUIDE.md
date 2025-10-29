@@ -1,27 +1,20 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-04'
-description: Step-by-step migration from .env token management to dedicated .tokens
-  system
+created_at: 2025-09-04
+description: "Step-by-step migration from .env token management to dedicated .tokens"
+
 document_type: guide
 merge_candidate: false
 priority: high
 project: DevOnboarder
 similarity_group: TOKEN_MIGRATION_GUIDE.md-docs
 status: implementation
-tags:
+tags: 
+title: "Token Architecture v2.0 Migration Guide"
 
-- guide
-
-- migration
-
-- token-architecture
-
-title: Token Architecture v2.0 Migration Guide
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

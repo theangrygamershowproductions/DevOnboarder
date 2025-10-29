@@ -35,7 +35,7 @@ echo "   PR #968: ${HEALTH_SCORE}% health, 2 files, 64 lines"
 echo "   Improvement: $((HEALTH_SCORE - 64)) percentage points"
 echo ""
 
-echo "🎯 NEXT STEPS FOR PR #968:"
+echo "TARGET: NEXT STEPS FOR PR #968:"
 if [[ $HEALTH_SCORE -ge 95 ]]; then
     echo "    Ready for merge - standards met"
 elif [[ $HEALTH_SCORE -ge 80 ]]; then

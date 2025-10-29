@@ -1,21 +1,18 @@
 ---
 project: "DevOnboarder MVP Delivery Plan"
-
-priority: "critical"
-status: "active"
-created: "2025-08-04"
-target_completion: "2025-09-15"
-project_lead: "architecture-team"
-stakeholders: ["development-team", "qa-team", "product-team"]
+priority: critical
+status: active
+created: 2025-08-04
+target_completion: 2025-09-15
+project_lead: architecture-team
+stakeholders: "["development-team", "qa-team", "product-team"]"
 dependencies: ["phase2/devonboarder-readiness.md"]
 related_files: [
-  "codex/tasks/staged/mvp_task_staging_overview.md",
-  "codex/tasks/strategic_split_readiness_diagnostic_COMPLETE.md",
-  "codex/tasks/staged/modular_extraction_deferred.md",
-  "codex/mvp/mvp_delivery_checklist.md",
-  "codex/mvp/mvp_quality_gates.md",
-  "codex/mvp/post_mvp_strategic_plan.md"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder MVP Delivery Plan

@@ -1,26 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Guide for contributing to DevOnboarder including setup, commit hooks, and quality standards
+created_at: 2025-09-12
+description: "Guide for contributing to DevOnboarder including setup, commit hooks, and quality standards"
+
 document_type: guide
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "DevOnboarder Contributing Guide"
 
-tags:
-
-- guide
-
-- contributing
-
-- development
-
-title: DevOnboarder Contributing Guide
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

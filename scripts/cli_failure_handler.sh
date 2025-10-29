@@ -167,23 +167,23 @@ echo "Health Score: ${health_points}%"
 
 if [ "${health_points}" -ge 95 ]; then
     echo "🎉 EXCELLENT: Meets 95% quality standard"
-    echo "🎯 Recommendation: Ready for merge"
+    echo "TARGET: Recommendation: Ready for merge"
     grade="EXCELLENT"
 elif [ "${health_points}" -ge 85 ]; then
     echo " GOOD: Strong health score"
-    echo "🎯 Recommendation: Manual review recommended"
+    echo "TARGET: Recommendation: Manual review recommended"
     grade="GOOD"
 elif [ "${health_points}" -ge 70 ]; then
     echo "  ACCEPTABLE: Functional but needs improvement"
-    echo "🎯 Recommendation: Infrastructure repair in progress"
+    echo "TARGET: Recommendation: Infrastructure repair in progress"
     grade="ACCEPTABLE"
 elif [ "${health_points}" -ge 50 ]; then
     echo " POOR: Significant infrastructure issues"
-    echo "🎯 Recommendation: Continue robust infrastructure deployment"
+    echo "TARGET: Recommendation: Continue robust infrastructure deployment"
     grade="POOR"
 else
     echo "🚨 FAILING: Critical infrastructure breakdown"
-    echo "🎯 Recommendation: Emergency infrastructure repair mode"
+    echo "TARGET: Recommendation: Emergency infrastructure repair mode"
     grade="FAILING"
 fi
 
@@ -200,7 +200,7 @@ echo " NEXT ACTIONS:"
 echo "==============="
 echo "1.  Continue robust infrastructure deployment"
 echo "2.  Monitor infrastructure improvements"
-echo "3. 🎯 Target environmental stability restoration"
+echo "3. TARGET: Target environmental stability restoration"
 echo "4.  Validate full functionality post-repair"
 
 echo ""
@@ -226,7 +226,7 @@ else
 fi
 
 echo ""
-echo "🎯 Step 3: Emergency Infrastructure Mode"
+echo "TARGET: Step 3: Emergency Infrastructure Mode"
 echo "--------------------------------------"
 
 # Create emergency mode assessment
@@ -254,7 +254,7 @@ Current Assessment for PR #968:
 - Quality standards: APPLIED 
 
 Recommendation:
-🎯 ACCEPTABLE GRADE - Infrastructure repair in progress
+TARGET: ACCEPTABLE GRADE - Infrastructure repair in progress
  Core mission accomplished despite environment issues
  Meets recalibrated 70% threshold for infrastructure limitations
  Ready for merge with infrastructure caveat documented
@@ -280,7 +280,7 @@ echo " Quality standards applied with infrastructure awareness"
 echo " Emergency fallback mechanisms functional"
 
 echo ""
-echo "🎯 CURRENT STATUS:"
+echo "TARGET: CURRENT STATUS:"
 echo "PR #968: ACCEPTABLE (70-75%) - Core mission accomplished"
 echo "Infrastructure: REPAIR IN PROGRESS - Robust solutions deployed"
 echo "Quality Gates: FUNCTIONAL - Realistic standards applied"

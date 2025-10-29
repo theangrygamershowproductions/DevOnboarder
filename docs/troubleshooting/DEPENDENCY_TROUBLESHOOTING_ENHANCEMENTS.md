@@ -1,9 +1,9 @@
 ---
 consolidation_priority: P3
-
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: troubleshooting-troubleshooting
+updated_at: 2025-10-27
 ---
 
 # Dependency Management & CI Troubleshooting Enhancement Recommendations

@@ -1,25 +1,16 @@
 ---
-author: DevOnboarder Team
+author: "DevOnboarder Team"
+created_at: 2025-09-13
+description: "Comprehensive CI Dashboard Integration architecture for real-time"
 
-created_at: '2025-09-13'
-description: Comprehensive CI Dashboard Integration architecture for real-time
-  workflow monitoring and failure prediction
 document_type: technical_design
 project: DevOnboarder
-tags:
+tags: 
+title: "CI Dashboard Integration Architecture v1.0"
 
-- ci-cd
-
-- dashboard
-
-- monitoring
-
-- architecture
-
-title: CI Dashboard Integration Architecture v1.0
-updated_at: '2025-09-13'
+updated_at: 2025-10-27
 visibility: internal
-similarity_group: "architecture-design"
+similarity_group: architecture-design
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3

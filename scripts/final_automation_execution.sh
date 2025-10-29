@@ -44,7 +44,7 @@ else
 fi
 
 # Apply Python formatting
-echo "🐍 Applying Python code formatting..."
+echo "PYTHON: Applying Python code formatting..."
 if command -v black >/dev/null 2>&1; then
     black --quiet . 2>/dev/null || echo "    No Python formatting needed"
     echo "    Python formatting applied"
@@ -75,12 +75,12 @@ fi
 echo ""
 
 # Step 5: Final Recommendation
-echo "🎯 Step 5: Final Automation Summary"
+echo "TARGET: Step 5: Final Automation Summary"
 echo "=================================="
 echo " Initial Health Score: ${HEALTH_SCORE}%"
 echo " Fixes Applied: Markdown formatting, Python formatting"
 echo " Post-Fix Score: ${POST_FIX_SCORE}"
-echo "🎯 Strategic Decision: ${DECISION}"
+echo "TARGET: Strategic Decision: ${DECISION}"
 echo ""
 
 case $DECISION in
@@ -113,7 +113,7 @@ echo ""
 echo "  QUALITY GATE ENFORCEMENT:"
 echo "    Required Standard: 95% health score"
 echo "    Current Score: ${HEALTH_SCORE}%"
-echo "   🎯 Gap to Standard: $((95 - HEALTH_SCORE)) percentage points"
+echo "   TARGET: Gap to Standard: $((95 - HEALTH_SCORE)) percentage points"
 
 echo ""
 echo " Automation execution complete!"

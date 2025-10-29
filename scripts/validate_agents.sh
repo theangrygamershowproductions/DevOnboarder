@@ -14,7 +14,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo "🤖 Validating Codex Agent Files..."
+echo "BOT: Validating Codex Agent Files..."
 
 if [ ! -f "$SCHEMA_FILE" ]; then
     echo -e "${RED} Agent schema not found: $SCHEMA_FILE${NC}" >&2

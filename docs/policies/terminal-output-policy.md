@@ -1,43 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Critical terminal output compliance policy to prevent system hanging
-  with zero tolerance enforcement
+created_at: 2025-09-11
+description: "Critical terminal output compliance policy to prevent system hanging"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- quality-control-policy.md
-
-- agent-requirements.md
-
+related_modules: 
 similarity_group: policies-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Terminal Output Policy"
 
-- devonboarder
-
-- terminal
-
-- output
-
-- policy
-
-- enforcement
-
-- compliance
-
-title: DevOnboarder Terminal Output Policy
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

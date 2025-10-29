@@ -2,16 +2,18 @@
 title: "PR Status Report Template"
 
 description: "Standardized template for generating comprehensive CI pipeline status reports for pull requests with detailed check analysis"
-document_type: "template"
-tags: ["pr", "ci", "status", "template", "automation", "pipeline"]
-project: "DevOnboarder"
-created: "2025-09-13"
-last_modified: "2025-09-13"
-version: "1.0"
+
+document_type: template
+tags: "["pr", "ci", "status", "template", "automation", "pipeline"]"
+project: DevOnboarder
+created: 2025-09-13
+last_modified: 2025-09-13
+version: 1.0
 consolidation_priority: P3
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: codex-codex
+updated_at: 2025-10-27
 ---
 
 # PR Status Report Template

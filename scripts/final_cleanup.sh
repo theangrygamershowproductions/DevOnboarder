@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "🎯 FINAL CLEANUP: Eliminating all residual test artifacts"
+echo "TARGET: FINAL CLEANUP: Eliminating all residual test artifacts"
 echo "=================================================="
 
 # Script metadata
@@ -25,7 +25,7 @@ if [ ! -d ".venv" ]; then
     exit 1
 fi
 
-log_and_display "🐍 Activating virtual environment..."
+log_and_display "PYTHON: Activating virtual environment..."
 # shellcheck source=/dev/null
 source .venv/bin/activate
 

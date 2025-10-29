@@ -3,6 +3,7 @@ similarity_group: custom-github-actions-framework.md-docs
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3
+updated_at: 2025-10-27
 ---
 # DevOnboarder Custom GitHub Actions Framework
 

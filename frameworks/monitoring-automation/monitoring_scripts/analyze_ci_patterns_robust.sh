@@ -84,7 +84,7 @@ fi
 # Documentation failures
 if echo "$FAILING_CHECKS" | grep -qi "docs\|documentation\|markdown\|readme"; then
     PATTERNS=("DOCUMENTATION")
-    echo "  📚 DOCUMENTATION: Documentation quality issues detected"
+    echo "  DOCS: DOCUMENTATION: Documentation quality issues detected"
 fi
 
 # Infrastructure failures
@@ -123,7 +123,7 @@ for pattern in "${PATTERNS[@]}"; do
             echo "  BUILD: BUILD: Check dependencies, fix compilation errors, verify configurations"
             ;;
         "DOCUMENTATION")
-            echo "  📚 DOCUMENTATION: Fix markdown errors, update docs, validate links"
+            echo "  DOCS: DOCUMENTATION: Fix markdown errors, update docs, validate links"
             ;;
         "INFRASTRUCTURE")
             echo "  BUILD: INFRASTRUCTURE: Verify deployment configs, check environment variables"

@@ -76,9 +76,9 @@ done
 
 echo " DevOnboarder COMPREHENSIVE Local CI Validation"
 if [[ -n "$TARGET_SECTION" ]]; then
-    echo "🎯 Running section: $TARGET_SECTION"
+    echo "TARGET: Running section: $TARGET_SECTION"
 elif [[ -n "$TARGET_STEP" ]]; then
-    echo "🎯 Running step: $TARGET_STEP"
+    echo "TARGET: Running step: $TARGET_STEP"
 elif [[ "$DRY_RUN" == "true" ]]; then
     echo " DRY RUN MODE - Showing what would execute"
 else
@@ -438,7 +438,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
 fi
 
 echo
-echo "🎯 COMPREHENSIVE CI VALIDATION COMPLETE!"
+echo "TARGET: COMPREHENSIVE CI VALIDATION COMPLETE!"
 echo "════════════════════════════════════════"
 
 # Create final summary for main log

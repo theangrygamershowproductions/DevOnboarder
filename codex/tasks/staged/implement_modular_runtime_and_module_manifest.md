@@ -1,19 +1,17 @@
 ---
 task: "Implement DevOnboarder Modular Runtime & Module Manifest System"
-
-priority: "high"
-status: "planning"
-created: "2025-08-03"
-assigned: "architecture-team"
-dependencies: ["phase2/devonboarder-readiness.md", "repo_init_tags-discord-bot.sh", "repo_init_tags-frontend.sh"]
+priority: high
+status: planning
+created: 2025-08-03
+assigned: architecture-team
+dependencies: "["phase2/devonboarder-readiness.md", "repo_init_tags-discord-bot.sh", "repo_init_tags-frontend.sh"]"
 related_files: [
-  ".codex/modules/module_manifest.yaml",
-  "scripts/module_integrity_checker.py",
-  "scripts/register_module_usage.sh",
-  "docs/v1/modules/runtime-config.md",
-  "docs/public/module-usage-examples.md"
-]
 validation_required: true
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder Modular Runtime Task

@@ -1,27 +1,25 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.CIBot
-  output: Open or closed ci-failure issues
-  role: Manages CI failure issues
-  scope: CI workflows
-  triggers: Failed CI runs and nightly cleanup
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.CIBot
+output: "Open or closed ci-failure issues"
+role: "Manages CI failure issues"
+scope: "CI workflows"
+triggers: "Failed CI runs and nightly cleanup"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Ci Bot"
 
-- documentation
-
-title: Ci Bot
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

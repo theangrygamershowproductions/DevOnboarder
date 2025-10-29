@@ -67,7 +67,7 @@ fi
 # Security failures
 if echo "$FAILING_CHECKS" | grep -qi "security\|audit\|vulnerability\|snyk\|safety"; then
     PATTERNS=("SECURITY")
-    echo "  🔒 SECURITY ISSUES: Security scan failures detected"
+    echo "  SECURE: SECURITY ISSUES: Security scan failures detected"
 fi
 
 # Build failures
@@ -79,7 +79,7 @@ fi
 # Documentation failures
 if echo "$FAILING_CHECKS" | grep -qi "docs\|documentation\|markdown\|readme"; then
     PATTERNS=("DOCUMENTATION")
-    echo "  📚 DOCUMENTATION: Documentation quality issues detected"
+    echo "  DOCS: DOCUMENTATION: Documentation quality issues detected"
 fi
 
 # Infrastructure failures
@@ -101,7 +101,7 @@ if [ ${#PATTERNS[@]} -eq 0 ]; then
 fi
 
 echo ""
-echo "🎯 Automated Fix Recommendations:"
+echo "TARGET: Automated Fix Recommendations:"
 
 for pattern in "${PATTERNS[@]}"; do
     case $pattern in
@@ -112,13 +112,13 @@ for pattern in "${PATTERNS[@]}"; do
             echo "   CODE_QUALITY: Run formatters (black, prettier), fix linting errors"
             ;;
         "SECURITY")
-            echo "  🔒 SECURITY: Update dependencies, patch vulnerabilities, review security policies"
+            echo "  SECURE: SECURITY: Update dependencies, patch vulnerabilities, review security policies"
             ;;
         "BUILD")
             echo "  BUILD: BUILD: Check dependencies, fix compilation errors, verify configurations"
             ;;
         "DOCUMENTATION")
-            echo "  📚 DOCUMENTATION: Fix markdown errors, update docs, validate links"
+            echo "  DOCS: DOCUMENTATION: Fix markdown errors, update docs, validate links"
             ;;
         "INFRASTRUCTURE")
             echo "  BUILD: INFRASTRUCTURE: Verify deployment configs, check environment variables"
@@ -133,7 +133,7 @@ for pattern in "${PATTERNS[@]}"; do
 done
 
 echo ""
-echo "🤖 Auto-fix Potential Assessment:"
+echo "BOT: Auto-fix Potential Assessment:"
 if [[ " ${PATTERNS[*]} " =~ " CODE_QUALITY " ]] || [[ " ${PATTERNS[*]} " =~ " DOCUMENTATION " ]]; then
     echo "  🟢 HIGH: Code quality and documentation issues are auto-fixable"
 elif [[ " ${PATTERNS[*]} " =~ " TESTING " ]] && [[ " ${PATTERNS[*]} " =~ " BUILD " ]]; then

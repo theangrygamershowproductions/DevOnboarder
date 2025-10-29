@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Comprehensive code quality standards including linting rules, testing
-  requirements, and enforcement policies
+created_at: 2025-09-11
+description: "Comprehensive code quality standards including linting rules, testing"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- quality-control-policy.md
-
-- development-workflow.md
-
+related_modules: 
 similarity_group: development-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Code Quality Requirements"
 
-- devonboarder
-
-- code-quality
-
-- linting
-
-- testing
-
-- standards
-
-title: DevOnboarder Code Quality Requirements
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

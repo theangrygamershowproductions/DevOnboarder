@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Centralized tracking of configuration file versions and metadata for files that don't support comment headers
+created_at: 2025-09-12
+description: "Centralized tracking of configuration file versions and metadata for files that don't support comment headers"
+
 document_type: reference
 merge_candidate: false
 project: DevOnboarder
 similarity_group: CONFIG_VERSIONS.md-docs
 status: active
-tags:
+tags: 
+title: "Configuration File Version Registry"
 
-- reference
-
-- configuration
-
-- versioning
-
-- file-tracking
-
-title: Configuration File Version Registry
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

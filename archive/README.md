@@ -1,3 +1,10 @@
+---
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
+---
 # DevOnboarder Archive Directory
 
 This directory contains archived files and directories that were part of the development process but are no longer active. These are preserved for continuity and reference in case issues arise with current implementations.

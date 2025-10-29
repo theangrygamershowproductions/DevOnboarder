@@ -1,19 +1,18 @@
 ---
 task: "Implement MVP Quality Gates Framework"
-
-priority: "critical"
-status: "staged"
-created: "2025-08-04"
-assigned: "architecture-team"
-dependencies: ["codex-catch-system-implementation.md", "terminal-output-enforcement-enhancement.md"]
+priority: critical
+status: staged
+created: 2025-08-04
+assigned: architecture-team
+dependencies: "["codex-catch-system-implementation.md", "terminal-output-enforcement-enhancement.md"]"
 related_files: [
-    "codex/mvp/mvp_quality_gates.md",
-    "scripts/qc_pre_push.sh",
-    "scripts/mvp_quality_gates_validation.sh",
-    ".github/workflows/quality-gates.yml"
-]
 validation_required: true
 staging_reason: "framework defined but implementation scripts and CI integration not yet built"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # MVP Quality Gates Implementation Task

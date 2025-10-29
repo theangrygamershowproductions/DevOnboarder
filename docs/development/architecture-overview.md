@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Comprehensive architecture guide covering TAGS stack integration, multi-service
-  setup, and technology stack
+created_at: 2025-09-11
+description: "Comprehensive architecture guide covering TAGS stack integration, multi-service"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- service-integration-patterns.md
-
-- file-structure-conventions.md
-
+related_modules: 
 similarity_group: architecture-design
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Architecture Overview"
 
-- devonboarder
-
-- architecture
-
-- tags-stack
-
-- microservices
-
-- integration
-
-title: DevOnboarder Architecture Overview
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

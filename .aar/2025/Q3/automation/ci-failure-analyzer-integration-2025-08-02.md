@@ -1,25 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: After Action Report
+created_at: 2025-09-12
+description: "After Action Report"
+
 document_type: aar
 merge_candidate: false
 project: core-aar
 similarity_group: aar-aar
 status: active
-tags:
+tags: 
+title: "AAR: Ci Failure Analyzer Integration 2025 08 02"
 
-- aar
-
-- retrospective
-
-- lessons-learned
-
-title: 'AAR: Ci Failure Analyzer Integration 2025 08 02'
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -2,14 +2,16 @@
 title: "Milestone Validation Troubleshooting"
 
 description: "Troubleshooting guide for milestone validation issues in DevOnboarder"
-document_type: "troubleshooting"
-tags: ["troubleshooting", "milestones", "validation", "devonboarder"]
-project: "DevOnboarder"
+
+document_type: troubleshooting
+tags: "["troubleshooting", "milestones", "validation", "devonboarder"]"
+project: DevOnboarder
 author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: troubleshooting-troubleshooting
+updated_at: 2025-10-27
 ---
 
 # Milestone Validation Troubleshooting

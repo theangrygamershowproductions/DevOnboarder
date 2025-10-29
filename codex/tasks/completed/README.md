@@ -1,3 +1,10 @@
+---
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
+---
 # Completed Tasks
 
 This folder contains tasks that have been successfully completed and are no longer active.

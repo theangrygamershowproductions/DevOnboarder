@@ -1,27 +1,25 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.MsTeamsIntegration
-  output: Teams channel messages
-  role: Sends DevOnboarder updates to Microsoft Teams
-  scope: infrastructure notifications
-  triggers: Project events requiring team alerts
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.MsTeamsIntegration
+output: "Teams channel messages"
+role: "Sends DevOnboarder updates to Microsoft Teams"
+scope: "infrastructure notifications"
+triggers: "Project events requiring team alerts"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Ms Teams Integration"
 
-- documentation
-
-title: Ms Teams Integration
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

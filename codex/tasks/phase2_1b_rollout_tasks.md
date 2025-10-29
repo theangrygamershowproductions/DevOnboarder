@@ -1,5 +1,5 @@
 ---
-title: Phase 2.1B Rollout Task List
+title: "Phase 2.1B Rollout Task List"
 
 project: DevOnboarder
 codex_scope: rollout-phase2-1b
@@ -7,15 +7,12 @@ codex_role: project_maintainer
 codex_type: task_index
 status: active
 created_at: 2025-08-03
-tags:
-  - rollout
-
-  - codex-tasks
-
-  - versioning
-
-  - ci-hardening
-
+tags: 
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## 🎯 Objective

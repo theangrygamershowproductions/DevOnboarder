@@ -66,10 +66,10 @@ check_unsafe_echo_patterns() {
     echo "Checking for unsafe echo patterns..."
 
     # Pattern 1: Echo with emojis (from Terminal Output Policy)
-    if grep -n "echo.*[🎯🥔]" scripts/*.sh 2>/dev/null; then
+    if grep -n "echo.*[TARGET:🥔]" scripts/*.sh 2>/dev/null; then
         while IFS: read -r file line content; do
             log_violation "CRITICAL" "Echo with emoji characters (terminal hanging risk)" "$file" "$line" "$content"
-        done < <(grep -n "echo.*[🎯🥔]" scripts/*.sh 2>/dev/null)
+        done < <(grep -n "echo.*[TARGET:🥔]" scripts/*.sh 2>/dev/null)
     fi
 
     # Pattern 2: Echo with command substitution

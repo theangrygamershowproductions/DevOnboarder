@@ -17,7 +17,7 @@ check_devonboarder_root() {
 
 # Function to setup virtual environment
 setup_venv() {
-    echo "🐍 Setting up Python virtual environment..."
+    echo "PYTHON: Setting up Python virtual environment..."
 
     if [[ ! -d ".venv" ]]; then
         echo "   Creating .venv directory..."

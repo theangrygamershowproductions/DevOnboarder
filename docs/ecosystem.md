@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Overview of DevOnboarder's integration with the TAGS platform stack and service architecture
+created_at: 2025-09-12
+description: "Overview of DevOnboarder's integration with the TAGS platform stack and service architecture"
+
 document_type: overview
 merge_candidate: false
 project: DevOnboarder
 similarity_group: ecosystem.md-docs
 status: active
-tags:
+tags: 
+title: "DevOnboarder Ecosystem and TAGS Stack"
 
-- overview
-
-- architecture
-
-- tags-platform
-
-- ecosystem
-
-title: DevOnboarder Ecosystem and TAGS Stack
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

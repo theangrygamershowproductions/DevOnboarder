@@ -69,7 +69,7 @@ commit_with_log_review() {
         echo "  • ${BLUE}Use smart commit tool:${NC} ./scripts/commit_changes.sh"
         echo "  • ${BLUE}Learn commit patterns:${NC} ./scripts/commit_message_guide.sh"
         echo ""
-        echo -e "${YELLOW}🎯 Pro Tips:${NC}"
+        echo -e "${YELLOW}TARGET: Pro Tips:${NC}"
         echo "  • Run ${BLUE}markdownlint-cli2${NC} on .md files to check markdown before commit"
         echo "  • Run ${BLUE}shellcheck${NC} on .sh files to check bash scripts"
         echo "  • Use ${BLUE}git add -p${NC} to stage changes interactively"
@@ -162,7 +162,7 @@ show_commit_preparation() {
 
     [ "$doc_files" -gt 0 ] && echo "   Documentation files: $doc_files"
     [ "$script_files" -gt 0 ] && echo "   Script files: $script_files"
-    [ "$python_files" -gt 0 ] && echo "  🐍 Python files: $python_files"
+    [ "$python_files" -gt 0 ] && echo "  PYTHON: Python files: $python_files"
     [ "$config_files" -gt 0 ] && echo "   Configuration files: $config_files"
     [ "$js_files" -gt 0 ] && echo "  FAST: JavaScript/TypeScript files: $js_files"
 

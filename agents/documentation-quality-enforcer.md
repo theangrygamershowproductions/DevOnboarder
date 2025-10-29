@@ -1,39 +1,33 @@
 ---
 agent: documentation-quality-enforcer
-
 authentication_required: true
-author: DevOnboarder Team
+author: "DevOnboarder Team"
 codex_dry_run: false
 codex_runtime: true
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
-discord_role_required: ''
+created_at: 2025-09-12
+description: "Documentation description needed"
+
+discord_role_required: 
 document_type: documentation
 environment: CI
-integration_log: Documentation quality enforcement and validation
+integration_log: "Documentation quality enforcement and validation"
 merge_candidate: false
 output: .codex/logs/documentation-quality.log
-permissions:
-
-- repo:read
-
-- workflows:write
-
-- pull_requests:write
-
+permissions: 
+- repo: read
+- workflows: write
+- pull_requests: write
 project: core-agents
-purpose: Enforce documentation quality standards on all PR submissions
+purpose: "Enforce documentation quality standards on all PR submissions"
 similarity_group: documentation-quality-enforcer.md-agents
 status: active
-tags:
+tags: 
+title: "Documentation Quality Enforcer"
 
-- documentation
-
-title: Documentation Quality Enforcer
-trigger: pull_request opened, synchronize
-updated_at: '2025-09-12'
+trigger: "pull_request opened, synchronize"
+updated_at: 2025-10-27
 visibility: internal
 ---
 

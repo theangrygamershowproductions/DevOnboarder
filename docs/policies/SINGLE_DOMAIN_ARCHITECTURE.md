@@ -1,9 +1,9 @@
 ---
 consolidation_priority: P3
-
 content_uniqueness_score: 4
 merge_candidate: false
 similarity_group: policies-policies
+updated_at: 2025-10-27
 ---
 
 # Single Domain Architecture Documentation

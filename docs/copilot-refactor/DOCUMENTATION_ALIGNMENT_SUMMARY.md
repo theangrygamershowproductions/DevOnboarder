@@ -1,34 +1,23 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Complete summary of documentation alignment work following modular extraction
-  and standardization
+created_at: 2025-09-11
+description: "Complete summary of documentation alignment work following modular extraction"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
 similarity_group: documentation-guides
 status: active
-tags:
+tags: 
+title: "DevOnboarder Documentation Alignment Summary"
 
-- devonboarder
-
-- documentation
-
-- alignment
-
-- modular
-
-- standardization
-
-title: DevOnboarder Documentation Alignment Summary
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

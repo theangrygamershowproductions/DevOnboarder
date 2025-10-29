@@ -91,7 +91,7 @@ echo "🧪 Testing core functionality..."
 pytest tests/test_smoke.py -v --tb=short 2>/dev/null || echo "  Smoke tests failed - may need services running"
 
 echo "============================="
-echo "🎯 CI Fix Summary:"
+echo "TARGET: CI Fix Summary:"
 echo "- Environment variables: Generated/updated"
 echo "- Dependencies: Installed where possible"
 echo "- Docker: Configuration checked"

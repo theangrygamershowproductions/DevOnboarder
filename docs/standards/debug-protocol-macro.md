@@ -1,33 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P1
 content_uniqueness_score: 5
-created_at: '2025-09-13'
-description: Debug Protocol Macro v1.2 - Standardized debugging framework for disciplined, test-first reasoning and structured problem resolution
+created_at: 2025-09-13
+description: "Debug Protocol Macro v1.2 - Standardized debugging framework for disciplined, test-first reasoning and structured problem resolution"
 
 document_type: standard
 merge_candidate: false
 project: core-standards
 similarity_group: methodology-documentation
 status: active
-tags:
-  - debugging
+tags: 
+title: "Debug Protocol Macro v1.2"
 
-  - methodology
-
-  - troubleshooting
-
-  - ci-cd
-
-  - devops
-
-  - protocol
-
-  - standards
-
-title: 'Debug Protocol Macro v1.2'
-updated_at: '2025-09-13'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

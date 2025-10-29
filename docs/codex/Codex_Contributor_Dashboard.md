@@ -1,33 +1,23 @@
 ---
-author: Chad Reesey
-
+author: "Chad Reesey"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Dashboard summarizing Codex task progress and module status for contributors.
+created_at: 2025-09-12
+description: "Dashboard summarizing Codex task progress and module status for contributors."
+
 document_type: documentation
 email: reesey275@thenagrygamershow.com
 merge_candidate: false
-module: Codex Integration
+module: "Codex Integration"
 phase: MVP
 project: DevOnboarder
 similarity_group: ci-automation
 status: active
-tags:
+tags: 
+title: "Codex Contributor Dashboard"
 
-- dashboard
-
-- codex
-
-- contributors
-
-- roadmap
-
-- automation
-
-title: Codex Contributor Dashboard
-updated: 21 June 2025 08:25 (EST)
-updated_at: '2025-09-12'
+updated: "21 June 2025 08:25 (EST)"
+updated_at: 2025-10-27
 version: v1.0.0
 visibility: internal
 ---

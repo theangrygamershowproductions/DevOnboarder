@@ -1,29 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Comprehensive automation tools for maintaining code quality and fixing common issues automatically, including markdown formatter, shell script fixer, and comprehensive auto-fixer orchestration
+created_at: 2025-09-12
+description: "Comprehensive automation tools for maintaining code quality and fixing common issues automatically, including markdown formatter, shell script fixer, and comprehensive auto-fixer orchestration"
+
 document_type: documentation
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "DevOnboarder Auto-Fixer Tools"
 
-- documentation
-
-- auto-fixers
-
-- code-quality
-
-- automation
-
-- tools
-
-title: DevOnboarder Auto-Fixer Tools
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

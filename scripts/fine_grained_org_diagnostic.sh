@@ -60,7 +60,7 @@ fi
 echo ""
 
 # Repository direct access
-echo "📚 Repository Direct Access:"
+echo "DOCS: Repository Direct Access:"
 if repo_info=$(GH_TOKEN="$AAR_TOKEN" gh api repos/theangrygamershowproductions/DevOnboarder 2>/dev/null); then
     echo "   Repository metadata: Accessible"
 

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🎯 FINISHING STRONG - CI FAILURE ANALYSIS FOR PR #968"
+echo "TARGET: FINISHING STRONG - CI FAILURE ANALYSIS FOR PR #968"
 echo "=================================================="
 
 # Get current status
@@ -47,14 +47,14 @@ echo "   - Verify environment variables"
 echo "   - Check tool availability"
 
 echo ""
-echo "🎯 EXECUTION PLAN TO REACH 95%:"
+echo "TARGET: EXECUTION PLAN TO REACH 95%:"
 echo "================================"
 
 # Current health score
 CURRENT_HEALTH=$(bash scripts/assess_pr_health.sh 968 2>/dev/null | grep "PR Health Score:" | sed 's/.*: \([0-9]*\)%.*/\1/' || echo "75")
 
 echo " Current Health: ${CURRENT_HEALTH}%"
-echo "🎯 Target Health: 95%"
+echo "TARGET: Target Health: 95%"
 echo "GROW: Gap to Close: $((95 - CURRENT_HEALTH)) percentage points"
 
 echo ""

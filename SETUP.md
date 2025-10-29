@@ -1,26 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Master setup guide for DevOnboarder development environment with virtual environment setup, service configuration, and quality control validation
+created_at: 2025-09-12
+description: "Master setup guide for DevOnboarder development environment with virtual environment setup, service configuration, and quality control validation"
+
 document_type: guide
 merge_candidate: false
 project: DevOnboarder
 similarity_group: docs-
 status: active
+tags: 
+title: "DevOnboarder Master Setup Guide"
 
-tags:
-
-- setup
-
-- guide
-
-- development
-
-title: DevOnboarder Master Setup Guide
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

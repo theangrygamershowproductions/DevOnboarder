@@ -1,20 +1,18 @@
 ---
 task: "Codex Agent Documentation and Validation System Enhancement"
-
-priority: "medium"
-status: "staged"
-created: "2025-08-04"
-assigned: "documentation-team"
+priority: medium
+status: staged
+created: 2025-08-04
+assigned: documentation-team
 dependencies: ["ci-workflow-token-security-enhancement.md"]
 related_files: [
-    "schema/agent-schema.json",
-    "scripts/validate_agents.py",
-    ".codex/agents/index.json",
-    "agents/",
-    ".github/workflows/cleanup-ci-failure.yml"
-]
 validation_required: true
 staging_reason: "agent documentation patterns and validation need standardization"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Agent System Enhancement Task

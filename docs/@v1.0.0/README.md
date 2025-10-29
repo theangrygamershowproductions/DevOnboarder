@@ -1,25 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: DevOnboarder v1.0.0 documentation directory README
+created_at: 2025-09-12
+description: "DevOnboarder v1.0.0 documentation directory README"
+
 document_type: documentation
 merge_candidate: false
 project: DevOnboarder
-similarity_group: '@v1.0.0--v1-0-0'
+similarity_group: @v1.0.0--v1-0-0
 status: active
-tags:
+tags: 
+title: "DevOnboarder v1.0.0 Documentation"
 
-- documentation
-
-- v1.0.0
-
-- release
-
-title: DevOnboarder v1.0.0 Documentation
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

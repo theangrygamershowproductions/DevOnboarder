@@ -58,7 +58,7 @@ echo "4. Security cleanup:"
 echo "   • After adding to GitHub, delete the local files:"
 echo "   • rm $KEY_FILE $KEY_FILE.pub"
 echo ""
-echo "🔒 The bot email must be associated with the machine user account for verification."
+echo "SECURE: The bot email must be associated with the machine user account for verification."
 echo ""
 
 # Display the keys for easy copying

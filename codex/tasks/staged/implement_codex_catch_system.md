@@ -1,22 +1,18 @@
 ---
 task: "Implement Codex Catch System: Coverage Decay Mitigation"
-
-priority: "high"
-status: "staged"
-created: "2025-08-04"
-assigned: "development-team"
-dependencies: ["terminal-output-cleanup-phases.md", "phase2_terminal_output_compliance.md"]
+priority: high
+status: staged
+created: 2025-08-04
+assigned: development-team
+dependencies: "["terminal-output-cleanup-phases.md", "phase2_terminal_output_compliance.md"]"
 related_files: [
-    "scripts/check_coverage_decay.py",
-    "scripts/parse_coverage.py",
-    "scripts/save_coverage.py",
-    "scripts/log_codex_test_backlog.sh",
-    "scripts/manage_test_backlog_issues.py",
-    "config/codex-catch-config.yml",
-    ".github/workflows/ci.yml"
-]
 validation_required: true
 staging_reason: "awaiting terminal output cleanup completion and CI stability improvements"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Codex Catch System Implementation Task

@@ -91,19 +91,19 @@ echo " PR Health Score: ${HEALTH_SCORE}%"
 # Health recommendations based on recalibrated standards
 if [ "$HEALTH_SCORE" -ge 95 ]; then
     echo "🎉 EXCELLENT: Meets 95% quality standard"
-    echo "🎯 Recommendation: Ready for merge"
+    echo "TARGET: Recommendation: Ready for merge"
 elif [ "$HEALTH_SCORE" -ge 85 ]; then
     echo " GOOD: Strong health score"
-    echo "🎯 Recommendation: Manual review recommended"
+    echo "TARGET: Recommendation: Manual review recommended"
 elif [ "$HEALTH_SCORE" -ge 70 ]; then
     echo "  ACCEPTABLE: Functional but needs improvement"
-    echo "🎯 Recommendation: Targeted fixes required"
+    echo "TARGET: Recommendation: Targeted fixes required"
 elif [ "$HEALTH_SCORE" -ge 50 ]; then
     echo " POOR: Significant issues present"
-    echo "🎯 Recommendation: Major fixes required"
+    echo "TARGET: Recommendation: Major fixes required"
 else
     echo "🚨 FAILING: Critical failures present"
-    echo "🎯 Recommendation: Fresh start recommended"
+    echo "TARGET: Recommendation: Fresh start recommended"
 fi
 
 # Show failing checks if any

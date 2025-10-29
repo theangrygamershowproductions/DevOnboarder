@@ -1,32 +1,23 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: REFERENCE
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Fast navigation guide for all documentation modules
+created_at: 2025-09-11
+description: "Fast navigation guide for all documentation modules"
+
 document_type: reference
 merge_candidate: false
 project: core-instructions
 similarity_group: quick-reference-reference
 status: active
-tags:
+tags: 
+title: "DevOnboarder Modular Documentation - Quick Reference"
 
-- devonboarder
-
-- quick-reference
-
-- navigation
-
-- modules
-
-title: DevOnboarder Modular Documentation - Quick Reference
-
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,22 +1,20 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-04'
-description: Comprehensive notification capabilities for missing tokens in DevOnboarder
+created_at: 2025-09-04
+description: "Comprehensive notification capabilities for missing tokens in DevOnboarder"
+
 document_type: documentation
 merge_candidate: false
 priority: high
 project: DevOnboarder
 similarity_group: TOKEN_NOTIFICATION_SYSTEM.md-docs
 status: implemented
-tags:
+tags: 
+title: "Token Missing Notification System"
 
-- documentation
-
-title: Token Missing Notification System
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

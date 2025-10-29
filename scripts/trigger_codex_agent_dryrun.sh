@@ -194,7 +194,7 @@ run_integration_tests() {
 # Function to display summary
 display_summary() {
     echo ""
-    echo "🎯 Dry-Run Summary:"
+    echo "TARGET: Dry-Run Summary:"
     echo "=================="
     echo "   Agent: $AGENT_NAME"
     echo "   Environment: $DEPLOY_ENV"

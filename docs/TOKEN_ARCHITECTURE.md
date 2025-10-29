@@ -1,22 +1,20 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-04'
-description: Standardized token management system separating authentication from configuration
+created_at: 2025-09-04
+description: "Standardized token management system separating authentication from configuration"
+
 document_type: documentation
 merge_candidate: false
 priority: high
 project: DevOnboarder
 similarity_group: TOKEN_ARCHITECTURE.md-docs
 status: proposed
-tags:
+tags: 
+title: "DevOnboarder Token Management Architecture"
 
-- documentation
-
-title: DevOnboarder Token Management Architecture
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 virtual_env_required: true
 visibility: internal
 ---

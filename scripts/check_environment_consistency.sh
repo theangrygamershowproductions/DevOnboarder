@@ -23,7 +23,7 @@ else
 fi
 
 # Check Python version
-echo "🐍 Python Version:"
+echo "PYTHON: Python Version:"
 PYTHON_VERSION=$(python --version | cut -d' ' -f2)
 echo "  LOCATION: Current: $PYTHON_VERSION"
 if [[ -f ".tool-versions" ]]; then

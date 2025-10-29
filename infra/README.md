@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Infrastructure blueprints and deployment documentation for DevOnboarder stack
+created_at: 2025-09-12
+description: "Infrastructure blueprints and deployment documentation for DevOnboarder stack"
+
 document_type: overview
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Infrastructure Documentation"
 
-- overview
-
-- infrastructure
-
-- deployment
-
-- blueprints
-
-title: Infrastructure Documentation
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,18 +1,17 @@
 ---
 project: "DevOnboarder MVP Quality Gates"
-
-priority: "critical"
-status: "active"
-created: "2025-08-04"
-target_completion: "2025-09-15"
-project_lead: "architecture-team"
-dependencies: ["codex/mvp/MVP_PROJECT_PLAN.md", "codex/mvp/mvp_delivery_checklist.md"]
+priority: critical
+status: active
+created: 2025-08-04
+target_completion: 2025-09-15
+project_lead: architecture-team
+dependencies: "["codex/mvp/MVP_PROJECT_PLAN.md", "codex/mvp/mvp_delivery_checklist.md"]"
 related_files: [
-  "scripts/qc_pre_push.sh",
-  "scripts/mvp_readiness_check.sh",
-  "scripts/performance_validation.sh",
-  "scripts/security_audit.sh"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # DevOnboarder MVP Quality Gates

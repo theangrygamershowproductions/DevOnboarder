@@ -1,19 +1,18 @@
 ---
 task: "CI Workflow Token Security and Authentication Enhancement"
-
-priority: "high"
-status: "staged"
-created: "2025-08-04"
-assigned: "security-team"
+priority: high
+status: staged
+created: 2025-08-04
+assigned: security-team
 dependencies: ["terminal-output-enforcement-enhancement.md"]
 related_files: [
-    ".github/workflows/cleanup-ci-failure.yml",
-    ".github/workflows/ci.yml",
-    "scripts/manage_ci_failure_issues.sh",
-    "docs/token-hierarchy-policy.md"
-]
 validation_required: true
 staging_reason: "analysis of cleanup-ci-failure.yml revealed token hierarchy implementation opportunities"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # CI Workflow Token Security Enhancement Task

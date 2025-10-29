@@ -142,23 +142,23 @@ echo "Health Score: ${health_points}%"
 
 if [ "${health_points}" -ge 95 ]; then
     echo "🎉 EXCELLENT: Meets 95% quality standard"
-    echo "🎯 Recommendation: Ready for merge"
+    echo "TARGET: Recommendation: Ready for merge"
     grade="EXCELLENT"
 elif [ "${health_points}" -ge 85 ]; then
     echo " GOOD: Strong health score"
-    echo "🎯 Recommendation: Manual review recommended"
+    echo "TARGET: Recommendation: Manual review recommended"
     grade="GOOD"
 elif [ "${health_points}" -ge 70 ]; then
     echo "  ACCEPTABLE: Functional but needs improvement"
-    echo "🎯 Recommendation: Infrastructure repair in progress"
+    echo "TARGET: Recommendation: Infrastructure repair in progress"
     grade="ACCEPTABLE"
 elif [ "${health_points}" -ge 50 ]; then
     echo " POOR: Significant infrastructure issues"
-    echo "🎯 Recommendation: Continue robust infrastructure deployment"
+    echo "TARGET: Recommendation: Continue robust infrastructure deployment"
     grade="POOR"
 else
     echo "🚨 FAILING: Critical infrastructure breakdown"
-    echo "🎯 Recommendation: Emergency infrastructure repair mode"
+    echo "TARGET: Recommendation: Emergency infrastructure repair mode"
     grade="FAILING"
 fi
 
@@ -175,7 +175,7 @@ echo " NEXT ACTIONS:"
 echo "==============="
 echo "1.  Continue robust infrastructure deployment"
 echo "2.  Monitor infrastructure improvements"
-echo "3. 🎯 Target environmental stability restoration"
+echo "3. TARGET: Target environmental stability restoration"
 echo "4.  Validate full functionality post-repair"
 
 echo ""

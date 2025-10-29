@@ -1,25 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Overview of DevOnboarder documentation structure and navigation guide
+created_at: 2025-09-12
+description: "Overview of DevOnboarder documentation structure and navigation guide"
+
 document_type: overview
 merge_candidate: false
 project: DevOnboarder
 similarity_group: README.md-docs
 status: active
-tags:
+tags: 
+title: "DevOnboarder Documentation Overview"
 
-- overview
-
-- documentation
-
-- navigation
-
-title: DevOnboarder Documentation Overview
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,41 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Feature addition workflows, bot command development, API endpoint patterns,
-  and integration examples
+created_at: 2025-09-11
+description: "Feature addition workflows, bot command development, API endpoint patterns,"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- service-integration-patterns.md
-
-- development-workflow.md
-
+related_modules: 
 similarity_group: integration-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Common Integration Points"
 
-- devonboarder
-
-- integration-points
-
-- feature-development
-
-- api-endpoints
-
-- workflows
-
-title: DevOnboarder Common Integration Points
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

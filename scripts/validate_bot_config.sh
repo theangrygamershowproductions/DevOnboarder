@@ -84,7 +84,7 @@ else
 fi
 
 # Check bot .env file
-echo -e "\n🤖 Bot Environment File (bot/.env)"
+echo -e "\nBOT: Bot Environment File (bot/.env)"
 echo "=================================="
 
 if [[ -f "bot/.env" ]]; then
@@ -179,7 +179,7 @@ else
     echo -e "${YELLOW}  Cannot test invite generation (Node.js or script not found)${NC}"
 fi
 
-echo -e "\n🎯 Summary"
+echo -e "\nTARGET: Summary"
 echo "=========="
 echo "Configuration validation complete!"
 echo ""

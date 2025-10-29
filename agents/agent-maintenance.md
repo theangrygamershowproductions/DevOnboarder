@@ -1,33 +1,28 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.AgentMaintenance
-  output: .codex/logs/agent-maintenance.log
-  role: Migrates and standardizes Codex agents
-  scope: local or CI
-  triggers: manual
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.AgentMaintenance
+output: .codex/logs/agent-maintenance.log
+role: "Migrates and standardizes Codex agents"
+scope: "local or CI"
+triggers: manual
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
-permissions:
-
-- repo:write
-
-- contents:read
-
+permissions: 
+- repo: write
+- contents: read
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Agent Maintenance"
 
-- documentation
-
-title: Agent Maintenance
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,19 +1,18 @@
 ---
 task: "Enhance Terminal Output Validation and Enforcement System"
-
-priority: "critical"
-status: "staged"
-created: "2025-08-04"
-assigned: "development-team"
+priority: critical
+status: staged
+created: 2025-08-04
+assigned: development-team
 dependencies: ["phase2_terminal_output_compliance.md"]
 related_files: [
-    "scripts/validate_terminal_output.sh",
-    "scripts/validation_summary.sh",
-    ".github/workflows/validate-terminal-output.yml",
-    "docs/TERMINAL_OUTPUT_VIOLATIONS.md"
-]
 validation_required: true
 staging_reason: "current validation system identifies violations but enforcement could be strengthened"
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Terminal Output Enforcement Enhancement Task

@@ -1,8 +1,8 @@
 ---
-title: Terminal Output Policy Violations - Phased Cleanup Plan
+title: "Terminal Output Policy Violations - Phased Cleanup Plan"
 
-labels: ["codex", "ci-fix", "terminal-policy", "enforcement"]
-assignees: ["@codex-bot", "@claude-dev"]
+labels: "["codex", "ci-fix", "terminal-policy", "enforcement"]"
+assignees: "["@codex-bot", "@claude-dev"]"
 priority: high
 codex_runtime: true
 codex_type: task-bundle
@@ -10,6 +10,11 @@ codex_scope: .github/workflows
 codex_target_branch: feat/smart-log-cleanup-system
 created: 2025-08-03
 status: in-progress
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 ## 🎯 Objective

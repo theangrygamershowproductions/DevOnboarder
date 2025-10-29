@@ -82,7 +82,7 @@ if echo "$TITLE $BODY" | grep -qi "automation\|ci\|workflow\|agent\|quality"; th
     ((MISSION_INDICATORS))
 fi
 
-echo "🎯 DECISION MATRIX ANALYSIS"
+echo "TARGET: DECISION MATRIX ANALYSIS"
 echo "=========================="
 echo
 
@@ -115,7 +115,7 @@ else
     CONFIDENCE="MEDIUM"
 fi
 
-echo "🤖 AUTOMATED RECOMMENDATION"
+echo "BOT: AUTOMATED RECOMMENDATION"
 echo "=========================="
 echo "  Decision: $RECOMMENDATION"
 echo "  Confidence: $CONFIDENCE"
@@ -125,7 +125,7 @@ echo " Reasoning:"
 case "$RECOMMENDATION" in
     "PROCEED TO MERGE")
         echo "   Meets 95% health standard with clear mission completion"
-        echo "  🎯 PR has achieved its objectives successfully"
+        echo "  TARGET: PR has achieved its objectives successfully"
         echo "   Ready for production deployment"
         ;;
     "MINOR FIXES THEN MERGE")
@@ -172,7 +172,7 @@ case "$RECOMMENDATION" in
     "CONSIDER FRESH START")
         echo "  1.  Document lessons learned and valuable code"
         echo "  2. 🆕 Create new branch/PR with focused scope"
-        echo "  3. 🎯 Target 95% health from the start"
+        echo "  3. TARGET: Target 95% health from the start"
         echo "  4. FOLDER:  Close current PR with summary"
         ;;
     "SIGNIFICANT FIXES REQUIRED")
@@ -188,4 +188,4 @@ echo "  QUALITY REMINDER: Our standard is 95% health score"
 echo " Current: ${HEALTH_SCORE}% | Required: 95% | Gap: $((95 - HEALTH_SCORE)) percentage points"
 
 echo
-echo "🤖 Decision Engine Complete - Use this guidance for strategic planning"
+echo "BOT: Decision Engine Complete - Use this guidance for strategic planning"

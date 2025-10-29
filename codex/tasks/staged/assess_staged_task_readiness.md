@@ -1,38 +1,25 @@
 ---
 task: "Staged Task Readiness Assessment Framework"
-
 description: "Validates readiness to implement staged tasks safely without disrupting MVP delivery timeline"
-project: "DevOnboarder"
-status: "staged"
-created_at: "2025-08-05"
+
+project: DevOnboarder
+status: staged
+created_at: 2025-08-05
 author: "TAGS CTO"
-tags:
-  - task-management
-
-  - readiness-assessment
-
-  - risk-mitigation
-
-  - resource-allocation
-
-  - mvp-coordination
-
-visibility: "internal"
-document_type: "staged_task"
-codex_scope: "tags/devonboarder"
-codex_type: "orchestration"
+tags: 
+visibility: internal
+document_type: staged_task
+codex_scope: tags/devonboarder
+codex_type: orchestration
 codex_runtime: true
-priority: "high"
+priority: high
 dependencies: [
-  "terminal_zero_tolerance_validator.md",
-  "codex/mvp/MVP_PROJECT_PLAN.md",
-  "codex/mvp/mvp_task_coordination.md"
-]
 related_files: [
-  "scripts/mvp_readiness_check.sh",
-  "scripts/mvp_health_monitor.sh",
-  "scripts/terminal_zero_tolerance_validator.sh"
-]
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-devonboarder
+updated_at: 2025-10-27
 ---
 
 # Staged Task Readiness Assessment Framework

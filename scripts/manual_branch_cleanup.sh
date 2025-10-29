@@ -200,7 +200,7 @@ list_stale_branches() {
 
 # Function to run automated cleanup (safe mode)
 run_automated_cleanup() {
-    echo -e "${BLUE}🤖 Automated Safe Cleanup${NC}"
+    echo -e "${BLUE}BOT: Automated Safe Cleanup${NC}"
     echo "=========================="
 
     # Run existing cleanup script in dry-run mode

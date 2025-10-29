@@ -1,21 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: DevOnboarder
 similarity_group: sessions-sessions
 status: active
-tags:
+tags: 
+title: "2025 09 11 Aar Protection System Complete"
 
-- documentation
-
-title: 2025 09 11 Aar Protection System Complete
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

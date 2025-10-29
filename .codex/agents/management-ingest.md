@@ -1,39 +1,28 @@
 ---
 agent: management-ingest
-
 authentication_required: true
 codex_dry_run: true
 codex_runtime: false
 consolidation_priority: P3
 content_uniqueness_score: 4
-description: Processes executive commands and routes them to appropriate Discord servers based on environment with CTO-level authentication requirements
+description: "Processes executive commands and routes them to appropriate Discord servers based on environment with CTO-level authentication requirements"
+
 discord_role_required: CTO
 document_type: specification
 environment: development
-integration_log: https://codex.theangrygamershow.com/docs/devonboarder/ci-integration-hold
+integration_log: "https://codex.theangrygamershow.com/docs/devonboarder/ci-integration-hold"
 merge_candidate: false
 output: .codex/logs/management-ingest.log
-permissions:
-
-- discord:write
-
-- routing:read
-
-purpose: Processes executive commands and routes them to appropriate Discord servers
-  based on environment
+permissions: 
+- discord: write
+- routing: read
+purpose: "Processes executive commands and routes them to appropriate Discord servers"
 similarity_group: agents-agents
-tags:
+tags: 
+title: "Management Ingest Agent"
 
-- management
-
-- discord
-
-- routing
-
-- executive
-
-title: Management Ingest Agent
-trigger: executive commands
+trigger: "executive commands"
+updated_at: 2025-10-27
 ---
 
 # Management Ingest Agent

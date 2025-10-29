@@ -226,7 +226,7 @@ echo ""
 
 # Generate recommendations based on score
 if [ "$READINESS_PERCENTAGE" -ge 80 ]; then
-    echo "🎯 RECOMMENDATION: READY FOR STRATEGIC SPLIT"
+    echo "TARGET: RECOMMENDATION: READY FOR STRATEGIC SPLIT"
     echo ""
     echo " High readiness score indicates successful split probability"
     echo " Service boundaries are well-defined"

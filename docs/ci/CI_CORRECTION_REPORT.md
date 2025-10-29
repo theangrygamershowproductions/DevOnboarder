@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: CI correction report documenting pipeline fixes and improvements
+created_at: 2025-09-12
+description: "CI correction report documenting pipeline fixes and improvements"
+
 document_type: report
 merge_candidate: false
 project: DevOnboarder
 similarity_group: ci-ci
 status: active
-tags:
+tags: 
+title: "CI Correction Report"
 
-- ci
-
-- correction
-
-- report
-
-- pipeline
-
-title: CI Correction Report
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

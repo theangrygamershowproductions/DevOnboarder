@@ -49,9 +49,9 @@ echo "==============================================================="
 # Function to identify scripts that generate markdown with violations
 find_markdown_generating_scripts() {
     local violation_patterns=(
-        "" "" "🎯" "" "" "" "" "" "" ""  # Common emojis
+        "" "" "TARGET:" "" "" "" "" "" "" ""  # Common emojis
         "cat.*>.*\.md.*<<"                                   # Here-doc to markdown
-        "echo.*[🎯].*>.*\.md"                 # Emoji echo to markdown
+        "echo.*[TARGET:].*>.*\.md"                 # Emoji echo to markdown
     )
 
     echo "Scanning scripts for markdown compliance violations..."
@@ -125,7 +125,7 @@ fix_manage_ci_failure_issues() {
         cp "$script" "$backup"
 
         # Replace any emoji usage in generated markdown
-        sed -i 's/### 🎯 Resolution/### Resolution/g' "$script" 2>/dev/null || true
+        sed -i 's/### TARGET: Resolution/### Resolution/g' "$script" 2>/dev/null || true
         sed -i 's/###  Status/### Status/g' "$script" 2>/dev/null || true
 
         echo "Fixed: manage_ci_failure_issues.sh"
@@ -147,7 +147,7 @@ fix_update_systems_for_tokens() {
         cp "$script" "$backup"
 
         # Fix markdown generation sections
-        sed -i 's/## 🎯 Token System Integration/## Token System Integration/g' "$script" 2>/dev/null || true
+        sed -i 's/## TARGET: Token System Integration/## Token System Integration/g' "$script" 2>/dev/null || true
         sed -i 's/###  /### /g' "$script" 2>/dev/null || true
 
         echo "Fixed: update_systems_for_tokens.sh"
@@ -180,7 +180,7 @@ AAR_DIR=".aar"
 # Check for emoji violations in generated markdown
 check_emoji_violations() {
     local file="$1"
-    local emoji_patterns=("" "" "🎯" "" "" "" "" "" "" "")
+    local emoji_patterns=("" "" "TARGET:" "" "" "" "" "" "" "")
 
     for emoji in "${emoji_patterns[@]}"; do
         if grep -q "$emoji" "$file" 2>/dev/null; then
@@ -229,13 +229,13 @@ cleanup_existing_violations() {
     # Clean reports directory
     if [[ -d "$REPORTS_DIR" ]]; then
         find "$REPORTS_DIR" -name "*.md" -type f | while read -r file; do
-            if grep -q "\|\|🎯\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
+            if grep -q "\|\|TARGET:\|\|\|\|\|\|\|" "$file" 2>/dev/null; then
                 echo "Cleaning: $file"
                 # Create backup
                 cp "$file" "$BACKUP_DIR/$(basename "$file")"
 
                 # Remove emojis
-                sed -i 's///g; s///g; s/🎯//g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
+                sed -i 's///g; s///g; s/TARGET://g; s///g; s///g; s///g; s///g; s///g; s///g; s///g' "$file"
                 cleaned=$((cleaned  1))
             fi
         done

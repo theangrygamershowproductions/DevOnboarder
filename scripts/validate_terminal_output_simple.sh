@@ -27,7 +27,7 @@ for file in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     echo "Validating file: $file"
 
     # 1. Check for emojis and Unicode characters (CRITICAL)
-    if grep -l '\|\|🎯\|\|\|\|\|\|\|\|\|GROW:\|📥\|LINK:\|🐛' "$file" 2>/dev/null; then
+    if grep -l '\|\|TARGET:\|\|\|\|\|\|\|\|\|GROW:\|📥\|LINK:\|🐛' "$file" 2>/dev/null; then
         echo "   CRITICAL: Emoji/Unicode characters found"
         ((total_violations))
     fi

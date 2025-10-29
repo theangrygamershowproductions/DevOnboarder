@@ -217,15 +217,15 @@ log "SUMMARY: $CRITICAL_ISSUES critical issues, $WARNINGS warnings"
 
 if [ "$CRITICAL_ISSUES" -eq 0 ]; then
     echo "🎉 DIAGNOSTIC RESULT: Infrastructure appears functional"
-    echo "🎯 RECOMMENDATION: Proceed to Phase 2 (Infrastructure Fixes)"
+    echo "TARGET: RECOMMENDATION: Proceed to Phase 2 (Infrastructure Fixes)"
     log "RESULT: Infrastructure functional - proceed to Phase 2"
 elif [ "$CRITICAL_ISSUES" -le 2 ]; then
     echo "  DIAGNOSTIC RESULT: Minor infrastructure issues detected"
-    echo "🎯 RECOMMENDATION: Address critical issues then proceed to Phase 2"
+    echo "TARGET: RECOMMENDATION: Address critical issues then proceed to Phase 2"
     log "RESULT: Minor issues - address then proceed to Phase 2"
 else
     echo " DIAGNOSTIC RESULT: Major infrastructure problems detected"
-    echo "🎯 RECOMMENDATION: Focus on critical infrastructure repair first"
+    echo "TARGET: RECOMMENDATION: Focus on critical infrastructure repair first"
     log "RESULT: Major problems - critical repair needed first"
 fi
 

@@ -71,7 +71,7 @@ EOF
 
 # Function to setup bot configuration
 setup_bot_config() {
-    echo "🤖 Setting up bot configuration..."
+    echo "BOT: Setting up bot configuration..."
 
     # Ensure bot directory exists
     if [[ ! -d "$BOT_DIR" ]]; then
@@ -204,7 +204,7 @@ create_deployment_scripts() {
 #!/bin/bash
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Development Environment"
+echo "BOT: Starting Discord Bot - Development Environment"
 echo "================================================"
 
 # Load development environment
@@ -242,7 +242,7 @@ EOF
 #!/bin/bash
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Production Environment"
+echo "BOT: Starting Discord Bot - Production Environment"
 echo "==============================================="
 
 # Load production environment
@@ -313,7 +313,7 @@ test_discord_connection() {
 # Function to display setup summary
 display_summary() {
     echo ""
-    echo "🎯 Discord Environment Setup Complete!"
+    echo "TARGET: Discord Environment Setup Complete!"
     echo "======================================"
     echo ""
     echo " Configuration Summary:"

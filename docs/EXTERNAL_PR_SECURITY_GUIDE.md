@@ -1,21 +1,19 @@
 ---
-author: DevOnboarder Team
+author: "DevOnboarder Team"
 consolidation_priority: P1
 content_uniqueness_score: 5
-created_at: '2025-10-01'
-description: Comprehensive guide for handling external pull requests securely in DevOnboarder
+created_at: 2025-10-01
+description: "Comprehensive guide for handling external pull requests securely in DevOnboarder"
+
 document_type: security-documentation
 merge_candidate: true
 project: DevOnboarder
 similarity_group: security-guides
 status: active
-tags:
-- security
-- external-prs
-- workflows
-- github-actions
-title: External PR Security Guide
-updated_at: '2025-10-01'
+tags: 
+title: "External PR Security Guide"
+
+updated_at: 2025-10-27
 visibility: public
 ---
 

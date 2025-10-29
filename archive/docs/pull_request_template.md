@@ -1,3 +1,10 @@
+---
+consolidation_priority: P3
+content_uniqueness_score: 4
+merge_candidate: false
+similarity_group: docs-general
+updated_at: 2025-10-27
+---
 # Summary
 
 <!-- Provide a concise description of the change. Highlight major updates or new functionality. -

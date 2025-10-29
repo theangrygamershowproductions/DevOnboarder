@@ -25,7 +25,7 @@ if [ -z "$PR_NUMBER" ]; then
     exit 1
 fi
 
-echo -e "${BLUE}🤖 AUTOMATED PR PROCESS CONTROLLER${NC}"
+echo -e "${BLUE}BOT: AUTOMATED PR PROCESS CONTROLLER${NC}"
 echo "========================================"
 echo -e "${BLUE}PR: #$PR_NUMBER | Mode: $ACTION_MODE${NC}"
 echo ""
@@ -228,10 +228,10 @@ echo -e "${GREEN} Automation report generated: reports/pr_${PR_NUMBER}_automatio
 
 # Final summary
 echo ""
-echo -e "${PURPLE}🎯 AUTOMATION COMPLETE${NC}"
+echo -e "${PURPLE}TARGET: AUTOMATION COMPLETE${NC}"
 echo "==============================="
 echo -e " Health Score: ${HEALTH_SCORE}%"
-echo -e "🎯 Recommendation: $RECOMMENDATION"
+echo -e "TARGET: Recommendation: $RECOMMENDATION"
 echo -e " Fixes Applied: $FIXES_APPLIED"
 echo -e " Full Report: reports/pr_${PR_NUMBER}_automation_report.md"
 echo -e " Detailed Log: $LOG_FILE"
@@ -241,7 +241,7 @@ if [ "$ACTION_MODE" = "analyze" ]; then
     echo -e "${BLUE} To execute automated fixes:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER execute"
     echo ""
-    echo -e "${BLUE}🤖 For full automation:${NC}"
+    echo -e "${BLUE}BOT: For full automation:${NC}"
     echo "bash scripts/automate_pr_process.sh $PR_NUMBER full-auto"
 fi
 

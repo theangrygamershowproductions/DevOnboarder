@@ -1,34 +1,23 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Complete navigation guide to DevOnboarder's modular documentation structure
-  with cross-references and quick access
+created_at: 2025-09-11
+description: "Complete navigation guide to DevOnboarder's modular documentation structure"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
 similarity_group: documentation-guides
 status: active
-tags:
+tags: 
+title: "DevOnboarder Modular Documentation Index"
 
-- devonboarder
-
-- documentation
-
-- modular
-
-- navigation
-
-- index
-
-title: DevOnboarder Modular Documentation Index
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

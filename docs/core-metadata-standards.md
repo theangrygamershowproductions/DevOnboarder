@@ -1,6 +1,5 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 ci_integration: true
 codex_role: Engineering
 codex_runtime: true
@@ -8,30 +7,19 @@ codex_scope: DEVOPS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-07-28'
-description: Standardized YAML frontmatter structure for all prompt files and documentation
+created_at: 2025-07-28
+description: "Standardized YAML frontmatter structure for all prompt files and documentation"
+
 document_type: standards
 integration_status: production_ready
 merge_candidate: false
 project: DevOnboarder
 similarity_group: documentation-guides
 status: active
-tags:
+tags: 
+title: "Core Instructions Metadata Standards"
 
-- codex
-
-- metadata
-
-- standards
-
-- yaml
-
-- frontmatter
-
-- documentation
-
-title: Core Instructions Metadata Standards
-updated_at: '2025-07-28'
+updated_at: 2025-10-27
 virtual_env_required: true
 visibility: internal
 ---

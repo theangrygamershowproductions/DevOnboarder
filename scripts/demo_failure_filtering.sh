@@ -57,7 +57,7 @@ cat << 'EOF'
 EOF
 
 echo ""
-echo "🎯 Analysis with jq (simulating what our scripts do):"
+echo "TARGET: Analysis with jq (simulating what our scripts do):"
 echo ""
 
 # Demonstrate filtering and analysis
@@ -94,7 +94,7 @@ echo "$SAMPLE_DATA" | jq -r '
 '
 
 echo ""
-echo "🎯 Key Benefits of Failure Filtering:"
+echo "TARGET: Key Benefits of Failure Filtering:"
 echo "    Focus only on relevant failures"
 echo "    Reduce analysis time and noise"
 echo "    Better pattern recognition"
@@ -112,4 +112,4 @@ echo "   gh auth login"
 echo "   gh auth status"
 echo ""
 
-echo "📚 Complete guide: docs/ci-failure-analysis-guide.md"
+echo "DOCS: Complete guide: docs/ci-failure-analysis-guide.md"

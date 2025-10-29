@@ -11,7 +11,7 @@ echo
 
 # Critical violation patterns that cause hanging
 declare -a CRITICAL_PATTERNS=(
-    "echo.*[🎯]"     # Emojis cause immediate hanging
+    "echo.*[TARGET:]"     # Emojis cause immediate hanging
     "echo.*[≥≤]"                    # Unicode characters cause hanging
     "echo.*\\$\\("                      # Command substitution in echo
     "echo.*\\$\\{"                      # Variable expansion in echo

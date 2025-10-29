@@ -1,36 +1,29 @@
 ---
 agent: ci-monitor
-
-author: DevOnboarder Team
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 environment: CI
 merge_candidate: false
 output: .codex/logs/ci-monitor.log
-permissions:
-
-- repo:read
-
-- actions:read
-
-- issues:write
-
-- pull_requests:write
-
+permissions: 
+- repo: read
+- actions: read
+- issues: write
+- pull_requests: write
 project: core-agents
-purpose: Automated real-time CI status monitoring and reporting for all PRs
+purpose: "Automated real-time CI status monitoring and reporting for all PRs"
 similarity_group: ci-monitor.md-agents
 status: active
-tags:
+tags: 
+title: "Ci Monitor"
 
-- documentation
-
-title: Ci Monitor
-trigger: on_pull_request, on_workflow_run, manual
-updated_at: '2025-09-12'
+trigger: "on_pull_request, on_workflow_run, manual"
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,27 +1,25 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.StagingOrchestrator
-  output: Deployment job logs
-  role: Orchestrates staging environment deployments
-  scope: .github/workflows/staging-orchestrator.yml
-  triggers: Push to staging or manual dispatch
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.StagingOrchestrator
+output: "Deployment job logs"
+role: "Orchestrates staging environment deployments"
+scope: .github/workflows/staging-orchestrator.yml
+triggers: "Push to staging or manual dispatch"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Staging Orchestrator"
 
-- documentation
-
-title: Staging Orchestrator
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

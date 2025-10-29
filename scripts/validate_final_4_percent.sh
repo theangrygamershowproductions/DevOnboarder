@@ -10,7 +10,7 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date %Y%m%d_%H%M%S)
 LOG_FILE="$LOG_DIR/final_4_percent_validation_$TIMESTAMP.log"
 
-echo "🎯 Final 4% Validation - Targeting Remaining CI Issues"
+echo "TARGET: Final 4% Validation - Targeting Remaining CI Issues"
 echo "======================================================"
 echo "Timestamp: $TIMESTAMP"
 echo "Log file: $LOG_FILE"

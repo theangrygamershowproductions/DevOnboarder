@@ -3,6 +3,7 @@ similarity_group: troubleshooting-troubleshooting
 content_uniqueness_score: 4
 merge_candidate: false
 consolidation_priority: P3
+updated_at: 2025-10-27
 ---
 # Critical Diagnostic Issue: GitHub API vs Local Timestamp Synchronization
 

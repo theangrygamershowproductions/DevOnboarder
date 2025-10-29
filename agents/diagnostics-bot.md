@@ -1,33 +1,28 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.DiagnosticsBot
-  output: .codex/logs/diagnostics-bot.log
-  role: Collects environment diagnostics and system health info
-  scope: repo utilities
-  triggers: manual or `python -m diagnostics`
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.DiagnosticsBot
+output: .codex/logs/diagnostics-bot.log
+role: "Collects environment diagnostics and system health info"
+scope: "repo utilities"
+triggers: "manual or `python -m diagnostics`"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
-permissions:
-
-- repo:read
-
-- actions:read
-
+permissions: 
+- repo: read
+- actions: read
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Diagnostics Bot"
 
-- documentation
-
-title: Diagnostics Bot
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

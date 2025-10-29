@@ -20,7 +20,7 @@ fi
 # Allow manual override
 if [ $# -gt 0 ]; then
     PR_NUM="$1"
-    echo "🎯 Using specified PR #$PR_NUM"
+    echo "TARGET: Using specified PR #$PR_NUM"
 fi
 
 echo ""
@@ -36,11 +36,11 @@ echo " Step 2: CI Failure Analysis"
 bash scripts/analyze_failed_ci_runs.sh || echo " CI analysis issues"
 
 echo ""
-echo "🤖 Step 3: Automated PR Process"
+echo "BOT: Step 3: Automated PR Process"
 bash scripts/automate_pr_process.sh "$PR_NUM" analyze
 
 echo ""
-echo "🎯 Quick Actions:"
+echo "TARGET: Quick Actions:"
 echo "• Run automated fixes: bash scripts/automate_pr_process.sh $PR_NUM execute"
 echo "• Monitor CI health: bash scripts/monitor_ci_health.sh"
 echo "• Check specific test failures: bash scripts/run_tests.sh"

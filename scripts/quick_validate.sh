@@ -54,7 +54,7 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --section bot --step "Bot Tests"
         ;;
     "security")
-        echo "🔒 Running security checks..."
+        echo "SECURE: Running security checks..."
         bash "$VALIDATE_SCRIPT" --section security
         ;;
     "frontend")
@@ -62,7 +62,7 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --section frontend
         ;;
     "bot")
-        echo "🤖 Running bot validation..."
+        echo "BOT: Running bot validation..."
         bash "$VALIDATE_SCRIPT" --section bot
         ;;
     "build")
@@ -81,12 +81,12 @@ case "${1:-help}" in
         bash "$VALIDATE_SCRIPT" --list
         ;;
     "full")
-        echo "🎯 Running complete validation suite..."
+        echo "TARGET: Running complete validation suite..."
         bash "$VALIDATE_SCRIPT"
         ;;
     "step")
         if [[ -n "$2" ]]; then
-            echo "🎯 Running specific step: $2"
+            echo "TARGET: Running specific step: $2"
             bash "$VALIDATE_SCRIPT" --step "$2"
         else
             echo " Error: Please specify a step name or number"

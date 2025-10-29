@@ -36,7 +36,7 @@ TOKEN_SCRIPTS=(
 )
 
 # Violation patterns that WILL cause terminal hanging
-EMOJI_PATTERNS='[🎯🎨LINK:📦]'
+EMOJI_PATTERNS='[TARGET:🎨LINK:📦]'
 VARIABLE_ECHO_PATTERN='echo.*\$[A-Z_]*[^}]'
 COMMAND_SUB_ECHO_PATTERN='echo.*\$\([^)]*\)'
 

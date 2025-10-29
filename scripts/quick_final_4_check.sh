@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-echo "🎯 Quick Final 4% Check"
+echo "TARGET: Quick Final 4% Check"
 echo "======================"
 echo "Checking the 4 main CI failure points..."
 echo

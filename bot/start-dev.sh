@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "🤖 Starting Discord Bot - Development Environment"
+echo "BOT: Starting Discord Bot - Development Environment"
 echo "================================================"
 
 # Load development environment

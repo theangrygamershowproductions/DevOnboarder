@@ -1,31 +1,27 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.AiMentor
-  output: .codex/logs/ai-mentor.log
-  role: Provides automated mentorship and resource guidance to new contributors
-  scope: onboarding assistance
-  triggers: on_question_received
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.AiMentor
+output: .codex/logs/ai-mentor.log
+role: "Provides automated mentorship and resource guidance to new contributors"
+scope: "onboarding assistance"
+triggers: on_question_received
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
-permissions:
-
-- repo:read
-
+permissions: 
+- repo: read
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Ai Mentor"
 
-- documentation
-
-title: Ai Mentor
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,38 +1,27 @@
 ---
 agent: README
-
-codex-agent:
-  environment: any
-  name: Agent.AgentsDocumentation
-  output: .codex/logs/agents-documentation.log
-  role: Documentation for Codex agent infrastructure and integration
-  scope: DevOnboarder agent system overview and file listing
-  triggers: when users need to understand agent infrastructure
+codex-agent: 
+environment: any
+name: Agent.AgentsDocumentation
+output: .codex/logs/README.log
+role: "Documentation for Codex agent infrastructure and integration"
+scope: "DevOnboarder agent system overview and file listing"
+triggers: "when users need to understand agent infrastructure"
 consolidation_priority: P3
 content_uniqueness_score: 4
-description: Optional infrastructure for enhanced Codex integration and automation with agent documentation, prompt indexing, and validation configuration
+description: "Optional infrastructure for enhanced Codex integration and automation with agent documentation, prompt indexing, and validation configuration"
+
 document_type: guide
-environment: any
 merge_candidate: false
-output: .codex/logs/README.log
-permissions:
-
-- repo:read
-
-purpose: Agent purpose description needed
+permissions: 
+- repo: read
+purpose: "Agent purpose description needed"
 similarity_group: agent-agent
-tags:
+tags: 
+title: "Codex Integration Infrastructure"
 
-- codex
-
-- infrastructure
-
-- automation
-
-- agents
-
-title: Codex Integration Infrastructure
 trigger: manual
+updated_at: 2025-10-27
 ---
 
 # Codex Integration Infrastructure

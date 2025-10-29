@@ -1,31 +1,22 @@
 ---
 agent: dev-orchestrator
-
 consolidation_priority: P3
 content_uniqueness_score: 4
-description: Coordinates development deployments via dev orchestration script with GitHub workflow dispatch integration
+description: "Coordinates development deployments via dev orchestration script with GitHub workflow dispatch integration"
+
 document_type: specification
 environment: CI
 merge_candidate: false
 output: .codex/logs/dev-orchestrator.log
-permissions:
-
-- workflows:write
-
-purpose: Orchestrates development environment deployments
+permissions: 
+- workflows: write
+purpose: "Orchestrates development environment deployments"
 similarity_group: agents-agents
-tags:
+tags: 
+title: "Dev Orchestrator Agent"
 
-- orchestration
-
-- deployment
-
-- ci
-
-- development
-
-title: Dev Orchestrator Agent
 trigger: on_push_to_dev
+updated_at: 2025-10-27
 ---
 
 # Dev Orchestrator Agent

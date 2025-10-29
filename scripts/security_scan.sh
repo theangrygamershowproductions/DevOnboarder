@@ -16,11 +16,11 @@ mkdir -p "$REPORTS_DIR"
 TIMESTAMP=$(date %Y%m%d_%H%M%S)
 SCAN_PREFIX="security_scan_${TIMESTAMP}"
 
-echo "🔒 Security Scan Starting - $(date)"
+echo "SECURE: Security Scan Starting - $(date)"
 echo " Reports will be saved to: $REPORTS_DIR"
 
 # Python Security Analysis
-echo "🐍 Running Python security analysis..."
+echo "PYTHON: Running Python security analysis..."
 
 echo "   Bandit (Python security scanner)..."
 bandit -r src/ -f json -o "$REPORTS_DIR/${SCAN_PREFIX}_bandit.json" || echo "Bandit completed with warnings"

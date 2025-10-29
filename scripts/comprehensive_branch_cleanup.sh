@@ -136,7 +136,7 @@ if [ -d ".git/refs/heads" ]; then
                 echo "   $branch (not merged)"
             fi
         else
-            echo "  🔒 $branch (protected)"
+            echo "  SECURE: $branch (protected)"
         fi
     done
 else

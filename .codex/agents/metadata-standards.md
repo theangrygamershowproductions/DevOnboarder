@@ -1,43 +1,27 @@
 ---
 agent: metadata_standards
-
-codex-agent:
-  environment: CI
-  name: Agent.MetadataStandards
-  output: .codex/logs/metadata-standards.log
-  permissions:
-  - repo:read
-
-  - repo:write
-
-  role: Standardized YAML frontmatter structure for all prompt files and documentation
-  scope: metadata validation and standards enforcement
-  triggers: on_file_changed
+codex-agent: 
+environment: any
+name: Agent.MetadataStandards
+output: .codex/logs/metadata-standards.log
+permissions: 
+- repo: read
+role: "Standardized YAML frontmatter structure for all prompt files and documentation"
+scope: "metadata validation and standards enforcement"
+triggers: on_file_changed
 consolidation_priority: P3
 content_uniqueness_score: 4
-description: Standardized YAML frontmatter structure for all prompt files and documentation with metadata validation and standards enforcement
+description: "Standardized YAML frontmatter structure for all prompt files and documentation with metadata validation and standards enforcement"
+
 document_type: specification
-environment: any
 merge_candidate: false
-output: .codex/logs/metadata-standards.log
-permissions:
-
-- repo:read
-
-purpose: Agent purpose description needed
+purpose: "Agent purpose description needed"
 similarity_group: agent-agent
-tags:
+tags: 
+title: "Core Instructions Metadata Standards"
 
-- metadata
-
-- standards
-
-- validation
-
-- frontmatter
-
-title: Core Instructions Metadata Standards
 trigger: manual
+updated_at: 2025-10-27
 ---
 
 # Core Instructions Metadata Standards

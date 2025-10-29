@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Project onboarding guide with helpful tips and setup instructions for new contributors
+created_at: 2025-09-12
+description: "Project onboarding guide with helpful tips and setup instructions for new contributors"
+
 document_type: guide
 merge_candidate: false
 project: DevOnboarder
 similarity_group: ONBOARDING.md-docs
 status: active
-tags:
+tags: 
+title: "Project Onboarding Guide"
 
-- guide
-
-- onboarding
-
-- contributors
-
-- setup
-
-title: Project Onboarding Guide
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

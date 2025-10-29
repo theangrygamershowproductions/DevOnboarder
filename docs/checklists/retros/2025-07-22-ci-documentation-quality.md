@@ -1,30 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Retrospective analysis of CI documentation quality improvements on July 22, 2025
+created_at: 2025-09-12
+description: "Retrospective analysis of CI documentation quality improvements on July 22, 2025"
+
 document_type: retrospective
 merge_candidate: false
 project: DevOnboarder
 similarity_group: checklists-retros
 status: active
-tags:
+tags: 
+title: "CI Documentation Quality Retrospective - July 22, 2025"
 
-- retrospective
-
-- ci
-
-- documentation
-
-- quality
-
-- checklist
-
-title: CI Documentation Quality Retrospective - July 22, 2025
-
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

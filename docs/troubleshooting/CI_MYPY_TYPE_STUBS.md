@@ -1,27 +1,19 @@
 ---
-author: DevOnboarder Team
-
+author: "DevOnboarder Team"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: MyPy type checking failures in CI environments and solutions for type stub dependencies
+created_at: 2025-09-12
+description: "MyPy type checking failures in CI environments and solutions for type stub dependencies"
+
 document_type: troubleshooting
 merge_candidate: false
 project: DevOnboarder
 similarity_group: troubleshooting-troubleshooting
 status: active
-tags:
+tags: 
+title: "CI MyPy Type Checking Failures"
 
-- troubleshooting
-
-- ci
-
-- mypy
-
-- type-checking
-
-title: CI MyPy Type Checking Failures
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

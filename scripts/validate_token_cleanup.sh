@@ -79,7 +79,7 @@ activate_virtual_env() {
 
     # shellcheck source=/dev/null
     source .venv/bin/activate
-    echo -e "${BLUE}🐍 Virtual environment activated for Python tools${NC}"
+    echo -e "${BLUE}PYTHON: Virtual environment activated for Python tools${NC}"
 }
 
 # Function to check registry availability and structure
@@ -196,7 +196,7 @@ scan_workflows_for_violations() {
 
 # Function to scan agent documentation for token usage
 scan_agent_docs_for_token_usage() {
-    echo -e "${BLUE}📚 Scanning agent documentation for token usage patterns...${NC}"
+    echo -e "${BLUE}DOCS: Scanning agent documentation for token usage patterns...${NC}"
 
     if [ ! -d "agents" ]; then
         log_violation "WARNING" "Agents directory not found" "agents/"

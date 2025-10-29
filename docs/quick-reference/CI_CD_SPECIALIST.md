@@ -1,33 +1,23 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: REFERENCE
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: Essential pipeline, quality control, and troubleshooting guide for CI/CD
-  specialists
+created_at: 2025-09-11
+description: "Essential pipeline, quality control, and troubleshooting guide for CI/CD"
+
 document_type: quick-reference
 merge_candidate: false
 project: core-instructions
 similarity_group: quick-reference-quick-reference
 status: active
-tags:
+tags: 
+title: "CI/CD Specialist Quick Reference - DevOnboarder"
 
-- devonboarder
-
-- ci-cd
-
-- quality-control
-
-- pipeline
-
-title: CI/CD Specialist Quick Reference - DevOnboarder
-
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

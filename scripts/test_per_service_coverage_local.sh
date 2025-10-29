@@ -89,7 +89,7 @@ echo "Local Per-Service Coverage Results"
 echo "=========================================="
 
 if [ "$OVERALL_SUCCESS" = "true" ]; then
-    echo "🎯  All services passed their coverage thresholds!"
+    echo "TARGET:  All services passed their coverage thresholds!"
     echo " Implementation is ready for CI deployment"
     echo
     echo " Generated artifacts:"

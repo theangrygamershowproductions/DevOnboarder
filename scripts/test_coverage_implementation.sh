@@ -51,7 +51,7 @@ else
 fi
 
 echo
-echo "🎯 IMPLEMENTATION VALIDATION SUMMARY"
+echo "TARGET: IMPLEMENTATION VALIDATION SUMMARY"
 echo "==================================="
 echo " Script executable and syntax valid"
 echo " CI workflow updated with per-service logic"

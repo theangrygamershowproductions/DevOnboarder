@@ -1,33 +1,27 @@
 ---
-author: DevOnboarder Team
-
-codex-agent:
-  name: Agent.DocumentationQuality
-  output: .codex/logs/documentation-quality.log
-  role: Automated markdown validation and quality enforcement
-  scope: documentation quality checks
-  triggers: documentation changes and PR validation
+author: "DevOnboarder Team"
+codex-agent: 
+name: Agent.DocumentationQuality
+output: .codex/logs/documentation-quality.log
+role: "Automated markdown validation and quality enforcement"
+scope: "documentation quality checks"
+triggers: "documentation changes and PR validation"
 consolidation_priority: P3
 content_uniqueness_score: 4
-created_at: '2025-09-12'
-description: Documentation description needed
+created_at: 2025-09-12
+description: "Documentation description needed"
+
 document_type: documentation
 merge_candidate: false
-permissions:
-
-- repo:read
-
-- repo:write
-
+permissions: 
+- repo: write
 project: core-agents
 similarity_group: documentation-documentation
 status: active
-tags:
+tags: 
+title: "Documentation Quality"
 
-- documentation
-
-title: Documentation Quality
-updated_at: '2025-09-12'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

@@ -1,43 +1,25 @@
 ---
-author: TAGS Engineering
-
+author: "TAGS Engineering"
 codex_role: Engineering
 codex_runtime: false
 codex_scope: TAGS
 codex_type: STANDARDS
 consolidation_priority: P3
 content_uniqueness_score: 5
-created_at: '2025-09-11'
-description: 95% quality threshold validation with comprehensive QC metrics enforcement
-  across all development work
+created_at: 2025-09-11
+description: "95% quality threshold validation with comprehensive QC metrics enforcement"
+
 document_type: standards
 merge_candidate: false
 project: core-instructions
-related_modules:
-
-- terminal-output-policy.md
-
-- code-quality-requirements.md
-
+related_modules: 
 similarity_group: policies-standards
 source: .github/copilot-instructions.md
 status: active
-tags:
+tags: 
+title: "DevOnboarder Quality Control Policy"
 
-- devonboarder
-
-- quality-control
-
-- policy
-
-- validation
-
-- testing
-
-- coverage
-
-title: DevOnboarder Quality Control Policy
-updated_at: '2025-09-11'
+updated_at: 2025-10-27
 visibility: internal
 ---
 

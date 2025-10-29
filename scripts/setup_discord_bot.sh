@@ -2,7 +2,7 @@
 # filepath: scripts/setup_discord_bot.sh
 set -euo pipefail
 
-echo "🤖 Discord Bot Setup for DevOnboarder"
+echo "BOT: Discord Bot Setup for DevOnboarder"
 echo "====================================="
 
 # Check if we're in the right directory
@@ -38,7 +38,7 @@ else
 fi
 
 echo ""
-echo "🎯 Target Servers:"
+echo "TARGET: Target Servers:"
 echo "   • TAGS: DevOnboarder (Dev): 1386935663139749998"
 echo "   • TAGS: C2C (Prod): 1065367728992571444"
 echo ""
