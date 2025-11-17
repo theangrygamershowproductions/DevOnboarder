@@ -286,7 +286,7 @@ sync_variables() {
 
     echo ""
     echo "Synchronization complete: $changes_made changes, $sync_errors errors"
-    return $sync_errors
+    return "$sync_errors"
 }
 
 # Function to validate all environments
@@ -362,13 +362,13 @@ validate_environments() {
     fi
 
     echo ""
-    if [ $validation_errors -eq 0 ]; then
+    if [ "$validation_errors" -eq 0 ]; then
         echo " All environments are synchronized and valid"
     else
         echo "FAILED: $validation_errors validation errors found"
     fi
 
-    return $validation_errors
+    return "$validation_errors"
 }
 
 # Function to show environment status

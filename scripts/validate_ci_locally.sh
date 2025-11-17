@@ -474,10 +474,10 @@ else
 fi
 echo
 echo "🎉 COVERAGE: ~95% of GitHub Actions CI pipeline"
-echo " CONFIDENCE: $([ $FAILED_STEPS -eq 0 ] && echo "MAXIMUM" || echo "VERY HIGH") - Push safety validated"
+echo " CONFIDENCE: $([ "$FAILED_STEPS" -eq 0 ] && echo "MAXIMUM" || echo "VERY HIGH") - Push safety validated"
 echo
 
-if [ $FAILED_STEPS -eq 0 ]; then
+if [ "$FAILED_STEPS" -eq 0 ]; then
     echo " ALL CHECKS PASSED - Safe to push to GitHub!"
     echo "   This eliminates the 'hit and miss' development cycle"
     [ -n "$LOG_FILE" ] && [ -f "$LOG_FILE" ] && { echo "SUCCESS" >> "$LOG_FILE" 2>/dev/null; }

@@ -104,7 +104,7 @@ start_tunnel() {
     local max_wait=120
     local wait_time=0
 
-    while [ $wait_time -lt $max_wait ]; do
+    while [ "$wait_time" -lt "$max_wait" ]; do
         if $COMPOSE_CMD -f docker-compose.dev.yaml ps --filter "health=healthy" | grep -q "healthy"; then
             echo "Services are becoming healthy"
             break

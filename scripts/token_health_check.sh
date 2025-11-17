@@ -125,7 +125,7 @@ echo ""
 HEALTH_SCORE=$(((PASSED_TESTS * 100) / TOTAL_TESTS))
 printf "Token Health Score: %d%%\n" "$HEALTH_SCORE"
 
-if [ $PROPAGATION_DELAYS -gt 0 ]; then
+if [ "$PROPAGATION_DELAYS" -gt 0 ]; then
     printf "Note: %d token(s) experiencing GitHub API propagation delays\n" "$PROPAGATION_DELAYS"
     echo "   This is normal for recently updated Fine-Grained tokens"
     echo "   Wait 2-5 minutes and re-run this check"
