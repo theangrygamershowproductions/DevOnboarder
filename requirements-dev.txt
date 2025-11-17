@@ -1,5 +1,5 @@
 ruff==0.14.1  # LTS as of 2025-06
-pytest==8.4.2  # LTS as of 2025-06
+pytest==9.0.1  # LTS as of 2025-06
 pyyaml
 pre-commit==4.2.0  # LTS as of 2025-06
 openapi-spec-validator==0.7.2  # LTS as of 2025-06
