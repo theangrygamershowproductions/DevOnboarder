@@ -93,11 +93,17 @@ git checkout -b feat/update-docs
 **NEVER use `git commit` directly** - always use the safe commit wrapper:
 
 ```bash
+# Stage your changes first
+git add <files>
+
+# Then commit using safe_commit.sh
 ./scripts/safe_commit.sh "DOCS(backend): improve app.py docstring
 
 - UPDATE main application docstring with clearer description
 - ADD context about FastAPI integration"
 ```
+
+**Important**: You must `git add` files before running `safe_commit.sh`. The script will fail with a clear error if no files are staged.
 
 This enforces:
 - Conventional commit format
