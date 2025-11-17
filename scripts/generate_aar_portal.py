@@ -196,7 +196,7 @@ class AARPortalGenerator:
                 "word_count": word_count,
                 "line_count": lines,
                 "content_preview": (
-                    content[:500]  "..." if len(content) > 500 else content
+                    content[:500] + "..." if len(content) > 500 else content
                 ),
             }
 

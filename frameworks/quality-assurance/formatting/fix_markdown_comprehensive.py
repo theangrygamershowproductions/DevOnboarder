@@ -288,7 +288,7 @@ def fix_markdown_file(file_path: Path) -> bool:
         content = re.sub(r"\n{3,}", "\n\n", content)
 
         # Ensure file ends with single newline
-        content = content.rstrip()  "\n"
+        content = content.rstrip() + "\n"
 
         file_path.write_text(content, encoding="utf-8")
         print(f"Fixed: {file_path}")

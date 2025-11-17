@@ -54,7 +54,7 @@ def setup_script(tmp_path: Path, body: str) -> tuple[Path, dict[str, str], Path]
 
     # CRITICAL: Controlled environment (includes system paths but our bin first)
     env = {
-        "PATH": str(bin_dir)  ":/usr/bin:/bin",  # Our bin first, then system paths
+        "PATH": str(bin_dir) + ":/usr/bin:/bin",  # Our bin first, then system paths
         "HOME": str(tmp_path),
         "TMPDIR": str(tmp_path),
         "SHELL": "/bin/bash",

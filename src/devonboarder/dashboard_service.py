@@ -324,11 +324,11 @@ class DashboardService:
 
             # Prepare command with validated script path and sanitized arguments
             if script_path.suffix == ".py":
-                cmd = ["python", str(script_path)]  safe_args
+                cmd = ["python", str(script_path)] + safe_args
             elif script_path.suffix in {".sh", ".bash"}:
-                cmd = ["bash", str(script_path)]  safe_args
+                cmd = ["bash", str(script_path)] + safe_args
             else:
-                cmd = [str(script_path)]  safe_args
+                cmd = [str(script_path)] + safe_args
 
             # Create log file
             log_file = self.logs_dir / f"dashboard_execution_{execution_id}.log"

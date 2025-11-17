@@ -1435,7 +1435,7 @@ def test_password_truncation_for_bcrypt():
     client = TestClient(app)
 
     # Create a password longer than 72 bytes (100 characters)
-    long_password = "a" * 50  "b" * 50  # 100 chars, >72 bytes
+    long_password = "a" * 50 + "b" * 50  # 100 chars, >72 bytes
     assert len(long_password.encode("utf-8")) > 72  # Verify it's >72 bytes
 
     # Register with long password

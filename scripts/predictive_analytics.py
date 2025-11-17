@@ -192,7 +192,7 @@ class PredictiveAnalytics:
                 df[col] = 0
 
         # Feature engineering
-        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"]  1)
+        df["cpu_memory_ratio"] = df["cpu_usage"] / (df["memory_usage"] + 1)
         df["response_error_ratio"] = df["response_time"] * df["error_rate"]
         df["load_factor"] = df["request_count"] / 1000
 
@@ -299,7 +299,7 @@ class PredictiveAnalytics:
 
         # Add engineered features
         features["cpu_memory_ratio"] = features["cpu_usage"] / (
-            features["memory_usage"]  1
+            features["memory_usage"] + 1
         )
         features["response_error_ratio"] = (
             features["response_time"] * features["error_rate"]

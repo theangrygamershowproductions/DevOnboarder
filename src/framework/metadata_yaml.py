@@ -322,20 +322,20 @@ class ExtendedMetadataYAMLManager:
                     # Count governance levels
                     gov_level = metadata.governance.level.value
                     governance_levels[gov_level] = (
-                        governance_levels.get(gov_level, 0)  1
+                        governance_levels.get(gov_level, 0) + 1
                     )
 
                     # Count compliance tags
                     for tag in metadata.governance.compliance_tags:
                         tag_value = tag.value
                         compliance_tags[tag_value] = (
-                            compliance_tags.get(tag_value, 0)  1
+                            compliance_tags.get(tag_value, 0) + 1
                         )
 
                     # Count similarity groups
                     sim_group = metadata.similarity_group
                     similarity_groups[sim_group] = (
-                        similarity_groups.get(sim_group, 0)  1
+                        similarity_groups.get(sim_group, 0) + 1
                     )
 
                 except Exception as e:

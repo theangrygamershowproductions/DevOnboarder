@@ -256,7 +256,7 @@ class AdvancedOrchestrator:
         for dep_name in config.dependencies:
             self.logger.info(f"⏳ Waiting for dependency: {dep_name}")
 
-            timeout = time.time()  config.startup_timeout
+            timeout = time.time() + config.startup_timeout
             while time.time() < timeout:
                 if await self.check_service_health(dep_name):
                     break
@@ -312,7 +312,7 @@ class AdvancedOrchestrator:
     async def verify_service_health(self, service_name: str) -> None:
         """Verify service is healthy after startup."""
         config = self.services[service_name]
-        timeout = time.time()  config.startup_timeout
+        timeout = time.time() + config.startup_timeout
 
         while time.time() < timeout:
             if await self.check_service_health(service_name):

@@ -190,7 +190,7 @@ class CIHealthMonitor:
         cancelled_rate = stats.get("cancelled_runs", 0) / total_runs
         reliability_score = max(0, (1 - cancelled_rate) * reliability_weight * 100)
 
-        total_score = success_score  duration_score  reliability_score
+        total_score = success_score + duration_score + reliability_score
         return round(total_score, 1)
 
     def _generate_health_alerts(self, stats: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -262,7 +262,7 @@ class CIHealthMonitor:
                 "virtual_env": self.venv_path,
                 "metrics": metrics,
                 "recommendations": self._generate_recommendations(metrics),
-                "next_monitoring": (datetime.now()  timedelta(hours=6)).isoformat(),
+                "next_monitoring": (datetime.now() + timedelta(hours=6)).isoformat(),
             }
         }
 

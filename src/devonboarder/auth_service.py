@@ -404,7 +404,7 @@ def discord_login(redirect_to: Optional[str] = None) -> RedirectResponse:
         "scope": "identify guilds guilds.members.read",
         "state": state,
     }
-    url = "https://discord.com/oauth2/authorize?"  urlencode(params)
+    url = "https://discord.com/oauth2/authorize?" + urlencode(params)
     return RedirectResponse(url)
 
 
@@ -545,7 +545,7 @@ def discord_callback(
     # Final security validation before redirect (for system URLs)
     if not is_safe_redirect_url(redirect_url):
         logger.warning(f"Unsafe redirect URL blocked at final check: {redirect_url}")
-        final_redirect = "/dashboard?token="  token
+        final_redirect = "/dashboard?token=" + token
 
     return RedirectResponse(final_redirect)
 

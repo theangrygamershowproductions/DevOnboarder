@@ -316,7 +316,7 @@ class AuditOverdueRule(PolicyRule):
         # Check if audit is overdue based on last_updated and audit_frequency_days
         last_updated = metadata.last_updated
         audit_frequency = metadata.governance.audit_frequency_days
-        next_audit_due = last_updated  timedelta(days=audit_frequency)
+        next_audit_due = last_updated + timedelta(days=audit_frequency)
 
         if datetime.now() > next_audit_due:
             days_overdue = (datetime.now() - next_audit_due).days
@@ -642,8 +642,8 @@ class GovernancePolicyEngine:
                 vtype = violation.violation_type.value
                 severity = violation.severity.value
 
-                violation_counts[vtype] = violation_counts.get(vtype, 0)  1
-                severity_counts[severity] = severity_counts.get(severity, 0)  1
+                violation_counts[vtype] = violation_counts.get(vtype, 0) + 1
+                severity_counts[severity] = severity_counts.get(severity, 0) + 1
 
         return {
             "timestamp": datetime.now().isoformat(),

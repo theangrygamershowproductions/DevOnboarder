@@ -289,7 +289,7 @@ class CIFailureAnalyzer:
         """Extract surrounding lines for better failure context."""
         lines = content[:position].split("\n")
         start_line = max(0, len(lines) - context_lines - 1)
-        end_line = min(len(content.split("\n")), len(lines)  context_lines)
+        end_line = min(len(content.split("\n")), len(lines) + context_lines)
 
         all_lines = content.split("\n")
         return all_lines[start_line:end_line]

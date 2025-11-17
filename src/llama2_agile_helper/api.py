@@ -45,7 +45,7 @@ def _call_llama2(prompt: str) -> str:
 def sprint_summary(data: dict[str, str]) -> dict[str, str]:
     """Return a sprint summary generated from raw notes."""
     notes = data["notes"]
-    prompt = _load_prompt("retro_analysis.prompt")  "\n"  notes
+    prompt = _load_prompt("retro_analysis.prompt") + "\n" + notes
     summary = _call_llama2(prompt)
     return {"summary": summary}
 
@@ -54,7 +54,7 @@ def sprint_summary(data: dict[str, str]) -> dict[str, str]:
 def groom_backlog(data: dict[str, list[str]]) -> dict[str, str]:
     """Return backlog grooming suggestions for the given tickets."""
     tickets = "\n".join(f"- {t}" for t in data["tickets"])
-    prompt = _load_prompt("ticket_classifier.prompt")  "\n"  tickets
+    prompt = _load_prompt("ticket_classifier.prompt") + "\n" + tickets
     suggestions = _call_llama2(prompt)
     return {"suggestions": suggestions}
 

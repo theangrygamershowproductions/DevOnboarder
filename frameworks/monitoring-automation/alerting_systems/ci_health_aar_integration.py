@@ -226,7 +226,7 @@ class CIHealthAARIntegrator:
             failure_type = pred["failure_type"]
             if failure_type != "none":
                 analysis["pattern_frequency"][failure_type] = (
-                    analysis["pattern_frequency"].get(failure_type, 0)  1
+                    analysis["pattern_frequency"].get(failure_type, 0) + 1
                 )
 
             patterns_found.extend(log["patterns_detected"])

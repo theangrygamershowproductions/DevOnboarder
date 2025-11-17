@@ -373,7 +373,7 @@ class ExtendedMetadata:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any])  "ExtendedMetadata":
+    def from_dict(cls, data: Dict[str, Any]) -> "ExtendedMetadata":
         """Create from dictionary for deserialization"""
         # Create a copy to avoid modifying original data
         data = data.copy()
