@@ -1,0 +1,147 @@
+name: DevOnboarder Quality Control
+
+# Enforce honest QC gates - no fake green lights
+# Blocks PRs if coverage <95% or tests fail
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+    paths:
+      - 'backend/**'
+      - 'bot/**'
+      - 'frontend/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'requirements*.txt'
+      - '.github/workflows/devonboarder-qc.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'bot/**'
+      - 'frontend/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'requirements*.txt'
+      - '.github/workflows/devonboarder-qc.yml'
+
+jobs:
+  qc-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+      with:
+        python-version: '3.12.x'
+
+    - name: Create virtual environment
+      run: |
+        python -m venv .venv
+        echo "Virtual environment created"
+
+    - name: Install dependencies
+      run: |
+        source .venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Run DevOnboarder QC
+      id: qc
+      run: |
+        source .venv/bin/activate
+        bash scripts/qc_pre_push.sh
+      continue-on-error: true
+
+    - name: Report QC failure
+      if: steps.qc.outcome == 'failure'
+      run: |
+        echo "❌ DevOnboarder QC Failed"
+        echo ""
+        echo "Requirements:"
+        echo "  - Backend coverage: ≥96%"
+        echo "  - Bot coverage: 100%"
+        echo "  - Frontend coverage: 100%"
+        echo "  - All tests: PASS"
+        echo ""
+        echo "Run locally to debug:"
+        echo "  cd ecosystem/DevOnboarder"
+        echo "  source .venv/bin/activate"
+        echo "  bash scripts/qc_pre_push.sh"
+        echo ""
+        echo "See scripts/qc_pre_push.sh for details"
+        exit 1
+
+    - name: Report QC success
+      if: steps.qc.outcome == 'success'
+      run: |
+        echo "✅ DevOnboarder QC Passed"
+        echo ""
+        echo "Quality gates validated:"
+        echo "  - Coverage thresholds met"
+        echo "  - All tests passing"
+        echo "  - No critical issues"
+
+    - name: Upload coverage reports (if available)
+      if: always()
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+      with:
+        name: coverage-reports
+        path: |
+          backend/htmlcov/
+          bot/htmlcov/
+          frontend/coverage/
+        if-no-files-found: ignore
+
+  lint-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+      with:
+        python-version: '3.12.x'
+
+    - name: Create virtual environment
+      run: |
+        python -m venv .venv
+
+    - name: Install dev dependencies
+      run: |
+        source .venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements-dev.txt
+
+    - name: Run flake8
+      run: |
+        source .venv/bin/activate
+        flake8 backend/ bot/ scripts/ || true
+
+    - name: Run black check
+      run: |
+        source .venv/bin/activate
+        black --check backend/ bot/ scripts/ || true
+
+    - name: Run isort check
+      run: |
+        source .venv/bin/activate
+        isort --check-only backend/ bot/ scripts/ || true

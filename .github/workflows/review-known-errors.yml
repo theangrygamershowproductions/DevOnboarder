@@ -20,7 +20,7 @@ jobs:
     review:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
             - uses: ./.github/actions/setup-gh-cli
               with:
                   version: stable

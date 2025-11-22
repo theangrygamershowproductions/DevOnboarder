@@ -37,12 +37,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
         with:
           python-version: "3.12"
 
@@ -157,7 +157,7 @@ jobs:
           fi
 
       - name: Upload analysis report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         if: always()
         with:
           name: ci-failure-analysis-${{ github.run_id }}
@@ -166,7 +166,7 @@ jobs:
 
       - name: Create GitHub issue for manual failures
         if: steps.analysis.outputs.auto_fixable == 'false' && steps.analysis.outputs.failure_count > 0
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -231,7 +231,7 @@ jobs:
 
       - name: Add PR comment for pull request failures
         if: github.event.workflow_run.event == 'pull_request' && steps.analysis.outputs.failure_count > 0
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

@@ -27,8 +27,8 @@ jobs:
   validate-yaml:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: ibiqlik/action-yamllint@v3
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c
         with:
           file_or_dir: ".github/workflows/**/*.yml"
           config_file: .github/.yamllint-config
@@ -39,12 +39,12 @@ jobs:
       code: ${{ steps.filter.outputs.code }}
       docs: ${{ steps.filter.outputs.docs }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
       - name: Filter paths
         id: filter
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
         with:
           filters: |
             code:
@@ -84,7 +84,7 @@ jobs:
       VALE_VERSION: 3.12.0
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
@@ -137,38 +137,38 @@ jobs:
           GH_VERSION=$(gh --version | head -n1)
           printf "GitHub CLI version: %s\n" "$GH_VERSION"
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
         with:
           node-version: ${{ matrix.node-version }}
       - name: Verify language versions
         run: bash scripts/check_versions.sh
       - name: Cache pip downloads
-        uses: actions/cache@v4
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-py${{ matrix.python-version }}-
       - name: Cache frontend node modules
-        uses: actions/cache@v4
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
         with:
           path: frontend/node_modules
           key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
       - name: Cache bot node modules
-        uses: actions/cache@v4
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
         with:
           path: bot/node_modules
           key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node${{ matrix.node-version }}-bot-
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349
       - name: Prepare CI log directory
         run: mkdir -p logs
       - name: Create virtual environment
@@ -303,7 +303,7 @@ jobs:
 
       - name: Upload Analysis Artifacts
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: ci-failure-analysis
           path: |
@@ -366,7 +366,7 @@ jobs:
         run: ./scripts/check_docs.sh
       - name: Upload Vale results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: vale-results
           path: logs/vale-results.json
@@ -387,7 +387,7 @@ jobs:
           fi
       - name: Upload env audit
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: env-audit
           path: |
@@ -419,7 +419,7 @@ jobs:
           PYTHONPATH=src python -m devonboarder.diagnostics > logs/diagnostics.log
       - name: Upload diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: diagnostics
           path: logs/diagnostics.log
@@ -569,7 +569,7 @@ jobs:
           fi
       - name: Upload pytest results
         if: always() && hashFiles('test-results/pytest-*.xml') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: pytest-results
           path: |
@@ -602,13 +602,13 @@ jobs:
         working-directory: frontend
       - name: Upload vitest log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: vitest-log
           path: frontend/vitest.log
           retention-days: 7
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
@@ -630,28 +630,28 @@ jobs:
         working-directory: frontend
       - name: Upload playwright log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: playwright-log
           path: frontend/playwright.log
           retention-days: 7
       - name: Upload accessibility log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: a11y-log
           path: frontend/a11y.log
           retention-days: 7
       - name: Upload Lighthouse log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: lighthouse-log
           path: frontend/lhci.log
           retention-days: 7
       - name: Upload Lighthouse report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: lighthouse-report
           path: frontend/lhci-report
@@ -671,7 +671,7 @@ jobs:
         working-directory: bot
       - name: Upload jest log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: jest-log
           path: bot/jest.log
@@ -690,14 +690,14 @@ jobs:
           bash scripts/append_coverage_summary.sh coverage-summary.md
       - name: Upload coverage summary
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: coverage-summary
           path: coverage-summary.md
           retention-days: 7
       - name: Upload coverage data
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: coverage-data
           path: |
@@ -766,7 +766,7 @@ jobs:
       # Upload coverage badge as artifact if git push failed
       - name: Upload coverage badge as artifact (fallback)
         if: failure() || github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: coverage-badge-fallback
           path: coverage.svg
@@ -936,7 +936,7 @@ jobs:
         run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
       - name: Upload CI failure issue number
         if: failure() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: ci-failure-issue
           path: ci_failure_issue.txt
@@ -978,7 +978,7 @@ jobs:
           mv -f audit.md logs/ 2>/dev/null || true
       - name: Upload CI logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: ci-logs
           path: |
@@ -990,7 +990,7 @@ jobs:
   frameworks-validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - run: chmod +x scripts/audit_frameworks.sh
       - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
       - name: Fail on legacy path references
@@ -1021,7 +1021,7 @@ jobs:
               echo "All framework documentation passes quality checks!"
           fi
       - name: Attach audit
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: frameworks-audit
           path: frameworks_audit.md

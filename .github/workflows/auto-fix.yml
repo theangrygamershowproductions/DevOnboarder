@@ -26,8 +26,8 @@ jobs:
         permissions:
             contents: read
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            - uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
@@ -39,7 +39,7 @@ jobs:
             contents: write
             pull-requests: write
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   fetch-depth: 0
                   # Security: Only checkout trusted code from the default branch
@@ -63,7 +63,7 @@ jobs:
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
@@ -120,7 +120,7 @@ jobs:
             - name: Apply patch
               run: git apply patch.diff
             - name: Create pull request
-              uses: peter-evans/create-pull-request@v6
+              uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
               with:
                   commit-message: "CHORE(auto-fix): apply patch from OpenAI"
                   branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}

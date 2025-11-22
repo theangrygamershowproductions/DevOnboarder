@@ -15,8 +15,8 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: DavidAnson/markdownlint-cli2-action@v20
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            - uses: DavidAnson/markdownlint-cli2-action@db7e3e0c83fe3892ce9dcd7c5d6e7661f0e6e607
               with:
                   globs: "*.md docs/**/*.md docs/v1/**/*.md"
                   fix: false

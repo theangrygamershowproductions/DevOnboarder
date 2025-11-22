@@ -25,8 +25,8 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            - uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
@@ -36,7 +36,7 @@ jobs:
                   yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
             - name: Upload yamllint log
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
               with:
                   name: yamllint-log
                   path: yamllint.log
@@ -66,7 +66,7 @@ jobs:
                   fi
                   echo "Using token source: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
             - name: Checkout repository
-              uses: actions/checkout@v5
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   token: ${{ steps.set-token.outputs.selected-token }}
             - name: Install the gh cli

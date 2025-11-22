@@ -11,18 +11,18 @@ jobs:
       runs-on: ubuntu-latest
       steps:
          - name: Checkout repository
-           uses: actions/checkout@v5
+           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
            with:
               token: ${{ secrets.GITHUB_TOKEN }}
               fetch-depth: 0
 
          - name: Setup Python
-           uses: actions/setup-python@v5
+           uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
            with:
               python-version: "3.12"
 
          - name: Setup Node
-           uses: actions/setup-node@v4
+           uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
            with:
               node-version: "22"
 

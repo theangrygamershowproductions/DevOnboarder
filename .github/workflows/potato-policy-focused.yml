@@ -64,12 +64,12 @@ jobs:
                 echo "Using token source for Potato Policy: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
             - name: Checkout code
-              uses: actions/checkout@v5
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   fetch-depth: 0  # Full history for comprehensive analysis
 
             - name: Setup Python Virtual Environment
-              uses: actions/setup-python@v5
+              uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
               with:
                   python-version: "3.12"
                   cache: "pip"
@@ -251,7 +251,7 @@ jobs:
                   fi
 
             - name: Upload Enhanced Audit Reports
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
               if: always()
               with:
                   name: enhanced-potato-policy-audit-${{ github.run_number }}

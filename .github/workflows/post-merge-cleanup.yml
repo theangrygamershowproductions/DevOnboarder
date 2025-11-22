@@ -42,10 +42,10 @@ jobs:
                 fi
                 echo "Using token source for Post-Merge Cleanup: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
               with:
                   python-version: "3.12"
 
@@ -115,7 +115,7 @@ jobs:
 
             - name: Upload cleanup summary
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
               with:
                   name: post-merge-cleanup-summary
                   path: |
