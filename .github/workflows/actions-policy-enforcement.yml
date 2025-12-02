@@ -42,7 +42,7 @@ jobs:
           # Check each banned action
           for action in "${BANNED_ACTIONS[@]}"; do
             if grep -r "uses:.*${action}" .github/workflows/ 2>/dev/null; then
-              echo "❌ ERROR: Banned action detected: ${action}"
+              echo "ERROR: Banned action detected: ${action}"
               echo ""
               echo "This action is explicitly forbidden by v3 policy."
               echo "See ACTIONS_REPLACEMENT_MATRIX.md for approved replacement."
@@ -54,7 +54,7 @@ jobs:
           if [ "$BANNED_FOUND" = "true" ]; then
             echo "banned_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "✅ No explicitly banned actions detected"
+            echo "No explicitly banned actions detected"
             echo "banned_detected=false" >> $GITHUB_OUTPUT
           fi
 
@@ -80,7 +80,7 @@ jobs:
             
             # Check if owner is allowlisted
             if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." ]]; then
-              echo "❌ ERROR: Non-allowlisted action owner: ${owner}"
+              echo "ERROR: Non-allowlisted action owner: ${owner}"
               echo "   Full reference: ${ref}"
               echo ""
               echo "Only 'actions/*' and 'docker/*' actions are allowed by v3 policy."
@@ -93,7 +93,7 @@ jobs:
           if [ "$VIOLATIONS_FOUND" = "true" ]; then
             echo "violations_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "✅ All action owners are allowlisted (actions/* or docker/*)"
+            echo "All action owners are allowlisted (actions/* or docker/*)"
             echo "violations_detected=false" >> $GITHUB_OUTPUT
           fi
 
@@ -112,7 +112,7 @@ jobs:
                      grep -vE "@[a-f0-9]{40}" || true)
           
           if [ -n "$TAG_REFS" ]; then
-            echo "❌ ERROR: Tag-based action references detected:"
+            echo "ERROR: Tag-based action references detected:"
             echo ""
             echo "$TAG_REFS"
             echo ""
@@ -125,7 +125,7 @@ jobs:
           if [ "$TAG_REFS_FOUND" = "true" ]; then
             echo "tag_refs_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "✅ All actions are SHA-pinned (no tag-based references)"
+            echo "All actions are SHA-pinned (no tag-based references)"
             echo "tag_refs_detected=false" >> $GITHUB_OUTPUT
           fi
 
@@ -137,7 +137,7 @@ jobs:
         run: |
           echo ""
           echo "=========================================="
-          echo "❌ ACTIONS POLICY VIOLATIONS DETECTED"
+          echo "ACTIONS POLICY VIOLATIONS DETECTED"
           echo "=========================================="
           echo ""
           echo "Your workflow changes violate v3 Actions Policy."
@@ -166,16 +166,16 @@ jobs:
         run: |
           echo ""
           echo "=========================================="
-          echo "✅ ACTIONS POLICY COMPLIANCE CONFIRMED"
+          echo "ACTIONS POLICY COMPLIANCE CONFIRMED"
           echo "=========================================="
           echo ""
           echo "All workflow changes comply with v3 Actions Policy:"
-          echo "  ✅ No banned third-party actions detected"
-          echo "  ✅ All action owners are allowlisted (actions/* or docker/*)"
-          echo "  ✅ All actions are SHA-pinned (no tag-based references)"
+          echo "  - No banned third-party actions detected"
+          echo "  - All action owners are allowlisted (actions/* or docker/*)"
+          echo "  - All actions are SHA-pinned (no tag-based references)"
           echo ""
           echo "Policy enforcement layers:"
-          echo "  ✅ This CI job (detects violations at commit time)"
-          echo "  ✅ GitHub org settings (blocks non-GitHub actions)"
-          echo "  ✅ MCP governance layer (SHA age window + audit)"
+          echo "  - This CI job (detects violations at commit time)"
+          echo "  - GitHub org settings (blocks non-GitHub actions)"
+          echo "  - MCP governance layer (SHA age window + audit)"
           echo ""
