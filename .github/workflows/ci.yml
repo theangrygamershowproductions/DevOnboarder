@@ -85,12 +85,17 @@ jobs:
             const changedFiles = diffOutput.trim().split('\n').filter(f => f);
             
             // Simple glob pattern matcher (built-in, no dependencies)
+            // Handles common patterns: **, *, ?, and .env* edge case
             function globToRegex(pattern) {
-              return new RegExp('^' + pattern
+              // First replace ** with placeholder to protect it
+              const temp = pattern.replace(/\*\*/g, '\x00DOUBLESTAR\x00');
+              // Escape dots, replace *, ?, then restore **
+              const regex = temp
                 .replace(/\./g, '\\.')
-                .replace(/\*\*/g, '.*')
-                .replace(/\*/g, '[^/]*')
-                .replace(/\?/g, '.') + '$');
+                .replace(/\*/g, '.*')  // Single * becomes .* (matches anything including nothing)
+                .replace(/\?/g, '.')
+                .replace(/\x00DOUBLESTAR\x00/g, '.*');
+              return new RegExp('^' + regex + '$');
             }
             
             function matchesPattern(file, pattern) {
