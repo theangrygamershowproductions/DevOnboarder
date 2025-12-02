@@ -57,6 +57,11 @@ jobs:
           script: |
             const { execSync } = require('child_process');
             
+            // Validate that SHAs are 40-character hex strings (security: prevent command injection)
+            function isValidSha(sha) {
+              return typeof sha === 'string' && /^[0-9a-f]{40}$/i.test(sha);
+            }
+            
             // Get changed files (works for both PRs and pushes)
             let base, head;
             if (context.eventName === 'pull_request') {
@@ -70,6 +75,10 @@ jobs:
                 base = context.payload.before;
               }
               head = context.payload.after;
+            }
+            
+            if (!isValidSha(base) || !isValidSha(head)) {
+              throw new Error(`Invalid git SHA detected: base=${base}, head=${head}`);
             }
             
             const diffOutput = execSync(`git diff --name-only ${base} ${head}`, { encoding: 'utf8' });
