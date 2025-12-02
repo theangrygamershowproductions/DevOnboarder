@@ -56,7 +56,6 @@ jobs:
         with:
           script: |
             const { execSync } = require('child_process');
-            const minimatch = require('minimatch');
             
             // Get changed files (works for both PRs and pushes)
             let base, head;
@@ -64,12 +63,30 @@ jobs:
               base = context.payload.pull_request.base.sha;
               head = context.payload.pull_request.head.sha;
             } else {
-              base = context.payload.before;
+              // Handle new branch (all-zeros SHA)
+              if (context.payload.before === '0000000000000000000000000000000000000000') {
+                base = execSync('git rev-parse origin/main', { encoding: 'utf8' }).trim();
+              } else {
+                base = context.payload.before;
+              }
               head = context.payload.after;
             }
             
             const diffOutput = execSync(`git diff --name-only ${base} ${head}`, { encoding: 'utf8' });
             const changedFiles = diffOutput.trim().split('\n').filter(f => f);
+            
+            // Simple glob pattern matcher (built-in, no dependencies)
+            function globToRegex(pattern) {
+              return new RegExp('^' + pattern
+                .replace(/\./g, '\\.')
+                .replace(/\*\*/g, '.*')
+                .replace(/\*/g, '[^/]*')
+                .replace(/\?/g, '.') + '$');
+            }
+            
+            function matchesPattern(file, pattern) {
+              return globToRegex(pattern).test(file);
+            }
             
             // Define filters (matching dorny/paths-filter patterns)
             const codePatterns = [
@@ -85,7 +102,7 @@ jobs:
             
             // Check if any changed file matches patterns
             function matchesAny(file, patterns) {
-              return patterns.some(pattern => minimatch(file, pattern, { dot: true }));
+              return patterns.some(pattern => matchesPattern(file, pattern));
             }
             
             const codeChanged = changedFiles.some(f => matchesAny(f, codePatterns));
@@ -164,7 +181,7 @@ jobs:
           GH_VERSION=$(gh --version | head -n1)
           printf "GitHub CLI version: %s\n" "$GH_VERSION"
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Node

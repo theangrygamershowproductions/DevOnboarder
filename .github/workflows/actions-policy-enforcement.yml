@@ -105,9 +105,10 @@ jobs:
           
           # Check for tag-based references (not SHA-pinned)
           # Pattern: actions/something@v1 or actions/something@main (not 40-char SHA)
-          TAG_REFS=$(grep -rhE "uses:\s+(actions|docker)/[^@]+@[^a-f0-9]" .github/workflows/ 2>/dev/null | \
+          # Updated pattern ensures exactly 40 hex chars required (prevents false positives from echo examples)
+          TAG_REFS=$(grep -rhE "uses:\s+(actions|docker)/[^@]+@" .github/workflows/ 2>/dev/null | \
                      grep -v "^\s*#" | \
-                     grep -vE "@[a-f0-9]{40}" || true)
+                     grep -vE "@[a-f0-9]{40}(\s|$)" || true)
           
           if [ -n "$TAG_REFS" ]; then
             echo "❌ ERROR: Tag-based action references detected:"
