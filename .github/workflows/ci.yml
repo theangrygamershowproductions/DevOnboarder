@@ -35,7 +35,7 @@ jobs:
           python-version: '3.12'
       
       - name: Install yamllint
-        run: pip install yamllint
+        run: pip install yamllint==1.35.1
       
       - name: Lint YAML files
         run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
@@ -52,7 +52,7 @@ jobs:
       
       - name: Detect changed paths
         id: filter
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # v8 (2025-09-04)
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7 (2024-09-04)
         with:
           script: |
             const { execSync } = require('child_process');
@@ -194,7 +194,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Node
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b  # v4.0.3 (2024-08-23)
         with:
           node-version: ${{ matrix.node-version }}
       - name: Verify language versions
@@ -255,7 +255,7 @@ jobs:
       - name: Install yamllint
         run: |
           source .venv/bin/activate
-          pip install yamllint
+          pip install yamllint==1.35.1
       - name: Lint and validate bot permissions
         run: bash scripts/validate-bot-permissions.sh
       - name: Run Black

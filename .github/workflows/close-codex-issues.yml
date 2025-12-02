@@ -27,7 +27,7 @@ jobs:
                   python-version: '3.12'
             
             - name: Install yamllint
-              run: pip install yamllint
+              run: pip install yamllint==1.35.1
             
             - name: Lint YAML files
               run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'

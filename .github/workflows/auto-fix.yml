@@ -34,7 +34,7 @@ jobs:
                   python-version: '3.12'
             
             - name: Install yamllint
-              run: pip install yamllint
+              run: pip install yamllint==1.35.1
             
             - name: Lint YAML files
               run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
@@ -66,7 +66,7 @@ jobs:
                   printf "%s\n" "$RUN_EVENT"
             - name: Run yamllint
               run: |
-                  pip install yamllint
+                  pip install yamllint==1.35.1
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'

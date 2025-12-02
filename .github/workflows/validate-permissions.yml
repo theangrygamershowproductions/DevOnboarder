@@ -32,7 +32,7 @@ jobs:
                   python-version: '3.12'
             
             - name: Install yamllint
-              run: pip install yamllint
+              run: pip install yamllint==1.35.1
             
             - name: Lint YAML files
               run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
@@ -42,7 +42,7 @@ jobs:
         steps:
             - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
             - name: Install yamllint
-              run: pip install yamllint
+              run: pip install yamllint==1.35.1
             - name: Lint bot permissions
               run: bash scripts/lint-bot-permissions.sh
             - name: Verify agent docs exist
