@@ -119,15 +119,59 @@ jobs:
                   echo "$suggestion" > patch.diff
             - name: Apply patch
               run: git apply patch.diff
+            
+            - name: Configure Git identity
+              run: |
+                  git config user.name "devon-autofix[bot]"
+                  git config user.email "devon-autofix[bot]@users.noreply.github.com"
+            
+            - name: Detect changes
+              id: changes
+              run: |
+                  if git diff --quiet && git diff --cached --quiet; then
+                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                  fi
+            
+            - name: Create branch and commit
+              if: steps.changes.outputs.has_changes == 'true'
+              id: create_branch
+              env:
+                  BRANCH_NAME: auto-fix/${{ steps.pr-info.outputs.head_sha }}
+              run: |
+                  git checkout -b "$BRANCH_NAME"
+                  git add -A
+                  git commit -m "CHORE(auto-fix): apply patch from OpenAI" || echo "No changes to commit"
+                  git push --set-upstream origin "$BRANCH_NAME"
+                  echo "branch=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+            
             - name: Create pull request
-              uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
-              with:
-                  commit-message: "CHORE(auto-fix): apply patch from OpenAI"
-                  branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}
-                  title: "CHORE(auto-fix): propose fix for failed CI run"
-                  body: |
-                      Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.
+              if: steps.changes.outputs.has_changes == 'true'
+              id: create_pr
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  BRANCH="${{ steps.create_branch.outputs.branch }}"
+                  PR_BODY="Automated fix generated from CI logs of run \`${{ github.event.workflow_run.id }}\`.
 
-                      **Security Note**: This fix was generated from trusted code only.
-                      Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
-                      Original branch: ${{ steps.pr-info.outputs.head_branch }}
+                  **Security Note**: This fix was generated from trusted code only.
+                  Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
+                  Original branch: ${{ steps.pr-info.outputs.head_branch }}"
+                  
+                  PR_URL=$(gh pr create \
+                    --head "$BRANCH" \
+                    --base main \
+                    --title "CHORE(auto-fix): propose fix for failed CI run" \
+                    --body "$PR_BODY")
+                  
+                  PR_NUMBER="${PR_URL##*/}"
+                  
+                  echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
+                  echo "pull-request-number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+                  echo "pull-request-operation=created" >> "$GITHUB_OUTPUT"
+            
+            - name: No changes detected
+              if: steps.changes.outputs.has_changes != 'true'
+              run: |
+                  echo "No changes detected – skipping PR creation."
