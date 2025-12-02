@@ -108,7 +108,7 @@ jobs:
           # Updated pattern ensures exactly 40 hex chars required (prevents false positives from echo examples)
           TAG_REFS=$(grep -rhE "uses:\s+(actions|docker)/[^@]+@" .github/workflows/ 2>/dev/null | \
                      grep -v "^\s*#" | \
-                     grep -v "echo" | \
+                     grep -vE "^\s*(echo|#.*echo)" | \
                      grep -vE "@[a-f0-9]{40}" || true)
           
           if [ -n "$TAG_REFS" ]; then
