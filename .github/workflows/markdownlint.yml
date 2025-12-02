@@ -16,8 +16,14 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-            - uses: DavidAnson/markdownlint-cli2-action@db7e3e0c83fe3892ce9dcd7c5d6e7661f0e6e607
+            
+            - name: Set up Node.js
+              uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b  # v4.0.3 (2024-08-23)
               with:
-                  globs: "*.md docs/**/*.md docs/v1/**/*.md"
-                  fix: false
-                  config: ".markdownlint.json"
+                  node-version: '22'
+            
+            - name: Install markdownlint-cli2
+              run: npm install -g markdownlint-cli2
+            
+            - name: Run markdownlint-cli2
+              run: markdownlint-cli2 --config .markdownlint.json "*.md" "docs/**/*.md" "docs/v1/**/*.md"
