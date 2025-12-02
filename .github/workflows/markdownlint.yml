@@ -23,7 +23,7 @@ jobs:
                   node-version: '22'
             
             - name: Install markdownlint-cli2
-              run: npm install -g markdownlint-cli2
+              run: npm install -g markdownlint-cli2@0.13.0
             
             - name: Run markdownlint-cli2
               run: markdownlint-cli2 --config .markdownlint.json "*.md" "docs/**/*.md" "docs/v1/**/*.md"
