@@ -43,11 +43,15 @@ jobs:
         if: github.event.workflow_run.conclusion == 'failure'
         runs-on: ubuntu-latest
         steps:
+            # Security: workflow_run trigger executes in privileged context.
+            # NEVER checkout PR head code - only use default branch (trusted code).
+            # This prevents code injection attacks from untrusted forks.
             - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   fetch-depth: 0
-                  # Security: Only checkout trusted code, not untrusted PR head
-                  ref: ${{ github.sha }}
+                  # Explicitly omit 'ref' parameter to ensure default branch checkout
+                  # Do NOT use github.event.pull_request.head.sha (untrusted)
+                  # Do NOT use github.event.workflow_run.head_sha (untrusted)
             - name: Get workflow run information
               id: workflow-info
               run: |

@@ -1,3 +1,9 @@
+# Security: Uses pull_request_target for write access to post welcome comment.
+# This is safe because:
+# 1. No code checkout (does not execute untrusted PR code)
+# 2. Only posts predefined welcome message (no user input processing)
+# 3. Minimal permissions (pull-requests: write only)
+# 4. Only runs for forked PRs (github.event.pull_request.head.repo.fork == true)
 name: PR Welcome
 
 on:
