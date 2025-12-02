@@ -49,31 +49,51 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
-      - name: Filter paths
+      
+      - name: Detect changed paths
         id: filter
-        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # v8 (2025-09-04)
         with:
-          filters: |
-            code:
-                - 'src/**'
-                - 'bot/**'
-                - 'frontend/**'
-                - 'auth/**'
-                - 'tests/**'
-                - 'scripts/**'
-                - 'config/**'
-                - '.github/workflows/**'
-                - 'pyproject.toml'
-                - 'package*.json'
-                - '.tool-versions'
-                - 'docker-compose*.yaml'
-                - '.env*'
-                - 'Makefile'
-                - 'plugins/**'
-            docs:
-                - 'docs/**'
-                - '**/*.md'
-                - '.github/copilot-instructions.md'
+          script: |
+            const { execSync } = require('child_process');
+            const minimatch = require('minimatch');
+            
+            // Get changed files (works for both PRs and pushes)
+            let base, head;
+            if (context.eventName === 'pull_request') {
+              base = context.payload.pull_request.base.sha;
+              head = context.payload.pull_request.head.sha;
+            } else {
+              base = context.payload.before;
+              head = context.payload.after;
+            }
+            
+            const diffOutput = execSync(`git diff --name-only ${base} ${head}`, { encoding: 'utf8' });
+            const changedFiles = diffOutput.trim().split('\n').filter(f => f);
+            
+            // Define filters (matching dorny/paths-filter patterns)
+            const codePatterns = [
+              'src/**', 'bot/**', 'frontend/**', 'auth/**', 'tests/**',
+              'scripts/**', 'config/**', '.github/workflows/**',
+              'pyproject.toml', 'package*.json', '.tool-versions',
+              'docker-compose*.yaml', '.env*', 'Makefile', 'plugins/**'
+            ];
+            
+            const docsPatterns = [
+              'docs/**', '**/*.md', '.github/copilot-instructions.md'
+            ];
+            
+            // Check if any changed file matches patterns
+            function matchesAny(file, patterns) {
+              return patterns.some(pattern => minimatch(file, pattern, { dot: true }));
+            }
+            
+            const codeChanged = changedFiles.some(f => matchesAny(f, codePatterns));
+            const docsChanged = changedFiles.some(f => matchesAny(f, docsPatterns));
+            
+            // Set outputs (matching dorny/paths-filter format)
+            core.setOutput('code', codeChanged ? 'true' : 'false');
+            core.setOutput('docs', docsChanged ? 'true' : 'false');
   test:
     needs: filter
     if: |
