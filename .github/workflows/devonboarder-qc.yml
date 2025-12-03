@@ -52,18 +52,11 @@ jobs:
         python -m venv .venv
         echo "Virtual environment created"
 
-    - name: Install dependencies
-      run: |
-        source .venv/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-dev.txt
-
-    - name: Run DevOnboarder QC
+    - name: Run DevOnboarder QC (canonical script)
       id: qc
       run: |
         source .venv/bin/activate
-        bash scripts/qc_pre_push.sh
+        ./scripts/devon_qc.sh
       continue-on-error: true
 
     - name: Report QC failure

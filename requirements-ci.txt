@@ -1,0 +1,57 @@
+# =============================================================================
+# File: requirements-ci.txt
+# Version: 1.0.0
+# Author: DevOnboarder Project
+# Created: 2025-12-03
+# Updated: 2025-12-03
+# Purpose: Canonical CI/QC dependency definition for DevOnboarder
+# Dependencies: Consolidates runtime + test/lint dependencies for CI workflows
+# DevOnboarder Project Standards: Compliant with copilot-instructions.md
+# Format: pip requirements format
+# =============================================================================
+
+# Runtime dependencies (from pyproject.toml [project.dependencies])
+httpx<0.29
+fastapi
+uvicorn
+SQLAlchemy<3.0
+passlib[bcrypt]
+bcrypt>=4.3.0
+PyJWT
+python-dotenv
+alembic
+psycopg2-binary
+pyyaml>=6.0
+logfire>=4.11.0
+
+# Test dependencies (from pyproject.toml [project.optional-dependencies.test])
+pytest==8.4.2
+pytest-cov==7.0.0
+pytest-asyncio
+requests==2.32.4
+jsonschema
+openapi-spec-validator==0.7.2
+
+# Code quality tools (from requirements-dev.txt)
+ruff==0.14.1
+black
+mypy==1.18.2
+types-requests
+
+# Security scanning (from requirements-dev.txt)
+pip-audit==2.9.0
+bandit==1.8.6
+
+# Documentation linting (from requirements-dev.txt)
+vale==3.12.0.2
+language-tool-python==2.9.4
+
+# Phase 5: Advanced Orchestration dependencies (from pyproject.toml)
+aiohttp
+psutil
+scikit-learn
+numpy
+pandas
+
+# Pre-commit (from requirements-dev.txt)
+pre-commit==4.2.0
