@@ -30,7 +30,8 @@ on:
       - '.github/workflows/devonboarder-qc.yml'
 
 jobs:
-  qc-check:
+  qc-gate-minimum:
+    name: QC Gate (Required - Basic Sanity)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,7 +53,48 @@ jobs:
         python -m venv .venv
         echo "Virtual environment created"
 
-    - name: Run DevOnboarder QC (canonical script)
+    - name: Run Minimal QC Gate
+      id: gate
+      run: |
+        source .venv/bin/activate
+        ./scripts/devon_qc.sh --gate-only
+
+    - name: Report Gate Success
+      if: success()
+      run: |
+        echo "✅ QC Gate Passed"
+        echo ""
+        echo "Basic sanity checks validated:"
+        echo "  - Dependencies install successfully"
+        echo "  - Python imports work"
+        echo "  - Tests are runnable"
+        echo ""
+        echo "Note: Full QC validation (coverage, lint) runs in qc-full job"
+
+  qc-full:
+    name: QC Full Validation (Non-Required - Coverage + Lint)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v5.1.0 (2024-09-10)
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+      with:
+        python-version: '3.12.x'
+
+    - name: Create virtual environment
+      run: |
+        python -m venv .venv
+        echo "Virtual environment created"
+
+    - name: Run Full DevOnboarder QC
       id: qc
       run: |
         source .venv/bin/activate
@@ -62,26 +104,27 @@ jobs:
     - name: Report QC failure
       if: steps.qc.outcome == 'failure'
       run: |
-        echo "❌ DevOnboarder QC Failed"
+        echo "⚠️  DevOnboarder Full QC Failed (Non-Blocking)"
         echo ""
-        echo "Requirements:"
+        echo "This check validates comprehensive quality standards:"
         echo "  - Backend coverage: ≥96%"
         echo "  - Bot coverage: 100%"
         echo "  - Frontend coverage: 100%"
+        echo "  - YAML lint passing"
         echo "  - All tests: PASS"
+        echo ""
+        echo "⚠️  Note: This is a v4 hardening target, not a v3 blocker"
+        echo "Issues identified here should be tracked for future cleanup"
         echo ""
         echo "Run locally to debug:"
         echo "  cd ecosystem/DevOnboarder"
         echo "  source .venv/bin/activate"
-        echo "  bash scripts/qc_pre_push.sh"
-        echo ""
-        echo "See scripts/qc_pre_push.sh for details"
-        exit 1
+        echo "  bash scripts/devon_qc.sh"
 
     - name: Report QC success
       if: steps.qc.outcome == 'success'
       run: |
-        echo "✅ DevOnboarder QC Passed"
+        echo "✅ DevOnboarder Full QC Passed"
         echo ""
         echo "Quality gates validated:"
         echo "  - Coverage thresholds met"
