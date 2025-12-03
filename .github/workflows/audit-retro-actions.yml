@@ -26,7 +26,7 @@ jobs:
     audit:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
             - name: Check for unresolved action items
               id: check

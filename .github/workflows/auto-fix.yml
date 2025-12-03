@@ -26,11 +26,18 @@ jobs:
         permissions:
             contents: read
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            
+            - name: Set up Python
+              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
               with:
-                  file_or_dir: ".github/workflows/**/*.yml"
-                  config_file: .github/.yamllint-config
+                  python-version: '3.12'
+            
+            - name: Install yamllint
+              run: pip install yamllint==1.35.1
+            
+            - name: Lint YAML files
+              run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
     fix:
         needs: validate-yaml
         if: github.event.workflow_run.conclusion == 'failure'
@@ -39,7 +46,7 @@ jobs:
             contents: write
             pull-requests: write
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   fetch-depth: 0
                   # Security: Only checkout trusted code from the default branch
@@ -59,11 +66,11 @@ jobs:
                   printf "%s\n" "$RUN_EVENT"
             - name: Run yamllint
               run: |
-                  pip install yamllint
+                  pip install yamllint==1.35.1
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
@@ -119,15 +126,82 @@ jobs:
                   echo "$suggestion" > patch.diff
             - name: Apply patch
               run: git apply patch.diff
+            
+            - name: Configure Git identity
+              run: |
+                  git config user.name "devon-autofix[bot]"
+                  git config user.email "devon-autofix[bot]@users.noreply.github.com"
+            
+            - name: Detect changes
+              id: changes
+              run: |
+                  if git diff --quiet && git diff --cached --quiet; then
+                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                  fi
+            
+            - name: Create branch and commit
+              if: steps.changes.outputs.has_changes == 'true'
+              id: create_branch
+              env:
+                  BRANCH_NAME: auto-fix/${{ steps.pr-info.outputs.head_sha }}
+              run: |
+                  git checkout -b "$BRANCH_NAME"
+                  git add -A
+                  if git commit -m "CHORE(auto-fix): apply patch from OpenAI"; then
+                    git push --set-upstream origin "$BRANCH_NAME"
+                    echo "branch=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "No changes to commit"
+                    exit 0
+                  fi
+            
             - name: Create pull request
-              uses: peter-evans/create-pull-request@v6
-              with:
-                  commit-message: "CHORE(auto-fix): apply patch from OpenAI"
-                  branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}
-                  title: "CHORE(auto-fix): propose fix for failed CI run"
-                  body: |
-                      Automated fix generated from CI logs of run `${{ github.event.workflow_run.id }}`.
+              if: steps.changes.outputs.has_changes == 'true'
+              id: create_pr
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  BRANCH="${{ steps.create_branch.outputs.branch }}"
+                  PR_BODY="Automated fix generated from CI logs of run \`${{ github.event.workflow_run.id }}\`.
 
-                      **Security Note**: This fix was generated from trusted code only.
-                      Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
-                      Original branch: ${{ steps.pr-info.outputs.head_branch }}
+                  **Security Note**: This fix was generated from trusted code only.
+                  Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
+                  Original branch: ${{ steps.pr-info.outputs.head_branch }}"
+                  
+                  # Try to create PR, handle if it already exists
+                  set +e
+                  PR_URL=$(gh pr create \
+                    --head "$BRANCH" \
+                    --base main \
+                    --title "CHORE(auto-fix): propose fix for failed CI run" \
+                    --body "$PR_BODY" 2>&1)
+                  STATUS=$?
+                  set -e
+                  
+                  if [ $STATUS -eq 0 ]; then
+                    PR_NUMBER="${PR_URL##*/}"
+                    echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
+                    echo "pull-request-number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+                    echo "pull-request-operation=created" >> "$GITHUB_OUTPUT"
+                  else
+                    # Check if PR already exists
+                    EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+                    if [ -n "$EXISTING_PR" ]; then
+                      PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
+                      echo "PR already exists: $PR_URL"
+                      echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
+                      echo "pull-request-number=$EXISTING_PR" >> "$GITHUB_OUTPUT"
+                      echo "pull-request-operation=updated" >> "$GITHUB_OUTPUT"
+                    else
+                      echo "Failed to create or find PR for branch $BRANCH" >&2
+                      exit 1
+                    fi
+                  fi
+            
+            - name: No changes detected
+              if: steps.changes.outputs.has_changes != 'true'
+              run: |
+                  echo "No changes detected – skipping PR creation."
+

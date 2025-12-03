@@ -49,12 +49,12 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v5
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 50  # Get recent history for change analysis
 
       - name: "Setup Python environment"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
         with:
           python-version: "3.12"
           cache: "pip"
@@ -137,7 +137,7 @@ jobs:
           fi
 
       - name: "Archive AAR artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: "aar-reports-${{ github.run_id }}"
           path: |
@@ -197,10 +197,10 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v5
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: "Setup Python environment"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
         with:
           python-version: "3.12"
 
@@ -221,7 +221,7 @@ jobs:
           mkdir -p logs logs/aar logs/aar-reports logs/token-audit logs/compliance-reports
 
       - name: "Download AAR artifacts"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           name: "aar-reports-${{ github.run_id }}"
           path: "aar-artifacts/"
@@ -277,7 +277,7 @@ jobs:
           echo "Security audit report generated"
 
       - name: "Archive security audit"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
         with:
           name: "aar-security-audit-${{ github.run_id }}"
           path: |

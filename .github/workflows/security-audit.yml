@@ -20,16 +20,23 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            
+            - name: Set up Python
+              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
               with:
-                  file_or_dir: ".github/workflows/**/*.yml"
-                  config_file: .github/.yamllint-config
+                  python-version: '3.12'
+            
+            - name: Install yamllint
+              run: pip install yamllint==1.35.1
+            
+            - name: Lint YAML files
+              run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
     audit:
         needs: validate-yaml
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
             - name: Install GitHub CLI
               uses: ./.github/actions/setup-gh-cli
               with:
@@ -38,11 +45,11 @@ jobs:
             - name: Show gh version
               run: which gh && gh --version
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
               with:
                   python-version: "3.12"
             - name: Set up Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b
               with:
                   node-version: "22"
             - name: Install Python dependencies
@@ -65,7 +72,7 @@ jobs:
                   printf -- "report=docs/security-audit-%s.md\n" "$(date -I)" >> "$GITHUB_OUTPUT"
             - name: Upload audit report
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
               with:
                   name: security-audit
                   path: ${{ steps.audit.outputs.report }}

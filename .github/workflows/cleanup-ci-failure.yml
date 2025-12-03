@@ -25,18 +25,23 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            
+            - name: Set up Python
+              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
               with:
-                  file_or_dir: ".github/workflows/**/*.yml"
-                  config_file: .github/.yamllint-config
-            - name: Run yamllint
+                  python-version: '3.12'
+            
+            - name: Install yamllint
+              run: pip install yamllint==1.35.1
+            
+            - name: Lint YAML files and save log
               run: |
-                  pip install yamllint
-                  yamllint -c .github/.yamllint-config .github/workflows/**/*.yml > yamllint.log || true
+                  yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml' | tee yamllint.log || true
+            
             - name: Upload yamllint log
               if: always()
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
               with:
                   name: yamllint-log
                   path: yamllint.log
@@ -66,7 +71,7 @@ jobs:
                   fi
                   echo "Using token source: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
             - name: Checkout repository
-              uses: actions/checkout@v5
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   token: ${{ steps.set-token.outputs.selected-token }}
             - name: Install the gh cli

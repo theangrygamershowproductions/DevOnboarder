@@ -24,7 +24,7 @@ jobs:
         runs-on: ubuntu-latest
         if: github.event_name == 'schedule' || github.event.label.name == 'codex:cleanup'
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
               with:
                   fetch-depth: 0
             - name: Run cleanup script

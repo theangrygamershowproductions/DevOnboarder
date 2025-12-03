@@ -15,9 +15,18 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: DavidAnson/markdownlint-cli2-action@v20
+            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            
+            - name: Set up Node.js
+              uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b  # v4.0.3 (2024-08-23)
               with:
-                  globs: "*.md docs/**/*.md docs/v1/**/*.md"
-                  fix: false
-                  config: ".markdownlint.json"
+                  node-version: '22'
+            
+            - name: Install markdownlint-cli2
+              # Version pinned per ACTIONS_POLICY.md - prevents unexpected behavior from automatic updates
+              # Matches pattern: actions pinned to SHAs, tools pinned to specific versions
+              # Update via scheduled automation (not floating latest)
+              run: npm install -g markdownlint-cli2@0.13.0
+            
+            - name: Run markdownlint-cli2
+              run: markdownlint-cli2 --config .markdownlint.json "*.md" "docs/**/*.md" "docs/v1/**/*.md"
