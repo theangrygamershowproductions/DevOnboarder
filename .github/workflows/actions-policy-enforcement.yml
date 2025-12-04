@@ -42,7 +42,7 @@ jobs:
           # Check each banned action
           for action in "${BANNED_ACTIONS[@]}"; do
             if grep -r "uses:.*${action}" .github/workflows/ 2>/dev/null; then
-              echo "ERROR: Banned action detected: ${action}"
+              printf 'ERROR: Banned action detected: %s\n' "${action}"
               echo ""
               echo "This action is explicitly forbidden by v3 policy."
               echo "See ACTIONS_REPLACEMENT_MATRIX.md for approved replacement."
@@ -80,8 +80,8 @@ jobs:
             
             # Check if owner is allowlisted
             if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." ]]; then
-              echo "ERROR: Non-allowlisted action owner: ${owner}"
-              echo "   Full reference: ${ref}"
+              printf 'ERROR: Non-allowlisted action owner: %s\n' "${owner}"
+              printf '   Full reference: %s\n' "${ref}"
               echo ""
               echo "Only 'actions/*' and 'docker/*' actions are allowed by v3 policy."
               echo "Third-party actions must be replaced with first-party + scripts."
@@ -114,7 +114,7 @@ jobs:
           if [ -n "$TAG_REFS" ]; then
             echo "ERROR: Tag-based action references detected:"
             echo ""
-            echo "$TAG_REFS"
+            printf '%s\n' "$TAG_REFS"
             echo ""
             echo "All actions must be pinned to full 40-char commit SHA."
             echo "Format: uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)"
