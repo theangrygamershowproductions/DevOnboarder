@@ -30,8 +30,8 @@ fi
 REQUIRED_CHECKS=(
     "QC Gate (Required - Basic Sanity)"
     "Validate Actions Policy Compliance"
-    "Terminal Output Policy Enforcement"  # ZERO TOLERANCE - must be green
-    "SonarCloud Code Analysis"            # Security hotspots must be addressed (or documented exception)
+    "Enforce Terminal Output Policy"          # ZERO TOLERANCE - must be green
+    "SonarCloud Code Analysis"                # Security hotspots must be addressed (or documented exception)
 )
 
 # Define v3-advisory checks (not blocking, but should be tracked)
