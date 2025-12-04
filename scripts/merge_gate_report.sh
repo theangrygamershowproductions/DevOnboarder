@@ -9,6 +9,10 @@
 #   If docs/SONAR_SCOPE_DECISION_PR<pr-number>.md exists, SonarCloud failures
 #   for pre-existing hotspots NOT modified by the PR are treated as WARNINGS
 #   instead of BLOCKERS. New hotspots still block.
+#
+# Systemic Failure Tracking SOP:
+#   Any documented exception MUST have a "Tracked in: #<issue>" reference.
+#   Exceptions without tracking issues are treated as BLOCKERS.
 
 set -euo pipefail
 
@@ -17,6 +21,37 @@ REPO_OWNER="theangrygamershowproductions"
 REPO_NAME="DevOnboarder"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Enforce Systemic Failure Tracking SOP
+# Any documented exception MUST have a tracking issue reference
+EXCEPTION_DOCS=$(find "$REPO_ROOT/docs" -type f \( -name "*STATUS*.md" -o -name "*DECISION*.md" \) 2>/dev/null || true)
+MISSING_ISSUE_REFS=()
+
+for doc in $EXCEPTION_DOCS; do
+    # Check if doc declares a documented exception
+    if grep -qi "documented exception" "$doc" 2>/dev/null; then
+        # Verify it has a tracking issue reference (flexible pattern)
+        # Accepts: "Tracked in: #123", "**Tracked in**: Issue #123", etc.
+        if ! grep -qiE "\*?\*?Tracked in\*?\*?:.*#[0-9]+" "$doc" 2>/dev/null; then
+            MISSING_ISSUE_REFS+=("$(basename "$doc")")
+        fi
+    fi
+done
+
+if [ ${#MISSING_ISSUE_REFS[@]} -gt 0 ]; then
+    echo "❌ MERGE GATE BLOCKED: Documented exceptions without tracking issues"
+    echo ""
+    echo "The following documents declare exceptions but lack 'Tracked in: #<issue>' references:"
+    for doc in "${MISSING_ISSUE_REFS[@]}"; do
+        echo "  - $doc"
+    done
+    echo ""
+    echo "SOP Requirement: Any documented exception MUST have a GitHub issue for tracking."
+    echo "Fix: Add 'Tracked in: #<issue>' near the top of each document."
+    echo "Helper: ./scripts/open_system_issue.sh <doc_path> <issue_title>"
+    echo ""
+    exit 1
+fi
 
 # Check for documented Sonar exception
 SONAR_EXCEPTION_DOC="$REPO_ROOT/docs/SONAR_SCOPE_DECISION_PR${PR_NUMBER}.md"

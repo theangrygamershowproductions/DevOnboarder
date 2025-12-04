@@ -3,7 +3,8 @@
 **Date**: 2025-12-04  
 **PR**: #1901 (DevOnboarder SHA Pinning Migration)  
 **Issue**: TAGS-META #294  
-**Decision Author**: GitHub Copilot (AI Agent)
+**Decision Author**: GitHub Copilot (AI Agent)  
+**Tracked in**: Issue #1902 (Sonar hotspot), Issue #1903 (CI bugs), Issue #1904 (Priority Matrix GPG)
 
 ## Problem Statement
 
@@ -174,7 +175,7 @@ During YAML lint cleanup for QC compliance, additional pre-existing CI bugs were
    - Structural fix: BWS/MCP integration planned for v4 (GPG key in Bitwarden, MCP auth bridge)
    - Documentation: See `docs/PRIORITY_MATRIX_GPG_STATUS.md` for full analysis and v4 roadmap
    - **Status**: Not blocking this PR (already non-blocking in branch protection)
-   - **Tracked in**: Documented in PRIORITY_MATRIX_GPG_STATUS.md (v4 issue creation pending)
+   - **Tracked in**: Issue #1904 (v4 infrastructure work - BWS/MCP integration)
 
 **Scope Decision**: These are pre-existing bugs surfaced by repo-wide cleanup. NOT blocking SHA pinning migration. All tracked in separate issues for follow-up work.
 

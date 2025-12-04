@@ -2,7 +2,8 @@
 
 **Status**: ADVISORY (non-blocking)  
 **Created**: 2025-12-04  
-**Context**: PR #1901 (SHA pinning migration)
+**Context**: PR #1901 (SHA pinning migration)  
+**Tracked in**: Issue #1904
 
 ## Problem Statement
 

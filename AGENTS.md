@@ -99,6 +99,94 @@ A repository is **v3-complete** when:
 - ❌ "Only advisory checks failing"
 - ❌ "Looks good to me"
 
+---
+
+## Systemic Failure Tracking SOP
+
+**MANDATORY**: Any of the following **MUST** result in a GitHub Issue being opened and linked:
+
+### Triggering Conditions
+
+1. **A new status/decision document is created**:
+   - Pattern: `docs/*STATUS*.md` or `docs/*DECISION*.md`
+   - Example: `docs/PRIORITY_MATRIX_GPG_STATUS.md`
+
+2. **A merge-gate documented exception is introduced**:
+   - Any document containing the phrase "documented exception"
+   - Example: `docs/SONAR_SCOPE_DECISION_PR1901.md`
+
+3. **A bot posts a CRITICAL / MANUAL ACTION REQUIRED comment on a PR**:
+   - Priority Matrix GPG signing failures
+   - SonarCloud security hotspots requiring human review
+   - Terminal Policy violations requiring manual fixes
+
+### Requirements (Non-Negotiable)
+
+1. **The document MUST contain a `Tracked in: #<issue>` reference near the top**
+   - Format: `Tracked in: Issue #<number>` or `**Tracked in**: Issue #<number>`
+   - Location: Within first 10 lines of document (typically in header metadata)
+   - Example:
+     ```markdown
+     # Priority Matrix GPG Signing Status
+     
+     **Status**: ADVISORY (non-blocking)
+     **Created**: 2025-12-04
+     **Context**: PR #1901 (SHA pinning migration)
+     **Tracked in**: Issue #1904
+     ```
+
+2. **The issue MUST be added to an appropriate GitHub Project**
+   - v3-blocking issues → Core-4 Hardening project
+   - v4 infrastructure → Org Roadmap project
+   - Client-specific → Client project board
+
+3. **The merge gate MUST treat undocumented exceptions as BLOCKERS**
+   - Enforcement: `scripts/merge_gate_report.sh` validates issue references
+   - If `documented exception` found but no `Tracked in: #` → **EXIT 1 (BLOCKED)**
+   - No silent bypassing - gate blocks merge until issue created and linked
+
+### Helper Script
+
+Use `./scripts/open_system_issue.sh` to streamline this process:
+
+```bash
+./scripts/open_system_issue.sh docs/PRIORITY_MATRIX_GPG_STATUS.md \
+  "INFRA: Fix Priority Matrix Bot GPG signing and migrate to BWS/MCP"
+```
+
+Then update the document with:
+```markdown
+**Tracked in**: Issue #<number>
+```
+
+### Enforcement
+
+**Merge gate validation** (automatic):
+- Scans all `docs/*STATUS*.md` and `docs/*DECISION*.md` files
+- For each file containing "documented exception":
+  - Verifies `Tracked in: #<number>` reference exists
+  - If missing → **BLOCKS merge** with clear error message
+- Exit code 1 prevents merge until all exceptions have tracking issues
+
+**Process discipline**:
+- "I wrote a doc" without "I opened an issue" is a **process bug**
+- Documentation alone is not sufficient - tracking must be external and visible
+- At this level of complexity, undocumented exceptions = invisible technical debt
+
+### Rationale
+
+**Why this matters**:
+- Prevents "documented but forgotten" technical debt
+- Ensures all systemic failures have accountability
+- Makes exceptions visible in project planning
+- Creates audit trail for governance compliance
+- Forces honest assessment (can't hide problems in docs)
+
+**Historical precedent**:
+- Priority Matrix GPG signing was documented but had no tracking issue
+- This gap was identified as a process bug, not an oversight
+- SOP enforcement prevents recurrence across all future exceptions
+
 ## Enforcement
 
 This policy is **non-negotiable**. Agents that bypass merge gate validation will:
