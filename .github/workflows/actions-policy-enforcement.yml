@@ -117,7 +117,7 @@ jobs:
             echo "$TAG_REFS"
             echo ""
             echo "All actions must be pinned to full 40-char commit SHA."
-            echo "Format: uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+            echo "Format: uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)"
             echo ""
             TAG_REFS_FOUND=true
           fi
