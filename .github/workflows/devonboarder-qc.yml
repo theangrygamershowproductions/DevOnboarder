@@ -62,7 +62,7 @@ jobs:
     - name: Report Gate Success
       if: success()
       run: |
-        echo "✅ QC Gate Passed"
+        printf 'QC Gate Passed\n'
         echo ""
         echo "Basic sanity checks validated:"
         echo "  - Dependencies install successfully"
@@ -104,16 +104,16 @@ jobs:
     - name: Report QC failure
       if: steps.qc.outcome == 'failure'
       run: |
-        echo "⚠️  DevOnboarder Full QC Failed (Non-Blocking)"
+        printf 'WARNING: DevOnboarder Full QC Failed (Non-Blocking)\n'
         echo ""
         echo "This check validates comprehensive quality standards:"
-        echo "  - Backend coverage: ≥96%"
+        echo "  - Backend coverage: >=96%"
         echo "  - Bot coverage: 100%"
         echo "  - Frontend coverage: 100%"
         echo "  - YAML lint passing"
         echo "  - All tests: PASS"
         echo ""
-        echo "⚠️  Note: This is a v4 hardening target, not a v3 blocker"
+        printf 'WARNING: This is a v4 hardening target, not a v3 blocker\n'
         echo "Issues identified here should be tracked for future cleanup"
         echo ""
         echo "Run locally to debug:"
@@ -124,7 +124,7 @@ jobs:
     - name: Report QC success
       if: steps.qc.outcome == 'success'
       run: |
-        echo "✅ DevOnboarder Full QC Passed"
+        printf 'DevOnboarder Full QC Passed\n'
         echo ""
         echo "Quality gates validated:"
         echo "  - Coverage thresholds met"
