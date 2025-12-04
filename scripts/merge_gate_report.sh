@@ -12,15 +12,16 @@ REPO_OWNER="theangrygamershowproductions"
 REPO_NAME="DevOnboarder"
 
 # Define v3-required checks (source of truth)
+# These MUST be green for merge - no exceptions
 REQUIRED_CHECKS=(
     "QC Gate (Required - Basic Sanity)"
     "Validate Actions Policy Compliance"
     "Terminal Output Policy Enforcement"  # ZERO TOLERANCE - must be green
+    "SonarCloud Code Analysis"            # Security hotspots must be addressed
 )
 
 # Define v3-advisory checks (not blocking, but should be tracked)
 ADVISORY_CHECKS=(
-    "SonarCloud Code Analysis"
     "validate-yaml"
     "markdownlint / lint"
 )
