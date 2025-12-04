@@ -70,7 +70,7 @@ jobs:
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'
-              uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-xx-xx)
+              uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-03-19)
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs

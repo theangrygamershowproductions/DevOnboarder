@@ -131,7 +131,7 @@ jobs:
                 fi
                 echo "Using token source for CI Health: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
-            - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-xx-xx)
+            - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-03-19)
               with:
                   path: results
             - name: Install GitHub CLI
