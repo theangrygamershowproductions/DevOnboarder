@@ -23,12 +23,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
         with:
           python-version: '3.12'
 
@@ -63,7 +63,7 @@ jobs:
 
       - name: Download CI failure issue artifact
         if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-03-19)
         with:
           name: ci-failure-issue
           path: ./ci-failure-data
@@ -79,7 +79,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Dashboard Report
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: ci-dashboard-report
           path: |

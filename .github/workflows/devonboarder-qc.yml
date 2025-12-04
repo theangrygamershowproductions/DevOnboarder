@@ -36,15 +36,14 @@ jobs:
     defaults:
       run:
         working-directory: .
-
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v5.1.0 (2024-09-10)
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
       with:
         fetch-depth: 0
 
     - name: Set up Python 3.12
-      uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
       with:
         python-version: '3.12.x'
 
@@ -62,7 +61,7 @@ jobs:
     - name: Report Gate Success
       if: success()
       run: |
-        echo "✅ QC Gate Passed"
+        printf 'QC Gate Passed\n'
         echo ""
         echo "Basic sanity checks validated:"
         echo "  - Dependencies install successfully"
@@ -77,15 +76,14 @@ jobs:
     defaults:
       run:
         working-directory: .
-
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v5.1.0 (2024-09-10)
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
       with:
         fetch-depth: 0
 
     - name: Set up Python 3.12
-      uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
       with:
         python-version: '3.12.x'
 
@@ -104,16 +102,16 @@ jobs:
     - name: Report QC failure
       if: steps.qc.outcome == 'failure'
       run: |
-        echo "⚠️  DevOnboarder Full QC Failed (Non-Blocking)"
+        printf 'WARNING: DevOnboarder Full QC Failed (Non-Blocking)\n'
         echo ""
         echo "This check validates comprehensive quality standards:"
-        echo "  - Backend coverage: ≥96%"
+        echo "  - Backend coverage: >=96%"
         echo "  - Bot coverage: 100%"
         echo "  - Frontend coverage: 100%"
         echo "  - YAML lint passing"
         echo "  - All tests: PASS"
         echo ""
-        echo "⚠️  Note: This is a v4 hardening target, not a v3 blocker"
+        printf 'WARNING: This is a v4 hardening target, not a v3 blocker\n'
         echo "Issues identified here should be tracked for future cleanup"
         echo ""
         echo "Run locally to debug:"
@@ -124,7 +122,7 @@ jobs:
     - name: Report QC success
       if: steps.qc.outcome == 'success'
       run: |
-        echo "✅ DevOnboarder Full QC Passed"
+        printf 'DevOnboarder Full QC Passed\n'
         echo ""
         echo "Quality gates validated:"
         echo "  - Coverage thresholds met"
@@ -133,7 +131,7 @@ jobs:
 
     - name: Upload coverage reports (if available)
       if: always()
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
       with:
         name: coverage-reports
         path: |
@@ -147,13 +145,12 @@ jobs:
     defaults:
       run:
         working-directory: .
-
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v5.1.0 (2024-09-10)
+      uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
 
     - name: Set up Python 3.12
-      uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
       with:
         python-version: '3.12.x'
 

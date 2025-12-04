@@ -39,7 +39,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+              uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
               with:
                   fetch-depth: 1
 
@@ -90,7 +90,7 @@ jobs:
               if: |
                   github.event_name == 'pull_request' &&
                   steps.check.outputs.status == 'violations'
-              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # TAGS-SHA-PIN: actions/github-script@v7.0.1 (2023-11-17)
               with:
                   script: |
                       const fs = require('fs');
@@ -134,7 +134,7 @@ jobs:
               if: |
                   github.event_name == 'schedule' &&
                   steps.check.outputs.status == 'violations'
-              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # TAGS-SHA-PIN: actions/github-script@v7.0.1 (2023-11-17)
               with:
                   script: |
                       const fs = require('fs');
@@ -170,7 +170,7 @@ jobs:
 
             - name: Upload reports
               if: steps.check.outputs.status == 'violations'
-              uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+              uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
               with:
                   name: "artifact-report-${{ github.run_number }}"
                   path: logs/ci/

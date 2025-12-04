@@ -27,16 +27,16 @@ jobs:
   validate-yaml:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+
       - name: Set up Python
-        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
         with:
           python-version: '3.12'
-      
+
       - name: Install yamllint
         run: pip install yamllint==1.35.1
-      
+
       - name: Lint YAML files
         run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
   filter:
@@ -46,22 +46,22 @@ jobs:
       code: ${{ steps.filter.outputs.code }}
       docs: ${{ steps.filter.outputs.docs }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
         with:
           fetch-depth: 0
-      
+
       - name: Detect changed paths
         id: filter
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # v7 (2024-09-04)
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # TAGS-SHA-PIN: actions/github-script@v7.0.1 (2023-11-17)
         with:
           script: |
             const { execSync } = require('child_process');
-            
+
             // Validate that SHAs are 40-character hex strings (security: prevent command injection)
             function isValidSha(sha) {
               return typeof sha === 'string' && /^[0-9a-f]{40}$/i.test(sha);
             }
-            
+
             // Get changed files (works for both PRs and pushes)
             let base, head;
             if (context.eventName === 'pull_request') {
@@ -76,14 +76,14 @@ jobs:
               }
               head = context.payload.after;
             }
-            
+
             if (!isValidSha(base) || !isValidSha(head)) {
               throw new Error(`Invalid git SHA detected: base=${base}, head=${head}`);
             }
-            
+
             const diffOutput = execSync(`git diff --name-only ${base} ${head}`, { encoding: 'utf8' });
             const changedFiles = diffOutput.trim().split('\n').filter(f => f);
-            
+
             // Simple glob pattern matcher (built-in, no dependencies)
             // Handles common patterns: **, *, ?, and .env* edge case
             function globToRegex(pattern) {
@@ -97,11 +97,11 @@ jobs:
                 .replace(/\x00DOUBLESTAR\x00/g, '.*');
               return new RegExp('^' + regex + '$');
             }
-            
+
             function matchesPattern(file, pattern) {
               return globToRegex(pattern).test(file);
             }
-            
+
             // Define filters (matching dorny/paths-filter patterns)
             const codePatterns = [
               'src/**', 'bot/**', 'frontend/**', 'auth/**', 'tests/**',
@@ -109,19 +109,19 @@ jobs:
               'pyproject.toml', 'package*.json', '.tool-versions',
               'docker-compose*.yaml', '.env*', 'Makefile', 'plugins/**'
             ];
-            
+
             const docsPatterns = [
               'docs/**', '**/*.md', '.github/copilot-instructions.md'
             ];
-            
+
             // Check if any changed file matches patterns
             function matchesAny(file, patterns) {
               return patterns.some(pattern => matchesPattern(file, pattern));
             }
-            
+
             const codeChanged = changedFiles.some(f => matchesAny(f, codePatterns));
             const docsChanged = changedFiles.some(f => matchesAny(f, docsPatterns));
-            
+
             // Set outputs (matching dorny/paths-filter format)
             core.setOutput('code', codeChanged ? 'true' : 'false');
             core.setOutput('docs', docsChanged ? 'true' : 'false');
@@ -142,7 +142,7 @@ jobs:
       VALE_VERSION: 3.12.0
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
@@ -195,38 +195,38 @@ jobs:
           GH_VERSION=$(gh --version | head -n1)
           printf "GitHub CLI version: %s\n" "$GH_VERSION"
       - name: Set up Python
-        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Node
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b  # v4.0.3 (2024-08-23)
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f  # TAGS-SHA-PIN: actions/setup-node@v6.1.0 (2025-12-03)
         with:
           node-version: ${{ matrix.node-version }}
       - name: Verify language versions
         run: bash scripts/check_versions.sh
       - name: Cache pip downloads
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # TAGS-SHA-PIN: actions/cache@v4.2.3 (2025-03-19)
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-py${{ matrix.python-version }}-
       - name: Cache frontend node modules
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # TAGS-SHA-PIN: actions/cache@v4.2.3 (2025-03-19)
         with:
           path: frontend/node_modules
           key: ${{ runner.os }}-node${{ matrix.node-version }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node${{ matrix.node-version }}-frontend-
       - name: Cache bot node modules
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # TAGS-SHA-PIN: actions/cache@v4.2.3 (2025-03-19)
         with:
           path: bot/node_modules
           key: ${{ runner.os }}-node${{ matrix.node-version }}-bot-${{ hashFiles('bot/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node${{ matrix.node-version }}-bot-
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349  # TAGS-SHA-PIN: docker/setup-buildx-action@v3.7.1 (2024-10-04)
       - name: Prepare CI log directory
         run: mkdir -p logs
       - name: Create virtual environment
@@ -361,7 +361,7 @@ jobs:
 
       - name: Upload Analysis Artifacts
         if: failure()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: ci-failure-analysis
           path: |
@@ -424,7 +424,7 @@ jobs:
         run: ./scripts/check_docs.sh
       - name: Upload Vale results
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: vale-results
           path: logs/vale-results.json
@@ -445,7 +445,7 @@ jobs:
           fi
       - name: Upload env audit
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: env-audit
           path: |
@@ -477,7 +477,7 @@ jobs:
           PYTHONPATH=src python -m devonboarder.diagnostics > logs/diagnostics.log
       - name: Upload diagnostics
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: diagnostics
           path: logs/diagnostics.log
@@ -627,7 +627,7 @@ jobs:
           fi
       - name: Upload pytest results
         if: always() && hashFiles('test-results/pytest-*.xml') != ''
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: pytest-results
           path: |
@@ -660,13 +660,13 @@ jobs:
         working-directory: frontend
       - name: Upload vitest log
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: vitest-log
           path: frontend/vitest.log
           retention-days: 7
       - name: Cache Playwright browsers
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # TAGS-SHA-PIN: actions/cache@v4.2.3 (2025-03-19)
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-node${{ matrix.node-version }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
@@ -688,28 +688,28 @@ jobs:
         working-directory: frontend
       - name: Upload playwright log
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: playwright-log
           path: frontend/playwright.log
           retention-days: 7
       - name: Upload accessibility log
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: a11y-log
           path: frontend/a11y.log
           retention-days: 7
       - name: Upload Lighthouse log
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: lighthouse-log
           path: frontend/lhci.log
           retention-days: 7
       - name: Upload Lighthouse report
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: lighthouse-report
           path: frontend/lhci-report
@@ -729,7 +729,7 @@ jobs:
         working-directory: bot
       - name: Upload jest log
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: jest-log
           path: bot/jest.log
@@ -748,14 +748,14 @@ jobs:
           bash scripts/append_coverage_summary.sh coverage-summary.md
       - name: Upload coverage summary
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: coverage-summary
           path: coverage-summary.md
           retention-days: 7
       - name: Upload coverage data
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: coverage-data
           path: |
@@ -824,7 +824,7 @@ jobs:
       # Upload coverage badge as artifact if git push failed
       - name: Upload coverage badge as artifact (fallback)
         if: failure() || github.event_name == 'pull_request'
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: coverage-badge-fallback
           path: coverage.svg
@@ -994,7 +994,7 @@ jobs:
         run: echo "${{ steps.ci_failure.outputs.issue-number }}" > ci_failure_issue.txt
       - name: Upload CI failure issue number
         if: failure() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: ci-failure-issue
           path: ci_failure_issue.txt
@@ -1036,7 +1036,7 @@ jobs:
           mv -f audit.md logs/ 2>/dev/null || true
       - name: Upload CI logs
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: ci-logs
           path: |
@@ -1048,7 +1048,7 @@ jobs:
   frameworks-validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
       - run: chmod +x scripts/audit_frameworks.sh
       - run: ./scripts/audit_frameworks.sh > frameworks_audit.md
       - name: Fail on legacy path references
@@ -1079,7 +1079,7 @@ jobs:
               echo "All framework documentation passes quality checks!"
           fi
       - name: Attach audit
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # TAGS-SHA-PIN: actions/upload-artifact@v5.0.0 (2025-10-24)
         with:
           name: frameworks-audit
           path: frameworks_audit.md

@@ -26,16 +26,16 @@ jobs:
         permissions:
             contents: read
         steps:
-            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-            
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+
             - name: Set up Python
-              uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3  # v5.2.0 (2024-08-13)
+              uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
               with:
                   python-version: '3.12'
-            
+
             - name: Install yamllint
               run: pip install yamllint==1.35.1
-            
+
             - name: Lint YAML files
               run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
     fix:
@@ -46,7 +46,7 @@ jobs:
             contents: write
             pull-requests: write
         steps:
-            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
               with:
                   fetch-depth: 0
                   # Security: Only checkout trusted code from the default branch
@@ -70,7 +70,7 @@ jobs:
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'
-              uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+              uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e  # TAGS-SHA-PIN: actions/download-artifact@v4.2.1 (2025-03-19)
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
@@ -126,12 +126,12 @@ jobs:
                   echo "$suggestion" > patch.diff
             - name: Apply patch
               run: git apply patch.diff
-            
+
             - name: Configure Git identity
               run: |
                   git config user.name "devon-autofix[bot]"
                   git config user.email "devon-autofix[bot]@users.noreply.github.com"
-            
+
             - name: Detect changes
               id: changes
               run: |
@@ -140,7 +140,7 @@ jobs:
                   else
                     echo "has_changes=true" >> "$GITHUB_OUTPUT"
                   fi
-            
+
             - name: Create branch and commit
               if: steps.changes.outputs.has_changes == 'true'
               id: create_branch
@@ -156,7 +156,7 @@ jobs:
                     echo "No changes to commit"
                     exit 0
                   fi
-            
+
             - name: Create pull request
               if: steps.changes.outputs.has_changes == 'true'
               id: create_pr
@@ -169,7 +169,7 @@ jobs:
                   **Security Note**: This fix was generated from trusted code only.
                   Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
                   Original branch: ${{ steps.pr-info.outputs.head_branch }}"
-                  
+
                   # Try to create PR, handle if it already exists
                   set +e
                   PR_URL=$(gh pr create \
@@ -179,7 +179,7 @@ jobs:
                     --body "$PR_BODY" 2>&1)
                   STATUS=$?
                   set -e
-                  
+
                   if [ $STATUS -eq 0 ]; then
                     PR_NUMBER="${PR_URL##*/}"
                     echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
@@ -190,18 +190,17 @@ jobs:
                     EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
                     if [ -n "$EXISTING_PR" ]; then
                       PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
-                      echo "PR already exists: $PR_URL"
+                      printf 'PR already exists: %s\n' "$PR_URL"
                       echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
                       echo "pull-request-number=$EXISTING_PR" >> "$GITHUB_OUTPUT"
                       echo "pull-request-operation=updated" >> "$GITHUB_OUTPUT"
                     else
-                      echo "Failed to create or find PR for branch $BRANCH" >&2
+                      printf 'Failed to create or find PR for branch %s\n' "$BRANCH" >&2
                       exit 1
                     fi
                   fi
-            
+
             - name: No changes detected
               if: steps.changes.outputs.has_changes != 'true'
               run: |
                   echo "No changes detected – skipping PR creation."
-

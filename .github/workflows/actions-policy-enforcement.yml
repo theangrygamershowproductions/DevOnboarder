@@ -20,17 +20,17 @@ jobs:
   validate-actions-policy:
     name: Validate Actions Policy Compliance
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v5.1.0 (2024-09-10)
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
 
       - name: Check for banned third-party actions
         id: check-banned
         run: |
           echo "Checking for banned third-party actions..."
           BANNED_FOUND=false
-          
+
           # List of explicitly banned actions
           BANNED_ACTIONS=(
             "DavidAnson/markdownlint-cli2-action"
@@ -38,11 +38,11 @@ jobs:
             "ibiqlik/action-yamllint"
             "peter-evans/create-pull-request"
           )
-          
+
           # Check each banned action
           for action in "${BANNED_ACTIONS[@]}"; do
             if grep -r "uses:.*${action}" .github/workflows/ 2>/dev/null; then
-              echo "ERROR: Banned action detected: ${action}"
+              printf 'ERROR: Banned action detected: %s\n' "${action}"
               echo ""
               echo "This action is explicitly forbidden by v3 policy."
               echo "See ACTIONS_REPLACEMENT_MATRIX.md for approved replacement."
@@ -50,7 +50,7 @@ jobs:
               BANNED_FOUND=true
             fi
           done
-          
+
           if [ "$BANNED_FOUND" = "true" ]; then
             echo "banned_detected=true" >> $GITHUB_OUTPUT
           else
@@ -63,25 +63,25 @@ jobs:
         run: |
           echo "Checking for non-allowlisted action owners..."
           VIOLATIONS_FOUND=false
-          
+
           # Extract all action references (exclude comments)
           ACTION_REFS=$(grep -rhE "^\s*uses:\s+" .github/workflows/ 2>/dev/null | \
                         grep -v "^\s*#" | \
                         sed 's/^\s*uses:\s*//' | \
                         sort -u)
-          
+
           # Check each reference
           while IFS= read -r ref; do
             # Skip empty lines
             [ -z "$ref" ] && continue
-            
+
             # Extract owner (part before first /)
             owner=$(echo "$ref" | cut -d'/' -f1)
-            
+
             # Check if owner is allowlisted
             if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." ]]; then
-              echo "ERROR: Non-allowlisted action owner: ${owner}"
-              echo "   Full reference: ${ref}"
+              printf 'ERROR: Non-allowlisted action owner: %s\n' "${owner}"
+              printf '   Full reference: %s\n' "${ref}"
               echo ""
               echo "Only 'actions/*' and 'docker/*' actions are allowed by v3 policy."
               echo "Third-party actions must be replaced with first-party + scripts."
@@ -89,7 +89,7 @@ jobs:
               VIOLATIONS_FOUND=true
             fi
           done <<< "$ACTION_REFS"
-          
+
           if [ "$VIOLATIONS_FOUND" = "true" ]; then
             echo "violations_detected=true" >> $GITHUB_OUTPUT
           else
@@ -102,7 +102,7 @@ jobs:
         run: |
           echo "Checking SHA pinning compliance..."
           TAG_REFS_FOUND=false
-          
+
           # Check for tag-based references (not SHA-pinned)
           # Pattern: actions/something@v1 or actions/something@main (not 40-char SHA)
           # Updated pattern ensures exactly 40 hex chars required (prevents false positives from echo examples)
@@ -110,18 +110,18 @@ jobs:
                      grep -v "^\s*#" | \
                      grep -vE "^\s*(echo|#.*echo)" | \
                      grep -vE "@[a-f0-9]{40}" || true)
-          
+
           if [ -n "$TAG_REFS" ]; then
             echo "ERROR: Tag-based action references detected:"
             echo ""
-            echo "$TAG_REFS"
+            printf '%s\n' "$TAG_REFS"
             echo ""
             echo "All actions must be pinned to full 40-char commit SHA."
-            echo "Format: uses: actions/checkout@<40-char-sha>  # v4.2.1 (YYYY-MM-DD)"
+            echo "Format: uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)"
             echo ""
             TAG_REFS_FOUND=true
           fi
-          
+
           if [ "$TAG_REFS_FOUND" = "true" ]; then
             echo "tag_refs_detected=true" >> $GITHUB_OUTPUT
           else
