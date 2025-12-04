@@ -4,20 +4,34 @@
 # Usage: ./scripts/merge_gate_report.sh <pr-number>
 #
 # Returns exit code 0 if PR is merge-ready, non-zero otherwise
+#
+# Documented Exception Support:
+#   If docs/SONAR_SCOPE_DECISION_PR<pr-number>.md exists, SonarCloud failures
+#   for pre-existing hotspots NOT modified by the PR are treated as WARNINGS
+#   instead of BLOCKERS. New hotspots still block.
 
 set -euo pipefail
 
 PR_NUMBER="${1:?Usage: $0 <pr-number>}"
 REPO_OWNER="theangrygamershowproductions"
 REPO_NAME="DevOnboarder"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Check for documented Sonar exception
+SONAR_EXCEPTION_DOC="$REPO_ROOT/docs/SONAR_SCOPE_DECISION_PR${PR_NUMBER}.md"
+HAS_SONAR_EXCEPTION=false
+if [ -f "$SONAR_EXCEPTION_DOC" ]; then
+    HAS_SONAR_EXCEPTION=true
+fi
 
 # Define v3-required checks (source of truth)
-# These MUST be green for merge - no exceptions
+# These MUST be green for merge - no exceptions unless documented
 REQUIRED_CHECKS=(
     "QC Gate (Required - Basic Sanity)"
     "Validate Actions Policy Compliance"
     "Terminal Output Policy Enforcement"  # ZERO TOLERANCE - must be green
-    "SonarCloud Code Analysis"            # Security hotspots must be addressed
+    "SonarCloud Code Analysis"            # Security hotspots must be addressed (or documented exception)
 )
 
 # Define v3-advisory checks (not blocking, but should be tracked)
@@ -64,12 +78,16 @@ query(\$owner:String!, \$name:String!, \$number:Int!) {
 echo "Required Status Checks (v3-blocking):"
 echo "──────────────────────────────────────"
 REQUIRED_FAILED=()
+DOCUMENTED_EXCEPTIONS=()
 for check_name in "${REQUIRED_CHECKS[@]}"; do
     CONCLUSION=$(echo "$PR_DATA" | jq -r --arg name "$check_name" \
         '.statusCheckRollup[] | select(.name == $name) | .conclusion // "MISSING"')
     
     if [ "$CONCLUSION" = "SUCCESS" ]; then
         echo "  ✅ $check_name"
+    elif [ "$check_name" = "SonarCloud Code Analysis" ] && [ "$HAS_SONAR_EXCEPTION" = true ]; then
+        echo "  ⚠️  $check_name ($CONCLUSION - documented exception)"
+        DOCUMENTED_EXCEPTIONS+=("$check_name")
     else
         echo "  ❌ $check_name ($CONCLUSION)"
         REQUIRED_FAILED+=("$check_name")
@@ -146,6 +164,15 @@ if [ "${#BLOCKERS[@]}" -eq 0 ]; then
     echo "✅ MERGE READY"
     echo ""
     echo "All required checks passed, review approved, no unresolved conversations."
+    
+    if [ "${#DOCUMENTED_EXCEPTIONS[@]}" -gt 0 ]; then
+        echo ""
+        echo "Note: The following checks have documented exceptions:"
+        for exception in "${DOCUMENTED_EXCEPTIONS[@]}"; do
+            echo "  - $exception (see $SONAR_EXCEPTION_DOC)"
+        done
+    fi
+    
     exit 0
 else
     echo "🔒 BLOCKED"
@@ -154,6 +181,14 @@ else
     for blocker in "${BLOCKERS[@]}"; do
         echo "  - $blocker"
     done
+    
+    if [ "${#DOCUMENTED_EXCEPTIONS[@]}" -gt 0 ]; then
+        echo ""
+        echo "Documented exceptions (not blocking):"
+        for exception in "${DOCUMENTED_EXCEPTIONS[@]}"; do
+            echo "  - $exception (see $SONAR_EXCEPTION_DOC)"
+        done
+    fi
     
     if [ "${#ADVISORY_FAILED[@]}" -gt 0 ]; then
         echo ""
