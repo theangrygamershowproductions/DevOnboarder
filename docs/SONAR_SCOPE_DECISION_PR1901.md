@@ -163,8 +163,18 @@ During YAML lint cleanup for QC compliance, additional pre-existing CI bugs were
 2. **Markdownlint Failures**: NEW failures after whitespace cleanup (investigation needed)
    - **Tracked in Issue #1903**
 
-3. **Priority Matrix Auto-Synthesis**: NEW failure after whitespace cleanup (investigation needed)
-   - **Tracked in Issue #1903**
+3. **Priority Matrix Auto-Synthesis GPG Signing Failures**:
+   - Bot comment: "Automated GPG signing failed and no fallback commit was detected"
+   - Root cause: GPG key provisioning issue (key may be expired, corrupted, or key ID mismatch)
+   - Secrets exist: `PMBOT_GPG_PRIVATE` (created 2025-09-23), `PMBOT_GPG_KEY_ID` (9BA7DCDBF5D4DEDD)
+   - Current status: **Advisory only** (NOT a required check in branch protection)
+   - Impact: **Zero** - PRs can merge without Priority Matrix synthesis
+   - Manual fallback: Available and documented in workflow comments
+   - v3 Decision: Maintain advisory status through feature freeze (out of scope for SHA pinning)
+   - Structural fix: BWS/MCP integration planned for v4 (GPG key in Bitwarden, MCP auth bridge)
+   - Documentation: See `docs/PRIORITY_MATRIX_GPG_STATUS.md` for full analysis and v4 roadmap
+   - **Status**: Not blocking this PR (already non-blocking in branch protection)
+   - **Tracked in**: Documented in PRIORITY_MATRIX_GPG_STATUS.md (v4 issue creation pending)
 
 **Scope Decision**: These are pre-existing bugs surfaced by repo-wide cleanup. NOT blocking SHA pinning migration. All tracked in separate issues for follow-up work.
 
