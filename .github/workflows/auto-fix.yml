@@ -190,12 +190,12 @@ jobs:
                     EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
                     if [ -n "$EXISTING_PR" ]; then
                       PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
-                      echo "PR already exists: $PR_URL"
+                      printf 'PR already exists: %s\n' "$PR_URL"
                       echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
                       echo "pull-request-number=$EXISTING_PR" >> "$GITHUB_OUTPUT"
                       echo "pull-request-operation=updated" >> "$GITHUB_OUTPUT"
                     else
-                      echo "Failed to create or find PR for branch $BRANCH" >&2
+                      printf 'Failed to create or find PR for branch %s\n' "$BRANCH" >&2
                       exit 1
                     fi
                   fi
