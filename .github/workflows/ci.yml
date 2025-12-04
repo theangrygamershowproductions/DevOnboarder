@@ -28,15 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
-      
+
       - name: Set up Python
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
         with:
           python-version: '3.12'
-      
+
       - name: Install yamllint
         run: pip install yamllint==1.35.1
-      
+
       - name: Lint YAML files
         run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
   filter:
@@ -49,19 +49,19 @@ jobs:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
         with:
           fetch-depth: 0
-      
+
       - name: Detect changed paths
         id: filter
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # TAGS-SHA-PIN: actions/github-script@v7.0.1 (2023-11-17)
         with:
           script: |
             const { execSync } = require('child_process');
-            
+
             // Validate that SHAs are 40-character hex strings (security: prevent command injection)
             function isValidSha(sha) {
               return typeof sha === 'string' && /^[0-9a-f]{40}$/i.test(sha);
             }
-            
+
             // Get changed files (works for both PRs and pushes)
             let base, head;
             if (context.eventName === 'pull_request') {
@@ -76,14 +76,14 @@ jobs:
               }
               head = context.payload.after;
             }
-            
+
             if (!isValidSha(base) || !isValidSha(head)) {
               throw new Error(`Invalid git SHA detected: base=${base}, head=${head}`);
             }
-            
+
             const diffOutput = execSync(`git diff --name-only ${base} ${head}`, { encoding: 'utf8' });
             const changedFiles = diffOutput.trim().split('\n').filter(f => f);
-            
+
             // Simple glob pattern matcher (built-in, no dependencies)
             // Handles common patterns: **, *, ?, and .env* edge case
             function globToRegex(pattern) {
@@ -97,11 +97,11 @@ jobs:
                 .replace(/\x00DOUBLESTAR\x00/g, '.*');
               return new RegExp('^' + regex + '$');
             }
-            
+
             function matchesPattern(file, pattern) {
               return globToRegex(pattern).test(file);
             }
-            
+
             // Define filters (matching dorny/paths-filter patterns)
             const codePatterns = [
               'src/**', 'bot/**', 'frontend/**', 'auth/**', 'tests/**',
@@ -109,19 +109,19 @@ jobs:
               'pyproject.toml', 'package*.json', '.tool-versions',
               'docker-compose*.yaml', '.env*', 'Makefile', 'plugins/**'
             ];
-            
+
             const docsPatterns = [
               'docs/**', '**/*.md', '.github/copilot-instructions.md'
             ];
-            
+
             // Check if any changed file matches patterns
             function matchesAny(file, patterns) {
               return patterns.some(pattern => matchesPattern(file, pattern));
             }
-            
+
             const codeChanged = changedFiles.some(f => matchesAny(f, codePatterns));
             const docsChanged = changedFiles.some(f => matchesAny(f, docsPatterns));
-            
+
             // Set outputs (matching dorny/paths-filter format)
             core.setOutput('code', codeChanged ? 'true' : 'false');
             core.setOutput('docs', docsChanged ? 'true' : 'false');

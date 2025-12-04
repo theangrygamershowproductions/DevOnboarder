@@ -27,15 +27,15 @@ jobs:
             contents: read
         steps:
             - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
-            
+
             - name: Set up Python
               uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
               with:
                   python-version: '3.12'
-            
+
             - name: Install yamllint
               run: pip install yamllint==1.35.1
-            
+
             - name: Lint YAML files
               run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
     fix:
@@ -126,12 +126,12 @@ jobs:
                   echo "$suggestion" > patch.diff
             - name: Apply patch
               run: git apply patch.diff
-            
+
             - name: Configure Git identity
               run: |
                   git config user.name "devon-autofix[bot]"
                   git config user.email "devon-autofix[bot]@users.noreply.github.com"
-            
+
             - name: Detect changes
               id: changes
               run: |
@@ -140,7 +140,7 @@ jobs:
                   else
                     echo "has_changes=true" >> "$GITHUB_OUTPUT"
                   fi
-            
+
             - name: Create branch and commit
               if: steps.changes.outputs.has_changes == 'true'
               id: create_branch
@@ -156,7 +156,7 @@ jobs:
                     echo "No changes to commit"
                     exit 0
                   fi
-            
+
             - name: Create pull request
               if: steps.changes.outputs.has_changes == 'true'
               id: create_pr
@@ -169,7 +169,7 @@ jobs:
                   **Security Note**: This fix was generated from trusted code only.
                   Original failing commit: ${{ steps.pr-info.outputs.head_sha }}
                   Original branch: ${{ steps.pr-info.outputs.head_branch }}"
-                  
+
                   # Try to create PR, handle if it already exists
                   set +e
                   PR_URL=$(gh pr create \
@@ -179,7 +179,7 @@ jobs:
                     --body "$PR_BODY" 2>&1)
                   STATUS=$?
                   set -e
-                  
+
                   if [ $STATUS -eq 0 ]; then
                     PR_NUMBER="${PR_URL##*/}"
                     echo "pull-request-url=$PR_URL" >> "$GITHUB_OUTPUT"
@@ -199,9 +199,8 @@ jobs:
                       exit 1
                     fi
                   fi
-            
+
             - name: No changes detected
               if: steps.changes.outputs.has_changes != 'true'
               run: |
                   echo "No changes detected – skipping PR creation."
-
