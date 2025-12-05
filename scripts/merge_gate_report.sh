@@ -53,26 +53,21 @@ if [ ${#MISSING_ISSUE_REFS[@]} -gt 0 ]; then
     exit 1
 fi
 
-# Check for documented Sonar exception
-SONAR_EXCEPTION_DOC="$REPO_ROOT/docs/SONAR_SCOPE_DECISION_PR${PR_NUMBER}.md"
-HAS_SONAR_EXCEPTION=false
-if [ -f "$SONAR_EXCEPTION_DOC" ]; then
-    HAS_SONAR_EXCEPTION=true
-fi
-
-# Define v3-required checks (source of truth)
-# These MUST be green for merge - no exceptions unless documented
+# Canonical truth: branch protection defines what is actually required.
+# Only these 2 checks are enforced by GitHub branch protection on main.
 REQUIRED_CHECKS=(
     "QC Gate (Required - Basic Sanity)"
     "Validate Actions Policy Compliance"
-    "Enforce Terminal Output Policy"          # ZERO TOLERANCE - must be green
-    "SonarCloud Code Analysis"                # Security hotspots must be addressed (or documented exception)
 )
 
-# Define v3-advisory checks (not blocking, but should be tracked)
+# Advisory checks: reported, but DO NOT block merges because
+# they are NOT in branch protection (yet).
 ADVISORY_CHECKS=(
-    "validate-yaml"
-    "markdownlint / lint"
+    "Enforce Terminal Output Policy"     # Strongly recommended, but not branch-protected
+    "validate-yaml"                      # Nice-to-have quality check
+    "markdownlint / lint"                # Nice-to-have quality check
+    # SonarCloud intentionally omitted:
+    # no workflow exists today; implement in v4+ before re-adding.
 )
 
 echo "═══════════════════════════════════════════════════════════════"
@@ -110,19 +105,15 @@ query(\$owner:String!, \$name:String!, \$number:Int!) {
   jq '[.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false and .isOutdated == false)] | length')
 
 # Check required status checks
-echo "Required Status Checks (v3-blocking):"
-echo "──────────────────────────────────────"
+echo "Required Status Checks (branch-protected):"
+echo "───────────────────────────────────────────"
 REQUIRED_FAILED=()
-DOCUMENTED_EXCEPTIONS=()
 for check_name in "${REQUIRED_CHECKS[@]}"; do
     CONCLUSION=$(echo "$PR_DATA" | jq -r --arg name "$check_name" \
         '.statusCheckRollup[] | select(.name == $name) | .conclusion // "MISSING"')
     
     if [ "$CONCLUSION" = "SUCCESS" ]; then
         echo "  ✅ $check_name"
-    elif [ "$check_name" = "SonarCloud Code Analysis" ] && [ "$HAS_SONAR_EXCEPTION" = true ]; then
-        echo "  ⚠️  $check_name ($CONCLUSION - documented exception)"
-        DOCUMENTED_EXCEPTIONS+=("$check_name")
     else
         echo "  ❌ $check_name ($CONCLUSION)"
         REQUIRED_FAILED+=("$check_name")
@@ -131,15 +122,17 @@ done
 echo ""
 
 # Check advisory checks
-echo "Advisory Checks (not blocking, but tracked):"
-echo "─────────────────────────────────────────────"
+echo "Advisory Checks (not blocking, but strongly recommended):"
+echo "──────────────────────────────────────────────────────────"
 ADVISORY_FAILED=()
 for check_name in "${ADVISORY_CHECKS[@]}"; do
     CONCLUSION=$(echo "$PR_DATA" | jq -r --arg name "$check_name" \
         '.statusCheckRollup[] | select(.name | contains($name)) | .conclusion // "MISSING"' | head -1)
     
-    if [ "$CONCLUSION" = "SUCCESS" ] || [ "$CONCLUSION" = "MISSING" ]; then
-        echo "  ℹ️  $check_name ($CONCLUSION)"
+    if [ "$CONCLUSION" = "SUCCESS" ]; then
+        echo "  ✅ $check_name"
+    elif [ "$CONCLUSION" = "MISSING" ]; then
+        echo "  ℹ️  $check_name (not run)"
     else
         echo "  ⚠️  $check_name ($CONCLUSION)"
         ADVISORY_FAILED+=("$check_name")
@@ -198,13 +191,13 @@ fi
 if [ "${#BLOCKERS[@]}" -eq 0 ]; then
     echo "✅ MERGE READY"
     echo ""
-    echo "All required checks passed, review approved, no unresolved conversations."
+    echo "All branch-protected checks passed, review approved, no unresolved conversations."
     
-    if [ "${#DOCUMENTED_EXCEPTIONS[@]}" -gt 0 ]; then
+    if [ "${#ADVISORY_FAILED[@]}" -gt 0 ]; then
         echo ""
-        echo "Note: The following checks have documented exceptions:"
-        for exception in "${DOCUMENTED_EXCEPTIONS[@]}"; do
-            echo "  - $exception (see $SONAR_EXCEPTION_DOC)"
+        echo "Advisory warnings (not blocking, but should investigate):"
+        for warning in "${ADVISORY_FAILED[@]}"; do
+            echo "  - $warning"
         done
     fi
     
@@ -216,14 +209,6 @@ else
     for blocker in "${BLOCKERS[@]}"; do
         echo "  - $blocker"
     done
-    
-    if [ "${#DOCUMENTED_EXCEPTIONS[@]}" -gt 0 ]; then
-        echo ""
-        echo "Documented exceptions (not blocking):"
-        for exception in "${DOCUMENTED_EXCEPTIONS[@]}"; do
-            echo "  - $exception (see $SONAR_EXCEPTION_DOC)"
-        done
-    fi
     
     if [ "${#ADVISORY_FAILED[@]}" -gt 0 ]; then
         echo ""

@@ -114,23 +114,36 @@ Validate Permissions
 
 </details>
 
-### 2.2 Required vs Advisory Classification
+### 2.2 Required vs Advisory Checks (Post-Alignment)
 
-**Required Checks** (Source: `scripts/merge_gate_report.sh` lines 69-75):
+**As of 2025-12-05**, branch protection is the canonical source of truth for required checks on `main`.
 
-| Check Name | Type | Status | Notes |
-|------------|------|--------|-------|
-| **QC Gate (Required - Basic Sanity)** | Enforcement | ⏸️ TBD | Core quality gate |
-| **Validate Actions Policy Compliance** | Enforcement | ⏸️ TBD | SHA pinning validation |
-| **Enforce Terminal Output Policy** | Enforcement | ⏸️ TBD | ZERO TOLERANCE (no emojis in terminal) |
-| **SonarCloud Code Analysis** | Security | ⏸️ TBD | Hotspots require documented exceptions |
+**Required (branch-protected):**
 
-**Advisory Checks** (Source: `scripts/merge_gate_report.sh` lines 78-81):
+| Check Name | Type | Branch Protection | Notes |
+|------------|------|-------------------|-------|
+| **QC Gate (Required - Basic Sanity)** | Enforcement | ✅ YES | Core quality gate, green on main |
+| **Validate Actions Policy Compliance** | Enforcement | ✅ YES | SHA pinning validation, green on main |
 
-| Check Name | Type | Status | Notes |
-|------------|------|--------|-------|
-| **validate-yaml** | Quality | ⏸️ TBD | YAML syntax validation |
-| **markdownlint / lint** | Quality | ⏸️ TBD | Markdown formatting |
+**Advisory (reported, but not enforced by branch protection):**
+
+| Check Name | Type | Branch Protection | Notes |
+|------------|------|-------------------|-------|
+| **Enforce Terminal Output Policy** | Enforcement | ❌ NO | Strongly recommended, but not branch-protected (yet) |
+| **validate-yaml** | Quality | ❌ NO | YAML syntax validation |
+| **markdownlint / lint** | Quality | ❌ NO | Markdown formatting |
+
+**Not implemented (removed from merge gate expectations):**
+
+- **SonarCloud Code Analysis** - No workflow currently exists; implement in v4+ before re-adding
+
+**`scripts/merge_gate_report.sh` has been updated to:**
+
+- Treat only the branch-protected checks as *required* for "MERGE READY"
+- Report Terminal Policy as *advisory*, non-blocking
+- Drop SonarCloud from expectations until a real workflow exists (v4 scope)
+
+**Rationale**: The merge gate script previously enforced an aspirational set of 4 checks, causing confusion when PRs appeared "blocked" despite GitHub allowing merges. This alignment eliminates the documentation vs enforcement mismatch discovered in Phase 3 Chapter 2.
 
 **Observability/Automation** (Not blocking v3):
 
@@ -363,23 +376,37 @@ TAGS-META success came from:
 ## 9. Final Status (This Recon Pass)
 
 **Date**: 2025-12-05  
-**Duration**: Initial recon pass  
-**Status**: ⏸️ **PAUSED FOR VERIFICATION**
+**Duration**: Initial recon + merge gate alignment  
+**Status**: ✅ **ALIGNMENT COMPLETE**
 
 **Summary**:
 - ✅ Workflow inventory complete (56 workflows catalogued)
-- ✅ Required vs advisory classification documented (4 required, 2 advisory, ~50 observability)
+- ✅ Required vs advisory classification updated (2 required, 3 advisory, ~50 observability)
+- ✅ **Merge gate alignment complete** - `scripts/merge_gate_report.sh` now matches branch protection
 - ✅ Failure classification rubric defined (P0/P1/P2/v4-scope)
 - ✅ Known documented exceptions captured (#1902, #1903, #1904, #1905)
-- ⏸️ Live CI status verification pending (gh auth required)
-- ⏸️ Failure classification pending (no new failures expected post-PR #1901)
 
-**CI Baseline Verdict**: ⏸️ **PENDING VERIFICATION**
-- Expected: ✅ All required checks green (based on PR #1901 success + documented exceptions)
-- Need: gh CLI auth to confirm live status
-- Fallback: Trust PR #1901 merge gate report as source of truth (merge wouldn't succeed with blocking failures)
+**Merge Gate Alignment (2025-12-05)**:
 
-**Next Action**: Verify required checks with gh CLI (when auth available) or proceed with assumption that PR #1901 merge confirms baseline health.
+The merge gate script previously enforced an aspirational set of 4 checks, causing confusion when PRs appeared "blocked" despite GitHub allowing merges. This has been corrected:
+
+- **Required checks** now match branch protection reality:
+  - QC Gate (Required - Basic Sanity)
+  - Validate Actions Policy Compliance
+- **Terminal Policy** moved to advisory section (strongly recommended, not branch-protected)
+- **SonarCloud** removed from expectations until workflow exists (v4 scope)
+
+This closes the documentation vs enforcement mismatch discovered in Phase 3 Chapter 2.
+
+**CI Baseline Verdict**: ✅ **HONEST ENFORCEMENT**
+- Branch protection defines truth (2 required checks)
+- Merge gate script now reflects this accurately
+- "MERGE READY" only depends on actual branch-protected checks
+- Advisory checks reported but do not block
+
+**Next Actions**:
+- Terminal Policy promotion decision (v4+) - requires stability evidence
+- SonarCloud implementation (v4+) - add workflow before re-adding to gate
 
 ---
 
