@@ -116,21 +116,28 @@ Validate Permissions
 
 ### 2.2 Required vs Advisory Classification
 
-**Required Checks** (Source: `scripts/merge_gate_report.sh` lines 69-75):
+**⚠️ DISCREPANCY IDENTIFIED**: merge_gate_report.sh vs branch protection (see Section 9.3)
 
-| Check Name | Type | Status | Notes |
-|------------|------|--------|-------|
-| **QC Gate (Required - Basic Sanity)** | Enforcement | ⏸️ TBD | Core quality gate |
-| **Validate Actions Policy Compliance** | Enforcement | ⏸️ TBD | SHA pinning validation |
-| **Enforce Terminal Output Policy** | Enforcement | ⏸️ TBD | ZERO TOLERANCE (no emojis in terminal) |
-| **SonarCloud Code Analysis** | Security | ⏸️ TBD | Hotspots require documented exceptions |
+**ACTUAL Required Checks** (Source: Branch Protection API - **canonical truth**):
 
-**Advisory Checks** (Source: `scripts/merge_gate_report.sh` lines 78-81):
+| Check Name | Type | Status | Verification |
+|------------|------|--------|--------------|
+| **QC Gate (Required - Basic Sanity)** | Enforcement | ✅ GREEN | 2025-12-04T22:22:17Z success on 3c0c30c4 |
+| **Validate Actions Policy Compliance** | Enforcement | ✅ GREEN | 2025-12-04T22:22:17Z success on 3c0c30c4 |
 
-| Check Name | Type | Status | Notes |
-|------------|------|--------|-------|
-| **validate-yaml** | Quality | ⏸️ TBD | YAML syntax validation |
+**Advisory Checks** (Source: Running workflows NOT in branch protection):
+
+| Check Name | Type | Status | Verification |
+|------------|------|--------|--------------|
+| **Terminal Output Policy Enforcement** | Enforcement | ✅ GREEN | 2025-12-04T22:22:17Z success on 3c0c30c4 (NOT required) |
+| **validate-yaml** | Quality | ⏸️ TBD | Basic YAML syntax validation |
 | **markdownlint / lint** | Quality | ⏸️ TBD | Markdown formatting |
+
+**Non-existent Checks** (Referenced in merge_gate_report.sh but not implemented):
+
+| Check Name | Type | Status | Notes |
+|------------|------|--------|-------|
+| **SonarCloud Code Analysis** | Security | ❌ MISSING | No workflow exists; remove from docs (v4-scope) |
 
 **Observability/Automation** (Not blocking v3):
 
@@ -360,26 +367,146 @@ TAGS-META success came from:
 
 ---
 
-## 9. Final Status (This Recon Pass)
+## 9. Live Verification Results (2025-12-05)
 
-**Date**: 2025-12-05  
-**Duration**: Initial recon pass  
-**Status**: ⏸️ **PAUSED FOR VERIFICATION**
+**Verification Date**: 2025-12-05T05:45:00Z  
+**Method**: GitHub CLI with branch protection API + workflow run queries  
+**Verified By**: AI Agent (reesey275 account)
+
+### 9.1 Critical Findings
+
+**DISCREPANCY DISCOVERED**: Documentation vs Branch Protection Reality
+
+**Branch Protection (Canonical Truth)**:
+```bash
+gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
+  --jq '.required_status_checks.contexts'
+```
+
+**Actual Required Checks** (only 2, not 4):
+1. ✅ `QC Gate (Required - Basic Sanity)` - **GREEN** on main
+2. ✅ `Validate Actions Policy Compliance` - **GREEN** on main
+
+**NOT Required** (contrary to merge_gate_report.sh expectations):
+- `Enforce Terminal Output Policy` - Green but **NOT** in branch protection
+- `SonarCloud Code Analysis` - **Does not exist** as a workflow
+
+### 9.2 Per-Check Verification Results
+
+**QC Gate (Required)**:
+```
+Latest 5 runs on main branch:
+2025-12-04T22:22:17Z    completed   success   3c0c30c4 (PR #1901 merge)
+2025-12-03T05:55:27Z    completed   success   5f75e7ab
+```
+**Status**: ✅ **HEALTHY** - 100% success rate on recent main commits
+
+**Actions Policy (Required)**:
+```
+Latest 5 runs on main branch:
+2025-12-04T22:22:17Z    completed   success   3c0c30c4 (PR #1901 merge)
+2025-12-03T05:55:27Z    completed   success   5f75e7ab
+```
+**Status**: ✅ **HEALTHY** - 100% success rate, SHA pinning enforcement working
+
+**Terminal Policy (Advisory - NOT Required)**:
+```
+Latest 5 runs on main branch:
+2025-12-04T22:22:17Z    completed   success   3c0c30c4 (PR #1901 merge)
+2025-12-03T05:55:27Z    completed   failure   5f75e7ab (pre-SHA pinning)
+2025-10-07T04:28:31Z    completed   success   ad31897c
+```
+**Status**: ✅ Green on latest main, but **NOT** in required branch protection contexts  
+**Action Required**: Either add to branch protection OR update docs to reflect advisory status
+
+**SonarCloud (Advisory - Does NOT Exist)**:
+- ❌ No workflow file exists in `.github/workflows/` for SonarCloud
+- ❌ No runs found in recent history
+- ⚠️ merge_gate_report.sh references it, but it's not implemented  
+**Action Required**: Remove from required checks list, update merge_gate_report.sh
+
+### 9.3 Branch Protection vs merge_gate_report.sh Alignment
+
+**Issue Identified**: `scripts/merge_gate_report.sh` defines REQUIRED_CHECKS array with:
+- QC Gate ✅ (matches branch protection)
+- Actions Policy ✅ (matches branch protection)
+- Terminal Policy ❌ (NOT in branch protection)
+- SonarCloud ❌ (workflow doesn't exist)
+
+**Root Cause**: merge_gate_report.sh is **aspirational** (what we want), not **canonical** (what branch protection enforces).
+
+**Impact**: Recon doc claimed 4 required checks when only 2 are actually required.
+
+### 9.4 Corrected Classification
+
+**Required Checks** (branch protection enforced):
+| Check | Status | Latest Main | Notes |
+|-------|--------|-------------|-------|
+| QC Gate (Required - Basic Sanity) | ✅ GREEN | 3c0c30c4 success | Core quality gate |
+| Validate Actions Policy Compliance | ✅ GREEN | 3c0c30c4 success | SHA pinning enforcement |
+
+**Advisory Checks** (running but not blocking):
+| Check | Status | Latest Main | Notes |
+|-------|--------|-------------|-------|
+| Terminal Output Policy Enforcement | ✅ GREEN | 3c0c30c4 success | ZERO TOLERANCE policy, but not required |
+| validate-yaml | ⚠️ UNKNOWN | Not queried | Basic YAML syntax |
+| markdownlint / lint | ⚠️ UNKNOWN | Not queried | Markdown formatting |
+
+**Non-existent Checks** (referenced but not implemented):
+| Check | Status | Notes |
+|-------|--------|-------|
+| SonarCloud Code Analysis | ❌ MISSING | No workflow exists, remove from docs |
+
+### 9.5 CI Baseline Verdict
+
+**Status**: ✅ **v3 REQUIREMENT MET**
+
+**Evidence**:
+- Both required checks (QC Gate, Actions Policy) are **GREEN** on main
+- Latest commit (3c0c30c4 - PR #1901 merge) passed all required checks
+- No P0 blockers identified
+- Advisory checks either green or not blocking v3 completion
+
+**v3 Completion Criteria**:
+- [x] All branch-protection-required checks green on main
+- [x] No untracked failures in required checks
+- [x] Known exceptions properly documented (Issue #1902 for non-existent Sonar)
+- [x] merge_gate_report.sh vs branch protection discrepancy identified and documented
+
+**Remaining Work** (v4-scope):
+1. **Align merge_gate_report.sh with branch protection** (v4-scope)
+   - Remove Terminal Policy from REQUIRED_CHECKS array OR add to branch protection
+   - Remove SonarCloud from REQUIRED_CHECKS (workflow doesn't exist)
+   - Update documentation to match branch protection as canonical source
+
+2. **Decide Terminal Policy status** (v4-scope)
+   - Either: Add to branch protection (promote to required)
+   - Or: Update docs to explicitly mark as advisory
+
+---
+
+## 10. Final Status (Post-Verification)
+
+**Date**: 2025-12-05T05:50:00Z  
+**Duration**: Initial recon + live verification complete  
+**Status**: ✅ **CHAPTER 2 COMPLETE**
 
 **Summary**:
 - ✅ Workflow inventory complete (56 workflows catalogued)
-- ✅ Required vs advisory classification documented (4 required, 2 advisory, ~50 observability)
-- ✅ Failure classification rubric defined (P0/P1/P2/v4-scope)
-- ✅ Known documented exceptions captured (#1902, #1903, #1904, #1905)
-- ⏸️ Live CI status verification pending (gh auth required)
-- ⏸️ Failure classification pending (no new failures expected post-PR #1901)
+- ✅ Required checks verified via branch protection API (2 required, not 4)
+- ✅ Live CI health verified via gh CLI (all required checks GREEN on main)
+- ✅ Failure classification rubric defined and applied (P0/P1/P2/v4-scope)
+- ✅ Known exceptions captured (#1902, #1903, #1904, #1905)
+- ✅ Documentation vs reality discrepancy identified (merge_gate_report.sh alignment)
+- ✅ v4-scope work identified (merge gate alignment, Terminal Policy decision)
 
-**CI Baseline Verdict**: ⏸️ **PENDING VERIFICATION**
-- Expected: ✅ All required checks green (based on PR #1901 success + documented exceptions)
-- Need: gh CLI auth to confirm live status
-- Fallback: Trust PR #1901 merge gate report as source of truth (merge wouldn't succeed with blocking failures)
+**CI Baseline Verdict**: ✅ **v3 COMPLETE**
+- Reality: 2 required checks, both GREEN on main (3c0c30c4)
+- Branch protection is enforcing correctly
+- merge_gate_report.sh has aspirational expectations (4 checks) vs reality (2 required)
+- No P0 blockers for v3 completion
 
-**Next Action**: Verify required checks with gh CLI (when auth available) or proceed with assumption that PR #1901 merge confirms baseline health.
+**Next Phase**: Phase 3 Chapter 3 (tags-mcp-servers or core-instructions CI recon, TBD)
 
 ---
 
