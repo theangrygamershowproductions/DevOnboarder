@@ -179,9 +179,9 @@ Validate Permissions
 - ✅ Documented exceptions for pre-existing Sonar hotspots (SONAR_SCOPE_DECISION_PR1901.md)
 - ✅ Tracking issues created: #1902 (Sonar hotspot), #1903 (CI bugs), #1904 (Priority Matrix GPG)
 
-### 3.3 Required Checks Status (Inferred from Baseline)
+### 3.3 Required Checks Status (Post-Alignment)
 
-**Assumptions** (to be verified):
+**Note**: Post-alignment, only 2 checks are required by branch protection. Assumptions below reflect pre-alignment understanding:
 
 1. **QC Gate**: ✅ Likely GREEN
    - Core quality gate, high priority fix
@@ -215,7 +215,7 @@ Validate Permissions
 ### 4.1 Classification Rubric
 
 **P0 - v3 Blocking** (Must fix before v3 lock):
-- Required check failures (QC Gate, Actions Policy, Terminal Policy)
+- Required check failures (QC Gate, Actions Policy)
 - Security issues without documented exceptions
 - Governance violations (freeze guard, no-verify, etc.)
 
@@ -321,7 +321,7 @@ gh run list --workflow "DevOnboarder Quality Control" --limit 10 \
 ### 6.3 Success Criteria (Chapter 2 Complete)
 
 **Exit Criteria**:
-- [ ] All required checks (QC Gate, Actions Policy, Terminal Policy) confirmed GREEN on main
+- [ ] All required checks (QC Gate, Actions Policy) confirmed GREEN on main
 - [ ] SonarCloud documented exception verified working (pre-existing hotspot not blocking)
 - [ ] All other failures classified: P0 (none expected), P1 (tracked), P2/v4-scope (tracked and documented)
 - [ ] TAGS_V3_REMAINING_WORK.md updated with "DevOnboarder CI: Chapter 2 complete"
@@ -343,7 +343,7 @@ TAGS-META success came from:
 
 **Expected Pattern**:
 - Most workflows will be v4-scope (observability/automation enhancements)
-- Only 4 required checks must be solid (QC Gate, Actions Policy, Terminal Policy, SonarCloud)
+- Only 2 required checks must be solid (QC Gate, Actions Policy)
 - Advisory checks can fail if tracked and classified
 - Goal: Honest CI health, not perfect CI health
 
