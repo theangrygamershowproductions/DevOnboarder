@@ -60,6 +60,12 @@ REQUIRED_CHECKS=(
     "Validate Actions Policy Compliance"
 )
 
+# Path-filtered checks: required by branch protection, but only run
+# when specific paths are modified. MISSING is acceptable if paths not touched.
+PATH_FILTERED_CHECKS=(
+    "Validate Actions Policy Compliance:.github/workflows/"
+)
+
 # Advisory checks: reported, but DO NOT block merges because
 # they are NOT in branch protection (yet).
 ADVISORY_CHECKS=(
@@ -112,8 +118,26 @@ for check_name in "${REQUIRED_CHECKS[@]}"; do
     CONCLUSION=$(echo "$PR_DATA" | jq -r --arg name "$check_name" \
         '.statusCheckRollup[] | select(.name == $name) | .conclusion // "MISSING"')
     
+    # Check if this is a path-filtered check
+    IS_PATH_FILTERED=false
+    FILTER_PATH=""
+    for filter_entry in "${PATH_FILTERED_CHECKS[@]}"; do
+        FILTER_CHECK="${filter_entry%%:*}"
+        FILTER_PATH="${filter_entry##*:}"
+        if [ "$check_name" = "$FILTER_CHECK" ]; then
+            IS_PATH_FILTERED=true
+            break
+        fi
+    done
+    
     if [ "$CONCLUSION" = "SUCCESS" ]; then
         echo "  ✅ $check_name"
+    elif [ -z "$CONCLUSION" ] && [ "$IS_PATH_FILTERED" = true ]; then
+        # For path-filtered checks, empty/missing means paths not modified (acceptable)
+        echo "  ℹ️  $check_name (not applicable - ${FILTER_PATH} not modified)"
+    elif [ "$CONCLUSION" = "MISSING" ] && [ "$IS_PATH_FILTERED" = true ]; then
+        # Fallback for explicit MISSING case
+        echo "  ℹ️  $check_name (not applicable - ${FILTER_PATH} not modified)"
     else
         echo "  ❌ $check_name ($CONCLUSION)"
         REQUIRED_FAILED+=("$check_name")
