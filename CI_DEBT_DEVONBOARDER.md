@@ -9,13 +9,15 @@
 ## Executive Summary
 
 **v3 Obligations for DevOnboarder**: ✅ COMPLETE
+
 - Actions policy compliant (SHA-pinned, allowlisted owners only)
 - Basic QC gate passing
 - Required checks green, conversations resolved, reviews satisfied
 
 **Current Red Checks**: 9 failing checks - ALL are **v4 hardening scope**, NOT v3 gates
 
-**Decision**: 
+**Decision**:
+
 - PR #1893: Merged (v3 actions policy work complete)
 - PR #1894: Merged via temporary check removal (docs-only, required checks misconfigured for markdown PRs)
 - v4 epics scheduled for remaining debt including CI configuration hygiene
@@ -27,19 +29,23 @@
 Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 
 ### Required for v3
+
 ✅ **Actions Policy Compliance**
+
 - Check: `Validate Actions Policy Compliance`
 - Status: SUCCESS
 - Requirement: Only `actions/*` + allowlisted owners, full SHA pinning
 - Result: PASSING
 
 ✅ **Basic QC Gate**
+
 - Check: `QC Gate (Required - Basic Sanity)`
 - Status: SUCCESS
 - Requirement: CI not obviously broken (deps install, tests discoverable)
 - Result: PASSING
 
 ✅ **Branch Protection Gates**
+
 - Required checks: Both green (exact name matching)
 - Required reviews: 3 approving (need 1)
 - Required conversations: All resolved
@@ -54,10 +60,12 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Category A: Terminal Policy Violations ⚠️ HIGH SEVERITY
 
 **Affected Checks**:
+
 - `Automated Code Review Bot / Automated Terminal Policy Review`
 - `Terminal Output Policy Enforcement / Enforce Terminal Output Policy`
 
-**What They Check**: 
+**What They Check**:
+
 - No emojis in terminal output (causes hangs)
 - No `printf '%s'` with potentially dash-prefixed content
 - Safe echo/printf usage patterns
@@ -65,6 +73,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Policy Source**: `TERMINAL_OUTPUT_VIOLATIONS.md`
 
 **Why v4, Not v3**:
+
 - These violations pre-date #1893
 - Scanning entire repo for existing land mines
 - Not part of "remove banned actions / SHA-pin" mission
@@ -74,6 +83,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Tracking Issue**: #____ (to be created via CI_DEBT_PROJECT_LINKAGE_PLAN.md)
 
 **Scope**:
+
 - Full repo scan for emoji usage
 - Audit all `printf`/`echo` calls
 - Fix violations systematically
@@ -88,15 +98,18 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Category B: Required Checks vs Paths Filters Mismatch ⚙️ MEDIUM SEVERITY (CONFIG)
 
 **Affected Checks**:
+
 - `QC Gate (Required - Basic Sanity)`
 - `Validate Actions Policy Compliance`
 
 **What's Misconfigured**:
+
 - Both workflows have `paths:` filters that exclude docs-only changes
 - Branch protection requires these checks, but they won't run on `*.md`-only PRs
 - Result: Docs-only PRs stuck at "Expected — waiting for status" forever
 
 **Symptom**: PR #1894 (docs-only, 15 markdown files) could not satisfy required checks because:
+
 - `devonboarder-qc.yml` only runs on `backend/`, `bot/`, `frontend/`, `scripts/`, `tests/`
 - `actions-policy-enforcement.yml` only runs on `.github/workflows/**/*.yml`
 - Neither triggers for root-level `*.md` changes
@@ -105,13 +118,15 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 
 **Classification**: v4 CI config debt, not v3 blocker
 
-**Resolution for PR #1894**: 
+**Resolution for PR #1894**:
+
 - Temporarily removed required status checks via API
 - Merged PR #1894 (squash commit `4a2e9737`)
 - Restored branch protection with same configuration
 - Documented as explicit exception with audit trail
 
 **Planned Fix (v4)**:
+
 - Option A: Make required workflows trigger on all PRs, early-exit when no relevant files
 - Option B: Create tiny "required stub" workflow that always runs/passes, keep heavy QC optional
 - Option C: Remove `paths:` filters from required checks, add conditional logic inside jobs
@@ -128,14 +143,17 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Category C: YAML Validation ⚠️ MEDIUM SEVERITY
 
 **Affected Checks**:
+
 - `Validate Permissions / validate-yaml (push / pull_request)`
 
 **What They Check**:
+
 - YAML structure correctness
 - Workflow file style consistency
 - Permission declarations
 
 **Why v4, Not v3**:
+
 - Violations pre-date #1893
 - Not part of actions policy migration (that's about *which* actions, not YAML formatting)
 - Fixing is allowed under v3, but not required to declare v3 done
@@ -145,6 +163,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Tracking Issue**: #____ (to be created via CI_DEBT_PROJECT_LINKAGE_PLAN.md)
 
 **Scope**:
+
 - Fix YAML structure issues
 - Standardize permission declarations
 - Update workflow style consistency
@@ -158,13 +177,16 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Category D: Documentation Lint 📚 LOW SEVERITY
 
 **Affected Checks**:
+
 - `Markdownlint / lint (pull_request/push)`
 
 **What They Check**:
+
 - Markdown style consistency
 - Documentation formatting rules
 
 **Why v4, Not v3**:
+
 - Pure documentation style enforcement
 - v3 freeze explicitly allows doc lint cleanup but doesn't gate on it
 - Red here is annoying but not dangerous
@@ -173,6 +195,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Tracking Issue**: #____ (to be created via CI_DEBT_PROJECT_LINKAGE_PLAN.md)
 
 **Scope**:
+
 - Fix markdown style violations
 - Update `.markdownlint.json` configuration if needed
 - Bundle with doc-metadata/Vale cleanup
@@ -187,14 +210,17 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Category E: SonarCloud Quality Gate 📊 LOW SEVERITY
 
 **Affected Checks**:
+
 - `SonarCloud Code Analysis (Quality Gate failed)`
 
 **What They Check**:
+
 - Code quality metrics
 - Technical debt ratios
 - Code smells and anti-patterns
 
 **Why v4, Not v3**:
+
 - Pure code-quality telemetry
 - If not security vulnerabilities, not v3 scope
 - Compass for improvement, not a gate for v3 completion
@@ -203,6 +229,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Tracking Issue**: #____ (to be created via CI_DEBT_PROJECT_LINKAGE_PLAN.md)
 
 **Scope**:
+
 - Review SonarCloud findings
 - Address high-priority quality issues
 - Refactor anti-patterns systematically
@@ -219,19 +246,22 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Why These Weren't v3 Gates
 
 **Design Intent**:
+
 - v3 = "Make CI work, comply with actions policy, pass basic sanity"
 - v4 = "Clean up accumulated debt, raise quality bar, harden everything"
 
 **These Checks**:
+
 - All scan for **existing** issues across **entire** codebase
 - Not specific to actions policy migration work
 - Pre-date PR #1893 (violations already present)
 - Would require broad "clean the yard" work beyond migration scope
 
 **Branch Protection Configuration**:
+
 - Correctly set to gate on **only** the v3 requirements:
-  - `QC Gate (Required - Basic Sanity)`
-  - `Validate Actions Policy Compliance`
+    - `QC Gate (Required - Basic Sanity)`
+    - `Validate Actions Policy Compliance`
 - Failing checks are **non-required** by design
 - `mergeStateStatus: UNSTABLE` is expected (non-required failures present)
 
@@ -242,6 +272,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 ### Immediate (Post-Merge #1893)
 
 1. **Merge PR #1893**
+
    ```bash
    cd ~/TAGS/ecosystem/DevOnboarder
    gh pr merge 1893 --squash --delete-branch
@@ -283,6 +314,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
    - Labels: `v4-scope`, `quality`, `low-priority`
 
 **Execution Pattern**:
+
 - One epic at a time (avoid parallel work in same codebase areas)
 - Each gets dedicated PR with full testing
 - Track progress in `DEVONBOARDER_V4_HARDENING_STATUS.md`
@@ -308,7 +340,8 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 
 **Cause**: Didn't distinguish v3 gates from v4 aspirational checks
 
-**Fix**: 
+**Fix**:
+
 - v3 = explicit gates in branch protection (only 2 checks)
 - v4 = everything else (document as debt, schedule as epics)
 - Don't let "red on the PR" obscure "gates are satisfied"
@@ -320,6 +353,7 @@ Per `DEVONBOARDER_V3_V4_QC_STANDARDS.md` and v3 freeze contract:
 **Reality**: Expected when non-required checks fail
 
 **Communication**:
+
 - "Merge-ready" = all **required** gates satisfied
 - "UNSTABLE" = some **non-required** checks failing (informational)
 - Branch protection is the source of truth, not the count of green checks

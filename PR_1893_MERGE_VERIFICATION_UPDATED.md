@@ -9,11 +9,13 @@
 ## What Changed
 
 **Previous verification** (incomplete):
+
 - ✅ Checked required status checks
 - ✅ Checked required reviews
 - ❌ **MISSED**: Conversation resolution requirement
 
 **Updated verification** (complete):
+
 - ✅ Required status checks
 - ✅ Required reviews  
 - ✅ **Conversation resolution** (now included)
@@ -23,6 +25,7 @@
 ## Step 1: Query Branch Protection (Complete)
 
 **Commands**:
+
 ```bash
 # Required status checks
 gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
@@ -38,6 +41,7 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 ```
 
 **Results**:
+
 - Required contexts: `["qc-gate-minimum"]`
 - Required reviews: `1`
 - Conversation resolution: `true` ← **This was the missing piece**
@@ -47,12 +51,14 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 ## Step 2: Query PR #1893 Status Checks
 
 **Command**:
+
 ```bash
 gh pr view 1893 --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)" or .name == "Validate Actions Policy Compliance") | {name, conclusion}'
 ```
 
 **Result**:
+
 - QC Gate (Required - Basic Sanity): ✅ `SUCCESS`
 - Validate Actions Policy Compliance: ✅ `SUCCESS`
 
@@ -61,6 +67,7 @@ gh pr view 1893 --json statusCheckRollup \
 ## Step 3: Query PR #1893 Review Threads
 
 **Command**:
+
 ```bash
 gh api graphql -f query='
 query($owner:String!, $name:String!, $number:Int!) {
@@ -88,23 +95,27 @@ query($owner:String!, $name:String!, $number:Int!) {
 ```
 
 **Result**:
+
 - **1 unresolved thread**
 - Path: `.github/workflows/validate-permissions.yml`
 - Status: `isOutdated: true` (code changed under it)
 - Author: `copilot-pull-request-reviewer`
-- URL: https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101
+- URL: <https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101>
 
 ---
 
 ## Step 4: Cross-Reference Requirements
 
 ### Required Status Checks
+
 - ✅ `qc-gate-minimum`: SUCCESS
 
 ### Required Reviews
+
 - ⚠️ 0 approving reviews (need 1)
 
 ### Conversation Resolution
+
 - ❌ 1 unresolved thread (need 0)
 
 ---
@@ -114,10 +125,12 @@ query($owner:String!, $name:String!, $number:Int!) {
 **Merge-ready?** ❌ **NO**
 
 **Blocking Issues**:
+
 1. **Unresolved review thread**: 1 thread from Copilot (outdated but not explicitly resolved)
 2. **Missing review approval**: Need 1 human approval
 
 **Non-blocking Issues** (expected v4 debt):
+
 - qc-full (non-required)
 - markdownlint (non-required)
 - validate-yaml (non-required)
@@ -130,9 +143,10 @@ query($owner:String!, $name:String!, $number:Int!) {
 
 ### 1. Resolve Copilot Thread
 
-**URL**: https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101
+**URL**: <https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101>
 
 **Action**:
+
 1. Navigate to thread in GitHub UI
 2. Verify code was updated (thread is `isOutdated: true`)
 3. Add comment: "Implemented in commit [sha]. Thread outdated by code changes."
@@ -141,6 +155,7 @@ query($owner:String!, $name:String!, $number:Int!) {
 ### 2. Add Human Approval
 
 **Action**:
+
 ```bash
 # Review PR in GitHub UI, then approve
 gh pr review 1893 --approve
@@ -149,6 +164,7 @@ gh pr review 1893 --approve
 ### 3. Verify Merge Readiness (After Steps 1-2)
 
 **Re-run verification**:
+
 ```bash
 # Check unresolved threads (should return 0)
 gh api graphql -f query='...' | jq '[.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)] | length'
@@ -167,6 +183,7 @@ gh pr merge 1893 --squash --delete-branch
 ### What We Missed in Original Verification
 
 **Original AGENTS.md rules checked**:
+
 1. ✅ Required status checks
 2. ✅ Required reviews (conceptually, not counted)
 
@@ -177,6 +194,7 @@ gh pr merge 1893 --squash --delete-branch
 ### Why This Matters
 
 **Branch protection has THREE independent gates**:
+
 1. Required status checks (CI)
 2. Required reviews (human approval)
 3. Required conversation resolution (thread cleanup)
@@ -186,6 +204,7 @@ gh pr merge 1893 --squash --delete-branch
 ### Updated AGENTS.md Rules
 
 Now includes mandatory Step 3 for conversation resolution:
+
 - Query `required_conversation_resolution.enabled`
 - Count unresolved threads
 - **CRITICAL**: Outdated threads still count until explicitly resolved
@@ -197,7 +216,7 @@ Now includes mandatory Step 3 for conversation resolution:
 
 - **Process Bug Fix**: AGENT_MERGE_READINESS_BUG_FIX.md (original issue)
 - **Updated AGENTS.md**: Lines 753+ (now includes conversation resolution)
-- **GitHub Branch Protection**: https://github.com/theangrygamershowproductions/DevOnboarder/settings/branch_protection_rules
+- **GitHub Branch Protection**: <https://github.com/theangrygamershowproductions/DevOnboarder/settings/branch_protection_rules>
 
 ---
 

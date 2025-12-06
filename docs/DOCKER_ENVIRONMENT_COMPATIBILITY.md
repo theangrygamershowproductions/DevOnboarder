@@ -71,7 +71,7 @@ fi
 
    - Apply & Restart Docker Desktop
 
-1. **Install Legacy Compatibility**:
+2. **Install Legacy Compatibility**:
 
    ```bash
    # Install docker-compose binary for legacy script compatibility
@@ -80,7 +80,7 @@ fi
    sudo chmod +x /usr/local/bin/docker-compose
    ```
 
-1. **Manual Testing with Modern Syntax**:
+3. **Manual Testing with Modern Syntax**:
 
    ```bash
    # Use modern Docker Compose syntax directly

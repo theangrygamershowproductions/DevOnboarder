@@ -20,11 +20,13 @@ PR #1901 (SHA pinning migration for DevOnboarder) is blocked by SonarCloud Quali
 ## PR #1901 Scope
 
 **Files Modified**: 48 workflow files for SHA pinning migration only
+
 - All changes are `uses: actions/*@vX.Y.Z` → `uses: actions/*@<sha256>` conversions
 - No changes to trigger patterns, permissions, or security logic
 - Zero Python/TypeScript application code changes
 
 **Verification**:
+
 ```bash
 gh pr view 1901 --json files --jq '.files[].path' | grep "pr-welcome"
 # Exit code 1 (not found - file not in changeset)
@@ -35,6 +37,7 @@ gh pr view 1901 --json files --jq '.files[].path' | grep "pr-welcome"
 ### Current State (`pr-welcome.yml`)
 
 **Trigger**:
+
 ```yaml
 on:
   pull_request_target:
@@ -44,6 +47,7 @@ on:
 **Purpose**: Post welcome message on forked PRs (requires write permission)
 
 **Existing Safeguards** (documented in file):
+
 1. ✅ No code checkout (doesn't execute untrusted PR code)
 2. ✅ Only posts predefined message (no user input processing)
 3. ✅ Minimal permissions (`pull-requests: write` only)
@@ -81,11 +85,13 @@ on:
 **Action**: Configure SonarCloud to fail only on **new code hotspots**
 
 **Rationale**:
+
 - Architecturally correct: PR responsible for code it changes, not entire repo history
 - Allows SHA pinning migration to proceed without scope creep
 - Pre-existing patterns addressed via separate security audit ticket
 
 **Implementation**:
+
 ```
 SonarCloud Project Settings → Quality Gates → 
 Set "Security Hotspots" condition to "Overall Code: 0, New Code: 0"
@@ -104,6 +110,7 @@ Set "Security Hotspots" condition to "Overall Code: 0, New Code: 0"
 **Action**: Create TAGS-META issue for pre-existing security pattern audit
 
 **Scope**:
+
 - Review all `pull_request_target` usage across repos
 - Evaluate safeguards vs Sonar standards
 - Implement fixes or document acceptance
@@ -115,12 +122,14 @@ Set "Security Hotspots" condition to "Overall Code: 0, New Code: 0"
 **Selected**: **Option A (Adjust Quality Gate to "New Code Only")** with documented exception
 
 **Justification**:
+
 - SHA pinning migration is time-sensitive (blocks DevOnboarder v3)
 - Pre-existing pattern has documented safeguards and acceptance rationale
 - Sonar "new code only" is standard practice for mature repos with technical debt
 - Separates concerns: SHA pinning ≠ security pattern audit
 
 **Implementation**:
+
 - SonarCloud hotspot tracked in **Issue #1902**
 - Merge gate updated to allow documented exceptions for pre-existing issues
 - This PR (SHA pinning) proceeds with documented exception
@@ -181,8 +190,8 @@ During YAML lint cleanup for QC compliance, additional pre-existing CI bugs were
 
 ## References
 
-- **PR #1901**: https://github.com/theangrygamershowproductions/DevOnboarder/pull/1901
-- **Issue #294**: https://github.com/theangrygamershowproductions/TAGS-META/issues/294
+- **PR #1901**: <https://github.com/theangrygamershowproductions/DevOnboarder/pull/1901>
+- **Issue #294**: <https://github.com/theangrygamershowproductions/TAGS-META/issues/294>
 - **Merge Gate Script**: `scripts/merge_gate_report.sh` (created during this PR)
 - **Sonar Rule**: GHSL-2024-268 GitHub Actions privilege escalation
 - **Security File**: `.github/workflows/pr-welcome.yml` (lines 1-30 have security comment block)

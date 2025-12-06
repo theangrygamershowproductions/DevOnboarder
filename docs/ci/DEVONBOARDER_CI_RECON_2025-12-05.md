@@ -162,6 +162,7 @@ Validate Permissions
 ### 3.1 Methodology
 
 **Without gh CLI auth**, using:
+
 - Git log analysis of recent workflow commits
 - Filesystem inspection of workflow files
 - Documented exceptions and tracking issues
@@ -170,11 +171,13 @@ Validate Permissions
 ### 3.2 Known Status (from prior audits)
 
 **Pre-SHA Pinning** (2025-12-01):
+
 - ❌ 100% failure rate (50/50 sampled runs)
 - ❌ Root cause: Tag-based action references blocked by org policy
 - ❌ Impact: Zero CI validation since policy activation
 
 **Post-SHA Pinning** (2025-12-04):
+
 - ✅ PR #1901 merged with full SHA migration
 - ✅ Documented exceptions for pre-existing Sonar hotspots (SONAR_SCOPE_DECISION_PR1901.md)
 - ✅ Tracking issues created: #1902 (Sonar hotspot), #1903 (CI bugs), #1904 (Priority Matrix GPG)
@@ -215,21 +218,25 @@ Validate Permissions
 ### 4.1 Classification Rubric
 
 **P0 - v3 Blocking** (Must fix before v3 lock):
+
 - Required check failures (QC Gate, Actions Policy)
 - Security issues without documented exceptions
 - Governance violations (freeze guard, no-verify, etc.)
 
 **P1 - v3 High Priority** (Should fix if time permits):
+
 - High-coverage test failures
 - Documentation quality regressions
 - Critical automation breakage
 
 **P2 - v4 Defer** (Explicitly park with tracking):
+
 - Advisory check failures
 - Observability/automation enhancements
 - Nice-to-have quality improvements
 
 **v4-Scope** (Out of v3 freeze entirely):
+
 - New features or capabilities
 - MCP/GPG enhancements (Priority Matrix #1904)
 - Backlog documentation (#1905)
@@ -255,21 +262,25 @@ Workflow failing?
 ### 5.1 Pre-existing Issues (Not Blocking)
 
 **Issue #1902** - SonarCloud: `pull_request_target` in pr-welcome.yml
+
 - **Type**: Pre-existing security hotspot
 - **Scope**: NOT modified by PR #1901
 - **Decision**: Documented exception (SONAR_SCOPE_DECISION_PR1901.md)
 - **Status**: Tracked, v4-scope fix planned
 
 **Issue #1903** - CI bugs discovered during SHA migration
+
 - **Type**: General CI issues surfaced during PR #1901
 - **Status**: Tracked for v4
 
 **Issue #1904** - Priority Matrix GPG signing status
+
 - **Type**: MCP/BWS integration enhancement
 - **Scope**: v4-scope (MCP hardening)
 - **Status**: Tracked, deferred to 2026+
 
 **Issue #1905** - Backlog Amnesty docs parked
+
 - **Type**: Documentation organization
 - **Scope**: v4-scope (backlog cleanup)
 - **Branch**: `v4/backlog-amnesty-docs`
@@ -282,23 +293,23 @@ Workflow failing?
 ### 6.1 Immediate Actions (This Recon Pass)
 
 - [ ] **Verify required checks are actually green** (need gh CLI auth or CI dashboard)
-  - QC Gate status
-  - Actions Policy status
-  - Terminal Policy status
-  - SonarCloud status (confirm documented exception honored)
+    - QC Gate status
+    - Actions Policy status
+    - Terminal Policy status
+    - SonarCloud status (confirm documented exception honored)
 
 - [ ] **Classify any red workflows** using decision tree above
-  - For each failure: P0/P1/P2/v4-scope?
-  - Create tracking issues for P0/P1
-  - Document v4 deferrals
+    - For each failure: P0/P1/P2/v4-scope?
+    - Create tracking issues for P0/P1
+    - Document v4 deferrals
 
 - [ ] **Update TAGS_V3_REMAINING_WORK.md** if any P0 blockers found
-  - Add to DevOnboarder v3 checklist
-  - Update Phase 3 Chapter 2 status
+    - Add to DevOnboarder v3 checklist
+    - Update Phase 3 Chapter 2 status
 
 - [ ] **Update DEVONBOARDER_V3_V4_SNAPSHOT** if scope changes
-  - New tracking issues
-  - v4 deferrals
+    - New tracking issues
+    - v4 deferrals
 
 ### 6.2 Verification Commands (When gh auth available)
 
@@ -321,6 +332,7 @@ gh run list --workflow "DevOnboarder Quality Control" --limit 10 \
 ### 6.3 Success Criteria (Chapter 2 Complete)
 
 **Exit Criteria**:
+
 - [ ] All required checks (QC Gate, Actions Policy) confirmed GREEN on main
 - [ ] SonarCloud documented exception verified working (pre-existing hotspot not blocking)
 - [ ] All other failures classified: P0 (none expected), P1 (tracked), P2/v4-scope (tracked and documented)
@@ -334,6 +346,7 @@ gh run list --workflow "DevOnboarder Quality Control" --limit 10 \
 ### 7.1 Pattern Recognition Works
 
 TAGS-META success came from:
+
 - **Binary decision tree**: Critical for v3? → Fix. Not critical? → v4-scope.
 - **Batch execution after pattern**: Avoided artificial rigidity, enabled efficient classification
 - **Ruthless v4 deferral**: 7 workflows disabled with documented rationale
@@ -342,6 +355,7 @@ TAGS-META success came from:
 ### 7.2 Apply to DevOnboarder
 
 **Expected Pattern**:
+
 - Most workflows will be v4-scope (observability/automation enhancements)
 - Only 2 required checks must be solid (QC Gate, Actions Policy)
 - Advisory checks can fail if tracked and classified
@@ -354,10 +368,12 @@ TAGS-META success came from:
 ### 8.1 Blockers
 
 **Authentication Required**:
+
 - Cannot query GitHub API for live CI status (gh auth expired)
 - Workaround: Use git log analysis, filesystem inspection, documented prior state
 
 **Verification Pending**:
+
 - Required checks actual status (assumed green based on PR #1901 success)
 - Advisory checks status (unknown)
 - New failures introduced post-PR #1901 (unlikely but possible)
@@ -380,6 +396,7 @@ TAGS-META success came from:
 **Status**: ✅ **ALIGNMENT COMPLETE**
 
 **Summary**:
+
 - ✅ Workflow inventory complete (56 workflows catalogued)
 - ✅ Required vs advisory classification updated (2 required, 3 advisory, ~50 observability)
 - ✅ **Merge gate alignment complete** - `scripts/merge_gate_report.sh` now matches branch protection
@@ -391,20 +408,22 @@ TAGS-META success came from:
 The merge gate script previously enforced an aspirational set of 4 checks, causing confusion when PRs appeared "blocked" despite GitHub allowing merges. This has been corrected:
 
 - **Required checks** now match branch protection reality:
-  - QC Gate (Required - Basic Sanity)
-  - Validate Actions Policy Compliance
+    - QC Gate (Required - Basic Sanity)
+    - Validate Actions Policy Compliance
 - **Terminal Policy** moved to advisory section (strongly recommended, not branch-protected)
 - **SonarCloud** removed from expectations until workflow exists (v4 scope)
 
 This closes the documentation vs enforcement mismatch discovered in Phase 3 Chapter 2.
 
 **CI Baseline Verdict**: ✅ **HONEST ENFORCEMENT**
+
 - Branch protection defines truth (2 required checks)
 - Merge gate script now reflects this accurately
 - "MERGE READY" only depends on actual branch-protected checks
 - Advisory checks reported but do not block
 
 **Next Actions**:
+
 - Terminal Policy promotion decision (v4+) - requires stability evidence
 - SonarCloud implementation (v4+) - add workflow before re-adding to gate
 
@@ -413,21 +432,25 @@ This closes the documentation vs enforcement mismatch discovered in Phase 3 Chap
 ## 10. References
 
 **Baseline Documentation**:
+
 - `DEVONBOARDER_V3_V4_SNAPSHOT_2025-12-03.md` - v3 sealed status
 - `SONAR_SCOPE_DECISION_PR1901.md` - Pre-existing hotspot exception
 - `TAGS_V3_REMAINING_WORK.md` - v3 completion tracker (synchronized 2025-12-05)
 - `scripts/merge_gate_report.sh` - Required checks source of truth
 
 **Prior Audits**:
+
 - `DEVONBOARDER_CI_STATUS_2025-12-01.md` - Pre-SHA pinning crisis audit
 - PR #1901 - SHA pinning migration (commit 3c0c30c4)
 
 **Tracking Issues**:
+
 - Issue #1902 - SonarCloud hotspot (pr-welcome.yml pull_request_target)
 - Issue #1903 - CI bugs discovered during migration
 - Issue #1904 - Priority Matrix GPG signing status (v4-scope)
 - Issue #1905 - Backlog Amnesty docs (v4-scope)
 
 **Pattern Reference**:
+
 - `TAGS_META_V3_CI_REALITY_CHECK.md` - Chapter 1 pattern validation
 - `TAGS_META_CI_STATUS_2025-12-01.md` - TAGS-META CI stabilization approach

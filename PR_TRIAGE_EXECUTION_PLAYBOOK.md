@@ -11,6 +11,7 @@ status: ready-for-execution
 **Context**: After merging PR #1893, systematically resolve all 30 open PRs using strict decision rules - no limbo, no drift.
 
 **Decision Framework**: Every PR gets one of three outcomes:
+
 1. **MERGE** - Required checks green, value clear, merge now
 2. **CLOSE** - Obsolete, superseded, or stale beyond recovery
 3. **REFRESH** - Value exists but needs rebase/update (rare, v4-deferred if complex)
@@ -56,6 +57,7 @@ git checkout main && git pull
 **Action**: CLOSE
 
 **Command**:
+
 ```bash
 gh pr close 1885 --comment "Superseded by #1893 (comprehensive actions policy migration). All workflows now SHA-pinned with banned actions replaced. Changes incorporated into v3 compliance work."
 ```
@@ -67,6 +69,7 @@ gh pr close 1885 --comment "Superseded by #1893 (comprehensive actions policy mi
 **Action**: CLOSE
 
 **Command**:
+
 ```bash
 gh pr close 1888 --comment "Superseded by #1893 (comprehensive actions policy migration + QC gate refactor). Enforcement workflow already deployed and passing. Changes incorporated into v3 compliance work."
 ```
@@ -82,18 +85,22 @@ gh pr close 1888 --comment "Superseded by #1893 (comprehensive actions policy mi
 ### Grouping (by lockfile target)
 
 **Bot Group** (7 PRs):
+
 - #1855, #1857, #1867, #1868, #1869, #1881, #1882
 - Lockfile: `bot/package-lock.json`
 
 **Frontend Group** (7 PRs):
+
 - #1862, #1863, #1864, #1865, #1866, #1880, #1883
 - Lockfile: `frontend/package-lock.json`
 
 **CI Toolkit Group** (2 PRs):
+
 - #1874, #1884
 - Lockfile: `.github/actions/ci-toolkit/package-lock.json`
 
 **Python Group** (6 PRs):
+
 - #1871, #1875, #1876, #1878, #1879
 - Lockfile: `pyproject.toml` / `requirements*.txt`
 
@@ -103,10 +110,12 @@ gh pr close 1888 --comment "Superseded by #1893 (comprehensive actions policy mi
 
 1. **Pick oldest PR** (lowest number)
 2. **Check required status**:
+
    ```bash
    gh pr view {PR} --json statusCheckRollup \
      --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)") | {name, conclusion}'
    ```
+
 3. **Decision**:
    - If `conclusion: "SUCCESS"` → **MERGE** oldest PR
    - If `conclusion: "FAILURE"` → Check if real regression or pre-existing debt
@@ -119,12 +128,14 @@ gh pr close 1888 --comment "Superseded by #1893 (comprehensive actions policy mi
 **Oldest PR**: #1855 (Bump @typescript-eslint/eslint-plugin, 37 days old)
 
 **Check**:
+
 ```bash
 gh pr view 1855 --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)") | {name, conclusion}'
 ```
 
 **If green**:
+
 ```bash
 # Merge oldest
 gh pr merge 1855 --squash --delete-branch
@@ -136,6 +147,7 @@ done
 ```
 
 **If red** (check why):
+
 ```bash
 # Get failure details
 gh run view --log | grep -A5 "qc-gate-minimum"
@@ -163,17 +175,22 @@ gh pr close 1855 --comment "Dependency bump breaks imports/tests. Blocked until 
 **Labels**: documentation, enhancement, maintenance
 
 **Check**:
+
 1. Conflicts with #1893 changes?
+
    ```bash
    gh pr view 1815 --json mergeable,mergeStateStatus
    ```
+
 2. Required checks status?
+
    ```bash
    gh pr view 1815 --json statusCheckRollup \
      --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)") | {name, conclusion}'
    ```
 
 **Decision Tree**:
+
 - Conflicts with main → **CLOSE** (stale, refactor needed)
 - No conflicts + required checks green → **MERGE**
 - No conflicts + required checks red (pre-existing debt) → **MERGE** (v3 gate is permissive)
@@ -195,6 +212,7 @@ gh pr close 1855 --comment "Dependency bump breaks imports/tests. Blocked until 
 **Age**: 29 days  
 
 **Special Check**: Does this conflict with current CODEOWNERS state?
+
 ```bash
 gh pr view 1872 --json files --jq '.files[].path'
 # If only touches .github/CODEOWNERS, check diff
@@ -202,6 +220,7 @@ gh pr diff 1872 -- .github/CODEOWNERS
 ```
 
 **Decision**:
+
 - If adds catch-all that's still needed → **MERGE** (if required checks green)
 - If catch-all already exists → **CLOSE** (superseded)
 - If catch-all conflicts with current org structure → **CLOSE** (needs redesign)
@@ -221,11 +240,13 @@ gh pr diff 1872 -- .github/CODEOWNERS
 **Author**: RabbitAlbatross (external contributor)
 
 **Analysis Required**:
+
 1. **Still relevant?** Check if dark mode already implemented elsewhere
 2. **Architecture drift?** 63 days of frontend changes likely conflict
 3. **Required checks?** Probably red due to age
 
 **Check**:
+
 ```bash
 # Check mergeable
 gh pr view 1694 --json mergeable,mergeStateStatus,files
@@ -239,6 +260,7 @@ gh pr view 1694 --json files --jq '.files[].path'
 ```
 
 **Decision Framework**:
+
 - Conflicts + required checks red → **CLOSE** with note "Stale after 63 days. If dark mode still desired, open fresh PR against current main with updated implementation."
 - No conflicts + required checks green + still relevant → **MERGE** (rare case)
 - No conflicts + required checks green + feature obsolete → **CLOSE** (not needed)
@@ -252,6 +274,7 @@ gh pr view 1694 --json files --jq '.files[].path'
 **Author**: reesey275 (internal)
 
 **Analysis**:
+
 1. Is token expiry monitoring already implemented?
 2. Does this fit current architecture?
 3. Required checks status?
@@ -259,6 +282,7 @@ gh pr view 1694 --json files --jq '.files[].path'
 **Check**: Same procedure as #1694
 
 **Decision**:
+
 - If monitoring already exists → **CLOSE** (superseded)
 - If still valuable + green + no conflicts → **MERGE**
 - If conflicts or red → **CLOSE** with note "v4: Revisit monitoring enhancement after Core-4 stable"
@@ -278,10 +302,12 @@ gh pr view 1694 --json files --jq '.files[].path'
 **Author**: reesey275 (automated AAR update)
 
 **Analysis**:
+
 - AAR portal updates are usually automated and cumulative
 - 57 days old likely means superseded by newer AAR runs
 
 **Check**:
+
 ```bash
 # Check if conflicts with current AAR state
 gh pr view 1810 --json files --jq '.files[].path'
@@ -293,6 +319,7 @@ gh pr view 1810 --json statusCheckRollup \
 ```
 
 **Decision**:
+
 - Required checks green + no conflicts → **MERGE** (low risk)
 - Conflicts or outdated content → **CLOSE** (next AAR run will regenerate)
 
@@ -316,6 +343,7 @@ gh pr view 1810 --json statusCheckRollup \
 ## Success Criteria
 
 This triage is **COMPLETE** when:
+
 - ✅ All 30 PRs have one of three states: MERGED, CLOSED, or explicitly documented as v4-deferred
 - ✅ No PR remains in "we should think about this" state
 - ✅ Triage report updated with actual outcomes
@@ -392,6 +420,7 @@ echo "=== Triage Complete - Update PR_TRIAGE_DEVONBOARDER_2025-12-03.md with out
 **Usage**: Run these command blocks in order. Each phase is self-contained with explicit decision points.
 
 **Setup** (run once per shell):
+
 ```bash
 export REPO="theangrygamershowproductions/DevOnboarder"
 cd ~/TAGS/ecosystem/DevOnboarder
@@ -450,7 +479,8 @@ gh pr list --repo "$REPO" \
 
 #### 2.2: Template Per Lockfile Group
 
-**Instructions**: 
+**Instructions**:
+
 1. Identify PRIMARY (oldest/cleanest) and DUPS (newer overlapping) from Phase 2 analysis in this doc
 2. Fill in PR numbers in template below
 3. Run block per group
@@ -474,6 +504,7 @@ done
 ```
 
 **Groups to Process** (from Phase 2 analysis above):
+
 - Bot lockfile group (7 PRs)
 - Frontend lockfile group (7 PRs)
 - CI toolkit group (2 PRs)
@@ -507,6 +538,7 @@ gh pr view "$PR" --repo "$REPO" \
 ```
 
 **Close obsolete infra PR**:
+
 ```bash
 gh pr close "$PR" --repo "$REPO" \
   --comment "Closed during DevOnboarder PR triage as **superseded/obsolete**. See PR_TRIAGE_DEVONBOARDER_2025-12-03.md for reasoning. If this work is still needed, please open a fresh PR based on current main."
@@ -532,6 +564,7 @@ done
 **HARD CALL per PR** (no auto-merge):
 
 **Option A: Close as out-of-scope**:
+
 ```bash
 PR=1694  # or 1813
 
@@ -575,6 +608,7 @@ gh pr list --repo "$REPO" --state open --limit 100 \
 **Expected outcome**: 0-3 PRs remaining, all with explicit intent documented.
 
 **Append results to triage doc**:
+
 - How many merged
 - How many closed  
 - Which (if any) remain and why
