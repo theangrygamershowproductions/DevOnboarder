@@ -209,13 +209,18 @@ Validate Permissions
 **Assumptions** (to be verified):
 
 - **validate-yaml**: ⏸️ Unknown (likely green, basic syntax check)
-- **markdownlint**: ❌ **FAILING** (837 errors as of 2025-12-06)
-  - **Status**: MD060 (table formatting) failing ~823 times (98% of errors)
+- **markdownlint**: ❌ **FAILING** (832 errors as of 2025-12-06 cleanup)
+  - **Status**: MD060 (table formatting) failing ~826 times (99% of errors)
+  - **v3 Progress (Branch `ci/phase4-devonboarder-markdownlint-cleanup`)**:
+    - 664 violations auto-fixed (formatting, blank lines, list indentation)
+    - 11 MD040 violations fixed (missing code fence languages)
+    - **Total fixed**: 669 violations (1501 → 832)
+    - **Remaining**: 832 errors (826 MD060 + 6 trivial: duplicate heading, inline HTML, list indent)
   - **Decision**: Check intentionally remains **enabled and red**
   - **Rationale**: No lint rule relaxation for convenience (AI Operating Invariants)
-  - **v3 Progress**: 664 violations auto-fixed (PR in progress)
-  - **v4 Scope**: Remaining 837 errors tracked for Phase 4 cleanup
+  - **v4 Scope**: Remaining 832 errors tracked in Phase 4 Workstream C.3
   - **Tracking**: Documented as Phase 4 debt, not silenced
+  - **Governance**: Test 8 (AI_VERIFICATION_TESTS.md) prevents rule weakening
 
 ---
 
