@@ -440,6 +440,115 @@ This closes the documentation vs enforcement mismatch discovered in Phase 3 Chap
 
 ---
 
+## 4. Actions Policy Enforcement & SHA Pinning Crisis (Discovered 2025-12-06)
+
+**Status**: 🔴 **CASCADING FAILURE** - Policy working, workflows not compliant
+
+### 4.1 Discovery Context
+
+While investigating advisory CI failures on main (2025-12-06), discovered that multiple workflows are blocked by `actions-policy-enforcement.yml` due to **unpinned GitHub Actions references**.
+
+**Initial symptom**: AAR Portal workflow (run 19984666175) failing with:
+```
+##[error]The action actions/upload-artifact@v4 is not allowed in theangrygamershowproductions/DevOnboarder 
+because all actions must be pinned to a full-length commit SHA.
+```
+
+**Scope analysis**: **171 unpinned action references** across `.github/workflows/*.yml`
+
+### 4.2 Root Cause
+
+DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, `@v7`) instead of **SHA-pinned references** required by organization policy.
+
+**Policy source**: `actions-policy-enforcement.yml` (added to enforce supply chain security)
+
+**Bootstrap problem**: The policy that enforces SHA pinning blocks workflows that need pinning - same cascade as core-instructions (65 refs) but **3x larger scope** (171 refs).
+
+### 4.3 Impact Assessment
+
+**Severity**: HIGH (quality gate paralysis, same class as core-instructions)
+
+**Affected workflows**:
+- AAR Portal (confirmed blocked)
+- Secrets Alignment (multiple failures)
+- CI Monitor (failures on main)
+- Auto Fix (failures on main)
+- Unknown count of other workflows (171 references suggests widespread impact)
+
+**What's NOT broken**:
+- Branch protection still enforced via `QC Gate (Required - Basic Sanity)` and `Validate Actions Policy Compliance`
+- Policy is **detecting** unpinned actions (working as designed)
+- No evidence of **unsafe code shipping** due to policy enforcement
+- Pre-commit hooks and local validation still functional
+
+**Duration**: Unknown start date (policy enforcement timing unclear), discovered 2025-12-06
+
+### 4.4 v3 Freeze Decision
+
+**Option A** (SELECTED): **Document debt, accept honest red, defer to Phase 4**
+- ✅ Respects v3 freeze discipline (no structural remediation during freeze)
+- ✅ Keeps governance consistent (same decision as core-instructions)
+- ✅ Maintains policy enforcement (no bypass/relaxation)
+- ✅ Clear Phase 4 scope with finite work estimate
+
+**Option B** (REJECTED): **Emergency v3 exemption to fix SHA pinning now**
+- ❌ Violates v3 freeze (171 refs = structural work, not stability patches)
+- ❌ Undermines CTO Charter (no "expedient" governance bypasses)
+- ❌ Sets bad precedent (teaches "break freeze if uncomfortable")
+- ❌ Contradicts Test 8 (No Lint Rule Relaxation - same anti-convenience pattern)
+
+**Option C** (REJECTED): **Disable actions-policy-enforcement temporarily**
+- ❌ Defeats purpose of policy (supply chain security)
+- ❌ Creates security gap during freeze
+- ❌ Same bypass pattern Test 8 was created to prevent
+
+**Rationale**: Scale doesn't change category. DevOnboarder has 171 unpinned refs vs core-instructions 65 refs, but both are **structural remediation work**, not v3 stability patches. Consistency with core-instructions decision is non-negotiable.
+
+### 4.5 v4 Scope (DevOnboarder SHA Pinning Migration)
+
+**Workstream**: Phase 4 Workstream A (SHA Pinning Migration - Core-4 Repos)
+
+**Scope**:
+- 171 unpinned GitHub Actions references across DevOnboarder workflows
+- Tag-based refs: `actions/checkout@v4`, `actions/setup-python@v5`, `actions/upload-artifact@v4`, etc.
+- Target: 100% SHA-pinned with inline comments (`# was @v4`)
+
+**Estimated effort**: 1-2 focused days (methodical workflow-by-workflow migration)
+
+**Success criteria**:
+- 171/171 action references SHA-pinned with comments
+- `actions-policy-enforcement` GREEN on all DevOnboarder workflows
+- Zero policy bypass or relaxation used
+- Commit in logical chunks (per workflow / per action family)
+- All workflows functional under policy enforcement
+
+**Cross-repo coordination**: DevOnboarder (171 refs) + core-instructions (65 refs) = **236 total references** in Phase 4 Workstream A
+
+### 4.6 Governance Alignment
+
+**AI Operating Invariants**:
+- ✅ **Human-Lift**: Documented complete analysis, work plan, and v4 scope
+- ✅ **Audit Trail**: Recon doc updates, Phase 4 plan commits, explicit decision rationale
+- ✅ **Manual Recovery Path**: Clear SHA pinning procedure in Phase 4 plan
+- ✅ **No Esoteric Layers**: No silent policy disables, all decisions explicit and tracked
+- ✅ **Worst Case Human Takeover**: Finite work (171 refs), clear procedure, no automation required
+
+**CTO Charter compliance**: No emergency governance bypass, no "expedient" policy relaxation, v3 freeze discipline maintained
+
+**Test 8 alignment**: Refusing to relax enforcement (same pattern as refusing to relax lint rules for convenience)
+
+### 4.7 Temporary Mitigation
+
+**Current state**: Live with **honest red** on affected workflows
+
+**Monitoring**: Track failures via CI recon updates, not heroic fixes
+
+**Communication**: Phase 4 Workstream A updated to include DevOnboarder scope explicitly
+
+**No workarounds**: Do NOT disable policy, do NOT bypass enforcement, do NOT attempt partial fixes during v3 freeze
+
+---
+
 ## 10. References
 
 **Baseline Documentation**:
