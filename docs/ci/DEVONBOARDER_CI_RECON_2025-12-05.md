@@ -50,8 +50,7 @@ codex_type: "reconnaissance"
 
 **56 workflows** in `.github/workflows/`:
 
-<details>
-<summary>Complete Workflow List (Click to expand)</summary>
+**Complete Workflow List**:
 
 ```text
 AAR Automation (GPG Signed)
@@ -210,17 +209,17 @@ Validate Permissions
 
 - **validate-yaml**: ⏸️ Unknown (likely green, basic syntax check)
 - **markdownlint**: ❌ **FAILING** (832 errors as of 2025-12-06 cleanup)
-  - **Status**: MD060 (table formatting) failing ~826 times (99% of errors)
-  - **v3 Progress (Branch `ci/phase4-devonboarder-markdownlint-cleanup`)**:
-    - 664 violations auto-fixed (formatting, blank lines, list indentation)
-    - 11 MD040 violations fixed (missing code fence languages)
-    - **Total fixed**: 669 violations (1501 → 832)
-    - **Remaining**: 832 errors (826 MD060 + 6 trivial: duplicate heading, inline HTML, list indent)
-  - **Decision**: Check intentionally remains **enabled and red**
-  - **Rationale**: No lint rule relaxation for convenience (AI Operating Invariants)
-  - **v4 Scope**: Remaining 832 errors tracked in Phase 4 Workstream C.3
-  - **Tracking**: Documented as Phase 4 debt, not silenced
-  - **Governance**: Test 8 (AI_VERIFICATION_TESTS.md) prevents rule weakening
+    - **Status**: MD060 (table formatting) failing ~826 times (99% of errors)
+    - **v3 Progress (Branch `ci/phase4-devonboarder-markdownlint-cleanup`)**:
+        - 664 violations auto-fixed (formatting, blank lines, list indentation)
+        - 11 MD040 violations fixed (missing code fence languages)
+        - **Total fixed**: 669 violations (1501 → 832)
+        - **Remaining**: 832 errors (826 MD060 + 6 trivial: duplicate heading, inline HTML, list indent)
+    - **Decision**: Check intentionally remains **enabled and red**
+    - **Rationale**: No lint rule relaxation for convenience (AI Operating Invariants)
+    - **v4 Scope**: Remaining 832 errors tracked in Phase 4 Workstream C.3
+    - **Tracking**: Documented as Phase 4 debt, not silenced
+    - **Governance**: Test 8 (AI_VERIFICATION_TESTS.md) prevents rule weakening
 
 ---
 
@@ -449,7 +448,8 @@ This closes the documentation vs enforcement mismatch discovered in Phase 3 Chap
 While investigating advisory CI failures on main (2025-12-06), discovered that multiple workflows are blocked by `actions-policy-enforcement.yml` due to **unpinned GitHub Actions references**.
 
 **Initial symptom**: AAR Portal workflow (run 19984666175) failing with:
-```
+
+```text
 ##[error]The action actions/upload-artifact@v4 is not allowed in theangrygamershowproductions/DevOnboarder 
 because all actions must be pinned to a full-length commit SHA.
 ```
@@ -469,6 +469,7 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 **Severity**: HIGH (quality gate paralysis, same class as core-instructions)
 
 **Affected workflows**:
+
 - AAR Portal (confirmed blocked)
 - Secrets Alignment (multiple failures)
 - CI Monitor (failures on main)
@@ -476,6 +477,7 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 - Unknown count of other workflows (171 references suggests widespread impact)
 
 **What's NOT broken**:
+
 - Branch protection still enforced via `QC Gate (Required - Basic Sanity)` and `Validate Actions Policy Compliance`
 - Policy is **detecting** unpinned actions (working as designed)
 - No evidence of **unsafe code shipping** due to policy enforcement
@@ -486,18 +488,21 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 ### 4.4 v3 Freeze Decision
 
 **Option A** (SELECTED): **Document debt, accept honest red, defer to Phase 4**
+
 - ✅ Respects v3 freeze discipline (no structural remediation during freeze)
 - ✅ Keeps governance consistent (same decision as core-instructions)
 - ✅ Maintains policy enforcement (no bypass/relaxation)
 - ✅ Clear Phase 4 scope with finite work estimate
 
 **Option B** (REJECTED): **Emergency v3 exemption to fix SHA pinning now**
+
 - ❌ Violates v3 freeze (171 refs = structural work, not stability patches)
 - ❌ Undermines CTO Charter (no "expedient" governance bypasses)
 - ❌ Sets bad precedent (teaches "break freeze if uncomfortable")
 - ❌ Contradicts Test 8 (No Lint Rule Relaxation - same anti-convenience pattern)
 
 **Option C** (REJECTED): **Disable actions-policy-enforcement temporarily**
+
 - ❌ Defeats purpose of policy (supply chain security)
 - ❌ Creates security gap during freeze
 - ❌ Same bypass pattern Test 8 was created to prevent
@@ -509,6 +514,7 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 **Workstream**: Phase 4 Workstream A (SHA Pinning Migration - Core-4 Repos)
 
 **Scope**:
+
 - 171 unpinned GitHub Actions references across DevOnboarder workflows
 - Tag-based refs: `actions/checkout@v4`, `actions/setup-python@v5`, `actions/upload-artifact@v4`, etc.
 - Target: 100% SHA-pinned with inline comments (`# was @v4`)
@@ -516,6 +522,7 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 **Estimated effort**: 1-2 focused days (methodical workflow-by-workflow migration)
 
 **Success criteria**:
+
 - 171/171 action references SHA-pinned with comments
 - `actions-policy-enforcement` GREEN on all DevOnboarder workflows
 - Zero policy bypass or relaxation used
@@ -527,6 +534,7 @@ DevOnboarder workflows use **tag-based action references** (e.g., `@v4`, `@v5`, 
 ### 4.6 Governance Alignment
 
 **AI Operating Invariants**:
+
 - ✅ **Human-Lift**: Documented complete analysis, work plan, and v4 scope
 - ✅ **Audit Trail**: Recon doc updates, Phase 4 plan commits, explicit decision rationale
 - ✅ **Manual Recovery Path**: Clear SHA pinning procedure in Phase 4 plan
