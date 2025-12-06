@@ -12,6 +12,7 @@
 **Problem**: Branch protection was looking for `qc-gate-minimum`, but actual check name is `QC Gate (Required - Basic Sanity)`
 
 **Root Cause**: String mismatch between:
+
 - Branch protection expected: `qc-gate-minimum`
 - Actual check reporting: `QC Gate (Required - Basic Sanity)`
 
@@ -20,6 +21,7 @@ GitHub behavior: "Waiting for status to be reported" because the exact string ne
 ### Fix Applied
 
 **Command**:
+
 ```bash
 gh api -X PUT \
   repos/theangrygamershowproductions/DevOnboarder/branches/main/protection/required_status_checks/contexts \
@@ -34,18 +36,22 @@ gh api -X PUT \
 ## Current Status (Verified)
 
 ### Required Status Checks ✅
+
 - `QC Gate (Required - Basic Sanity)`: ✅ SUCCESS
 - `Validate Actions Policy Compliance`: ✅ SUCCESS
 
 ### Required Reviews ✅
+
 - Required: 1
 - Actual: 3 approving reviews
 
 ### Conversation Resolution ✅
+
 - Unresolved threads: 0
 - All Copilot threads resolved
 
 ### Overall Status
+
 - `mergeable`: MERGEABLE
 - `mergeStateStatus`: UNSTABLE (9 non-required v4 checks failing - expected, documented)
 - **All branch protection gates**: ✅ SATISFIED
@@ -56,33 +62,42 @@ gh api -X PUT \
 ## Verification Commands
 
 ### 1. Verify Branch Protection Configuration
+
 ```bash
 gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
   --jq '.required_status_checks.contexts[]'
 ```
+
 **Expected**:
-```
+
+```text
 QC Gate (Required - Basic Sanity)
 Validate Actions Policy Compliance
 ```
 
 ### 2. Verify PR Required Checks
+
 ```bash
 gh pr view 1893 --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)" or .name == "Validate Actions Policy Compliance") | {name, conclusion}'
 ```
+
 **Expected**: Both with `conclusion: SUCCESS`
 
 ### 3. Verify Conversation Resolution
+
 ```bash
 gh api graphql -f query='...' | jq '[.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)] | length'
 ```
+
 **Expected**: 0
 
 ### 4. Verify Reviews
+
 ```bash
 gh api graphql -f query='...' | jq '.data.repository.pullRequest.reviews.totalCount'
 ```
+
 **Expected**: ≥1
 
 ---
@@ -90,6 +105,7 @@ gh api graphql -f query='...' | jq '.data.repository.pullRequest.reviews.totalCo
 ## v3 Scope Clarification
 
 ### What v3 Required (Met)
+
 1. ✅ **Actions Policy Compliance**: Only `actions/*` + allowlisted, SHA-pinned
 2. ✅ **Basic QC Gate**: CI fundamentals working
 3. ✅ **Branch Protection**: Required checks green, conversations resolved, reviews met
@@ -99,22 +115,26 @@ gh api graphql -f query='...' | jq '.data.repository.pullRequest.reviews.totalCo
 **9 failing checks - ALL are v4 hardening work, NOT v3 blockers**:
 
 **Category A: Terminal Policy** (v4 epic: HIGH priority)
+
 - `Automated Code Review Bot / Automated Terminal Policy Review`
 - `Terminal Output Policy Enforcement / Enforce Terminal Output Policy`
 - **Issue**: Repo-wide emoji/subshell violations (pre-date #1893)
 - **Scope**: Full repo scan + systematic cleanup
 
 **Category B: YAML Validation** (v4 epic: MEDIUM priority)
+
 - `Validate Permissions / validate-yaml`
 - **Issue**: Workflow file structure/style (pre-date #1893)
 - **Scope**: YAML formatting cleanup
 
 **Category C: Docs Lint** (v4 epic: LOW priority)
+
 - `Markdownlint / lint`
 - **Issue**: Documentation style violations
 - **Scope**: Docs-only cleanup PR
 
 **Category D: Quality Gate** (v4 epic: LOW priority)
+
 - `SonarCloud Code Analysis`
 - **Issue**: Code quality metrics/refactoring opportunities
 - **Scope**: Quality improvements (non-security)
@@ -122,10 +142,12 @@ gh api graphql -f query='...' | jq '.data.repository.pullRequest.reviews.totalCo
 ### Why They Don't Block
 
 **Design Intent**:
+
 - v3 = "Make CI work, comply with actions policy"
 - v4 = "Clean up accumulated debt, harden everything"
 
 **These Checks**:
+
 - Scan entire codebase for existing issues
 - Not specific to actions policy migration
 - Pre-date PR #1893 (violations already present)
@@ -138,12 +160,14 @@ gh api graphql -f query='...' | jq '.data.repository.pullRequest.reviews.totalCo
 ## Ready to Merge
 
 **Command**:
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 gh pr merge 1893 --squash --delete-branch
 ```
 
 **Post-Merge Actions**:
+
 1. Pull latest main: `git checkout main && git pull`
 2. Update documentation:
    - CI_GREEN_CAMPAIGN_STATUS.md (remove #1893 from blockers)
@@ -161,6 +185,7 @@ gh pr merge 1893 --squash --delete-branch
 **Problem**: Agent assumed `qc-gate-minimum` was the check name because that's what we called it
 
 **Reality**: GitHub Actions check names are:
+
 - `<workflow-name> / <job-name>` OR
 - Just `<job-name>` if explicitly set with `name:` field
 
@@ -185,6 +210,7 @@ The merge readiness discipline now requires:
 **Pattern**: Each time, agent defined "done" based on internal understanding, not GitHub's actual enforcement
 
 **Solution**: AGENTS.md now mandates:
+
 - Query branch protection (ALL requirements: checks + reviews + conversations)
 - Query PR status (ACTUAL names from statusCheckRollup)
 - Cross-reference with **exact string matching**
@@ -195,6 +221,7 @@ The merge readiness discipline now requires:
 ## Final Verification
 
 **All gates satisfied**:
+
 - ✅ Required checks: Both SUCCESS with correct names
 - ✅ Required reviews: 3 approvals (need 1)
 - ✅ Conversation resolution: 0 unresolved threads

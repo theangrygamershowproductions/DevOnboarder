@@ -23,9 +23,10 @@ Branch protection has **3 gates**, not 2:
 
 ### Step 1: Resolve Copilot Thread (< 1 min)
 
-**Direct link**: https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101
+**Direct link**: <https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101>
 
 **Actions**:
+
 1. Click link
 2. Verify thread is about `.github/workflows/validate-permissions.yml`
 3. Verify code was updated (thread shows "outdated")
@@ -35,12 +36,14 @@ Branch protection has **3 gates**, not 2:
 ### Step 2: Approve PR (< 1 min)
 
 **In GitHub UI**:
+
 - Click "Files changed" tab
 - Click "Review changes" button
 - Select "Approve"
 - Submit review
 
 **OR via CLI**:
+
 ```bash
 gh pr review 1893 --approve
 ```
@@ -58,11 +61,13 @@ gh pr merge 1893 --squash --delete-branch
 **We updated AGENTS.md** to include conversation resolution as mandatory check:
 
 **Before** (incomplete):
+
 - Step 1: Query required checks
 - Step 2: Verify checks green
 - **MISSING**: Conversation resolution
 
 **After** (complete):
+
 - Step 1: Query required checks **+ required reviews + conversation resolution**
 - Step 2: Verify checks green
 - Step 3: **Query unresolved threads**
@@ -86,10 +91,11 @@ gh pr merge 1893 --squash --delete-branch
 
 ---
 
-**Bottom Line**: 
+**Bottom Line**:
+
 - Resolve 1 thread (< 1 min)
 - Approve PR (< 1 min)  
 - Merge (< 30 sec)
 - Total time: < 3 minutes
 
-**Link**: https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101
+**Link**: <https://github.com/theangrygamershowproductions/DevOnboarder/pull/1893#discussion_r2582401101>

@@ -20,13 +20,15 @@ status: verified-ready
 ### Step 1: Query Branch Protection (Source of Truth)
 
 **Command:**
+
 ```bash
 gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
   --jq '.required_status_checks.contexts[]'
 ```
 
 **Result:**
-```
+
+```text
 qc-gate-minimum
 ```
 
@@ -37,12 +39,14 @@ qc-gate-minimum
 ### Step 2: Query PR Status Checks
 
 **Command:**
+
 ```bash
 gh pr view 1893 --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)" or .name == "Validate Actions Policy Compliance") | {name, status, conclusion}'
 ```
 
 **Result:**
+
 ```json
 {
   "conclusion": "SUCCESS",
@@ -116,17 +120,20 @@ gh pr view 1893 --json statusCheckRollup \
 ## Human Merge Instructions
 
 **Recommended merge strategy:**
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 gh pr merge 1893 --squash --delete-branch
 ```
 
 **Rationale for squash:**
+
 - 18 commits on branch (original work + Copilot resolution + QC fixes)
 - Squashing preserves logical unit: "v3 actions policy migration + QC gate refactor"
 - Cleaner history for future archaeology
 
 **Post-merge actions** (agent can perform):
+
 1. Pull latest main: `git checkout main && git pull`
 2. Update `DEVONBOARDER_CI_STATUS_2025-12-01.md` (mark P1 actions policy work complete)
 3. Update `GOVERNANCE_IMPLEMENTATION_STATUS.md` (DevOnboarder: v3 compliant)
@@ -138,12 +145,14 @@ gh pr merge 1893 --squash --delete-branch
 ## Governance Compliance
 
 **v3 Freeze Alignment**: ✅ COMPLIANT
+
 - Actions policy: ✅ SHA-pinned, GitHub-owned actions only
 - QC gate: ✅ Basic sanity enforced, comprehensive validation visible but non-blocking
 - Stability-only: ✅ Infrastructure fix, no new features
 - Core-4 hardening: ✅ DevOnboarder v3 compliance achieved
 
 **Documentation Trail**:
+
 - Process bug fix: `AGENT_MERGE_READINESS_BUG_FIX.md`
 - Triage playbook: `PR_TRIAGE_BRIEF.md`
 - v3/v4 standards: `DEVONBOARDER_V3_V4_QC_STANDARDS.md`
@@ -157,7 +166,8 @@ gh pr merge 1893 --squash --delete-branch
 
 **Root Cause**: Agent logic used "mission complete" as merge gate instead of querying branch protection
 
-**Resolution**: 
+**Resolution**:
+
 1. Split QC into required (qc-gate-minimum) and non-required (qc-full)
 2. Updated branch protection to use narrow gate
 3. Documented process bug and fix in `AGENT_MERGE_READINESS_BUG_FIX.md`

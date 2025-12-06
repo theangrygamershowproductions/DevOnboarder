@@ -22,9 +22,11 @@ The Priority Matrix Auto-Synthesis workflow is configured to GPG-sign commits us
    - `PMBOT_EMAIL` - exists: `priority-matrix@theangrygamershow.com`
 
 2. **Workflow expects**:
+
    ```bash
    printf '%s\n' "$PMBOT_GPG_PRIVATE" | base64 -d | gpg --batch --import --quiet
    ```
+
    - Secret should be base64-encoded armored GPG key
    - Import runs with `--quiet` (errors suppressed in logs)
    - If import fails, `git commit -S` will fail with "no secret key"
@@ -37,25 +39,27 @@ The Priority Matrix Auto-Synthesis workflow is configured to GPG-sign commits us
 ### What's Unknown (Investigation Needed)
 
 - **Is the GPG key valid?**
-  - Key may be expired (1-year validity common)
-  - Key may be corrupted in secret storage
-  - Base64 encoding may be incorrect
+    - Key may be expired (1-year validity common)
+    - Key may be corrupted in secret storage
+    - Base64 encoding may be incorrect
   
 - **Does the key match the key ID?**
-  - `PMBOT_GPG_KEY_ID` may not correspond to the key in `PMBOT_GPG_PRIVATE`
-  - Key rotation may have happened without updating secrets
+    - `PMBOT_GPG_KEY_ID` may not correspond to the key in `PMBOT_GPG_PRIVATE`
+    - Key rotation may have happened without updating secrets
 
 ## Current Impact: MINIMAL
 
 **Branch Protection Status**: Priority Matrix is **NOT a required check** for main branch.
 
 This means:
+
 - ❌ Workflow failures do **NOT** block PR merges
 - ⚠️ Bot comment is a **nag**, not a gate
 - ✅ PRs can merge without Priority Matrix synthesis
 - 📋 Manual synthesis remains an option when needed
 
 **Verified via**:
+
 ```bash
 gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
   --jq '.required_status_checks.contexts[]' | grep -i priority
@@ -67,6 +71,7 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 ### Option Chosen: **Maintain Advisory Status**
 
 **Rationale**:
+
 1. Priority Matrix is **already non-blocking** - no new risk introduced
 2. GPG key troubleshooting is **out of scope** for SHA pinning migration (PR #1901)
 3. Manual fallback exists and is documented in workflow comments
@@ -74,8 +79,10 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 5. Structural fix (BWS/MCP integration) is a v4 infrastructure project
 
 **Policy for v3**:
+
 - Accept Priority Matrix workflow failures as **expected** until GPG key issue resolved
 - Use manual synthesis when Priority Matrix updates are actually needed:
+
   ```bash
   source .venv/bin/activate
   python scripts/synthesize_priority_matrix.py
@@ -83,17 +90,20 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
   git commit -S -m "FEAT(docs): manual Priority Matrix field synthesis"
   git push
   ```
+
 - Do **NOT** attempt to "fix" the GPG key during v3 feature freeze
 - Document this status for future work
 
 ### Options Rejected
 
 **Option 1: Use personal GPG key temporarily**
+
 - ❌ Adds technical debt (key swap later)
 - ❌ Blurs bot vs human attribution
 - ❌ Out of scope for SHA pinning work
 
 **Option 2: Fix GPG key in GitHub Secrets**
+
 - ❌ Requires key rotation/regeneration
 - ❌ Investigation time unknown (key may be expired, corrupted, or mismatched)
 - ❌ Not blocking any v3 work
@@ -107,6 +117,7 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 #### Phase 1: Key Provisioning (BWS)
 
 1. **Verify or regenerate PM Bot GPG key**:
+
    ```bash
    # Check current key expiry
    gpg --list-keys 9BA7DCDBF5D4DEDD
@@ -128,13 +139,14 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 
 #### Phase 2: MCP Bridge Implementation
 
-3. **Expose via BWS MCP Server**:
+1. **Expose via BWS MCP Server**:
    - Tool: `get_pmbot_gpg_key()`
    - Auth: Requires `cicd-automation` project access
    - Returns: `{ armored_key, key_id }` only to trusted CI contexts
    - Implementation in `ecosystem/tags-mcp-servers/servers/bitwarden_server/`
 
-4. **Update workflow to use MCP**:
+2. **Update workflow to use MCP**:
+
    ```yaml
    - name: Fetch PM Bot GPG key from BWS MCP
      env:
@@ -149,24 +161,25 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
        git config --global user.signingkey "$key_id"
    ```
 
-5. **Replace GitHub Secrets with MCP token**:
+3. **Replace GitHub Secrets with MCP token**:
    - Remove: `PMBOT_GPG_PRIVATE` (raw key)
    - Keep: `PMBOT_GPG_KEY_ID`, `PMBOT_NAME`, `PMBOT_EMAIL` (metadata)
    - Add: `BWS_MCP_TOKEN` (MCP auth token, short-lived or rotatable)
 
 #### Phase 3: Enforcement Update
 
-6. **Add MCP contract flag**:
+1. **Add MCP contract flag**:
+
    ```yaml
    env:
      PMBOT_MCP_ENABLED: ${{ vars.PMBOT_MCP_ENABLED || 'false' }}
    ```
 
-7. **Update failure handling**:
+2. **Update failure handling**:
    - If `PMBOT_MCP_ENABLED=true` and signing fails → **hard block** (MCP should work)
    - If `PMBOT_MCP_ENABLED=false` and signing fails → **advisory** (legacy mode)
 
-8. **Flip to required after MCP bridge validated**:
+3. **Flip to required after MCP bridge validated**:
    - Once BWS MCP integration tested and stable
    - Update branch protection to include Priority Matrix as required check
    - Set `PMBOT_MCP_ENABLED=true` to enforce MCP contract

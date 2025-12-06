@@ -61,7 +61,7 @@ If `state != "MERGED"`, **stop** and merge #1893 first.
 
 Expected existing epic (adjust number if different):
 
-* `#294` – *"DevOnboarder SHA Pinning Crisis"* (or equivalent)
+- `#294` – _"DevOnboarder SHA Pinning Crisis"_ (or equivalent)
 
 Check linkage:
 
@@ -88,13 +88,13 @@ Use `CI_DEBT_DEVONBOARDER.md` as the single source of truth.
 Planned epics (rename if you already decided on other titles):
 
 1. **Terminal Policy**
-   * Title: `v4-epic: Terminal Output Policy Cleanup (DevOnboarder)`
+   - Title: `v4-epic: Terminal Output Policy Cleanup (DevOnboarder)`
 2. **YAML Validation**
-   * Title: `v4-epic: Workflow YAML Validation Cleanup (DevOnboarder)`
+   - Title: `v4-epic: Workflow YAML Validation Cleanup (DevOnboarder)`
 3. **Markdownlint**
-   * Title: `v4-epic: Markdownlint & Docs Formatting Cleanup (DevOnboarder)`
+   - Title: `v4-epic: Markdownlint & Docs Formatting Cleanup (DevOnboarder)`
 4. **SonarCloud**
-   * Title: `v4-epic: SonarCloud Quality Gate Remediation (DevOnboarder)`
+   - Title: `v4-epic: SonarCloud Quality Gate Remediation (DevOnboarder)`
 
 Create issues if they don't exist yet:
 
@@ -142,8 +142,8 @@ Record the mapping back into `CI_DEBT_DEVONBOARDER.md` under each section.
 
 Org Projects (from your notes):
 
-* **Project 4** – Team Planning Board
-* **Project 6** – Org Roadmap
+- **Project 4** – Team Planning Board
+- **Project 6** – Org Roadmap
 
 First, get project IDs (once):
 
@@ -155,8 +155,8 @@ gh project list --owner theangrygamershowproductions \
 
 Note the `id` for:
 
-* `number == 4` (Team Planning Board)
-* `number == 6` (Org Roadmap)
+- `number == 4` (Team Planning Board)
+- `number == 6` (Org Roadmap)
 
 Then add each epic issue to both projects:
 
@@ -185,8 +185,8 @@ done
 For each new v4 epic issue:
 
 1. **Add backlinks to docs:**
-   * `CI_DEBT_DEVONBOARDER.md`
-   * Any relevant status docs (`PROCESS_BUG_FIX_STATUS.md`, `READY_TO_EXECUTE.md`)
+   - `CI_DEBT_DEVONBOARDER.md`
+   - Any relevant status docs (`PROCESS_BUG_FIX_STATUS.md`, `READY_TO_EXECUTE.md`)
 
    Example comment:
 
@@ -196,10 +196,10 @@ For each new v4 epic issue:
    ```
 
 2. **Add consistent labels:**
-   * `component:devonboarder`
-   * `phase:v4`
-   * `type:ci-debt`
-   * Priority (`P1`/`P2`/`P3`) matching your HIGH/MEDIUM/LOW classification.
+   - `component:devonboarder`
+   - `phase:v4`
+   - `type:ci-debt`
+   - Priority (`P1`/`P2`/`P3`) matching your HIGH/MEDIUM/LOW classification.
 
 ```bash
 # Example: set labels on one epic
@@ -246,12 +246,12 @@ This document is **complete** when ALL are true:
 1. PR **#1893** is merged and linked to its v3 tracking issue.
 2. All four v4 CI debt epics exist and are **open**.
 3. Each epic is on:
-   * Project 4 (Team Planning Board)
-   * Project 6 (Org Roadmap)
+   - Project 4 (Team Planning Board)
+   - Project 6 (Org Roadmap)
 4. `CI_DEBT_DEVONBOARDER.md` references each epic by number.
 5. `PROCESS_BUG_FIX_STATUS.md` clearly states:
-   * DevOnboarder v3 actions-policy **complete**
-   * CI debt moved to **v4 epics**.
+   - DevOnboarder v3 actions-policy **complete**
+   - CI debt moved to **v4 epics**.
 
 After that, DevOnboarder's CI story is:
 
@@ -263,15 +263,18 @@ After that, DevOnboarder's CI story is:
 ## Execution Log
 
 ### Phase 1: Preconditions ⏳
+
 - [ ] PR #1893 merge status verified
 - [ ] Required v3 docs exist and accessible
 - [ ] `gh` CLI configured with proper auth
 
 ### Phase 2: v3 Epic Linkage ⏳
+
 - [ ] PR #1893 linked to tracking issue #294 (or equivalent)
 - [ ] v3 epic closed if auto-close didn't trigger
 
 ### Phase 3: v4 Epic Creation ⏳
+
 - [ ] Terminal Policy epic created (issue #____)
 - [ ] YAML Validation epic created (issue #____)
 - [ ] Markdownlint epic created (issue #____)
@@ -279,23 +282,27 @@ After that, DevOnboarder's CI story is:
 - [ ] Issue numbers recorded in `CI_DEBT_DEVONBOARDER.md`
 
 ### Phase 4: Project Wiring ⏳
+
 - [ ] Project 4 (Team Planning) ID retrieved: ____
 - [ ] Project 6 (Org Roadmap) ID retrieved: ____
 - [ ] All 4 epics added to Project 4
 - [ ] All 4 epics added to Project 6
 
 ### Phase 5: Labels & Backlinks ⏳
+
 - [ ] Terminal Policy: labels applied, docs linked
 - [ ] YAML Validation: labels applied, docs linked
 - [ ] Markdownlint: labels applied, docs linked
 - [ ] SonarCloud: labels applied, docs linked
 
 ### Phase 6: Verification ⏳
+
 - [ ] PR #1893 → issue linkage confirmed
 - [ ] All v4 epics showing OPEN state
 - [ ] Project board items visible (spot check)
 
 ### Phase 7: Documentation Update ⏳
+
 - [ ] `CI_DEBT_DEVONBOARDER.md` updated with issue numbers
 - [ ] `PROCESS_BUG_FIX_STATUS.md` updated with v3 completion
 - [ ] This playbook marked COMPLETE
@@ -307,6 +314,7 @@ After that, DevOnboarder's CI story is:
 Once all phases complete:
 
 1. **Update Status Documents**:
+
    ```bash
    # Mark v3 complete in CI campaign status
    # Update governance completion tracking

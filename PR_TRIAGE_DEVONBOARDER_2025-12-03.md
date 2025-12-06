@@ -12,10 +12,12 @@ status: in-progress
 **Context:** After merging PR #1893 (actions policy + QC gate refactor), this report systematically triages the 30 open PRs against the new v3 compliance reality.
 
 **Required Checks (Source of Truth):**
+
 - ✅ `qc-gate-minimum` (Basic sanity: deps install, imports work, tests runnable)
 - ✅ `Validate Actions Policy Compliance`
 
 **Non-blocking Checks (Informational):**
+
 - `qc-full` (coverage, YAML lint) - v4 hardening target
 - `markdownlint`, `validate-yaml`, `Terminal Output Policy`, `SonarCloud`
 
@@ -24,12 +26,14 @@ status: in-progress
 ## Classification Legend
 
 **Type:**
+
 - **A** - Dependabot / tooling-only (lockfiles, dependencies)
 - **B** - Infra / CI / governance (workflows, scripts, policy docs)
 - **C** - Feature / code changes (backend, bot, frontend)
 - **D** - Docs-only (markdown, metadata)
 
 **Recommendation:**
+
 - `merge` - Ready to merge (required checks green)
 - `merge-after-quick-fix` - Minor fix needed, then mergeable
 - `needs-rework` - Conflicts, failing required checks, or design outdated
@@ -84,6 +88,7 @@ status: in-progress
 - **Docs-only (Type D):** 1 (3%)
 
 **Age Distribution:**
+
 - 50+ days: 5 PRs
 - 30-49 days: 10 PRs
 - 15-29 days: 8 PRs
@@ -98,12 +103,14 @@ status: in-progress
 **Status:** ✅ Both required checks green
 
 **Command (human-only):**
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 gh pr merge 1893 --squash --delete-branch
 ```
 
 **Post-merge updates (agent can perform):**
+
 - Update `DEVONBOARDER_CI_STATUS_2025-12-01.md` (mark P1 complete)
 - Update `GOVERNANCE_IMPLEMENTATION_STATUS.md` (DevOnboarder: v3 compliant)
 - Update `ACTIONS_REPLACEMENT_MATRIX.md` (all 4 migrations complete)
@@ -116,22 +123,25 @@ gh pr merge 1893 --squash --delete-branch
 **For each PR (1694, 1810, 1813, etc.):**
 
 1. **Check required checks status:**
+
 ```bash
 gh pr view NNNN --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)" or .name == "Validate Actions Policy Compliance") | {name, status, conclusion}'
 ```
 
-2. **Check conflicts with main:**
+1. **Check conflicts with main:**
+
 ```bash
 gh pr view NNNN --json mergeable,mergeStateStatus
 ```
 
-3. **Review files changed:**
+1. **Review files changed:**
+
 ```bash
 gh pr view NNNN --json files --jq '.files[].path'
 ```
 
-4. **Update triage table** with findings:
+1. **Update triage table** with findings:
    - qc-gate-minimum: ✅/❌/⏸️ (pending)
    - Actions Policy: ✅/❌/N/A
    - Other Red Checks: List (informational)
@@ -142,10 +152,12 @@ gh pr view NNNN --json files --jq '.files[].path'
 ### Phase 3: Close Superseded PRs
 
 **Likely Candidates:**
+
 - #1885 (FIX: pin actions to SHAs) - Superseded by #1893
 - #1888 (FEAT: actions policy enforcement) - Superseded by #1893
 
 **Process:**
+
 ```bash
 gh pr close NNNN --comment "Superseded by #1893 (actions policy migration). Changes incorporated into comprehensive v3 compliance work."
 ```
@@ -178,10 +190,12 @@ gh pr close NNNN --comment "Superseded by #1893 (actions policy migration). Chan
 ### Phase 5: Feature/Code PRs (Manual Review)
 
 **High Priority:**
+
 - #1694 (dark mode toggle) - 63 days old, may be stale
 - #1813 (token expiry monitoring) - 52 days old, feature PR
 
 **Review Criteria:**
+
 1. Does feature still align with current architecture?
 2. Required checks status?
 3. Conflicts with main?
@@ -194,11 +208,13 @@ gh pr close NNNN --comment "Superseded by #1893 (actions policy migration). Chan
 ### Phase 6: Cleanup/Infra PRs
 
 **Candidates:**
+
 - #1815 (DevOnboarder workspace organization) - 52 days old
 - #1816 (main branch garbage removal) - 52 days old
 - #1872 (CODEOWNERS catch-all) - 29 days old
 
 **Strategy:**
+
 1. Check for conflicts with #1893 changes
 2. Evaluate if still relevant post-QC refactor
 3. Required checks status
@@ -226,6 +242,7 @@ This triage is **complete** when:
 **Execute Phase 2:** Systematic PR analysis
 
 **Command pattern:**
+
 ```bash
 # For each PR number from inventory
 for PR in 1694 1810 1813 1815 1816 1855 1857 1862 1863 1864 1865 1866 1867 1868 1869 1871 1872 1874 1875 1876 1878 1879 1880 1881 1882 1883 1884 1885 1888; do

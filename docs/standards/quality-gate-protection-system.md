@@ -439,7 +439,7 @@ If you suspect quality gates are not functioning:
 
    - Virtual environment inactive: `source .venv/bin/activate`
 
-1. **Recovery Process:**
+2. **Recovery Process:**
 
    ```bash
 
