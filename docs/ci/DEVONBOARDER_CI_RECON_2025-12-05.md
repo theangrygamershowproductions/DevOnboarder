@@ -209,7 +209,13 @@ Validate Permissions
 **Assumptions** (to be verified):
 
 - **validate-yaml**: ⏸️ Unknown (likely green, basic syntax check)
-- **markdownlint**: ⏸️ Unknown (may have failures, not blocking)
+- **markdownlint**: ❌ **FAILING** (837 errors as of 2025-12-06)
+  - **Status**: MD060 (table formatting) failing ~823 times (98% of errors)
+  - **Decision**: Check intentionally remains **enabled and red**
+  - **Rationale**: No lint rule relaxation for convenience (AI Operating Invariants)
+  - **v3 Progress**: 664 violations auto-fixed (PR in progress)
+  - **v4 Scope**: Remaining 837 errors tracked for Phase 4 cleanup
+  - **Tracking**: Documented as Phase 4 debt, not silenced
 
 ---
 
