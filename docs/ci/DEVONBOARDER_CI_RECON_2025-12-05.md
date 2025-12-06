@@ -53,7 +53,7 @@ codex_type: "reconnaissance"
 <details>
 <summary>Complete Workflow List (Click to expand)</summary>
 
-```
+```text
 AAR Automation (GPG Signed)
 Actions Policy Enforcement
 After Action Report (AAR) Generator
@@ -249,7 +249,7 @@ Validate Permissions
 
 ### 4.2 Decision Tree
 
-```
+```text
 Workflow failing?
 ├─ Is it a REQUIRED check?
 │  ├─ YES → v3-BLOCKING (P0)
