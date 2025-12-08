@@ -54,4 +54,4 @@ numpy
 pandas
 
 # Pre-commit (from requirements-dev.txt)
-pre-commit==4.2.0
+pre-commit==4.5.0
