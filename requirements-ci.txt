@@ -35,7 +35,7 @@ openapi-spec-validator==0.7.2
 # Code quality tools (from requirements-dev.txt)
 ruff==0.14.1
 black
-mypy==1.18.2
+mypy==1.19.0
 types-requests
 
 # Security scanning (from requirements-dev.txt)
