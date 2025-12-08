@@ -44,7 +44,7 @@ bandit==1.8.6
 
 # Documentation linting (from requirements-dev.txt)
 vale==3.12.0.2
-language-tool-python==2.9.4
+language-tool-python==3.1.0
 
 # Phase 5: Advanced Orchestration dependencies (from pyproject.toml)
 aiohttp
