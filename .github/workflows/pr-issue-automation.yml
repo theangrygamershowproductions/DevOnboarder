@@ -71,7 +71,7 @@ jobs:
                 echo "Using token source for PR Issue Automation: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
             - name: Checkout code
-              uses: actions/checkout@v5
+              uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
 
             - name: Setup GitHub CLI
               uses: ./.github/actions/setup-gh-cli

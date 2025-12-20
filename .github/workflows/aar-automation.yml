@@ -79,7 +79,7 @@ jobs:
           echo "Using token source for AAR: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         with:
           token: ${{ steps.set-token.outputs.selected-token }}
           fetch-depth: 0
@@ -217,7 +217,7 @@ jobs:
 
       - name: Create follow-up issue for action items
         if: github.event_name == 'issues'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const issueNumber = context.issue.number;
@@ -258,7 +258,7 @@ jobs:
 
       - name: Create follow-up issue for PR action items
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
@@ -301,7 +301,7 @@ jobs:
 
       - name: Comment on PR with AAR link
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
@@ -335,7 +335,7 @@ jobs:
 
       - name: Comment on Issue with AAR link
         if: github.event_name == 'issues'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const issueNumber = context.issue.number;
@@ -382,7 +382,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload AAR artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: aar-files-${{ github.run_number }}
           path: |

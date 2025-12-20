@@ -174,7 +174,7 @@ runs:
 
     - name: Upload CI Health Monitoring Logs
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: ci-health-monitor-${{ inputs.workflow-name }}-${{ github.run_number }}
         path: logs/ci_health_monitor_*.log

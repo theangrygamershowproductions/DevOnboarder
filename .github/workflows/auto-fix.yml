@@ -63,7 +63,7 @@ jobs:
                   find .github/workflows \( -name "*.yml" -o -name "*.yaml" \) -print0 | xargs -0 yamllint -c .github/.yamllint-config | tee yamllint.log || true
             - name: Download CI logs
               if: github.event.workflow_run.conclusion == 'success'
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
               with:
                   run-id: ${{ github.event.workflow_run.id }}
                   name: ci-logs
@@ -120,7 +120,7 @@ jobs:
             - name: Apply patch
               run: git apply patch.diff
             - name: Create pull request
-              uses: peter-evans/create-pull-request@v6
+              uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
               with:
                   commit-message: "CHORE(auto-fix): apply patch from OpenAI"
                   branch: auto-fix/${{ steps.pr-info.outputs.head_sha }}

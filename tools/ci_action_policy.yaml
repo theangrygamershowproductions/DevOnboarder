@@ -1,0 +1,51 @@
+# CI action governance policy
+version: 1
+
+# Default stance: deterministic and SHA-pinned.
+defaults:
+  sha_only: true            # require full 40-char commit SHA after "@"
+  allow_local_actions: true # allow uses: ./.github/actions/foo
+  allow_docker_actions: false
+  allow_expressions: false  # deny uses with ${{ ... }} in the ref
+
+# These owners are allowed without per-repo allowlisting (still must be SHA-pinned).
+trusted_owners:
+  - actions
+  - github
+
+# Explicit allowlist for vendor actions (still must be SHA-pinned unless overridden).
+allow:
+  - action: SonarSource/sonarqube-scan-action
+    rationale: "Sonar scanning in CI; official vendor action."
+  - action: SonarSource/sonarqube-quality-gate-action
+    rationale: "Sonar quality gate enforcement; official vendor action."
+
+  - action: bitwarden/sm-action
+    rationale: "Secrets Manager integration for CI; requires minimal scoped secrets."
+    notes: "Pin to SHA; avoid v-tags in production workflows."
+
+  - action: peter-evans/create-pull-request
+    rationale: "PR automation; widely used. Must be SHA-pinned."
+
+  - action: dorny/paths-filter
+    rationale: "Path-based workflow gating; must be SHA-pinned."
+
+  - action: docker/setup-buildx-action
+    rationale: "Buildx support; must be SHA-pinned."
+
+  # Prefer CLI install for uv. Keep only if you truly need its caching/UX.
+  - action: astral-sh/setup-uv
+    rationale: "Optional. Prefer `python -m pip install uv` unless action is required."
+    notes: "If retained, must be SHA-pinned."
+
+# Hard deny patterns (match against the full uses string).
+deny_uses_regex:
+  - '@main(\b|$)'
+  - '@master(\b|$)'
+  - '@HEAD(\b|$)'
+  - '@refs/heads/'
+  - '^docker://'
+
+# Optional: forbid whole orgs or repos even if otherwise allowed.
+deny_actions:
+  # - someOwner/someRepo
