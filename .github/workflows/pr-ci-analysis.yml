@@ -21,8 +21,8 @@ jobs:
       actions: read
 
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+      - uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236  # TAGS-SHA-PIN: actions/setup-python@v4.7.1 (2025-01-03)
         with:
           python-version: "3.12"
 

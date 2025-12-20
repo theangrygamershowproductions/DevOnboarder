@@ -22,8 +22,11 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+            - name: Install yamllint
+              run: pip install --user yamllint
+            - name: Run yamllint
+              run: find . -name '*.yml' -o -name '*.yaml' | xargs yamllint -c .yamllint
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
@@ -31,7 +34,7 @@ jobs:
         needs: validate-yaml
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
             - name: Install GitHub CLI
               uses: ./.github/actions/setup-gh-cli
               with:

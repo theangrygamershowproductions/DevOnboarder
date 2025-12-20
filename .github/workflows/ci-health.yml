@@ -26,8 +26,11 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+            - name: Install yamllint
+              run: pip install --user yamllint
+            - name: Run yamllint
+              run: find . -name '*.yml' -o -name '*.yaml' | xargs yamllint -c .yamllint
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
@@ -38,7 +41,7 @@ jobs:
         outputs:
             list: ${{ steps.set.outputs.list }}
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
               with:
                   fetch-depth: 0
             - name: Fetch branches
@@ -68,7 +71,7 @@ jobs:
                 python-version: ["3.12"]
                 node-version: ["22"]
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
               with:
                   fetch-depth: 0
                   ref: ${{ matrix.branch }}
@@ -124,7 +127,7 @@ jobs:
                 fi
                 echo "Using token source for CI Health: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e  # TAGS-SHA-PIN: actions/download-artifact@v4.1.7 (2025-01-03)
               with:
                   path: results
             - name: Install GitHub CLI

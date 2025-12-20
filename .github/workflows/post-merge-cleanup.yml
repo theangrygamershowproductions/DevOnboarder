@@ -42,7 +42,7 @@ jobs:
                 fi
                 echo "Using token source for Post-Merge Cleanup: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
 
             - name: Set up Python
               uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c

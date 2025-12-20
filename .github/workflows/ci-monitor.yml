@@ -21,8 +21,11 @@ jobs:
     validate-yaml:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
-            - uses: ibiqlik/action-yamllint@v3
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+            - name: Install yamllint
+              run: pip install --user yamllint
+            - name: Run yamllint
+              run: find . -name '*.yml' -o -name '*.yaml' | xargs yamllint -c .yamllint
               with:
                   file_or_dir: ".github/workflows/**/*.yml"
                   config_file: .github/.yamllint-config
@@ -50,7 +53,7 @@ jobs:
                 fi
                 echo "Using token source for CI Monitor: $(cat $GITHUB_OUTPUT | grep token-source | cut -d= -f2)"
 
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e  # TAGS-SHA-PIN: actions/download-artifact@v4.1.7 (2025-01-03)
               if: github.event.workflow_run.conclusion == 'failure'
               with:
                   run-id: ${{ github.event.workflow_run.id }}

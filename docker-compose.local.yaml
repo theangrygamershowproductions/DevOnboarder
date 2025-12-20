@@ -1,0 +1,176 @@
+# DevOnboarder local stack (no Traefik/Cloudflare)
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+    target: development
+  env_file:
+    - .env.local
+  working_dir: /app
+  volumes:
+    - ./src:/app/src
+    - ./logs:/app/logs
+  networks:
+    - devonboarder_local
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: devonboarder-db-local
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-devuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpass}
+      POSTGRES_DB: ${POSTGRES_DB:-devdb}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - devonboarder_db_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devuser} -d ${POSTGRES_DB:-devdb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - devonboarder_local
+
+  auth:
+    <<: *app-base
+    container_name: devonboarder-auth-local
+    command: ["devonboarder-auth"]
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8002:8002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    <<: *app-base
+    container_name: devonboarder-backend-local
+    command: ["devonboarder-api"]
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  discord-integration:
+    <<: *app-base
+    container_name: devonboarder-discord-integration-local
+    command: ["devonboarder-integration"]
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  dashboard:
+    <<: *app-base
+    container_name: devonboarder-dashboard-local
+    command: ["python", "-m", "devonboarder.dashboard_service"]
+    depends_on:
+      auth:
+        condition: service_healthy
+    environment:
+      DASHBOARD_HOST: ${DASHBOARD_HOST:-0.0.0.0}
+    ports:
+      - "8003:8003"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    env_file:
+      - .env.local
+    container_name: devonboarder-frontend-local
+    depends_on:
+      auth:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+      discord-integration:
+        condition: service_healthy
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+    networks:
+      - devonboarder_local
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  bot:
+    build:
+      context: .
+      dockerfile: bot/Dockerfile.dev
+    env_file:
+      - .env.local
+    container_name: devonboarder-bot-local
+    depends_on:
+      auth:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    command: ["npm", "run", "dev"]
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./bot/src:/app/src
+      - ./bot/package.json:/app/package.json
+      - ./bot/tsconfig.json:/app/tsconfig.json
+      - ./docs:/docs
+    networks:
+      - devonboarder_local
+    profiles:
+      - bot
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  devonboarder_db_data:
+
+networks:
+  devonboarder_local:
+    driver: bridge

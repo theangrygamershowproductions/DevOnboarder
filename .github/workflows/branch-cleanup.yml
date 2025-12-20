@@ -24,7 +24,7 @@ jobs:
         runs-on: ubuntu-latest
         if: github.event_name == 'schedule' || github.event.label.name == 'codex:cleanup'
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
               with:
                   fetch-depth: 0
             - name: Run cleanup script
