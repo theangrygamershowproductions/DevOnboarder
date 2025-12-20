@@ -38,6 +38,12 @@ allow:
     rationale: "Optional. Prefer `python -m pip install uv` unless action is required."
     notes: "If retained, must be SHA-pinned."
 
+  - action: davidanson/markdownlint-cli2-action
+    rationale: "Markdownlint CI enforcement; must be SHA-pinned."
+
+  - action: ibiqlik/action-yamllint
+    rationale: "Yamllint CI enforcement; must be SHA-pinned."
+
 # Hard deny patterns (match against the full uses string).
 deny_uses_regex:
   - '@main(\b|$)'
