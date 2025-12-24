@@ -1,0 +1,47 @@
+name: Filesystem Scanner Audit
+
+# Prevents reintroduction of unprotected find . patterns or dependency traversal
+# Source: TAGS-META governance pattern (2025-12-24)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - '.pre-commit-config.yaml'
+      - '.gitignore'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scanner-audit:
+    runs-on: [self-hosted, tagsdev]
+    name: Filesystem Scanner Audit
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run scanner audit
+        run: |
+          chmod +x scripts/audit_filesystem_scanners.sh
+          ./scripts/audit_filesystem_scanners.sh
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Filesystem Scanner Audit completed"
+          echo "See: scripts/audit_filesystem_scanners.sh for details"
