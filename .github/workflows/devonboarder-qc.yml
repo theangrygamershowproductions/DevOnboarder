@@ -2,6 +2,10 @@ name: DevOnboarder Quality Control
 
 # Enforce honest QC gates - no fake green lights
 # Blocks PRs if coverage <95% or tests fail
+#
+# IMPORTANT: This workflow ALWAYS runs on PRs (no path filter) to ensure
+# the required check context is created. Docs-only PRs get a fast noop success.
+# This prevents branch protection bypass for docs-only changes.
 
 on:
   push:
@@ -20,14 +24,7 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'backend/**'
-      - 'bot/**'
-      - 'frontend/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - 'requirements*.txt'
-      - '.github/workflows/devonboarder-qc.yml'
+    # NOTE: No paths filter - always run to provide required check context
 
 jobs:
   qc-gate-minimum:
@@ -42,24 +39,80 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Detect code changes
+      id: changes
+      run: |
+        # Detect if code files changed (vs docs-only PR)
+        # Compare against base branch for PRs, or HEAD~1 for pushes
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          BASE="${{ github.event.pull_request.base.sha }}"
+        else
+          BASE="HEAD~1"
+        fi
+
+        # Check for code-relevant changes
+        CODE_PATHS="backend/ bot/ frontend/ scripts/ tests/ requirements"
+        CODE_CHANGED="false"
+
+        for path in $CODE_PATHS; do
+          if git diff --name-only "$BASE" HEAD 2>/dev/null | grep -q "^${path}"; then
+            CODE_CHANGED="true"
+            break
+          fi
+        done
+
+        echo "code_changed=$CODE_CHANGED" >> $GITHUB_OUTPUT
+        echo "Code changed: $CODE_CHANGED"
+
+        if [ "$CODE_CHANGED" = "false" ]; then
+          echo ""
+          echo "No code changes detected - docs/config-only PR"
+          echo "QC Gate will pass with noop success"
+        fi
+
+    - name: Noop success for docs-only PR
+      if: steps.changes.outputs.code_changed == 'false'
+      run: |
+        echo ""
+        echo "=========================================="
+        echo "QC GATE: DOCS-ONLY PR (NOOP SUCCESS)"
+        echo "=========================================="
+        echo ""
+        echo "No code changes detected in this PR."
+        echo "Skipping full QC validation - docs/config changes only."
+        echo ""
+        echo "Changed paths do not include:"
+        echo "  - backend/**"
+        echo "  - bot/**"
+        echo "  - frontend/**"
+        echo "  - scripts/**"
+        echo "  - tests/**"
+        echo "  - requirements*.txt"
+        echo ""
+        echo "QC Gate passes automatically for non-code PRs."
+        echo ""
+
     - name: Set up Python 3.12
+      if: steps.changes.outputs.code_changed == 'true'
       uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
       with:
         python-version: '3.12.x'
 
     - name: Create virtual environment
+      if: steps.changes.outputs.code_changed == 'true'
       run: |
         python -m venv .venv
         echo "Virtual environment created"
 
     - name: Run Minimal QC Gate
+      if: steps.changes.outputs.code_changed == 'true'
       id: gate
       run: |
         source .venv/bin/activate
         ./scripts/devon_qc.sh --gate-only
 
     - name: Report Gate Success
-      if: success()
+      if: success() && steps.changes.outputs.code_changed == 'true'
       run: |
         printf 'QC Gate Passed\n'
         echo ""

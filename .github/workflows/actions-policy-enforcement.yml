@@ -4,6 +4,10 @@ name: Actions Policy Enforcement
 # Scope: All workflow files in .github/workflows/
 # Policy: ACTIONS_POLICY.md (TAGS-META)
 # Reference: tags-qa-framework/docs/ACTIONS_REPLACEMENT_MATRIX.md
+#
+# IMPORTANT: This workflow ALWAYS runs on PRs (no path filter) to ensure
+# the required check context is created. Non-workflow PRs get a fast noop success.
+# This prevents branch protection bypass for docs-only changes.
 
 on:
   push:
@@ -12,9 +16,7 @@ on:
       - '.github/workflows/**/*.yml'
       - '.github/workflows/**/*.yaml'
   pull_request:
-    paths:
-      - '.github/workflows/**/*.yml'
-      - '.github/workflows/**/*.yaml'
+    # NOTE: No paths filter - always run to provide required check context
 
 jobs:
   validate-actions-policy:
@@ -24,8 +26,55 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)
+        with:
+          fetch-depth: 0
+
+      - name: Detect workflow changes
+        id: changes
+        run: |
+          # Detect if workflow files changed (vs non-workflow PR)
+          # Compare against base branch for PRs, or HEAD~1 for pushes
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE="HEAD~1"
+          fi
+
+          # Check for workflow changes
+          WORKFLOW_CHANGED="false"
+          if git diff --name-only "$BASE" HEAD 2>/dev/null | grep -qE "^\.github/workflows/.*\.(yml|yaml)$"; then
+            WORKFLOW_CHANGED="true"
+          fi
+
+          echo "workflow_changed=$WORKFLOW_CHANGED" >> $GITHUB_OUTPUT
+          echo "Workflow files changed: $WORKFLOW_CHANGED"
+
+          if [ "$WORKFLOW_CHANGED" = "false" ]; then
+            echo ""
+            echo "No workflow changes detected - non-workflow PR"
+            echo "Actions Policy check will pass with noop success"
+          fi
+
+      - name: Noop success for non-workflow PR
+        if: steps.changes.outputs.workflow_changed == 'false'
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "ACTIONS POLICY: NON-WORKFLOW PR (NOOP SUCCESS)"
+          echo "=========================================="
+          echo ""
+          echo "No workflow file changes detected in this PR."
+          echo "Skipping actions policy validation."
+          echo ""
+          echo "Changed paths do not include:"
+          echo "  - .github/workflows/**/*.yml"
+          echo "  - .github/workflows/**/*.yaml"
+          echo ""
+          echo "Actions Policy check passes automatically for non-workflow PRs."
+          echo ""
 
       - name: Check for banned third-party actions
+        if: steps.changes.outputs.workflow_changed == 'true'
         id: check-banned
         run: |
           echo "Checking for banned third-party actions..."
@@ -59,6 +108,7 @@ jobs:
           fi
 
       - name: Check for non-allowlisted action owners
+        if: steps.changes.outputs.workflow_changed == 'true'
         id: check-owners
         run: |
           echo "Checking for non-allowlisted action owners..."
@@ -98,6 +148,7 @@ jobs:
           fi
 
       - name: Check SHA pinning compliance
+        if: steps.changes.outputs.workflow_changed == 'true'
         id: check-sha
         run: |
           echo "Checking SHA pinning compliance..."
@@ -131,9 +182,10 @@ jobs:
 
       - name: Report policy violations
         if: |
-          steps.check-banned.outputs.banned_detected == 'true' ||
+          steps.changes.outputs.workflow_changed == 'true' &&
+          (steps.check-banned.outputs.banned_detected == 'true' ||
           steps.check-owners.outputs.violations_detected == 'true' ||
-          steps.check-sha.outputs.tag_refs_detected == 'true'
+          steps.check-sha.outputs.tag_refs_detected == 'true')
         run: |
           echo ""
           echo "=========================================="
@@ -160,6 +212,7 @@ jobs:
 
       - name: Policy compliance confirmed
         if: |
+          steps.changes.outputs.workflow_changed == 'true' &&
           steps.check-banned.outputs.banned_detected != 'true' &&
           steps.check-owners.outputs.violations_detected != 'true' &&
           steps.check-sha.outputs.tag_refs_detected != 'true'
