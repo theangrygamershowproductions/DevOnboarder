@@ -1,0 +1,50 @@
+{
+    "$schema": "./schemas/project.manifest.schema.json",
+    "project": {
+        "id": "DEVONBOARDER_SERVICE_INTEGRATION",
+        "name": "DevOnboarder Service Integration",
+        "description": "Multi-service integration validation for FastAPI backend, React frontend, and Discord bot",
+        "repository": "theangrygamershowproductions/DevOnboarder",
+        "created_at": "2025-12-24T04:10:00Z",
+        "updated_at": "2025-12-24T04:10:00Z",
+        "status": "active",
+        "owner": "@theangrygamershowproductions"
+    },
+    "triage": {
+        "report_path": "docs/triage/SERVICE_INTEGRATION_TRIAGE.md",
+        "approved_at": "2025-12-24T04:10:00Z",
+        "approved_by": "@theangrygamershowproductions"
+    },
+    "phases": [
+        {
+            "id": "DEVONBOARDER_PHASE_001",
+            "title": "Service Integration & CORS Validation",
+            "status": "active",
+            "plan_path": "docs/phases/DEVONBOARDER_PHASE_001_PLAN.md",
+            "closeout_path": null,
+            "start_date": "2025-12-24",
+            "end_date": null,
+            "issues": [
+                1893,
+                1932
+            ]
+        }
+    ],
+    "current_phase": "DEVONBOARDER_PHASE_001",
+    "governance": {
+        "enforcement_enabled": false,
+        "lock_file_path": ".tgs/phase.lock.json",
+        "require_triage_approval": false,
+        "require_phase_closeout": false
+    },
+    "metadata": {
+        "schema_version": "1.0.0",
+        "generator": "manual",
+        "tags": [
+            "pilot",
+            "phase-governance",
+            "wave-1"
+        ],
+        "notes": "PILOT: First real use of Phase Governance System in DevOnboarder"
+    }
+}

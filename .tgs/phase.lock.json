@@ -1,0 +1,48 @@
+{
+    "$schema": "./schemas/phase.lock.schema.json",
+    "lock": {
+        "phase_id": "DEVONBOARDER_PHASE_001",
+        "locked_at": "2025-12-24T04:10:00Z",
+        "locked_by": "@theangrygamershowproductions",
+        "reason": "Focused execution on Service Integration & CORS Validation",
+        "expires_at": "2025-12-27T23:59:59Z"
+    },
+    "scope": {
+        "allowed_issue_ids": [
+            1893,
+            1932
+        ],
+        "allowed_paths": [
+            "docs/triage/SERVICE_INTEGRATION_TRIAGE.md",
+            "docs/phases/DEVONBOARDER_PHASE_001_*.md",
+            "docs/LOCAL_DEV_SETUP.md",
+            "docs/INTEGRATION_REQUIREMENTS.md",
+            "backend/app/core/config.py",
+            "docker-compose*.yaml",
+            ".tgs/PROJECT_MANIFEST.json",
+            ".tgs/phase.lock.json"
+        ],
+        "blocked_paths": [
+            "docs/phases/DEVONBOARDER_PHASE_002_*",
+            "frontend/src/features/*"
+        ]
+    },
+    "enforcement": {
+        "block_unscoped_commits": false,
+        "block_unscoped_prs": false,
+        "warn_only": true,
+        "bypass_users": [
+            "@theangrygamershowproductions"
+        ]
+    },
+    "status": {
+        "active": true,
+        "violations": [],
+        "last_checked": "2025-12-24T04:10:00Z"
+    },
+    "metadata": {
+        "schema_version": "1.0.0",
+        "manifest_path": ".tgs/PROJECT_MANIFEST.json",
+        "notes": "PILOT: Informational lock only - enforcement not active (Wave 2)"
+    }
+}
