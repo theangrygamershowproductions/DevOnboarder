@@ -1,3 +1,27 @@
+# =============================================================================
+# GLOBAL EXCLUDE PATTERN - NEVER SCAN THESE DIRECTORIES
+# =============================================================================
+# Policy: NEVER scan dependencies, build outputs, caches, or vendored code.
+# =============================================================================
+exclude: |
+  (?x)^(
+    (.*/)?node_modules/.*|
+    (.*/)?\.venv/.*|
+    (.*/)?venv/.*|
+    (.*/)?__pycache__/.*|
+    (.*/)?\.pytest_cache/.*|
+    (.*/)?\.mypy_cache/.*|
+    (.*/)?\.ruff_cache/.*|
+    (.*/)?build/.*|
+    (.*/)?dist/.*|
+    (.*/)?\.git/.*|
+    (.*/)?coverage/.*|
+    (.*/)?\.coverage/.*|
+    (.*/)?htmlcov/.*|
+    (.*/)?\.vscode-test/.*|
+    (.*/)?\.cache/.*
+  )$
+
 ---
 repos:
     - repo: https://github.com/psf/black
@@ -30,7 +54,7 @@ repos:
             files: '\.(md|txt|rst)$'
             args: ["--ignore-words=.codespell-ignore"]
     - repo: https://github.com/DavidAnson/markdownlint-cli2
-      rev: v0.18.1
+      rev: 7339935a3036f096ee0d7f1f047a9ec41707d4c1  # v0.20.0
       hooks:
           - id: markdownlint-cli2
             files: '\.md$'
