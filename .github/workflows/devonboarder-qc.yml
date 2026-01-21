@@ -62,7 +62,7 @@ jobs:
         done
 
         echo "code_changed=$CODE_CHANGED" >> $GITHUB_OUTPUT
-        echo "Code changed: $CODE_CHANGED"
+        printf 'Code changed: %s\n' "$CODE_CHANGED"
 
         if [ "$CODE_CHANGED" = "false" ]; then
           echo ""

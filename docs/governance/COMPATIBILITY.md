@@ -58,13 +58,17 @@ uses: actions/checkout@v4
 
 ### Reusable Workflows
 
-Consumed from `tags-workflows` with immutable version tags:
+Consumed from `tags-workflows` with **ruleset-protected** version tags:
 
 ```yaml
 uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@v1.0.0
 ```
 
 **Policy**: Only use tagged releases (e.g., `@v1.0.0`), never branch refs.
+
+> **Note**: The `tags-workflows` repository uses GitHub rulesets to protect `v*` tags from deletion
+> and modification, making them effectively immutable. This differs from unprotected tags on
+> arbitrary marketplace actions, which remain mutable.
 
 ## CI vs Local Enforcement
 
@@ -149,6 +153,6 @@ Test in a PR before merging.
 
 ## References
 
-- [TWO_TIER_RUNNER_POLICY.md](../../../TAGS-META/docs/governance/TWO_TIER_RUNNER_POLICY.md) — Full runner policy
-- [ACTIONS_POLICY.md](../../../TAGS-META/ACTIONS_POLICY.md) — SHA pinning requirements
+- [TWO_TIER_RUNNER_POLICY.md](https://github.com/theangrygamershowproductions/TAGS-META/blob/main/docs/governance/TWO_TIER_RUNNER_POLICY.md) — Full runner policy
+- [ACTIONS_POLICY.md](https://github.com/theangrygamershowproductions/TAGS-META/blob/main/ACTIONS_POLICY.md) — SHA pinning requirements
 - [tags-workflows](https://github.com/theangrygamershowproductions/tags-workflows) — Reusable CI platform

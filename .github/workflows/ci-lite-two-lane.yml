@@ -8,12 +8,19 @@ name: CI Lite (Two-Lane via tags-workflows)
 #   Lane 2 (main-ci): Trusted pushes to main run with full capabilities
 #
 # IMMUTABLE TAG: Pinned to v1.0.0 - protected by tags-workflows ruleset
+#   (Ruleset "Immutable Release Tags" blocks deletion/update of v* tags)
+#
+# ALLOWLIST: theangrygamershowproductions org is allowlisted in actions-policy-enforcement.yml
 
 on:
   pull_request:
   push:
     branches: [main]
 
+# NOTE: Global permissions set to minimum. The reusable workflow
+# defines its own permissions based on the 'trusted' parameter.
+# Lane 1 (untrusted) inherits read-only. Lane 2 (trusted) gets
+# elevated permissions from the called workflow's permission block.
 permissions:
   contents: read
 
@@ -27,8 +34,11 @@ jobs:
       trusted: false
 
   # Lane 2: Trusted branch CI (self-hosted, secrets allowed)
+  # NOTE: Secrets are inherited automatically when trusted=true
+  # per GitHub Actions reusable workflow semantics
   main-ci:
     if: github.event_name == 'push'
     uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@v1.0.0
+    secrets: inherit
     # runner defaults to [self-hosted, tagsdev] per workflow defaults
     # trusted defaults to true
