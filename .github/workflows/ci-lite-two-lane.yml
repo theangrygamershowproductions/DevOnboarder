@@ -1,0 +1,34 @@
+name: CI Lite (Two-Lane via tags-workflows)
+
+# PURPOSE: Demonstrate consuming tags-workflows reusable workflow
+# with the two-lane pattern for public repositories
+#
+# TWO-LANE PATTERN:
+#   Lane 1 (pr-validate): Untrusted PR code runs on GitHub-hosted, no secrets
+#   Lane 2 (main-ci): Trusted pushes to main run with full capabilities
+#
+# IMMUTABLE TAG: Pinned to v1.0.0 - protected by tags-workflows ruleset
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # Lane 1: Untrusted PR validation (GitHub-hosted, no secrets)
+  pr-validate:
+    if: github.event_name == 'pull_request'
+    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@v1.0.0
+    with:
+      runner: ubuntu-latest
+      trusted: false
+
+  # Lane 2: Trusted branch CI (self-hosted, secrets allowed)
+  main-ci:
+    if: github.event_name == 'push'
+    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@v1.0.0
+    # runner defaults to [self-hosted, tagsdev] per workflow defaults
+    # trusted defaults to true
