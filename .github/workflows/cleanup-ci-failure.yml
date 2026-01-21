@@ -37,7 +37,7 @@ jobs:
 
             - name: Lint YAML files and save log
               run: |
-                  yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml' | tee yamllint.log || true
+                  find .github/workflows -name '*.yml' -o -name '*.yaml' | xargs yamllint -c .github/.yamllint-config | tee yamllint.log || true
 
             - name: Upload yamllint log
               if: always()

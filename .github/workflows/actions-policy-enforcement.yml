@@ -47,7 +47,7 @@ jobs:
           fi
 
           echo "workflow_changed=$WORKFLOW_CHANGED" >> $GITHUB_OUTPUT
-          echo "Workflow files changed: $WORKFLOW_CHANGED"
+          printf 'Workflow files changed: %s\n' "$WORKFLOW_CHANGED"
 
           if [ "$WORKFLOW_CHANGED" = "false" ]; then
             echo ""
@@ -129,11 +129,12 @@ jobs:
             owner=$(echo "$ref" | cut -d'/' -f1)
 
             # Check if owner is allowlisted
-            if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." ]]; then
+            # Allowed: actions/*, docker/*, . (local), theangrygamershowproductions/* (org internal)
+            if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." && "$owner" != "theangrygamershowproductions" ]]; then
               printf 'ERROR: Non-allowlisted action owner: %s\n' "${owner}"
               printf '   Full reference: %s\n' "${ref}"
               echo ""
-              echo "Only 'actions/*' and 'docker/*' actions are allowed by v3 policy."
+              echo "Only 'actions/*', 'docker/*', and 'theangrygamershowproductions/*' actions are allowed."
               echo "Third-party actions must be replaced with first-party + scripts."
               echo ""
               VIOLATIONS_FOUND=true
@@ -199,11 +200,11 @@ jobs:
           echo "2. Consult tags-qa-framework/docs/ACTIONS_REPLACEMENT_MATRIX.md"
           echo "3. Replace banned actions with approved alternatives"
           echo "4. Ensure all actions are SHA-pinned to 40-char commit hash"
-          echo "5. Verify action owners are 'actions/*' or 'docker/*' only"
+          echo "5. Verify action owners are allowlisted"
           echo ""
           echo "Policy Enforcement:"
           echo "- Banned actions: Explicitly forbidden by name"
-          echo "- Non-allowlisted owners: Only GitHub (actions/*) and Docker (docker/*) allowed"
+          echo "- Non-allowlisted owners: Only actions/*, docker/*, theangrygamershowproductions/* allowed"
           echo "- Tag-based refs: Must use full SHA, not tags like @v4"
           echo ""
           echo "This check will fail until all violations are resolved."
@@ -224,7 +225,7 @@ jobs:
           echo ""
           echo "All workflow changes comply with v3 Actions Policy:"
           echo "  - No banned third-party actions detected"
-          echo "  - All action owners are allowlisted (actions/* or docker/*)"
+          echo "  - All action owners are allowlisted (actions/*, docker/*, org internal)"
           echo "  - All actions are SHA-pinned (no tag-based references)"
           echo ""
           echo "Policy enforcement layers:"
