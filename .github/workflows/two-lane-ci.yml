@@ -4,6 +4,9 @@
 # - Lane 1 (pull_request): GitHub-hosted, no secrets, minimal validation
 # - Lane 2 (push to main): Can use secrets for deployment/publishing
 #
+# SECURITY: Fork PRs CANNOT access secrets (GitHub policy). This workflow enforces
+# explicit separation to make the security model clear and auditable.
+#
 # See: docs/governance/TWO_TIER_RUNNER_POLICY.md in TAGS-META
 
 name: Two-Lane CI
@@ -13,9 +16,15 @@ on:
   push:
     branches: [main]
 
+# SECURITY: Minimal permissions for untrusted code paths
 permissions:
   contents: read
   pull-requests: write
+
+env:
+  # SECURITY: Detect fork PRs to explicitly gate any secret-dependent steps
+  # This is defense-in-depth - GitHub already blocks fork PR secret access
+  IS_FORK_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
 
 jobs:
   # ============================================================================
@@ -25,6 +34,11 @@ jobs:
   # - Uses GitHub-hosted runners (ubuntu-latest)
   # - NO secrets available (fork PRs can't access secrets anyway)
   # - Fast validation: lint, type-check, basic tests
+  #
+  # SECURITY CONTROLS:
+  # - GitHub-hosted runner (no self-hosted exposure)
+  # - No secrets: block
+  # - permissions: read-only minimum
   #
   validate-pr:
     name: "PR Validation (Lane 1)"
@@ -80,6 +94,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Runner**: GitHub-hosted (ubuntu-latest)" >> $GITHUB_STEP_SUMMARY
           echo "**Secrets**: Not available (untrusted context)" >> $GITHUB_STEP_SUMMARY
+          echo "**Fork PR**: ${{ env.IS_FORK_PR }}" >> $GITHUB_STEP_SUMMARY
           echo "**Scope**: Lint, type-check, basic validation" >> $GITHUB_STEP_SUMMARY
 
   # ============================================================================
@@ -88,6 +103,11 @@ jobs:
   # - Runs ONLY on push to main (after PR merge)
   # - Can use secrets for deployment, publishing, etc.
   # - Full CI including integration tests
+  #
+  # SECURITY CONTROLS:
+  # - Only runs on push (not pull_request)
+  # - Explicit github.ref check to ensure main branch only
+  # - Secrets available (trusted context - code has been reviewed and merged)
   #
   # NOTE: For DevOnboarder (public), we still use GitHub-hosted runners
   # to avoid self-hosted exposure. Secrets are available for trusted pushes.
