@@ -147,6 +147,13 @@ for check_name in "${ADVISORY_CHECKS[@]}"; do
 done
 echo ""
 
+# Check merge state
+echo "Merge State:"
+echo "────────────"
+echo "  Mergeable: $MERGEABLE"
+echo "  Merge state: $MERGE_STATE"
+echo ""
+
 # Check review state
 echo "Review State:"
 echo "─────────────"
