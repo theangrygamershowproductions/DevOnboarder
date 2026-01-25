@@ -66,7 +66,8 @@ jobs:
           token: ${{ steps.set-token.outputs.selected-token }}
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.head_ref }}
-          persist-credentials: false
+          # persist-credentials: true required for fetch-depth: 0 to work
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548  # TAGS-SHA-PIN: actions/setup-python@v6.1.0 (2025-11-24)
