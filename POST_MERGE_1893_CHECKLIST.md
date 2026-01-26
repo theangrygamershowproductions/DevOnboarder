@@ -13,6 +13,7 @@ gh pr view 1893 --json state,mergedAt,mergedBy
 ```
 
 **Result**:
+
 - `state: "MERGED"` ✅
 - `mergedAt: "2025-12-03T05:55:24Z"` ✅
 - `mergedBy: "reesey275"` ✅
@@ -29,12 +30,14 @@ gh pr view 1893 --json state,mergedAt,mergedBy
 Local `main` has diverged from `origin/main`:
 
 **Local-only commits** (not on origin/main):
+
 ```
 dc93a311 FEAT(ci): add actions policy enforcement
 c44024d0 FIX(ci): pin all GitHub Actions to full commit SHAs
 ```
 
 **Remote commits** (not in local main):
+
 ```
 5f75e7ab CI: DevOnboarder actions policy migration (v3 compliance) (#1893)
 ```
@@ -48,6 +51,7 @@ c44024d0 FIX(ci): pin all GitHub Actions to full commit SHAs
 ### Fix: Align Local to Remote
 
 **Current state**:
+
 - Local main has 2 commits not on origin/main (the pre-squash commits)
 - Remote has 1 commit not in local main (the squashed PR commit)
 - **15 untracked documentation files** from this session
@@ -92,6 +96,7 @@ git branch backup/main-before-reset
 ```
 
 **What safe_main_repair.sh does**:
+
 - Creates rescue bundle automatically
 - Shows exact divergence (what you're losing)
 - Requires explicit confirmation token
@@ -146,6 +151,7 @@ git pull
 Now execute `CI_DEBT_PROJECT_LINKAGE_PLAN.md`:
 
 ### Phase 1: Verify Preconditions ✅
+
 - [x] PR #1893 merged (confirmed above)
 - [x] v3 docs exist (created in previous session)
 - [ ] Local main aligned to remote
@@ -153,6 +159,7 @@ Now execute `CI_DEBT_PROJECT_LINKAGE_PLAN.md`:
 ### Phase 2: Create v4 Epic Issues
 
 **Command sequence**:
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 
@@ -182,6 +189,7 @@ gh issue create \
 ```
 
 **Capture issue numbers**:
+
 ```bash
 gh issue list --state open --search "v4-epic DevOnboarder" \
   --json number,title,labels \
@@ -191,6 +199,7 @@ gh issue list --state open --search "v4-epic DevOnboarder" \
 ### Phase 3: Add to Projects 4 & 6
 
 **Get project IDs**:
+
 ```bash
 gh project list --owner theangrygamershowproductions \
   --format json --limit 10 \
@@ -198,6 +207,7 @@ gh project list --owner theangrygamershowproductions \
 ```
 
 **Add issues to projects**:
+
 ```bash
 TEAM_PROJ_ID="<ID_FOR_4>"
 ROADMAP_PROJ_ID="<ID_FOR_6>"
@@ -215,12 +225,14 @@ done
 ### Phase 4: Update CI_DEBT_DEVONBOARDER.md
 
 Replace placeholders with actual issue numbers:
+
 ```bash
 # Example: If Terminal Policy epic is #1234
 sed -i 's/#____ (to be created via CI_DEBT_PROJECT_LINKAGE_PLAN.md)/#1234/' CI_DEBT_DEVONBOARDER.md
 ```
 
 Or edit manually to fill in:
+
 - Terminal Policy: `#____`
 - YAML Validation: `#____`
 - Markdownlint: `#____`
@@ -233,19 +245,23 @@ Or edit manually to fill in:
 After epic creation, update:
 
 ### 1. CI_GREEN_CAMPAIGN_STATUS.md
+
 - Remove #1893 from blockers
 - Add "DevOnboarder v3 actions policy: ✅ COMPLETE"
 - Reference v4 debt tracking issues
 
 ### 2. GOVERNANCE_COMPLETION_STATUS.md
+
 - Mark actions policy complete for DevOnboarder
 - Add v4 hardening phase kickoff date (2026+)
 
 ### 3. ACTIONS_MIGRATION_MATRIX.md
+
 - Mark all DevOnboarder workflows as SHA-pinned
 - Update compliance status
 
 ### 4. QC_STANDARDS.md
+
 - Document two-tier QC system (gate vs full)
 - Reference branch protection configuration
 
@@ -254,6 +270,7 @@ After epic creation, update:
 ## What Changed in the Merge
 
 **Files updated** (from PR #1893):
+
 - `.github/workflows/ci.yml`
 - `.github/workflows/markdownlint.yml`
 - `.github/workflows/actions-policy-enforcement.yml`
@@ -262,6 +279,7 @@ After epic creation, update:
 - `.github/workflows/pr-welcome.yml`
 
 **Key changes**:
+
 - All actions SHA-pinned (no more `@v5` tags)
 - Third-party actions replaced with first-party + scripts
 - Actions policy enforcement job added
@@ -272,6 +290,7 @@ After epic creation, update:
 ## Failing Checks: Expected and Classified
 
 **Current red checks on main** (post-merge):
+
 - Automated Terminal Policy Review
 - Terminal Output Policy Enforcement
 - validate-yaml
@@ -281,6 +300,7 @@ After epic creation, update:
 **Classification**: ALL are **v4 scope** (not v3 gates)
 
 **Why they're failing**:
+
 - Pre-date PR #1893 (violations already existed)
 - Scan entire repo for accumulated debt
 - Not specific to actions policy migration
@@ -295,6 +315,7 @@ After epic creation, update:
 ## Success Criteria Checklist
 
 ### DevOnboarder v3 Completion ✅
+
 - [x] PR #1893 merged to main
 - [x] Actions policy compliant (SHA-pinned, allowlisted only)
 - [x] Basic QC gate passing
@@ -303,6 +324,7 @@ After epic creation, update:
 - [ ] Local main aligned to remote (do this next)
 
 ### v4 Debt Management (In Progress)
+
 - [ ] 4 v4 epic issues created
 - [ ] All epics on Projects 4 & 6
 - [ ] Issue numbers filled in CI_DEBT_DEVONBOARDER.md
@@ -313,6 +335,7 @@ After epic creation, update:
 ## Common Mistakes to Avoid
 
 ### ❌ Don't Chase v4 Failures as v3 Work
+
 - Terminal policy violations are v4 scope
 - YAML validation failures are v4 scope
 - Markdownlint failures are v4 scope
@@ -322,11 +345,13 @@ After epic creation, update:
 v4 = "clean up accumulated debt + raise quality bar"
 
 ### ❌ Don't Reopen v3 Work
+
 - PR #1893 is complete and correct
 - Red checks don't invalidate v3 completion
 - Branch protection is the source of truth
 
 ### ❌ Don't Skip GitHub Wiring
+
 - v4 debt must have named epics (no vague "someday")
 - Epics must be on project boards (visible tracking)
 - Documentation must reference issue numbers (no drift)
@@ -336,26 +361,31 @@ v4 = "clean up accumulated debt + raise quality bar"
 ## Quick Commands Reference
 
 **Check merge status**:
+
 ```bash
 gh pr view 1893 --json state,mergedAt
 ```
 
 **Fix local divergence**:
+
 ```bash
 git reset --hard origin/main
 ```
 
 **Create v4 epic**:
+
 ```bash
 gh issue create --title "v4-epic: ..." --body-file CI_DEBT_DEVONBOARDER.md --label "v4-scope" --label "epic"
 ```
 
 **List v4 epics**:
+
 ```bash
 gh issue list --state open --search "v4-epic DevOnboarder"
 ```
 
 **Add to project**:
+
 ```bash
 gh project item-add <PROJECT_ID> --owner theangrygamershowproductions --url "https://github.com/.../issues/<NUM>"
 ```

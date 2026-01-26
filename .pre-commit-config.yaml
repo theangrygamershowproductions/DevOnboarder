@@ -30,7 +30,7 @@ repos:
             files: '\.(md|txt|rst)$'
             args: ["--ignore-words=.codespell-ignore"]
     - repo: https://github.com/DavidAnson/markdownlint-cli2
-      rev: v0.18.1
+      rev: 7339935a3036f096ee0d7f1f047a9ec41707d4c1  # v0.20.0 per issue #1930
       hooks:
           - id: markdownlint-cli2
             files: '\.md$'

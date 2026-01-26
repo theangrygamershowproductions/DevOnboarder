@@ -116,8 +116,8 @@ gh pr view 1893 \
 
 Expected for **merge-ready**:
 
-* `QC Gate (Required - Basic Sanity)` → `status: COMPLETED`, `conclusion: SUCCESS`
-* `Validate Actions Policy Compliance` → `status: COMPLETED`, `conclusion: SUCCESS`
+- `QC Gate (Required - Basic Sanity)` → `status: COMPLETED`, `conclusion: SUCCESS`
+- `Validate Actions Policy Compliance` → `status: COMPLETED`, `conclusion: SUCCESS`
 
 If those two are **not both green**, this document must **NOT** treat #1893 as merge-able.
 
@@ -128,8 +128,8 @@ If those two are **not both green**, this document must **NOT** treat #1893 as m
 Once Step 0 confirms both required checks are ✅:
 
 1. **Merge policy:**
-   * Prefer `--squash` to keep the actions-migration work as a single logical change.
-   * Delete branch after merge (`feat/devon-actions-migration-rollup`).
+   - Prefer `--squash` to keep the actions-migration work as a single logical change.
+   - Delete branch after merge (`feat/devon-actions-migration-rollup`).
 
 2. **Human-only command** (agents must not run this themselves):
 
@@ -138,13 +138,13 @@ cd ~/TAGS/ecosystem/DevOnboarder
 gh pr merge 1893 --squash --delete-branch
 ```
 
-3. **Post-merge actions (agent can perform):**
-   * Pull latest main
-   * Update:
-     * `DEVONBOARDER_CI_STATUS_2025-12-01.md` (mark P1 complete)
-     * `GOVERNANCE_IMPLEMENTATION_STATUS.md` (DevOnboarder v3: compliant)
-     * `ACTIONS_REPLACEMENT_MATRIX.md` (all 4 migrations implemented)
-     * `DEVONBOARDER_V3_V4_QC_STANDARDS.md` (confirm two-tier QC reality)
+1. **Post-merge actions (agent can perform):**
+   - Pull latest main
+   - Update:
+     - `DEVONBOARDER_CI_STATUS_2025-12-01.md` (mark P1 complete)
+     - `GOVERNANCE_IMPLEMENTATION_STATUS.md` (DevOnboarder v3: compliant)
+     - `ACTIONS_REPLACEMENT_MATRIX.md` (all 4 migrations implemented)
+     - `DEVONBOARDER_V3_V4_QC_STANDARDS.md` (confirm two-tier QC reality)
 
 ---
 
@@ -159,22 +159,22 @@ gh pr list --limit 100 --json number,title,headRefName,author,createdAt,isDraft 
   --jq '.[] | {number,title,headRefName,author:.author.login,createdAt,isDraft}'
 ```
 
-2. **Classify each PR into one bucket:**
+1. **Classify each PR into one bucket:**
 
-* **A. Dependabot / tooling-only**
-  * Labeled `dependencies` or `dependabot`.
-  * Only touches lockfiles, pyproject, package.json, etc.
+- **A. Dependabot / tooling-only**
+    - Labeled `dependencies` or `dependabot`.
+    - Only touches lockfiles, pyproject, package.json, etc.
 
-* **B. Infra / CI / governance**
-  * Touches `.github/workflows`, `scripts/`, policy docs.
+- **B. Infra / CI / governance**
+    - Touches `.github/workflows`, `scripts/`, policy docs.
 
-* **C. Feature / code changes**
-  * Touches `backend/`, `bot/`, frontend paths, etc.
+- **C. Feature / code changes**
+    - Touches `backend/`, `bot/`, frontend paths, etc.
 
-* **D. Docs-only**
-  * Touches `docs/`, markdown, metadata.
+- **D. Docs-only**
+    - Touches `docs/`, markdown, metadata.
 
-3. Create a working doc:
+1. Create a working doc:
 
 `PR_TRIAGE_DEVONBOARDER_<YYYY-MM-DD>.md` with a table:
 
@@ -198,13 +198,13 @@ For each PR:
 
 1. Re-run CI against **current main** (rebase or `gh pr checkout` + `git merge main`).
 2. Evaluate **required** checks only:
-   * If `qc-gate-minimum` & actions policy are green:
-     * ✅ Tag as **safe-to-merge**.
-   * If `qc-gate-minimum` fails:
-     * Check if it's a **real regression** (tests/imports broken) vs "old QC debt."
-     * If it breaks imports/tests → **needs fix** or close.
+   - If `qc-gate-minimum` & actions policy are green:
+     - ✅ Tag as **safe-to-merge**.
+   - If `qc-gate-minimum` fails:
+     - Check if it's a **real regression** (tests/imports broken) vs "old QC debt."
+     - If it breaks imports/tests → **needs fix** or close.
 3. If the dependency bump is clearly obsolete / superseded:
-   * Mark as **close (superseded)** in triage doc.
+   - Mark as **close (superseded)** in triage doc.
 
 **Output row example:**
 
@@ -221,20 +221,20 @@ These are **high leverage**. Handle next after Dependabot.
 Rules:
 
 1. If they **conflict** with #1893 changes (actions policy, QC refactor):
-   * Rebase onto new `main` or recreate PR with updated patterns.
+   - Rebase onto new `main` or recreate PR with updated patterns.
 2. CI evaluation:
-   * Must pass:
-     * `qc-gate-minimum`
-     * Actions policy enforcement
-   * Other failures:
-     * Log them.
-     * Only block if **introduced by the PR**, not pre-existing on `main`.
+   - Must pass:
+     - `qc-gate-minimum`
+     - Actions policy enforcement
+   - Other failures:
+     - Log them.
+     - Only block if **introduced by the PR**, not pre-existing on `main`.
 
 Recommendation per PR:
 
-* **merge** – if it meaningfully improves CI/governance and passes required checks.
-* **needs rewrite** – if it reintroduces banned actions or breaks QC gate.
-* **archive** – if it's an old experiment superseded by current reality.
+- **merge** – if it meaningfully improves CI/governance and passes required checks.
+- **needs rewrite** – if it reintroduces banned actions or breaks QC gate.
+- **archive** – if it's an old experiment superseded by current reality.
 
 ---
 
@@ -245,14 +245,14 @@ These are the most likely to be broken by drift.
 Rules:
 
 1. Confirm they still apply:
-   * If target files were heavily refactored since PR was opened → likely **stale**.
+   - If target files were heavily refactored since PR was opened → likely **stale**.
 2. Run quick sanity:
-   * Does `qc-gate-minimum` pass after rebase?
-   * Do tests related to touched area still exist / succeed locally?
+   - Does `qc-gate-minimum` pass after rebase?
+   - Do tests related to touched area still exist / succeed locally?
 3. Recommendations:
-   * **merge soon** – if still relevant & green on required checks.
-   * **rework** – if conflicts, failing required checks, or design is outdated.
-   * **close** – if they no longer match current architecture.
+   - **merge soon** – if still relevant & green on required checks.
+   - **rework** – if conflicts, failing required checks, or design is outdated.
+   - **close** – if they no longer match current architecture.
 
 ---
 
@@ -263,15 +263,15 @@ These are low-risk but often blocked by markdownlint / metadata.
 Rules:
 
 1. If `qc-gate-minimum` passes and actions policy is irrelevant (most of the time):
-   * They are **mergeable** even if markdownlint is mad.
+   - They are **mergeable** even if markdownlint is mad.
 2. But:
-   * If a doc PR explicitly tries to "fix CI docs," ensure it doesn't conflict with new standards in `DEVONBOARDER_V3_V4_QC_STANDARDS.md`.
+   - If a doc PR explicitly tries to "fix CI docs," ensure it doesn't conflict with new standards in `DEVONBOARDER_V3_V4_QC_STANDARDS.md`.
 
 Recommendations:
 
-* Merge if:
-  * No regressions to metadata patterns.
-  * No obvious conflicts with v3/v4 QC standards.
+- Merge if:
+    - No regressions to metadata patterns.
+    - No obvious conflicts with v3/v4 QC standards.
 
 ---
 
@@ -290,11 +290,11 @@ Minimum columns:
 
 Recommendations must be one of:
 
-* `merge`
-* `merge-after-quick-fix`
-* `needs-rework`
-* `close-superseded`
-* `archive/park-for-v4`
+- `merge`
+- `merge-after-quick-fix`
+- `needs-rework`
+- `close-superseded`
+- `archive/park-for-v4`
 
 ---
 
@@ -302,12 +302,12 @@ Recommendations must be one of:
 
 1. **Never claim "merge ready"** unless all branch-protected checks are ✅ green.
 2. **Always distinguish**:
-   * "This PR is bad" vs
-   * "This PR is exposing existing repo debt."
+   - "This PR is bad" vs
+   - "This PR is exposing existing repo debt."
 3. **Do not auto-lower standards silently.**
-   * Any branch protection changes must be explicitly documented in:
-     * `DEVONBOARDER_V3_V4_QC_STANDARDS.md`
-     * A GitHub issue or governance doc.
+   - Any branch protection changes must be explicitly documented in:
+     - `DEVONBOARDER_V3_V4_QC_STANDARDS.md`
+     - A GitHub issue or governance doc.
 
 ---
 
@@ -315,18 +315,18 @@ Recommendations must be one of:
 
 This triage is **done** when:
 
-* PR #1893 is merged to `main`.
-* All ~30 open PRs are:
-  * Merged, or
-  * Explicitly closed, or
-  * Parked with a clear note in the triage report.
-* `qc-gate-minimum` and actions policy remain the only required checks, both green on `main`.
-* `qc-full` and other red checks are:
-  * Documented as **v4 hardening work**.
-  * Not silently ignored.
+- PR #1893 is merged to `main`.
+- All ~30 open PRs are:
+    - Merged, or
+    - Explicitly closed, or
+    - Parked with a clear note in the triage report.
+- `qc-gate-minimum` and actions policy remain the only required checks, both green on `main`.
+- `qc-full` and other red checks are:
+    - Documented as **v4 hardening work**.
+    - Not silently ignored.
 
 At that point, DevOnboarder is:
 
-* v3 actions-policy compliant,
-* CI gates are sane,
-* PR backlog is intentionally handled, not just "red everywhere."
+- v3 actions-policy compliant,
+- CI gates are sane,
+- PR backlog is intentionally handled, not just "red everywhere."

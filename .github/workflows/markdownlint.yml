@@ -23,10 +23,10 @@ jobs:
                   node-version: '22'
 
             - name: Install markdownlint-cli2
-              # Version pinned per ACTIONS_POLICY.md - prevents unexpected behavior from automatic updates
-              # Matches pattern: actions pinned to SHAs, tools pinned to specific versions
+              # SHA-pinned per ACTIONS_POLICY.md and issue #1930
+              # v0.20.0 = 7339935a3036f096ee0d7f1f047a9ec41707d4c1
               # Update via scheduled automation (not floating latest)
-              run: npm install -g markdownlint-cli2@0.13.0
+              run: npm install -g markdownlint-cli2@0.20.0
 
             - name: Run markdownlint-cli2
               run: markdownlint-cli2 --config .markdownlint.json "*.md" "docs/**/*.md" "docs/v1/**/*.md"

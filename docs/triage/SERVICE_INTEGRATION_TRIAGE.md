@@ -18,6 +18,7 @@
 **Summary:** DevOnboarder's multi-service architecture (FastAPI backend, React frontend, Discord bot) requires validated CORS configuration and service integration testing before production deployment.
 
 **Impact:**
+
 - [x] Blocks other work (production deployment blocked)
 - [ ] Security concern
 - [ ] Performance degradation
@@ -40,18 +41,21 @@
 | PR #1893 | GitHub | Service integration work incomplete | 2025-12-24 |
 
 ### Working
+
 - Individual service unit tests passing (backend 96%+)
 - Docker compose files defined for multi-service deployment
 - CI infrastructure operational
 - Pre-commit hooks enforcing quality
 
 ### Not Working / Missing
+
 - End-to-end service integration validation
 - CORS configuration verification under real browser conditions
 - Documented runbook for local development setup
 - Integration test suite for cross-service communication
 
 ### Technical Debt Identified
+
 - CORS configuration not validated against actual frontend requests
 - No automated integration testing between services
 - Local development setup requires tribal knowledge
@@ -73,6 +77,7 @@
 **Approach:** Complete service integration validation through structured testing phase, document findings, establish integration test patterns for future use.
 
 **Alternatives Considered:**
+
 | Option | Pros | Cons | Recommendation |
 |--------|------|------|----------------|
 | Full integration test suite | Comprehensive coverage | Time-intensive, delays deployment | ❌ Deferred to Phase 2 |
@@ -82,12 +87,14 @@
 ## 5. Scope Boundaries
 
 ### In Scope (Phase 1)
+
 - [ ] CORS configuration validation (browser-based)
 - [ ] Service communication verification (API ↔ Frontend ↔ Bot)
 - [ ] Local development runbook creation
 - [ ] Document integration requirements
 
 ### Out of Scope (Explicit)
+
 - [ ] Automated integration test suite — Reason: Phase 2 work
 - [ ] Performance testing — Reason: Separate initiative after deployment
 - [ ] Discord bot feature completion — Reason: Separate track
@@ -123,6 +130,7 @@
 **Rationale:** This is the primary blocker for production deployment. Manual validation is sufficient for Phase 1; automated testing can follow in Phase 2.
 
 **Next Steps (Approved):**
+
 1. ✅ Create Phase Plan in `docs/phases/DEVONBOARDER_PHASE_001_PLAN.md`
 2. ✅ Link issues #1893, #1932
 3. Begin implementation

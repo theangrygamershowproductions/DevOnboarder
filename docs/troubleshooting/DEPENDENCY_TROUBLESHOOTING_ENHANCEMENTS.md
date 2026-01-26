@@ -229,7 +229,7 @@ git diff HEAD~1 HEAD package.json  # See what changed
 
    ```
 
-1. **Incremental Recovery**:
+2. **Incremental Recovery**:
 
    - Merge patch updates first (1.2.3 → 1.2.4)
 

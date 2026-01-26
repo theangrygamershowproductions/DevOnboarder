@@ -35,13 +35,16 @@ cd ~/TAGS/ecosystem/DevOnboarder
 ## Quick Command Lookup
 
 ### Check Branch Protection (Source of Truth)
+
 ```bash
 gh api repos/$REPO/branches/main/protection \
   --jq '.required_status_checks.contexts[]'
 ```
+
 **Expected**: `["qc-gate-minimum"]`
 
 ### Check PR Required Checks
+
 ```bash
 gh pr view XXXX --repo "$REPO" \
   --json statusCheckRollup \
@@ -49,12 +52,14 @@ gh pr view XXXX --repo "$REPO" \
 ```
 
 ### Close PR (Standard Pattern)
+
 ```bash
 gh pr close XXXX --repo "$REPO" \
   --comment "Closed during DevOnboarder triage as **[reason]**. See PR_TRIAGE_DEVONBOARDER_2025-12-03.md for context."
 ```
 
 ### Merge PR (After Human Review)
+
 ```bash
 gh pr checks XXXX --repo "$REPO"  # Verify first
 gh pr merge XXXX --repo "$REPO" --squash --delete-branch
@@ -65,31 +70,39 @@ gh pr merge XXXX --repo "$REPO" --squash --delete-branch
 ## Decision Framework Per Phase
 
 ### Phase 1: Superseded PRs
+
 **Rule**: Close immediately, no review needed  
 **Reason**: #1893 rollup includes all relevant changes
 
 ### Phase 2: Dependabot Groups
+
 **Rule**: Merge oldest passing, close rest  
 **Process**:
+
 1. Group by lockfile (bot, frontend, python, ci-toolkit)
 2. Check oldest PR's required checks
 3. If green → merge, close duplicates
 4. If red → close all in group (can reopen fresh Dependabot)
 
 ### Phase 3: Infra PRs
+
 **Rule**: Manual review per PR  
 **Decision Tree**:
+
 - Obsolete/superseded → CLOSE
 - Stale but relevant → Label for REFRESH (rare)
 - Clean and relevant → MERGE
 
 ### Phase 4: Feature PRs
+
 **Rule**: No auto-merge, explicit design call  
 **Options**:
+
 - Close as out-of-scope (likely for 60+ day age)
 - Salvage (requires re-spec + heavy refactor)
 
 ### Phase 5: Docs PR
+
 **Rule**: Quick merge if current, close if stale  
 **Check**: Does content match current system state?
 
@@ -109,6 +122,7 @@ gh pr merge XXXX --repo "$REPO" --squash --delete-branch
 After completing all phases:
 
 1. **Count PRs**:
+
    ```bash
    gh pr list --repo "$REPO" --state open --limit 100 | wc -l
    ```
@@ -127,6 +141,7 @@ After completing all phases:
 ## Execution Pattern
 
 **Recommended**:
+
 1. Start with Phase 0 (snapshot)
 2. Run Phase 1 (quick wins)
 3. Work through Phase 2 groups systematically
@@ -134,6 +149,7 @@ After completing all phases:
 5. Finish with Phase 5-6 (cleanup)
 
 **Script vs Manual**:
+
 - Phases 0-2: Script-friendly (repetitive)
 - Phases 3-5: Manual recommended (judgment calls)
 - Phase 6: Script (verification)

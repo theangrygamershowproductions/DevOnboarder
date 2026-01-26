@@ -21,6 +21,7 @@
 **Goal:** Validate CORS configuration and service integration for DevOnboarder's multi-service architecture (FastAPI backend, React frontend, Discord bot), unblocking production deployment.
 
 **This phase is complete when:**
+
 - [ ] CORS configuration validated with real browser requests
 - [ ] All services communicate successfully (backend ↔ frontend ↔ bot)
 - [ ] Local development runbook created and tested
@@ -146,6 +147,7 @@ docker-compose*.yaml
 **Trigger conditions:** CORS changes break existing functionality
 
 **Rollback steps:**
+
 1. Revert CORS config changes (if any) via `git revert`
 2. Re-test with previous configuration
 3. Document what went wrong in closeout
@@ -157,6 +159,7 @@ docker-compose*.yaml
 **Lock File:** [`.tgs/phase.lock.json`](../../.tgs/phase.lock.json)
 
 When locked:
+
 - Only issues #1893, #1932 should be worked
 - Only allowed paths may be modified
 - *(Note: Enforcement will be added in Wave 2)*

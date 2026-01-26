@@ -19,11 +19,13 @@ status: fixed
 ### The Bug (What Actually Happened)
 
 **Agent was optimizing for:**
+
 ```
 "Is the thing I was asked to fix (actions policy / Copilot threads) green?"
 ```
 
 **Agent was NOT asking:**
+
 ```
 "What does branch protection say is required to merge this PR?"
 ```
@@ -31,6 +33,7 @@ status: fixed
 ### Failure Mode
 
 Agent's internal "merge-ready" logic:
+
 1. ✅ Fix banned actions
 2. ✅ Fix actions-policy-enforcement check
 3. ✅ Clear Copilot inline comments
@@ -38,6 +41,7 @@ Agent's internal "merge-ready" logic:
 5. ❌ **Declare: "PR is ready to merge"**
 
 **Missing from the loop:**
+
 - `gh api .../branches/main/protection`
 - `required_status_checks.contexts[]`
 - Cross-check: "Is every required context green on *this PR*?"
@@ -66,31 +70,35 @@ The agent was declaring victory based on **mission scope** ("did I complete what
 ### 1. QC Gate Split (Technical Fix)
 
 **Before:**
+
 - `qc-check` = comprehensive validation (coverage, YAML lint, everything)
 - Single required check = all-or-nothing merge blocker
 - Historical debt blocked all PRs
 
 **After:**
+
 - `qc-gate-minimum` = **required**, basic sanity only
-  - Dependencies install
-  - Python imports work
-  - Tests discoverable
+    - Dependencies install
+    - Python imports work
+    - Tests discoverable
 - `qc-full` = **non-required**, comprehensive validation
-  - Coverage ≥95%
-  - YAML lint
-  - Full enforcement
+    - Coverage ≥95%
+    - YAML lint
+    - Full enforcement
 
 **Result**: Infrastructure work can land without fixing all historical debt first
 
 ### 2. v3 vs v4 Line Drawn (Scope Clarity)
 
 **v3 (current):**
+
 - Actions policy compliance
 - SHA pinning enforcement
 - CI infrastructure functional
 - Basic sanity gates
 
 **v4 (future):**
+
 - YAML workflow lint cleanup
 - Coverage perfection (XP/Discord ≥95%)
 - SonarCloud compliance
@@ -102,12 +110,14 @@ The agent was declaring victory based on **mission scope** ("did I complete what
 ### 3. Triage Infrastructure (Process Documentation)
 
 **Created:**
+
 - `PR_TRIAGE_BRIEF.md` - Execution playbook with explicit rule:
   > "A PR is mergeable only if ALL required checks (per branch protection) are green"
 - `PR_TRIAGE_DEVONBOARDER_2025-12-03.md` - 30-PR backlog classification
 - Explicit command patterns for checking branch protection as source of truth
 
 **Enforcement:**
+
 ```bash
 # Step 0 of every triage - check branch protection FIRST
 gh api repos/.../branches/main/protection --jq '.required_status_checks.contexts[]'
@@ -124,12 +134,14 @@ gh pr view NNNN --json statusCheckRollup \
 ## Verification: PR #1893 Under Real Rules
 
 **Branch Protection Requirements** (source of truth):
+
 ```bash
 $ gh api repos/.../branches/main/protection --jq '.required_status_checks.contexts[]'
 qc-gate-minimum
 ```
 
 **PR #1893 Status** (actual checks):
+
 ```json
 {
   "name": "QC Gate (Required - Basic Sanity)",
@@ -154,12 +166,14 @@ All required checks (per branch protection) are green. Non-required checks (qc-f
 ### For AI Agents
 
 **OLD LOGIC (WRONG):**
+
 ```
 if my_assigned_tasks_complete() and looks_good_to_me():
     return "merge-ready"
 ```
 
 **NEW LOGIC (CORRECT):**
+
 ```
 required_checks = get_branch_protection_required_checks()
 pr_check_status = get_pr_check_status(required_checks)
@@ -179,6 +193,7 @@ Branch protection is the **only** source of truth for merge-ability. Everything 
 
 **Process Rule:**
 > Never accept "merge-ready" declaration without verification:
+>
 > 1. What does branch protection require?
 > 2. Are those specific checks green on this PR?
 > 3. If no to #2, PR is NOT ready (regardless of agent confidence)

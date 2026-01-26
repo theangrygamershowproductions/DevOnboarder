@@ -511,13 +511,13 @@ All scripts include comprehensive error handling:
    ❌ Not in a git repository
    ```
 
-1. **Uncommitted changes during sync**:
+2. **Uncommitted changes during sync**:
 
    ```text
    ❌ You have uncommitted changes. Please commit or stash them first.
    ```
 
-1. **Merge conflicts**:
+3. **Merge conflicts**:
 
    ```text
    ❌ Pull failed - there may be conflicts
@@ -525,7 +525,7 @@ All scripts include comprehensive error handling:
    Please resolve conflicts manually and try again.
    ```
 
-1. **Push failures**:
+4. **Push failures**:
 
    ```text
    ❌ Push failed

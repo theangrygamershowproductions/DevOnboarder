@@ -9,6 +9,7 @@
 ## What We Accomplished (Complete Session)
 
 ### Process Bug Fixes (3 iterations)
+
 ✅ **Process Bug #1**: Agent never checked branch protection  
 ✅ **Process Bug #2**: Agent didn't check conversation resolution  
 ✅ **Configuration Bug #3**: Branch protection context name mismatch  
@@ -16,11 +17,13 @@
 **Result**: AGENTS.md updated with complete merge-readiness discipline
 
 ### v3 Scope Clarification
+
 ✅ Separated v3 gates from v4 aspirational checks  
 ✅ Classified all 9 failing checks as v4 scope (not blockers)  
 ✅ Documented v3 completion criteria (met)
 
 ### Documentation Created (Complete Package)
+
 ✅ `CI_DEBT_DEVONBOARDER.md` - Complete v4 debt classification  
 ✅ `CI_DEBT_PROJECT_LINKAGE_PLAN.md` - Execution playbook for GitHub wiring  
 ✅ `PR_1893_FINAL_STATUS.md` - Merge readiness verification  
@@ -35,12 +38,14 @@
 ### Step 1: Merge PR #1893 ⏳
 
 **Command**:
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 gh pr merge 1893 --squash --delete-branch
 ```
 
 **Verification**:
+
 ```bash
 gh pr view 1893 --json state,mergedAt --jq '{state, mergedAt}'
 ```
@@ -54,11 +59,13 @@ gh pr view 1893 --json state,mergedAt --jq '{state, mergedAt}'
 **Document**: `CI_DEBT_PROJECT_LINKAGE_PLAN.md`
 
 **Requirements**:
+
 - Host with `gh` CLI configured
 - Org admin access (for project wiring)
 - `jq` installed (for JSON parsing)
 
 **7 Phases**:
+
 1. Verify preconditions (PR merged, docs exist)
 2. Link v3 epic to PR #1893
 3. Create 4 v4 epic issues
@@ -76,19 +83,23 @@ gh pr view 1893 --json state,mergedAt --jq '{state, mergedAt}'
 After merge and epic creation:
 
 **Update `CI_GREEN_CAMPAIGN_STATUS.md`**:
+
 - Remove #1893 from blockers
 - Add "DevOnboarder v3 actions policy: COMPLETE"
 - Reference v4 debt tracking issues
 
 **Update `GOVERNANCE_COMPLETION_STATUS.md`**:
+
 - Mark actions policy complete for DevOnboarder
 - Add v4 hardening phase kickoff date (2026+)
 
 **Update `ACTIONS_MIGRATION_MATRIX.md`**:
+
 - Mark all DevOnboarder workflows as SHA-pinned
 - Document remaining repos if any
 
 **Update `QC_STANDARDS.md`**:
+
 - Document two-tier QC system (gate vs full)
 - Reference branch protection configuration
 
@@ -97,11 +108,13 @@ After merge and epic creation:
 ## What Changed
 
 ### Before
+
 - Agent: "Merge-ready = vibes + tasks I remember doing"
 - Process: Ad-hoc decisions, no systematic verification
 - Result: Process bug (agent declared ready while required check failing)
 
 ### After
+
 - AGENTS.md: "Merge-ready = all branch-protected checks green + human approval"
 - Process: 3-step verification mandatory, standard reporting format
 - Result: Cannot repeat - hard rule enforced in code, process, governance
@@ -110,7 +123,7 @@ After merge and epic creation:
 
 ## Success Criteria
 
-### DevOnboarder v3 = COMPLETE when:
+### DevOnboarder v3 = COMPLETE when
 
 ✅ PR #1893 merged to main  
 ✅ All v3 docs committed and pushed  
@@ -119,7 +132,7 @@ After merge and epic creation:
 ✅ `CI_DEBT_DEVONBOARDER.md` has issue numbers filled in  
 ✅ Status documents updated to reflect v3 completion
 
-### DevOnboarder v3 Deliverables:
+### DevOnboarder v3 Deliverables
 
 ✅ **Actions Policy Compliant**: SHA-pinned, allowlisted owners only  
 ✅ **Basic QC Gate Passing**: CI fundamentals working  
@@ -133,44 +146,51 @@ After merge and epic creation:
 **When v3 freeze lifts** (2026-01-01):
 
 **Phase 1: High Priority** (Q1 2026)
+
 - Terminal Policy Cleanup (HIGH) - runtime hangs possible
-  - Epic: #____ (to be filled via linkage plan)
-  - Estimated: 4-8 hours
+    - Epic: #____ (to be filled via linkage plan)
+    - Estimated: 4-8 hours
 
 **Phase 2: Medium Priority** (Q1-Q2 2026)
+
 - Workflow YAML Cleanup (MEDIUM) - annoying but not dangerous
-  - Epic: #____ (to be filled via linkage plan)
-  - Estimated: 2-4 hours
+    - Epic: #____ (to be filled via linkage plan)
+    - Estimated: 2-4 hours
 
 **Phase 3: Low Priority** (Q2+ 2026)
+
 - Markdownlint Compliance (LOW) - cosmetic
-  - Epic: #____ (to be filled via linkage plan)
-  - Estimated: 2-3 hours
+    - Epic: #____ (to be filled via linkage plan)
+    - Estimated: 2-3 hours
 - SonarCloud Quality Gate (LOW) - quality improvements
-  - Epic: #____ (to be filled via linkage plan)
-  - Estimated: Variable (depends on findings)
+    - Epic: #____ (to be filled via linkage plan)
+    - Estimated: Variable (depends on findings)
 
 ---
 
 ## Key Lessons Learned
 
 ### 1. Scope Clarity Prevents Paralysis
+
 - v3 = explicit gates (2 required checks)
 - v4 = everything else (catalogued as debt)
 - Don't let "red on PR" obscure "gates satisfied"
 
 ### 2. Name Matching is Critical
+
 - GitHub Actions check names ≠ job IDs
 - Branch protection requires exact string match
 - Must query `statusCheckRollup` to discover actual names
 
 ### 3. Three Independent Gates
+
 - Status checks (CI)
 - Reviews (human approval)
 - Conversation resolution (explicit clicks)
 - Agent must check ALL three, no assumptions
 
 ### 4. Debt Classification Enables Progress
+
 - Named epics with clear scope
 - Priority levels guide execution
 - Prevents vague "someday we'll fix this"
@@ -180,36 +200,39 @@ After merge and epic creation:
 ## Deliverables (Complete Documentation Package)
 
 ### Process Bug Documentation
+
 - `AGENT_MERGE_READINESS_BUG_FIX.md` (216 lines)
-  - Root cause: Agent never checked branch protection
-  - Three-layer fix: Technical + Scope + Documentation
+    - Root cause: Agent never checked branch protection
+    - Three-layer fix: Technical + Scope + Documentation
   
 - `PR_1893_MERGE_VERIFICATION.md` (120 lines)
-  - First correct use of new process
-  - Systematic verification: branch protection → PR checks → cross-reference
+    - First correct use of new process
+    - Systematic verification: branch protection → PR checks → cross-reference
   
 - `PROCESS_BUG_FIX_STATUS.md` (268 lines)
-  - Complete state snapshot
-  - Before/after comparison
-  - Success criteria checklist
+    - Complete state snapshot
+    - Before/after comparison
+    - Success criteria checklist
 
 ### PR Triage Infrastructure
+
 - `PR_TRIAGE_EXECUTION_PLAYBOOK.md` (657 lines)
-  - 6 phases with command sequences
-  - Decision frameworks per category
-  - Executable script template
+    - 6 phases with command sequences
+    - Decision frameworks per category
+    - Executable script template
   
 - `TRIAGE_COMMAND_QUICK_REF.md` (193 lines)
-  - 2-page quick reference
-  - Phase timings and complexity
-  - Safety rules
+    - 2-page quick reference
+    - Phase timings and complexity
+    - Safety rules
 
 ### System Lockdown
+
 - `~/TAGS/AGENTS.md` § "Merge Readiness Discipline (Non-Negotiable)" (lines 753+)
-  - Mandatory 3-step verification
-  - Forbidden definitions
-  - Canonical definition established
-  - Cannot say "merge-ready" without verification
+    - Mandatory 3-step verification
+    - Forbidden definitions
+    - Canonical definition established
+    - Cannot say "merge-ready" without verification
 
 ---
 
@@ -218,6 +241,7 @@ After merge and epic creation:
 ### PR #1893 (Actions Policy Rollup)
 
 **Technical**: ✅ READY
+
 - Required check `qc-gate-minimum`: ✅ SUCCESS
 - Required check `actions-policy`: ✅ SUCCESS  
 - All banned actions replaced: ✅ COMPLETE
@@ -225,6 +249,7 @@ After merge and epic creation:
 - Copilot review processed: ✅ COMPLETE
 
 **Governance**: ⚠️ PENDING HUMAN APPROVAL
+
 - Branch protection requires 1 approving review
 - This is correct governance boundary
 - Not bypassable (intentional)
@@ -232,12 +257,14 @@ After merge and epic creation:
 ### 30-PR Backlog
 
 **Infrastructure**: ✅ COMPLETE
+
 - Inventory: PR_TRIAGE_DEVONBOARDER_2025-12-03.md
 - Playbook: PR_TRIAGE_EXECUTION_PLAYBOOK.md (657 lines)
 - Quick ref: TRIAGE_COMMAND_QUICK_REF.md
 - Framework: MERGE/CLOSE/REFRESH, no limbo
 
 **Classification**:
+
 - 2 superseded → close immediately
 - 22 Dependabot → merge 4-6, close rest
 - 3 infra → manual triage
@@ -283,6 +310,7 @@ cat TRIAGE_COMMAND_QUICK_REF.md
 ## No Mystery, Just Work
 
 **Not blocked by**:
+
 - ❌ CI infrastructure (fixed)
 - ❌ Actions policy (fixed)
 - ❌ QC gate definition (fixed)
@@ -290,6 +318,7 @@ cat TRIAGE_COMMAND_QUICK_REF.md
 - ❌ Process documentation (complete)
 
 **Blocked by**:
+
 - ⚠️ You approving #1893
 - ⚠️ You running triage playbook
 
@@ -300,24 +329,30 @@ That's it. No ambiguity. No hidden dependencies.
 ## Verification Commands
 
 ### Confirm PR #1893 Status
+
 ```bash
 cd ~/TAGS/ecosystem/DevOnboarder
 gh pr view 1893 --json statusCheckRollup \
   --jq '.statusCheckRollup[] | select(.name == "QC Gate (Required - Basic Sanity)" or .name == "Validate Actions Policy Compliance") | {name, conclusion}'
 ```
+
 **Expected**: Both SUCCESS
 
 ### Confirm Branch Protection
+
 ```bash
 gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection \
   --jq '.required_status_checks.contexts[]'
 ```
+
 **Expected**: `["qc-gate-minimum"]`
 
 ### Confirm AGENTS.md Hard Rule
+
 ```bash
 grep -A 3 "Merge Readiness Discipline" ~/TAGS/AGENTS.md
 ```
+
 **Expected**: Section starting at line 753
 
 ---

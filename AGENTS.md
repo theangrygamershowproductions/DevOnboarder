@@ -126,6 +126,7 @@ A repository is **v3-complete** when:
    - Format: `Tracked in: Issue #<number>` or `**Tracked in**: Issue #<number>`
    - Location: Within first 10 lines of document (typically in header metadata)
    - Example:
+
      ```markdown
      # Priority Matrix GPG Signing Status
      
@@ -155,6 +156,7 @@ Use `./scripts/open_system_issue.sh` to streamline this process:
 ```
 
 Then update the document with:
+
 ```markdown
 **Tracked in**: Issue #<number>
 ```
@@ -162,13 +164,15 @@ Then update the document with:
 ### Enforcement
 
 **Merge gate validation** (automatic):
+
 - Scans all `docs/*STATUS*.md` and `docs/*DECISION*.md` files
 - For each file containing "documented exception":
-  - Verifies `Tracked in: #<number>` reference exists
-  - If missing → **BLOCKS merge** with clear error message
+    - Verifies `Tracked in: #<number>` reference exists
+    - If missing → **BLOCKS merge** with clear error message
 - Exit code 1 prevents merge until all exceptions have tracking issues
 
 **Process discipline**:
+
 - "I wrote a doc" without "I opened an issue" is a **process bug**
 - Documentation alone is not sufficient - tracking must be external and visible
 - At this level of complexity, undocumented exceptions = invisible technical debt
@@ -176,6 +180,7 @@ Then update the document with:
 ### Rationale
 
 **Why this matters**:
+
 - Prevents "documented but forgotten" technical debt
 - Ensures all systemic failures have accountability
 - Makes exceptions visible in project planning
@@ -183,6 +188,7 @@ Then update the document with:
 - Forces honest assessment (can't hide problems in docs)
 
 **Historical precedent**:
+
 - Priority Matrix GPG signing was documented but had no tracking issue
 - This gap was identified as a process bug, not an oversight
 - SOP enforcement prevents recurrence across all future exceptions

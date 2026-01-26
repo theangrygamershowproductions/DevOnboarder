@@ -95,13 +95,13 @@ pip install pre-commit
 pre-commit install
 ```
 
-### Why Optional?
+### Why Optional
 
 1. **Barrier to entry**: Requiring local tooling discourages contributions
 2. **Environment drift**: "Works on my machine" debugging wastes maintainer time
 3. **CI authority**: CI runs the authoritative checks — local hooks are just early feedback
 
-### What Happens Without Local Hooks?
+### What Happens Without Local Hooks
 
 Your PR will be validated by CI. If checks fail, you'll see the failure in the PR and can fix it. The workflow is:
 
