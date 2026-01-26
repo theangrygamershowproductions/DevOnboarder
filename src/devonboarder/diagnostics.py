@@ -10,7 +10,6 @@ from pathlib import Path
 
 import requests
 
-
 REQUIRED_PACKAGES = ["fastapi", "pytest"]
 
 # Base service mappings used for health checks

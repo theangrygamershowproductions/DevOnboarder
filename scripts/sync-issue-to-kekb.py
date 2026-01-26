@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Append resolved GitHub issues to the KEKB knowledge base."""
+
 from __future__ import annotations
 
 import json

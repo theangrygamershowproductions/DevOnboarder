@@ -1384,14 +1384,12 @@ def test_policy_validation_with_violations():
 
         # Create a mock validation script that reports violations
         validation_script = scripts_dir / "validate_no_verify_usage.sh"
-        validation_script.write_text(
-            """#!/bin/bash
+        validation_script.write_text("""#!/bin/bash
 echo "Validation found 0 violations"
 echo "Unauthorized violations: 0"
 echo "No violations detected"
 exit 0
-"""
-        )
+""")
         validation_script.chmod(0o755)
 
         # Change to temp directory to test the endpoint
@@ -1422,12 +1420,10 @@ def test_policy_validation_script_error():
 
         # Create a mock validation script that fails with generic error
         validation_script = scripts_dir / "validate_no_verify_usage.sh"
-        validation_script.write_text(
-            """#!/bin/bash
+        validation_script.write_text("""#!/bin/bash
 echo "Some other error occurred" >&2
 exit 1
-"""
-        )
+""")
         validation_script.chmod(0o755)
 
         original_cwd = os.getcwd()
@@ -1455,16 +1451,14 @@ def test_precommit_hook_not_configured():
 
         # Create .pre-commit-config.yaml without validate-no-verify hook
         precommit_config = temp_path / ".pre-commit-config.yaml"
-        precommit_config.write_text(
-            """
+        precommit_config.write_text("""
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-"""
-        )
+""")
 
         original_cwd = os.getcwd()
         try:

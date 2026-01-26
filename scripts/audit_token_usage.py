@@ -373,7 +373,9 @@ class TokenAuditor:
         if report["violations"]:
             print("\n❌ VIOLATIONS:")
             for violation in report["violations"]:
-                severity_icon = "🚨" if violation.get("severity") == "CRITICAL" else "⚠️"
+                severity_icon = (
+                    "🚨" if violation.get("severity") == "CRITICAL" else "⚠️"
+                )
                 print(f"   {severity_icon} {violation['file']}")
                 print(f"      Type: {violation['type']}")
                 print(f"      Message: {violation['message']}")

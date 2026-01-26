@@ -33,6 +33,7 @@ Requirements:
     - Project dependencies installed: pip install -e .[test]
     - Write access to .codespell-ignore file
 """
+
 from __future__ import annotations
 
 import argparse

@@ -5,7 +5,6 @@ from __future__ import annotations
 import os
 import httpx
 
-
 BASE_URL = "https://discord.com/api/v10"
 API_TIMEOUT = int(os.getenv("DISCORD_API_TIMEOUT", "10"))
 

@@ -11,6 +11,7 @@ subset of YAML (top-level key: value pairs). Exit codes:
 The implementation deliberately keeps lines under 88 cols to satisfy
 the project's linters.
 """
+
 from __future__ import annotations
 
 import subprocess

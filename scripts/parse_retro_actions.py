@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Extract open retrospective action items and owners."""
+
 from __future__ import annotations
 
 import argparse
