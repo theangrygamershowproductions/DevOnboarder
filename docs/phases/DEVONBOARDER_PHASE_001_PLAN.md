@@ -40,7 +40,7 @@
 
 ### 2.2 Allowed Paths
 
-```
+```text
 # Documentation
 docs/triage/SERVICE_INTEGRATION_TRIAGE.md
 docs/phases/DEVONBOARDER_PHASE_001_*.md

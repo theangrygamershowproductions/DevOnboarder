@@ -193,7 +193,7 @@ Then update the document with:
 - This gap was identified as a process bug, not an oversight
 - SOP enforcement prevents recurrence across all future exceptions
 
-## Enforcement
+## Policy Enforcement
 
 This policy is **non-negotiable**. Agents that bypass merge gate validation will:
 

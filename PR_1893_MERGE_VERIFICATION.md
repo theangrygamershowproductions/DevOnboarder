@@ -28,7 +28,7 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 
 **Result:**
 
-```
+```text
 qc-gate-minimum
 ```
 

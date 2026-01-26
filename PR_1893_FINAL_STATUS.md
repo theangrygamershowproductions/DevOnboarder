@@ -70,7 +70,7 @@ gh api repos/theangrygamershowproductions/DevOnboarder/branches/main/protection 
 
 **Expected**:
 
-```
+```text
 QC Gate (Required - Basic Sanity)
 Validate Actions Policy Compliance
 ```

@@ -105,7 +105,7 @@ pre-commit install
 
 Your PR will be validated by CI. If checks fail, you'll see the failure in the PR and can fix it. The workflow is:
 
-```
+```text
 Push → CI runs checks → Fix failures if any → Merge when green
 ```
 

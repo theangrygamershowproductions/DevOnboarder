@@ -31,14 +31,14 @@ Local `main` has diverged from `origin/main`:
 
 **Local-only commits** (not on origin/main):
 
-```
+```text
 dc93a311 FEAT(ci): add actions policy enforcement
 c44024d0 FIX(ci): pin all GitHub Actions to full commit SHAs
 ```
 
 **Remote commits** (not in local main):
 
-```
+```text
 5f75e7ab CI: DevOnboarder actions policy migration (v3 compliance) (#1893)
 ```
 

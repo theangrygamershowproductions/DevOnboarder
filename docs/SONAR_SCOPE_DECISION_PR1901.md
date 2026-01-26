@@ -92,8 +92,8 @@ on:
 
 **Implementation**:
 
-```
-SonarCloud Project Settings → Quality Gates → 
+```text
+SonarCloud Project Settings → Quality Gates →
 Set "Security Hotspots" condition to "Overall Code: 0, New Code: 0"
 ```
 
