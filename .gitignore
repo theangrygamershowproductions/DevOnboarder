@@ -152,3 +152,6 @@ prospector.json
 # Local state and configuration
 **/.local/**
 **/.state/**
+
+# WGU course materials (personal)
+docs/data/
