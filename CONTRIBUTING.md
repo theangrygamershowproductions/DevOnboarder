@@ -26,32 +26,48 @@ visibility: internal
 
 # Contributing
 
-Please install our commit message hook after cloning:
+## Quick Start (No Local Tooling Required)
+
+**CI is the source of truth.** You don't need to install any local tooling to contribute:
+
+1. Fork and clone the repository
+2. Make your changes
+3. Push and open a PR
+4. CI will validate your code — fix any failures
+
+That's it. See [docs/governance/COMPATIBILITY.md](docs/governance/COMPATIBILITY.md) for our full governance contract.
+
+## Optional: Local Development Tooling
+
+For faster feedback during development, you can optionally install local hooks:
+
+### Commit Message Hook (Recommended)
+
+Validates commit message format before pushing:
 
 ```bash
 bash scripts/install_commit_msg_hook.sh
-
 ```
 
-The hook prevents bad commit messages from reaching CI. See [docs/git-guidelines.md](docs/git-guidelines.md) for style
-rules and [docs/README.md](docs/README.md) for environment setup tips.
+### Pre-commit Hooks (Optional)
 
-After installing the commit message hook, install our lint hooks so code and documentation are checked automatically:
+Runs linting locally for faster feedback. **Not required** — CI runs the same checks:
 
 ```bash
+pip install pre-commit
 pre-commit install
-
 ```
 
-Install the Python and Node.js dependencies before running tests or any
-`pre-commit` commands. Run `pip install -e .[test]` before executing `pytest`:
+> **Note**: Pre-commit hooks are a convenience, not a gate. CI is authoritative.
+
+### Full Development Setup
+
+Install dependencies for running tests locally:
 
 ```bash
 pip install -e .[test]
 npm ci --prefix bot
 npm ci --prefix frontend
-pre-commit install
-
 ```
 
 ## Centralized Logging Policy
