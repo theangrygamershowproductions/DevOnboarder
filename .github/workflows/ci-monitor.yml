@@ -32,7 +32,7 @@ jobs:
               run: pip install yamllint==1.35.1
 
             - name: Lint YAML files
-              run: yamllint -c .github/.yamllint-config '.github/workflows/**/*.yml'
+              run: yamllint -c .github/.yamllint-config .github/workflows/
     report-rate-limit:
         needs: validate-yaml
         if: github.event.workflow_run.conclusion == 'failure'
