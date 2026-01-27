@@ -4,9 +4,19 @@
 # Purpose: Safe commit wrapper that handles pre-commit hook file modifications
 # Author: DevOnboarder Project
 # Standards: Compliant with copilot-instructions.md and centralized logging policy
+# Updated: 2025-12-24 - Added repo-root anchoring (TAGS-META governance pattern)
 # =============================================================================
 
 set -euo pipefail
+
+# CRITICAL: Repo-root anchoring - always resolve paths from git root
+# Prevents shadow script execution from wrong directories
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$REPO_ROOT" ]; then
+    echo "ERROR: Not in a git repository"
+    exit 1
+fi
+cd "$REPO_ROOT"
 
 # Function to validate terminal output patterns (ZERO TOLERANCE policy)
 validate_terminal_output() {
