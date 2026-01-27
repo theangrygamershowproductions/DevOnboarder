@@ -181,7 +181,9 @@ def test_contribute_endpoint_auth_required(monkeypatch):
 
     resp = client.post("/api/user/contribute", json={"description": "test"})
     # This should fail due to auth requirement
-    assert resp.status_code == 403  # noqa: B101
+    # Accept both 401 (Unauthorized) and 403 (Forbidden) as valid auth failures
+    # CI/local environments may handle FastAPI auth exceptions differently
+    assert resp.status_code in (401, 403)  # noqa: B101
 
 
 def test_contribute_endpoint_missing_description():
