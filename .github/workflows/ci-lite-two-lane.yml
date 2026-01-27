@@ -1,6 +1,6 @@
 name: CI Lite (Two-Lane via tags-workflows)
 
-# PURPOSE: Demonstrate consuming tags-workflows reusable workflow
+# PURPOSE: Production CI consuming tags-workflows reusable workflow
 # with the two-lane pattern for public repositories
 #
 # TWO-LANE PATTERN:
@@ -33,5 +33,7 @@ jobs:
     if: github.event_name == 'push'
     # SHA = v1.0.0
     uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@5ab970b7f5b9dae8573b6043dad594222a58d593
-    # runner defaults to [self-hosted, tagsdev] per workflow defaults
-    # trusted defaults to true
+    with:
+      # Explicit values for clarity (matches tags-workflows defaults)
+      runner: '["self-hosted", "tagsdev"]'
+      trusted: true

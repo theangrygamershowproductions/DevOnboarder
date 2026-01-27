@@ -44,13 +44,13 @@ DevOnboarder uses a two-lane CI model for security and cost efficiency:
 
 ### GitHub Actions
 
-All actions are **SHA-pinned** via local composite wrappers:
+All actions are **SHA-pinned** to immutable commit references:
 
 ```yaml
-# ✅ Correct: Use local pinned composite
-uses: ./.github/actions/pinned-checkout@v1
+# ✅ Correct: SHA-pinned to immutable commit
+uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
-# ❌ Forbidden: Direct marketplace reference
+# ❌ Forbidden: Mutable tag reference (subject to supply-chain attacks)
 uses: actions/checkout@v4
 ```
 
@@ -149,6 +149,6 @@ Test in a PR before merging.
 
 ## References
 
-- [TWO_TIER_RUNNER_POLICY.md](../../../TAGS-META/docs/governance/TWO_TIER_RUNNER_POLICY.md) — Full runner policy
-- [ACTIONS_POLICY.md](../../../TAGS-META/ACTIONS_POLICY.md) — SHA pinning requirements
+- [TWO_TIER_RUNNER_POLICY.md](https://github.com/theangrygamershowproductions/TAGS-META/blob/main/docs/governance/TWO_TIER_RUNNER_POLICY.md) — Full runner policy
+- [ACTIONS_POLICY.md](https://github.com/theangrygamershowproductions/TAGS-META/blob/main/ACTIONS_POLICY.md) — SHA pinning requirements
 - [tags-workflows](https://github.com/theangrygamershowproductions/tags-workflows) — Reusable CI platform
