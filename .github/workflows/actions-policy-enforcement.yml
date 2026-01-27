@@ -129,11 +129,12 @@ jobs:
             owner=$(echo "$ref" | cut -d'/' -f1)
 
             # Check if owner is allowlisted
-            if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." ]]; then
+            # Allowlist: actions/*, docker/*, . (local), theangrygamershowproductions/* (same-org reusable workflows)
+            if [[ "$owner" != "actions" && "$owner" != "docker" && "$owner" != "." && "$owner" != "theangrygamershowproductions" ]]; then
               printf 'ERROR: Non-allowlisted action owner: %s\n' "${owner}"
               printf '   Full reference: %s\n' "${ref}"
               echo ""
-              echo "Only 'actions/*' and 'docker/*' actions are allowed by v3 policy."
+              echo "Only 'actions/*', 'docker/*', and 'theangrygamershowproductions/*' actions are allowed."
               echo "Third-party actions must be replaced with first-party + scripts."
               echo ""
               VIOLATIONS_FOUND=true
