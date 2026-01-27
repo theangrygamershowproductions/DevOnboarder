@@ -27,6 +27,13 @@ _Designed to automate onboarding, reduce friction, and support developers buildi
 [![🥔 Potato Policy](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml/badge.svg)](https://github.com/theangrygamershowproductions/DevOnboarder/actions/workflows/potato-policy-focused.yml)
 [![📚 Documentation Quality](https://img.shields.io/badge/docs-certified-brightgreen?style=flat&logo=markdown)](docs/public/documentation-quality-certification.md)
 
+## 🆕 New here?
+
+If you're a new developer or stakeholder trying to understand DevOnboarder:
+
+- **[Why DevOnboarder?](docs/product/WHY_DEVONBOARDER.md)** - What problem this solves and who should care
+- **[Getting started as a new developer](docs/product/GETTING_STARTED_NEW_DEV.md)** - Your first 48 hours
+
 ## 🎯 **Project Management Framework**
 
 DevOnboarder uses a comprehensive three-project structure for optimal organization and tracking:
