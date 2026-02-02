@@ -40,7 +40,7 @@ types-requests
 
 # Security scanning (from requirements-dev.txt)
 pip-audit==2.9.0
-bandit==1.8.6
+bandit==1.9.2
 
 # Documentation linting (from requirements-dev.txt)
 vale==3.12.0.2
