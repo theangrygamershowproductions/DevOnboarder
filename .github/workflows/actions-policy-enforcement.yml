@@ -144,7 +144,7 @@ jobs:
           if [ "$VIOLATIONS_FOUND" = "true" ]; then
             echo "violations_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "All action owners are allowlisted (actions/* or docker/*)"
+            echo "All action owners are allowlisted (actions/*, docker/*, org internal)"
             echo "violations_detected=false" >> $GITHUB_OUTPUT
           fi
 
@@ -155,23 +155,53 @@ jobs:
           echo "Checking SHA pinning compliance..."
           TAG_REFS_FOUND=false
 
-          # Check for tag-based references (not SHA-pinned)
-          # Pattern: actions/something@v1 or actions/something@main (not 40-char SHA)
-          # Updated pattern ensures exactly 40 hex chars required (prevents false positives from echo examples)
-          TAG_REFS=$(grep -rhE "uses:\s+(actions|docker)/[^@]+@" .github/workflows/ 2>/dev/null | \
-                     grep -v "^\s*#" | \
-                     grep -vE "^\s*(echo|#.*echo)" | \
-                     grep -vE "@[a-f0-9]{40}" || true)
+          # Extract action references (exclude comments)
+          ACTION_REFS=$(grep -rhE "^\s*uses:\s+" .github/workflows/ 2>/dev/null | \
+                        grep -v "^\s*#" | \
+                        sed 's/^\s*uses:\s*//' | \
+                        sort -u)
 
-          if [ -n "$TAG_REFS" ]; then
-            echo "ERROR: Tag-based action references detected:"
-            echo ""
-            printf '%s\n' "$TAG_REFS"
+          while IFS= read -r ref; do
+            [ -z "$ref" ] && continue
+
+            owner=$(echo "$ref" | cut -d'/' -f1)
+            repo=$(echo "$ref" | cut -d'/' -f2)
+            ref_part=$(echo "$ref" | awk -F@ '{print $2}')
+
+            # Skip local actions or references without @
+            [ "$owner" = "." ] && continue
+            [ -z "$ref_part" ] && continue
+
+            # Allow full SHA pins everywhere
+            if echo "$ref_part" | grep -qE '^[a-f0-9]{40}$'; then
+              continue
+            fi
+
+            # Allow immutable tag refs only for org workflows with protected tags
+            if [ "$owner" = "theangrygamershowproductions" ]; then
+              if [ "$repo" = "tags-workflows" ] || [ "$repo" = "tags-workflows-private" ]; then
+                if echo "$ref_part" | grep -qE '^v[0-9]+(\.[0-9]+){1,2}$'; then
+                  continue
+                fi
+              fi
+              printf 'ERROR: Org action not SHA-pinned (or immutable tag): %s\n' "$ref"
+              TAG_REFS_FOUND=true
+              continue
+            fi
+
+            # Enforce SHA pins for external actions
+            if [ "$owner" = "actions" ] || [ "$owner" = "docker" ]; then
+              printf 'ERROR: Tag-based action reference detected: %s\n' "$ref"
+              TAG_REFS_FOUND=true
+            fi
+          done <<< "$ACTION_REFS"
+
+          if [ "$TAG_REFS_FOUND" = "true" ]; then
             echo ""
             echo "All actions must be pinned to full 40-char commit SHA."
+            echo "Org workflows may use immutable tags only for tags-workflows/tags-workflows-private."
             echo "Format: uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # TAGS-SHA-PIN: actions/checkout@v5.0.1 (2025-11-13)"
             echo ""
-            TAG_REFS_FOUND=true
           fi
 
           if [ "$TAG_REFS_FOUND" = "true" ]; then
@@ -205,7 +235,7 @@ jobs:
           echo "Policy Enforcement:"
           echo "- Banned actions: Explicitly forbidden by name"
           echo "- Non-allowlisted owners: Only actions/*, docker/*, theangrygamershowproductions/* allowed"
-          echo "- Tag-based refs: Must use full SHA, not tags like @v4"
+          echo "- Tag-based refs: Must use full SHA (org immutable tags allowed for tags-workflows only)"
           echo ""
           echo "This check will fail until all violations are resolved."
           echo ""
@@ -226,7 +256,7 @@ jobs:
           echo "All workflow changes comply with v3 Actions Policy:"
           echo "  - No banned third-party actions detected"
           echo "  - All action owners are allowlisted (actions/*, docker/*, org internal)"
-          echo "  - All actions are SHA-pinned (no tag-based references)"
+          echo "  - All actions are SHA-pinned (org immutable tags allowed for tags-workflows only)"
           echo ""
           echo "Policy enforcement layers:"
           echo "  - This CI job (detects violations at commit time)"

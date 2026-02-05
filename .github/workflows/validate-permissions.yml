@@ -35,7 +35,7 @@ jobs:
               run: pip install yamllint==1.35.1
 
             - name: Lint YAML files
-              run: find .github/workflows -name '*.yml' -o -name '*.yaml' | xargs yamllint -c .github/.yamllint-config
+              run: find .github/workflows \( -name '*.yml' -o -name '*.yaml' \) -print0 | xargs -0 yamllint -c .github/.yamllint-config
     check:
         needs: validate-yaml
         runs-on: ubuntu-latest
