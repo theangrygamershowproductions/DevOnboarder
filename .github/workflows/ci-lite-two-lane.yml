@@ -8,7 +8,8 @@ name: CI Lite (Two-Lane via tags-workflows)
 #   Lane 2 (main-ci): Trusted pushes to main run with full capabilities
 #
 # SHA PIN: Pinned to tags-workflows commit for immutable references
-# TAGS-SHA-PIN: ce3b63239d05403ecdf582c95fda779e0c33bf9e (SHA-only policy; see ACTIONS_POLICY.md)
+# POLICY: SHA-only pinning is required (see ACTIONS_POLICY.md)
+# TAGS-SHA-PIN: tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
 # ALLOWLIST: theangrygamershowproductions org is allowlisted in actions-policy-enforcement.yml
 
 on:
@@ -23,7 +24,7 @@ jobs:
   # Lane 1: Untrusted PR validation (GitHub-hosted, no secrets)
   pr-validate:
     if: github.event_name == 'pull_request'
-    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
+    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e (verified via git rev-parse)
     uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
     with:
       runner: ubuntu-latest
@@ -32,7 +33,7 @@ jobs:
   # Lane 2: Trusted branch CI (self-hosted, secrets allowed)
   main-ci:
     if: github.event_name == 'push'
-    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
+    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e (verified via git rev-parse)
     uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
     with:
       runner: [self-hosted, tagsdev]
