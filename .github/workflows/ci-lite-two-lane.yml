@@ -7,8 +7,10 @@ name: CI Lite (Two-Lane via tags-workflows)
 #   Lane 1 (pr-validate): Untrusted PR code runs on GitHub-hosted, no secrets
 #   Lane 2 (main-ci): Trusted pushes to main run with full capabilities
 #
-# IMMUTABLE SHA: Pinned to v1.0.0 (5ab970b7f5b9dae8573b6043dad594222a58d593)
-# SHA verified: git -C tags-workflows rev-parse v1.0.0
+# SHA PIN: Pinned to tags-workflows commit for immutable references
+# POLICY: SHA-only pinning is required (see ACTIONS_POLICY.md)
+# TAGS-SHA-PIN: tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
+# ALLOWLIST: theangrygamershowproductions org is allowlisted in actions-policy-enforcement.yml
 
 on:
   pull_request:
@@ -22,8 +24,8 @@ jobs:
   # Lane 1: Untrusted PR validation (GitHub-hosted, no secrets)
   pr-validate:
     if: github.event_name == 'pull_request'
-    # SHA = v1.0.0
-    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@5ab970b7f5b9dae8573b6043dad594222a58d593
+    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e (verified via git rev-parse)
+    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
     with:
       runner: ubuntu-latest
       trusted: false
@@ -31,9 +33,10 @@ jobs:
   # Lane 2: Trusted branch CI (self-hosted, secrets allowed)
   main-ci:
     if: github.event_name == 'push'
-    # SHA = v1.0.0
-    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@5ab970b7f5b9dae8573b6043dad594222a58d593
+    # TAGS-SHA-PIN: ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e (verified via git rev-parse)
+    uses: theangrygamershowproductions/tags-workflows/.github/workflows/ci-lite.yml@ce3b63239d05403ecdf582c95fda779e0c33bf9e
     with:
-      # Explicit values for clarity (matches tags-workflows defaults)
-      runner: '["self-hosted", "tagsdev"]'
+      runner: [self-hosted, tagsdev]
       trusted: true
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
