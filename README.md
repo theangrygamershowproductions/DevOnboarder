@@ -46,6 +46,8 @@ The formalized planning structure for DevOnboarder project evolution:
 
 ## 🚀 Current Feature Initiatives
 
+**Feature Index**: View all active feature initiatives [→ docs/features/README.md](docs/features/README.md)
+
 ### Time Tracking Metrics
 
 TAGS-native developer productivity telemetry system (planning phase).
