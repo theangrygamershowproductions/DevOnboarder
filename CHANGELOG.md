@@ -9,16 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Time Tracking Metrics planning artifacts (PLAN.md, TODO.md, roadmap.md, README.md)
-- Decision point locks for v0.1 baseline (coding-only, 120s idle, Mode A aggregates, separate versioning)
-- Phase 6-10 implementation roadmap and phased backlog
+- DevOnboarder root planning documents (PLAN.md, TODO.md, roadmap.md)
+- Feature planning pack structure under `docs/features/`
+- Time Tracking Metrics feature planning pack (docs/features/time-tracking-metrics/)
+  - Architecture and design decisions (PLAN.md)
+  - Phase 6-10 implementation backlog (TODO.md)
+  - Version roadmap v0.1 → v3.0 (roadmap.md)
+  - v0.1 baseline decision locks (120s idle, Mode A aggregates, separate versioning)
+- Cross-linking in README.md pointing to feature planning packs
+
+### Changed
+
+- Restructured planning documentation: repo-root docs describe platform, feature planning in nested packs
+- PLAN.md now describes DevOnboarder platform execution focus, not individual features
+- TODO.md now describes core platform backlog, with links to feature backlogs
 
 ### Planning
 
-- v0.1 baseline: Core time tracking metrics with VS Code extension + backend API
-- v0.5 release: Analytics dashboard + team visibility controls
-- v1.0 release: Production hardening + performance optimization
-- v2.0+ release: Cross-IDE support + ecosystem expansion
+- Time Tracking Metrics phases 6–10: extension + API + dashboards + team analytics + public profiles
+- v4.0 (2026-Q2+): Cross-IDE support, advanced observability, RBAC
 
 ## [0.0.0] - Pre-Release
 

@@ -1,132 +1,67 @@
 ---
-title: "Time Tracking Metrics — Implementation Phases"
-description: "Phased backlog for VS Code extension, backend API, dashboards, and public exposure."
+title: "DevOnboarder — Active Backlog"
+description: "Current sprint and active work items for DevOnboarder platform."
 author: "TAGS Engineering"
 created_at: "2026-03-04"
 updated_at: "2026-03-04"
-tags: ["TAGS", "DevOnboarder", "phases", "metrics"]
+tags: ["TAGS", "DevOnboarder", "backlog", "sprint"]
 project: "DevOnboarder"
 document_type: "TODO"
-status: "planning"
+status: "active"
 visibility: "internal"
-codex_scope: "tags.ecosystem.planning"
+codex_scope: "tags.ecosystem.devonboarder"
 codex_role: "cto"
-codex_type: "execution-plan"
-codex_runtime: "planning-only"
+codex_type: "backlog"
+codex_runtime: "production"
 ---
 
-# TODO — Time Tracking Metrics (Phases 6–10)
+# DevOnboarder — Active Backlog
 
-## Phase 6 — VS Code Extension Foundation
+## Current Sprint (v3+ Stability)
 
-Deliverables
+### P0: Governance & Enforcement
 
-- Extension scaffold + packaging strategy (VSIX first)
-- Activity capture layer (focus/edit/open/close)
-- Active time engine (idle detection + manual pause)
-- Local store (events → sessions compaction)
-- Config + privacy modes (Mode A default)
-- Minimal UI: status bar indicator + commands
+- [x] SHA pinning for all GitHub Actions (complete)
+- [x] Actions policy enforcement (complete)
+- [ ] Refresh CI dependency audit quarterly
 
-Acceptance criteria
+### P1: Core Infrastructure
 
-- Session summaries are correct in local-only mode
-- No content capture possible by design
-- Manual pause/resume works reliably
-- Idle and focus-loss behavior matches defaults
+- [ ] PostgreSQL performance tuning (slow query analysis)
+- [ ] Traefik TLS certificate automation
+- [ ] Docker image layer caching optimization
 
-Verification gates
+### P2: Documentation & Knowledge
 
-- Privacy audit checklist passes
-- Local store survives restart + crash recovery
-- Config toggles behave deterministically
+- [ ] Complete developer onboarding runbook
+- [ ] API documentation (OpenAPI/Swagger)
+- [ ] Architecture decision record (ADR) system
 
 ---
 
-## Phase 7 — Backend Time Metrics API (DevOnboarder)
+## Feature Initiatives
 
-Deliverables
+### Time Tracking Metrics
 
-- `POST /api/metrics/sessions` ingest
-- AuthN/AuthZ integration (developer/teamlead/admin/public)
-- Postgres tables + indexes
-- Retention policy primitives (policy + job)
-- Basic query endpoints (`/me`, team aggregates)
+**Planning backlog**: [`docs/features/time-tracking-metrics/TODO.md`](docs/features/time-tracking-metrics/TODO.md)
 
-Acceptance criteria
-
-- Extension can sync session batches successfully
-- Developer can read own metrics
-- Team lead only sees authorized aggregates
-- Policy changes are auditable (who/when/what)
-
-Verification gates
-
-- Request validation + schema versioning enforced
-- Rate limiting applied to ingest
-- Zero leakage of private fields in team/org queries
+Phases 6–10: VS Code extension, backend API, dashboards, team analytics, public profiles.
 
 ---
 
-## Phase 8 — Analytics Dashboard
+## Future Work (v4+)
 
-Deliverables
-
-- Personal dashboard: daily/weekly totals, project breakdown, language breakdown
-- Team dashboard: aggregate trendlines + rollups
-- Export: personal data export (CSV/JSON)
-
-Acceptance criteria
-
-- Dashboards match server truth
-- Privacy constraints enforced in API + UI
-- No default leaderboards
-
-Verification gates
-
-- Query performance meets baseline targets
-- Snapshot tests for key API responses (contract stability)
+- Cross-IDE support (Neovim, Cursor, JetBrains)
+- Advanced observability and tracing
+- Policy-driven RBAC and audit
+- Ecosystem expansion
 
 ---
 
-## Phase 9 — Public API Exposure (Opt-in Profiles)
+## How to Update This List
 
-Deliverables
+- P0 items block releases
+- P1 items scheduled in sprints
+- P2 items are backlog/future
 
-- Publish/unpublish mechanism (explicit opt-in)
-- Public endpoints returning publishable aggregates only
-- Caching + rate limiting
-- Public API documentation + examples
-
-Acceptance criteria
-
-- Published data is opt-in and reversible
-- No private data can be inferred via public API
-- Contract is versioned and backward compatible
-
-Verification gates
-
-- Security review on publish surface + enumeration resistance
-- Abuse testing (scraping, brute-force handles)
-
----
-
-## Phase 10 — Developer Metrics Platform
-
-Deliverables
-
-- Org-level analytics dashboards
-- Policy controls: retention/visibility/export
-- Optional correlations (PR/commit metadata) behind explicit opt-in + governance
-- Extension update strategy + compatibility matrix
-
-Acceptance criteria
-
-- Strategic metrics value without surveillance creep
-- Governance controls are auditable and least-privilege
-- System remains usable in local-only mode (degraded operation)
-
-Verification gates
-
-- Governance compliance checks wired into CI
-- Metrics drift monitoring (schema + computation integrity)
+See PLAN.md for initiative details and roadmap.md for version milestones.
