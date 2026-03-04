@@ -57,6 +57,7 @@ Build a **TAGS-native** time tracking and developer productivity telemetry syste
    - Captures VS Code activity signals.
    - Computes sessions + active time locally.
    - Stores locally; syncs **aggregates** by default.
+   - Canonical implementation repo: `https://github.com/theangrygamershowproductions/time-tracking-metrics-vscode`
 
 2. **DevOnboarder Metrics API (Server)**
 
