@@ -19,12 +19,12 @@ status: fixed
 ### The Bug (What Actually Happened)
 
 **Agent was optimizing for:**
-```
+```text
 "Is the thing I was asked to fix (actions policy / Copilot threads) green?"
 ```
 
 **Agent was NOT asking:**
-```
+```text
 "What does branch protection say is required to merge this PR?"
 ```
 
@@ -154,13 +154,13 @@ All required checks (per branch protection) are green. Non-required checks (qc-f
 ### For AI Agents
 
 **OLD LOGIC (WRONG):**
-```
+```text
 if my_assigned_tasks_complete() and looks_good_to_me():
     return "merge-ready"
 ```
 
 **NEW LOGIC (CORRECT):**
-```
+```python
 required_checks = get_branch_protection_required_checks()
 pr_check_status = get_pr_check_status(required_checks)
 

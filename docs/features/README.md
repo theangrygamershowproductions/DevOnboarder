@@ -30,7 +30,7 @@ Each feature maintains its own planning directory with the complete 4-document s
 - Extension: [time-tracking-metrics-vscode](https://github.com/theangrygamershowproductions/time-tracking-metrics-vscode) (pending Phase 6 bootstrap)
 
 **Cross-Links**:
-- ["🚀 Current Feature Initiatives" in DevOnboarder README](../README.md#-current-feature-initiatives)
+- ["🚀 Current Feature Initiatives" in DevOnboarder README](../../README.md#current-feature-initiatives)
 - [Time Tracking Metrics in TAGS ecosystem roadmap](../../../../roadmap.md#devonboarder-initiatives)
 
 ---
