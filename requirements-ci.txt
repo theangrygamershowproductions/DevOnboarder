@@ -28,7 +28,7 @@ logfire>=4.11.0
 pytest==8.4.2
 pytest-cov==7.0.0
 pytest-asyncio
-requests==2.32.4
+requests==2.33.0
 jsonschema
 openapi-spec-validator==0.7.2
 
