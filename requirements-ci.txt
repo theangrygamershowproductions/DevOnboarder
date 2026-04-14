@@ -25,7 +25,7 @@ pyyaml>=6.0
 logfire>=4.11.0
 
 # Test dependencies (from pyproject.toml [project.optional-dependencies.test])
-pytest==8.4.2
+pytest==9.0.3
 pytest-cov==7.0.0
 pytest-asyncio
 requests==2.32.4
